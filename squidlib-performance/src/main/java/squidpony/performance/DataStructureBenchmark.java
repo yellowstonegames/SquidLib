@@ -42,7 +42,10 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import squidpony.FakeLanguageGen;
+import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.IntIntOrderedMap;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
@@ -295,9 +298,78 @@ import java.util.concurrent.TimeUnit;
  * DataStructureBenchmark.insertSquidOS3                         1  128000  avgt    5   1424965.573 ±   84169.386  ns/op
  * DataStructureBenchmark.insertSquidOS3                         2  128000  avgt    5   1543401.423 ±   30843.084  ns/op
  * </pre>
+ * 
+ * A completely different benchmark set run on 2 to the 16 Strings (which are not necessarily unique) instead of about
+ * twice as many Integers:
+ * <pre>
+ * Benchmark                                           (NEED_TO_ENLARGE)  (SIZE)  Mode  Cnt  Score   Error  Units
+ * DataStructureBenchmark.insertStringGdxOM                            0   65536  avgt    4  5.150 ± 0.375  ms/op
+ * DataStructureBenchmark.insertStringGdxOM                            1   65536  avgt    4  7.976 ± 0.213  ms/op
+ * DataStructureBenchmark.insertStringGdxOM                            2   65536  avgt    4  9.796 ± 0.473  ms/op
+ * DataStructureBenchmark.insertStringGdxOM2                           0   65536  avgt    4  5.122 ± 0.930  ms/op
+ * DataStructureBenchmark.insertStringGdxOM2                           1   65536  avgt    4  6.255 ± 0.145  ms/op
+ * DataStructureBenchmark.insertStringGdxOM2                           2   65536  avgt    4  7.102 ± 0.066  ms/op
+ * DataStructureBenchmark.insertStringGdxOS                            0   65536  avgt    4  3.021 ± 0.223  ms/op
+ * DataStructureBenchmark.insertStringGdxOS                            1   65536  avgt    4  5.527 ± 0.274  ms/op
+ * DataStructureBenchmark.insertStringGdxOS                            2   65536  avgt    4  6.601 ± 0.427  ms/op
+ * DataStructureBenchmark.insertStringGdxOS2                           0   65536  avgt    4  3.168 ± 0.168  ms/op
+ * DataStructureBenchmark.insertStringGdxOS2                           1   65536  avgt    4  4.300 ± 0.332  ms/op
+ * DataStructureBenchmark.insertStringGdxOS2                           2   65536  avgt    4  5.069 ± 0.402  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashMap                    0   65536  avgt    4  4.454 ± 0.105  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashMap                    1   65536  avgt    4  5.134 ± 0.827  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashMap                    2   65536  avgt    4  5.284 ± 0.280  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashMap2                   0   65536  avgt    4  3.856 ± 0.073  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashMap2                   1   65536  avgt    4  4.065 ± 0.164  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashMap2                   2   65536  avgt    4  4.660 ± 0.174  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashSet                    0   65536  avgt    4  4.065 ± 0.612  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashSet                    1   65536  avgt    4  4.734 ± 0.041  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashSet                    2   65536  avgt    4  4.958 ± 0.897  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashSet2                   0   65536  avgt    4  3.465 ± 0.247  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashSet2                   1   65536  avgt    4  4.197 ± 0.236  ms/op
+ * DataStructureBenchmark.insertStringLinkedHashSet2                   2   65536  avgt    4  4.425 ± 0.385  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM                   0   65536  avgt    4  2.511 ± 0.246  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM                   1   65536  avgt    4  5.154 ± 0.314  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM                   2   65536  avgt    4  5.667 ± 0.319  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM2                  0   65536  avgt    4  2.571 ± 0.134  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM2                  1   65536  avgt    4  4.149 ± 0.441  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM2                  2   65536  avgt    4  4.207 ± 0.036  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM3                  0   65536  avgt    4  2.951 ± 0.163  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM3                  1   65536  avgt    4  3.885 ± 0.076  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOM3                  2   65536  avgt    4  4.755 ± 0.319  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS                   0   65536  avgt    4  1.522 ± 0.395  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS                   1   65536  avgt    4  3.369 ± 0.077  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS                   2   65536  avgt    4  4.073 ± 0.137  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS2                  0   65536  avgt    4  1.481 ± 0.052  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS2                  1   65536  avgt    4  2.783 ± 0.186  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS2                  2   65536  avgt    4  3.165 ± 0.119  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS3                  0   65536  avgt    4  1.396 ± 0.076  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS3                  1   65536  avgt    4  2.472 ± 0.698  ms/op
+ * DataStructureBenchmark.insertStringSquidDefaultOS3                  2   65536  avgt    4  2.758 ± 0.256  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM                      0   65536  avgt    4  2.615 ± 0.184  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM                      1   65536  avgt    4  4.316 ± 0.407  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM                      2   65536  avgt    4  5.407 ± 0.621  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM2                     0   65536  avgt    4  2.619 ± 0.182  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM2                     1   65536  avgt    4  3.682 ± 0.206  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM2                     2   65536  avgt    4  3.700 ± 0.070  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM3                     0   65536  avgt    4  3.044 ± 0.069  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM3                     1   65536  avgt    4  3.939 ± 0.778  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOM3                     2   65536  avgt    4  4.191 ± 0.812  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS                      0   65536  avgt    4  1.415 ± 0.120  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS                      1   65536  avgt    4  3.545 ± 0.044  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS                      2   65536  avgt    4  4.025 ± 0.128  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS2                     0   65536  avgt    4  1.415 ± 0.105  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS2                     1   65536  avgt    4  2.702 ± 0.022  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS2                     2   65536  avgt    4  2.975 ± 0.154  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS3                     0   65536  avgt    4  1.323 ± 0.084  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS3                     1   65536  avgt    4  2.372 ± 0.151  ms/op
+ * DataStructureBenchmark.insertStringSquidMildOS3                     2   65536  avgt    4  2.663 ± 0.275  ms/op
+ * </pre>
+ * The SquidLib data structures do much better here, especially if they don't need to rehash (when NEED_TO_ENLARGE is
+ * 0, mostly). The Mild benchmarks use {@link CrossHash#mildHasher}, which delegates to the hashCode() implementation of
+ * the class used as a key without changes; these do surprisingly well.
  */
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Fork(1)
 @Warmup(iterations = 6)
 @Measurement(iterations = 4)
@@ -305,10 +377,12 @@ public class DataStructureBenchmark {
 
     @State(Scope.Thread)
     public static class BenchmarkState {
-        @Param({/* "2000", "4000", "8000", */"128000"})
+        @Param({/* "2000", "4000", "8000", */"65536"})
         public int SIZE;
         @Param({"0", "1", "2"})
         public int NEED_TO_ENLARGE;
+        
+        public String[] words = StringKit.split(FakeLanguageGen.HINDI_ROMANIZED.sentence(123456789L, 65536, 65536, new String[]{","}, new String[]{"."}, 0.07), " ");
 //        public LinkedHashMap<Integer, Integer> lhm;
 //        public OrderedMap<Integer, Integer> squidOM;
 //        public com.badlogic.gdx.utils.OrderedMap<Integer, Integer> gdxOM;
@@ -344,7 +418,7 @@ public class DataStructureBenchmark {
 //    };
 
     @Benchmark
-    public void insertLinkedHashMap(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerLinkedHashMap(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashMap<Integer, Integer> lhm = new LinkedHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -354,7 +428,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertLinkedHashMap2(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerLinkedHashMap2(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashMap<Integer, Integer> lhm = new LinkedHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -364,7 +438,7 @@ public class DataStructureBenchmark {
     }
 
     //@Benchmark
-    public void insertLinkedHashMap3(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerLinkedHashMap3(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashMap<Integer, Integer> lhm = new LinkedHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -373,7 +447,7 @@ public class DataStructureBenchmark {
         blackhole.consume(lhm);
     }
     @Benchmark
-    public void insertLinkedHashSet(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerLinkedHashSet(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashSet<Integer> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -383,7 +457,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertLinkedHashSet2(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerLinkedHashSet2(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashSet<Integer> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -393,7 +467,7 @@ public class DataStructureBenchmark {
     }
 
     //@Benchmark
-    public void insertLinkedHashSet3(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerLinkedHashSet3(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashSet<Integer> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -403,7 +477,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertGdxOM(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerGdxOM(BenchmarkState state, Blackhole blackhole)
     {
         com.badlogic.gdx.utils.OrderedMap<Integer, Integer> gdxOM = new com.badlogic.gdx.utils.OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE,0.75f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -413,7 +487,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertGdxOM2(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerGdxOM2(BenchmarkState state, Blackhole blackhole)
     {
         com.badlogic.gdx.utils.OrderedMap<Integer, Integer> gdxOM = new com.badlogic.gdx.utils.OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -423,7 +497,7 @@ public class DataStructureBenchmark {
     }
 
     //@Benchmark
-    public void insertGdxOM3(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerGdxOM3(BenchmarkState state, Blackhole blackhole)
     {
         com.badlogic.gdx.utils.OrderedMap<Integer, Integer> gdxOM = new com.badlogic.gdx.utils.OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -432,7 +506,7 @@ public class DataStructureBenchmark {
         blackhole.consume(gdxOM);
     }
     @Benchmark
-    public void insertGdxOS(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerGdxOS(BenchmarkState state, Blackhole blackhole)
     {
         com.badlogic.gdx.utils.OrderedSet<Integer> gdxOS = new com.badlogic.gdx.utils.OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -441,7 +515,7 @@ public class DataStructureBenchmark {
         blackhole.consume(gdxOS);
     }
     @Benchmark
-    public void insertGdxOS2(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerGdxOS2(BenchmarkState state, Blackhole blackhole)
     {
         com.badlogic.gdx.utils.OrderedSet<Integer> gdxOS = new com.badlogic.gdx.utils.OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -450,7 +524,7 @@ public class DataStructureBenchmark {
         blackhole.consume(gdxOS);
     }
     //@Benchmark
-    public void insertGdxOS3(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerGdxOS3(BenchmarkState state, Blackhole blackhole)
     {
         com.badlogic.gdx.utils.OrderedSet<Integer> gdxOS = new com.badlogic.gdx.utils.OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
         for (int i = 0; i < state.SIZE; i++) {
@@ -460,7 +534,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertSquidOM(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerSquidOM(BenchmarkState state, Blackhole blackhole)
     {
         OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerHasher);
         for (int i = 0; i < state.SIZE; i++) {
@@ -470,7 +544,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertSquidOM2(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerSquidOM2(BenchmarkState state, Blackhole blackhole)
     {
         OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerHasher);
         for (int i = 0; i < state.SIZE; i++) {
@@ -480,7 +554,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertSquidOM3(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerSquidOM3(BenchmarkState state, Blackhole blackhole)
     {
         OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerHasher);
         for (int i = 0; i < state.SIZE; i++) {
@@ -490,7 +564,7 @@ public class DataStructureBenchmark {
     }
 
     @Benchmark
-    public void insertSquidOS(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerSquidOS(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerHasher);
         for (int i = 0; i < state.SIZE; i++) {
@@ -499,7 +573,7 @@ public class DataStructureBenchmark {
         blackhole.consume(squidOS);
     }
     @Benchmark
-    public void insertSquidOS2(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerSquidOS2(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerHasher);
         for (int i = 0; i < state.SIZE; i++) {
@@ -508,7 +582,7 @@ public class DataStructureBenchmark {
         blackhole.consume(squidOS);
     }
     @Benchmark
-    public void insertSquidOS3(BenchmarkState state, Blackhole blackhole)
+    public void insertIntegerSquidOS3(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerHasher);
         for (int i = 0; i < state.SIZE; i++) {
@@ -517,66 +591,398 @@ public class DataStructureBenchmark {
         blackhole.consume(squidOS);
     }
 
-//    @Benchmark
-//    public void insertSquidCustomOM(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>( state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOM.put(i, i);
-//        }
-//        blackhole.consume(squidOM);
-//    }
-//
-//    @Benchmark
-//    public void insertSquidCustomOM2(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOM.put(i, i);
-//        }
-//        blackhole.consume(squidOM);
-//    }
-//
-//    @Benchmark
-//    public void insertSquidCustomOM3(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOM.put(i, i);
-//        }
-//        blackhole.consume(squidOM);
-//    }
-//
-//    @Benchmark
-//    public void insertSquidCustomOS(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOS.add(i);
-//        }
-//        blackhole.consume(squidOS);
-//    }
-//    @Benchmark
-//    public void insertSquidCustomOS2(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOS.add(i);
-//        }
-//        blackhole.consume(squidOS);
-//    }
-//    @Benchmark
-//    public void insertSquidCustomOS3(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOS.add(i);
-//        }
-//        blackhole.consume(squidOS);
-//    }
+    @Benchmark
+    public void insertIntegerSquidDefaultOM(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>( state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidDefaultOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidDefaultOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidDefaultOS(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertIntegerSquidDefaultOS2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertIntegerSquidDefaultOS3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidMildOM(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidMildOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidMildOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidMildOS(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertIntegerSquidMildOS2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertIntegerSquidMildOS3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidPrimitiveOM(BenchmarkState state, Blackhole blackhole)
+    {
+        IntIntOrderedMap squidOM = new IntIntOrderedMap( state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidPrimitiveOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        IntIntOrderedMap squidOM = new IntIntOrderedMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertIntegerSquidPrimitiveOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        IntIntOrderedMap squidOM = new IntIntOrderedMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+
+
+
+
+
+
+
+
+    @Benchmark
+    public void insertStringLinkedHashMap(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashMap<String, Integer> lhm = new LinkedHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhm.put(state.words[i], i);
+        }
+        blackhole.consume(lhm);
+    }
+
+    @Benchmark
+    public void insertStringLinkedHashMap2(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashMap<String, Integer> lhm = new LinkedHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhm.put(state.words[i], i);
+        }
+        blackhole.consume(lhm);
+    }
+
+    //@Benchmark
+    public void insertStringLinkedHashMap3(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashMap<String, Integer> lhm = new LinkedHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhm.put(state.words[i], i);
+        }
+        blackhole.consume(lhm);
+    }
+    @Benchmark
+    public void insertStringLinkedHashSet(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashSet<String> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhs.add(state.words[i]);
+        }
+        blackhole.consume(lhs);
+    }
+
+    @Benchmark
+    public void insertStringLinkedHashSet2(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashSet<String> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhs.add(state.words[i]);
+        }
+        blackhole.consume(lhs);
+    }
+
+    //@Benchmark
+    public void insertStringLinkedHashSet3(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashSet<String> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhs.add(state.words[i]);
+        }
+        blackhole.consume(lhs);
+    }
+
+    @Benchmark
+    public void insertStringGdxOM(BenchmarkState state, Blackhole blackhole)
+    {
+        com.badlogic.gdx.utils.OrderedMap<String, Integer> gdxOM = new com.badlogic.gdx.utils.OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE,0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            gdxOM.put(state.words[i], i);
+        }
+        blackhole.consume(gdxOM);
+    }
+
+    @Benchmark
+    public void insertStringGdxOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        com.badlogic.gdx.utils.OrderedMap<String, Integer> gdxOM = new com.badlogic.gdx.utils.OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            gdxOM.put(state.words[i], i);
+        }
+        blackhole.consume(gdxOM);
+    }
+
+    //@Benchmark
+    public void insertStringGdxOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        com.badlogic.gdx.utils.OrderedMap<String, Integer> gdxOM = new com.badlogic.gdx.utils.OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            gdxOM.put(state.words[i], i);
+        }
+        blackhole.consume(gdxOM);
+    }
+    @Benchmark
+    public void insertStringGdxOS(BenchmarkState state, Blackhole blackhole)
+    {
+        com.badlogic.gdx.utils.OrderedSet<String> gdxOS = new com.badlogic.gdx.utils.OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            gdxOS.add(state.words[i]);
+        }
+        blackhole.consume(gdxOS);
+    }
+    @Benchmark
+    public void insertStringGdxOS2(BenchmarkState state, Blackhole blackhole)
+    {
+        com.badlogic.gdx.utils.OrderedSet<String> gdxOS = new com.badlogic.gdx.utils.OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            gdxOS.add(state.words[i]);
+        }
+        blackhole.consume(gdxOS);
+    }
+    //@Benchmark
+    public void insertStringGdxOS3(BenchmarkState state, Blackhole blackhole)
+    {
+        com.badlogic.gdx.utils.OrderedSet<String> gdxOS = new com.badlogic.gdx.utils.OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            gdxOS.add(state.words[i]);
+        }
+        blackhole.consume(gdxOS);
+    }
+    
+    @Benchmark
+    public void insertStringSquidDefaultOM(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<String, Integer> squidOM = new OrderedMap<>( state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(state.words[i], i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertStringSquidDefaultOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<String, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(state.words[i], i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertStringSquidDefaultOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<String, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(state.words[i], i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertStringSquidDefaultOS(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(state.words[i]);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertStringSquidDefaultOS2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(state.words[i]);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertStringSquidDefaultOS3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(state.words[i]);
+        }
+        blackhole.consume(squidOS);
+    }
+
+    @Benchmark
+    public void insertStringSquidMildOM(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<String, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(state.words[i], i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertStringSquidMildOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<String, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(state.words[i], i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertStringSquidMildOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<String, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(state.words[i], i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertStringSquidMildOS(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(state.words[i]);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertStringSquidMildOS2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(state.words[i]);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertStringSquidMildOS3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, CrossHash.mildHasher);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(state.words[i]);
+        }
+        blackhole.consume(squidOS);
+    }
+
+
+
+
 
 //    @Benchmark
-//    public void insertFastUtilOM(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilOM(BenchmarkState state, Blackhole blackhole)
 //    {
 //        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -586,7 +992,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilOM2(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilOM2(BenchmarkState state, Blackhole blackhole)
 //    {
 //        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -596,7 +1002,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilOM3(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilOM3(BenchmarkState state, Blackhole blackhole)
 //    {
 //        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -606,7 +1012,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilOS(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilOS(BenchmarkState state, Blackhole blackhole)
 //    {
 //        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -615,7 +1021,7 @@ public class DataStructureBenchmark {
 //        blackhole.consume(fastutilOS);
 //    }
 //    @Benchmark
-//    public void insertFastUtilOS2(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilOS2(BenchmarkState state, Blackhole blackhole)
 //    {
 //        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -624,7 +1030,7 @@ public class DataStructureBenchmark {
 //        blackhole.consume(fastutilOS);
 //    }
 //    @Benchmark
-//    public void insertFastUtilOS3(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilOS3(BenchmarkState state, Blackhole blackhole)
 //    {
 //        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -634,7 +1040,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilFairOM(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilFairOM(BenchmarkState state, Blackhole blackhole)
 //    {
 //        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerStrategy);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -644,7 +1050,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilFairOM2(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilFairOM2(BenchmarkState state, Blackhole blackhole)
 //    {
 //        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerStrategy);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -654,7 +1060,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilFairOM3(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilFairOM3(BenchmarkState state, Blackhole blackhole)
 //    {
 //        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerStrategy);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -664,7 +1070,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilFairOS(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilFairOS(BenchmarkState state, Blackhole blackhole)
 //    {
 //        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerStrategy);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -674,7 +1080,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilFairOS2(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilFairOS2(BenchmarkState state, Blackhole blackhole)
 //    {
 //        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerStrategy);
 //        for (int i = 0; i < state.SIZE; i++) {
@@ -684,7 +1090,7 @@ public class DataStructureBenchmark {
 //    }
 //
 //    @Benchmark
-//    public void insertFastUtilFairOS3(BenchmarkState state, Blackhole blackhole)
+//    public void insertIntegerFastUtilFairOS3(BenchmarkState state, Blackhole blackhole)
 //    {
 //        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerStrategy);
 //        for (int i = 0; i < state.SIZE; i++) {

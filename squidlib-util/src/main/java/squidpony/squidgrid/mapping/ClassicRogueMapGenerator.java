@@ -9,7 +9,6 @@ import squidpony.squidmath.OrderedSet;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Creates a dungeon in the style of the original Rogue game. It will always
@@ -27,11 +26,10 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
      * Holds the information needed to track rooms in the classic rogue
      * generation algorithm.
      */
-    private class ClassicRogueRoom {
+    private static class ClassicRogueRoom {
 
         private int x, y, width, height, cellx, celly;
         private final OrderedSet<ClassicRogueRoom> connections = new OrderedSet<>(4);
-
         ClassicRogueRoom(int x, int y, int width, int height, int cellx, int celly) {
             this.x = x;
             this.y = y;
@@ -43,10 +41,11 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
         @Override
         public int hashCode() {
-            int hash = 5;
-            hash = 89 * hash + cellx;
-            hash = 89 * hash + celly;
-            return hash;
+            // same as Coord.hashCode(); has extremely good resistance to collisions on common points
+            int r = cellx ^ celly;
+            r ^= (cellx << 13 | cellx >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
+            r = cellx ^ (r << 11 | r >>> 21);
+            return r ^ (r << 25 | r >>> 7);
         }
 
         @Override
@@ -70,8 +69,8 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     private int horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight,
             minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight;
     private ClassicRogueRoom[][] rooms;
-    private Terrain[][] map;
     private char[][] dungeon;
+    private Direction[] dirToCheck = new Direction[4];
     /**
      * Initializes the generator to turn out random dungeons within the specific
      * parameters.
@@ -138,23 +137,6 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     }
 
     /**
-     * Builds and returns a map in the Classic Rogue style.
-     * <br>
-     * Only includes rooms, corridors and doors.
-     * <br>
-     * There is also a generate method that produces a 2D char array, which may be more suitable.
-     * @return a 2D array of Terrain objects
-     */
-    public Terrain[][] create() {
-        initRooms();
-        connectRooms();
-        connectUnconnectedRooms();
-        fullyConnect();
-        createRooms();
-        createCorridors();
-        return map;
-    }
-    /**
      * Builds and returns a map in the Classic Rogue style, returned as a 2D char array.
      *
      * Only includes rooms ('.' for floor and '#' for walls), corridors (using the same chars as rooms) and doors ('+'
@@ -166,16 +148,12 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
      */
     public char[][] generate()
     {
-        create();
-        if(map.length <= 0)
-            return new char[0][0];
-        if(dungeon == null || dungeon.length != map.length || dungeon[0].length != map[0].length)
-            dungeon = new char[map.length][map[0].length];
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[x].length; y++) {
-                dungeon[x][y] = map[x][y].symbol();
-            }
-        }
+        initRooms();
+        connectRooms();
+        connectUnconnectedRooms();
+        fullyConnect();
+        createRooms();
+        createCorridors();
         return dungeon;
     }
 
@@ -185,7 +163,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
     private void initRooms() {
         rooms = new ClassicRogueRoom[horizontalRooms][verticalRooms];
-        map = new Terrain[dungeonWidth][dungeonHeight];
+        dungeon = new char[dungeonWidth][dungeonHeight];
         for (int x = 0; x < horizontalRooms; x++) {
             for (int y = 0; y < verticalRooms; y++) {
                 rooms[x][y] = new ClassicRogueRoom(0, 0, 0, 0, x, y);
@@ -193,22 +171,22 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         }
         for (int x = 0; x < dungeonWidth; x++) {
             for (int y = 0; y < dungeonHeight; y++) {
-                map[x][y] = Terrain.WALL;
+                dungeon[x][y] = '#';
             }
         }
     }
 
     private void connectRooms() {
-        List<ClassicRogueRoom> unconnected = new ArrayList<>();
+        ArrayList<ClassicRogueRoom> unconnected = new ArrayList<>();
         for (int x = 0; x < horizontalRooms; x++) {
             for (int y = 0; y < verticalRooms; y++) {
                 unconnected.add(rooms[x][y]);
             }
         }
-        unconnected = rng.shuffle(unconnected);
+        rng.shuffleInPlace(unconnected);
 
-        Direction[]  dirToCheck = new Direction[4];
-        for (ClassicRogueRoom room : unconnected) {
+        for (int i = 0; i < unconnected.size(); i++) {
+            ClassicRogueRoom room = unconnected.get(i);
             rng.shuffle(Direction.CARDINALS, dirToCheck);
             for (Direction dir : dirToCheck) {
                 int nextX = room.x + dir.deltaX;
@@ -231,7 +209,6 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     }
 
     private void connectUnconnectedRooms() {
-        Direction[]  dirToCheck = new Direction[4];
         for (int x = 0; x < horizontalRooms; x++) {
             for (int y = 0; y < verticalRooms; y++) {
                 ClassicRogueRoom room = rooms[x][y];
@@ -285,16 +262,17 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
             ArrayList<ClassicRogueRoom> connected = new ArrayList<>();
             connected.add(deq.removeFirst());
             boolean changed = true;
-            testing:
+            TESTING:
             while (changed) {
                 changed = false;
                 for (ClassicRogueRoom test : deq) {
-                    for (ClassicRogueRoom r : connected) {
+                    for (int i = 0, connectedSize = connected.size(); i < connectedSize; i++) {
+                        ClassicRogueRoom r = connected.get(i);
                         if (test.connections.contains(r) || r.connections.contains(test)) {
                             connected.add(test);
                             deq.remove(test);
                             changed = true;
-                            continue testing;
+                            continue TESTING;
                         }
                     }
                 }
@@ -302,7 +280,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
             allGood = true;
             if (!deq.isEmpty()) {
-                testing:
+                TESTING:
                 for (ClassicRogueRoom room : deq) {
                     for (Direction dir : Direction.CARDINALS) {
                         int x = room.cellx + dir.deltaX;
@@ -312,7 +290,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
                             if (connected.contains(otherRoom)) {
                                 room.connections.add(otherRoom);
                                 allGood = false;
-                                break testing;
+                                break TESTING;
                             }
                         }
                     }
@@ -382,7 +360,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
                 for (int xx = sx; xx < sx + roomw; xx++) {
                     for (int yy = sy; yy < sy + roomh; yy++) {
-                        map[xx][yy] = Terrain.FLOOR;
+                        dungeon[xx][yy] = '.';
                     }
                 }
             }
@@ -397,25 +375,25 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
             case LEFT:
                 y = rng.between(room.y + 1, room.y + room.height);
                 x = room.x - 1;
-                map[x][y] = Terrain.CLOSED_DOOR;
+                dungeon[x][y] = '+';
                 p = Coord.get(x - 1, y);
                 break;
             case RIGHT:
                 y = rng.between(room.y + 1, room.y + room.height);
                 x = room.x + room.width;
-                map[x][y] = Terrain.CLOSED_DOOR;
+                dungeon[x][y] = '+';
                 p = Coord.get(x + 1, y);
-                break;
-            case UP:
-                x = rng.between(room.x + 1, room.x + room.width);
-                y = room.y - 1;
-                map[x][y] = Terrain.CLOSED_DOOR;
-                p = Coord.get(x, y - 1);
                 break;
             case DOWN:
                 x = rng.between(room.x + 1, room.x + room.width);
+                y = room.y - 1;
+                dungeon[x][y] = '+';
+                p = Coord.get(x, y - 1);
+                break;
+            case UP:
+                x = rng.between(room.x + 1, room.x + room.width);
                 y = room.y + room.height;
-                map[x][y] = Terrain.CLOSED_DOOR;
+                dungeon[x][y] = '+';
                 p = Coord.get(x, y + 1);
                 break;
         case NONE:
@@ -467,7 +445,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
             moves.add(new Magnitude(xDir, tempDist));
         }
 
-        map[xpos][ypos] = Terrain.FLOOR;
+        dungeon[xpos][ypos] = '.';
 
         while (!moves.isEmpty()) {
             Magnitude move = moves.removeFirst();
@@ -476,7 +454,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
             while (dist > 0) {
                 xpos += dir.deltaX;
                 ypos += dir.deltaY;
-                map[xpos][ypos] = Terrain.FLOOR;
+                dungeon[xpos][ypos] = '.';
                 dist--;
             }
         }
@@ -494,7 +472,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         }
     }
 
-    private class Magnitude {
+    private static class Magnitude {
 
         public Direction dir;
         public int distance;

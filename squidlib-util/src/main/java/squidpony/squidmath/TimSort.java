@@ -19,24 +19,30 @@ import java.util.Comparator;
  * arrays, while offering performance comparable to a traditional mergesort when run on random arrays. Like all proper mergesorts,
  * this sort is stable and runs O(n log n) time (worst case). In the worst case, this sort requires temporary storage space for
  * n/2 object references; in the best case, it requires only a small constant amount of space.
- * 
+ * <br>
+ * Most users won't ever need this class directly; its API is meant for implementors of ordered data structures like
+ * {@link OrderedMap} that allow sorting. In many cases those data structures expose methods like
+ * {@link OrderedSet#sort(Comparator)} or {@link OrderedMap#sortByValue(Comparator, int, int)}, and using those class'
+ * methods is a much better idea than trying to use TimSort directly on a data structure that already allows sorting.
+ * <br>
  * This implementation was adapted from Tim Peters's list sort for Python, which is described in detail here:
- * 
+ * <br>
  * http://svn.python.org/projects/python/trunk/Objects/listsort.txt
- * 
+ * <br>
  * Tim's C code may be found here:
- * 
+ * <br>
  * http://svn.python.org/projects/python/trunk/Objects/listobject.c
- * 
+ * <br>
  * The underlying techniques are described in this paper (and may have even earlier origins):
- * 
+ * <br>
  * "Optimistic Sorting and Information Theoretic Complexity" Peter McIlroy SODA (Fourth Annual ACM-SIAM Symposium on Discrete
  * Algorithms), pp 467-474, Austin, Texas, 25-27 January 1993.
- * 
+ * <br>
  * While the API to this class consists solely of static methods, it is (privately) instantiable; a TimSort instance holds the
  * state of an ongoing sort, assuming the input array is large enough to warrant the full-blown TimSort. Small arrays are sorted
- * in place, using a binary insertion sort. */
-class TimSort<T> {
+ * in place, using a binary insertion sort.
+ */
+public class TimSort<T> {
 	/** This is the minimum sized sequence that will be merged. Shorter sequences will be lengthened by calling binarySort. If the
 	 * entire array is less than this length, no merges will be performed.
 	 * 
@@ -87,62 +93,12 @@ class TimSort<T> {
 
 	/** Asserts have been placed in if-statements for performance. To enable them, set this field to true and enable them in VM with
 	 * a command line flag. If you modify this class, please do test the asserts! */
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	TimSort () {
 		tmp = new int[INITIAL_TMP_STORAGE_LENGTH];
 		runBase = new int[40];
 		runLen = new int[40];
-	}
-
-	public void doSort (T[] a, IntVLA order, Comparator<T> c, int lo, int hi) {
-		stackSize = 0;
-		rangeCheck(a.length, lo, hi);
-		int nRemaining = hi - lo;
-		if (nRemaining < 2) return; // Arrays of size 0 and 1 are always sorted
-
-		// If array is small, do a "mini-TimSort" with no merges
-		if (nRemaining < MIN_MERGE) {
-			int initRunLen = countRunAndMakeAscending(a, order, lo, hi, c);
-			binarySort(a, order, lo, hi, lo + initRunLen, c);
-			return;
-		}
-
-		this.a = a;
-		this.c = c;
-		this.indices = order;
-		tmpCount = 0;
-
-		/* March over the array once, left to right, finding natural runs, extending short natural runs to minRun 
-		   elements, and merging runs to maintain stack invariant. */
-		int minRun = minRunLength(nRemaining);
-		do {
-			// Identify next run
-			int runLen = countRunAndMakeAscending(a, order, lo, hi, c);
-
-			// If run is short, extend to min(minRun, nRemaining)
-			if (runLen < minRun) {
-				int force = nRemaining <= minRun ? nRemaining : minRun;
-				binarySort(a, order, lo, lo + force, lo + runLen, c);
-				runLen = force;
-			}
-
-			// Push run onto pending-run stack, and maybe merge
-			pushRun(lo, runLen);
-			mergeCollapse();
-
-			// Advance to find next run
-			lo += runLen;
-			nRemaining -= runLen;
-		} while (nRemaining != 0);
-
-		// Merge all remaining runs to complete sort
-		if (DEBUG) assert lo == hi;
-		mergeForceCollapse();
-		if (DEBUG) assert stackSize == 1;
-
-		this.a = null;
-		this.c = null;
 	}
 
 	/** Creates a TimSort instance to maintain the state of an ongoing sort.
@@ -171,15 +127,37 @@ class TimSort<T> {
 	}
 
 	/*
-	 * The next two methods (which are package private and static) constitute the entire API of this class. Each of these methods
-	 * obeys the contract of the public method with the same signature in java.util.Arrays.
+	 * The next two methods (which are public and static) constitute the entire API of this class.
 	 */
 
-	static <T> void sort (T[] a, IntVLA order, Comparator<? super T> c) {
+	/**
+	 * Modifies {@code order} by comparing items in the array {@code a} with the Comparator {@code c}; not likely to be
+	 * used externally except by code that extends or re-implements SquidLib data structures. Generally, {@code order}
+	 * is the {@link OrderedMap#order} field or some similar IntVLA used to keep order in an OrderedSet or the like; it
+	 * will be modified in-place, but the other parameters will be unchanged.
+	 * @param a an array of T, where items will be compared using {@code c}; will not be modified
+	 * @param order an IntVLA that stores indices in {@code a} in the order they would be iterated through; will be modified
+	 * @param c a Comparator that can compare items in {@code a}
+	 * @param <T> the type of items in {@code a} that {@code c} can compare
+	 */
+	public static <T> void sort (T[] a, IntVLA order, Comparator<? super T> c) {
 		sort(a, order, 0, a.length, c);
 	}
 
-	static <T> void sort (T[] a, IntVLA order, int lo, int hi, Comparator<? super T> c) {
+	/**
+	 * Modifies {@code order} by comparing items from index {@code lo} inclusive to index {@code hi} exclusive in the
+	 * array {@code a} with the Comparator {@code c}; not likely to be used externally except by code that extends or
+	 * re-implements SquidLib data structures. Generally, {@code order} is the {@link OrderedMap#order} field or some
+	 * similar IntVLA used to keep order in an OrderedSet or the like; it will be modified in-place, but the other
+	 * parameters will be unchanged.
+	 * @param a an array of T, where items will be compared using {@code c}; will not be modified
+	 * @param order an IntVLA that stores indices in {@code a} in the order they would be iterated through; will be modified
+	 * @param lo the inclusive start index to compare in {@code a} and change in {@code order}
+	 * @param hi the exclusive end index to compare in {@code a} and change in {@code order}
+	 * @param c a Comparator that can compare items in {@code a}
+	 * @param <T> the type of items in {@code a} that {@code c} can compare
+	 */
+	public static <T> void sort (T[] a, IntVLA order, int lo, int hi, Comparator<? super T> c) {
 		if (c == null) {
 			return;
 		}

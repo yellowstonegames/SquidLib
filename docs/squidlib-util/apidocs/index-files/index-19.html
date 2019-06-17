@@ -206,6 +206,10 @@
 <dd>
 <div class="block">Gets a random entry from this Arrangement in constant time, using the given IRNG to generate a random number.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#randomEntry-squidpony.squidmath.IRNG-">randomEntry(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Gets a random entry from this OrderedMap in constant time, using the given IRNG to generate a random number.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#randomEntry-squidpony.squidmath.IRNG-">randomEntry(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
 <div class="block">Gets a random entry from this OrderedMap in constant time, using the given IRNG to generate a random number.</div>
@@ -328,6 +332,11 @@
 <dd>
 <div class="block">Makes a new Mist with all of the salt values altered based on the previous salt values.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomize-long-">randomize(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">High-quality static randomizing method that takes its state as a parameter; state is expected to change between
+ calls to this.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/JabRNG.html#randomize-long-">randomize(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/JabRNG.html" title="class in squidpony.squidmath">JabRNG</a></dt>
 <dd>
 <div class="block">Call with <code>nextLong(z += 0x3C6EF372FE94F82AL)</code>.</div>
@@ -351,6 +360,21 @@
 <dd>
 <div class="block">Randomly add appearance descriptors to a copy of the Chimera creature.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomizeBounded-long-int-">randomizeBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">High-quality static randomizing method that takes its state as a parameter and limits output to an int between 0
+ (inclusive) and bound (exclusive); state is expected to change between calls to this.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomizeDouble-long-">randomizeDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomizeFloat-long-">randomizeFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+ return the same float.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#randomizePowers-squidpony.squidmath.RNG-squidpony.MonsterGen.Chimera-java.lang.String-int-">randomizePowers(RNG, MonsterGen.Chimera, String, int)</a></span> - Method in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>
 <div class="block">Randomly add power descriptors to a copy of the Chimera creature.</div>
@@ -362,6 +386,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#randomKey-squidpony.squidmath.IRNG-">randomKey(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Gets a random key from this Arrangement in constant time, using the given IRNG to generate a random number.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#randomKey-squidpony.squidmath.IRNG-">randomKey(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Gets a random key from this OrderedMap in constant time, using the given IRNG to generate a random number.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#randomKey-squidpony.squidmath.IRNG-">randomKey(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
@@ -545,6 +573,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#randomValue-squidpony.squidmath.IRNG-">randomValue(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Gets a random value from this Arrangement in constant time, using the given IRNG to generate a random number.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#randomValue-squidpony.squidmath.IRNG-">randomValue(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Gets a random value from this OrderedMap in constant time, using the given IRNG to generate a random number.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#randomValue-squidpony.squidmath.IRNG-">randomValue(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
@@ -788,6 +820,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#regenerate-int-int-int-int-double-double-int-int-">regenerate(int, int, int, int, double, double, int, int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#regenerate-int-int-int-int-double-double-int-int-">regenerate(int, int, int, int, double, double, int, int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#regenerate-int-int-int-int-double-double-int-int-">regenerate(int, int, int, int, double, double, int, int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMimicMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#regenerate-int-int-int-int-double-double-int-int-">regenerate(int, int, int, int, double, double, int, int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-int-int-">regenerate(int, int, int, int, double, double, int, int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
@@ -969,16 +1005,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#rem-java.lang.Object-">rem(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#rem-java.lang.Object-">rem(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>
-<div class="block">Delegates to the corresponding type-specific method.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#rem-double-">rem(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html#rem-java.lang.Object-">rem(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a></dt>
-<dd>
-<div class="block">Delegates to the corresponding type-specific method.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#rem-java.lang.Object-">rem(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MathExtras.html#remainder-double-double-">remainder(double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MathExtras.html" title="class in squidpony.squidmath">MathExtras</a></dt>
@@ -1044,30 +1070,23 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#remove-java.lang.Object-">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#remove-java.lang.Object-">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>
-<div class="block">Delegates to the type-specific <code>rem()</code> method.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html#remove--">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.EntryIterator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html#remove-int-">remove(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html#remove-java.lang.Integer-">remove(Integer)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#remove--">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeyIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html#remove-java.lang.Object-">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a></dt>
 <dd>
-<div class="block">Delegates to the type-specific <code>rem()</code> method.</div>
+<div class="block">Always throws an UnsupportedOperationException</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#remove-java.lang.Object-">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#remove-int-">remove(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#remove-java.lang.Object-">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#remove-int-double-">remove(int, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="block"><span class="deprecationComment">Please use the corresponding type-specific method instead.</span></div>
-</div>
+<div class="block">Removes the entry for the specified key only if it is currently
+ mapped to the specified value.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html#remove--">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.ValueIterator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.KeyIterator.html#remove--">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">IntIntOrderedMap.KeyIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.KeySet.html#remove-java.lang.Object-">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntIntOrderedMap.KeySet</a></dt>
@@ -1167,14 +1186,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeAll-java.util.Collection-">removeAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#removeAll-squidpony.squidmath.IntDoubleOrderedMap.DoubleCollection-">removeAll(IntDoubleOrderedMap.DoubleCollection)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>
-<div class="block">Remove from this collection all elements in the given type-specific collection.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#removeAll-java.util.Collection-">removeAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>
-<div class="block">Remove from this collection all elements in the given collection.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html#removeAll-java.util.Collection-">removeAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a></dt>
 <dd>
 <div class="block">Remove from this collection all elements in the given type-specific collection.</div>
@@ -1230,6 +1241,11 @@
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
  should be efficient).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#removeAt-int-">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
+ should be efficient).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#removeAt-int-">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
@@ -1277,6 +1293,10 @@
 <dd>
 <div class="block">Removes the mapping associated with the first key in iteration order.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#removeFirst--">removeFirst()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Removes the mapping associated with the first key in iteration order.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#removeFirst--">removeFirst()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
 <div class="block">Removes the mapping associated with the first key in iteration order.</div>
@@ -1288,10 +1308,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#removeFirst--">removeFirst()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
 <dd>
 <div class="block">Removes the first key in iteration order.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#removeFirstDouble--">removeFirstDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
-<dd>
-<div class="block">Removes the mapping associated with the first key in iteration order.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/RectangleRoomFinder.html#removeFloorCharacter-char-">removeFloorCharacter(char)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/RectangleRoomFinder.html" title="class in squidpony.squidgrid.mapping">RectangleRoomFinder</a></dt>
 <dd>
@@ -1323,6 +1339,10 @@
 <dd>
 <div class="block">Removes the mapping associated with the last key in iteration order.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#removeLast--">removeLast()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Removes the mapping associated with the last key in iteration order.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#removeLast--">removeLast()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
 <div class="block">Removes the mapping associated with the last key in iteration order.</div>
@@ -1334,10 +1354,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#removeLast--">removeLast()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
 <dd>
 <div class="block">Removes the the last key in iteration order.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#removeLastDouble--">removeLastDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
-<dd>
-<div class="block">Removes the mapping associated with the last key in iteration order.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#removeModifiers--">removeModifiers()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>
@@ -1401,6 +1417,16 @@
 <dd>
 <div class="block">If a sound is being produced at a given location (a Coord), this removes it.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.html#removeTrianglesUsing-squidpony.squidmath.Delaunay3D.MultiCoord-">removeTrianglesUsing(Delaunay3D.MultiCoord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath">Delaunay3D</a></dt>
+<dd>
+<div class="block">Removes all triangles from this triangle soup that contain the specified
+ vertex.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DelaunayTriangulator.html#removeTrianglesUsing-squidpony.squidmath.CoordDouble-">removeTrianglesUsing(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DelaunayTriangulator.html" title="class in squidpony.squidmath">DelaunayTriangulator</a></dt>
+<dd>
+<div class="block">Removes all triangles from this triangle soup that contain the specified
+ vertex.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#removeValue-int-">removeValue(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
 <dd>
 <div class="block">Removes the first occurrence of the requested value, and returns the index it was removed at (-1 if not found)</div>
@@ -1426,6 +1452,12 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the
+ first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
+ or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#reorder-int...-">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Given an array or varargs of replacement indices for this OrderedMap's iteration order, reorders this so the
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
 </dd>
@@ -1467,8 +1499,22 @@
  first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
  or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Voronoi.html#reorder-int:A-">reorder(int[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Voronoi.html" title="class in squidpony.squidmath">Voronoi</a></dt>
+<dd>
+<div class="block">Shuffles the point set using a custom permutation sequence.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#repeats">repeats</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#replace-int-double-double-">replace(int, double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Replaces the entry for the specified key only if currently
+ mapped to the specified value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#replace-int-double-">replace(int, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Replaces the entry for the specified key only if it is
+ currently mapped to some value.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#replace-int-int-int-">replace(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
 <div class="block">Replaces the entry for the specified key only if currently
@@ -1523,6 +1569,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Alteration.html#replacer">replacer</a></span> - Variable in class squidpony.<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#reprojectToElliptical-squidpony.squidmath.GreasedRegion-">reprojectToElliptical(GreasedRegion)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a></dt>
+<dd>
+<div class="block">Meant for making maps conform to the Mollweide (elliptical) projection that MimicMap uses.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html#res">res</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html" title="class in squidpony.squidgrid">FOVCache.RefreshUnit</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LongPeriodRNG.html#reseed--">reseed()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a></dt>
@@ -1718,14 +1768,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#retainAll-java.util.Collection-">retainAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#retainAll-squidpony.squidmath.IntDoubleOrderedMap.DoubleCollection-">retainAll(IntDoubleOrderedMap.DoubleCollection)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>
-<div class="block">Retains in this collection only elements from the given type-specific collection.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#retainAll-java.util.Collection-">retainAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>
-<div class="block">Retains in this collection only elements from the given collection.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html#retainAll-java.util.Collection-">retainAll(Collection&lt;?&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a></dt>
 <dd>
 <div class="block">Retains in this collection only elements from the given type-specific collection.</div>
@@ -1966,6 +2008,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/WaypointPathfinder.html#rng">rng</a></span> - Variable in class squidpony.squidai.<a href="../squidpony/squidai/WaypointPathfinder.html" title="class in squidpony.squidai">WaypointPathfinder</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#rng">rng</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html#rng">rng</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping">DenseRoomMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#rng">rng</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
@@ -2000,7 +2044,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#rng">rng</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>
-<div class="block">The IStatefulRNG used to decide how to randomly fill a space; can have its state set and read.</div>
+<div class="block">The IRNG used to decide how to randomly fill a space; can have its state set and read.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SoundMap.html#rng">rng</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a></dt>
 <dd>
@@ -2153,8 +2197,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/tileset/RoomsLimitConnectivity.html#RoomsLimitConnectivity--">RoomsLimitConnectivity()</a></span> - Constructor for class squidpony.tileset.<a href="../squidpony/tileset/RoomsLimitConnectivity.html" title="class in squidpony.tileset">RoomsLimitConnectivity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MixedGenerator.html#roomWidth">roomWidth</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MixedGenerator.html" title="class in squidpony.squidgrid.mapping">MixedGenerator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#root3">root3</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#rotate-int-">rotate(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
 <dd>

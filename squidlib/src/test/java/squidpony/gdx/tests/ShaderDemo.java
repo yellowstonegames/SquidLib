@@ -51,9 +51,9 @@ public class ShaderDemo extends ApplicationAdapter {
     //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 91;
+    private static final int gridWidth = 72;
     /** In number of cells */
-    private static final int gridHeight = 24;
+    private static final int gridHeight = 20;
 
     /** In number of cells */
     private static final int bigWidth = gridWidth * 3;
@@ -63,9 +63,9 @@ public class ShaderDemo extends ApplicationAdapter {
     /** In number of cells */
     private static final int bonusHeight = 7;
     /** The pixel width of a cell */
-    private static final int cellWidth = 13;
+    private static final int cellWidth = 24;
     /** The pixel height of a cell */
-    private static final int cellHeight = 25;
+    private static final int cellHeight = 32;
     private SquidInput input;
     private Color bgColor;
     private Stage stage, languageStage;
@@ -150,12 +150,12 @@ public class ShaderDemo extends ApplicationAdapter {
         // You should try this with both DefaultResources.getLeanFamily() and DefaultResources.getStretchableLeanFont()
         // if you intend to use both or are considering one over the other; the outline weights vary between fonts.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getCrispLeanFamily());
+                DefaultResources.getStretchableLeanFont());
 
         // The main thing this demo is meant to show!
         // Here we assign a different ShaderProgram to the TextCellFactory we use, so that it draws outlines instead of
         // only fading the colors for chars out at their edges.
-        display.font.shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.msdfOutlineFragmentShader);
+        display.font.shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.outlineFragmentShader);
         if (!display.font.shader.isCompiled()) {
             Gdx.app.error("shader", "Outline font shader compilation failed:\n" + display.font.shader.getLog());
         }
@@ -263,12 +263,12 @@ public class ShaderDemo extends ApplicationAdapter {
 
         for (int x = 0; x < bigWidth; x++) {
             for (int y = 0; y < bigHeight; y++) {
-                decoDungeon[x][y] = GDXMarkup.instance.styleChar(decoDungeon[x][y], true, false);
+                decoDungeon[x][y] = GDXMarkup.instance.styleChar(decoDungeon[x][y], false, false);
             }
         }
         
         //places the player as an '@' at his position in orange.
-        pg = display.glyph(GDXMarkup.instance.styleChar('@', true, false), SColor.SAFETY_ORANGE.toEditedFloat(0, -0.05f, 0.35f), player.x, player.y);
+        pg = display.glyph(GDXMarkup.instance.styleChar('@', false, false), SColor.SAFETY_ORANGE.toEditedFloat(0, -0.05f, 0.35f), player.x, player.y);
 
         lang = new ArrayList<>(16);
         StringKit.wrap(lang, artOfWar, gridWidth - 2);
@@ -277,7 +277,8 @@ public class ShaderDemo extends ApplicationAdapter {
         translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
 
         for (int i = 0; i < lang.size(); i++) {
-            lang.set(i, GDXMarkup.instance.styleString("[*]"+lang.get(i)).toString());
+//            lang.set(i, GDXMarkup.instance.styleString("[*]"+lang.get(i)).toString());
+            lang.set(i, lang.get(i));
         }
         
         // this is a big one.
@@ -488,7 +489,8 @@ public class ShaderDemo extends ApplicationAdapter {
             translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
         }
         for (int i = prevSize; i < lang.size(); i++) {             
-            lang.set(i, GDXMarkup.instance.styleString("[*]"+lang.get(i)).toString());
+            lang.set(i, GDXMarkup.instance.styleString(lang.get(i)).toString());
+//            lang.set(i, GDXMarkup.instance.styleString("[*]"+lang.get(i)).toString());
         }
     }
 

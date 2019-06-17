@@ -92,11 +92,11 @@ public class Splash {
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public List<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {
+	public ArrayList<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {
 		if (!DungeonUtility.inLevel(level, start) || !passable(level[start.x][start.y]))
-			return Collections.emptyList();
+			return new ArrayList<>(0);
 
-		final List<Coord> result = new ArrayList<>(volume);
+		final ArrayList<Coord> result = new ArrayList<>(volume);
 
 		Direction[] dirs = new Direction[Direction.OUTWARDS.length];
 
@@ -158,7 +158,8 @@ public class Splash {
 		if (nb == 0)
 			return;
 
-		assert !border.isEmpty();
+		if(border.isEmpty())
+			return;
 		for (int j = 0; j < nb && !zone.isEmpty(); j++) {
 			inebriate0(rng, zone, border, drunks);
 			if (border.isEmpty() || zone.isEmpty())
@@ -187,7 +188,7 @@ public class Splash {
 		final Coord center = rng.getRandomElement(border);
 		zone.remove(center);
 		for (int dx = -radius; dx <= radius; ++dx) {
-			final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));
+			final int high = (int) (Math.sqrt(radius * radius - dx * dx));
 			for (int dy = -high; dy <= high; ++dy) {
 				final Coord c = center.translate(dx, dy);
 				zone.remove(c);
@@ -230,7 +231,7 @@ public class Splash {
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public static List<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, Set<Character> impassable, int drunks)
+	public static ArrayList<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, Set<Character> impassable, int drunks)
 	{
 		Set<Character> blocked;
 		if(impassable == null)

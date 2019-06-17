@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
@@ -16,11 +15,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,7 +23,7 @@ import java.util.Set;
 
 public class SquidAIDemo extends ApplicationAdapter {
     private enum Phase {MOVE_ANIM, ATTACK_ANIM}
-    SpriteBatch batch;
+    private FilterBatch batch;
 
     private Phase phase = Phase.ATTACK_ANIM;
     private RNG rng;
@@ -59,7 +54,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
     @Override
     public void create () {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         width = 40;
         height = 40;
         cellWidth = 6;
@@ -260,7 +255,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         }*/
         ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, null, whichFoes, whichAllies, user, whichFoes);
         if(path.isEmpty())
-            path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[whichFoes.size()]));
+            path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[0]));
         /*
         System.out.println("User at (" + user.x + "," + user.y + ") using " +
                 whichTech.name);
@@ -279,28 +274,14 @@ public class SquidAIDemo extends ApplicationAdapter {
     }
 
     public void move(AnimatedEntity ae, int newX, int newY) {
-        display.slide(ae, newX, newY, 2, 0.075f);
+        Coord n = Coord.get(newX, newY);
+        if(!bluePlaces.contains(n) && !redPlaces.contains(n)) {
+            display.slide(ae, newX, newY, 2, 0.075f);
+        }
         phase = Phase.MOVE_ANIM;
 
     }
-
-    // check if a monster's movement would overlap with another monster.
-    @SuppressWarnings("unused")
-	private boolean checkOverlap(AnimatedEntity ae, int x, int y)
-    {
-        for(AnimatedEntity mon : teamRed)
-        {
-            if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
-                return true;
-        }
-        for(AnimatedEntity mon : teamBlue)
-        {
-            if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
-                return true;
-        }
-        return false;
-    }
-
+    
     private void postMove(int idx) {
 
         int i = 0;

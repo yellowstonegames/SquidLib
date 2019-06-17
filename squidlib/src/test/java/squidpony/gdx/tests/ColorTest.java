@@ -5,21 +5,19 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.ArrayTools;
 import squidpony.StringKit;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.MathExtras;
-import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.NumberTools;
 
 import static squidpony.StringKit.safeSubstring;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
+//import static squidpony.squidgrid.gui.gdx.SColor.floatGetYCwCm;
 
 /**
  * Created by Tommy Ettinger on 12/27/2016.
@@ -28,28 +26,30 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-//    private static int gridWidth = 160;
-    private static int gridWidth = 64;
+    private static int gridWidth = 160;
+//    private static int gridWidth = 256;
 //    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
      * In number of cells
      */
     private static int gridHeight = 32;
+//    private static int gridHeight = 256;
 //    private static int gridHeight = 27;
 
     /**
      * The pixel width of a cell
      */
-//    private static int cellWidth = 5;
+//    private static int cellWidth = 2;
     private static int cellWidth = 10;
     /**
      * The pixel height of a cell
      */
-//    private static int cellHeight = 5;
-    private static int cellHeight = 25;
+//    private static int cellHeight = 2;
+    private static int cellHeight = 21;
 
-    private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
+    private static int totalWidth = 512, totalHeight = 512;
+//    private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
 
 
 
@@ -90,26 +90,27 @@ public class ColorTest extends ApplicationAdapter {
             0x00000000, 0x1F1833FF, 0x2B2E42FF, 0x3E3546FF,
             0x414859FF, 0x68717AFF, 0x90A1A8FF, 0xB6CBCFFF,
             0xD3E5EDFF, 0xFFFFFFFF, 0x5C3A41FF, 0x826481FF,
-            0x966C6CFF, 0xAB947AFF, 0xF68181FF, 0xF53333FF,
-            0xD75748FF, 0xAE4539FF, 0x8A503EFF, 0xCD683DFF,
-            0xDE6A38FF, 0xFB6B1DFF, 0xB58057FF, 0xFCBF8AFF,
-            0xFF9E17FF, 0xFFBF40FF, 0xE3C896FF, 0xFFE596FF,
-            0xEDD500FF, 0xFBFF86FF, 0xB4D645FF, 0x729446FF,
-            0x91DB69FF, 0x358510FF, 0x51C43FFF, 0x4BA14AFF,
-            0x1EBC73FF, 0x30E1B9FF, 0x8FF8E2FF, 0xB8FDFFFF,
-            0x94D2D4FF, 0x0B8A8FFF, 0x63C2C9FF, 0x4C93ADFF,
-            0x417291FF, 0x8FD3FFFF, 0x264F6EFF, 0x4D9BE6FF,
-            0x233663FF, 0x3F4DD0FF, 0x6858F0FF, 0x484A77FF,
-            0x8657CCFF, 0xA884F3FF, 0x621075FF, 0x905EA9FF,
-            0x6B3E75FF, 0xEAADEDFF, 0x852D66FF, 0xC32454FF,
-            0x7A3045FF, 0xF04F78FF, 0xC27182FF, 0xC93038FF,
+            0x966C6CFF, 0x715A56FF, 0xAB947AFF, 0xF68181FF, //0xE3C896FF -> 0x715A56FF
+            0xF53333FF, 0x5A0A07FF, 0xAE4539FF, 0x8A503EFF,
+            0xCD683DFF, 0xFBA458FF, 0xFB6B1DFF, 0xDDBBA4FF, //0x9F8562FF -> 0xDDBBA4FF
+            0xFDD7AAFF, 0xFFA514FF, 0xC29162FF, 0xE8B710FF, //0xF9C79FFF -> 0xFDD7AAFF
+            0xFBE626FF, 0xC0B510FF, 0xFBFF86FF, 0xB4D645FF,
+            0x729446FF, 0xC8E4BEFF, 0x45F520FF, 0x51C43FFF,
+            0x0E4904FF, 0x55F084FF, 0x1EBC73FF, 0x30E1B9FF,
+            0x7FE0C2FF, 0xB8FDFFFF, 0x039F78FF, 0x63C2C9FF,
+            0x216981FF, 0x7FE8F2FF, 0x5369EFFF, 0x4D9BE6FF,
+            0x28306FFF, 0x5C76BFFF, 0x4D44C0FF, 0x180FCFFF,
+            0x53207DFF, 0x8657CCFF, 0xA884F3FF, 0x630867FF,
+            0xA03EB2FF, 0x881AC4FF, 0xE4A8FAFF, 0xB53D86FF,
+            0xF34FE9FF, 0x7A3045FF, 0xF04F78FF, 0xC93038FF, //0xC27182FF -> 0xC29162FF
     };
 
     private Stage stage;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private Viewport viewport;
     private TextCellFactory tcf;
     private SquidLayers display;
+    private float[][] colors;
     private int hh = 0;
     private int vv = 0;
     private float luma = 0.5f;
@@ -228,86 +229,125 @@ public class ColorTest extends ApplicationAdapter {
         return floatGet(r, g, b,
                 opacity);
     }
+//    public static float floatGetYCwCm(float luma, float warm, float mild, float opacity) {
+//        // the color solid should be:
+//        
+//        //                   > warm >
+//        // blue    violet     red
+//        // cyan     gray      orange
+//        // green    neon      yellow
+//        //  \/ mild \/
+//
+//        // so, warm is effectively defined as the presence of red.
+//        // and mild is, effectively, presence of green.
+//        // negative warm or negative mild will each contribute to blue.
+//        // luma is defined as (r * 3 + g * 4 + b) / 8
+//        // or r * 0.375f + g * 0.5f + b * 0.125f
+//        // warm is the warm-cool axis, with positive warm between red and yellow and negative warm between blue and green
+//        // warm is defined as (r - b), with range from -1 to 1
+//        // mild is the green-purple axis, with positive mild between green and yellow, negative mild between blue and red
+//        // mild is defined as (g - b), with range from -1 to 1
+//        
+//        //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
+//        //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
+//        //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
+//        final float r = MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+//        g = MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+//        b = MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f);
+//        return floatGet(r, g, b, opacity);
+//    }
+
+    /**
+     * Gets a color as a packed float given floats representing luma (Y, akin to lightness), chroma warm (Cw, one of two
+     * kinds of chroma used here), chroma mild (Cm, the other kind of chroma), and opacity. Luma should be between 0 and
+     * 1, inclusive, with 0 used for very dark colors including but not limited to black, and 1 used for very light
+     * colors including but not limited to white. The two chroma values range from -1.0 to 1.0, unlike YCbCr and YCoCg,
+     * and also unlike those color spaces, there's some aesthetic value in changing just one chroma value. When warm is
+     * high and mild is low, the color is more reddish; when both are low it is more bluish, and when mild is high and
+     * warm is low, the color tends to be greenish, and when both are high it tends to be brown or yellow. When warm and
+     * mild are both near 0.0f, the color is closer to gray. Because chroma values are centered on 0.0f, you can multiply
+     * them by a value like 0.5f to halve the colorfulness of the color.
+     * <br>
+     * This method clamps the resulting color's RGB values, so any values can technically be given to this as luma,
+     * warm, and mild, but they will only be reversible from the returned float color to the original Y, Cw, and Cm
+     * values if the original values were in the range that {@link SColor#chromaWarm(float)},
+     * {@link SColor#chromaMild(float)}, and {@link SColor#lumaYCwCm(float)} return.
+     *
+     * @param luma       0f to 1f, luma or Y component of YCwCm
+     * @param warm       -1f to 1f, "chroma warm" or Cw component of YCwCm, with 1f more red or yellow
+     * @param mild       -1f to 1f, "chroma mild" or Cm component of YCwCm, with 1f more green or yellow
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a float encoding a color with the given properties
+     */
     public static float floatGetYCwCm(float luma, float warm, float mild, float opacity) {
-        if (mild >= -0.0039f && mild <= 0.0039f && warm >= -0.0039f && warm <= 0.0039f) {
-            return floatGet(luma, luma, luma, opacity);
-        }
-
         // the color solid should be:
-        //                             > warm >
-        //          rose
-        //     violet    red
-        // blue               orange
-        //     cyan      yellow
-        //          green
-        // \/ mild \/
-        
-        // so, warm is effectively defined as the lack of blue.
-        // and mild is, loosely, presence of green.
-        
-        // luma is defined as (r * 5 + g * 9 + b * 2) / 16
-        // or r * 0x.5p0f + g * 0x.9p0f + b * 0x.2p0f
-        // warm is the warm-cool axis, with positive warm between red and yellow and negative warm between violet and cyan
-        // warm is defined as (r * 7 + g * 1 + b * -8) / 16
-        // or b * 0x.6p0f + g * 0x.2p0f + r * -0x.8p0f
-        // mild is the green-purple axis, with positive mild between cyan and yellow, negative full between violet and red
-        // mild is defined as (r * -8 + g * 8 + b * 0) / 16
-        // or r * -0x0.8p0f + g * 0x0.8p0f
-        
-        //r = (luma * 4 + warm) * 0x8p-9f + mild * 0x1Bp-9f;
-        //g = (luma * 4 + warm) * 0x8p-9f - mild * 0x25p-9f;
-        //b = warm * -2 - r * 0xEp-4f - g * 0x2p-4f;
-        //
-        //
 
-        // by is the diagonal from blue at 0.75 to yellow at -0.75
-        // r * -0.25f + g * -0.5f + b * 0.75f
-        // should be
-        // r * -0.25f + g * -0.25f + b * 0.5f
-        // gr is the diagonal from green at 0.75 to red at -0.75
-        // r * -0.75f + g * 0.5f + b * 0.25f
-        // should be
-        // r * -0.5f + g * 0.5f
+        //                   > warm >
+        // blue    violet     red
+        // cyan     gray      orange
+        // green    neon      yellow
+        //  \/ mild \/
 
-        //r = t + mild * 0x1Bp-9f;
-        //g = t - mild * 0x25p-9f;
-        //b = warm * -2 - r * 0xEp-4f - g * 0x2p-4f;
-        
-//        warm -= luma * 0.5f;
+        // so, warm is effectively defined as the presence of red.
+        // and mild is, effectively, presence of green.
+        // negative warm with negative mild will each contribute to blue.
+        // luma is defined as (r * 3 + g * 4 + b) / 8
+        // or r * 0.375f + g * 0.5f + b * 0.125f
+        // warm is the warm-cool axis, with positive warm between red and yellow and negative warm between blue and green
+        // warm is defined as (r - b), with range from -1 to 1
+        // mild is the green-purple axis, with positive mild between green and yellow, negative mild between blue and red
+        // mild is defined as (g - b), with range from -1 to 1
 
-        final float t = (luma * 4 + warm) * 0x8p-5f;
-        float r = t + mild * 0x1Bp-5f;//t - cool;//luma * 4 - cool * 0x0.8p0f + full * 0x0.3p0f;
-        if(r < 0f || r > 1f) 
-            r = MathExtras.clamp(r,0,1);
-        //return -0x1.fefefep125F;//SColor.CW_GRAY
-        float g = t - mild * 0x25p-5f;//0.5f - full;
-        if(g < 0f || g > 1f) 
-            g = MathExtras.clamp(g,0,1);
-        //return -0x1.fefefep125F;//SColor.CW_GRAY
-        float b = luma * 4 - r * 0x5p-2f - g * 0x9p-2f;//t + cool;
-        if(b < 0f || b > 1f) 
-            b = MathExtras.clamp(b,0,1);
-        //return -0x1.fefefep125F;//SColor.CW_GRAY
+        //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
+        //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
+        //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
+        //// used in WarpWriter, not sure if optimal
+//        return floatGet(
+//                MathExtras.clamp(luma + warm * 0.625f, 0f, 1f),
+//                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
 
-//        final float t = (luma * 4 + warm) * 0x8p-5f;
-//        float r = t + mild * 0x1Bp-5f;//t - cool;//luma * 4 - cool * 0x0.8p0f + full * 0x0.3p0f;
-//        if(r < 0f || r > 1f) r = MathExtras.clamp(r,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
-//        float g = t - mild * 0x25p-5f;//0.5f - full;
-//        if(g < 0f || g > 1f) g = MathExtras.clamp(g,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
-//        float b = luma * 4 - r * 0x5p-2f - g * 0x9p-2f;//t + cool;
-//        if(b < 0f || b > 1f) b = MathExtras.clamp(b,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
+        /// was chosen as alternative, has issues because it has to change colors and has no identity state
+//        return floatGet(
+//                MathExtras.clamp(luma + warm * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma - warm * 0.25f - mild * 0.25f, 0f, 1f), opacity);
 
-        return floatGet(r, g, b,
-                opacity);
+        //// original
+        return floatGet(
+                MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+
     }
 
-    private void ycc(float y, float cb, float cr)
+
+    private void ycc(float y, float warm, float mild)
     {
-        final byte b = (byte) ((cb + 0.625f) * 64), r = (byte) ((0.625f - cr) * 64);
+        final int b = (int) ((warm + 1f) * 255.5f), r = (int) ((1f - mild) * 255.5f);
 //        SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(y, cb, cr, 1f));
 //        display.putString(b, r, StringKit.hex(b) + "x" + StringKit.hex(r), y < 0.65f ? SColor.WHITE : SColor.BLACK,
 //                tmp);
-        display.put(b, r, '\0', floatGetYCoCg(y, cb, cr, 1f));
+        float red = luma + warm * 0.625f - mild * 0.5f
+          , green = luma + mild * 0.5f - warm * 0.375f
+          ,  blue = luma - warm * 0.375f - mild * 0.5f
+                ;
+//        float red = luma + warm * 0.625f    
+//          , green = luma + mild * 0.5f      
+//          ,  blue = luma - warm * 0.375f - mild * 0.5f
+//                ;
+//        float red = luma + warm * 0.5f
+//          , green = luma + mild * 0.5f
+//          ,  blue = luma - warm * 0.25f - mild * 0.25f
+//                ;
+//        colors[b][r] = floatGetYCwCm(y, cb, cr, 1f);
+        colors[b][r] =
+                (red >= 0f && red <= 1f && green >= 0f && green <= 1f && blue >= 0f && blue <= 1f)
+                ? floatGet(
+                MathExtras.clamp(red, 0f, 1f),
+                MathExtras.clamp(green, 0f, 1f),
+                MathExtras.clamp(blue, 0f, 1f), 1f)
+        : 0f;
 //        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
 //        if((vv = ((vv + 1) & 7)) == 0)
 //        {
@@ -388,26 +428,30 @@ public class ColorTest extends ApplicationAdapter {
 
     public static float lumaYOG(final Color color)
     {
-        return (color.r + color.b) * 0.25f + color.g * 0.5f;
+        return color.r * 0x8.Ap-5f + color.g * 0xF.Fp-5f + color.b * 0x6.1p-5f
+                + 0x1.6p-5f - (Math.max(color.r, Math.max(color.g, color.b))
+                   - Math.min(color.r, Math.min(color.g, color.b))) * 0x1.6p-5f
+                ;
     }
 
     public static float coYOG(final Color color)
     {
-        return (color.r - color.b) * 0.5f;
+        return color.r * 0x8p-4f /* + color.g * -0x1p-4f */ + color.b * -0x8p-4f;
     }
 
     public static float cgYOG(final Color color)
     {
-        return (color.r + color.b) * -0.25f + color.g * 0.5f;
+        return color.r * -0x4p-4f + color.g * 0x8p-4f + color.b * -0x4p-4f;
     }
     
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        tcf = DefaultResources.getCrispSlabFont();//.width(cellWidth).height(cellHeight).initBySize();
+        batch = new FilterBatch();
+        tcf = DefaultResources.getCrispSlabFont().width(1).height(1).initBySize();
         viewport = new StretchViewport(totalWidth, totalHeight);
-        display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight, tcf);//.setTextSize(cellWidth + 1f, cellHeight + 1f);
+        display = new SquidLayers(gridWidth, gridHeight, 1, 1, tcf);//.setTextSize(cellWidth + 1f, cellHeight + 1f);
         stage = new Stage(viewport, batch);
+        colors = ArrayTools.fill(SColor.FLOAT_BLACK, 512, 512);
         //SquidColorCenter scc = DefaultResources.getSCC();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -420,19 +464,29 @@ public class ColorTest extends ApplicationAdapter {
         });
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
         SColor col = new SColor(0, 0, 0, 0);
-        final int COUNT = FLESURRECT.length;
-        final double threshold = 0.008; // threshold controls the "stark-ness" of color changes; must not be negative.
+        int[] palette = {
+                0x00000000, 0x0F0813FF, 0x31383BFF, 0x64666FFF, 0x888F94FF, 0xD2DEE2FF, 0x9EAAB2FF, 0xD5D5D5FF,
+                0x58363DFF, 0x896B88FF, 0x956B6BFF, 0x806965FF, 0xB29B81FF, 0xFF9B9BFF, 0xFF3D3DFF, 0x540300FF,
+                0xAC4337FF, 0x894F3DFF, 0xCD673CFF, 0xF9A256FF, 0xC77930FF, 0xD0AE97FF, 0xE2BC8FFF, 0xF39908FF,
+                0xAE7D4EFF, 0xF2C11AFF, 0xFFEF2EFF, 0xC0FFA6FF, 0x73F60EFF, 0x9BBD2CFF, 0x146D03FF, 0x819E77FF,
+                0x4DFD28FF, 0x44B732FF, 0x8BD1BAFF, 0x52ED81FF, 0x23C178FF, 0x2EDFB7FF, 0x8DEED0FF, 0xC7FFFFFF,
+                0x008F68FF, 0x7BDAE1FF, 0x196179FF, 0x68D1DBFF, 0x5D74FAFF, 0x4D9BE6FF, 0x2A3271FF, 0x4F69B2FF,
+                0x574ECAFF, 0x140BCBFF, 0x5A2784FF, 0x8354C9FF, 0x9B77E6FF, 0x6A0F6EFF, 0xAF4DC1FF, 0x8113BDFF,
+                0xFFC7FFFF, 0xAB337CFF, 0xFF5FFAFF, 0x6F243AFF, 0xE94771FF, 0xD0363EFF, 0xC3A5F4FF, 0x5A00BBFF,
+        };
+        final int COUNT = palette.length;
+        final double THRESHOLD = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
         byte[] paletteMapping = new byte[1 << 16];
         int[] reverse = new int[COUNT];
         byte[][] ramps = new byte[COUNT][4];
         float[] lumas = new float[COUNT], cos = new float[COUNT], cgs = new float[COUNT];
         //String[] names = new String[COUNT];
         final int yLim = 63, coLim = 31, cgLim = 31, shift1 = 6, shift2 = 11;
-        final OrderedSet<Color> flesurrectSet = new OrderedSet<>(COUNT);
-        for (int i = 0; i < COUNT; i++) {
-            col.set(FLESURRECT[i]).clamp();
-            flesurrectSet.add(col.cpy());
-        }
+//        final OrderedSet<Color> flesurrectSet = new OrderedSet<>(COUNT);
+//        for (int i = 0; i < COUNT; i++) {
+//            col.set(FLESURRECT[i]).clamp();
+//            flesurrectSet.add(col.cpy());
+//        }
 //        flesurrectSet.sort(new Comparator<Color>() {
 //            @Override
 //            public int compare(Color o1, Color o2) {
@@ -443,15 +497,16 @@ public class ColorTest extends ApplicationAdapter {
 //            }
 //        }, 1, COUNT);
         for (int i = 1; i < COUNT; i++) {
-            col.set(flesurrectSet.getAt(i));
+            //col.set(flesurrectSet.getAt(i));
             //FLESURRECT[i] = Color.rgba8888(col);
+            col.set(palette[i]);
             //names[i] = col.name;
             reverse[i] =
                     (int) ((lumas[i] = lumaYOG(col)) * yLim)
                             | (int) (((cos[i] = coYOG(col)) + 0.5f) * coLim) << shift1
                             | (int) (((cgs[i] = cgYOG(col)) + 0.5f) * cgLim) << shift2;
             if(paletteMapping[reverse[i]] != 0)
-                System.out.println("color #" + i + ", " + col.name + ", overlaps an existing color, " + (int)paletteMapping[reverse[i]] + "!!!");
+                System.out.println("color #" + i + ", " + col.name + ", overlaps an existing color, " + (int)paletteMapping[reverse[i]] + "!");
             paletteMapping[reverse[i]] = (byte) i;
         }
 //        //this gives the possibility of storing 32KB of paletteMapping as a 9046-char String.
@@ -463,16 +518,17 @@ public class ColorTest extends ApplicationAdapter {
 //        }
         
 //        System.out.println("String[] names = new String[]{ \"" + StringKit.join("\",\"", names) + "\"\n};");
-        StringBuilder sb = new StringBuilder(12 * COUNT);
-        for (int i = 0; i < COUNT; i++) {
-            StringKit.appendHex(sb.append("0x"), FLESURRECT[i]).append(", ");
-            if((i & 3) == 3) sb.append('\n');
-        }
-        System.out.println("int[] FLESURRECT = new int[]{\n"+ sb + "};");
-        System.out.println("int[] reverses = new int[]{ "+ StringKit.join(",", reverse) + "\n};");
-        System.out.println("float[] lumas = new float[]{ "+ StringKit.join("f,", lumas) + "f\n};");
-        System.out.println("float[] cos = new float[]{ "+ StringKit.join("f,", cos) + "f\n};");
-        System.out.println("float[] cgs = new float[]{ "+ StringKit.join("f,", cgs) + "f\n};");
+
+//        StringBuilder sb = new StringBuilder(12 * COUNT);
+//        for (int i = 0; i < COUNT; i++) {
+//            StringKit.appendHex(sb.append("0x"), FLESURRECT[i]).append(", ");
+//            if((i & 3) == 3) sb.append('\n');
+//        }
+//        System.out.println("int[] FLESURRECT = new int[]{\n"+ sb + "};");
+//        System.out.println("int[] reverses = new int[]{ "+ StringKit.join(",", reverse) + "\n};");
+//        System.out.println("float[] lumas = new float[]{ "+ StringKit.join("f,", lumas) + "f\n};");
+//        System.out.println("float[] cos = new float[]{ "+ StringKit.join("f,", cos) + "f\n};");
+//        System.out.println("float[] cgs = new float[]{ "+ StringKit.join("f,", cgs) + "f\n};");
         float cgf, cof, yf;
         for (int cr = 0; cr <= cgLim; cr++) {
             cgf = (float) cr / cgLim - 0.5f;
@@ -484,9 +540,11 @@ public class ColorTest extends ApplicationAdapter {
                         yf = (float) y / yLim;
                         double dist = Double.POSITIVE_INFINITY;
                         for (int i = 1; i < COUNT; i++) {
-                            if (Math.abs(lumas[i] - yf) < 0.1f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
+                            if (Math.abs(lumas[i] - yf) < 0.2f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
                                 paletteMapping[c2] = (byte) i;
                         }
+//                        if(paletteMapping[c2] == 0)
+//                            System.out.println("what gives? y=" + y + ", co=" + cb + ", cg=" + cr);
                     }
                 }
             }
@@ -509,17 +567,18 @@ public class ColorTest extends ApplicationAdapter {
             cof = cos[i];
             cgf = cgs[i];
             ramps[i][1] = (byte)i;//Color.rgba8888(DAWNBRINGER_AURORA[i]);
-            ramps[i][0] = 9;//0xFFFFFFFF; // white
-            ramps[i][2] = 1;//0x010101FF; // black
-            ramps[i][3] = 1;//0x010101FF; // black
+            ramps[i][0] = 9;//15;  //0xFFFFFFFF, white
+            ramps[i][2] = 1;//0x010101FF, black
+            ramps[i][3] = 1;//0x010101FF, black
             for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
-                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > threshold) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
                     ramps[i][0] = paletteMapping[rr];
                     break;
-                }                 
+                }
                 adj = 1f + ((yLim + 1 >>> 1) - yy) * 0x1p-10f;
                 cof = MathUtils.clamp(cof * adj, -0.5f, 0.5f);
                 cgf = MathUtils.clamp(cgf * adj + 0x1.8p-10f, -0.5f, 0.5f);
+
 //                cof = (cof + 0.5f) * 0.984375f - 0.5f;
 //                cgf = (cgf - 0.5f) * 0.96875f + 0.5f;
                 rr = yy
@@ -529,16 +588,17 @@ public class ColorTest extends ApplicationAdapter {
             cof = cos[i];
             cgf = cgs[i];
             for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
-                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > threshold) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
                     ramps[i][2] = paletteMapping[rr];
                     rev = rr;
                     y = yy;
                     match = paletteMapping[rr] & 255;
                     break;
                 }
-                adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-11f;
+                adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
                 cof = MathUtils.clamp(cof * adj, -0.5f, 0.5f);
-                cgf = MathUtils.clamp(cgf * adj - 0x1p-11f, -0.5f, 0.5f);
+                cgf = MathUtils.clamp(cgf * adj - 0x1.8p-10f, -0.5f, 0.5f);
+                
 //                cof = (cof - 0.5f) * 0.984375f + 0.5f;
 //                cgf = (cgf + 0.5f) * 0.984375f - 0.5f;
                 rr = yy
@@ -556,13 +616,14 @@ public class ColorTest extends ApplicationAdapter {
             }
             if (match >= 0) {
                 for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
-                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > threshold) {
+                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
                         ramps[i][3] = paletteMapping[rr];
                         break;
                     }
                     adj = 1f + (yy - (yLim + 1 >>> 1)) * 0x1p-10f;
                     cof = MathUtils.clamp(cof * adj, -0.5f, 0.5f);
-                    cgf = MathUtils.clamp(cgf * adj - 0x1p-11f, -0.5f, 0.5f);
+                    cgf = MathUtils.clamp(cgf * adj - 0x1.8p-10f, -0.5f, 0.5f);
+
 //                    cof = (cof - 0.5f) * 0.96875f + 0.5f;
 //                    cgf = (cgf + 0.5f) * 0.96875f - 0.5f;
                     rr = yy
@@ -578,27 +639,26 @@ public class ColorTest extends ApplicationAdapter {
             }
         }
         
-        //0xFF6262, 0xFC3A8C, 0xE61E78, 0xBF3FBF
-        System.out.println("byte[][] RAMPS = new byte[][]{");
+        System.out.println("public static final byte[][] JUDGE_RAMPS = new byte[][]{");
         for (int i = 0; i < COUNT; i++) {
             System.out.println(
-                      "{ " + ramps[i][0]
-                    + ", " + ramps[i][1]
+                      "{ " + ramps[i][3]
                     + ", " + ramps[i][2]
-                    + ", " + ramps[i][3] + " },"
+                    + ", " + ramps[i][1]
+                    + ", " + ramps[i][0] + " },"
             );
         }
         System.out.println("};");
 
-        System.out.println("int[][] RAMP_VALUES = new int[][]{");
+        System.out.println("public static final int[][] JUDGE_RAMP_VALUES = new int[][]{");
         for (int i = 0; i < COUNT; i++) {
-            System.out.println("{ 0x" + StringKit.hex(FLESURRECT[ramps[i][0] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][1] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][2] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][3] & 255]) + " },"
+            System.out.println("{ 0x" + StringKit.hex(palette[ramps[i][3] & 255])
+                    + ", 0x" + StringKit.hex(palette[ramps[i][2] & 255])
+                    + ", 0x" + StringKit.hex(palette[ramps[i][1] & 255])
+                    + ", 0x" + StringKit.hex(palette[ramps[i][0] & 255]) + " },"
             );
         }
-//        for (int i = 0; i < 256; i++) {
+//        for (int i = 0; i < COUNT; i++) {
 //            System.out.println("{ 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][0] & 255]))
 //                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][1] & 255]))
 //                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][2] & 255]))
@@ -607,13 +667,16 @@ public class ColorTest extends ApplicationAdapter {
 //        }
         System.out.println("};");
         for (int i = 0; i < COUNT; i++) {
-//                col.set(flesurrectSet.getAt(i)).clamp();
-//                display.putString((i >>> 5) << 4, i & 31, "    " + StringKit.hex(Color.rgba8888(col)) + "    ", col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
-            for (int j = 0; j < 4; j++) {
-                float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();
-                display.put((i >>> 5) << 3 | j << 1, i & 31, '\0', cf);
-                display.put((i >>> 5) << 3 | j << 1 | 1, i & 31, '\0', cf);
-            }
+            col.set(palette[i & 255]).clamp();
+            display.putString(i >>> 1 & 0xF0, i & 31, String.format("   %08X   ", palette[i]), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+        }
+            //            for (int j = 0; j < 4; j++) {
+                //float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();
+//                display.put((i >>> 3) << 3 | j << 1, i & 7, '\0', cf);
+//                display.put((i >>> 3) << 3 | j << 1 | 1, i & 7, '\0', cf);
+//                display.putString((i >>> 5) * 20, i & 31, "  " + StringKit.padRightStrict(col.name.substring(7), ' ', 18), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            }
+            
 //            for (int j = 0; j < 4; j++) {
 //                display.put((i >>> 5) << 3 | j << 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
 //                display.put((i >>> 5) << 3 | j << 1 | 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
@@ -622,7 +685,6 @@ public class ColorTest extends ApplicationAdapter {
 //            col = SColor.DAWNBRINGER_AURORA[i];
 //            display.putString((i >>> 5) * 20, i & 31, "  " + StringKit.padRightStrict(col.name.substring(7), ' ', 18), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
 //            display.putString(i >>> 2 & 0xF8, i & 31, String.format("   %02X   ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
-        }
 //            SColor col = SColor.DAWNBRINGER_AURORA[i];
 //        for (int i = 0; i < 48; i++) {
 //            Color.rgba8888ToColor(col, RINSED[i]);
@@ -810,7 +872,7 @@ public class ColorTest extends ApplicationAdapter {
 //                show(hue2, 0.8f, 0.425f);
 //            }
 //        }
-        stage.addActor(display);
+        //stage.addActor(display);
 
         //This block, when uncommented, will generate the color wheel palette code for SColor and print it to stdout.
 //        String template = "NAME\tFEDCBA\tName";
@@ -958,10 +1020,10 @@ public class ColorTest extends ApplicationAdapter {
 //        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
     }
 
-    private double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
+    private static double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
 //        float angle1 = NumberTools.atan2_(cb1, cr1);
 //        float angle2 = NumberTools.atan2_(cb2, cr2);
-        return (y1 - y2) * (y1 - y2) + ((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2)) * 0.5;
+        return (y1 - y2) * (y1 - y2) + ((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2)) * 0.325;
                 //+ ((angle1 - angle2) % 0.5f + 0.5f) % 0.5f;
     }
 
@@ -983,18 +1045,30 @@ public class ColorTest extends ApplicationAdapter {
     @Override
     public void render() {
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
+        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xFFFL) * 0x1.4p-7f) * 0.5f + 0.5f;
+        Gdx.gl.glClearColor(1f - luma, 1f - luma, 1f - luma, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xfff) * 0x1p-7f) * 0.5f + 0.5f;
-//        Gdx.graphics.setTitle("Current luma: " + luma);
+        Gdx.graphics.setTitle("Current luma: " + luma);
+
+//        Gdx.graphics.setTitle("YCwCm demo at 66% luma");
 //        for (float cb = -0.625f; cb <= 0.625f; cb += 0x1p-6f) {
 //            for (float cr = -0.626f; cr <= 0.625f; cr += 0x1p-6f) {
 //                ycc(luma, cb, cr);
 //            }
 //        }
-        stage.getViewport().update(totalWidth, totalHeight, true);
-        stage.getViewport().apply(true);
-        stage.draw();
+        
+        for (float cb = -1f; cb <= 1f; cb += 0x1p-8f) {
+            for (float cr = -1f; cr <= 1f; cr += 0x1p-8f) {
+                ycc(luma, cb, cr);
+            }
+        }
+//        stage.draw();
+        
+        viewport.update(totalWidth, totalHeight, true);
+        viewport.apply(true);
+        batch.begin();
+        tcf.draw(batch, colors, 0, 0);
+        batch.end();
     }
 
     @Override

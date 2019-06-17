@@ -105,8 +105,8 @@
 <span class="sourceLineNo">097</span> * slightly slower. While Lathe32RNG can produce all ints over the course of its period,<a name="line.97"></a>
 <span class="sourceLineNo">098</span> * it will produce some pairs of ints, or longs, more often than others and will never<a name="line.98"></a>
 <span class="sourceLineNo">099</span> * produce some longs. Starfish32RNG will produce all longs but one. {@link ThrustAlt32RNG},<a name="line.99"></a>
-<span class="sourceLineNo">100</span> * {@link Zag32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators that<a name="line.100"></a>
-<span class="sourceLineNo">101</span> * were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,<a name="line.101"></a>
+<span class="sourceLineNo">100</span> * {@link XoshiroStarPhi32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * that were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,<a name="line.101"></a>
 <span class="sourceLineNo">102</span> * but should not be used on GWT: {@link PintRNG} and {@link FlapRNG}. All other generators<a name="line.102"></a>
 <span class="sourceLineNo">103</span> * use longs, and so will be slower than the recommended Starfish32RNG or Lathe32RNG on GWT,<a name="line.103"></a>
 <span class="sourceLineNo">104</span> * but much faster on 64-bit JREs.<a name="line.104"></a>
@@ -452,7 +452,7 @@
 <span class="sourceLineNo">444</span>    public &lt;T&gt; List&lt;T&gt; randomRotation(final List&lt;T&gt; l) {<a name="line.444"></a>
 <span class="sourceLineNo">445</span>        final int sz = l.size();<a name="line.445"></a>
 <span class="sourceLineNo">446</span>        if (sz == 0)<a name="line.446"></a>
-<span class="sourceLineNo">447</span>            return Collections.&lt;T&gt;emptyList();<a name="line.447"></a>
+<span class="sourceLineNo">447</span>            return new ArrayList&lt;&gt;(0);<a name="line.447"></a>
 <span class="sourceLineNo">448</span><a name="line.448"></a>
 <span class="sourceLineNo">449</span>                /*<a name="line.449"></a>
 <span class="sourceLineNo">450</span>                 * Collections.rotate should prefer the best-performing way to rotate l,<a name="line.450"></a>
@@ -480,7 +480,7 @@
 <span class="sourceLineNo">472</span>    public &lt;T&gt; Iterable&lt;T&gt; getRandomStartIterable(final List&lt;T&gt; list) {<a name="line.472"></a>
 <span class="sourceLineNo">473</span>        final int sz = list.size();<a name="line.473"></a>
 <span class="sourceLineNo">474</span>        if (sz == 0)<a name="line.474"></a>
-<span class="sourceLineNo">475</span>            return Collections.&lt;T&gt;emptyList();<a name="line.475"></a>
+<span class="sourceLineNo">475</span>            return new ArrayList&lt;&gt;(0);<a name="line.475"></a>
 <span class="sourceLineNo">476</span><a name="line.476"></a>
 <span class="sourceLineNo">477</span>                /*<a name="line.477"></a>
 <span class="sourceLineNo">478</span>                 * Here's a tricky bit: Defining 'start' here means that every Iterator<a name="line.478"></a>

@@ -139,8 +139,8 @@
 <span class="sourceLineNo">131</span>    public int random(long state)<a name="line.131"></a>
 <span class="sourceLineNo">132</span>    {<a name="line.132"></a>
 <span class="sourceLineNo">133</span>        // This is DiverRNG's algorithm to generate a random long given sequential states<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        state = (state = ((state = ((state &lt;&lt; ((state &amp; 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)<a name="line.134"></a>
-<span class="sourceLineNo">135</span>                ^ (state &gt;&gt;&gt; ((state &gt;&gt;&gt; 60) + 16))) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 27;<a name="line.135"></a>
+<span class="sourceLineNo">134</span>        state = (state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ <a name="line.134"></a>
+<span class="sourceLineNo">135</span>                state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25;<a name="line.135"></a>
 <span class="sourceLineNo">136</span>        // get a random int (using half the bits of our previously-calculated state) that is less than size<a name="line.136"></a>
 <span class="sourceLineNo">137</span>        int column = (int)((size * (state &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.137"></a>
 <span class="sourceLineNo">138</span>        // use the other half of the bits of state to get a 31-bit int, compare to probability and choose either the<a name="line.138"></a>

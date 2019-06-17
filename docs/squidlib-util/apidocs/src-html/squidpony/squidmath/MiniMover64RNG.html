@@ -9,203 +9,193 @@
 <pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
-<span class="sourceLineNo">004</span><a name="line.4"></a>
-<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
-<span class="sourceLineNo">006</span><a name="line.6"></a>
-<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
-<span class="sourceLineNo">008</span> * The fastest generator in this library on desktop JVMs; one of Mark Overton's subcycle generators from<a name="line.8"></a>
-<span class="sourceLineNo">009</span> * &lt;a href="http://www.drdobbs.com/tools/229625477"&gt;this article&lt;/a&gt;, specifically a CMR with a 64-bit state, that has<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * its result multiplied by a constant. Its period is unknown, but is at the very least 2 to the 42, since the generator<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * passes PractRand after generating that many 64-bit integers (it passes with two minor anomalies, and none at the end,<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * the 32TB mark). It probably won't pass many tests when the bits are reversed, so that is something to be aware of.<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * &lt;br&gt;<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * Notably, this generator's {@link #nextLong()} method is extremely small (as are all of the methods that use it as a<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * basis), which may help with inlining decisions for HotSpot. Generating the next step just needs a bitwise rotation of<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * the current state, multiplying the result by a 32-bit constant, and assigning that to state. Generating a long after<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * that only needs a multiplication by a 31-bit constant, which could be modified to allow this to pass tests when the<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * bits are reversed (presumably by appending one or more xorshift operations). The choice of constants for the<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * multipliers and for the rotation needs to be carefully verified; earlier choices came close to failing PractRand at<a name="line.19"></a>
-<span class="sourceLineNo">020</span> * 8TB (and were worsening, so were likely to fail at 16TB), but this set of constants has higher quality in testing.<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * For transparency, the constants used are the state multiplier 0x9E3779B9L, which is 2 to the 32 divided by the golden<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * ratio, the post-processing multiplier 0x41C64E6DL, which was recommended in PractRand as a small LCG multiplier, and<a name="line.22"></a>
-<span class="sourceLineNo">023</span> * a left rotation constant of 21, which was chosen because it is slightly smaller than 1/3 of 64, and that seems to<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * work well in a 64-bit CMR generator.<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * This is a RandomnessSource but not a StatefulRandomness because it needs to take care and avoid seeds that would put<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * it in a short-period subcycle. One long test brute-force checked all seeds from 1 to {@code Math.pow(2, 25)} and<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * validated that each of their periods is at least {@code Math.pow(2, 20) - 1}. This means that as long as a period<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * as low as 1 million is rarely allowed, a starting state can be quickly chosen from a 32-bit int by using the bottom<a name="line.29"></a>
-<span class="sourceLineNo">030</span> * 25 bits of the int (plus 1, to disallow the 0 state) and using the remaining 7 bits to step up to 127 times through<a name="line.30"></a>
-<span class="sourceLineNo">031</span> * the generator.<a name="line.31"></a>
-<span class="sourceLineNo">032</span> * &lt;br&gt;<a name="line.32"></a>
-<span class="sourceLineNo">033</span> * The name comes from M. Overton, who discovered this category of subcycle generators, and also how this generator can<a name="line.33"></a>
-<span class="sourceLineNo">034</span> * really move when it comes to speed. This generator has less state than {@link Mover64RNG}, has a shorter period than<a name="line.34"></a>
-<span class="sourceLineNo">035</span> * it, and is faster than it in all aspects.<a name="line.35"></a>
-<span class="sourceLineNo">036</span> * &lt;br&gt;<a name="line.36"></a>
-<span class="sourceLineNo">037</span> * Created by Tommy Ettinger on 11/26/2018.<a name="line.37"></a>
-<span class="sourceLineNo">038</span> * @author Mark Overton<a name="line.38"></a>
-<span class="sourceLineNo">039</span> * @author Tommy Ettinger<a name="line.39"></a>
-<span class="sourceLineNo">040</span> */<a name="line.40"></a>
-<span class="sourceLineNo">041</span>public final class MiniMover64RNG implements RandomnessSource, Serializable {<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    private static final long serialVersionUID = 1L;<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    private long state;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    public MiniMover64RNG()<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    {<a name="line.45"></a>
-<span class="sourceLineNo">046</span>        seed((int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    public MiniMover64RNG(final int state)<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    {<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        seed(state);<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
-<span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>    /**<a name="line.53"></a>
-<span class="sourceLineNo">054</span>     * Not advised for external use; prefer {@link #MiniMover64RNG(int)} because it guarantees a good subcycle. This<a name="line.54"></a>
-<span class="sourceLineNo">055</span>     * constructor allows all subcycles to be produced, including ones with a shorter period.<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     * @param state the state to use, exactly unless it is 0 (then this uses 1)<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    public MiniMover64RNG(final long state)<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    {<a name="line.59"></a>
-<span class="sourceLineNo">060</span>        this.state = state == 0L ? 1L : state;<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    }<a name="line.61"></a>
-<span class="sourceLineNo">062</span><a name="line.62"></a>
-<span class="sourceLineNo">063</span>//    private static final long[] starting = {<a name="line.63"></a>
-<span class="sourceLineNo">064</span>//            0x000000009E3779B9L, 0x3B8FC958F31EDA72L, 0xD65FCA34221AE79EL, 0xD1D0129A934029AEL, 0x76487440E53D6DF1L, 0x23A3513401A622B0L, 0x90190513B057E092L, 0xE71A9E0801045EDDL,<a name="line.64"></a>
-<span class="sourceLineNo">065</span>//            0xCC8C18579C4F58F7L, 0x63F2C5AB11CE6A0DL, 0xD68A4E08B923DB48L, 0xAAB0DE27C8F2AF64L, 0x86CB87754B5642E8L, 0xDEFA30634C0B7577L, 0x43BE36F3C3B74F65L, 0x6B6FD89017A0A97DL,<a name="line.65"></a>
-<span class="sourceLineNo">066</span>//            0x440B41A2A5E1C0D6L, 0xFFEB33C5B24EE830L, 0x26E53595E2280A26L, 0x12F2526D06CDF7FDL, 0xFEAFF92D0E5FF424L, 0xCD6D34166E5C15ABL, 0xFC3F2307ED6A5094L, 0xD19147F8E373B79CL,<a name="line.66"></a>
-<span class="sourceLineNo">067</span>//            0x6B4385E08BD17503L, 0xE3307AF38B4B3F69L, 0x9E075AF9344F3172L, 0xE6ABC10084A3C64BL, 0x623E72CFA2124CE1L, 0x9619FFDC7741150EL, 0x35BBB499321FB17CL, 0x547D93E6EABAE288L,<a name="line.67"></a>
-<span class="sourceLineNo">068</span>//            0xB1BB900999391989L, 0xF2B6A36E2B74ABFDL, 0xB1554E2018BBBDCEL, 0xC7D2949E15B0F435L, 0xB6CE7BB5CB4B85D3L, 0x89D8EF6444C21B72L, 0x807C2CDCCAA04650L, 0x508E97EC6F7E8200L,<a name="line.68"></a>
-<span class="sourceLineNo">069</span>//            0x6E26B960CA372975L, 0xB18325F328CACED6L, 0x1BE26F268AAEE28DL, 0x7B9D09A322914A6AL, 0xB60D3754CA86E8AEL, 0x2BDDE7F688AAC807L, 0x4277DB3E755DF315L, 0x0D9D5C7376A318B0L,<a name="line.69"></a>
-<span class="sourceLineNo">070</span>//            0x77B8AE1FCB50740AL, 0xE98BBFA83A0E1B98L, 0xFA7D325D5012FAF6L, 0xFBAFB6A750122E5CL, 0x2FC293145BF17259L, 0xAEE61EF2E2C1136EL, 0xD843DA31FA30166AL, 0xCB5439714BE182A0L,<a name="line.70"></a>
-<span class="sourceLineNo">071</span>//            0x2BF7D169AA3FCB21L, 0x6A32949AFE26086AL, 0x0D2282637A5DE391L, 0xBCE4ABF63EAD1D03L, 0xEC5A1E315AC21C06L, 0xEE78DE4B0817F57DL, 0x60D8A7563EF1477AL, 0x911E18BF0D40144BL,<a name="line.71"></a>
-<span class="sourceLineNo">072</span>//            0xA3DD993DA75E5585L, 0x76CACC2F1D980C23L, 0x13B08273152A6CF4L, 0x412B694F86A0FD74L, 0xE33E2FA2EC85334EL, 0xFBFDB2E43EAE4FDAL, 0x901685992003C139L, 0x25DB6A3A3F382B37L,<a name="line.72"></a>
-<span class="sourceLineNo">073</span>//            0x7A3F9DCCAA9A31A1L, 0x42FECE662CC20318L, 0xE5830C50C07AAC70L, 0x1BFFD4DA173ABA99L, 0xC7360E3B7192B2C7L, 0x741470808ED902F3L, 0xC92962DDDFEA8FFAL, 0x055D06BDE448E8C2L,<a name="line.73"></a>
-<span class="sourceLineNo">074</span>//            0xE0A7CC888C02BE8FL, 0x8E7E0790DD8E07EAL, 0x826B0553895B1AAFL, 0xE8C58BA7AAA58FFEL, 0xCF7151A441189F5FL, 0x3A7A1CBB4E879FA7L, 0xD72EEC8A7EFCBBA3L, 0x6B8C77A8954D0BF7L,<a name="line.74"></a>
-<span class="sourceLineNo">075</span>//            0x73F34FE8FB0D8A9BL, 0x6AE297552616C873L, 0x2C4BFD618875BD73L, 0xE98E66DEFEB78A21L, 0xCB834E733E709C50L, 0x8549E7EE0A84CDC2L, 0x2B6E96B9372049C8L, 0x815706308CBE0965L,<a name="line.75"></a>
-<span class="sourceLineNo">076</span>//            0x0744B5093B9CABBAL, 0x8DCF6EA1903504E7L, 0x132A796A48ADFCA5L, 0x9F8F27C1E909C058L, 0x2CEE06E6EE1F5464L, 0x4D62EB09818C8F28L, 0x227FE2C3F1D602BFL, 0x3E27033C9D492A2DL,<a name="line.76"></a>
-<span class="sourceLineNo">077</span>//            0xBDA74A65A3510F69L, 0x9EDA095387235CE8L, 0xD4E4C6B09EB5236DL, 0x4BD5574FDFEF003DL, 0x44E862A20801F72FL, 0x27E6EFE688B4C83EL, 0xC9E8B6E36B64B351L, 0x94F8B89DD9D95A23L,<a name="line.77"></a>
-<span class="sourceLineNo">078</span>//            0x52BCD222D63A833BL, 0x7D4E109CBCAC447BL, 0x205C5D9B41D4B536L, 0x2DEE86E015A01563L, 0xD50E141D4E626F0EL, 0x784CF0A2A7DF0F2CL, 0xB415A9891FB8D999L, 0xF55E85E3D31FFEAAL,<a name="line.78"></a>
-<span class="sourceLineNo">079</span>//            0x2C8273E565F8596CL, 0x3EDCC59F02D0AD91L, 0x24FBE3D4820DF713L, 0x18D9A3DA2219387EL, 0xCF1F6C734E66C1F5L, 0x277967EBA92FADA7L, 0x004D1C3CE5DB911BL, 0xBB24BA3C8385C723L,<a name="line.79"></a>
-<span class="sourceLineNo">080</span>//            0x8D5875128360F2A7L, 0xA9C6C4DF9FCCCA06L, 0x6FECA1183DDF2208L, 0xEC6A1B4526680673L, 0x1F30BD544B870B14L, 0xC8CEF1B3296A340FL, 0xD0D83FE58A46B927L, 0x918D0D521351E66EL,<a name="line.80"></a>
-<span class="sourceLineNo">081</span>//            0x365B57385CD83843L, 0x3801138F4D2D36DFL, 0x3FBB9D893B0D2343L, 0x11F44781EA77AD00L, 0x43DCD114D96729FDL, 0x3BD4DCCB594B6200L, 0xA24A9B213A09B058L, 0x09A3E7F0BE142BB1L,<a name="line.81"></a>
-<span class="sourceLineNo">082</span>//            0x90236C4D945599B7L, 0x2BA8A0608D0417ECL, 0xC24FEF571FC782DFL, 0x8DC625863607028BL, 0xBEDA2DBFB8A84987L, 0x915D2C8925A72E05L, 0xDBE8B345156E5C33L, 0xB699F01B3A7135B8L,<a name="line.82"></a>
-<span class="sourceLineNo">083</span>//            0x73E82A7E2DBE8CF5L, 0xEC0348F876389FB5L, 0x4A0B54EA2D49A245L, 0x338791CF4309ED1CL, 0xC600944F8239852CL, 0x54E2A687D4995C26L, 0x7C9E29BADBED71CBL, 0x4094B0FF0339D075L,<a name="line.83"></a>
-<span class="sourceLineNo">084</span>//            0xF0204249A6058FB0L, 0x6541EE890DA7F33BL, 0xF2FB714B53B6540CL, 0x3299C9024579D55BL, 0x3AE82580C2CB344DL, 0x62281AC6A4C19184L, 0x523711B215B65DA7L, 0xD2232BC66BAEBF8CL,<a name="line.84"></a>
-<span class="sourceLineNo">085</span>//            0xF05868D81D54CADFL, 0xF8C670CBFE46DAB5L, 0x60F49E5FA3A30680L, 0x33BED3AE1CA5FA89L, 0x0B9577229DA48E79L, 0x5586CC9E612E7655L, 0x31272E47B47F8AF2L, 0x529A3EC1636A9FC0L,<a name="line.85"></a>
-<span class="sourceLineNo">086</span>//            0x90501EF07A4EBFADL, 0xAEFF651E4A047F52L, 0xF160B66AEA6603BDL, 0x9BC156E2775665D1L, 0xD3C898E787E6ADBCL, 0x393F6D6B6B4AC94DL, 0x9795EE44CBA5E935L, 0x676232369E68CA73L,<a name="line.86"></a>
-<span class="sourceLineNo">087</span>//            0x516FC161A97658B9L, 0x7243223BD7B8812AL, 0x4061A73DE3AC1EB6L, 0x87589DE0B4CBA6B6L, 0x17F2D34487B117AFL, 0x5E7786C984DEDF4BL, 0xD30DF191B5B0923DL, 0xA49791249D2684B3L,<a name="line.87"></a>
-<span class="sourceLineNo">088</span>//            0x1A0CBCFB5BE5AB5CL, 0x7628D1C1EB51C2F2L, 0x50168CC527A39AF8L, 0x697CB60CF8F9322BL, 0x48AFF611B2E10946L, 0xA3858FD4EA18E2B6L, 0xEFD20E4CEF2A65F5L, 0xDB1CED0A445A293FL,<a name="line.88"></a>
-<span class="sourceLineNo">089</span>//            0xFDF61684CC927D67L, 0xDC6376DBBB5D3BFCL, 0xD09BFB2F6F8D6CDFL, 0x1E84842524902A05L, 0xBD92B8C37F9EE46DL, 0x06F7A007ED5C2ED6L, 0x82EE75DF651DCCA7L, 0x9F2D4ED71D6180EEL,<a name="line.89"></a>
-<span class="sourceLineNo">090</span>//            0xA0D3DCD3B8AE1150L, 0x7D17C26D2C397B06L, 0x8C0720297799B091L, 0x71070EF8E8D38300L, 0xBC0430BB90CF3145L, 0xEA523D477537C90CL, 0xD42D8753251C0BD3L, 0xF0967F3D663603D9L,<a name="line.90"></a>
-<span class="sourceLineNo">091</span>//            0x6A724E528FA997CFL, 0xA476827F739B7100L, 0xFB4848834480191AL, 0xC9D2E5724A0AE765L, 0xD220F37EB7FD56A5L, 0xC0986CDDC6A4613AL, 0x4B70F47719C3D8D8L, 0x87AD1A0426B0BE6EL,<a name="line.91"></a>
-<span class="sourceLineNo">092</span>//            0x0753E68807C62CB5L, 0x99BA97040B35F7BFL, 0xB278C34645360313L, 0x2A3BB3439F729DFDL, 0x1BA7FEDEFE42E878L, 0xE689C25E229FF893L, 0x5A886195FB13BB22L, 0x16B17F955E2C9A76L,<a name="line.92"></a>
-<span class="sourceLineNo">093</span>//            0x40AF38E5B5413AC6L, 0xA2F26EB7E9A4949FL, 0xAFE07155EE2C5FCDL, 0x46F6C31C27832F3EL, 0x82E6051363F4CC9DL, 0x3D2B03828EAB31D3L, 0x126CA811A46BF03BL, 0x69E8E26BDF6409F1L,<a name="line.93"></a>
-<span class="sourceLineNo">094</span>//            0xF9E2985426D876ADL, 0x008CA76E0541E8E0L, 0xC27A4485B397F943L, 0x85EB66C4C81E90DFL, 0x44FEB62F172BF3E0L, 0x238A7B993CE155BEL, 0x988BF9ECF8F36F59L, 0x3A58DA6AB00C876AL,<a name="line.94"></a>
-<span class="sourceLineNo">095</span>//            0x74348C5D00115985L, 0xD0291A87BAA4649EL, 0x7A36C1D79F4FC33BL, 0x28548F67E91EA20FL, 0xB01469B524F79B6EL, 0x67AEEBA546D67C35L, 0x30E10DE9E3BABCCBL, 0x45F9DC2FC4B25D03L,<a name="line.95"></a>
-<span class="sourceLineNo">096</span>//    };<a name="line.96"></a>
-<span class="sourceLineNo">097</span><a name="line.97"></a>
-<span class="sourceLineNo">098</span>    /**<a name="line.98"></a>
-<span class="sourceLineNo">099</span>     * Seeds the state using all bits of the given int {@code s}. Between 33554432 and 4294967296 seeds are possible,<a name="line.99"></a>
-<span class="sourceLineNo">100</span>     * with the actual count probably much closer to 4294967296. This treats the bottom 25 bits of {@code s} (plus 1, to<a name="line.100"></a>
-<span class="sourceLineNo">101</span>     * avoid a seed of 0) as the starting point and then generates the next state at most 127 times, with<a name="line.101"></a>
-<span class="sourceLineNo">102</span>     * each generated state taking less time than {@link #nextLong()}. Some of the starting states are entirely possible<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     * to be within 127 steps of another starting state, so not all seeds are necessarily unique. This is not<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     * guaranteed to put the generator on an optimal subcycle, but it is guaranteed that any subcycle will have a period<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * of at least 1048575.<a name="line.105"></a>
-<span class="sourceLineNo">106</span>     * @param s all bits are used, none verbatim (0 is tolerated)<a name="line.106"></a>
-<span class="sourceLineNo">107</span>     */<a name="line.107"></a>
-<span class="sourceLineNo">108</span>    public final void seed(final int s) {<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        long v = (s &amp; 0x1FFFFFF) + 1L; // at least 2 to the 25 sequential seeds have periods of at least 1048575.<a name="line.109"></a>
-<span class="sourceLineNo">110</span>        //long v = starting[s &amp; 0xFF];<a name="line.110"></a>
-<span class="sourceLineNo">111</span>        for (int i = s &gt;&gt;&gt; 25; i &gt; 0; i--) {<a name="line.111"></a>
-<span class="sourceLineNo">112</span>            v = (v &lt;&lt; 21 | v &gt;&gt;&gt; 43) * 0x9E3779B9L;<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        }<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        state = v;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>    public final int nextInt()<a name="line.117"></a>
-<span class="sourceLineNo">118</span>    {<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        return (int)((state = (state &lt;&lt; 21 | state &gt;&gt;&gt; 43) * 0x9E3779B9L) * 0x41C64E6DL);<a name="line.119"></a>
+<span class="sourceLineNo">004</span>import java.io.Serializable;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/**<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * The fastest generator in this library on desktop JVMs; one of Mark Overton's subcycle generators from<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * &lt;a href="http://www.drdobbs.com/tools/229625477"&gt;this article&lt;/a&gt;, specifically a CMR with a 64-bit state, that has<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * its result multiplied by a constant. Its period is unknown, and it has multiple subcycles with different period<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * lengths, but one is at the very least 2 to the 42, since the generator passes PractRand after generating that many<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * 64-bit integers (it passes 32TB with no anomalies), and all states that can be produced using {@link #seed(int)} have<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * a minimum period of 2 to the 20, or roughly one million. It also can pass TestU01's BigCrush suite in both forward<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * and reversed bit order, though not for all seeds (as expected).<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * &lt;br&gt;<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * Notably, this generator's {@link #nextLong()} method is extremely small (as are all of the methods that use it as a<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * basis), which may help with inlining decisions for HotSpot. Generating the next step just needs a bitwise rotation of<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * the current state, multiplying the result by a 32-bit constant, and assigning that to state. Generating a long after<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * that only needs a multiplication by another constant, which doesn't have the issues with reversed-bits testing that<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * some other generators do when they multiply as their only output step (xorshift128 notably has patterns in its low<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * bits, so multiplying by a constant doesn't help those bits, but the CMR generator here has no such low-bit problems).<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * This means only three math instructions need to be performed to get a new random number (bitwise rotate left,<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * multiply, multiply), which is extremely low for a high-quality generator. While the CMR state change does not<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * pipeline well, the ease of calculating a complete number seems to make up for it on desktop JVMs.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * &lt;br&gt;<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * The choice of constants for the multipliers and for the rotation needs to be carefully verified; earlier choices came<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * close to failing PractRand at 8TB (and were worsening, so were likely to fail at 16TB), but this set of constants has<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * higher quality in testing. Other constants did well in PractRand but had failures in TestU01 (even down to SmallCrush<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * when reversed). For transparency, the constants used in this version:<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;ul&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;li&gt;The state multiplier is 0xAC564B05L (or 2891336453L), which is one of the constants evaluated in Tables of Linear<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * Congruential Generators of Different Sizes and Good Lattice Structure, by Pierre L'Ecuyer, to be optimal for an LCG<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * with a modulus of 2 to the 32 and an odd addend (this doesn't have an addend, but it isn't an LCG either).&lt;/li&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * &lt;li&gt;The post-processing multiplier is 0x818102004182A025L (or -9115001970698837979L), which is a probable prime with<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * a low Hamming weight (14 bits of 64 are set), in the hope it will perform well speed-wise. This number doesn't seem<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * as critical to the quality of the generator, and some other multipliers probably work just as well.&lt;/li&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * &lt;li&gt;A left rotation constant of 29, which was chosen because it seems to allow the generator to pass certain<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * TestU01 statistical tests, such as Birthday Spacings, where most other rotations do not.&lt;/li&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * &lt;/ul&gt;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;br&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * This is a RandomnessSource but not a StatefulRandomness because it needs to take care and avoid seeds that would put<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * it in a short-period subcycle. One long test brute-force checked all seeds from 1 to {@code Math.pow(2, 25)} and<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * validated that each of their periods is at least {@code Math.pow(2, 20) - 1}. This means that as long as a period<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * as low as 1 million is rarely allowed, a starting state can be quickly chosen from a 32-bit int by using the bottom<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * 25 bits of the int (plus 1, to disallow the 0 state) and using the remaining 7 bits to step up to 127 times through<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * the generator.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;br&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * The name comes from M. Overton, who discovered this category of subcycle generators, and also how this generator can<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * really move when it comes to speed. This generator has less state than {@link Mover64RNG}, has a shorter period than<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * it, and is faster than it in all aspects.<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;br&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * Created by Tommy Ettinger on 11/26/2018.<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * @author Mark Overton<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * @author Tommy Ettinger<a name="line.53"></a>
+<span class="sourceLineNo">054</span> */<a name="line.54"></a>
+<span class="sourceLineNo">055</span>public final class MiniMover64RNG implements RandomnessSource, Serializable {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    private static final long serialVersionUID = 2L;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    private long state;<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * Calls {@link #seed(int)} with a random int value (obtained using {@link Math#random()}).<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     */<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    public MiniMover64RNG()<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        seed((int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    }<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>    /**<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * one million, but most if not all initial states will have much longer periods). All ints are permissible values<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * for {@code state}.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * @param state any int; will be used to get the actual state used in the generator (which is a long internally)<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     */<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    public MiniMover64RNG(final int state)<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        seed(state);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * Not advised for external use; prefer {@link #MiniMover64RNG(int)} because it guarantees a good subcycle. This<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * constructor allows all subcycles to be produced, including ones with a shorter period.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * @param state the state to use, exactly unless it is 0 (then this uses 1)<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     */<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    public MiniMover64RNG(final long state)<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        this.state = state == 0L ? 1L : state;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    }<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    /**<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * Seeds the state using all bits of the given int {@code s}. Between 33554432 and 4294967296 seeds are possible,<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * with the actual count probably much closer to 4294967296. This treats the bottom 25 bits of {@code s} (plus 1, to<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * avoid a seed of 0) as the starting point and then generates the next state at most 127 times, with<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * each generated state taking less time than {@link #nextLong()}. Some of the starting states are entirely possible<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * to be within 127 steps of another starting state, so not all seeds are necessarily unique. This is not<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * guaranteed to put the generator on an optimal subcycle, but it is guaranteed that any subcycle will have a period<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * of at least 1048575.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * @param s all bits are used, none verbatim (0 is tolerated)<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    public final void seed(final int s) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        long v = (s &amp; 0x1FFFFFF) + 1L; // at least 2 to the 25 sequential seeds have periods of at least 1048575.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        for (int i = s &gt;&gt;&gt; 25; i &gt; 0; i--) {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            v = (v &lt;&lt; 29 | v &gt;&gt;&gt; 35) * 0xAC564B05L;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        }<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        state = v;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    }<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>    public final int nextInt()<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    {<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        return (int)((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    }<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    @Override<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    public final int next(final int bits)<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        return (int)((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L) &gt;&gt;&gt; (32 - bits);<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    }<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    @Override<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    public final long nextLong() {<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>        return (state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>//        return (state = (state &lt;&lt; 21 | state &gt;&gt;&gt; 43) * 0x9E3779B9L) * 0x41C64E6DL; // earlier, fails some of TestU01<a name="line.119"></a>
 <span class="sourceLineNo">120</span>    }<a name="line.120"></a>
-<span class="sourceLineNo">121</span>    @Override<a name="line.121"></a>
-<span class="sourceLineNo">122</span>    public final int next(final int bits)<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    {<a name="line.123"></a>
-<span class="sourceLineNo">124</span>        return (int)((state = (state &lt;&lt; 21 | state &gt;&gt;&gt; 43) * 0x9E3779B9L) * 0x41C64E6DL) &gt;&gt;&gt; (32 - bits);<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    }<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    @Override<a name="line.126"></a>
-<span class="sourceLineNo">127</span>    public final long nextLong()<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    {<a name="line.128"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>    /**<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * Gets a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive).<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive)<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     */<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    public final double nextDouble() {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        return ((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L &amp; 0x1fffffffffffffL) * 0x1p-53;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
 <span class="sourceLineNo">129</span><a name="line.129"></a>
-<span class="sourceLineNo">130</span>        return (state = (state &lt;&lt; 21 | state &gt;&gt;&gt; 43) * 0x9E3779B9L) * 0x41C64E6DL;<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    }<a name="line.131"></a>
-<span class="sourceLineNo">132</span><a name="line.132"></a>
-<span class="sourceLineNo">133</span>    /**<a name="line.133"></a>
-<span class="sourceLineNo">134</span>     * Produces a copy of this MiniMover64RNG that, if next() and/or nextLong() are called on this object and the<a name="line.134"></a>
-<span class="sourceLineNo">135</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.135"></a>
-<span class="sourceLineNo">136</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.136"></a>
-<span class="sourceLineNo">137</span>     *<a name="line.137"></a>
-<span class="sourceLineNo">138</span>     * @return a copy of this MiniMover64RNG<a name="line.138"></a>
-<span class="sourceLineNo">139</span>     */<a name="line.139"></a>
-<span class="sourceLineNo">140</span>    @Override<a name="line.140"></a>
-<span class="sourceLineNo">141</span>    public MiniMover64RNG copy() {<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        return new MiniMover64RNG(state);<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
-<span class="sourceLineNo">145</span>    /**<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * Gets the state; if this generator was set with {@link #MiniMover64RNG()},<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * {@link #MiniMover64RNG(int)}, or {@link #seed(int)}, then this will be on a good subcycle, otherwise it<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * may not be. <a name="line.148"></a>
-<span class="sourceLineNo">149</span>     * @return the state, a long<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     */<a name="line.150"></a>
-<span class="sourceLineNo">151</span>    public long getState()<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    {<a name="line.152"></a>
-<span class="sourceLineNo">153</span>        return state;<a name="line.153"></a>
-<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
-<span class="sourceLineNo">155</span><a name="line.155"></a>
-<span class="sourceLineNo">156</span>    /**<a name="line.156"></a>
-<span class="sourceLineNo">157</span>     * Sets the state to any long, which may put the generator in a low-period subcycle.<a name="line.157"></a>
-<span class="sourceLineNo">158</span>     * Use {@link #seed(int)} to guarantee a good subcycle.<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     * @param state any int<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     */<a name="line.160"></a>
-<span class="sourceLineNo">161</span>    public void setState(final long state)<a name="line.161"></a>
-<span class="sourceLineNo">162</span>    {<a name="line.162"></a>
-<span class="sourceLineNo">163</span>        this.state = state == 0L ? 1L : state;<a name="line.163"></a>
-<span class="sourceLineNo">164</span>    }<a name="line.164"></a>
-<span class="sourceLineNo">165</span><a name="line.165"></a>
-<span class="sourceLineNo">166</span>    @Override<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    public String toString() {<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        return "MiniMover64RNG with state 0x" + StringKit.hex(state);<a name="line.168"></a>
+<span class="sourceLineNo">130</span>    /**<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * Gets a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive).<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * @return a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive)<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     */<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public final float nextFloat() {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        return ((state = (state &lt;&lt; 29 | state &gt;&gt;&gt; 35) * 0xAC564B05L) * 0x818102004182A025L &amp; 0xffffffL) * 0x1p-24f;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * Produces a copy of this MiniMover64RNG that, if next() and/or nextLong() are called on this object and the<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     *<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @return a copy of this MiniMover64RNG<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     */<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    @Override<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    public MiniMover64RNG copy() {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        return new MiniMover64RNG(state);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    }<a name="line.148"></a>
+<span class="sourceLineNo">149</span><a name="line.149"></a>
+<span class="sourceLineNo">150</span>    /**<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * Gets the state; if this generator was set with {@link #MiniMover64RNG()},<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * {@link #MiniMover64RNG(int)}, or {@link #seed(int)}, then this will be on a good subcycle, otherwise it<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * may not be. <a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * @return the state, a long<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     */<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    public long getState()<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    {<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        return state;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>    }<a name="line.159"></a>
+<span class="sourceLineNo">160</span><a name="line.160"></a>
+<span class="sourceLineNo">161</span>    /**<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * Sets the state to any long, which may put the generator in a low-period subcycle.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * Use {@link #seed(int)} to guarantee a good subcycle.<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * @param state any int<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     */<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    public void setState(final long state)<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        this.state = state == 0L ? 1L : state;<a name="line.168"></a>
 <span class="sourceLineNo">169</span>    }<a name="line.169"></a>
 <span class="sourceLineNo">170</span><a name="line.170"></a>
 <span class="sourceLineNo">171</span>    @Override<a name="line.171"></a>
-<span class="sourceLineNo">172</span>    public boolean equals(Object o) {<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        if (this == o) return true;<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.174"></a>
+<span class="sourceLineNo">172</span>    public String toString() {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        return "MiniMover64RNG with state 0x" + StringKit.hex(state);<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    }<a name="line.174"></a>
 <span class="sourceLineNo">175</span><a name="line.175"></a>
-<span class="sourceLineNo">176</span>        MiniMover64RNG miniMover64RNG = (MiniMover64RNG) o;<a name="line.176"></a>
-<span class="sourceLineNo">177</span><a name="line.177"></a>
-<span class="sourceLineNo">178</span>        return state == miniMover64RNG.state;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>    }<a name="line.179"></a>
+<span class="sourceLineNo">176</span>    @Override<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    public boolean equals(Object o) {<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        if (this == o) return true;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.179"></a>
 <span class="sourceLineNo">180</span><a name="line.180"></a>
-<span class="sourceLineNo">181</span>    @Override<a name="line.181"></a>
-<span class="sourceLineNo">182</span>    public int hashCode() {<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        return (int)(state ^ state &gt;&gt;&gt; 32);<a name="line.183"></a>
+<span class="sourceLineNo">181</span>        MiniMover64RNG miniMover64RNG = (MiniMover64RNG) o;<a name="line.181"></a>
+<span class="sourceLineNo">182</span><a name="line.182"></a>
+<span class="sourceLineNo">183</span>        return state == miniMover64RNG.state;<a name="line.183"></a>
 <span class="sourceLineNo">184</span>    }<a name="line.184"></a>
 <span class="sourceLineNo">185</span><a name="line.185"></a>
-<span class="sourceLineNo">186</span>//    public static void main(String[] args)<a name="line.186"></a>
-<span class="sourceLineNo">187</span>//    {<a name="line.187"></a>
-<span class="sourceLineNo">188</span>//        long stateA = 0x9E3779B9L;<a name="line.188"></a>
-<span class="sourceLineNo">189</span>//        System.out.println("long[] starting = {");<a name="line.189"></a>
-<span class="sourceLineNo">190</span>//        for (int ctr = 0; ctr &lt; 256; ctr++) {<a name="line.190"></a>
-<span class="sourceLineNo">191</span>//            System.out.printf("0x%016XL, ", stateA);<a name="line.191"></a>
-<span class="sourceLineNo">192</span>//            if((ctr &amp; 7) == 7)<a name="line.192"></a>
-<span class="sourceLineNo">193</span>//                System.out.println();<a name="line.193"></a>
-<span class="sourceLineNo">194</span>//            for (int i = 0; i &lt; 0x10000; i++) {<a name="line.194"></a>
-<span class="sourceLineNo">195</span>//                stateA = (stateA &lt;&lt; 21 | stateA &gt;&gt;&gt; 43) * 0x9E3779B9L;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>//            }<a name="line.196"></a>
-<span class="sourceLineNo">197</span>//        }<a name="line.197"></a>
-<span class="sourceLineNo">198</span>//        System.out.println("};");<a name="line.198"></a>
-<span class="sourceLineNo">199</span>//    }<a name="line.199"></a>
-<span class="sourceLineNo">200</span>}<a name="line.200"></a>
+<span class="sourceLineNo">186</span>    @Override<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    public int hashCode() {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        return (int)(state ^ state &gt;&gt;&gt; 32);<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    }<a name="line.189"></a>
+<span class="sourceLineNo">190</span>}<a name="line.190"></a>
 
 
 

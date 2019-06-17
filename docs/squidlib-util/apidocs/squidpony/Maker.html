@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -260,12 +260,19 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr id="i12" class="altColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeList-T-">makeList</a></span>(T&nbsp;element)</code>
+<div class="block">Makes an ArrayList of T given a single T element; avoids creating an array for varargs as
+ <a href="../squidpony/Maker.html#makeList-T...-"><code>makeList(Object[])</code></a> would do, but only allows one item.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM--">makeOM</a></span>()</code>
 <div class="block">Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM-float-K-V-java.lang.Object...-">makeOM</a></span>(float&nbsp;factor,
       K&nbsp;k0,
@@ -276,7 +283,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  at positions 0, 2, 4...</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static &lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOM-K-V-java.lang.Object...-">makeOM</a></span>(K&nbsp;k0,
       V&nbsp;v0,
@@ -285,16 +292,30 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  parameters key-value pairs, casting the Objects at positions 0, 2, 4...</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOS-T...-">makeOS</a></span>(T...&nbsp;elements)</code>
 <div class="block">Makes an OrderedSet (OS) of T given an array or vararg of T elements.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeOS-T-">makeOS</a></span>(T&nbsp;element)</code>
+<div class="block">Makes an OrderedSet of T given a single T element; avoids creating an array for varargs as
+ <a href="../squidpony/Maker.html#makeOS-T...-"><code>makeOS(Object[])</code></a> would do, but only allows one item.</div>
+</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeUOS-T...-">makeUOS</a></span>(T...&nbsp;elements)</code>
 <div class="block">Makes an UnorderedSet (UOS) of T given an array or vararg of T elements.</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Maker.html#makeUOS-T-">makeUOS</a></span>(T&nbsp;element)</code>
+<div class="block">Makes an UnorderedSet of T given a single T element; avoids creating an array for varargs as
+ <a href="../squidpony/Maker.html#makeOS-T...-"><code>makeOS(Object[])</code></a> would do, but only allows one item.</div>
 </td>
 </tr>
 </table>
@@ -425,6 +446,27 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
+<a name="makeList-java.lang.Object-">
+<!--   -->
+</a><a name="makeList-T-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeList</h4>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.107">makeList</a>(T&nbsp;element)</pre>
+<div class="block">Makes an ArrayList of T given a single T element; avoids creating an array for varargs as
+ <a href="../squidpony/Maker.html#makeList-T...-"><code>makeList(Object[])</code></a> would do, but only allows one item.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>element</code> - an array or vararg of T</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a newly-allocated ArrayList containing only element</dd>
+</dl>
+</li>
+</ul>
 <a name="makeLHS-java.lang.Object:A-">
 <!--   -->
 </a><a name="makeLHS-T...-">
@@ -433,7 +475,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeLHS</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util">LinkedHashSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.108">makeLHS</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashSet.html?is-external=true" title="class or interface in java.util">LinkedHashSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.121">makeLHS</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements.</div>
 <dl>
@@ -454,7 +496,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.129">makeOM</a>(K&nbsp;k0,
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.142">makeOM</a>(K&nbsp;k0,
                                            V&nbsp;v0,
                                            <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Makes an OrderedMap (OM) with key and value types inferred from the types of k0 and v0, and considers all
@@ -483,7 +525,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.149">makeOM</a>(float&nbsp;factor,
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.162">makeOM</a>(float&nbsp;factor,
                                            K&nbsp;k0,
                                            V&nbsp;v0,
                                            <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
@@ -513,7 +555,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOM</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.193">makeOM</a>()</pre>
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.206">makeOM</a>()</pre>
 <div class="block">Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty
  OrderedMap with String keys and Coord values, you could use <code>Maker.&lt;String, Coord&gt;makeOM()</code>. Using
  the new keyword is probably just as easy in this case; this method is provided for completeness relative to
@@ -535,7 +577,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeOS</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.206">makeOS</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.219">makeOS</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes an OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements.</div>
 <dl>
@@ -548,6 +590,27 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
+<a name="makeOS-java.lang.Object-">
+<!--   -->
+</a><a name="makeOS-T-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeOS</h4>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.231">makeOS</a>(T&nbsp;element)</pre>
+<div class="block">Makes an OrderedSet of T given a single T element; avoids creating an array for varargs as
+ <a href="../squidpony/Maker.html#makeOS-T...-"><code>makeOS(Object[])</code></a> would do, but only allows one item.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>element</code> - an array or vararg of T</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a newly-allocated OrderedSet containing only element</dd>
+</dl>
+</li>
+</ul>
 <a name="makeUOS-java.lang.Object:A-">
 <!--   -->
 </a><a name="makeUOS-T...-">
@@ -556,7 +619,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeUOS</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.218">makeUOS</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.245">makeUOS</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes an UnorderedSet (UOS) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements; order will not be kept.</div>
 <dl>
@@ -569,6 +632,27 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
+<a name="makeUOS-java.lang.Object-">
+<!--   -->
+</a><a name="makeUOS-T-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeUOS</h4>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.257">makeUOS</a>(T&nbsp;element)</pre>
+<div class="block">Makes an UnorderedSet of T given a single T element; avoids creating an array for varargs as
+ <a href="../squidpony/Maker.html#makeOS-T...-"><code>makeOS(Object[])</code></a> would do, but only allows one item.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>element</code> - an array or vararg of T</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a newly-allocated UnorderedSet containing only element</dd>
+</dl>
+</li>
+</ul>
 <a name="makeEOS-java.lang.Enum-java.lang.Enum:A-">
 <!--   -->
 </a><a name="makeEOS-T-T...-">
@@ -577,7 +661,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeEOS</h4>
-<pre>public static&nbsp;&lt;T extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedSet.html" title="class in squidpony.squidmath">EnumOrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.233">makeEOS</a>(T&nbsp;initial,
+<pre>public static&nbsp;&lt;T extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedSet.html" title="class in squidpony.squidmath">EnumOrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.274">makeEOS</a>(T&nbsp;initial,
                                                             T...&nbsp;elements)</pre>
 <div class="block">Makes a EnumOrderedSet (OS) of the enum type T given at least one T element followed by an array or vararg of any
  number of additional T elements. Duplicate items in elements will have all but one item discarded, using the
@@ -600,7 +684,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeEOS</h4>
-<pre>public static&nbsp;&lt;T extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;T&gt;&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedSet.html" title="class in squidpony.squidmath">EnumOrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.251">makeEOS</a>()</pre>
+<pre>public static&nbsp;&lt;T extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;T&gt;&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedSet.html" title="class in squidpony.squidmath">EnumOrderedSet</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.292">makeEOS</a>()</pre>
 <div class="block">Makes an empty EnumOrderedSet (EOS); needs item type to be specified in order to work. For an empty
  EnumOrderedSet with Radius items, you could use <code>Maker.&lt;Radius&gt;makeEOS()</code>. Using the new keyword is
  probably just as easy in this case; this method is provided for completeness relative to makeEOS() with 1 or more
@@ -621,7 +705,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeArrange</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.264">makeArrange</a>(T...&nbsp;elements)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.305">makeArrange</a>(T...&nbsp;elements)</pre>
 <div class="block">Makes a Arrangement (Arrange) of T given an array or vararg of T elements. Duplicate items in elements will have
  all but one item discarded, using the later item in elements. As is always the case with Arrangement, each item
  will be mapped bi-directionally to its index in the iteration order, and an item can be retrieved with
@@ -645,7 +729,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeK2</h4>
-<pre>public static&nbsp;&lt;A,B&gt;&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;A,B&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.282">makeK2</a>(A&nbsp;a0,
+<pre>public static&nbsp;&lt;A,B&gt;&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;A,B&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.323">makeK2</a>(A&nbsp;a0,
                                    B&nbsp;b0,
                                    <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Makes a K2 (two-key set/bimap) with A and B key types inferred from the types of a0 and b0, and considers all
@@ -674,7 +758,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeK2</h4>
-<pre>public static&nbsp;&lt;A,B&gt;&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;A,B&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.302">makeK2</a>(float&nbsp;factor,
+<pre>public static&nbsp;&lt;A,B&gt;&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;A,B&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.343">makeK2</a>(float&nbsp;factor,
                                    A&nbsp;a0,
                                    B&nbsp;b0,
                                    <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
@@ -704,7 +788,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeK2</h4>
-<pre>public static&nbsp;&lt;A,B&gt;&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;A,B&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.346">makeK2</a>()</pre>
+<pre>public static&nbsp;&lt;A,B&gt;&nbsp;<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;A,B&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.387">makeK2</a>()</pre>
 <div class="block">Makes an empty K2 (two-key set/bimap); needs A and B key types to be specified in order to work. For an empty
  K2 with String A keys Coord B keys, you could use <code>Maker.&lt;String, Coord&gt;makeK2();</code>. Using
  the new keyword is probably just as easy in this case; this method is provided for completeness relative to
@@ -726,7 +810,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>makeEOM</h4>
-<pre>public static&nbsp;&lt;K extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;,V&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedMap.html" title="class in squidpony.squidmath">EnumOrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.367">makeEOM</a>(K&nbsp;k0,
+<pre>public static&nbsp;&lt;K extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;,V&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedMap.html" title="class in squidpony.squidmath">EnumOrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.408">makeEOM</a>(K&nbsp;k0,
                                                                 V&nbsp;v0,
                                                                 <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Makes an EnumOrderedMap (EOM) with key and value types inferred from the types of k0 and v0, and considers all
@@ -755,7 +839,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeEOM</h4>
-<pre>public static&nbsp;&lt;K extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;K&gt;,V&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedMap.html" title="class in squidpony.squidmath">EnumOrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.411">makeEOM</a>()</pre>
+<pre>public static&nbsp;&lt;K extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;K&gt;,V&gt;&nbsp;<a href="../squidpony/squidmath/EnumOrderedMap.html" title="class in squidpony.squidmath">EnumOrderedMap</a>&lt;K,V&gt;&nbsp;<a href="../src-html/squidpony/Maker.html#line.452">makeEOM</a>()</pre>
 <div class="block">Makes an empty EnumOrderedMap (EOM); needs key and value types to be specified in order to work. For an empty
  EnumOrderedMap with Radius keys and Coord values, you could use <code>Maker.&lt;Radius, Coord&gt;makeEOM()</code>. Using
  the new keyword is probably just as easy in this case; this method is provided for completeness relative to

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,26 +113,41 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.41">MiniMover64RNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.55">MiniMover64RNG</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">The fastest generator in this library on desktop JVMs; one of Mark Overton's subcycle generators from
  <a href="http://www.drdobbs.com/tools/229625477">this article</a>, specifically a CMR with a 64-bit state, that has
- its result multiplied by a constant. Its period is unknown, but is at the very least 2 to the 42, since the generator
- passes PractRand after generating that many 64-bit integers (it passes with two minor anomalies, and none at the end,
- the 32TB mark). It probably won't pass many tests when the bits are reversed, so that is something to be aware of.
+ its result multiplied by a constant. Its period is unknown, and it has multiple subcycles with different period
+ lengths, but one is at the very least 2 to the 42, since the generator passes PractRand after generating that many
+ 64-bit integers (it passes 32TB with no anomalies), and all states that can be produced using <a href="../../squidpony/squidmath/MiniMover64RNG.html#seed-int-"><code>seed(int)</code></a> have
+ a minimum period of 2 to the 20, or roughly one million. It also can pass TestU01's BigCrush suite in both forward
+ and reversed bit order, though not for all seeds (as expected).
  <br>
  Notably, this generator's <a href="../../squidpony/squidmath/MiniMover64RNG.html#nextLong--"><code>nextLong()</code></a> method is extremely small (as are all of the methods that use it as a
  basis), which may help with inlining decisions for HotSpot. Generating the next step just needs a bitwise rotation of
  the current state, multiplying the result by a 32-bit constant, and assigning that to state. Generating a long after
- that only needs a multiplication by a 31-bit constant, which could be modified to allow this to pass tests when the
- bits are reversed (presumably by appending one or more xorshift operations). The choice of constants for the
- multipliers and for the rotation needs to be carefully verified; earlier choices came close to failing PractRand at
- 8TB (and were worsening, so were likely to fail at 16TB), but this set of constants has higher quality in testing.
- For transparency, the constants used are the state multiplier 0x9E3779B9L, which is 2 to the 32 divided by the golden
- ratio, the post-processing multiplier 0x41C64E6DL, which was recommended in PractRand as a small LCG multiplier, and
- a left rotation constant of 21, which was chosen because it is slightly smaller than 1/3 of 64, and that seems to
- work well in a 64-bit CMR generator.
+ that only needs a multiplication by another constant, which doesn't have the issues with reversed-bits testing that
+ some other generators do when they multiply as their only output step (xorshift128 notably has patterns in its low
+ bits, so multiplying by a constant doesn't help those bits, but the CMR generator here has no such low-bit problems).
+ This means only three math instructions need to be performed to get a new random number (bitwise rotate left,
+ multiply, multiply), which is extremely low for a high-quality generator. While the CMR state change does not
+ pipeline well, the ease of calculating a complete number seems to make up for it on desktop JVMs.
+ <br>
+ The choice of constants for the multipliers and for the rotation needs to be carefully verified; earlier choices came
+ close to failing PractRand at 8TB (and were worsening, so were likely to fail at 16TB), but this set of constants has
+ higher quality in testing. Other constants did well in PractRand but had failures in TestU01 (even down to SmallCrush
+ when reversed). For transparency, the constants used in this version:
+ <ul>
+ <li>The state multiplier is 0xAC564B05L (or 2891336453L), which is one of the constants evaluated in Tables of Linear
+ Congruential Generators of Different Sizes and Good Lattice Structure, by Pierre L'Ecuyer, to be optimal for an LCG
+ with a modulus of 2 to the 32 and an odd addend (this doesn't have an addend, but it isn't an LCG either).</li>
+ <li>The post-processing multiplier is 0x818102004182A025L (or -9115001970698837979L), which is a probable prime with
+ a low Hamming weight (14 bits of 64 are set), in the hope it will perform well speed-wise. This number doesn't seem
+ as critical to the quality of the generator, and some other multipliers probably work just as well.</li>
+ <li>A left rotation constant of 29, which was chosen because it seems to allow the generator to pass certain
+ TestU01 statistical tests, such as Birthday Spacings, where most other rotations do not.</li>
+ </ul>
  <br>
  This is a RandomnessSource but not a StatefulRandomness because it needs to take care and avoid seeds that would put
  it in a short-period subcycle. One long test brute-force checked all seeds from 1 to <code>Math.pow(2, 25)</code> and
@@ -170,10 +185,15 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG--">MiniMover64RNG</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG--">MiniMover64RNG</a></span>()</code>
+<div class="block">Calls <a href="../../squidpony/squidmath/MiniMover64RNG.html#seed-int-"><code>seed(int)</code></a> with a random int value (obtained using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a>).</div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-int-">MiniMover64RNG</a></span>(int&nbsp;state)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-int-">MiniMover64RNG</a></span>(int&nbsp;state)</code>
+<div class="block">The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly
+ one million, but most if not all initial states will have much longer periods).</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-long-">MiniMover64RNG</a></span>(long&nbsp;state)</code>
@@ -226,29 +246,41 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#nextDouble--">nextDouble</a></span>()</code>
+<div class="block">Gets a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive).</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#nextFloat--">nextFloat</a></span>()</code>
+<div class="block">Gets a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive).</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#nextInt--">nextInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#seed-int-">seed</a></span>(int&nbsp;s)</code>
 <div class="block">Seeds the state using all bits of the given int <code>s</code>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#setState-long-">setState</a></span>(long&nbsp;state)</code>
 <div class="block">Sets the state to any long, which may put the generator in a low-period subcycle.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MiniMover64RNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -280,7 +312,8 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>MiniMover64RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.44">MiniMover64RNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.62">MiniMover64RNG</a>()</pre>
+<div class="block">Calls <a href="../../squidpony/squidmath/MiniMover64RNG.html#seed-int-"><code>seed(int)</code></a> with a random int value (obtained using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a>).</div>
 </li>
 </ul>
 <a name="MiniMover64RNG-int-">
@@ -289,7 +322,14 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>MiniMover64RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.48">MiniMover64RNG</a>(int&nbsp;state)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.73">MiniMover64RNG</a>(int&nbsp;state)</pre>
+<div class="block">The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly
+ one million, but most if not all initial states will have much longer periods). All ints are permissible values
+ for <code>state</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - any int; will be used to get the actual state used in the generator (which is a long internally)</dd>
+</dl>
 </li>
 </ul>
 <a name="MiniMover64RNG-long-">
@@ -298,7 +338,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MiniMover64RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.58">MiniMover64RNG</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.83">MiniMover64RNG</a>(long&nbsp;state)</pre>
 <div class="block">Not advised for external use; prefer <a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-int-"><code>MiniMover64RNG(int)</code></a> because it guarantees a good subcycle. This
  constructor allows all subcycles to be produced, including ones with a shorter period.</div>
 <dl>
@@ -321,7 +361,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>seed</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.108">seed</a>(int&nbsp;s)</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.98">seed</a>(int&nbsp;s)</pre>
 <div class="block">Seeds the state using all bits of the given int <code>s</code>. Between 33554432 and 4294967296 seeds are possible,
  with the actual count probably much closer to 4294967296. This treats the bottom 25 bits of <code>s</code> (plus 1, to
  avoid a seed of 0) as the starting point and then generates the next state at most 127 times, with
@@ -341,7 +381,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.117">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.106">nextInt</a>()</pre>
 </li>
 </ul>
 <a name="next-int-">
@@ -350,7 +390,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.122">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.111">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -370,7 +410,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.127">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.116">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -384,13 +424,41 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </dl>
 </li>
 </ul>
+<a name="nextDouble--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextDouble</h4>
+<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.126">nextDouble</a>()</pre>
+<div class="block">Gets a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive).</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive)</dd>
+</dl>
+</li>
+</ul>
+<a name="nextFloat--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextFloat</h4>
+<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.134">nextFloat</a>()</pre>
+<div class="block">Gets a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive).</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive)</dd>
+</dl>
+</li>
+</ul>
 <a name="copy--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.141">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.146">copy</a>()</pre>
 <div class="block">Produces a copy of this MiniMover64RNG that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -408,7 +476,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.151">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.156">getState</a>()</pre>
 <div class="block">Gets the state; if this generator was set with <a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG--"><code>MiniMover64RNG()</code></a>,
  <a href="../../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-int-"><code>MiniMover64RNG(int)</code></a>, or <a href="../../squidpony/squidmath/MiniMover64RNG.html#seed-int-"><code>seed(int)</code></a>, then this will be on a good subcycle, otherwise it
  may not be.</div>
@@ -424,7 +492,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.161">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.166">setState</a>(long&nbsp;state)</pre>
 <div class="block">Sets the state to any long, which may put the generator in a low-period subcycle.
  Use <a href="../../squidpony/squidmath/MiniMover64RNG.html#seed-int-"><code>seed(int)</code></a> to guarantee a good subcycle.</div>
 <dl>
@@ -439,7 +507,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.167">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.172">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -452,7 +520,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.172">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.177">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -465,7 +533,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.182">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MiniMover64RNG.html#line.187">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

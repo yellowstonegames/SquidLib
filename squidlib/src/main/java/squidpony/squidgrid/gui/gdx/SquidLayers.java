@@ -691,7 +691,7 @@ public class SquidLayers extends Group {
         return this;
     }
 
-    public SquidLayers put(int x, int y, char c[][], Color[][] foreground, Color[][] background) {
+    public SquidLayers put(int x, int y, char[][] c, Color[][] foreground, Color[][] background) {
         foregroundPanel.put(x, y, c, foreground);
         backgroundPanel.put(x, y, background);
         return this;

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -29,6 +28,27 @@ import squidpony.squidmath.WhirlingNoise;
 import java.util.ArrayList;
 
 /**
+ * A general-purpose char display grid that supports one layer of backgrounds and arbitrarily many layers of foreground,
+ * only rendering foreground chars when something is present at a char's location. This also stores an ArrayList of
+ * {@link TextCellFactory.Glyph} items that can be added to using {@link #glyph(char, Color, int, int)} or one of
+ * several other methods; these Glyphs can have effects performed on them that are analogous to the effects on
+ * {@link SquidPanel}'s {@link AnimatedEntity} effects, such as
+ * {@link #slide(TextCellFactory.Glyph, int, int, int, int, float, Runnable)}. Unlike SquidPanel and SquidLayers, this
+ * class does not typically provide many overloads for each method, and usually limits the overloads to one that takes
+ * a packed float color and one that takes a libGDX {@link Color}, and all the other parameters are expected to be
+ * specified explicitly rather than relying on default behavior. SparseLayers tends to perform better than SquidLayers,
+ * especially when a lot of the map is unassigned/blank. It will cause less GC pressure when packed floats are used, and
+ * because {@link SColor} constants pre-calculate their packed float values, using the overloads that take a Color will
+ * perform a little better when given an SColor than a plain libGDX Color. This class makes heavy use of
+ * {@link SColor#lerpFloatColors(float, float, float)} because it should cause no GC pressure (it doesn't create
+ * temporary Color objects), and if you don't want to mutate Colors in-place (which is a bad idea for constants), then
+ * using lerpFloatColors with the packed float color API here should be very effective.
+ * <br>
+ * The names are a little different for some member fields here; there's a {@link TextCellFactory} called {@link #font},
+ * a {@code float[][]} called {@link #backgrounds} that stores packed float colors, an ArrayList of
+ * {@link SparseTextMap} that implements the sparse drawing behavior of foreground chars called {@link #layers}, and so
+ * on.
+ * <br>
  * Created by Tommy Ettinger on 7/28/2017.
  */
 public class SparseLayers extends Actor implements IPackedColorPanel {
@@ -594,6 +614,22 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
+     * The same as {@link #gridWidth()}; here for compatibility with SquidPanel.
+     * @return The number of cells that this panel spans, horizontally.
+     */
+    public int getGridWidth() {
+        return gridWidth;
+    }
+
+    /**
+     * The same as {@link #gridHeight()}; here for compatibility with SquidPanel.
+     * @return The number of cells that this panel spans, vertically.
+     */
+    public int getGridHeight() {
+        return gridHeight;
+    }
+
+    /**
      * @return The width of a cell, in number of pixels.
      */
     @Override
@@ -610,8 +646,22 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
+     * Changes the width and height of chars the font renders, inside the same cell size.
+     * Primarily useful if the font has issues and doesn't line up visually; some older versions of .fnt files
+     * distributed with SquidLib had this type of problem (and some may still).
+     * Provides compatibility with SquidPanel code.
+     * @param wide width in approximate pixels
+     * @param high height in approximate pixels
+     * @return this for chaining.
+     */
+    public SparseLayers setTextSize(float wide, float high)
+    {
+        font.tweakWidth(wide).tweakHeight(high).initBySize();
+        return this;
+    }
+    /**
      * Sets the default foreground color.
-     * Unlike most ISquidPanel implementations, color can be null, which will
+     * This Color can be null, which will
      * usually not be rendered unless a different color is specified.
      * @param color a libGDX Color object or an extension of Color, such as SColor
      */
@@ -625,10 +675,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
     /**
      * @return The default foreground color (if none was set with
-     * {@link #setDefaultForeground(Object)}), or the last color set
-     * with {@link #setDefaultForeground(Object)}. Unlike most
-     * ISquidPanel implementations, this can be null, which will
-     * usually not be rendered unless a different color is specified.
+     * {@link #setDefaultForeground(Color)}), or the last color set with
+     * {@link #setDefaultForeground(Color)}. This Color can be null which
+     * will usually not be rendered unless a different color is specified.
      */
     @Override
     public Color getDefaultForegroundColor() {
@@ -637,7 +686,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
 
     /**
      * Sets the default background color.
-     * Unlike most ISquidPanel implementations, color can be null, which will
+     * This Color can be null, which will
      * usually not be rendered unless a different color is specified.
      * @param color a libGDX Color object or an extension of Color, such as SColor
      */
@@ -1517,6 +1566,60 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             put(x, y, c, foreground,
                 SColor.lerpFloatColors(background, lightColor,(0xAAp-9f + (0xC8p-9f * lightAmount *
                         (1f + 0.35f * (float) flicker.getNoise(x * 0.3, y * 0.3, (System.currentTimeMillis() & 0xffffffL) * 0.00125))))));
+    }
+    public void putBorders(float color, String caption)
+    {
+        put(0, 0,'┌', color);
+        put(gridWidth - 1, 0,'┐', color);
+        put(0, gridHeight - 1,'└', color);
+        put(gridWidth - 1, gridHeight - 1,'┘', color);
+        for (int i = 1; i < gridWidth - 1; i++) {
+            put(i, 0, '─', color);
+            put(i, gridHeight - 1, '─', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            put(0, y, '│', color);
+            put(gridWidth - 1, y, '│', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            for (int x = 1; x < gridWidth - 1; x++) {
+                clear(x, y, 0);
+            }
+        }
+
+        if (caption != null) {
+            put(1, 0, caption, color, 0f);
+        }
+    }
+
+    /**
+     *
+     * @param color the color to draw the borders with; does not affect caption's color(s)
+     * @param caption an IColoredString
+     */
+    public void putBordersCaptioned(float color, IColoredString<Color> caption)
+    {
+        put(0, 0,'┌', color);
+        put(gridWidth - 1, 0,'┐', color);
+        put(0, gridHeight - 1,'└', color);
+        put(gridWidth - 1, gridHeight - 1,'┘', color);
+        for (int i = 1; i < gridWidth - 1; i++) {
+            put(i, 0, '─', color);
+            put(i, gridHeight - 1, '─', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            put(0, y, '│', color);
+            put(gridWidth - 1, y, '│', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            for (int x = 1; x < gridWidth - 1; x++) {
+                clear(x, y, 0);
+            }
+        }
+
+        if (caption != null) {
+            put(1, 0, caption);
+        }
     }
 
     /**
@@ -2830,13 +2933,17 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
-     * Draws the actor. The batch is configured to draw in the parent's coordinate system.
-     * {@link Batch#draw(TextureRegion, float, float, float, float, float, float, float, float, float)
-     * This draw method} is convenient to draw a rotated and scaled TextureRegion. {@link Batch#begin()} has already been called on
-     * the batch. If {@link Batch#end()} is called to draw without the batch then {@link Batch#begin()} must be called before the
-     * method returns.
+     * Draws the SparseLayers and all glyphs it tracks. {@link Batch#begin()} must have already been called on the
+     * batch, and {@link Batch#end()} should be called after this returns and before the rendering code finishes for the
+     * frame.
+     * <br>
+     * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not
+     * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the
+     * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
+     * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
+     * draw full-color art, and end the Batch between drawing this object and the other art.
      *
-     * @param batch a Batch such as a SpriteBatch that must be between a begin() and end() call; usually done by Stage
+     * @param batch a Batch such as a {@link FilterBatch} that must be between a begin() and end() call; usually done by Stage
      * @param parentAlpha currently ignored
      */
     @Override

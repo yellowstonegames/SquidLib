@@ -7,12 +7,12 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -65,7 +65,7 @@ public class EverythingDemo extends ApplicationAdapter {
         }
     }
 
-    private SpriteBatch batch;
+    private FilterBatch batch;
 
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
@@ -132,7 +132,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private Camera camera;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
     private Vector2 screenPosition;
-
+    private TextPanel<Color> tp;
     @Override
     public void create() {
         // gotta have a random number generator. We give a seed to StatefulRNG, which will ensure the dungeon is the
@@ -222,7 +222,7 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         //DefaultResources.getSCC().granularity = 3;
 
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         width = 90;
         height = 26;
         totalWidth = width * 3;
@@ -291,7 +291,6 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f); //cellWidth * 1f, cellHeight  * 1.034f
         display.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f); //cellWidth * 1f, cellHeight  * 1.034f
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
@@ -332,6 +331,9 @@ public class EverythingDemo extends ApplicationAdapter {
         text.append(" to quit. Click the top or bottom border of this box to scroll.");
         */
         messages.appendWrappingMessage(text);
+
+
+        tp = new TextPanel<>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont());
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-9 to use different filters, or press 'f' in play.
@@ -806,7 +808,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
     private void toggleHelp() {
         if (help != null) {
-            clearHelp();
+            help.setVisible(!help.isVisible());
             return;
         }
         final int nbMonsters = monsters.size();
@@ -833,7 +835,7 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> helping4 = new IColoredString.Impl<>("Each Я is an AЯMED GUAЯD; bump into them to kill them.", Color.WHITE);
         IColoredString<Color> helping5 = new IColoredString.Impl<>("If an Я starts its turn next to where you just moved, you take damage.", Color.WHITE);
         
-        final Actor a;
+        final ScrollPane a;
             /*
 			 * Use TextPanel. There's less work to do than with
 			 * GroupCombinedPanel, and we can use a more legible variable-width font.
@@ -842,7 +844,9 @@ public class EverythingDemo extends ApplicationAdapter {
 			 * justifying, without having to worry about sizes since TextPanel lays
 			 * itself out.
 			 */
-        final TextPanel<Color> tp = new TextPanel<Color>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont());
+        tp.borderStyle = UIUtil.CornerStyle.ROUNDED;
+        tp.borderSize = 2f;
+        tp.borderColor = SColor.CW_LIGHT_APRICOT;
         tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
         final List<IColoredString<Color>> text = new ArrayList<>();
@@ -855,12 +859,14 @@ public class EverythingDemo extends ApplicationAdapter {
         text.add(helping5);
 
         final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
-        final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
+        final float h = height * cellHeight, ah = tp.getFont().font().getData().down * -9f * INTERNAL_ZOOM;
         tp.init(aw, ah, text);
         a = tp.getScrollPane();
         final float x = (w - aw) / 2f;
         final float y = (h - ah) / 2f;
         a.setPosition(x, y);
+//        a.layout();
+
         stage.setScrollFocus(a);
 
         help = a;
@@ -869,12 +875,10 @@ public class EverythingDemo extends ApplicationAdapter {
     }
 
     private void clearHelp() {
-        if (help == null)
-			/* Nothing to do */
+        if (help == null) {            /* Nothing to do */
             return;
-        help.clear();
-        stage.getActors().removeValue(help, true);
-        help = null;
+        }
+        help.setVisible(false);
     }
 
     public void putMap() {
@@ -1011,7 +1015,6 @@ public class EverythingDemo extends ApplicationAdapter {
                     break;
                     case PLAYER_ANIM: {
                         postMove();
-
                     }
                 }
             }
@@ -1033,7 +1036,7 @@ public class EverythingDemo extends ApplicationAdapter {
         viewport.apply(false);
         // each stage has its own batch that it starts an ends, so certain batch-wide effects only change one stage.
         stage.draw();
-        if (help == null) {
+        if (help == null || !help.isVisible()) {
             screenPosition.set(cellWidth * 5, cellHeight);
             stage.screenToStageCoordinates(screenPosition);
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
@@ -1053,6 +1056,8 @@ public class EverythingDemo extends ApplicationAdapter {
             // batch must end if it began.
             batch.end();
         }
+        else 
+            tp.drawBorder(batch);
         // if using a filter that changes each frame, clear the known relationship between requested and actual colors
         if (changingColors) {
             fgCenter.clearCache();
@@ -1068,9 +1073,9 @@ public class EverythingDemo extends ApplicationAdapter {
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
         currentZoomX = (float)width / this.width;
         // total new screen height in pixels divided by total number of rows on the screen
-        currentZoomY = (float)height / (this.height + messages.getGridHeight());
+        currentZoomY = (float)height / (this.height + messages.gridHeight());
         // message box should be given updated bounds since I don't think it will do this automatically
-        messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
+        messages.setBounds(0, 0, width, currentZoomY * messages.gridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
         input.getMouse().reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0);
         currentZoomX = cellWidth / currentZoomX;

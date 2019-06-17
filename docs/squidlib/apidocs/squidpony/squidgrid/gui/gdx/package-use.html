@@ -83,17 +83,6 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/AbstractSquidScreen.html#squidpony.squidgrid.gui.gdx">AbstractSquidScreen</a>
-<div class="block">A SquidLib-aware partial implementation of <code>ScreenAdapter</code>.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/AbstractSquidScreen.SquidScreenInput.html#squidpony.squidgrid.gui.gdx">AbstractSquidScreen.SquidScreenInput</a>
-<div class="block">A dumb container, to avoid having too many parameters to
- <a href="../../../../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.html" title="class in squidpony.squidgrid.gui.gdx"><code>AbstractSquidScreen</code></a>'s constructor.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/AnimatedEntity.html#squidpony.squidgrid.gui.gdx">AnimatedEntity</a>
 <div class="block">A simple class that wraps an Actor with its grid position, animating state, and if it is a double-width Actor.</div>
 </td>
@@ -109,8 +98,19 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/FilterBatch.html#squidpony.squidgrid.gui.gdx">FilterBatch</a>
+<div class="block">A drop-in substitute for <code>SpriteBatch</code> that filters any colors used to tint text
+ or images using a <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilter</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/FloatFilter.html#squidpony.squidgrid.gui.gdx">FloatFilter</a>
 <div class="block">Like <code>IFilter</code>, but produces packed floats that encode colors instead of <code>Color</code> objects.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/FloatFilters.IdentityFilter.html#squidpony.squidgrid.gui.gdx">FloatFilters.IdentityFilter</a>
+<div class="block">A FloatFilter that makes no changes to the colors given to it; useful as a default for when no filter is wanted.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -190,7 +190,8 @@
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/SparseLayers.html#squidpony.squidgrid.gui.gdx">SparseLayers</a>
-<div class="block">Created by Tommy Ettinger on 7/28/2017.</div>
+<div class="block">A general-purpose char display grid that supports one layer of backgrounds and arbitrarily many layers of foreground,
+ only rendering foreground chars when something is present at a char's location.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -248,28 +249,25 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/StretchContainer.WrapperViewport.html#squidpony.squidgrid.gui.gdx">StretchContainer.WrapperViewport</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/TextCellFactory.html#squidpony.squidgrid.gui.gdx">TextCellFactory</a>
 <div class="block">Class for creating text blocks.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/TextCellFactory.Glyph.html#squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a>
 <div class="block">A kind of Actor for one char (with one color) that is innately drawn with a specific TextCellFactory, and will
  match the layout behavior of that TextCellFactory when it is used for other purposes.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/TextFamily.html#squidpony.squidgrid.gui.gdx">TextFamily</a>
 <div class="block">A variant of <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextCellFactory</code></a> that allows switching between regular, bold, italic, and bold italic styles.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/UIUtil.CornerStyle.html#squidpony.squidgrid.gui.gdx">UIUtil.CornerStyle</a>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../squidpony/squidgrid/gui/gdx/class-use/UIUtil.YMoveKind.html#squidpony.squidgrid.gui.gdx">UIUtil.YMoveKind</a>
 <div class="block">A vertical move triggered by keyboard keys.</div>
 </td>

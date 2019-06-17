@@ -15,7 +15,7 @@
 <span class="sourceLineNo">007</span>/**<a name="line.7"></a>
 <span class="sourceLineNo">008</span> * A variant on {@link ThrustAltRNG} that uses only 32-bit math when producing 32-bit numbers. This generator does as<a name="line.8"></a>
 <span class="sourceLineNo">009</span> * well as you could hope for on statistical tests, considering it can only generate 2 to the 32 ints before repeating<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * the cycle. You may want to consider {@link Zag32RNG} if roughly 4 billion numbers could be produced by your game or<a name="line.10"></a>
+<span class="sourceLineNo">010</span> * the cycle. You may want to consider {@link Lathe32RNG} if roughly 4 billion numbers could be produced by your game or<a name="line.10"></a>
 <span class="sourceLineNo">011</span> * application (if you just generated random ints, you could exhaust that amount in seconds). On<a name="line.11"></a>
 <span class="sourceLineNo">012</span> * &lt;a href="http://pracrand.sourceforge.net/"&gt;PractRand&lt;/a&gt;, this completes testing on 16GB of generated ints (the<a name="line.12"></a>
 <span class="sourceLineNo">013</span> * amount of space all possible ints would use) without finding any failures. Some big-name number generators sometimes<a name="line.13"></a>

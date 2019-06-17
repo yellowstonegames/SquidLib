@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.gui.gdx.SColor;
@@ -21,19 +22,23 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 19;
-    private int modes = 25;
+    private int mode = 14;
+    private int modes = 31;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
     private Stage stage;
     private int[] amounts = new int[512];
     private DiverRNG diver;
+    private boolean hasGauss = false;
+    private double followingGauss = 0.0;
     private RandomBias bias;
     private RandomXS128 xs128;
     private XSP xsp;
     private EditRNG edit;
     private long seed = 1L;
+    private long startTime = 0L;
+    private double[] circleCoord = new double[2];
 
     private double twist(double input) {
         return (input = input * 0.5 + 1.0) - (int)input;
@@ -50,6 +55,171 @@ public class MathVisualizer extends ApplicationAdapter {
         return NumberTools.setExponent(Math.pow((mixed + index), mixed * 2.6180339887498948482), 0x3ff) - 1.0;
 //        return ((Long.rotateLeft((base *= index), 31) ^ Long.rotateLeft(base, 17) ^ Long.rotateLeft(base, 42)) >>> 11) * 0x1p-53;
     }
+
+    public void insideBallRejection(final double[] vector)
+    {
+        double v1, v2, v3;
+        do {
+            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v3 = 2 * diver.nextDouble() - 1; // between -1 and 1
+        } while (v1 * v1 + v2 * v2 + v3 * v3 > 1);
+        vector[0] = v1;
+        vector[1] = v2;
+    }
+    public final float fastGaussian()
+    {
+        long a = diver.nextLong(), b = diver.nextLong();
+        a = (a & 0x0003FF003FF003FFL) +     ((a & 0x0FFC00FFC00FFC00L) >>> 10);
+        b = (b & 0x0003FF003FF003FFL) +     ((b & 0x0FFC00FFC00FFC00L) >>> 10);
+        a = (a & 0x000000007FF007FFL) +     ((a & 0x0007FF0000000000L) >>> 40);
+        b = (b & 0x000000007FF007FFL) +     ((b & 0x0007FF0000000000L) >>> 40);
+        return (((a & 0x0000000000000FFFL) + ((a & 0x000000007FF00000L) >>> 20))
+                - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * (0x1p-10f);
+    }
+    
+    public final float editedCurve()
+    {
+//        final long r = diver.nextLong(), s = diver.nextLong();
+//        return (((r & 0xFFFFFFL) + (r >>> 40)) * 0x1p-25f + (1.0f - ((s & 0xFFFFFFL) * 0x1p-24f) * ((s >>> 40) * 0x1p-24f))) * 0.5f;
+
+        return 0.1f * (diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+                + diver.nextFloat() + diver.nextFloat() + diver.nextFloat())
+                + 0.2f * ((1f - diver.nextFloat() * diver.nextFloat()) + (1f - diver.nextFloat() * diver.nextFloat()));
+        
+//                - (s & 0xFFFFFFL) - (r >>> 20 & 0xFFFFFFL) - (s >>> 26 & 0xFFFFFFL) - (t >>> 40) - (t >>> 13 & 0xFFFFFFL)
+//        return  ((r & 0xFFFFFFL) + (r >>> 20 & 0xFFFFFFL) + (s >>> 40)
+//                - (s & 0xFFFFFFL) - (s >>> 20 & 0xFFFFFFL) - (r >>> 40)
+//        ) * 0x1p-26f;
+//        return ((r & 0xFFFFFFL) * 0x1p-23f - ((s & 0xFFFFFFL) * 0x1p-23f)) * ((r >> 40) * 0x1p-23f) * ((s >> 40) * 0x1p-23f);
+    }
+    public final double nextGaussian() {
+        if (hasGauss = !hasGauss) {
+            double v1, v2, s;
+            do {
+                v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
+                v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+                s = v1 * v1 + v2 * v2;
+            } while (s > 1 || s == 0);
+            final double multiplier = Math.sqrt(-2 * Math.log(s) / s);
+            followingGauss = v2 * multiplier;
+            return v1 * multiplier;
+        }
+        else return followingGauss;
+    }
+    public void insideBallBoxMuller(final double[] vector)
+    {
+        double mag = 0.0;
+        double v1, v2, v3, s;
+        do {
+            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v3 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            s = v1 * v1 + v2 * v2 + v3 * v3;
+        } while (s > 1 || s == 0);
+        double multiplier = Math.sqrt(-2 * Math.log(s) / s);
+        mag += (vector[0] = (v1 *= multiplier)) * (v1);
+        mag += (vector[1] = (v2 *= multiplier)) * (v2);
+        mag += (v3 *= multiplier) * (v3);
+        if(mag == 0.0)
+        {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        }
+        else
+            mag = Math.cbrt(diver.nextDouble()) / Math.sqrt(mag);
+        vector[0] *= mag;
+        vector[1] *= mag;
+    }
+    public void insideBallBoxMullerFast(final double[] vector)
+    {
+        double v1 = fastGaussian(), v2 = fastGaussian(), v3 = fastGaussian();
+        double mag = (vector[0] = v1) * v1 + (vector[1] = v2) * v2 + v3 * v3;
+        if(mag == 0.0)
+        {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        }
+        else
+            mag = Math.cbrt(diver.nextDouble()) / Math.sqrt(mag);
+        vector[0] *= mag;
+        vector[1] *= mag;
+    }
+    public void insideBallExponential(final double[] vector)
+    {
+        double v1 = nextGaussian(), v2 = nextGaussian(), v3 = nextGaussian();
+        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(diver.nextDouble());
+        if(mag == 0.0)
+        {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        }
+        else
+            mag = 1.0 / Math.sqrt(mag);
+        vector[0] = v1 * mag;
+        vector[1] = v2 * mag;
+    }
+    public void insideBallExponentialFast(final double[] vector) {
+        double v1 = fastGaussian(), v2 = fastGaussian(), v3 = fastGaussian();//, sq = diver.nextDouble() * diver.nextDouble();
+//        double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - diver.nextDouble() * diver.nextDouble()) - 0.25;
+        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(diver.nextDouble());
+        if (mag == 0.0) {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        } else
+            mag = 1.0 / Math.sqrt(mag);
+        //if (Math.abs(v3 * mag) < 0.1) 
+        {
+            vector[0] = v1 * mag;
+            vector[1] = v2 * mag;
+        }
+    }
+    public void insideCircleBoxMuller(final double[] vector)
+    {
+        double mag = 0.0;
+        double v1, v2, s;
+        do {
+            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            s = v1 * v1 + v2 * v2;
+        } while (s > 1 || s == 0);
+        double multiplier = Math.sqrt(-2 * Math.log(s) / s);
+        mag += (vector[0] = (v1 *= multiplier)) * (v1);
+        mag += (vector[1] = (v2 *= multiplier)) * (v2);
+        //mag += -2.0 * Math.log(diver.nextDouble());
+        if(mag == 0)
+        {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        }
+        else
+            mag = Math.sqrt(diver.nextDouble()) / Math.sqrt(mag);
+        vector[0] *= mag;
+        vector[1] *= mag;
+    }
+    public void insideCircleBoxMullerFast(final double[] vector)
+    {
+        double mag = 0.0;
+        double v1 = fastGaussian(), v2 = fastGaussian();
+        mag += (vector[0] = v1) * v1;
+        mag += (vector[1] = v2) * v2;
+        if(mag == 0)
+        {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        }
+        else
+            mag = Math.sqrt(diver.nextDouble()) / Math.sqrt(mag);
+        vector[0] *= mag;
+        vector[1] *= mag;
+    }
+
     private static class XSP {
         private long state0;
         public XSP()
@@ -155,6 +325,7 @@ public class MathVisualizer extends ApplicationAdapter {
 
     @Override
     public void create() {
+        startTime = TimeUtils.millis();
         Coord.expandPoolTo(512, 512);
         diver = new DiverRNG();
         seed = DiverRNG.determine(12345L);
@@ -301,7 +472,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 8)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -487,15 +658,15 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 14: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " XSP, mult128 & 0x1FFL");
+                        " RNG.nextGaussian(), clamped [-4,4]");
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((xsp.nextLongMult(0x1800000000000000L)) & 0x1FFL)]++;
+                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -4.0, 4.0) * 63 + 256)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -504,6 +675,25 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " XSP, mult128 & 0x1FFL");
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) ((xsp.nextLongMult(0x1800000000000000L)) & 0x1FFL)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
 
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " MathUtils.random(0x1FF)");
@@ -527,23 +717,73 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 15: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " XSP, bitBased & 0x1FFL");
+                        " fastGaussian, clamped [-4,4]");
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((xsp.nextLongBit(0x1800000000000000L)) & 0x1FFL)]++;
+//                    long a = diver.nextLong();
+//                    a = (a & 0x007C1F07C1F07C1FL) +     ((a & 0x0F8370F8370F8370L) >>>  5);
+//                    a = (a & 0x00003F0003F0003FL) +     ((a & 0x00FC000FC000FC00L) >>>  10);
+//                    a = (a & 0x00007F000000007FL) +     ((a & 0x0000000007F00000L) >>>  20);
+//                    amounts[(int) (((((a & 0x00000000000000FFL) + ((a & 0x00007F0000000000L) >>> 40))) / (12f * 31f)) * 511)]++;
+//                    long a = diver.nextLong(), b = diver.nextLong();
+//                    a = (a & 0x00FF00FF00FF00FFL) +     ((a & 0xFF00FF00FF00FF00L) >>>  8);
+//                    b = (b & 0x00FF00FF00FF00FFL) +     ((b & 0xFF00FF00FF00FF00L) >>>  8);
+//                    a = (a & 0x000001FF000001FFL) +     ((a & 0x01FF000001FF0000L) >>> 16);
+////                    b = (b & 0x00000000000001FFL) +     ((b & 0x0000000001FF0000L) >>> 16);
+//                    amounts[(int) (((
+//                            ((a & 0x00000000000003FFL) + ((a & 0x000003FF00000000L) >>> 32))
+//                                    + (b & 0x00000000000001FFL) + ((b & 0x0000000001FF0000L) >>> 16))
+//                            / (12f * 255.5f)) * 511)]++;
+//                    amounts[256 + (int) (((a & 0x00000000000003FFL) + ((a & 0x000003FF00000000L) >>> 32))
+//                            - ((b & 0x00000000000003FFL) + ((b & 0x000003FF00000000L) >>> 32)) >> 3)]++;
+                    amounts[MathUtils.round(MathUtils.clamp(fastGaussian() * 64f + 256f, 0f, 511f))]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 9)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
+                Arrays.fill(amounts, 0);
+                for (int i = 0; i < 0x1000000; i++) {
+                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0f, 0x3.FCp0f) * 64 + 256)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+                        layers.backgrounds[i][j] = SColor.lerpFloatColors(layers.backgrounds[i][j],
+                                -0x1.64b5eap125F, //SColor.AURORA_EMBERS
+                                0.3f);
+                    }
+                }
+
+
                 for (int i = 0; i < 10; i++) {
                     for (int j = 8; j < 520; j += 32) {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " XSP, bitBased & 0x1FFL");
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) ((xsp.nextLongBit(0x1800000000000000L)) & 0x1FFL)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " RandomXS128, random.nextInt(0x200)");
 //                RandomXS128 random = new RandomXS128();
@@ -567,15 +807,15 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " XSP, traditional & 0x1FFL");
+                        " editedCurve");
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((xsp.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
+                    amounts[MathUtils.floor(editedCurve() * 512f)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -584,6 +824,26 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " XSP, traditional & 0x1FFL");
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) ((xsp.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+                
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " DiverRNG, random.nextLong(0x1000000000000000L) & 0x1FFL");
 //                //DiverRNG diver = new DiverRNG();
@@ -615,7 +875,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 8)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -700,7 +960,7 @@ public class MathVisualizer extends ApplicationAdapter {
             // correctly, and this caused a pattern in the output because there was a pattern in the input.
             // Notably, with very large indices this still doesn't get collisions, but Halton does.
             case 21: {
-                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
+                long size = 0x1000L;//(System.nanoTime() >>> 28 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Roberts sequence, first " + size + " points");
                 int x, y, a = 1;
 //                double p, q;
@@ -729,18 +989,25 @@ public class MathVisualizer extends ApplicationAdapter {
                     } else
                         layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
-                x = (a * 0xC13FA9A9) >>> 23;
-                y = (a * 0x91E10DA5) >>> 23;
-                layers.backgrounds[x+1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y+1] = -0x1.794bfep125F;
-                layers.backgrounds[x-1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y-1] = -0x1.794bfep125F;
+//                x = (a * 0xC13FA9A9) >>> 23;
+//                y = (a * 0x91E10DA5) >>> 23;
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[i][y] = -0x1.794bfep125F;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[x][i] = -0x1.794bfep125F;
+//                }
+
+//                layers.backgrounds[x+1][y] = -0x1.794bfep125F;
+//                layers.backgrounds[x][y+1] = -0x1.794bfep125F;
+//                layers.backgrounds[x-1][y] = -0x1.794bfep125F;
+//                layers.backgrounds[x][y-1] = -0x1.794bfep125F;
             }
             break;
             case 22: {
-                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
-                Gdx.graphics.setTitle("Roberts sequence (later start), first " + size + " points");
-                int x, y, a = 100000;
+                long size = 0x1000L;//(System.nanoTime() >>> 28 & 0xfff) + 1L;
+                Gdx.graphics.setTitle("Jittered Roberts sequence, first " + size + " points");
+                int x, y, a = 1, z;
                 for (int i = 0; i < size; i++) {
                     //1.32471795724474602596 0.7548776662466927 0.5698402909980532
                     //0x5320B74F 0xC13FA9A9 0x91E10DA5
@@ -750,8 +1017,11 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    x = (int) (0x8000000000000000L + a * 0xC13FA9A902A6328FL >>> 55);
 //                    y = (int) (0x8000000000000000L + a * 0x91E10DA5C79E7B1DL >>> 55);
                     a++;
-                    x = (a * 0xC13FA9A9) >>> 23;
-                    y = (a * 0x91E10DA5) >>> 23;
+                    x = (a * 0xC13FA9A9);
+                    y = (a * 0x91E10DA5);
+                    z = (a * 0x9E3779B9);
+                    x = (x >>> 23) + (z >>> 29 & 6) - (z >>> 25 & 6) & 511;
+                    y = (y >>> 23) + (z >>> 27 & 6) - (z >>> 23 & 6) & 511;
 
 //                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
 //                    x = a & 0x1ff;
@@ -762,16 +1032,29 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    y = a >>> 16 & 0x7f;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.backgrounds[x][y] = -0x1.7677e8p125F;
-                        System.out.println("Overlap on index " + i);
+                        System.out.println("Overlap on index " + a);
                     } else
                         layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
-                x = (a * 0xC13FA9A9) >>> 23;
-                y = (a * 0x91E10DA5) >>> 23;
-                layers.backgrounds[x+1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y+1] = -0x1.794bfep125F;
-                layers.backgrounds[x-1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y-1] = -0x1.794bfep125F;
+                //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+
+//                x = (a * 0xC13FA9A9);
+//                y = (a * 0x91E10DA5);
+//                z = (a * 0x9E3779B9);
+//                x = (x >>> 23) + (z >>> 29 & 6) - (z >>> 25 & 6) & 511;
+//                y = (y >>> 23) + (z >>> 27 & 6) - (z >>> 23 & 6) & 511;
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[i][y] = -0x1.794bfep125F;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[x][i] = -0x1.794bfep125F;
+//                }
+
+
+//                if(x < 511) layers.backgrounds[x+1][y] = -0x1.794bfep125F;
+//                if(y < 511) layers.backgrounds[x][y+1] = -0x1.794bfep125F;
+//                if(x > 0) layers.backgrounds[x-1][y] = -0x1.794bfep125F;
+//                if(y > 0) layers.backgrounds[x][y-1] = -0x1.794bfep125F;
 
             }
             break;
@@ -836,11 +1119,13 @@ public class MathVisualizer extends ApplicationAdapter {
 //                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
 //                    }
 //                }
-                double[] angle;
+                double[] angle = new double[2];
                 int x, y;
                 float color;
                 for (int t = 0; t < 256; t++) {
-                    angle = PerlinNoise.phiGrad2[t];
+//                    angle = SeededNoise.phiGrad2[t];
+                    angle[0] = MathUtils.cosDeg(t * 1.40625f);
+                    angle[1] = MathUtils.sinDeg(t * 1.40625f);
                     color = (t & 4) == 4
                             ? -0x1.c98066p126F
                             : -0x1.d08864p126F;
@@ -868,30 +1153,125 @@ public class MathVisualizer extends ApplicationAdapter {
                     }
                 }
             }
-                break;
-//            case 24: {
-//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-//                        " DiverRNG, hyperCurve(0x1FF)");
-//                //DiverRNG diver = new DiverRNG();
-//                for (int i = 0; i < 0x1000000; i++) {
-//                    amounts[hyperCurve(diver, 0x1FF)]++;
+            break;
+            case 25: {
+                Gdx.graphics.setTitle("swayAngleRandomized() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                float theta = NumberTools.swayAngleRandomized(9999L, TimeUtils.timeSinceMillis(startTime) * 0x3p-11f);
+                float c = MathUtils.cos(theta), s = MathUtils.sin(theta);
+                int x, y;
+                float color;
+                color = SColor.FLOAT_BLACK;
+                for (int j = 150; j >= 1; j -= 4) {
+                    x = Noise.fastFloor(c * j + 260);
+                    y = Noise.fastFloor(s * j + 260);
+                    layers.backgrounds[x][y] = color;
+                    layers.backgrounds[x + 1][y] = color;
+                    layers.backgrounds[x - 1][y] = color;
+                    layers.backgrounds[x][y + 1] = color;
+                    layers.backgrounds[x][y - 1] = color;
+                    layers.backgrounds[x + 1][y+1] = color;
+                    layers.backgrounds[x - 1][y-1] = color;
+                    layers.backgrounds[x-1][y + 1] = color;
+                    layers.backgrounds[x+1][y - 1] = color;
+                }
+//                for (int j = 128; j >= 32; j -= 4) {
+//                    x = Noise.fastFloor(c * j + 260);
+//                    y = Noise.fastFloor(s * j + 260);
+//                    layers.backgrounds[x][y] = color;
+////                        layers.backgrounds[x+1][y] = color;
+////                        layers.backgrounds[x-1][y] = color;
+////                        layers.backgrounds[x][y+1] = color;
+////                        layers.backgrounds[x][y-1] = color;
 //                }
-//                for (int i = 0; i < 512; i++) {
-//                    float color = (i & 63) == 0
-//                            ? -0x1.c98066p126F // CW Azure
-//                            : -0x1.d08864p126F; // CW Sapphire
-//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
-//                        layers.backgrounds[i][j] = color;
-//                    }
+            }
+            break;
+            case 26:{
+                Gdx.graphics.setTitle("insideBallRejection at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 100000; j++) {
+                    insideBallRejection(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+                }
+            }
+            break;
+            case 27:{
+                Gdx.graphics.setTitle("insideBallBoxMuller at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 100000; j++) {
+                    insideBallBoxMuller(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+                }
+            }
+            break;
+            case 28:{
+                Gdx.graphics.setTitle("insideBallBoxMullerFast at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 100000; j++) {
+                    insideBallBoxMullerFast(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+                }
+            }
+            break;
+            case 29:{
+//                Gdx.graphics.setTitle("Weird color thing at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                int x, y;
+//                float co, cg, color;
+//                final float luma = NumberTools.swayTight(TimeUtils.timeSinceMillis(startTime) * 0x1.2p-11f);
+//                for (int j = 0; j < 100000; j++) {
+////                    final long t = diver.nextLong();
+////                    final float mag = ((t & 0xFFFFFFL) * 0x1.0p-25f) + ((t >>> 40) * 0x1.0p-25f),
+//                    //final float mag = (float) Math.sqrt(1.0f - diver.nextFloat()), angle = diver.nextFloat() * MathUtils.PI2;
+//                    // + (0x1.0p0f - ((s & 0xFFFFFFL) * 0x1.0p-24f) * ((s >>> 40) * 0x1.0p-24f))) * 0.5f;
+//                    //warm = NumberTools.cos(angle) * mag;
+//                    //mild = NumberTools.sin(angle) * mag;
+//                    cg = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+//                            - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
+//                    co = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+//                                    - diver.nextFloat() - diver.nextFloat()- diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
+////                    mild = Math.signum(mild) * (float) Math.pow(Math.abs(mild), 1.05);
+////                    warm = Math.signum(warm) * (float) Math.pow(Math.abs(warm), 0.8);
+////                    if (mild > 0 && warm < 0) warm += mild * 1.666f;
+////                    else if (mild < -0.6) warm *= 0.4f - mild;
+//                    color = SColor.floatGetYCoCg(luma, co, cg, 1f);
+//                    co = SColor.chrominanceOrange(color);
+//                    cg = SColor.chrominanceGreen(color);
+//                    x = Noise.fastFloor(co * 250 + 260);
+//                    y = Noise.fastFloor(cg * 250 + 260);
+//                    layers.backgrounds[x][y] = color;
 //                }
-//                for (int i = 0; i < 10; i++) {
-//                    for (int j = 8; j < 520; j += 32) {
-//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
-//                    }
-//                }
-//            }
-//            break;
-
+                Gdx.graphics.setTitle("insideBallExponential at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 100000; j++) {
+                    insideBallExponential(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+                }
+            }
+            break;
+            case 30:{
+                Gdx.graphics.setTitle("insideBallExponentialFast at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                final float luma = NumberTools.swayTight(TimeUtils.timeSinceMillis(startTime) * 0x1.2p-11f);
+//                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 100000; j++) {
+                    insideBallExponentialFast(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = SColor.floatGetYCwCm(luma, (float)circleCoord[0], (float)circleCoord[1], 1f);
+                }
+            }
+            break;
         }
     }
 
@@ -928,8 +1308,8 @@ public class MathVisualizer extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Visualizer for Math Testing/Checking";
-        config.width = 512 << 1;
-        config.height = 520 << 1;
+        config.width = 512;
+        config.height = 520;
         config.foregroundFPS = 0;
         config.vSyncEnabled = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);

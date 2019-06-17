@@ -4,7 +4,7 @@ import squidpony.annotation.Beta;
 
 import static squidpony.squidmath.Noise.cerp;
 import static squidpony.squidmath.Noise.longFloor;
-import static squidpony.squidmath.WhirlingNoise.grad3d;
+import static squidpony.squidmath.SeededNoise.grad3d;
 
 /**
  * A different kind of noise that has spotted and striped areas, like a tabby cat.

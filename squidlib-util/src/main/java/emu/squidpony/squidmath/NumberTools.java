@@ -35,7 +35,7 @@ public class NumberTools {
 
     public static double longBitsToDouble(final long bits) {
         wia.set(1, (int)(bits >>> 32));
-        wia.set(0, (int)(bits & 0xFFFFFFFF));
+        wia.set(0, (int)(bits & 0xffffffffL));
         return wda.get(0);
     }
 
@@ -162,7 +162,28 @@ public class NumberTools {
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
     }
-
+    public static float swayRandomized(final int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed + floor;
+        final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f,
+                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
+    public static float swayAngleRandomized(long seed, float value)
+    {
+        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        end = end - start + 1.5f;
+        end -= (long)end + 0.5f;
+        start += end * value + 1;
+        return (start - (long)start) * 6.283185307179586f;
+    }
     public static int floatToIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
@@ -211,13 +232,7 @@ public class NumberTools {
         wba.set(whichByte & 3, newValue);
         return wfa.get(0);
     }
-
-    public static long splitMix64(long state) {
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return state ^ (state >>> 31);
-    }
-
+    
     public static double randomDouble(long seed)
     {
         return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
@@ -364,6 +379,39 @@ public class NumberTools {
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
+
+    public static double sin_(double turns)
+    {
+        turns *= 4.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+    public static double cos_(double turns)
+    {
+        turns = turns * 4.0 + 1.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+    public static float sin_(float turns)
+    {
+        turns *= 4f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
+    public static float cos_(float turns)
+    {
+        turns = turns * 4f + 1f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
     public static double atan2(final double y, final double x)
     {
         if(y == 0.0 && x >= 0.0) return 0.0;
@@ -490,6 +538,86 @@ public class NumberTools {
             final float a = ay / ax,
                     r = (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;
             return (x < 0f) ? (y < 0f) ? 0.5f + r : 0.5f - r : (y < 0f) ? 1f - r : r;
+        }
+    }
+    public static double asin(double a) {
+        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
+                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+    }
+    public static float asin(float a) {
+        return (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
+                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+    }
+    public static double acos(double a) {
+        return 1.5707963267948966 - (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
+                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+    }
+    public static float acos(float a) {
+        return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
+                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+    }
+    public static double asin_(final double n)
+    {
+        if(n == 0.0) return 0.0;
+        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+    }
+    public static double acos_(final double n)
+    {
+        if(n == 1.0 || n == -1.0) return 0.0;
+        final double ax = Math.abs(n), ay = Math.sqrt((1.0 + n) * (1.0 - n));
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+        else {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+    }
+    public static float asin_(final float n)
+    {
+        if(n == 0.0f) return 0.0f;
+        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+    }
+    public static float acos_(final float n)
+    {
+        if(n == 1.0f || n == -1.0f) return 0.0f;
+        final float ax = Math.abs(n), ay = (float) Math.sqrt((1f + n) * (1f - n));
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
+        }
+        else {
+            final float a = ax / ay, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
         }
     }
 }

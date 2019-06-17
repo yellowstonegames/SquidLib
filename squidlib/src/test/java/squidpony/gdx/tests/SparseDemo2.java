@@ -91,13 +91,15 @@ public class SparseDemo2 extends ApplicationAdapter {
 
     // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
     // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
-    private final String artOfWar =
-            "[@ 0.8 0.06329113 0.30980393][/]Sun Tzu[/] said: In the [!]practical[!] art of war, the best thing of all is " +
-                    "to take the enemy's country whole and intact; to shatter and destroy it is not so good. So, " +
-                    "too, it is better to recapture an army entire than to destroy it, to capture " +
-                    "a regiment, a detachment or a company entire than to destroy them. Hence to fight " +
-                    "and conquer in all your battles is not [!]supreme[,] excellence; [!]supreme[=] EXCELLENCE[,] " +
-                    "consists in breaking the enemy's resistance without fighting.[]";
+    private final String artOfWar = "Use the keyboard to bump into [@ 0.31416655 0.91324204 0.85882354]GREEN[] walls " +
+            "to gain POINTS! Bumping into [@ 0.0 0.8235294 0.93333334]RED[] walls will make you lose POINTS, so be " +
+            "careful! I can't [/]possibly[/] see this being inaccessible [/]in any way[]...";
+//            "[@ 0.8 0.06329113 0.30980393][/]Sun Tzu[/] said: In the [!]practical[!] art of war, the best thing of all is " +
+//                    "to take the enemy's country whole and intact; to shatter and destroy it is not so good. So, " +
+//                    "too, it is better to recapture an army entire than to destroy it, to capture " +
+//                    "a regiment, a detachment or a company entire than to destroy them. Hence to fight " +
+//                    "and conquer in all your battles is not [!]supreme[,] excellence; [!]supreme[=] EXCELLENCE[,] " +
+//                    "consists in breaking the enemy's resistance without fighting.[]";
     // A translation dictionary for going back and forth between English and an imaginary language that this generates
     // words for, using some of the rules that the English language tends to follow to determine if two words should
     // share a common base word (such as "read" and "reader" needing similar translations). This is given randomly
@@ -148,6 +150,9 @@ public class SparseDemo2 extends ApplicationAdapter {
 //    private FloatFilters.MultiLerpFilter mlerp;
     private FloatFilters.YCbCrFilter ycbcr;
     private FloatFilters.YCoCgFilter ycocg;
+    private FloatFilters.IdentityFilter id;
+    private FloatFilters.DistinctRedGreenFilter rg;
+    private int points = 0;
     //    private FloatFilter sepia;
     @Override
     public void create () {
@@ -167,12 +172,14 @@ public class SparseDemo2 extends ApplicationAdapter {
         // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
         ycbcr = new FloatFilters.YCbCrFilter(0.875f, 0.6f, 0.6f);
         ycocg = new FloatFilters.YCoCgFilter(1.0625f, 1.25f, 0.75f);
+        rg = new FloatFilters.DistinctRedGreenFilter();
+        id = new FloatFilters.IdentityFilter();
 //        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or
         // for tinting images.
-        batch = new FilterBatch(ycocg);
+        batch = new FilterBatch(id);
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -201,7 +208,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         // set the background colors directly as floats with the SparseDisplay.backgrounds field, and it can be handy
         // to hold onto the current color we want to fill that with in the defaultPackedBackground field.
         // SparseLayers has fillBackground() and fillArea() methods for coloring all or part of the backgrounds.
-        languageDisplay.defaultPackedBackground = FLOAT_LIGHTING; // happens to be the same color used for lighting
+        languageDisplay.defaultPackedBackground = SColor.DB_INK.toFloatBits();//FLOAT_LIGHTING; // happens to be the same color used for lighting
 
         //This uses the seeded RNG we made earlier to build a procedural dungeon using a method that takes rectangular
         //sections of pre-drawn dungeon and drops them into place in a tiling pattern. It makes good winding dungeons
@@ -346,12 +353,21 @@ public class SparseDemo2 extends ApplicationAdapter {
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
         colors = MapUtility.generateDefaultColorsFloat(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColorsFloat(decoDungeon);
-//        for (int x = 0; x < bigWidth; x++) {
-//            for (int y = 0; y < bigHeight; y++) {
-//                colors[x][y] = f(colors[x][y]);
-//                bgColors[x][y] = f(bgColors[x][y]);
-//            }
-//        }
+        final int seed = new MoonwalkRNG().nextInt();
+        final float darkGreen = SColor.CW_RICH_GREEN.toFloatBits(), lightGreen = SColor.CW_LIGHT_GREEN.toFloatBits(),
+                darkRed = SColor.CW_RICH_RED.toFloatBits(), lightRed = SColor.CW_LIGHT_RED.toFloatBits();
+        for (int x = 0; x < bigWidth; x++) {
+            for (int y = 0; y < bigHeight; y++) {
+                if(bareDungeon[x][y] == '#') 
+                {
+                    float n = FastNoise.instance.singleSimplex(seed, x * 0.125f, y * 0.125f) * 0.9f;
+                    if(n < 0)
+                        colors[x][y] = SColor.lerpFloatColors(darkGreen, lightGreen, Math.abs(n));
+                    else
+                        colors[x][y] = SColor.lerpFloatColors(darkRed, lightRed, n);
+                }
+            }
+        }
         //places the player as an '@' at his position in orange.
         pg = display.glyph('@', SColor.SAFETY_ORANGE, player.x, player.y);
 
@@ -438,6 +454,15 @@ public class SparseDemo2 extends ApplicationAdapter {
                     case 'C':
                     {
                         seen.fill(true);
+                        break;
+                    }
+                    case 'f':
+                    case 'F':
+                    {
+                        if(batch.filter instanceof FloatFilters.IdentityFilter)
+                            batch.setFilter(rg);
+                        else
+                            batch.setFilter(id);
                         break;
                     }
                 }
@@ -563,25 +588,16 @@ public class SparseDemo2 extends ApplicationAdapter {
             // on the grid, and also how to move it back again. Using bump() will move pg quickly about a third of the
             // way into a wall, then back to its former position at normal speed.
             display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
-            // PanelEffect is a type of Action (from libGDX) that can run on a SparseLayers or SquidPanel.
-            // This particular kind of PanelEffect creates a purple glow around the player when he bumps into a wall.
-            // Other kinds can make explosions or projectiles appear.
-            display.addAction(new PanelEffect.PulseEffect(display, 1f, currentlySeen, player, 3
-                    , new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}
-                    ));
-            // recolor() will change the color of a cell over time from what it is currently to a target color, which is
-            // DB_BLOOD here from a DawnBringer palette. We give it a Runnable to run after the effect finishes, which
-            // permanently sets the color of the cell you bumped into to the color of your bloody nose. Without such a 
-            // Runnable, the cell would get drawn over with its normal wall color.
-            display.recolor(0f, player.x + xmod, player.y + ymod, 0, SColor.DB_BLOOD.toFloatBits(), 0.4f, new Runnable() {
-                int x = player.x + xmod;
-                int y = player.y + ymod;
-                @Override
-                public void run() {
-                    colors[x][y] = SColor.DB_BLOOD.toFloatBits();
-                }
-            });
-            //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6));
+            float c = colors[newX][newY];
+            if(SColor.redOfFloat(c) < SColor.greenOfFloat(c)) {
+                points++;
+                display.summon(player.x, player.y, player.x, player.y - 1, '+', SColor.CYAN.toFloatBits(), SColor.translucentColor(SColor.CYAN, 0f), 1f);
+            }
+            else {
+                points--;
+                display.summon(player.x, player.y, player.x, player.y - 1, '-', SColor.BLACK.toFloatBits(), SColor.translucentColor(SColor.BLACK, 0f), 1.3f);
+            }
+
         }
         // removes the first line displayed of the Art of War text or its translation.
         lang.remove(0);
@@ -606,8 +622,8 @@ public class SparseDemo2 extends ApplicationAdapter {
         //display.clear();
 //        ycbcr.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
 //        ycbcr.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
-        ycocg.coMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
-        ycocg.cgMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+//        ycocg.coMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
+//        ycocg.cgMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
         float modifier = display.calculateConsistentLightModifier(), la, seenColor = GRAY_FLOAT;
         boolean isSeen;
         // The loop here only will draw tiles if they are potentially in the visible part of the map.
@@ -714,11 +730,13 @@ public class SparseDemo2 extends ApplicationAdapter {
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         batch.setProjectionMatrix(stage.getCamera().combined);
-        screenPosition.set(cellWidth * 12, cellHeight);
+        screenPosition.set(cellWidth * 25, cellHeight);
         stage.screenToStageCoordinates(screenPosition);
         batch.begin();
         stage.getRoot().draw(batch, 1);
-        display.font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", screenPosition.x, screenPosition.y);
+        display.font.draw(batch, 
+                ((batch.filter instanceof FloatFilters.IdentityFilter) ? "Filter OFF, POINTS: " : "Filter ON, POINTS: ")
+                + points, screenPosition.x, screenPosition.y);
         batch.end();
         Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
     }

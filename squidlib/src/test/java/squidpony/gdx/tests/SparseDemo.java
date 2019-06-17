@@ -146,7 +146,7 @@ public class SparseDemo extends ApplicationAdapter {
     // It can also be used to over- or under-saturate colors, change their brightness, or any combination of these. 
 //    private FloatFilters.PaletteFilter pal;
 //    private FloatFilters.MultiLerpFilter mlerp;
-    private FloatFilters.YCbCrFilter ycbcr;
+    private FloatFilters.YCwCmFilter ycwcm;
 //    private FloatFilter sepia;
     @Override
     public void create () {
@@ -164,13 +164,13 @@ public class SparseDemo extends ApplicationAdapter {
 //                SColor.translucentColor(SColor.CW_LIGHT_BROWN, 0.5f)
 //        );
         // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
-        ycbcr = new FloatFilters.YCbCrFilter(0.875f, 0.6f, 0.6f);
+        ycwcm = new FloatFilters.YCwCmFilter(0.875f, 0.6f, 0.6f);
 //        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or
         // for tinting images.
-        batch = new FilterBatch(ycbcr);
+        batch = new FilterBatch(ycwcm);
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -600,8 +600,12 @@ public class SparseDemo extends ApplicationAdapter {
         //past from affecting the current frame. This isn't a problem here, but would probably be an issue if we had
         //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
         //display.clear();
-        ycbcr.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
-        ycbcr.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+        
+        // causes colors to cycle semi-randomly from warm reds and browns to cold cyan-blues
+        ycwcm.cwMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
+        // causes colors to move semi-randomly in a different direction, from green-yellow to purple
+        //ycwcm.cmMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+        
         // The loop here only will draw tiles if they are potentially in the visible part of the map.
         // It starts at an x,y position equal to the player's position minus half of the shown gridWidth and gridHeight,
         // minus one extra cell to allow the camera some freedom to move. This position won't go lower than 0. The

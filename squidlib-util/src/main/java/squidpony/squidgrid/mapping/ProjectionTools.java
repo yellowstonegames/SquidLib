@@ -23,6 +23,7 @@
  */
 
 package squidpony.squidgrid.mapping;
+
 /**
  * Added to SquidLib by Tommy Ettinger on 7/4/2018, using MIT-licensed work by Justin Kunimune from
  * <a href="https://github.com/jkunimune15/Map-Projections/blob/9f820aba788ba0b37a1c67128a4c861d243b4a46/src/utils/NumericalAnalysis.java">his Map-Projections repo</a>.
@@ -89,4 +90,5 @@ public class ProjectionTools {
     public static double hyperellipse(double y, double kappa) {
         return Math.pow(1 - Math.pow(Math.abs(y),kappa), 1/kappa);
     }
+
 }

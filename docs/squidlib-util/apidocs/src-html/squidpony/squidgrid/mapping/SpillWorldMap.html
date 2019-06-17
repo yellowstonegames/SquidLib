@@ -174,10 +174,10 @@
 <span class="sourceLineNo">166</span>        }<a name="line.166"></a>
 <span class="sourceLineNo">167</span>        OrderedMap&lt;Coord, Double&gt; entries = new OrderedMap&lt;&gt;();<a name="line.167"></a>
 <span class="sourceLineNo">168</span>        for (int i = 0; i &lt; aLen; i++) {<a name="line.168"></a>
-<span class="sourceLineNo">169</span>            int volume = 10 + (height * width) / (aLen * 2);<a name="line.169"></a>
+<span class="sourceLineNo">169</span>            int volume = 10 + (height * width) / (aLen);<a name="line.169"></a>
 <span class="sourceLineNo">170</span>            area.empty().insert(pts[i]).spill(bounds, volume, rng).expand(3);<a name="line.170"></a>
 <span class="sourceLineNo">171</span>            tmpInner.remake(area).retract(4).expand8way().and(area);<a name="line.171"></a>
-<span class="sourceLineNo">172</span>            tmpEdge.remake(area).surface8way();<a name="line.172"></a>
+<span class="sourceLineNo">172</span>            tmpEdge.remake(area).surface();<a name="line.172"></a>
 <span class="sourceLineNo">173</span>            Coord[] edges = tmpEdge.mixedRandomSeparated(0.35);<a name="line.173"></a>
 <span class="sourceLineNo">174</span>            int eLen = edges.length;<a name="line.174"></a>
 <span class="sourceLineNo">175</span>            Double[] powers = new Double[eLen];<a name="line.175"></a>

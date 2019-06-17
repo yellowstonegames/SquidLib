@@ -118,7 +118,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A variant on <a href="../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that uses only 32-bit math when producing 32-bit numbers. This generator does as
  well as you could hope for on statistical tests, considering it can only generate 2 to the 32 ints before repeating
- the cycle. You may want to consider <a href="../../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath"><code>Zag32RNG</code></a> if roughly 4 billion numbers could be produced by your game or
+ the cycle. You may want to consider <a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a> if roughly 4 billion numbers could be produced by your game or
  application (if you just generated random ints, you could exhaust that amount in seconds). On
  <a href="http://pracrand.sourceforge.net/">PractRand</a>, this completes testing on 16GB of generated ints (the
  amount of space all possible ints would use) without finding any failures. Some big-name number generators sometimes

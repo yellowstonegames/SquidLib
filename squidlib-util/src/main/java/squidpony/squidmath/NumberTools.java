@@ -340,15 +340,18 @@ public final class NumberTools {
      * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs
      * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
      */
-
-
     public static double swayRandomized(long seed, double value)
     {
-        final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
+        final long floor = value >= 0.0 ? (long) value : (long) value - 1L; // the closest long that is less than value
+        // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
+        // seed changes the start and end values unpredictably (so use the same seed for one curving line).
         final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
+        // gets the fractional part of value
         value -= floor;
+        // cubic interpolation to smooth the curve
         value *= value * (3.0 - 2.0 * value);
+        // interpolate between start and end based on how far we are between the start and end points of this section
         return (1.0 - value) * start + value * end;
     }
 
@@ -364,7 +367,7 @@ public final class NumberTools {
      * swayRandomized(long, double), with the float version almost twice as fast after JIT warms up. On GWT, the
      * reverse should be expected because floats must be emulated there.
      * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
-     * @param value a float that typically changes slowly, by less than 1.0, with direction changes at integer inputs
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
      */
     public static float swayRandomized(long seed, float value)
@@ -375,6 +378,50 @@ public final class NumberTools {
         value -= floor;
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
+    }
+    
+    /**
+     * A variant on {@link #swayRandomized(long, float)} that takes an int seed instead of a float, and is optimized for
+     * usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
+     * points; only the method of generating those random peaks and valleys has changed.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float swayRandomized(final int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed + floor;
+        final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f,
+                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
+    /**
+     * A 1D "noise" method that produces smooth transitions like {@link #sway(float)}, but also wrapping around at pi *
+     * 2 so this can be used to get smoothly-changing random angles. Has (seeded) random peaks and valleys where it
+     * slows its range of change, but can return any value from 0 to 6.283185307179586f, or pi * 2. The pattern this
+     * will produces will be completely different if the seed changes, and the value is expected to be something other
+     * than an angle, like time. Uses a simple method of cubic interpolation between random values, where a random value
+     * is used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than {@link #sway(float)}, which uses quintic (this causes swayAngleRandomized() to be slightly
+     * faster and simpler).
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with possible direction changes at integer inputs
+     * @return a pseudo-random float between 0f and 283185307179586f (both inclusive), smoothly changing with value and wrapping
+     */
+    public static float swayAngleRandomized(long seed, float value)
+    {
+        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        end = end - start + 1.5f;
+        end -= (long)end + 0.5f;
+        start += end * value + 1;
+        return (start - (long)start) * 6.283185307179586f;
     }
     
     /**
@@ -465,18 +512,6 @@ public final class NumberTools {
     }
 
     /**
-     * Get a pseudo-random long from this with {@code splitMix64(z += 0x9E3779B97F4A7C15L)}, where z is a long to use
-     * as state. 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.
-     * @param state long, must be changed with each call; {@code splitMix64(z += 0x9E3779B97F4A7C15L)} is recommended
-     * @return a pseudo-random long
-     */
-    public static long splitMix64(long state) {
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return state ^ (state >>> 31);
-    }
-
-    /**
      * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given long seed, passing
      * it once through the (decent-quality and very fast) {@link ThrustAltRNG} algorithm.
      * <br>
@@ -488,7 +523,7 @@ public final class NumberTools {
      */
     public static double randomDouble(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 23)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
 
     /**
@@ -503,7 +538,7 @@ public final class NumberTools {
      */
     public static double randomSignedDouble(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) >> 10) * 0x1p-53;
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 23)) >> 10) * 0x1p-53;
     }
     /**
      * Generates a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given long seed, passing it
@@ -517,7 +552,7 @@ public final class NumberTools {
      */
     public static float randomFloat(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0xFFFFFF) * 0x1p-24f;
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 23)) & 0xFFFFFF) * 0x1p-24f;
     }
     /**
      * Generates a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given long seed, passing
@@ -533,7 +568,7 @@ public final class NumberTools {
      */
     public static float randomSignedFloat(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) >> 39) * 0x1p-24f;
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 23)) >> 39) * 0x1p-24f;
     }
 
     /**
@@ -550,7 +585,7 @@ public final class NumberTools {
      */
     public static float randomFloatCurved(long seed)
     {
-        return formCurvedFloat(((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)));
+        return formCurvedFloat(((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 23)));
     }
 
     /**
@@ -715,8 +750,8 @@ public final class NumberTools {
 
     /**
      * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 8x and 80x
-     * faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
-     * consider its more-precise and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
+     * faster sin() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
+     * and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
      * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
      * with this method than with MathUtils. Takes the same arguments Math.sin() does, so one angle in radians,
      * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
@@ -744,7 +779,7 @@ public final class NumberTools {
 
     public static double sin(double radians)
     {
-        radians = radians * 0.6366197723675814;
+        radians *= 0.6366197723675814;
         final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
         radians -= floor;
         radians *= 2.0 - radians;
@@ -753,8 +788,8 @@ public final class NumberTools {
 
     /**
      * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 8x and 80x
-     * faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
-     * consider its more-precise and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
+     * faster cos() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
+     * and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
      * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
      * with this method than with MathUtils. Takes the same arguments Math.cos() does, so one angle in radians,
      * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
@@ -817,7 +852,7 @@ public final class NumberTools {
      */
     public static float sin(float radians)
     {
-        radians = radians * 0.6366197723675814f;
+        radians *= 0.6366197723675814f;
         final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
         radians -= floor;
         radians *= 2f - radians;
@@ -933,6 +968,133 @@ public final class NumberTools {
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
+
+    /**
+     * A variation on {@link Math#sin(double)} that takes its input as a fraction of a turn instead of in radians; one
+     * turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
+     * to make a sine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
+     * the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also
+     * called brad (with 256 brad equal to 360 degrees), you would divide by 256.0 or multiply by 0.00390625 before
+     * passing that value here. The brad case is especially useful because you can use a byte for any brad values, and
+     * adding up those brad values will wrap correctly (256 brad goes back to 0) while keeping perfect precision for the
+     * results (you still divide by 256.0 when you pass the brad value to this method).
+     * <br>
+     * The error for this double version is extremely close to the float version, {@link #sin_(float)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for sine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a double, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the sine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
+     */
+    public static double sin_(double turns)
+    {
+        turns *= 4.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+
+    /**
+     * A variation on {@link Math#cos(double)} that takes its input as a fraction of a turn instead of in radians; one
+     * turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
+     * to make a cosine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
+     * the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also
+     * called brad (with 256 brad equal to 360 degrees), you would divide by 256.0 or multiply by 0.00390625 before
+     * passing that value here. The brad case is especially useful because you can use a byte for any brad values, and
+     * adding up those brad values will wrap correctly (256 brad goes back to 0) while keeping perfect precision for the
+     * results (you still divide by 256.0 when you pass the brad value to this method).
+     * <br>
+     * The error for this double version is extremely close to the float version, {@link #cos_(float)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for cosine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a double, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the cosine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
+     */
+    public static double cos_(double turns)
+    {
+        turns = turns * 4.0 + 1.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+
+    /**
+     * A variation on {@link Math#sin(double)} that takes its input as a fraction of a turn instead of in radians (it
+     * also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
+     * building block for other measurements; to make a sine method that takes its input in grad (with 400 grad equal to
+     * 360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this
+     * method. Similarly for binary degrees, also called brad (with 256 brad equal to 360 degrees), you would divide by
+     * 256.0 or multiply by 0.00390625 before passing that value here. The brad case is especially useful because you
+     * can use a byte for any brad values, and adding up those brad values will wrap correctly (256 brad goes back to 0)
+     * while keeping perfect precision for the results (you still divide by 256.0 when you pass the brad value to this
+     * method).
+     * <br>
+     * The error for this float version is extremely close to the double version, {@link #sin_(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for sine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a float, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the sine of the given angle, as a float between -1.0 and 1.0 (both inclusive)
+     */
+    public static float sin_(float turns)
+    {
+        turns *= 4f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
+
+    /**
+     * A variation on {@link Math#cos(double)} that takes its input as a fraction of a turn instead of in radians (it
+     * also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
+     * building block for other measurements; to make a cosine method that takes its input in grad (with 400 grad equal
+     * to 360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this
+     * method. Similarly for binary degrees, also called brad (with 256 brad equal to 360 degrees), you would divide by
+     * 256.0 or multiply by 0.00390625 before passing that value here. The brad case is especially useful because you
+     * can use a byte for any brad values, and adding up those brad values will wrap correctly (256 brad goes back to 0)
+     * while keeping perfect precision for the results (you still divide by 256.0 when you pass the brad value to this
+     * method).
+     * <br>
+     * The error for this float version is extremely close to the float version, {@link #cos_(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for cosine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a float, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the cosine of the given angle, as a float between -1.0 and 1.0 (both inclusive)
+     */
+    public static float cos_(float turns)
+    {
+        turns = turns * 4f + 1f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
+
     /**
      * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
      * approximation. Maximum error is below 0.001 radians.
@@ -1079,10 +1241,10 @@ if y < 0 then r := -r
 
     /**
      * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as 
-     * doubles and returning an angle from 0.0 to 1.0 (inclusive), with one cycle over the range equivalent to 360
-     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
-     * to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a negative number,
-     * which may help avoid costly floating-point modulus when you actually want a positive number.
+     * doubles and returning an angle measured in turns from 0.0 to 1.0 (inclusive), with one cycle over the range
+     * equivalent to 360 degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians,
+     * or by {@code 360f} to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a
+     * negative number, which may help avoid costly floating-point modulus when you actually want a positive number.
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that
      * {@link #atan2(double, double)} returns an angle in radians and can return negative results, which may be fine for
@@ -1109,13 +1271,14 @@ if y < 0 then r := -r
     }
     /**
      * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
-     * and returning an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI radians.
-     * You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f} to change to degrees.
-     * Takes y and x (in that unusual order) as floats. Will never return a negative number, which may help avoid costly
-     * floating-point modulus when you actually want a positive number. Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that {@link #atan2(float, float)}
-     * returns an angle in radians and can return negative results, which may be fine for many tasks; these two methods
-     * are extremely close in implementation and speed.
+     * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
+     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
+     * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which
+     * may help avoid costly floating-point modulus when you actually want a positive number.
+     * Credit to StackExchange user njuffa, who gave
+     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that
+     * {@link #atan2(float, float)} returns an angle in radians and can return negative results, which may be fine for
+     * many tasks; these two methods are extremely close in implementation and speed.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
@@ -1136,6 +1299,8 @@ if y < 0 then r := -r
             return (x < 0.0f) ? (y < 0.0f) ? 0.5f + r : 0.5f - r : (y < 0.0f) ? 1f - r : r;
         }
     }
+
+
     /**
      * Less-precise but somewhat faster altered-range approximation of the frequently-used trigonometric method atan2, with
      * worse average and max error than {@link #atan2(double, double)} but better speed. Takes y and x positions as
@@ -1194,6 +1359,155 @@ if y < 0 then r := -r
             final float a = ay / ax,
                     r = (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;
             return (x < 0f) ? (y < 0f) ? 0.5f + r : 0.5f - r : (y < 0f) ? 1f - r : r;
+        }
+    }
+
+    /**
+     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.
+     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
+     * than {@link Math#asin(double)}.
+     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
+     */
+    public static double asin(double a) {
+        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
+                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+    }
+    /**
+     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(float)}.
+     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
+     * than {@link Math#asin(double)}, and takes and returns a float.
+     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
+     */
+    public static float asin(float a) {
+        return (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
+                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+    }
+    /**
+     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(double)}.
+     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+     * Kjaer Christensen's unfinished math work on arc sine approximation</a>, with a basic change to go from arc sine
+     * to arc cosine. This method is faster than {@link Math#acos(double)}.
+     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+     * @return an output from the inverse cosine function, from 0 to PI inclusive.
+     */
+    public static double acos(double a) {
+        return 1.5707963267948966 - (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
+                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+    }
+    /**
+     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(float)}.
+     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+     * Kjaer Christensen's unfinished math work on arc sine approximation</a>, with a basic change to go from arc sine
+     * to arc cosine. This method is faster than {@link Math#acos(double)}, and takes and returns a float.
+     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+     * @return an output from the inverse cosine function, from 0 to PI inclusive.
+     */
+    public static float acos(float a) {
+        return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
+                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+    }
+
+    /**
+     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}
+     */
+    public static double asin_(final double n)
+    {
+        if(n == 0.0) return 0.0;
+        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+    }
+    /**
+     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.0 (inclusive) to 0.5 (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(double)}
+     */
+    public static double acos_(final double n)
+    {
+        if(n == 1.0 || n == -1.0) return 0.0;
+        final double ax = Math.abs(n), ay = Math.sqrt((1.0 + n) * (1.0 - n));
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+        else {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+    }
+
+
+    /**
+     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f
+     * (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}
+     */
+    public static float asin_(final float n)
+    {
+        if(n == 0.0f) return 0.0f;
+        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+    }
+    /**
+     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.0f (inclusive) to 0.5f (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(float)}
+     */
+    public static float acos_(final float n)
+    {
+        if(n == 1.0f || n == -1.0f) return 0.0f;
+        final float ax = Math.abs(n), ay = (float) Math.sqrt((1f + n) * (1f - n));
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
+        }
+        else {
+            final float a = ax / ay, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
         }
     }
 }

@@ -15,6 +15,7 @@ import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -138,8 +139,6 @@ public class LinesPanel<T extends Color> extends Actor {
 		this.markup = markup;
 		this.font = font;
 		this.tcf = null;
-		if (markup != null)
-			this.font.getData().markupEnabled = true;
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
 					+ getClass().getSimpleName() + " must be greater or equal than zero");
@@ -164,11 +163,9 @@ public class LinesPanel<T extends Color> extends Actor {
 		this.markup = markup;
 		this.tcf = font;
 		this.font = font.bmpFont;
-		if (markup != null)
-			this.font.getData().markupEnabled = true;
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
-					+ getClass().getSimpleName() + " must be greater or equal than zero");
+					+ "LinesPanel must be greater or equal than zero");
 		this.maxLines = maxLines;
 		this.content = new ArrayDeque<>(maxLines);
 	}
@@ -253,6 +250,18 @@ public class LinesPanel<T extends Color> extends Actor {
 		content.addLast(ics);
 	}
 
+	/**
+	 * Draws this LinesPanel using the given Batch.
+	 * <br>
+	 * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not
+	 * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the
+	 * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
+	 * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
+	 * draw full-color art, and end the Batch between drawing this object and the other art.
+	 *
+	 * @param batch a Batch such as a {@link FilterBatch} that must be between a begin() and end() call; usually done by Stage
+	 * @param parentAlpha currently ignored
+	 */
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		clearArea(batch);
@@ -266,46 +275,35 @@ public class LinesPanel<T extends Color> extends Actor {
 		final float height = lineHeight * maxLines;
 
 		final float x = getX() + xOffset;
+		//TODO: check if drawBottomUp is correct or if lineHeight should be changed to 0
 		float y = getY() + (drawBottomUp ? lineHeight : height - lineHeight) - data.descent + yOffset;
 
 		final Iterator<IColoredString<T>> it = content.iterator();
-		int ydx = 0;
+//		int ydx = 0;
 		float consumed = 0;
 		while (it.hasNext()) {
 			final IColoredString<T> ics = it.next();
-			final String str = toDraw(ics, ydx);
+			//final String str = toDraw(ics, ydx);
 			/* Let's see if the drawing would go outside this Actor */
 			final BitmapFontCache cache = font.getCache();
 			cache.clear();
-			final GlyphLayout glyph = cache.addText(str, 0, y, width, align, wrap);
+			final GlyphLayout glyph = cache.setText(ics.present(), 0, 0, width, align, wrap);
 			if (height < consumed + glyph.height)
 				/* We would draw outside this Actor's bounds */
 				break;
-			final int increaseAlready, nbLines = MathUtils.ceil(glyph.height / lineHeight);
-			if (drawBottomUp) {
-				/*
-				 * If the text span multiple lines and we draw bottom-up, we
-				 * must go up *before* drawing.
-				 */
-				if (1 < nbLines) {
-					increaseAlready = nbLines - 1;
-					y += increaseAlready * lineHeight;
-				} else
-					increaseAlready = 0;
-			} else
-			{
-				if (1 < nbLines) {
-					increaseAlready = nbLines - 1;
-					y -= increaseAlready * lineHeight;
-				} else
-					increaseAlready = 0;
-			}
+			final int nbLines = MathUtils.ceil(glyph.height / lineHeight);
 			/* Actually draw */
-			font.draw(batch, str, x, y, width, align, wrap);
-			y += (drawBottomUp ? /* Go up */ lineHeight : /* Go down */ -lineHeight);
-			y -= increaseAlready * lineHeight;
-			consumed += lineHeight;
-			ydx++;
+			int ci = 0;
+			ArrayList<IColoredString.Bucket<T>> frags = ics.getFragments();
+			for (int i = 0; i < frags.size(); i++) {
+				final IColoredString.Bucket<T> b = frags.get(i);
+				cache.setColors(b.getColor(), ci, ci += b.length());
+			}
+			cache.setPosition(x, y);
+			cache.draw(batch);
+			y -= nbLines * lineHeight;
+			consumed += nbLines * lineHeight;
+			//ydx++;
 		}
 	}
 
@@ -325,18 +323,7 @@ public class LinesPanel<T extends Color> extends Actor {
 		return content.size() == maxLines;
 
 	}
-
-	protected String toDraw(IColoredString<T> ics, int ydx) {
-		return applyMarkup(transform(ics, ydx));
-	}
-
-	protected String applyMarkup(IColoredString<T> ics) {
-		if (ics == null)
-			return null;
-		else
-			return markup == null ? ics.toString() : ics.presentWithMarkup(markup);
-	}
-
+	
 	/**
 	 * If you want to grey out "older" messages, you would do it in this method,
 	 * when {@code ydx > 0} (using an {@link squidpony.IColorCenter} maybe ?).

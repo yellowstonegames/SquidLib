@@ -282,8 +282,6 @@
 <dd>
 <div class="block">Called when the <code>Application</code> is about to pause</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidApplicationAdapter.html#pause--">pause()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidApplicationAdapter.html" title="class in squidpony.squidgrid.gui.gdx">SquidApplicationAdapter</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#PEACH">PEACH</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">This color constant "Peach" has RGB code <code>0xFFE5B4</code>, red 1.0, green 0.8980392, blue 0.7058824, alpha 1, hue 0.108888984, saturation 0.29411763, and value 1.0.</div>
@@ -412,10 +410,12 @@
 <dd>
 <div class="block">This color constant "Powder Blue" has RGB code <code>0xB0E0E6</code>, red 0.6901961, green 0.8784314, blue 0.9019608, alpha 1, hue 0.51851845, saturation 0.23478259, and value 0.9019608.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/StretchContainer.html#prefHeight">prefHeight</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/StretchContainer.html" title="class in squidpony.squidgrid.gui.gdx">StretchContainer</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/StretchContainer.html#prefWidth">prefWidth</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/StretchContainer.html" title="class in squidpony.squidgrid.gui.gdx">StretchContainer</a></dt>
-<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#prepareText--">prepareText()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx">TextPanel</a></dt>
+<dd>
+<div class="block">Updates the text this will show based on the current contents of the ArrayList of IColoredString values that may
+ be shared due to <a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#initShared-float-float-java.util.ArrayList-"><code>TextPanel.initShared(float, float, ArrayList)</code></a>, then resizes the <a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#getTextActor--"><code>TextPanel.getTextActor()</code></a> to fit
+ the current text and lays out the <a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#getScrollPane--"><code>TextPanel.getScrollPane()</code></a> to match.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#present-squidpony.panel.IColoredString-">present(IColoredString&lt;T&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx">TextPanel</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidMouse.html#processor">processor</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a></dt>
@@ -838,6 +838,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#putAll-squidpony.squidgrid.gui.gdx.SparseTextMap-">putAll(SparseTextMap)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#putBorders-float-java.lang.String-">putBorders(float, String)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#putBorders--">putBorders()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>
 <div class="block">Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in white.</div>
@@ -862,6 +864,8 @@
 <div class="block">Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
  color as a packed float.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#putBordersCaptioned-float-squidpony.panel.IColoredString-">putBordersCaptioned(float, IColoredString&lt;Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#putBordersCaptioned-com.badlogic.gdx.graphics.Color-squidpony.panel.IColoredString-">putBordersCaptioned(Color, IColoredString&lt;Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>
 <div class="block">Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given

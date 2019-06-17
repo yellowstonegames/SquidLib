@@ -1,0 +1,447 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span>/*******************************************************************************<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Copyright 2011 See AUTHORS file.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * you may not use this file except in compliance with the License.<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * You may obtain a copy of the License at<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> *   http://www.apache.org/licenses/LICENSE-2.0<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Unless required by applicable law or agreed to in writing, software<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * See the License for the specific language governing permissions and<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * limitations under the License.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> ******************************************************************************/<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>/** Delaunay triangulation. Adapted from Paul Bourke's triangulate: http://paulbourke.net/papers/triangulate/<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * @author Nathan Sweet */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>public class IndexedDelaunayTriangulator {<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    static private final double EPSILON = 0.000001;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    static private final int INSIDE = 0;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    static private final int COMPLETE = 1;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    static private final int INCOMPLETE = 2;<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>    private final IntVLA quicksortStack = new IntVLA();<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    private double[] sortedPoints;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    private final IntVLA triangles = new IntVLA(16);<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    private final IntVLA originalIndices = new IntVLA(0);<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    private final IntVLA edges = new IntVLA();<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    private final ShortVLA complete = new ShortVLA(false, 16); // only a ShortVLA because we don't have BooleanArray<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    private final double[] superTriangle = new double[6];<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    <a name="line.33"></a>
+<span class="sourceLineNo">034</span>    /** @see #computeTriangles(double[], int, int, boolean) */<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    public IntVLA computeTriangles (double[] polygon, boolean sorted) {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        return computeTriangles(polygon, 0, polygon.length, sorted);<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    }<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /** Triangulates the given point cloud to a list of triangle indices that make up the Delaunay triangulation.<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * @param points x,y pairs describing points. Duplicate points will result in undefined behavior.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * @param sorted If false, the points will be sorted by the x coordinate, which is required by the triangulation<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     *               algorithm. In that case, the input array is not modified, the returned indices are for the input<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     *               array, and count*2 additional working memory is needed.<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * @return triples of indices into the points that describe the triangles in clockwise order. Note the returned array is reused<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     *         for later calls to the same method. */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public IntVLA computeTriangles (double[] points, int offset, int count, boolean sorted) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        IntVLA triangles = this.triangles;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        triangles.clear();<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        if (count &lt; 6) return triangles;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        triangles.ensureCapacity(count);<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>        if (!sorted) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>            if (sortedPoints == null || sortedPoints.length &lt; count) sortedPoints = new double[count];<a name="line.53"></a>
+<span class="sourceLineNo">054</span>            System.arraycopy(points, offset, sortedPoints, 0, count);<a name="line.54"></a>
+<span class="sourceLineNo">055</span>            points = sortedPoints;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>            offset = 0;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>            sort(points, count);<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        }<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>        int end = offset + count;<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>        // Determine bounds for super triangle.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        double xmin = points[0], ymin = points[1];<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        double xmax = xmin, ymax = ymin;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        for (int i = offset + 2; i &lt; end; i++) {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>            double value = points[i];<a name="line.66"></a>
+<span class="sourceLineNo">067</span>            if (value &lt; xmin) xmin = value;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>            if (value &gt; xmax) xmax = value;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>            i++;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            value = points[i];<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            if (value &lt; ymin) ymin = value;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>            if (value &gt; ymax) ymax = value;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        }<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        double dx = xmax - xmin, dy = ymax - ymin;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        double dmax = (dx &gt; dy ? dx : dy) * 20f;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        double xmid = (xmax + xmin) / 2f, ymid = (ymax + ymin) / 2f;<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>        // Setup the super triangle, which contains all points.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        double[] superTriangle = this.superTriangle;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        superTriangle[0] = xmid - dmax;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        superTriangle[1] = ymid - dmax;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        superTriangle[2] = xmid;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        superTriangle[3] = ymid + dmax;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        superTriangle[4] = xmid + dmax;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        superTriangle[5] = ymid - dmax;<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>        IntVLA edges = this.edges;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        edges.ensureCapacity(count / 2);<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>        ShortVLA complete = this.complete;<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        complete.clear();<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        complete.ensureCapacity(count);<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>        // Add super triangle.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        triangles.add(end);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        triangles.add(end + 2);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        triangles.add(end + 4);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        complete.add((short) 0);<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>        // Include each point one at a time into the existing mesh.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        for (int pointIndex = offset; pointIndex &lt; end; pointIndex += 2) {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            double x = points[pointIndex], y = points[pointIndex + 1];<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>            // If x,y lies inside the circumcircle of a triangle, the edges are stored and the triangle removed.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            int[] trianglesArray = triangles.items;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            short[] completeArray = complete.items;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            for (int triangleIndex = triangles.size - 1; triangleIndex &gt;= 0; triangleIndex -= 3) {<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                int completeIndex = triangleIndex / 3;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                if (completeArray[completeIndex] != 0) continue;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                int p1 = trianglesArray[triangleIndex - 2];<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                int p2 = trianglesArray[triangleIndex - 1];<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                int p3 = trianglesArray[triangleIndex];<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                double x1, y1, x2, y2, x3, y3;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                if (p1 &gt;= end) {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                    int i = p1 - end;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                    x1 = superTriangle[i];<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                    y1 = superTriangle[i + 1];<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                } else {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                    x1 = points[p1];<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                    y1 = points[p1 + 1];<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                }<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                if (p2 &gt;= end) {<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                    int i = p2 - end;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                    x2 = superTriangle[i];<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                    y2 = superTriangle[i + 1];<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                } else {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                    x2 = points[p2];<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                    y2 = points[p2 + 1];<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                }<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                if (p3 &gt;= end) {<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                    int i = p3 - end;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                    x3 = superTriangle[i];<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                    y3 = superTriangle[i + 1];<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                } else {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                    x3 = points[p3];<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                    y3 = points[p3 + 1];<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                switch (circumCircle(x, y, x1, y1, x2, y2, x3, y3)) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                    case COMPLETE:<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                        completeArray[completeIndex] = 1;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                        break;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                    case INSIDE:<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                        edges.add(p1);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                        edges.add(p2);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                        edges.add(p2);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                        edges.add(p3);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                        edges.add(p3);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                        edges.add(p1);<a name="line.148"></a>
+<span class="sourceLineNo">149</span><a name="line.149"></a>
+<span class="sourceLineNo">150</span>                        trianglesArray[triangleIndex] = trianglesArray[--triangles.size];<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                        trianglesArray[triangleIndex - 1] = trianglesArray[--triangles.size];<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                        trianglesArray[triangleIndex - 2] = trianglesArray[--triangles.size];<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                        completeArray[completeIndex] = completeArray[--complete.size];<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                        break;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                }<a name="line.155"></a>
+<span class="sourceLineNo">156</span>            }<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>            int[] edgesArray = edges.items;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            for (int i = 0, n = edges.size; i &lt; n; i += 2) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                // Skip multiple edges. If all triangles are anticlockwise then all interior edges are opposite pointing in direction.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                int p1 = edgesArray[i];<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                if (p1 == -1) continue;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                int p2 = edgesArray[i + 1];<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                boolean skip = false;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                for (int ii = i + 2; ii &lt; n; ii += 2) {<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                    if (p1 == edgesArray[ii + 1] &amp;&amp; p2 == edgesArray[ii]) {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                        skip = true;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                        edgesArray[ii] = -1;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                    }<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                if (skip) continue;<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>                // Form new triangles for the current point. Edges are arranged in clockwise order.<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                triangles.add(p1);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                triangles.add(edgesArray[i + 1]);<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                triangles.add(pointIndex);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                complete.add((short)0);<a name="line.177"></a>
+<span class="sourceLineNo">178</span>            }<a name="line.178"></a>
+<span class="sourceLineNo">179</span>            edges.clear();<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        }<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>        // Remove triangles with super triangle vertices.<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        int[] trianglesArray = triangles.items;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        for (int i = triangles.size - 1; i &gt;= 0; i -= 3) {<a name="line.184"></a>
+<span class="sourceLineNo">185</span>            if (trianglesArray[i] &gt;= end || trianglesArray[i - 1] &gt;= end || trianglesArray[i - 2] &gt;= end) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                trianglesArray[i] = trianglesArray[--triangles.size];<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                trianglesArray[i - 1] = trianglesArray[--triangles.size];<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                trianglesArray[i - 2] = trianglesArray[--triangles.size];<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            }<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        }<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>        // Convert sorted to unsorted indices.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        if (!sorted) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            int[] originalIndicesArray = originalIndices.items;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            for (int i = 0, n = triangles.size; i &lt; n; i++)<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                trianglesArray[i] = (originalIndicesArray[trianglesArray[i] / 2] * 2);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        }<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>        // Adjust triangles to start from zero and count by 1, not by vertex x,y coordinate pairs.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>        if (offset == 0) {<a name="line.200"></a>
+<span class="sourceLineNo">201</span>            for (int i = 0, n = triangles.size; i &lt; n; i++)<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                trianglesArray[i] = (trianglesArray[i] / 2);<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        } else {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            for (int i = 0, n = triangles.size; i &lt; n; i++)<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                trianglesArray[i] = ((trianglesArray[i] - offset) / 2);<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        }<a name="line.206"></a>
+<span class="sourceLineNo">207</span><a name="line.207"></a>
+<span class="sourceLineNo">208</span>        return triangles;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>    /** Returns INSIDE if point xp,yp is inside the circumcircle made up of the points x1,y1, x2,y2, x3,y3. Returns COMPLETE if xp<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * is to the right of the entire circumcircle. Otherwise returns INCOMPLETE. Note: a point on the circumcircle edge is<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     * considered inside. */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    private int circumCircle (double xp, double yp, double x1, double y1, double x2, double y2, double x3, double y3) {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        double xc, yc;<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        double y1y2 = Math.abs(y1 - y2);<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        double y2y3 = Math.abs(y2 - y3);<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        if (y1y2 &lt; EPSILON) {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            if (y2y3 &lt; EPSILON) return INCOMPLETE;<a name="line.219"></a>
+<span class="sourceLineNo">220</span>            double m2 = -(x3 - x2) / (y3 - y2);<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            double mx2 = (x2 + x3) / 2f;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>            double my2 = (y2 + y3) / 2f;<a name="line.222"></a>
+<span class="sourceLineNo">223</span>            xc = (x2 + x1) / 2f;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>            yc = m2 * (xc - mx2) + my2;<a name="line.224"></a>
+<span class="sourceLineNo">225</span>        } else {<a name="line.225"></a>
+<span class="sourceLineNo">226</span>            double m1 = -(x2 - x1) / (y2 - y1);<a name="line.226"></a>
+<span class="sourceLineNo">227</span>            double mx1 = (x1 + x2) / 2f;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>            double my1 = (y1 + y2) / 2f;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>            if (y2y3 &lt; EPSILON) {<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                xc = (x3 + x2) / 2f;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                yc = m1 * (xc - mx1) + my1;<a name="line.231"></a>
+<span class="sourceLineNo">232</span>            } else {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                double m2 = -(x3 - x2) / (y3 - y2);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                double mx2 = (x2 + x3) / 2f;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                double my2 = (y2 + y3) / 2f;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                xc = (m1 * mx1 - m2 * mx2 + my2 - my1) / (m1 - m2);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                yc = m1 * (xc - mx1) + my1;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            }<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>        double dx = x2 - xc;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        double dy = y2 - yc;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        double rsqr = dx * dx + dy * dy;<a name="line.243"></a>
+<span class="sourceLineNo">244</span><a name="line.244"></a>
+<span class="sourceLineNo">245</span>        dx = xp - xc;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        dx *= dx;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>        dy = yp - yc;<a name="line.247"></a>
+<span class="sourceLineNo">248</span>        if (dx + dy * dy - rsqr &lt;= EPSILON) return INSIDE;<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        return xp &gt; xc &amp;&amp; dx &gt; rsqr ? COMPLETE : INCOMPLETE;<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    }<a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>//    public void sortPairs(double[] points)<a name="line.252"></a>
+<span class="sourceLineNo">253</span>//    {<a name="line.253"></a>
+<span class="sourceLineNo">254</span>//        final int pointCount = points.length / 2;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>//        if (sortedPoints == null || sortedPoints.length &lt; points.length) sortedPoints = new double[points.length];<a name="line.255"></a>
+<span class="sourceLineNo">256</span>//        System.arraycopy(points, 0, sortedPoints, 0, points.length);<a name="line.256"></a>
+<span class="sourceLineNo">257</span>////        points = sortedPoints;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>//        sort(sortedPoints, sortedPoints.length);<a name="line.258"></a>
+<span class="sourceLineNo">259</span>//        int[] originalIndicesArray = originalIndices.items;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>//        int p;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>//        for (int i = 0; i &lt; pointCount; i++) {<a name="line.261"></a>
+<span class="sourceLineNo">262</span>//            p = originalIndicesArray[i];<a name="line.262"></a>
+<span class="sourceLineNo">263</span>//            points[p&lt;&lt;1] = sortedPoints[i&lt;&lt;1];<a name="line.263"></a>
+<span class="sourceLineNo">264</span>//            points[p&lt;&lt;1|1] = sortedPoints[i&lt;&lt;1|1];<a name="line.264"></a>
+<span class="sourceLineNo">265</span>//        }<a name="line.265"></a>
+<span class="sourceLineNo">266</span>//        System.out.println(sortedPoints.length);<a name="line.266"></a>
+<span class="sourceLineNo">267</span>//    }<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    <a name="line.268"></a>
+<span class="sourceLineNo">269</span>    /** Sorts x,y pairs of values by the x value.<a name="line.269"></a>
+<span class="sourceLineNo">270</span>     * @param count Number of indices, must be even. */<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    private void sort (double[] values, int count) {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        int pointCount = count / 2;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        originalIndices.clear();<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        originalIndices.ensureCapacity(pointCount);<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        int[] originalIndicesArray = originalIndices.items;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        for (int i = 0; i &lt; pointCount; i++)<a name="line.276"></a>
+<span class="sourceLineNo">277</span>            originalIndicesArray[i] = i;<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>        int lower = 0;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        int upper = count - 1;<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        IntVLA stack = quicksortStack;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        stack.add(lower);<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        stack.add(upper - 1);<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        while (stack.size &gt; 0) {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>            upper = stack.pop();<a name="line.285"></a>
+<span class="sourceLineNo">286</span>            lower = stack.pop();<a name="line.286"></a>
+<span class="sourceLineNo">287</span>            if (upper &lt;= lower) continue;<a name="line.287"></a>
+<span class="sourceLineNo">288</span>            int i = quicksortPartition(values, lower, upper, originalIndicesArray);<a name="line.288"></a>
+<span class="sourceLineNo">289</span>            if (i - lower &gt; upper - i) {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                stack.add(lower);<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                stack.add(i - 2);<a name="line.291"></a>
+<span class="sourceLineNo">292</span>            }<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            stack.add(i + 2);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            stack.add(upper);<a name="line.294"></a>
+<span class="sourceLineNo">295</span>            if (upper - i &gt;= i - lower) {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                stack.add(lower);<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                stack.add(i - 2);<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            }<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        }<a name="line.299"></a>
+<span class="sourceLineNo">300</span>    }<a name="line.300"></a>
+<span class="sourceLineNo">301</span><a name="line.301"></a>
+<span class="sourceLineNo">302</span>    private int quicksortPartition (final double[] values, int lower, int upper, int[] originalIndices) {<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        double value = values[lower];<a name="line.303"></a>
+<span class="sourceLineNo">304</span>        int up = upper;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        int down = lower + 2;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        double tempValue;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        int tempIndex;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        while (down &lt; up) {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            while (down &lt; up &amp;&amp; values[down] &lt;= value)<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                down = down + 2;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>            while (values[up] &gt; value)<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                up = up - 2;<a name="line.312"></a>
+<span class="sourceLineNo">313</span>            if (down &lt; up) {<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                tempValue = values[down];<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                values[down] = values[up];<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                values[up] = tempValue;<a name="line.316"></a>
+<span class="sourceLineNo">317</span><a name="line.317"></a>
+<span class="sourceLineNo">318</span>                tempValue = values[down + 1];<a name="line.318"></a>
+<span class="sourceLineNo">319</span>                values[down + 1] = values[up + 1];<a name="line.319"></a>
+<span class="sourceLineNo">320</span>                values[up + 1] = tempValue;<a name="line.320"></a>
+<span class="sourceLineNo">321</span><a name="line.321"></a>
+<span class="sourceLineNo">322</span>                tempIndex = originalIndices[down / 2];<a name="line.322"></a>
+<span class="sourceLineNo">323</span>                originalIndices[down / 2] = originalIndices[up / 2];<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                originalIndices[up / 2] = tempIndex;<a name="line.324"></a>
+<span class="sourceLineNo">325</span>            }<a name="line.325"></a>
+<span class="sourceLineNo">326</span>        }<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        values[lower] = values[up];<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        values[up] = value;<a name="line.328"></a>
+<span class="sourceLineNo">329</span><a name="line.329"></a>
+<span class="sourceLineNo">330</span>        tempValue = values[lower + 1];<a name="line.330"></a>
+<span class="sourceLineNo">331</span>        values[lower + 1] = values[up + 1];<a name="line.331"></a>
+<span class="sourceLineNo">332</span>        values[up + 1] = tempValue;<a name="line.332"></a>
+<span class="sourceLineNo">333</span><a name="line.333"></a>
+<span class="sourceLineNo">334</span>        tempIndex = originalIndices[lower / 2];<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        originalIndices[lower / 2] = originalIndices[up / 2];<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        originalIndices[up / 2] = tempIndex;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        return up;<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    }<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>    /** Removes all triangles with a centroid outside the specified hull, which may be concave. Note some triangulations may have<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     * triangles whose centroid is inside the hull but a portion is outside. */<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    public void trim (IntVLA triangles, double[] points, double[] hull, int offset, int count) {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        int[] trianglesArray = triangles.items;<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        for (int i = triangles.size - 1; i &gt;= 0; i -= 3) {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>            int p1 = trianglesArray[i - 2] * 2;<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            int p2 = trianglesArray[i - 1] * 2;<a name="line.346"></a>
+<span class="sourceLineNo">347</span>            int p3 = trianglesArray[i] * 2;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>            double centroidX = (points[p1] + points[p2] + points[p3]) / 3.0;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>            double centroidY = (points[p1+1] + points[p2+1] + points[p3+1]) / 3.0;<a name="line.349"></a>
+<span class="sourceLineNo">350</span>            if (!isPointInPolygon(hull, offset, count, centroidX, centroidY)) {<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                trianglesArray[i] = trianglesArray[--triangles.size];<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                trianglesArray[i - 1] = trianglesArray[--triangles.size];<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                trianglesArray[i - 2] = trianglesArray[--triangles.size];<a name="line.353"></a>
+<span class="sourceLineNo">354</span>            }<a name="line.354"></a>
+<span class="sourceLineNo">355</span>        }<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    }<a name="line.356"></a>
+<span class="sourceLineNo">357</span>    /** Returns true if the specified point is in the polygon.<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * @param offset Starting polygon index.<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * @param count Number of array indices to use after offset. */<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    public static boolean isPointInPolygon (double[] polygon, int offset, int count, double x, double y) {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>        boolean oddNodes = false;<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        int j = offset + count - 2;<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        for (int i = offset, n = j; i &lt;= n; i += 2) {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>            double yi = polygon[i + 1];<a name="line.364"></a>
+<span class="sourceLineNo">365</span>            double yj = polygon[j + 1];<a name="line.365"></a>
+<span class="sourceLineNo">366</span>            if ((yi &lt; y &amp;&amp; yj &gt;= y) || (yj &lt; y &amp;&amp; yi &gt;= y)) {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                double xi = polygon[i];<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                if (xi + (y - yi) / (yj - yi) * (polygon[j] - xi) &lt; x) oddNodes = !oddNodes;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>            }<a name="line.369"></a>
+<span class="sourceLineNo">370</span>            j = i;<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        }<a name="line.371"></a>
+<span class="sourceLineNo">372</span>        return oddNodes;<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    }<a name="line.373"></a>
+<span class="sourceLineNo">374</span>}<a name="line.374"></a>
+<span class="sourceLineNo">375</span><a name="line.375"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

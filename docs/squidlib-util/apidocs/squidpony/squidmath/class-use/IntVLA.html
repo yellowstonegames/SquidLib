@@ -641,12 +641,19 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#order">order</a></span></code>
+<div class="block">An IntVLA (variable-length int sequence) that stores the positions in the key array of specific keys, with the
+ positions in insertion order.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Arrangement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Arrangement.html#order">order</a></span></code>
 <div class="block">The ordering of entries, with the nth entry in order being the index into <a href="../../../squidpony/squidmath/Arrangement.html#key"><code>Arrangement.key</code></a> and <a href="../../../squidpony/squidmath/Arrangement.html#value"><code>Arrangement.value</code></a> to find
  that entry's key and value.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#weights">weights</a></span></code>&nbsp;</td>
 </tr>
@@ -659,6 +666,20 @@
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IndexedDelaunayTriangulator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IndexedDelaunayTriangulator.html#computeTriangles-double:A-boolean-">computeTriangles</a></span>(double[]&nbsp;polygon,
+                boolean&nbsp;sorted)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IndexedDelaunayTriangulator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IndexedDelaunayTriangulator.html#computeTriangles-double:A-int-int-boolean-">computeTriangles</a></span>(double[]&nbsp;points,
+                int&nbsp;offset,
+                int&nbsp;count,
+                boolean&nbsp;sorted)</code>
+<div class="block">Triangulates the given point cloud to a list of triangle indices that make up the Delaunay triangulation.</div>
+</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><span class="typeNameLabel">IntVLA.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntVLA.html#copy--">copy</a></span>()</code>&nbsp;</td>
@@ -736,6 +757,37 @@
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">IntVLA.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntVLA.html#removeAll-squidpony.squidmath.IntVLA-">removeAll</a></span>(<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;array)</code>
 <div class="block">Removes from this array all of elements contained in the specified array.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">TimSort.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TimSort.html#sort-T:A-squidpony.squidmath.IntVLA-java.util.Comparator-">sort</a></span>(T[]&nbsp;a,
+    <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;order,
+    <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super T&gt;&nbsp;c)</code>
+<div class="block">Modifies <code>order</code> by comparing items in the array <code>a</code> with the Comparator <code>c</code>; not likely to be
+ used externally except by code that extends or re-implements SquidLib data structures.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">TimSort.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/TimSort.html#sort-T:A-squidpony.squidmath.IntVLA-int-int-java.util.Comparator-">sort</a></span>(T[]&nbsp;a,
+    <a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;order,
+    int&nbsp;lo,
+    int&nbsp;hi,
+    <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super T&gt;&nbsp;c)</code>
+<div class="block">Modifies <code>order</code> by comparing items from index <code>lo</code> inclusive to index <code>hi</code> exclusive in the
+ array <code>a</code> with the Comparator <code>c</code>; not likely to be used externally except by code that extends or
+ re-implements SquidLib data structures.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">IndexedDelaunayTriangulator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IndexedDelaunayTriangulator.html#trim-squidpony.squidmath.IntVLA-double:A-double:A-int-int-">trim</a></span>(<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;triangles,
+    double[]&nbsp;points,
+    double[]&nbsp;hull,
+    int&nbsp;offset,
+    int&nbsp;count)</code>
+<div class="block">Removes all triangles with a centroid outside the specified hull, which may be concave.</div>
 </td>
 </tr>
 </tbody>

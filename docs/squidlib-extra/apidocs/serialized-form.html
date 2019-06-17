@@ -132,7 +132,7 @@
 </li>
 <li class="blockList">
 <h4>syllableFrequencies</h4>
-<pre>squidpony.squidmath.IntDoubleOrderedMap syllableFrequencies</pre>
+<pre>double[] syllableFrequencies</pre>
 </li>
 <li class="blockList">
 <h4>totalSyllableFrequency</h4>
@@ -512,7 +512,7 @@
 <h3>Class squidpony.ObText extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;squidpony.ObText.ObTextEntry&gt; implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>6L</dd>
+<dd>7L</dd>
 </dl>
 </li>
 <li class="blockList"><a name="squidpony.ObText.ContentMatcher">
@@ -526,7 +526,7 @@
 <h3>Class squidpony.ObText.ObTextEntry extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>5L</dd>
+<dd>7L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -927,7 +927,7 @@
 <h3>Class squidpony.squidmath.CoordDouble extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>300L</dd>
+<dd>500L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -966,12 +966,8 @@
 <pre>int len</pre>
 </li>
 <li class="blockList">
-<h4>upper</h4>
-<pre>int upper</pre>
-</li>
-<li class="blockList">
-<h4>seeds</h4>
-<pre>long[] seeds</pre>
+<h4>seed</h4>
+<pre>long seed</pre>
 </li>
 <li class="blockListLast">
 <h4>effect</h4>
@@ -1029,6 +1025,158 @@
 <li class="blockListLast">
 <h4>deck</h4>
 <pre>double[] deck</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Delaunay3D extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>points</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord[] points</pre>
+</li>
+<li class="blockListLast">
+<h4>triangleSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; triangleSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D.Edge">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Delaunay3D.Edge extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D.Triangle">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Delaunay3D.Triangle extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord b</pre>
+</li>
+<li class="blockListLast">
+<h4>c</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord c</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.DelaunayTriangulator extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>points</h4>
+<pre>squidpony.squidmath.CoordDouble[] points</pre>
+</li>
+<li class="blockListLast">
+<h4>triangleSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; triangleSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator.Edge">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.DelaunayTriangulator.Edge extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator.Triangle">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.DelaunayTriangulator.Triangle extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+<li class="blockListLast">
+<h4>c</h4>
+<pre>squidpony.squidmath.CoordDouble c</pre>
 </li>
 </ul>
 </li>
@@ -1248,9 +1396,25 @@
 <h4>cellularNoiseLookup</h4>
 <pre>squidpony.squidmath.FastNoise cellularNoiseLookup</pre>
 </li>
-<li class="blockListLast">
+<li class="blockList">
 <h4>gradientPerturbAmp</h4>
 <pre>float gradientPerturbAmp</pre>
+</li>
+<li class="blockList">
+<h4>m</h4>
+<pre>float[] m</pre>
+</li>
+<li class="blockList">
+<h4>cellDist</h4>
+<pre>float[] cellDist</pre>
+</li>
+<li class="blockList">
+<h4>distOrder</h4>
+<pre>int[] distOrder</pre>
+</li>
+<li class="blockListLast">
+<h4>intLoc</h4>
+<pre>int[] intLoc</pre>
 </li>
 </ul>
 </li>
@@ -1370,7 +1534,7 @@
 <h3>Class squidpony.squidmath.GWTRNG extends squidpony.squidmath.AbstractRNG implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>2L</dd>
+<dd>3L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -1403,6 +1567,31 @@
 </dl>
 <ul class="blockList">
 <li class="blockList">
+<h3>Serialization Methods</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>readObject</h4>
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.0">readObject</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;arg0)
+                 throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                        <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
+</dl>
+</li>
+<li class="blockListLast">
+<h4>writeObject</h4>
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.0">writeObject</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;arg0)
+                  throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
 <li class="blockList">
@@ -1422,16 +1611,8 @@
 <pre>boolean containsNullKey</pre>
 </li>
 <li class="blockList">
-<h4>first</h4>
-<pre>int first</pre>
-</li>
-<li class="blockList">
-<h4>last</h4>
-<pre>int last</pre>
-</li>
-<li class="blockList">
-<h4>link</h4>
-<pre>long[] link</pre>
+<h4>order</h4>
+<pre>squidpony.squidmath.IntVLA order</pre>
 </li>
 <li class="blockList">
 <h4>n</h4>
@@ -1459,7 +1640,7 @@
 </li>
 <li class="blockList">
 <h4>values</h4>
-<pre>squidpony.squidmath.IntDoubleOrderedMap.DoubleCollection values</pre>
+<pre>squidpony.squidmath.IntDoubleOrderedMap.ValueCollection values</pre>
 </li>
 <li class="blockListLast">
 <h4>defRetValue</h4>
@@ -1468,6 +1649,71 @@
 </ul>
 </li>
 </ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.FastEntryIterator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.IntDoubleOrderedMap.FastEntryIterator extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>entry</h4>
+<pre>squidpony.squidmath.IntDoubleOrderedMap.MapEntry entry</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.KeyIterator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.IntDoubleOrderedMap.KeyIterator extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.KeySet">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.IntDoubleOrderedMap.KeySet extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.MapEntrySet">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.IntDoubleOrderedMap.MapEntrySet extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.ValueCollection">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.IntDoubleOrderedMap.ValueCollection extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.ValueIterator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.IntDoubleOrderedMap.ValueIterator extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
 </li>
 <li class="blockList"><a name="squidpony.squidmath.IntIntOrderedMap">
 <!--   -->
@@ -1973,7 +2219,7 @@
 <h3>Class squidpony.squidmath.MiniMover64RNG extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>1L</dd>
+<dd>2L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -3344,6 +3590,114 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>pointSet</h4>
+<pre>squidpony.squidmath.OrderedSet&lt;K&gt; pointSet</pre>
+</li>
+<li class="blockList">
+<h4>triangleSoup</h4>
+<pre>squidpony.squidmath.Voronoi.TriangleSoup triangleSoup</pre>
+</li>
+<li class="blockListLast">
+<h4>polygonSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; polygonSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Edge">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi.Edge extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Polygon">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi.Polygon extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>centroid</h4>
+<pre>squidpony.squidmath.CoordDouble centroid</pre>
+</li>
+<li class="blockListLast">
+<h4>vertices</h4>
+<pre>squidpony.squidmath.CoordDouble[] vertices</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Triangle">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi.Triangle extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+<li class="blockList">
+<h4>c</h4>
+<pre>squidpony.squidmath.CoordDouble c</pre>
+</li>
+<li class="blockListLast">
+<h4>centroid</h4>
+<pre>squidpony.squidmath.CoordDouble centroid</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="squidpony.squidmath.WeightedTable">
 <!--   -->
 </a>
@@ -3371,22 +3725,11 @@
 <li class="blockList"><a name="squidpony.squidmath.WhirlingNoise">
 <!--   -->
 </a>
-<h3>Class squidpony.squidmath.WhirlingNoise extends squidpony.squidmath.PerlinNoise implements Serializable</h3>
+<h3>Class squidpony.squidmath.WhirlingNoise extends squidpony.squidmath.SeededNoise implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>5L</dd>
+<dd>6L</dd>
 </dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>seed</h4>
-<pre>long seed</pre>
-</li>
-</ul>
-</li>
-</ul>
 </li>
 <li class="blockList"><a name="squidpony.squidmath.XoRoRNG">
 <!--   -->
@@ -3463,30 +3806,6 @@
 <li class="blockListLast">
 <h4>stateD</h4>
 <pre>int stateD</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="squidpony.squidmath.Zag32RNG">
-<!--   -->
-</a>
-<h3>Class squidpony.squidmath.Zag32RNG extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>178316585712476930L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>a</h4>
-<pre>int a</pre>
-</li>
-<li class="blockListLast">
-<h4>b</h4>
-<pre>int b</pre>
 </li>
 </ul>
 </li>

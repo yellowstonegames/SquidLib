@@ -100,11 +100,11 @@
 <span class="sourceLineNo">092</span>         *         passable. If non-empty, this is guaranteed to be an<a name="line.92"></a>
 <span class="sourceLineNo">093</span>         *         {@link ArrayList}.<a name="line.93"></a>
 <span class="sourceLineNo">094</span>         */<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        public List&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {<a name="line.95"></a>
+<span class="sourceLineNo">095</span>        public ArrayList&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {<a name="line.95"></a>
 <span class="sourceLineNo">096</span>                if (!DungeonUtility.inLevel(level, start) || !passable(level[start.x][start.y]))<a name="line.96"></a>
-<span class="sourceLineNo">097</span>                        return Collections.emptyList();<a name="line.97"></a>
+<span class="sourceLineNo">097</span>                        return new ArrayList&lt;&gt;(0);<a name="line.97"></a>
 <span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>                final List&lt;Coord&gt; result = new ArrayList&lt;&gt;(volume);<a name="line.99"></a>
+<span class="sourceLineNo">099</span>                final ArrayList&lt;Coord&gt; result = new ArrayList&lt;&gt;(volume);<a name="line.99"></a>
 <span class="sourceLineNo">100</span><a name="line.100"></a>
 <span class="sourceLineNo">101</span>                Direction[] dirs = new Direction[Direction.OUTWARDS.length];<a name="line.101"></a>
 <span class="sourceLineNo">102</span><a name="line.102"></a>
@@ -166,94 +166,95 @@
 <span class="sourceLineNo">158</span>                if (nb == 0)<a name="line.158"></a>
 <span class="sourceLineNo">159</span>                        return;<a name="line.159"></a>
 <span class="sourceLineNo">160</span><a name="line.160"></a>
-<span class="sourceLineNo">161</span>                assert !border.isEmpty();<a name="line.161"></a>
-<span class="sourceLineNo">162</span>                for (int j = 0; j &lt; nb &amp;&amp; !zone.isEmpty(); j++) {<a name="line.162"></a>
-<span class="sourceLineNo">163</span>                        inebriate0(rng, zone, border, drunks);<a name="line.163"></a>
-<span class="sourceLineNo">164</span>                        if (border.isEmpty() || zone.isEmpty())<a name="line.164"></a>
-<span class="sourceLineNo">165</span>                                return;<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                }<a name="line.166"></a>
-<span class="sourceLineNo">167</span>        }<a name="line.167"></a>
-<span class="sourceLineNo">168</span><a name="line.168"></a>
-<span class="sourceLineNo">169</span>        protected boolean passable(char c) {<a name="line.169"></a>
-<span class="sourceLineNo">170</span>                return !impassable.contains(c);<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        }<a name="line.171"></a>
-<span class="sourceLineNo">172</span><a name="line.172"></a>
-<span class="sourceLineNo">173</span>        /**<a name="line.173"></a>
-<span class="sourceLineNo">174</span>         * Removes a circle from {@code zone}, by taking the circle's center in<a name="line.174"></a>
-<span class="sourceLineNo">175</span>         * {@code zone} 's border: {@code border}.<a name="line.175"></a>
-<span class="sourceLineNo">176</span>         * <a name="line.176"></a>
-<span class="sourceLineNo">177</span>         * @param border<a name="line.177"></a>
-<span class="sourceLineNo">178</span>         *            {@code result}'s border.<a name="line.178"></a>
-<span class="sourceLineNo">179</span>         */<a name="line.179"></a>
-<span class="sourceLineNo">180</span>        private void inebriate0(IRNG rng, List&lt;Coord&gt; zone, List&lt;Coord&gt; border, int nb) {<a name="line.180"></a>
-<span class="sourceLineNo">181</span>                assert !border.isEmpty();<a name="line.181"></a>
-<span class="sourceLineNo">182</span>                assert !zone.isEmpty();<a name="line.182"></a>
-<span class="sourceLineNo">183</span><a name="line.183"></a>
-<span class="sourceLineNo">184</span>                final int width = rng.nextInt(nb) + 1;<a name="line.184"></a>
-<span class="sourceLineNo">185</span>                final int height = rng.nextInt(nb) + 1;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>                final int radius = Math.max(1, Math.round(nb * Math.min(width, height)));<a name="line.186"></a>
-<span class="sourceLineNo">187</span>                final Coord center = rng.getRandomElement(border);<a name="line.187"></a>
-<span class="sourceLineNo">188</span>                zone.remove(center);<a name="line.188"></a>
-<span class="sourceLineNo">189</span>                for (int dx = -radius; dx &lt;= radius; ++dx) {<a name="line.189"></a>
-<span class="sourceLineNo">190</span>                        final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                        for (int dy = -high; dy &lt;= high; ++dy) {<a name="line.191"></a>
-<span class="sourceLineNo">192</span>                                final Coord c = center.translate(dx, dy);<a name="line.192"></a>
-<span class="sourceLineNo">193</span>                                zone.remove(c);<a name="line.193"></a>
-<span class="sourceLineNo">194</span>                                if (zone.isEmpty())<a name="line.194"></a>
-<span class="sourceLineNo">195</span>                                        return;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>                        }<a name="line.196"></a>
-<span class="sourceLineNo">197</span>                }<a name="line.197"></a>
-<span class="sourceLineNo">198</span>        }<a name="line.198"></a>
-<span class="sourceLineNo">199</span><a name="line.199"></a>
-<span class="sourceLineNo">200</span>        /**<a name="line.200"></a>
-<span class="sourceLineNo">201</span>         * @param rng<a name="line.201"></a>
-<span class="sourceLineNo">202</span>         *            used to randomize the floodfill<a name="line.202"></a>
-<span class="sourceLineNo">203</span>         * @param level<a name="line.203"></a>
-<span class="sourceLineNo">204</span>         *            char 2D array with x, y indices for the dungeon/map level<a name="line.204"></a>
-<span class="sourceLineNo">205</span>         * @param start<a name="line.205"></a>
-<span class="sourceLineNo">206</span>         *            Where the spill should start. It should be passable, otherwise<a name="line.206"></a>
-<span class="sourceLineNo">207</span>         *            an empty list gets returned. Consider using<a name="line.207"></a>
-<span class="sourceLineNo">208</span>         *            {@link DungeonUtility#getRandomCell(IRNG, char[][], Set, int)}<a name="line.208"></a>
-<span class="sourceLineNo">209</span>         *            to find it.<a name="line.209"></a>
-<span class="sourceLineNo">210</span>         * @param volume<a name="line.210"></a>
-<span class="sourceLineNo">211</span>         *            The number of cells to spill on.<a name="line.211"></a>
-<span class="sourceLineNo">212</span>         * @param impassable the set of chars on the level that block the spill, such<a name="line.212"></a>
-<span class="sourceLineNo">213</span>         *                   as walls or maybe other spilled things (oil and water).<a name="line.213"></a>
-<span class="sourceLineNo">214</span>         *                   May be null, which makes this treat '#' as impassable.<a name="line.214"></a>
-<span class="sourceLineNo">215</span>         * @param drunks<a name="line.215"></a>
-<span class="sourceLineNo">216</span>         *            The ratio of drunks to use to make the splash more realistic.<a name="line.216"></a>
-<span class="sourceLineNo">217</span>         *            Like for dungeon generation, if greater than 0, drunk walkers<a name="line.217"></a>
-<span class="sourceLineNo">218</span>         *            will remove the splash's margins, to make it more realistic.<a name="line.218"></a>
-<span class="sourceLineNo">219</span>         *            You don't need that if you're doing a splash that is bounded<a name="line.219"></a>
-<span class="sourceLineNo">220</span>         *            by walls, because the fill will be realistic. If you're doing<a name="line.220"></a>
-<span class="sourceLineNo">221</span>         *            a splash that isn't bounded, use that for its borders not to<a name="line.221"></a>
-<span class="sourceLineNo">222</span>         *            be too square.<a name="line.222"></a>
-<span class="sourceLineNo">223</span>         * <a name="line.223"></a>
-<span class="sourceLineNo">224</span>         *            &lt;p&gt;<a name="line.224"></a>
-<span class="sourceLineNo">225</span>         *            Useful values are 0, 1, and 2. Giving more will likely yield<a name="line.225"></a>
-<span class="sourceLineNo">226</span>         *            an empty result, on any decent map sizes.<a name="line.226"></a>
-<span class="sourceLineNo">227</span>         *            &lt;/p&gt;<a name="line.227"></a>
-<span class="sourceLineNo">228</span>         * @return The spill. It is a list of coordinates (containing {@code start})<a name="line.228"></a>
-<span class="sourceLineNo">229</span>         *         valid in {@code level} that are all adjacent and whose symbol is<a name="line.229"></a>
-<span class="sourceLineNo">230</span>         *         passable. If non-empty, this is guaranteed to be an<a name="line.230"></a>
-<span class="sourceLineNo">231</span>         *         {@link ArrayList}.<a name="line.231"></a>
-<span class="sourceLineNo">232</span>         */<a name="line.232"></a>
-<span class="sourceLineNo">233</span>        public static List&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, Set&lt;Character&gt; impassable, int drunks)<a name="line.233"></a>
-<span class="sourceLineNo">234</span>        {<a name="line.234"></a>
-<span class="sourceLineNo">235</span>                Set&lt;Character&gt; blocked;<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                if(impassable == null)<a name="line.236"></a>
-<span class="sourceLineNo">237</span>                        blocked = new HashSet&lt;&gt;(2);<a name="line.237"></a>
-<span class="sourceLineNo">238</span>                else<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                        blocked = impassable;<a name="line.239"></a>
-<span class="sourceLineNo">240</span>                if(splashCache == null || blocked.hashCode() != splashHash)<a name="line.240"></a>
-<span class="sourceLineNo">241</span>                {<a name="line.241"></a>
-<span class="sourceLineNo">242</span>                        splashHash = blocked.hashCode();<a name="line.242"></a>
-<span class="sourceLineNo">243</span>                        splashCache = new Splash(blocked);<a name="line.243"></a>
-<span class="sourceLineNo">244</span>                }<a name="line.244"></a>
-<span class="sourceLineNo">245</span>                return splashCache.spill(rng, level, start, volume, drunks);<a name="line.245"></a>
-<span class="sourceLineNo">246</span>        }<a name="line.246"></a>
-<span class="sourceLineNo">247</span><a name="line.247"></a>
-<span class="sourceLineNo">248</span>}<a name="line.248"></a>
+<span class="sourceLineNo">161</span>                if(border.isEmpty())<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                        return;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                for (int j = 0; j &lt; nb &amp;&amp; !zone.isEmpty(); j++) {<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                        inebriate0(rng, zone, border, drunks);<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                        if (border.isEmpty() || zone.isEmpty())<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                                return;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                }<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        }<a name="line.168"></a>
+<span class="sourceLineNo">169</span><a name="line.169"></a>
+<span class="sourceLineNo">170</span>        protected boolean passable(char c) {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                return !impassable.contains(c);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>        /**<a name="line.174"></a>
+<span class="sourceLineNo">175</span>         * Removes a circle from {@code zone}, by taking the circle's center in<a name="line.175"></a>
+<span class="sourceLineNo">176</span>         * {@code zone} 's border: {@code border}.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>         * <a name="line.177"></a>
+<span class="sourceLineNo">178</span>         * @param border<a name="line.178"></a>
+<span class="sourceLineNo">179</span>         *            {@code result}'s border.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>         */<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        private void inebriate0(IRNG rng, List&lt;Coord&gt; zone, List&lt;Coord&gt; border, int nb) {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                assert !border.isEmpty();<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                assert !zone.isEmpty();<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>                final int width = rng.nextInt(nb) + 1;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                final int height = rng.nextInt(nb) + 1;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                final int radius = Math.max(1, Math.round(nb * Math.min(width, height)));<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                final Coord center = rng.getRandomElement(border);<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                zone.remove(center);<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                for (int dx = -radius; dx &lt;= radius; ++dx) {<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                        final int high = (int) (Math.sqrt(radius * radius - dx * dx));<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                        for (int dy = -high; dy &lt;= high; ++dy) {<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                                final Coord c = center.translate(dx, dy);<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                                zone.remove(c);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                                if (zone.isEmpty())<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                                        return;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                        }<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                }<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        }<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>        /**<a name="line.201"></a>
+<span class="sourceLineNo">202</span>         * @param rng<a name="line.202"></a>
+<span class="sourceLineNo">203</span>         *            used to randomize the floodfill<a name="line.203"></a>
+<span class="sourceLineNo">204</span>         * @param level<a name="line.204"></a>
+<span class="sourceLineNo">205</span>         *            char 2D array with x, y indices for the dungeon/map level<a name="line.205"></a>
+<span class="sourceLineNo">206</span>         * @param start<a name="line.206"></a>
+<span class="sourceLineNo">207</span>         *            Where the spill should start. It should be passable, otherwise<a name="line.207"></a>
+<span class="sourceLineNo">208</span>         *            an empty list gets returned. Consider using<a name="line.208"></a>
+<span class="sourceLineNo">209</span>         *            {@link DungeonUtility#getRandomCell(IRNG, char[][], Set, int)}<a name="line.209"></a>
+<span class="sourceLineNo">210</span>         *            to find it.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>         * @param volume<a name="line.211"></a>
+<span class="sourceLineNo">212</span>         *            The number of cells to spill on.<a name="line.212"></a>
+<span class="sourceLineNo">213</span>         * @param impassable the set of chars on the level that block the spill, such<a name="line.213"></a>
+<span class="sourceLineNo">214</span>         *                   as walls or maybe other spilled things (oil and water).<a name="line.214"></a>
+<span class="sourceLineNo">215</span>         *                   May be null, which makes this treat '#' as impassable.<a name="line.215"></a>
+<span class="sourceLineNo">216</span>         * @param drunks<a name="line.216"></a>
+<span class="sourceLineNo">217</span>         *            The ratio of drunks to use to make the splash more realistic.<a name="line.217"></a>
+<span class="sourceLineNo">218</span>         *            Like for dungeon generation, if greater than 0, drunk walkers<a name="line.218"></a>
+<span class="sourceLineNo">219</span>         *            will remove the splash's margins, to make it more realistic.<a name="line.219"></a>
+<span class="sourceLineNo">220</span>         *            You don't need that if you're doing a splash that is bounded<a name="line.220"></a>
+<span class="sourceLineNo">221</span>         *            by walls, because the fill will be realistic. If you're doing<a name="line.221"></a>
+<span class="sourceLineNo">222</span>         *            a splash that isn't bounded, use that for its borders not to<a name="line.222"></a>
+<span class="sourceLineNo">223</span>         *            be too square.<a name="line.223"></a>
+<span class="sourceLineNo">224</span>         * <a name="line.224"></a>
+<span class="sourceLineNo">225</span>         *            &lt;p&gt;<a name="line.225"></a>
+<span class="sourceLineNo">226</span>         *            Useful values are 0, 1, and 2. Giving more will likely yield<a name="line.226"></a>
+<span class="sourceLineNo">227</span>         *            an empty result, on any decent map sizes.<a name="line.227"></a>
+<span class="sourceLineNo">228</span>         *            &lt;/p&gt;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>         * @return The spill. It is a list of coordinates (containing {@code start})<a name="line.229"></a>
+<span class="sourceLineNo">230</span>         *         valid in {@code level} that are all adjacent and whose symbol is<a name="line.230"></a>
+<span class="sourceLineNo">231</span>         *         passable. If non-empty, this is guaranteed to be an<a name="line.231"></a>
+<span class="sourceLineNo">232</span>         *         {@link ArrayList}.<a name="line.232"></a>
+<span class="sourceLineNo">233</span>         */<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        public static ArrayList&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, Set&lt;Character&gt; impassable, int drunks)<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        {<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                Set&lt;Character&gt; blocked;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                if(impassable == null)<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                        blocked = new HashSet&lt;&gt;(2);<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                else<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                        blocked = impassable;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>                if(splashCache == null || blocked.hashCode() != splashHash)<a name="line.241"></a>
+<span class="sourceLineNo">242</span>                {<a name="line.242"></a>
+<span class="sourceLineNo">243</span>                        splashHash = blocked.hashCode();<a name="line.243"></a>
+<span class="sourceLineNo">244</span>                        splashCache = new Splash(blocked);<a name="line.244"></a>
+<span class="sourceLineNo">245</span>                }<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                return splashCache.spill(rng, level, start, volume, drunks);<a name="line.246"></a>
+<span class="sourceLineNo">247</span>        }<a name="line.247"></a>
+<span class="sourceLineNo">248</span><a name="line.248"></a>
+<span class="sourceLineNo">249</span>}<a name="line.249"></a>
 
 
 

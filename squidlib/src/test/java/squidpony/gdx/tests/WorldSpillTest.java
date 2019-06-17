@@ -17,13 +17,14 @@ import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.mapping.SpillWorldMap;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.StatefulRNG;
 
 /**
  * Created by Tommy Ettinger on 4/6/2016.
  */
 public class WorldSpillTest extends ApplicationAdapter{
-    public static final int gridWidth = 192, gridHeight = 128, cellWidth = 4, cellHeight = 4;
+    public static final int gridWidth = 256, gridHeight = 256, cellWidth = 2, cellHeight = 2;
 
     SquidPanel display;
     char[][] map, displayedMap;
@@ -35,6 +36,7 @@ public class WorldSpillTest extends ApplicationAdapter{
     @Override
     public void create() {
         super.create();
+        Coord.expandPoolTo(gridWidth, gridHeight);
         rng = new StatefulRNG(0x9876543210L);
         swm = new SpillWorldMap(gridWidth, gridHeight, FakeLanguageGen.FANTASY_NAME.word(rng, true));
         displayedMap = ArrayTools.fill(' ', gridWidth, gridHeight);
@@ -64,13 +66,13 @@ public class WorldSpillTest extends ApplicationAdapter{
     public void refresh()
     {
         swm = new SpillWorldMap(gridWidth, gridHeight, FakeLanguageGen.FANTASY_NAME.word(rng, true));
-        map = swm.generate(0, false, true, 0.0, 1.4);
+        map = swm.generate(0, false, true, 0.0, 0.06);
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 display.colors[x][y] =
                         (swm.heightMap[x][y] >= 0) ? SColor.lerpFloatColors(landColor, lightestColor,
-                        (swm.heightMap[x][y] * 3 + 106) * 0.001953125f)
-                : SColor.lerpFloatColors(oceanColor, lightestColor, 50 * 0.001953125f);
+                                Math.min((swm.heightMap[x][y] * 3 + 106f) / (gridHeight + gridWidth), 1f))
+                : SColor.lerpFloatColors(oceanColor, lightestColor, 0.1f);
             }
         }
         ArrayTools.fill(display.contents, '\0');

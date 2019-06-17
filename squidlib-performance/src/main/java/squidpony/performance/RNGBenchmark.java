@@ -619,29 +619,6 @@ public class RNGBenchmark {
 //        return Light32R.nextInt();
 //    }
 
-    private Zag32RNG Zag32 = new Zag32RNG(9999L);
-    private RNG Zag32R = new RNG(Zag32);
-    @Benchmark
-    public long measureZag32()
-    {
-        return Zag32.nextLong();
-    }
-    @Benchmark
-    public int measureZag32Int()
-    {
-        return Zag32.next(32);
-    }
-    @Benchmark
-    public long measureZag32R()
-    {
-        return Zag32R.nextLong();
-    }
-    @Benchmark
-    public int measureZag32IntR()
-    {
-        return Zag32R.nextInt();
-    }
-    
     private Oriole32RNG Oriole32 = new Oriole32RNG(9999, 999, 99);
     private RNG Oriole32R = new RNG(Oriole32);
     @Benchmark

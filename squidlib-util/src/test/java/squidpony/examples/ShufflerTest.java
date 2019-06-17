@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.*;
@@ -11,6 +12,7 @@ import static squidpony.examples.LanguageGenTest.PRINTING;
 /**
  * Created by Tommy Ettinger on 5/21/2016.
  */
+@Ignore
 public class ShufflerTest {
 
     @Test

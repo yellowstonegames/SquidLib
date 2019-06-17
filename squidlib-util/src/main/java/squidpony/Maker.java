@@ -98,6 +98,19 @@ public class Maker {
     }
 
     /**
+     * Makes an ArrayList of T given a single T element; avoids creating an array for varargs as
+     * {@link #makeList(Object[])} would do, but only allows one item.
+     * @param element an array or vararg of T
+     * @param <T> just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)
+     * @return a newly-allocated ArrayList containing only element
+     */
+    public static <T> ArrayList<T> makeList(T element) {
+        ArrayList<T> list = new ArrayList<>(1);
+        list.add(element);
+        return list;
+    }
+
+    /**
      * Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements. Duplicate items in elements will have
      * all but one item discarded, using the later item in elements.
      * @param elements an array or vararg of T
@@ -207,6 +220,20 @@ public class Maker {
         if(elements == null) return null;
         return new OrderedSet<>(elements);
     }
+
+    /**
+     * Makes an OrderedSet of T given a single T element; avoids creating an array for varargs as
+     * {@link #makeOS(Object[])} would do, but only allows one item.
+     * @param element an array or vararg of T
+     * @param <T> just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)
+     * @return a newly-allocated OrderedSet containing only element
+     */
+    public static <T> OrderedSet<T> makeOS(T element) {
+        OrderedSet<T> set = new OrderedSet<>(1);
+        set.add(element);
+        return set;
+    }
+    
     /**
      * Makes an UnorderedSet (UOS) of T given an array or vararg of T elements. Duplicate items in elements will have
      * all but one item discarded, using the later item in elements; order will not be kept.
@@ -219,6 +246,20 @@ public class Maker {
         if(elements == null) return null;
         return new UnorderedSet<>(elements);
     }
+
+    /**
+     * Makes an UnorderedSet of T given a single T element; avoids creating an array for varargs as
+     * {@link #makeOS(Object[])} would do, but only allows one item.
+     * @param element an array or vararg of T
+     * @param <T> just about any non-primitive, non-array type (arrays would cause confusion with the vararg method)
+     * @return a newly-allocated UnorderedSet containing only element
+     */
+    public static <T> UnorderedSet<T> makeUOS(T element) {
+        UnorderedSet<T> set = new UnorderedSet<>(1);
+        set.add(element);
+        return set;
+    }
+
     /**
      * Makes a EnumOrderedSet (OS) of the enum type T given at least one T element followed by an array or vararg of any
      * number of additional T elements. Duplicate items in elements will have all but one item discarded, using the

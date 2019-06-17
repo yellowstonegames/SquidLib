@@ -278,126 +278,191 @@
 <span class="sourceLineNo">270</span>    }<a name="line.270"></a>
 <span class="sourceLineNo">271</span><a name="line.271"></a>
 <span class="sourceLineNo">272</span>    /**<a name="line.272"></a>
-<span class="sourceLineNo">273</span>     * Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.<a name="line.273"></a>
-<span class="sourceLineNo">274</span>     * It is recommended that you use {@code DiverRNG.determine(++state)} or {@code DiverRNG.determine(--state)} to<a name="line.274"></a>
-<span class="sourceLineNo">275</span>     * produce a sequence of different numbers, but you can also use {@code DiverRNG.determine(state += 12345L)} or<a name="line.275"></a>
-<span class="sourceLineNo">276</span>     * any odd-number increment. All longs are accepted by this method, and all longs can be produced; unlike several<a name="line.276"></a>
-<span class="sourceLineNo">277</span>     * other classes' determine() methods, passing 0 here does not return 0.<a name="line.277"></a>
+<span class="sourceLineNo">273</span>     * Fast static randomizing method that takes its state as a parameter; state is expected to change between calls to<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * this. It is recommended that you use {@code DiverRNG.determine(++state)} or {@code DiverRNG.determine(--state)}<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * to produce a sequence of different numbers, and you may have slightly worse quality with increments or decrements<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * other than 1. All longs are accepted by this method, and all longs can be produced; unlike several other classes'<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * determine() methods, passing 0 here does not return 0.<a name="line.277"></a>
 <span class="sourceLineNo">278</span>     * &lt;br&gt;<a name="line.278"></a>
-<span class="sourceLineNo">279</span>     * This was the same as {@link LinnormRNG#determine(long)}, but was changed to a slightly-faster method that also<a name="line.279"></a>
-<span class="sourceLineNo">280</span>     * has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's version,<a name="line.280"></a>
-<span class="sourceLineNo">281</span>     * some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an<a name="line.281"></a>
-<span class="sourceLineNo">282</span>     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the<a name="line.282"></a>
-<span class="sourceLineNo">283</span>     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its<a name="line.283"></a>
-<span class="sourceLineNo">284</span>     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as<a name="line.284"></a>
-<span class="sourceLineNo">285</span>     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing<a name="line.285"></a>
-<span class="sourceLineNo">286</span>     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using<a name="line.286"></a>
-<span class="sourceLineNo">287</span>     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large<a name="line.287"></a>
-<span class="sourceLineNo">288</span>     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()<a name="line.288"></a>
-<span class="sourceLineNo">289</span>     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,<a name="line.289"></a>
-<span class="sourceLineNo">290</span>     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * have passed to 16TB and 32TB with no anomalies as well).<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.292"></a>
-<span class="sourceLineNo">293</span>     * @return any long<a name="line.293"></a>
-<span class="sourceLineNo">294</span>     */<a name="line.294"></a>
-<span class="sourceLineNo">295</span>    public static long determine(long state)<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    {<a name="line.296"></a>
-<span class="sourceLineNo">297</span>        return ((state = ((state = ((state &lt;&lt; ((state &amp; 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                ^ (state &gt;&gt;&gt; ((state &gt;&gt;&gt; 60) + 16))) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 27);<a name="line.298"></a>
-<span class="sourceLineNo">299</span>    }<a name="line.299"></a>
-<span class="sourceLineNo">300</span><a name="line.300"></a>
-<span class="sourceLineNo">301</span>    /**<a name="line.301"></a>
-<span class="sourceLineNo">302</span>     * Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)<a name="line.302"></a>
-<span class="sourceLineNo">303</span>     * and bound (exclusive); state is expected to change between calls to this. It is recommended that you use<a name="line.303"></a>
-<span class="sourceLineNo">304</span>     * {@code DiverRNG.determineBounded(++state, bound)} or {@code DiverRNG.determineBounded(--state, bound)} to<a name="line.304"></a>
-<span class="sourceLineNo">305</span>     * produce a sequence of different numbers, but you can also use<a name="line.305"></a>
-<span class="sourceLineNo">306</span>     * {@code DiverRNG.determineBounded(state += 12345L, bound)} or any odd-number increment. All longs are accepted<a name="line.306"></a>
-<span class="sourceLineNo">307</span>     * by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any<a name="line.307"></a>
-<span class="sourceLineNo">308</span>     * odd-number values for bound, this isn't possible for most generators). The bound can be negative.<a name="line.308"></a>
-<span class="sourceLineNo">309</span>     * &lt;br&gt;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>     * This was the same as {@link LinnormRNG#determineBounded(long, int)}, but was changed to a slightly-faster method<a name="line.310"></a>
-<span class="sourceLineNo">311</span>     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's<a name="line.311"></a>
-<span class="sourceLineNo">312</span>     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an<a name="line.312"></a>
-<span class="sourceLineNo">313</span>     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the<a name="line.313"></a>
-<span class="sourceLineNo">314</span>     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its<a name="line.314"></a>
-<span class="sourceLineNo">315</span>     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as<a name="line.315"></a>
-<span class="sourceLineNo">316</span>     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing<a name="line.316"></a>
-<span class="sourceLineNo">317</span>     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using<a name="line.317"></a>
-<span class="sourceLineNo">318</span>     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large<a name="line.318"></a>
-<span class="sourceLineNo">319</span>     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()<a name="line.319"></a>
-<span class="sourceLineNo">320</span>     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,<a name="line.320"></a>
-<span class="sourceLineNo">321</span>     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions<a name="line.321"></a>
-<span class="sourceLineNo">322</span>     * have passed to 16TB and 32TB with no anomalies as well).<a name="line.322"></a>
-<span class="sourceLineNo">323</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.323"></a>
-<span class="sourceLineNo">324</span>     * @param bound the outer exclusive bound, as an int<a name="line.324"></a>
-<span class="sourceLineNo">325</span>     * @return an int between 0 (inclusive) and bound (exclusive)<a name="line.325"></a>
-<span class="sourceLineNo">326</span>     */<a name="line.326"></a>
-<span class="sourceLineNo">327</span>    public static int determineBounded(long state, final int bound)<a name="line.327"></a>
-<span class="sourceLineNo">328</span>    {<a name="line.328"></a>
-<span class="sourceLineNo">329</span>        return (int)((bound * (((state = ((state = ((state &lt;&lt; ((state &amp; 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                ^ (state &gt;&gt;&gt; ((state &gt;&gt;&gt; 60) + 16))) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 27) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.330"></a>
-<span class="sourceLineNo">331</span>    }<a name="line.331"></a>
-<span class="sourceLineNo">332</span><a name="line.332"></a>
-<span class="sourceLineNo">333</span>    /**<a name="line.333"></a>
-<span class="sourceLineNo">334</span>     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will<a name="line.334"></a>
-<span class="sourceLineNo">335</span>     * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},<a name="line.335"></a>
-<span class="sourceLineNo">336</span>     * where the increment for state should be odd but otherwise doesn't really matter. This should tolerate just about<a name="line.336"></a>
-<span class="sourceLineNo">337</span>     * any increment as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are<a name="line.337"></a>
-<span class="sourceLineNo">338</span>     * only 2 to the 30 possible floats between 0 and 1.<a name="line.338"></a>
-<span class="sourceLineNo">339</span>     * &lt;br&gt;<a name="line.339"></a>
-<span class="sourceLineNo">340</span>     * This was the same as {@link LinnormRNG#determineFloat(long)} , but was changed to a slightly-faster method<a name="line.340"></a>
-<span class="sourceLineNo">341</span>     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's<a name="line.341"></a>
-<span class="sourceLineNo">342</span>     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an<a name="line.342"></a>
-<span class="sourceLineNo">343</span>     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the<a name="line.343"></a>
-<span class="sourceLineNo">344</span>     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its<a name="line.344"></a>
-<span class="sourceLineNo">345</span>     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as<a name="line.345"></a>
-<span class="sourceLineNo">346</span>     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing<a name="line.346"></a>
-<span class="sourceLineNo">347</span>     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using<a name="line.347"></a>
-<span class="sourceLineNo">348</span>     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large<a name="line.348"></a>
-<span class="sourceLineNo">349</span>     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()<a name="line.349"></a>
-<span class="sourceLineNo">350</span>     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,<a name="line.350"></a>
-<span class="sourceLineNo">351</span>     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions<a name="line.351"></a>
-<span class="sourceLineNo">352</span>     * have passed to 16TB and 32TB with no anomalies as well).<a name="line.352"></a>
-<span class="sourceLineNo">353</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.353"></a>
-<span class="sourceLineNo">354</span>     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to<a name="line.354"></a>
-<span class="sourceLineNo">355</span>     *              generate numbers in reverse order<a name="line.355"></a>
-<span class="sourceLineNo">356</span>     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}<a name="line.356"></a>
-<span class="sourceLineNo">357</span>     */<a name="line.357"></a>
-<span class="sourceLineNo">358</span>    public static float determineFloat(long state) {<a name="line.358"></a>
-<span class="sourceLineNo">359</span>        return (((state = ((state &lt;&lt; ((state &amp; 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)<a name="line.359"></a>
-<span class="sourceLineNo">360</span>                ^ (state &gt;&gt;&gt; ((state &gt;&gt;&gt; 60) + 16))) * 0x369DEA0F31A53F85L &gt;&gt;&gt; 40) * 0x1p-24f;<a name="line.360"></a>
-<span class="sourceLineNo">361</span>    }<a name="line.361"></a>
-<span class="sourceLineNo">362</span><a name="line.362"></a>
-<span class="sourceLineNo">363</span>    /**<a name="line.363"></a>
-<span class="sourceLineNo">364</span>     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this<a name="line.364"></a>
-<span class="sourceLineNo">365</span>     * will return the same float. This is expected to be called with a changing variable, e.g.<a name="line.365"></a>
-<span class="sourceLineNo">366</span>     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't matter. This should<a name="line.366"></a>
-<span class="sourceLineNo">367</span>     * tolerate just about any increment, as long as it is odd. The period is 2 to the 64 if you increment or<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     * decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     * &lt;br&gt;<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     * This was the same as {@link LinnormRNG#determineDouble(long)}, but was changed to a slightly-faster method<a name="line.370"></a>
-<span class="sourceLineNo">371</span>     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's<a name="line.371"></a>
-<span class="sourceLineNo">372</span>     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an<a name="line.372"></a>
-<span class="sourceLineNo">373</span>     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the<a name="line.373"></a>
-<span class="sourceLineNo">374</span>     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its<a name="line.374"></a>
-<span class="sourceLineNo">375</span>     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as<a name="line.375"></a>
-<span class="sourceLineNo">376</span>     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing<a name="line.376"></a>
-<span class="sourceLineNo">377</span>     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using<a name="line.377"></a>
-<span class="sourceLineNo">378</span>     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large<a name="line.378"></a>
-<span class="sourceLineNo">379</span>     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()<a name="line.379"></a>
-<span class="sourceLineNo">380</span>     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,<a name="line.380"></a>
-<span class="sourceLineNo">381</span>     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions<a name="line.381"></a>
-<span class="sourceLineNo">382</span>     * have passed to 16TB and 32TB with no anomalies as well).<a name="line.382"></a>
-<span class="sourceLineNo">383</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.383"></a>
-<span class="sourceLineNo">384</span>     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to<a name="line.384"></a>
-<span class="sourceLineNo">385</span>     *              generate numbers in reverse order<a name="line.385"></a>
-<span class="sourceLineNo">386</span>     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}<a name="line.386"></a>
-<span class="sourceLineNo">387</span>     */<a name="line.387"></a>
-<span class="sourceLineNo">388</span>    public static double determineDouble(long state) {<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        return (((state = ((state = ((state &lt;&lt; ((state &amp; 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)<a name="line.389"></a>
-<span class="sourceLineNo">390</span>                ^ (state &gt;&gt;&gt; ((state &gt;&gt;&gt; 60) + 16))) * 0x369DEA0F31A53F85L) ^ state &gt;&gt;&gt; 27) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>    }<a name="line.391"></a>
-<span class="sourceLineNo">392</span>}<a name="line.392"></a>
+<span class="sourceLineNo">279</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.282"></a>
+<span class="sourceLineNo">283</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.283"></a>
+<span class="sourceLineNo">284</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.284"></a>
+<span class="sourceLineNo">285</span>     * all possible longs as input.<a name="line.285"></a>
+<span class="sourceLineNo">286</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.286"></a>
+<span class="sourceLineNo">287</span>     * @return any long<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     */<a name="line.288"></a>
+<span class="sourceLineNo">289</span>    public static long determine(long state)<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        return (state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    }<a name="line.292"></a>
+<span class="sourceLineNo">293</span><a name="line.293"></a>
+<span class="sourceLineNo">294</span>    /**<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     * High-quality static randomizing method that takes its state as a parameter; state is expected to change between<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * calls to this. It is suggested that you use {@code DiverRNG.randomize(++state)} or<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     * {@code DiverRNG.randomize(--state)} to produce a sequence of different numbers, but any increments are allowed<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     * (even-number increments won't be able to produce all outputs, but their quality will be fine for the numbers they<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     * can produce). All longs are accepted by this method, and all longs can be produced; unlike several other classes'<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     * determine() methods, passing 0 here does not return 0.<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     * &lt;br&gt;<a name="line.301"></a>
+<span class="sourceLineNo">302</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.302"></a>
+<span class="sourceLineNo">303</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.303"></a>
+<span class="sourceLineNo">304</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * all possible longs as input.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * @return any long<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     */<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    public static long randomize(long state)<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    {<a name="line.313"></a>
+<span class="sourceLineNo">314</span>        return (state = ((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 43 ^ state &gt;&gt;&gt; 31 ^ state &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L) ^ state &gt;&gt;&gt; 28;<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    }<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>    /**<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     * Fast static randomizing method that takes its state as a parameter and limits output to an int between 0<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * (inclusive) and bound (exclusive); state is expected to change between calls to this. It is recommended that you<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * use {@code DiverRNG.determineBounded(++state, bound)} or {@code DiverRNG.determineBounded(--state, bound)} to<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * produce a sequence of different numbers. All longs are accepted<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * odd-number values for bound, this isn't possible for most generators). The bound can be negative.<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     * &lt;br&gt;<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.326"></a>
+<span class="sourceLineNo">327</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.327"></a>
+<span class="sourceLineNo">328</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.329"></a>
+<span class="sourceLineNo">330</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     * all possible longs as input.<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * @param bound the outer exclusive bound, as an int<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * @return an int between 0 (inclusive) and bound (exclusive)<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     */<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    public static int determineBounded(long state, final int bound)<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    {<a name="line.337"></a>
+<span class="sourceLineNo">338</span>        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    }<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    /**<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     * High-quality static randomizing method that takes its state as a parameter and limits output to an int between 0<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     * (inclusive) and bound (exclusive); state is expected to change between calls to this. It is suggested that you<a name="line.342"></a>
+<span class="sourceLineNo">343</span>     * use {@code DiverRNG.randomizeBounded(++state)} or {@code DiverRNG.randomize(--state)} to produce a sequence of<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     * different numbers, but any increments are allowed (even-number increments won't be able to produce all outputs,<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * but their quality will be fine for the numbers they can produce). All longs are accepted by this method, but not<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     * all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any odd-number values for<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * bound, this isn't possible for most generators). The bound can be negative.<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     * &lt;br&gt;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.350"></a>
+<span class="sourceLineNo">351</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.352"></a>
+<span class="sourceLineNo">353</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.353"></a>
+<span class="sourceLineNo">354</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.354"></a>
+<span class="sourceLineNo">355</span>     * all possible longs as input.<a name="line.355"></a>
+<span class="sourceLineNo">356</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     * @param bound the outer exclusive bound, as an int<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * @return an int between 0 (inclusive) and bound (exclusive)<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     */<a name="line.359"></a>
+<span class="sourceLineNo">360</span><a name="line.360"></a>
+<span class="sourceLineNo">361</span>    public static int randomizeBounded(long state, final int bound)<a name="line.361"></a>
+<span class="sourceLineNo">362</span>    {<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        return (int)((bound * (((state = ((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 43 ^ state &gt;&gt;&gt; 31 ^ state &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L) ^ state &gt;&gt;&gt; 28) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
+<span class="sourceLineNo">366</span>    /**<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will<a name="line.367"></a>
+<span class="sourceLineNo">368</span>     * return the same float. This is expected to be called with a changing variable, e.g.<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     * {@code determineFloat(++state)}, where the increment for state should generally be 1. The period is 2 to the 64<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     * if you increment or decrement by 1, but there are only 2 to the 30 possible floats between 0 and 1.<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     * &lt;br&gt;<a name="line.371"></a>
+<span class="sourceLineNo">372</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.372"></a>
+<span class="sourceLineNo">373</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.374"></a>
+<span class="sourceLineNo">375</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.377"></a>
+<span class="sourceLineNo">378</span>     * all possible longs as input.<a name="line.378"></a>
+<span class="sourceLineNo">379</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.379"></a>
+<span class="sourceLineNo">380</span>     *              using {@code determineFloat(++state)} is recommended to go forwards or<a name="line.380"></a>
+<span class="sourceLineNo">381</span>     *              {@code determineFloat(--state)} to generate numbers in reverse order<a name="line.381"></a>
+<span class="sourceLineNo">382</span>     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}<a name="line.382"></a>
+<span class="sourceLineNo">383</span>     */<a name="line.383"></a>
+<span class="sourceLineNo">384</span>    public static float determineFloat(long state) {<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        return ((((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 40) * 0x1p-24f;<a name="line.385"></a>
+<span class="sourceLineNo">386</span>    }<a name="line.386"></a>
+<span class="sourceLineNo">387</span><a name="line.387"></a>
+<span class="sourceLineNo">388</span>    /**<a name="line.388"></a>
+<span class="sourceLineNo">389</span>     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will<a name="line.389"></a>
+<span class="sourceLineNo">390</span>     * return the same float. This is expected to be called with a changing variable, e.g.<a name="line.390"></a>
+<span class="sourceLineNo">391</span>     * {@code randomizeFloat(++state)}, where the increment for state can be any value and should usually be odd<a name="line.391"></a>
+<span class="sourceLineNo">392</span>     * (even-number increments reduce the period). The period is 2 to the 64 if you increment or decrement by any odd<a name="line.392"></a>
+<span class="sourceLineNo">393</span>     * number, but there are only 2 to the 30 possible floats between 0 and 1.<a name="line.393"></a>
+<span class="sourceLineNo">394</span>     * &lt;br&gt;<a name="line.394"></a>
+<span class="sourceLineNo">395</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.395"></a>
+<span class="sourceLineNo">396</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.396"></a>
+<span class="sourceLineNo">397</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.397"></a>
+<span class="sourceLineNo">398</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.398"></a>
+<span class="sourceLineNo">399</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.399"></a>
+<span class="sourceLineNo">400</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.400"></a>
+<span class="sourceLineNo">401</span>     * all possible longs as input.<a name="line.401"></a>
+<span class="sourceLineNo">402</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>     *              using {@code randomizeFloat(++state)} is recommended to go forwards or<a name="line.403"></a>
+<span class="sourceLineNo">404</span>     *              {@code randomizeFloat(--state)} to generate numbers in reverse order<a name="line.404"></a>
+<span class="sourceLineNo">405</span>     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}<a name="line.405"></a>
+<span class="sourceLineNo">406</span>     */<a name="line.406"></a>
+<span class="sourceLineNo">407</span>    public static float randomizeFloat(long state) {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        return (((state = (state ^ (state &lt;&lt; 41 | state &gt;&gt;&gt; 23) ^ (state &lt;&lt; 17 | state &gt;&gt;&gt; 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 43 ^ state &gt;&gt;&gt; 31 ^ state &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L &gt;&gt;&gt; 40) * 0x1p-24f;<a name="line.408"></a>
+<span class="sourceLineNo">409</span><a name="line.409"></a>
+<span class="sourceLineNo">410</span>    }<a name="line.410"></a>
+<span class="sourceLineNo">411</span><a name="line.411"></a>
+<span class="sourceLineNo">412</span>    /**<a name="line.412"></a>
+<span class="sourceLineNo">413</span>     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this<a name="line.413"></a>
+<span class="sourceLineNo">414</span>     * will return the same float. This is expected to be called with a changing variable, e.g.<a name="line.414"></a>
+<span class="sourceLineNo">415</span>     * {@code determineDouble(++state)}, where the increment for state should generally be 1. The period is 2 to the 64<a name="line.415"></a>
+<span class="sourceLineNo">416</span>     * if you increment or decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.<a name="line.416"></a>
+<span class="sourceLineNo">417</span>     * &lt;br&gt;<a name="line.417"></a>
+<span class="sourceLineNo">418</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.421"></a>
+<span class="sourceLineNo">422</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.422"></a>
+<span class="sourceLineNo">423</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.423"></a>
+<span class="sourceLineNo">424</span>     * all possible longs as input.<a name="line.424"></a>
+<span class="sourceLineNo">425</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.425"></a>
+<span class="sourceLineNo">426</span>     *              using {@code determineDouble(++state)} is recommended to go forwards or<a name="line.426"></a>
+<span class="sourceLineNo">427</span>     *              {@code determineDouble(--state)} to generate numbers in reverse order<a name="line.427"></a>
+<span class="sourceLineNo">428</span>     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     */<a name="line.429"></a>
+<span class="sourceLineNo">430</span>    public static double determineDouble(long state) {<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>    }<a name="line.432"></a>
+<span class="sourceLineNo">433</span><a name="line.433"></a>
+<span class="sourceLineNo">434</span>    /**<a name="line.434"></a>
+<span class="sourceLineNo">435</span>     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this<a name="line.435"></a>
+<span class="sourceLineNo">436</span>     * will return the same float. This is expected to be called with a changing variable, e.g.<a name="line.436"></a>
+<span class="sourceLineNo">437</span>     * {@code randomizeDouble(++state)}, where the increment for state can be any number but should usually be odd<a name="line.437"></a>
+<span class="sourceLineNo">438</span>     * (even-number increments reduce the period). The period is 2 to the 64 if you increment or decrement by 1, but <a name="line.438"></a>
+<span class="sourceLineNo">439</span>     * there are only 2 to the 62 possible doubles between 0 and 1.<a name="line.439"></a>
+<span class="sourceLineNo">440</span>     * &lt;br&gt;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as<a name="line.441"></a>
+<span class="sourceLineNo">442</span>     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     * &lt;a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html"&gt;the same<a name="line.444"></a>
+<span class="sourceLineNo">445</span>     * testing requirements Evensen used for rrxmrrxmsx_0&lt;/a&gt;; it will have excellent quality regardless of patterns in<a name="line.445"></a>
+<span class="sourceLineNo">446</span>     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given<a name="line.446"></a>
+<span class="sourceLineNo">447</span>     * all possible longs as input.<a name="line.447"></a>
+<span class="sourceLineNo">448</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.448"></a>
+<span class="sourceLineNo">449</span>     *              using {@code randomizeDouble(++state)} is recommended to go forwards or<a name="line.449"></a>
+<span class="sourceLineNo">450</span>     *              {@code randomizeDouble(--state)} to generate numbers in reverse order<a name="line.450"></a>
+<span class="sourceLineNo">451</span>     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}<a name="line.451"></a>
+<span class="sourceLineNo">452</span>     */<a name="line.452"></a>
+<span class="sourceLineNo">453</span>    public static double randomizeDouble(long state) {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.454"></a>
+<span class="sourceLineNo">455</span>    }<a name="line.455"></a>
+<span class="sourceLineNo">456</span><a name="line.456"></a>
+<span class="sourceLineNo">457</span>}<a name="line.457"></a>
 
 
 

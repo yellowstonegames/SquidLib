@@ -76,7 +76,7 @@ public class DefaultResources implements LifecycleListener {
             distanceSlab = null, distanceSlabLight = null,
             distanceLean = null, distanceLeanLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
-            msdfDejaVu = null, msdfCurvySquare = null,
+            msdfDejaVu = null, msdfCurvySquare = null, msdfCarved = null,
             msdfIcons = null;
     private TextFamily familyLean = null, familySlab = null, familyGo = null,
             familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
@@ -113,8 +113,10 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png",
             distanceFieldOrbit = "Orbitron-distance.fnt",
             distanceFieldOrbitTexture = "Orbitron-distance.png",
-            distanceFieldLean = "Iosevka-distance.fnt",
-            distanceFieldLeanTexture = "Iosevka-distance.png",
+//            distanceFieldLean = "Iosevka-psdf.fnt",           // PSDF has better shape but needs the black background removed
+//            distanceFieldLeanTexture = "Iosevka-psdf.png",    // PSDF has better shape but needs the black background removed
+            distanceFieldLean = "Iosevka-distance.fnt",         // switch comment with above when PSDF works better
+            distanceFieldLeanTexture = "Iosevka-distance.png",  // switch comment with above when PSDF works better
             distanceFieldLeanLight = "Iosevka-Light-distance.fnt",
             distanceFieldLeanLightTexture = "Iosevka-Light-distance.png",
             distanceFieldSlabLight = "Iosevka-Slab-Light-distance.fnt",
@@ -133,6 +135,8 @@ public class DefaultResources implements LifecycleListener {
             crispDejaVuTexture = "DejaVuSansMono-msdf.png",
             crispNotoSerif = "NotoSerif-Family-msdf.fnt",
             crispNotoSerifTexture = "NotoSerif-Family-msdf.png",
+            crispCarved = "bloccus-msdf.fnt",
+            crispCarvedTexture = "bloccus-msdf.png",
             crispCurvySquare = "square-msdf.fnt",
             crispCurvySquareTexture = "square-msdf.png",
             crispIcons = "awesome-solid-msdf.fnt",
@@ -248,22 +252,41 @@ public class DefaultResources implements LifecycleListener {
             + "  if(u_smoothing <= 0.0) {\n"
             + "    float smoothing = -u_smoothing;\n"
             + "	   vec4 box = vec4(v_texCoords-0.000125, v_texCoords+0.000125);\n"
-            + "	   float asum = smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, v_texCoords).a) + 0.5 * (\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.xy).a) +\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.zw).a) +\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.xw).a) +\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.zy).a));\n"
+            + "    vec2 sample0 = texture2D(u_texture, v_texCoords).ra;\n"
+            + "    vec2 sample1 = texture2D(u_texture, box.xy).ra;\n"
+            + "    vec2 sample2 = texture2D(u_texture, box.zw).ra;\n"
+            + "    vec2 sample3 = texture2D(u_texture, box.xw).ra;\n"
+            + "    vec2 sample4 = texture2D(u_texture, box.zy).ra;\n"
+            + "	   float asum = smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample0.x, sample0.y)) + 0.5 * (\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample1.x, sample1.y)) +\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample2.x, sample2.y)) +\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample3.x, sample3.y)) +\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample4.x, sample4.y)));\n"
             + "    gl_FragColor = vec4(v_color.rgb, (asum / 3.0) * v_color.a);\n"
             + "	 } else {\n"
-            + "    float distance = texture2D(u_texture, v_texCoords).a;\n"
-            + "	   vec2 box = vec2(0.0, 0.00375 * (u_smoothing + 0.0825));\n"
-            + "	   float asum = 0.7 * (smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, distance) + \n"
-            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords + box.xy).a) +\n"
-            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords - box.xy).a) +\n"
-            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords + box.yx).a) +\n"
-            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords - box.yx).a)),\n"
-            + "                 outline = clamp((distance * 0.8 - 0.415) * 18, 0, 1);\n"
-            + "	   gl_FragColor = vec4(mix(vec3(0.0), v_color.rgb, outline), asum * v_color.a);\n"
+            + "    vec2 radistance = texture2D(u_texture, v_texCoords).ra;\n"
+            + "    float distance = min(radistance.x, radistance.y);\n"
+//            + "	   vec2 box = vec2(0.0, 0.00375 * (u_smoothing + 0.0825));\n"
+//            + "	   float asum = 0.7 * (smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, distance) + \n"
+//            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords + box.xy).a) +\n"
+//            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords - box.xy).a) +\n"
+//            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords + box.yx).a) +\n"
+//            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords - box.yx).a)),\n"
+            + "	   vec4 box = vec4(v_texCoords-0.000625, v_texCoords+0.000625);\n"
+            + "    vec2 sample0 = texture2D(u_texture, v_texCoords).ra;\n"
+            + "    vec2 sample1 = texture2D(u_texture, box.xy).ra;\n"
+            + "    vec2 sample2 = texture2D(u_texture, box.zw).ra;\n"
+            + "    vec2 sample3 = texture2D(u_texture, box.xw).ra;\n"
+            + "    vec2 sample4 = texture2D(u_texture, box.zy).ra;\n"
+            + "	   float asum = smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample0.x, sample0.y)) + 0.5 * (\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample1.x, sample1.y)) +\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample2.x, sample2.y)) +\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample3.x, sample3.y)) +\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample4.x, sample4.y))),\n"
+//            + "                 char = step(distance, 0.35);\n"
+            + "                 fancy = step(0.55, distance);\n"
+//            + "                 outline = clamp((distance * 0.8 - 0.415) * 18.0, 0.0, 1.0);\n"
+            + "	   gl_FragColor = vec4(v_color.rgb * fancy, (asum + step(0.3, distance)) * v_color.a);\n"
             + "  }\n"
             + "}\n";
     /**
@@ -288,9 +311,15 @@ public class DefaultResources implements LifecycleListener {
             + "\n"
             + "void main() {\n"
             + "  vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
-            + "  float distance = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.425);"
+//            + "  float distance = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.425);\n"
+//            + "  gl_FragColor = vec4(step(3.5 * u_smoothing, distance * 0.75) * v_color.rgb, clamp((distance / (3.4 * u_smoothing)) + 0.9125, 0.0, 1.0) * v_color.a);\n"
+
             //+ "  float cd = clamp(distance, 0.0, 1.0);"
-            + "  gl_FragColor = vec4(step(3.5 * u_smoothing, distance * 0.75) * v_color.rgb, clamp((distance / (3.4 * u_smoothing)) + 0.9125, 0.0, 1.0) * v_color.a);\n"
+
+            + "  float d = ((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b))) - 0.4);\n"
+            + "  float block = step(-0.4999999, d);\n"
+            + "  float nice = step(0.24999999, d);\n"
+            + "  gl_FragColor = vec4(v_color.rgb * nice, clamp(d * u_smoothing + (block + 1.0) * 0.5, 0.0, 1.0) * v_color.a);\n"
             + "}\n";
 
     private SquidColorCenter scc = null;
@@ -1121,7 +1150,9 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(8);
+                        .height(30).width(7);
+                instance.distancePrint.bmpFont.setUseIntegerPositions(false);
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1688,7 +1719,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.familyPrintMSDF = new TextFamily();
                 instance.familyPrintMSDF.fontMultiDistanceField(crispNotoSerif, crispNotoSerifTexture)
-                        .width(12).height(30).setSmoothingMultiplier(1.5f);
+                        .width(24).height(30).setSmoothingMultiplier(1.5f);
                 instance.familyPrintMSDF.font().setUseIntegerPositions(false);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1698,6 +1729,47 @@ public class DefaultResources implements LifecycleListener {
             return instance.familyPrintMSDF.copy();
         return null;
     }
+    /**
+     * Returns a TextCellFactory already configured to use a partially-angular variable-width font with good Unicode
+     * support and an appearance as if it were carved into solid rock, that should scale cleanly to even very large
+     * sizes (using an MSDF technique). Caches the result for later calls. The font used is
+     * <a href="https://fontstruct.com/fontstructions/show/507930/bloccus">Bloccus by Christian Munk</a>. It supports a
+     * lot of glyphs, including most of extended Latin, Greek, Cyrillic, and the International Phonetic Alphabet (IPA),
+     * but not box drawing characters because this is variable-width. This uses the Multi-channel Signed Distance
+     * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
+     * sharper edges and precise corners instead of rounded tips on strokes.
+     * <br>
+     * Preview: <a href="https://i.imgur.com/zaqgHTW.png">Image link</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font bloccus.ttf
+     */
+    public static TextCellFactory getCrispCarvedFont()
+    {
+        initialize();
+        if(instance.msdfCarved == null)
+        {
+            try {
+                instance.msdfCarved = new TextCellFactory()
+                        .fontMultiDistanceField(crispCarved, crispCarvedTexture)
+                        .width(32f).height(32f).setSmoothingMultiplier(1.5f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfCarved != null)
+            return instance.msdfCarved.copy();
+        return null;
+    }
+
     /**
      * Returns a TextCellFactory already configured to use a fixed-width icon font (no letters are supported) using the
      * Font-Awesome icon set, that should scale cleanly to even very large sizes. Caches the result for later calls.
@@ -1988,6 +2060,10 @@ public class DefaultResources implements LifecycleListener {
         if(msdfDejaVu != null) {
             msdfDejaVu.dispose();
             msdfDejaVu = null;
+        }
+        if(msdfCarved != null) {
+            msdfCarved.dispose();
+            msdfCarved = null;
         }
         if(msdfCurvySquare != null) {
             msdfCurvySquare.dispose();

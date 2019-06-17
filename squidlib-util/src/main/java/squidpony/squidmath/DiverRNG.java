@@ -270,123 +270,188 @@ public final class DiverRNG implements StatefulRandomness, Serializable {
     }
 
     /**
-     * Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.
-     * It is recommended that you use {@code DiverRNG.determine(++state)} or {@code DiverRNG.determine(--state)} to
-     * produce a sequence of different numbers, but you can also use {@code DiverRNG.determine(state += 12345L)} or
-     * any odd-number increment. All longs are accepted by this method, and all longs can be produced; unlike several
-     * other classes' determine() methods, passing 0 here does not return 0.
+     * Fast static randomizing method that takes its state as a parameter; state is expected to change between calls to
+     * this. It is recommended that you use {@code DiverRNG.determine(++state)} or {@code DiverRNG.determine(--state)}
+     * to produce a sequence of different numbers, and you may have slightly worse quality with increments or decrements
+     * other than 1. All longs are accepted by this method, and all longs can be produced; unlike several other classes'
+     * determine() methods, passing 0 here does not return 0.
      * <br>
-     * This was the same as {@link LinnormRNG#determine(long)}, but was changed to a slightly-faster method that also
-     * has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's version,
-     * some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
-     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
-     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
-     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
-     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
-     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
-     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
-     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
-     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
-     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
-     * have passed to 16TB and 32TB with no anomalies as well).
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
      * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
      * @return any long
      */
     public static long determine(long state)
     {
-        return ((state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
-                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27);
+        return (state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
     }
 
     /**
-     * Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)
-     * and bound (exclusive); state is expected to change between calls to this. It is recommended that you use
-     * {@code DiverRNG.determineBounded(++state, bound)} or {@code DiverRNG.determineBounded(--state, bound)} to
-     * produce a sequence of different numbers, but you can also use
-     * {@code DiverRNG.determineBounded(state += 12345L, bound)} or any odd-number increment. All longs are accepted
+     * High-quality static randomizing method that takes its state as a parameter; state is expected to change between
+     * calls to this. It is suggested that you use {@code DiverRNG.randomize(++state)} or
+     * {@code DiverRNG.randomize(--state)} to produce a sequence of different numbers, but any increments are allowed
+     * (even-number increments won't be able to produce all outputs, but their quality will be fine for the numbers they
+     * can produce). All longs are accepted by this method, and all longs can be produced; unlike several other classes'
+     * determine() methods, passing 0 here does not return 0.
+     * <br>
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
+     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
+     * @return any long
+     */
+    public static long randomize(long state)
+    {
+        return (state = ((state = (state ^ (state << 41 | state >>> 23) ^ (state << 17 | state >>> 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state >>> 43 ^ state >>> 31 ^ state >>> 23) * 0xDB4F0B9175AE2165L) ^ state >>> 28;
+    }
+
+    /**
+     * Fast static randomizing method that takes its state as a parameter and limits output to an int between 0
+     * (inclusive) and bound (exclusive); state is expected to change between calls to this. It is recommended that you
+     * use {@code DiverRNG.determineBounded(++state, bound)} or {@code DiverRNG.determineBounded(--state, bound)} to
+     * produce a sequence of different numbers. All longs are accepted
      * by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any
      * odd-number values for bound, this isn't possible for most generators). The bound can be negative.
      * <br>
-     * This was the same as {@link LinnormRNG#determineBounded(long, int)}, but was changed to a slightly-faster method
-     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
-     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
-     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
-     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
-     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
-     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
-     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
-     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
-     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
-     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
-     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
-     * have passed to 16TB and 32TB with no anomalies as well).
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
      * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
      * @param bound the outer exclusive bound, as an int
      * @return an int between 0 (inclusive) and bound (exclusive)
      */
     public static int determineBounded(long state, final int bound)
     {
-        return (int)((bound * (((state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
-                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27) & 0x7FFFFFFFL)) >> 31);
+        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) & 0xFFFFFFFFL)) >> 32);
+    }
+    /**
+     * High-quality static randomizing method that takes its state as a parameter and limits output to an int between 0
+     * (inclusive) and bound (exclusive); state is expected to change between calls to this. It is suggested that you
+     * use {@code DiverRNG.randomizeBounded(++state)} or {@code DiverRNG.randomize(--state)} to produce a sequence of
+     * different numbers, but any increments are allowed (even-number increments won't be able to produce all outputs,
+     * but their quality will be fine for the numbers they can produce). All longs are accepted by this method, but not
+     * all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any odd-number values for
+     * bound, this isn't possible for most generators). The bound can be negative.
+     * <br>
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
+     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
+     * @param bound the outer exclusive bound, as an int
+     * @return an int between 0 (inclusive) and bound (exclusive)
+     */
+
+    public static int randomizeBounded(long state, final int bound)
+    {
+        return (int)((bound * (((state = ((state = (state ^ (state << 41 | state >>> 23) ^ (state << 17 | state >>> 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state >>> 43 ^ state >>> 31 ^ state >>> 23) * 0xDB4F0B9175AE2165L) ^ state >>> 28) & 0xFFFFFFFFL)) >> 32);
     }
 
     /**
      * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
-     * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},
-     * where the increment for state should be odd but otherwise doesn't really matter. This should tolerate just about
-     * any increment as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
-     * only 2 to the 30 possible floats between 0 and 1.
+     * return the same float. This is expected to be called with a changing variable, e.g.
+     * {@code determineFloat(++state)}, where the increment for state should generally be 1. The period is 2 to the 64
+     * if you increment or decrement by 1, but there are only 2 to the 30 possible floats between 0 and 1.
      * <br>
-     * This was the same as {@link LinnormRNG#determineFloat(long)} , but was changed to a slightly-faster method
-     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
-     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
-     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
-     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
-     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
-     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
-     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
-     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
-     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
-     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
-     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
-     * have passed to 16TB and 32TB with no anomalies as well).
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
      * @param state a variable that should be different every time you want a different random result;
-     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
-     *              generate numbers in reverse order
+     *              using {@code determineFloat(++state)} is recommended to go forwards or
+     *              {@code determineFloat(--state)} to generate numbers in reverse order
      * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
      */
     public static float determineFloat(long state) {
-        return (((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
-                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L >>> 40) * 0x1p-24f;
+        return ((((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) >>> 40) * 0x1p-24f;
+    }
+
+    /**
+     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+     * return the same float. This is expected to be called with a changing variable, e.g.
+     * {@code randomizeFloat(++state)}, where the increment for state can be any value and should usually be odd
+     * (even-number increments reduce the period). The period is 2 to the 64 if you increment or decrement by any odd
+     * number, but there are only 2 to the 30 possible floats between 0 and 1.
+     * <br>
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
+     * @param state a variable that should be different every time you want a different random result;
+     *              using {@code randomizeFloat(++state)} is recommended to go forwards or
+     *              {@code randomizeFloat(--state)} to generate numbers in reverse order
+     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
+     */
+    public static float randomizeFloat(long state) {
+        return (((state = (state ^ (state << 41 | state >>> 23) ^ (state << 17 | state >>> 47) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ state >>> 43 ^ state >>> 31 ^ state >>> 23) * 0xDB4F0B9175AE2165L >>> 40) * 0x1p-24f;
+
     }
 
     /**
      * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
      * will return the same float. This is expected to be called with a changing variable, e.g.
-     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't matter. This should
-     * tolerate just about any increment, as long as it is odd. The period is 2 to the 64 if you increment or
-     * decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
+     * {@code determineDouble(++state)}, where the increment for state should generally be 1. The period is 2 to the 64
+     * if you increment or decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
      * <br>
-     * This was the same as {@link LinnormRNG#determineDouble(long)}, but was changed to a slightly-faster method
-     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
-     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
-     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
-     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
-     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
-     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
-     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
-     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
-     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
-     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
-     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
-     * have passed to 16TB and 32TB with no anomalies as well).
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
      * @param state a variable that should be different every time you want a different random result;
-     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
-     *              generate numbers in reverse order
+     *              using {@code determineDouble(++state)} is recommended to go forwards or
+     *              {@code determineDouble(--state)} to generate numbers in reverse order
      * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}
      */
     public static double determineDouble(long state) {
-        return (((state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
-                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+        return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
+
+    /**
+     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+     * will return the same float. This is expected to be called with a changing variable, e.g.
+     * {@code randomizeDouble(++state)}, where the increment for state can be any number but should usually be odd
+     * (even-number increments reduce the period). The period is 2 to the 64 if you increment or decrement by 1, but 
+     * there are only 2 to the 62 possible doubles between 0 and 1.
+     * <br>
+     * You have a choice between determine() and randomize() in this class. {@code determine()} is the same as
+     * {@link LinnormRNG#determine(long)} and will behave well when the inputs are sequential, while {@code randomize()}
+     * is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+     * <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+     * testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+     * input but will be about 30% slower than {@code determine()}. Each method will produce all long outputs if given
+     * all possible longs as input.
+     * @param state a variable that should be different every time you want a different random result;
+     *              using {@code randomizeDouble(++state)} is recommended to go forwards or
+     *              {@code randomizeDouble(--state)} to generate numbers in reverse order
+     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}
+     */
+    public static double randomizeDouble(long state) {
+        return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+    }
+
 }

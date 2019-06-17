@@ -1,29 +1,36 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.cerp;
-import static squidpony.squidmath.Noise.longFloor;
+import static squidpony.squidmath.Noise.emphasizeSigned;
+import static squidpony.squidmath.Noise.extremeSigned;
+import static squidpony.squidmath.NumberTools.swayRandomized;
 
 /**
- * Like a kind of RNG, but fully deterministic in a way that depends on certain connected variables.
+ * Like a kind of RNG, but fully deterministic in a way that depends on a "connected" double array.
  * Intended as a way to produce similar values when small changes occur in the connections, while potentially producing
  * larger changes when the changes are more significant (unlike an RNG or hashing function, which can and should produce
  * very different output given even slightly different seeds/input). This might be useful to produce procedural story
  * data that is similar when most of the connected inputs are similar, or for terrain generation/population. This can
  * produce ints and doubles, and does not produce a different output unless its input is changed (usually by altering a
- * shared reference to {@code connections}).
+ * shared reference to {@code connections}). Also implements the various {@link Noise} interfaces, which this doesn't
+ * do perfectly but is at least different (it may yield large spans of high or low results, which Simplex and Perlin
+ * noise cannot actually do).
  * <br>
  * Created by Tommy Ettinger on 5/18/2017.
  */
-public class CosmicNumbering implements Serializable {
+@Beta
+public class CosmicNumbering implements Serializable, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     private static final long serialVersionUID = 0L;
+    public static final CosmicNumbering instance = new CosmicNumbering(0x1337BEEFL, new double[]{1.618, 3.14});
     protected double[] connections;
     protected int len;
-    private int upper;
-    protected long[] seeds;
-    private transient long[] scratch3;
-    private transient double[] scratch;
+//    private int upper;
+    protected long seed;
+//    private transient long[] scratch3;
+//    private transient double[] scratch;
 
     protected double effect;
     public CosmicNumbering() {
@@ -39,15 +46,11 @@ public class CosmicNumbering implements Serializable {
         else
             this.connections = connections;
         len = this.connections.length;
-        upper = 1 << len;
-        scratch3 = new long[len * 3];
-        scratch = new double[upper];
-        seeds = new long[len];
-        seeds[0] = seed | 1L;
-        for (int i = 1; i < len; i++) {
-            seeds[i] = DiverRNG.determine(seed + i) | 1L;
-        }
-        effect = 0x1.81p-62 * Math.pow(1.1875, len);
+//        upper = 1 << len;
+//        scratch3 = new long[len * 3];
+//        scratch = new double[upper];
+        this.seed = seed;
+//        effect = 0x1.81p-62 * Math.pow(1.1875, len);
     }
 
     public double[] getConnections() {
@@ -61,15 +64,10 @@ public class CosmicNumbering implements Serializable {
             this.connections = connections;
         if (len != this.connections.length) {
             len = this.connections.length;
-            upper = 1 << len;
-            scratch3 = new long[len * 3];
-            scratch = new double[upper];
-            long seed = seeds[0];
-            seeds = new long[len];
-            for (int i = 1; i < len; i++) {
-                seeds[i] = DiverRNG.determine(seed + i) | 1L;
-            }
-            effect = 0x1.81p-62 * Math.pow(1.1875, len);
+//            upper = 1 << len;
+//            scratch3 = new long[len * 3];
+//            scratch = new double[upper];
+//            effect = 0x1.81p-62 * Math.pow(1.1875, len);
         }
     }
 //    /*
@@ -119,24 +117,12 @@ public class CosmicNumbering implements Serializable {
      * @return a double between -1.0 and 1.0; will be the same value until/unless connections change
      */
     public final double getDoubleBase() {
-        for (int i = 0; i < len; i++) {
-            long seed = seeds[i];
-            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(connections[i])) * seed) + seed;
+        //return (getDouble() - 0.5) * 2.0;
+        double sum = swayRandomized(seed, connections[len - 1] + connections[0]);
+        for (int i = 1; i < len; i++) {
+            sum += swayRandomized(seed, sum + connections[i - 1] + connections[i]);
         }
-        long working;
-        for (int i = 0; i < upper; i++) {
-            working = 0L;
-            for (int j = 0; j < len; j++) {
-                working += scratch3[j * 3 + (i >> j & 1)];
-            }
-            scratch[i] = determine(working) * effect;
-        }
-        for (int i = 0; i < len; ++i) {
-            for (int j = 0, t = upper >> i; j < t; j += 2) {
-                scratch[j >> 1] = cerp(scratch[j], scratch[j + 1], connections[i] - scratch3[i * 3 + 2]);
-            }
-        }
-        return NumberTools.sway(scratch[0]);
+        return sum / len;
     }
 
 //    {
@@ -164,7 +150,32 @@ public class CosmicNumbering implements Serializable {
      */
     public double getDouble()
     {
-        return getDoubleBase() * 0.5 + 0.5;
+//        for (int i = 0; i < len; i++) {
+//            long seed = seeds[i];
+//            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(connections[i])) * seed) + seed;
+//        }
+//        long working;
+//        for (int i = 0; i < upper; i++) {
+//            working = 0L;
+//            for (int j = 0; j < len; j++) {
+//                working += scratch3[j * 3 + (i >>> j & 1)];
+//            }
+//            scratch[i] = determine(working) * effect;
+//        }
+//        for (int i = 0; i < len; ++i) {
+//            for (int j = 0, t = upper >> i; j < t; j += 2) {
+//                scratch[j >>> 1] = cerp(scratch[j], scratch[j + 1], connections[i] - scratch3[i * 3 + 2]);
+//            }
+//        }
+//        return scratch[0] - longFloor(scratch[0]);
+//// has a different look than the above line
+////        return NumberTools.sway(scratch[0]);
+        double sum = swayRandomized(seed, connections[len - 1] + connections[0]);
+        for (int i = 1; i < len; i++) {
+            sum += swayRandomized(seed, sum + connections[i - 1] + connections[i]);
+        }
+        return sum / (len << 1) + 0.5;
+
     }
 
 //    public double getDouble()
@@ -189,16 +200,68 @@ public class CosmicNumbering implements Serializable {
     {
         return (int)(0x80000000 * getDoubleBase());
     }
+    
+    @Override
+    public double getNoise(double x, double y) {
+        return getNoiseWithSeed(x, y, seed);
+    }
 
-    /**
-     * The same as {@link DiverRNG#determine(long)}, except this assumes state has already been multiplied by
-     * 0x632BE59BD9B4E019L.
-     * @param state a long that should change in increments of 0x632BE59BD9B4E019L
-     * @return a pseudo-random permutation of state
-     */
-    public static long determine(long state)
-    {
-        return (state = ((state = ((state ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
+    @Override
+    public double getNoiseWithSeed(double x, double y, long seed) {
+        x *= 2.25;
+        y *= 2.25;
+        double sum = (swayRandomized(seed, x) * swayRandomized(~seed, x + y));
+        sum += (swayRandomized(seed, sum + y) * swayRandomized(~seed, x - y));
+//        sum += swayRandomized(seed, sum - x + y);
+        return Noise.extremeSigned(sum * 0.5);
+//        return Noise.emphasizeSigned((sum + swayRandomized(seed, sum + x + y)) * 0.25);
+        //return sum * 0.5;
+    }
+
+    @Override
+    public double getNoise(double x, double y, double z) {
+        return getNoiseWithSeed(x, y, z, seed);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, long seed) {
+        x *= 2.25;
+        y *= 2.25;
+        z *= 2.25;
+        double sum = swayRandomized(seed, x - y) * swayRandomized(~seed, x - z);
+        sum += swayRandomized(seed, sum + y - z) * swayRandomized(~seed, x + y - sum);
+        sum += swayRandomized(seed, sum + z - x) * swayRandomized(~seed, -y - z + sum);
+        return extremeSigned(sum * 0.3333333333333333);
+    }
+
+    @Override
+    public double getNoise(double x, double y, double z, double w) {
+        return getNoiseWithSeed(x, y, z, w, seed);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
+        double sum = swayRandomized(seed, w + x - y);
+        sum += swayRandomized(seed, sum + x + y - z);
+        sum += swayRandomized(seed, sum + y + z - w);
+        sum += swayRandomized(seed, sum + z + w - x);
+        return emphasizeSigned(sum * 0.25);
+    }
+
+    @Override
+    public double getNoise(double x, double y, double z, double w, double u, double v) {
+        return getNoiseWithSeed(x, y, z, w, u, v, seed);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
+        double sum = swayRandomized(seed, v + x - y);
+        sum += swayRandomized(seed, sum + x + y - z);
+        sum += swayRandomized(seed, sum + y + z - w);
+        sum += swayRandomized(seed, sum + z + w - u);
+        sum += swayRandomized(seed, sum + w + u - v);
+        sum += swayRandomized(seed, sum + u + v - x);
+        return emphasizeSigned(sum * 0.16666666666666666);
     }
 
     /*
@@ -268,5 +331,17 @@ public class CosmicNumbering implements Serializable {
         for (int i = 0; i < len; i++) {
             vector[i] /= mag;
         }
-    }*/
+    }
+    
+     * The same as {@link DiverRNG#determine(long)}, except this assumes state has already been multiplied by
+     * 0x632BE59BD9B4E019L.
+     * @param state a long that should change in increments of 0x632BE59BD9B4E019L
+     * @return a pseudo-random permutation of state
+    public static long determine(long state)
+    {
+        return (state = ((state = ((state ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
+    }
+
+    
+    */
 }

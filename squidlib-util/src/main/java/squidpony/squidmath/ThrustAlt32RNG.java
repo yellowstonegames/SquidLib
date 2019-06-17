@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A variant on {@link ThrustAltRNG} that uses only 32-bit math when producing 32-bit numbers. This generator does as
  * well as you could hope for on statistical tests, considering it can only generate 2 to the 32 ints before repeating
- * the cycle. You may want to consider {@link Zag32RNG} if roughly 4 billion numbers could be produced by your game or
+ * the cycle. You may want to consider {@link Lathe32RNG} if roughly 4 billion numbers could be produced by your game or
  * application (if you just generated random ints, you could exhaust that amount in seconds). On
  * <a href="http://pracrand.sourceforge.net/">PractRand</a>, this completes testing on 16GB of generated ints (the
  * amount of space all possible ints would use) without finding any failures. Some big-name number generators sometimes

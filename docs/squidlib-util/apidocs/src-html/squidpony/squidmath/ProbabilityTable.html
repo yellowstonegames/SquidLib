@@ -394,28 +394,31 @@
 <span class="sourceLineNo">386</span><a name="line.386"></a>
 <span class="sourceLineNo">387</span>        if (!table.equals(that.table)) return false;<a name="line.387"></a>
 <span class="sourceLineNo">388</span>        if (!extraTable.equals(that.extraTable)) return false;<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        if (!weights.equals(that.weights)) return false;<a name="line.389"></a>
-<span class="sourceLineNo">390</span>        return rng != null ? rng.equals(that.rng) : that.rng == null;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>    }<a name="line.391"></a>
-<span class="sourceLineNo">392</span><a name="line.392"></a>
-<span class="sourceLineNo">393</span>    public boolean contentEquals(ProbabilityTable&lt;T&gt; o) {<a name="line.393"></a>
-<span class="sourceLineNo">394</span>        if (this == o) return true;<a name="line.394"></a>
-<span class="sourceLineNo">395</span>        if (o == null) return false;<a name="line.395"></a>
-<span class="sourceLineNo">396</span><a name="line.396"></a>
-<span class="sourceLineNo">397</span>        if (!table.equals(o.table)) return false;<a name="line.397"></a>
-<span class="sourceLineNo">398</span>        if (!extraTable.equals(o.extraTable)) return false;<a name="line.398"></a>
-<span class="sourceLineNo">399</span>        return weights.equals(o.weights);<a name="line.399"></a>
-<span class="sourceLineNo">400</span>    }<a name="line.400"></a>
-<span class="sourceLineNo">401</span><a name="line.401"></a>
-<span class="sourceLineNo">402</span>    @Override<a name="line.402"></a>
-<span class="sourceLineNo">403</span>    public int hashCode() {<a name="line.403"></a>
-<span class="sourceLineNo">404</span>        int result = table.hashCode();<a name="line.404"></a>
-<span class="sourceLineNo">405</span>        result = 31 * result + extraTable.hashCode() | 0;<a name="line.405"></a>
-<span class="sourceLineNo">406</span>        result = 31 * result + weights.hashWisp() | 0;<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        result = 31 * result + (rng != null ? rng.hashCode() : 0) | 0;<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        return result;<a name="line.408"></a>
-<span class="sourceLineNo">409</span>    }<a name="line.409"></a>
-<span class="sourceLineNo">410</span>}<a name="line.410"></a>
+<span class="sourceLineNo">389</span>        return weights.equals(that.weights);<a name="line.389"></a>
+<span class="sourceLineNo">390</span>    }<a name="line.390"></a>
+<span class="sourceLineNo">391</span><a name="line.391"></a>
+<span class="sourceLineNo">392</span>    /**<a name="line.392"></a>
+<span class="sourceLineNo">393</span>     * Can avoid some checks that {@link #equals(Object)} needs because this always takes a ProbabilityTable.<a name="line.393"></a>
+<span class="sourceLineNo">394</span>     * @param o another ProbabilityTable<a name="line.394"></a>
+<span class="sourceLineNo">395</span>     * @return true if both ProbabilityTables are equivalent in contents and likelihoods, not necessarily random state<a name="line.395"></a>
+<span class="sourceLineNo">396</span>     */<a name="line.396"></a>
+<span class="sourceLineNo">397</span>    public boolean contentEquals(ProbabilityTable&lt;T&gt; o) {<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        if (this == o) return true;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        if (o == null) return false;<a name="line.399"></a>
+<span class="sourceLineNo">400</span><a name="line.400"></a>
+<span class="sourceLineNo">401</span>        if (!table.equals(o.table)) return false;<a name="line.401"></a>
+<span class="sourceLineNo">402</span>        if (!extraTable.equals(o.extraTable)) return false;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>        return weights.equals(o.weights);<a name="line.403"></a>
+<span class="sourceLineNo">404</span>    }<a name="line.404"></a>
+<span class="sourceLineNo">405</span><a name="line.405"></a>
+<span class="sourceLineNo">406</span>    @Override<a name="line.406"></a>
+<span class="sourceLineNo">407</span>    public int hashCode() {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        int result = table.hashCode();<a name="line.408"></a>
+<span class="sourceLineNo">409</span>        result = 31 * result + extraTable.hashCode() | 0;<a name="line.409"></a>
+<span class="sourceLineNo">410</span>        result = 31 * result + weights.hashHive() | 0;<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        return result;<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    }<a name="line.412"></a>
+<span class="sourceLineNo">413</span>}<a name="line.413"></a>
 
 
 

@@ -158,6 +158,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#scale-int-int-">scale(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PerlinNoise.html#SCALE">SCALE</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Scaled1D.html#Scaled1D--">Scaled1D()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Scaled1D.html" title="class in squidpony.squidmath">Noise.Scaled1D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Scaled1D.html#Scaled1D-squidpony.squidmath.Noise.Noise1D-">Scaled1D(Noise.Noise1D)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Scaled1D.html" title="class in squidpony.squidmath">Noise.Scaled1D</a></dt>
@@ -301,6 +303,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html#SEA_LEVEL">SEA_LEVEL</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless1D-squidpony.squidmath.Noise.Noise2D-double-double-long-">seamless1D(Noise.Noise2D, double, double, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/Noise.html#seamless2D-double:A:A-long-int-squidpony.squidmath.Noise.Noise4D-"><code>Noise.seamless2D(double[][], long, int, Noise4D)</code></a>, but this produces 1D noise that "tiles" by repeating
+ its output every <code>sizeX</code> units that <code>x</code> increases or decreases by.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless2D-int-int-int-int-">seamless2D(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
 <dd>
 <div class="block">Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.</div>
@@ -315,11 +322,16 @@
 <div class="block">Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-int-int-int-int-int-">seamless3D(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless2D-squidpony.squidmath.Noise.Noise4D-double-double-double-double-long-">seamless2D(Noise.Noise4D, double, double, double, double, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/Noise.html#seamless2D-double:A:A-long-int-squidpony.squidmath.Noise.Noise4D-"><code>Noise.seamless2D(double[][], long, int, Noise4D)</code></a>, but this doesn't precalculate noise into an array,
+ instead calculating just one 2D point so that later calls with different x or y will tile seamlessly.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-int-int-int-long-int-">seamless3D(int, int, int, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
 <dd>
 <div class="block">Produces a 3D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-int-int-">seamless3D(double[][][], int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-long-int-">seamless3D(double[][][], long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
 <dd>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries.</div>
@@ -333,6 +345,11 @@
 <dd>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-squidpony.squidmath.Noise.Noise6D-double-double-double-double-double-double-long-">seamless3D(Noise.Noise6D, double, double, double, double, double, double, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-long-int-squidpony.squidmath.Noise.Noise6D-"><code>Noise.seamless3D(double[][][], long, int, Noise6D)</code></a>, but this doesn't precalculate noise into an array,
+ instead calculating just one 3D point so that later calls with different x, y, or z will tile seamlessly.</div>
 </dd>
 <dt><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">SectionDungeonGenerator</span></a> - Class in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
 <dd>
@@ -383,6 +400,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ClassicNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CosmicNumbering.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/JitterNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MerlinNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
@@ -391,11 +410,13 @@
 <dd>
 <div class="block">Seeds the state using all bits of the given int <code>s</code>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway1D.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway1D.html" title="class in squidpony.squidmath">Noise.Sway1D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway2D.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway2D.html" title="class in squidpony.squidmath">Noise.Sway2D</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShuffledIntSequence.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#seedA">seedA</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
 <dd>&nbsp;</dd>
@@ -414,8 +435,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#seedFixed">seedFixed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#seedFixed">seedFixed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CosmicNumbering.html#seeds">seeds</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MummyNoise.html#seedU">seedU</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -592,6 +611,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.ValueIterator.html#set-java.lang.Integer-">set(Integer)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.ValueIterator.html" title="class in squidpony.squidmath">Arrangement.ValueIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#set-double-double-">set(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#set-squidpony.squidmath.CoordDouble-">set(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#set-boolean-int-int-">set(boolean, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Sets the cell at x,y to on if value is true or off if value is false.</div>
@@ -600,17 +623,11 @@
 <dd>
 <div class="block">Sets the cell at point to on if value is true or off if value is false.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html#set-java.lang.Double-">set(Double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleIterator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html#set-double-">set(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleIterator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html#set-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">set(IntDoubleOrderedMap.MapEntry)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.EntryIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html#set-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">set(IntDoubleOrderedMap.MapEntry)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.FastEntryIterator</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#set-int-">set(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeyIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#set-java.lang.Integer-">set(Integer)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeyIterator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html#set-java.lang.Double-">set(Double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.ValueIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.FastEntryIterator.html#set-squidpony.squidmath.IntIntOrderedMap.MapEntry-">set(IntIntOrderedMap.MapEntry)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">IntIntOrderedMap.FastEntryIterator</a></dt>
 <dd>&nbsp;</dd>
@@ -876,6 +893,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#setGradientPerturbAmp-float-">setGradientPerturbAmp(float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setHeight-int-">setHeight(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/GreasedZOI.html#setInfluences-squidpony.squidmath.Coord:A:A-">setInfluences(Coord[][])</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/GreasedZOI.html" title="class in squidpony.squidai">GreasedZOI</a></dt>
 <dd>
 <div class="block">Changes the influencing groups.</div>
@@ -921,10 +940,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/LineAOE.html#setLimitType-squidpony.squidai.AimLimit-">setLimitType(AimLimit)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/LineAOE.html" title="class in squidpony.squidai">LineAOE</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/PointAOE.html#setLimitType-squidpony.squidai.AimLimit-">setLimitType(AimLimit)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/PointAOE.html" title="class in squidpony.squidai">PointAOE</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#setLocation-double-double-">setLocation(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#setLocation-squidpony.squidmath.CoordDouble-">setLocation(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/AOE.html#setMap-char:A:A-">setMap(char[][])</a></span> - Method in interface squidpony.squidai.<a href="../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></dt>
 <dd>
@@ -1006,6 +1021,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/LineAOE.html#setMinRange-int-">setMinRange(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/LineAOE.html" title="class in squidpony.squidai">LineAOE</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/PointAOE.html#setMinRange-int-">setMinRange(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/PointAOE.html" title="class in squidpony.squidai">PointAOE</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setNoiseMax-double-">setNoiseMax(double)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setNoiseMin-double-">setNoiseMin(double)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#setNoiseType-int-">setNoiseType(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>
@@ -1386,15 +1405,6 @@
 <div class="block">Sets the current internal state of this XoshiroStarPhi32RNG with four ints, where each can be any int unless
  they are all 0 (which will be treated as if stateA is 1 and the rest are 0).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Zag32RNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></dt>
-<dd>
-<div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Zag32RNG.html#setState-int-int-">setState(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></dt>
-<dd>
-<div class="block">Sets the current internal state of this Zag32RNG with two ints, where stateA can be any int except 0, and stateB
- can be any int.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#setState0-long-">setState0(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
 <dd>
 <div class="block">Sets the linearly-changing part of the state; if the parameter is too small, the generator will behave poorly.</div>
@@ -1437,8 +1447,6 @@
 <dd>
 <div class="block">Sets the first part of the state to the given int.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Zag32RNG.html#setStateA-int-">setStateA(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
 <dd>
 <div class="block">Sets the second part of the state to the given int.</div>
@@ -1473,8 +1481,6 @@
 <dd>
 <div class="block">Sets the second part of the state to the given int.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Zag32RNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Oriole32RNG.html#setStateC-int-">setStateC(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Oriole32RNG.html" title="class in squidpony.squidmath">Oriole32RNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setStateC-int-">setStateC(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
@@ -1503,23 +1509,27 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html#setValue-double-">setValue(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html#setValue-java.lang.Double-">setValue(Double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.MapEntry.html#setValue-int-">setValue(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntIntOrderedMap.MapEntry</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/CloudAOE.html#setVolume-int-">setVolume(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CloudAOE.html" title="class in squidpony.squidai">CloudAOE</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setWidth-int-">setWidth(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#setX-int-">setX(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#setX-int-">setX(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#setX-double-">setX(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#setY-int-">setY(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#setY-int-">setY(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#setY-double-">setY(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#SHADOW">SHADOW</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#shallow">shallow</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMimicMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#shallow">shallow</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ObText.ObTextEntry.html#shallowContents--">shallowContents()</a></span> - Method in class squidpony.<a href="../squidpony/ObText.ObTextEntry.html" title="class in squidpony">ObText.ObTextEntry</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/LineKit.html#shallowerExteriorSquareLarge">shallowerExteriorSquareLarge</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/LineKit.html" title="class in squidpony.squidgrid.mapping">LineKit</a></dt>
 <dd>
@@ -1555,8 +1565,6 @@
 <div class="block">Gets all unique Strings from the top level of this ObText as keys in an <a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>, with any Strings
  associated with those keys as their values (in a possibly-empty ArrayList of String for each value).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#shallowOriginal">shallowOriginal</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#shallowWaterLower">shallowWaterLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#shallowWaterUpper">shallowWaterUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
@@ -1589,7 +1597,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#shiftKeys-int-">shiftKeys(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>
-<div class="block">Shifts left entries with the specified hash code, starting at the specified position, and empties the resulting free entry.</div>
+<div class="block">Shifts left entries with the specified hash code, starting at the
+ specified position, and empties the resulting free entry.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#shiftKeys-int-">shiftKeys(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
@@ -1745,6 +1754,18 @@
 <dd>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.html#shuffle-squidpony.squidmath.IRNG-">shuffle(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath">Delaunay3D</a></dt>
+<dd>
+<div class="block">Creates a random permutation of the specified point set.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DelaunayTriangulator.html#shuffle-squidpony.squidmath.IRNG-">shuffle(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DelaunayTriangulator.html" title="class in squidpony.squidmath">DelaunayTriangulator</a></dt>
+<dd>
+<div class="block">Creates a random permutation of the specified point set.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#shuffle-squidpony.squidmath.IRNG-">shuffle(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#shuffle-squidpony.squidmath.IRNG-">shuffle(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
@@ -1803,6 +1824,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle(Collection&lt;T&gt;, ArrayList&lt;T&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Shuffles a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Voronoi.html#shuffle-squidpony.squidmath.IRNG-">shuffle(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Voronoi.html" title="class in squidpony.squidmath">Voronoi</a></dt>
+<dd>
+<div class="block">Creates a random permutation of the specified point set.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath"><span class="typeNameLink">ShuffledIntSequence</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
@@ -1896,13 +1921,9 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#SIMPLEX">SIMPLEX</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PerlinNoise.html#simplex">simplex</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SeededNoise.html#SIMPLEX">SIMPLEX</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#SIMPLEX_4D">SIMPLEX_4D</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SeededNoise.html#SIMPLEX_4D">SIMPLEX_4D</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>
-<div class="block">Used by <a href="../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-double-long-"><code>WhirlingNoise.noise(double, double, double, double, long)</code></a> to look up the vertices of the 4D triangle analogue.</div>
+<div class="block">Used by <a href="../squidpony/squidmath/SeededNoise.html#noise-double-double-double-double-long-"><code>SeededNoise.noise(double, double, double, double, long)</code></a> to look up the vertices of the 4D triangle analogue.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#SIMPLEX_FRACTAL">SIMPLEX_FRACTAL</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -1940,14 +1961,24 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#sin-double-">sin(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#sin-double-" title="class or interface in java.lang"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
- faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
- consider its more-precise and sometimes-faster MathUtils.sin() method.</div>
+ faster sin() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
+ and sometimes-faster MathUtils.sin() method.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#sin-float-">sin(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#sin-double-" title="class or interface in java.lang"><code>Math.sin(double)</code></a> that can be significantly faster (between 8x and 80x
  faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.sin() method.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#sin_-double-">sin_(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">A variation on <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#sin-double-" title="class or interface in java.lang"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
+ turn is equal to 360 degrees or two*PI radians.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#sin_-float-">sin_(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">A variation on <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#sin-double-" title="class or interface in java.lang"><code>Math.sin(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
+ also takes and returns a float); one turn is equal to 360 degrees or two*PI radians.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#sinDegrees-float-">sinDegrees(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
@@ -1965,6 +1996,16 @@
 <div class="block">Gets a single random Coord from the "on" positions in this GreasedRegion, or the Coord (-1,-1) if this is empty.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#singleRandomTight-squidpony.squidmath.IRNG-">singleRandomTight(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-float-">singleSimplex(int, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-">singleSimplex(int, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-float-float-">singleSimplex(int, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-float-float-float-float-">singleSimplex(int, float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Sirocco.html#Sirocco--">Sirocco()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Sirocco.html" title="class in squidpony.squidmath">CrossHash.Sirocco</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/iterator/SquidIterators.CenteredSquare.html#size">size</a></span> - Variable in class squidpony.squidgrid.iterator.<a href="../squidpony/squidgrid/iterator/SquidIterators.CenteredSquare.html" title="class in squidpony.squidgrid.iterator">SquidIterators.CenteredSquare</a></dt>
 <dd>&nbsp;</dd>
@@ -1999,8 +2040,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeySet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a></dt>
@@ -2010,6 +2049,8 @@
 <div class="block">Number of entries in the set (including the key zero, if present).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueCollection.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.ValueCollection</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.KeySet.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.KeySet.html" title="class in squidpony.squidmath">IntIntOrderedMap.KeySet</a></dt>
 <dd>&nbsp;</dd>
@@ -2230,6 +2271,17 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#sort--">sort()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TimSort.html#sort-T:A-squidpony.squidmath.IntVLA-java.util.Comparator-">sort(T[], IntVLA, Comparator&lt;? super T&gt;)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TimSort.html" title="class in squidpony.squidmath">TimSort</a></dt>
+<dd>
+<div class="block">Modifies <code>order</code> by comparing items in the array <code>a</code> with the Comparator <code>c</code>; not likely to be
+ used externally except by code that extends or re-implements SquidLib data structures.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TimSort.html#sort-T:A-squidpony.squidmath.IntVLA-int-int-java.util.Comparator-">sort(T[], IntVLA, int, int, Comparator&lt;? super T&gt;)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TimSort.html" title="class in squidpony.squidmath">TimSort</a></dt>
+<dd>
+<div class="block">Modifies <code>order</code> by comparing items from index <code>lo</code> inclusive to index <code>hi</code> exclusive in the
+ array <code>a</code> with the Comparator <code>c</code>; not likely to be used externally except by code that extends or
+ re-implements SquidLib data structures.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#sortByValue-java.util.Comparator-">sortByValue(Comparator&lt;? super V&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>
 <div class="block">Sorts this whole OrderedMap on its values using the supplied Comparator.</div>
@@ -2517,11 +2569,6 @@
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
  are only adjacent diagonally are considered <b>one area</b> with this) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#splitMix64-long-">splitMix64(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
-<dd>
-<div class="block">Get a pseudo-random long from this with <code>splitMix64(z += 0x9E3779B97F4A7C15L)</code>, where z is a long to use
- as state.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/PoliticalMapper.html#spokenLanguages">spokenLanguages</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/PoliticalMapper.html" title="class in squidpony.squidgrid.mapping">PoliticalMapper</a></dt>
 <dd>
@@ -2888,10 +2935,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#subMap-K-K-">subMap(K, K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#subMap-int-int-">subMap(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#subMap-java.lang.Integer-java.lang.Integer-">subMap(Integer, Integer)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#subMap-K-K-">subMap(K, K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.KeySet.html#subSet-K-K-">subSet(K, K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">Arrangement.KeySet</a></dt>
@@ -2925,6 +2968,10 @@
 <div class="block">Separately subtracts operand from the x and y positions of this Coord, rounding to the nearest int for each of x
  and y and producing a different Coord as their "difference."</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#subtract-double-double-">subtract(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#subtract-squidpony.squidmath.CoordDouble-">subtract(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#sum-squidpony.squidmath.GreasedRegion...-">sum(GreasedRegion...)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
@@ -2939,8 +2986,6 @@
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
  produce any number between 0 and 16 in a cell.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#sum--">sum()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#sumDouble-squidpony.squidmath.GreasedRegion...-">sumDouble(GreasedRegion...)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Generates a 2D double array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the double at
@@ -3045,6 +3090,10 @@
 <dd>
 <div class="block">Mutates the array arr by switching the contents at pos1 and pos2.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#swap-int-int-">swap(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Swaps the positions in the ordering for the given items, if they are both present.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#swap-int-int-">swap(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
 <div class="block">Swaps the positions in the ordering for the given items, if they are both present.</div>
@@ -3064,6 +3113,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#swapIndices-int-int-">swapIndices(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Swaps the given indices in the ordering, if they are both ints between 0 and size.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#swapIndices-int-int-">swapIndices(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
+<dd>
+<div class="block">Swaps the given indices in the ordering, if they are both valid int indices.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#swapIndices-int-int-">swapIndices(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>
@@ -3106,6 +3159,19 @@
  looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway1D.html#Sway1D--">Sway1D()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway1D.html" title="class in squidpony.squidmath">Noise.Sway1D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway1D.html#Sway1D-long-">Sway1D(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway1D.html" title="class in squidpony.squidmath">Noise.Sway1D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway2D.html#Sway2D--">Sway2D()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway2D.html" title="class in squidpony.squidmath">Noise.Sway2D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway2D.html#Sway2D-long-">Sway2D(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway2D.html" title="class in squidpony.squidmath">Noise.Sway2D</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayAngleRandomized-long-float-">swayAngleRandomized(long, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">A 1D "noise" method that produces smooth transitions like <a href="../squidpony/squidmath/NumberTools.html#sway-float-"><code>NumberTools.sway(float)</code></a>, but also wrapping around at pi *
+ 2 so this can be used to get smoothly-changing random angles.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayRandomized-long-double-">swayRandomized(long, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">A mix of the smooth transitions of <a href="../squidpony/squidmath/NumberTools.html#sway-double-"><code>NumberTools.sway(double)</code></a> with (seeded) random peaks and valleys between -1.0 and
@@ -3115,6 +3181,11 @@
 <dd>
 <div class="block">A mix of the smooth transitions of <a href="../squidpony/squidmath/NumberTools.html#sway-float-"><code>NumberTools.sway(float)</code></a> with (seeded) random peaks and valleys between -1f and
  1f (both exclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayRandomized-int-float-">swayRandomized(int, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">A variant on <a href="../squidpony/squidmath/NumberTools.html#swayRandomized-long-float-"><code>NumberTools.swayRandomized(long, float)</code></a> that takes an int seed instead of a float, and is optimized for
+ usage on GWT.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayTight-float-">swayTight(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>

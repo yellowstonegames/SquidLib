@@ -169,14 +169,16 @@ public abstract class StringConvert<T> {
             final CharSequence s;
             if(data instanceof StringConvert) s = ((StringConvert) data).getName();
             else s = (CharSequence) data;
-            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+
+            long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
             final int len = s.length();
-            char c;
             for (int i = 0; i < len; i++) {
-                if((c = s.charAt(i)) != ' ')
-                    result += (a ^= 0x8329C6EB9E6AD3E3L * c);
+                result ^= (z += (s.charAt(i) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+                result = (result << 54 | result >>> 10);
             }
-            return (int)(result * (a | 1L) ^ (result >>> 27 | result << 37));
+            result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+            result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+            return (int) ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
         }
 
         @Override
@@ -210,12 +212,16 @@ public abstract class StringConvert<T> {
             if(!(data instanceof CharSequence[]))
                 return data.hashCode();
             CharSequence[] data2 = (CharSequence[])data;
-            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+
+            long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
             final int len = data2.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * spaceIgnoringHasher.hash(data2[i]));
+                result ^= (z += (spaceIgnoringHasher.hash(data2[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+                result = (result << 54 | result >>> 10);
             }
-            return (int)(result * (a | 1L) ^ (result >>> 27 | result << 37));
+            result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+            result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+            return (int) ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
         }
 
         @Override

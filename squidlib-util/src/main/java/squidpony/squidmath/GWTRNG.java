@@ -33,7 +33,7 @@ import java.io.Serializable;
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)
  */
 public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     public int stateA, stateB;
 
@@ -327,4 +327,74 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         return "GWTRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);
     }
 
+    /**
+     * A deterministic random int generator that, given one int {@code state} as input, irreversibly returns an 
+     * almost-always-different int as a result. Unlike the rest of GWTRNG, this will not produce all possible ints given
+     * all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with
+     * {@code GWTRNG.determineInt(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of forwards),
+     * which will allow overflow in the incremented state to be handled the same on GWT as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineInt(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique int that is usually very different from {@code state}
+     */
+    public static int determineInt(int state) {
+        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19;
+    }
+    
+    /**
+     * A deterministic random int generator that, given one int {@code state} and an outer int {@code bound} as input,
+     * returns an int between 0 (inclusive) and {@code bound} (exclusive) as a result, which should have no noticeable
+     * correlation between {@code state} and the result. You should call this with
+     * {@code GWTRNG.determineBound(state = state + 1 | 0, bound)} (you can subtract 1 to go backwards instead of
+     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.
+     * Like most bounded int generation in SquidLib, this uses some long math, but most of the function uses ints.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineBounded(state = state + 1 | 0, bound)} to handle overflow
+     * @param bound the outer exclusive bound, as an int; may be positive or negative
+     * @return an int between 0 (inclusive) and {@code bound} (exclusive)
+     */
+    public static int determineBounded(int state, final int bound)
+    {
+        return (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL) * bound >> 32);
+    }
+    /**
+     * A deterministic random long generator that, given one int {@code state} as input, returns an 
+     * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there
+     * are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should
+     * call this with {@code GWTRNG.determine(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of
+     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determine(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique long that is usually very different from {@code state}
+     */
+    public static long determine(int state)
+    {
+        int r = (state ^ 0xD1B54A35) * 0x102473;
+        r = (r = (r ^ r >>> 11 ^ r >>> 21) * (r | 0xFFE00001)) ^ r >>> 13 ^ r >>> 19;
+        return ((long) r << 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL);
+    }
+    /**
+     * A deterministic random float generator that, given one int {@code state} as input, returns an 
+     * almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of GWTRNG, this might not
+     * produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.
+     * You should call this with {@code GWTRNG.determineFloat(state = state + 1 | 0)} (you can subtract 1 to go
+     * backwards instead of forwards), which will allow overflow in the incremented state to be handled the same on GWT
+     * as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineFloat(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique float from 0.0f to 1.0f that is usually very different from {@code state}
+     */
+    public static float determineFloat(int state) {
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFF) * 0x1p-24f;
+    }
+    /**
+     * A deterministic random double generator that, given one int {@code state} as input, returns an 
+     * almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of
+     * all possible doubles because the input is 32 bits and at least 53 bits are needed to represent most doubles from
+     * 0.0 to 1.0. You should call this with {@code GWTRNG.determineDouble(state = state + 1 | 0)} (you can subtract 1
+     * to go backwards instead of forwards), which will allow overflow in the incremented state to be handled the same
+     * on GWT as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineDouble(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique double from 0.0 to 1.0 that is usually very different from {@code state}
+     */
+    public static double determineDouble(int state)
+    {
+        return ((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) * 0x1p-32 + 0.5;
+    }
 }

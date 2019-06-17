@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
@@ -25,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BasicDemo extends ApplicationAdapter {
-    SpriteBatch batch;
+    private FilterBatch batch;
 
     private IRNG rng;
     private SquidLayers display;
@@ -79,7 +78,7 @@ public class BasicDemo extends ApplicationAdapter {
         rng = new RNG("SquidLib!");
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + 8) * cellHeight), batch);
         // the font will try to load CM-Custom as an embedded bitmap font with a distance field effect.

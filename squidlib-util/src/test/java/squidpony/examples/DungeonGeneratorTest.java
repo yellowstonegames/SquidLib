@@ -351,6 +351,45 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
+
+        System.out.println("ClassicRogueMapGenerator\n");
+        rng.setState(2252637788195L);
+        ClassicRogueMapGenerator classic = new ClassicRogueMapGenerator(6, 6, width, height, 6, 15, 4, 8,rng);
+        dungeonGenerator.clearEffects();
+        dungeon = dungeonGenerator.generate(classic.generate());
+        //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println("ConnectingMapGenerator\n");
+        rng.setState(2252637788195L);
+        ConnectingMapGenerator cmg = new ConnectingMapGenerator(width, height, rng);
+        sdg.clearEffects();
+        sdg.addWater(MixedGenerator.CORRIDOR_FLOOR, 15);
+        cmg.generate();
+        dungeon = sdg.generate(cmg.dungeon, cmg.environment);
+        //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        dungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        dungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
+        
+        
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);

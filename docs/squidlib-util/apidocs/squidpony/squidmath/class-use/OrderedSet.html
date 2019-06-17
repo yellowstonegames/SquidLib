@@ -166,6 +166,13 @@
 <div class="block">Makes an OrderedSet (OS) of T given an array or vararg of T elements.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Maker.</span><code><span class="memberNameLink"><a href="../../../squidpony/Maker.html#makeOS-T-">makeOS</a></span>(T&nbsp;element)</code>
+<div class="block">Makes an OrderedSet of T given a single T element; avoids creating an array for varargs as
+ <a href="../../../squidpony/Maker.html#makeOS-T...-"><code>Maker.makeOS(Object[])</code></a> would do, but only allows one item.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -502,19 +509,29 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Voronoi.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Voronoi.html#getPointSet--">getPointSet</a></span>()</code>
+<div class="block">Returns the point set in form of a vector of 2D vectors.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#items--">items</a></span>()</code>
 <div class="block">Provides a set of the items in this table, without reference to their
  weight.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">OrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrderedMap.html#keysAsOrderedSet--">keysAsOrderedSet</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IntIntOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntIntOrderedMap.html#keysAsOrderedSet--">keysAsOrderedSet</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#keysAsOrderedSet--">keysAsOrderedSet</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Arrangement.html" title="type parameter in Arrangement">K</a>&gt;</code></td>
@@ -624,6 +641,19 @@
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#whichContain-int-int-squidpony.squidmath.GreasedRegion...-">whichContain</a></span>(int&nbsp;x,
             int&nbsp;y,
             <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Voronoi.html#Voronoi-squidpony.squidmath.OrderedSet-">Voronoi</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;&nbsp;pointSet)</code>
+<div class="block">Constructs a new triangulator instance using the specified point set.</div>
+</td>
 </tr>
 </tbody>
 </table>

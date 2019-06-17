@@ -1,15 +1,16 @@
 package squidpony.squidgrid.gui.gdx;
 
+import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.WhirlingNoise;
 
-import static squidpony.squidmath.Noise.HastyPointHash.hashAll;
+import static squidpony.squidmath.Noise.IntPointHash.hashAll;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
  * Created by Tommy Ettinger on 6/12/2017.
  */
-public class ColorNoise extends WhirlingNoise {
+public class ColorNoise extends FastNoise {
     public static final ColorNoise instance = new ColorNoise();
     public ColorNoise() {
     }
@@ -74,11 +75,11 @@ public class ColorNoise extends WhirlingNoise {
 //        int gi0 = (int)(determine(seed + i + determine(j)) >>> 16);
 //        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) >>> 16);
 //        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) >>> 16);
-        int gi0 = (int)(hashAll(i, j, seed) & 0xFFFFFFL);
-        int gi1 = (int)(hashAll(i + i1, j + j1, seed) & 0xFFFFFFL);
-        int gi2 = (int)(hashAll(i + 1, j + 1, seed) & 0xFFFFFFL);
+        int gi0 = (hashAll(i, j, seed) & 0xFFFFFF);
+        int gi1 = (hashAll(i + i1, j + j1, seed) & 0xFFFFFF);
+        int gi2 = (hashAll(i + 1, j + 1, seed) & 0xFFFFFF);
 
-        float red, green, blue, t0, t1, t2;
+        float luma, cb, cr, t0, t1, t2;
         // Calculate the contribution from the three corners
         t0 = 0.75f - x0 * x0 - y0 * y0;
         if (t0 < 0) {
@@ -102,8 +103,8 @@ public class ColorNoise extends WhirlingNoise {
             noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to return values in the interval [-1,1].
-        red = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;
+        // The result is scaled to return values in the interval [0,1].
+        luma = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;
         gi0 >>>= 8;
         gi1 >>>= 8;
         gi2 >>>= 8;
@@ -131,8 +132,8 @@ public class ColorNoise extends WhirlingNoise {
             noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to return values in the interval [-1,1].
-        green = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;
+        // The result is scaled to return values in the interval [-0.5,0.5].
+        cb = 4.5625f * (noise0 + noise1 + noise2);
         gi0 >>>= 8;
         gi1 >>>= 8;
         gi2 >>>= 8;
@@ -159,9 +160,9 @@ public class ColorNoise extends WhirlingNoise {
             noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to return values in the interval [-1,1].
-        blue = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;
-        return SColor.floatGet(red, green, blue, 1f);
+        // The result is scaled to return values in the interval [-0.5,0.5].
+        cr = 4.5625f * (noise0 + noise1 + noise2);
+        return SColor.floatGetYCbCr(luma, cb, cr, 1f);
     }
 
 
@@ -258,116 +259,98 @@ public class ColorNoise extends WhirlingNoise {
         float x3 = x0 - 0.5f; // Offsets for last corner in (x,y,z) coords
         float y3 = y0 - 0.5f;
         float z3 = z0 - 0.5f;
-        // Work out the hashed gradient indices of the four simplex corners
-        int gi0 = (int)(hashAll(i, j , k, seed) & 0xFFFFFFFFL);
-        int gi1 = (int)(hashAll(i + i1, j + j1 , k + k1, seed) & 0xFFFFFFFFL);
-        int gi2 = (int)(hashAll(i + i2, j + j2 , k + k2, seed) & 0xFFFFFFFFL);
-        int gi3 = (int)(hashAll(i + 1, j + 1 , k + 1, seed) & 0xFFFFFFFFL);
-        float red, green, blue, t0, t1, t2, t3;
+        int seed1 = GWTRNG.determineInt(~seed);
+        int seed2 = GWTRNG.determineInt(seed ^ seed1);
+        float dist0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
+        float dist1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
+        float dist2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+        float dist3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+        float luma, cb, cr;
+        float n = 0;
+
+        t = dist0;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed, i, j, k, x0, y0, z0);
+        }
+
+        t = dist1;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
+        }
+
+        t = dist2;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
+        }
+
+        t = dist3;
+        if (t > 0)  {
+            t *= t;
+            n += t * t * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
+        }
+
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to stay just inside [0,1]
+        luma = 15.75f * n + 0.5f;
+        n = 0;
         // Calculate the contribution from the four corners
-        t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0) {
-            n0 = 0f;
-        } else {
-            t0 *= t0;
-            n0 = t0 * t0 * dotf(grad3f[gi0 & 31], x0, y0, z0);
+        t = dist0;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed1, i, j, k, x0, y0, z0);
         }
-        t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0) {
-            n1 = 0f;
-        } else {
-            t1 *= t1;
-            n1 = t1 * t1 * dotf(grad3f[gi1 & 31], x1, y1, z1);
+
+        t = dist1;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed1, i + i1, j + j1, k + k1, x1, y1, z1);
         }
-        t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0) {
-            n2 = 0f;
-        } else {
-            t2 *= t2;
-            n2 = t2 * t2 * dotf(grad3f[gi2 & 31], x2, y2, z2);
+
+        t = dist2;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed1, i + i2, j + j2, k + k2, x2, y2, z2);
         }
-        t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0) {
-            n3 = 0f;
-        } else {
-            t3 *= t3;
-            n3 = t3 * t3 * dotf(grad3f[gi3 & 31], x3, y3, z3);
+
+        t = dist3;
+        if (t > 0)  {
+            t *= t;
+            n += t * t * gradCoord3D(seed1, i + 1, j + 1, k + 1, x3, y3, z3);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to stay just inside [-1,1]
-        red = 15.75f * (n0 + n1 + n2 + n3) + 0.5f;
-        gi0 >>>= 8;
-        gi1 >>>= 8;
-        gi2 >>>= 8;
-        gi3 >>>= 8;
+        // The result is scaled to stay just inside [-0.5,0.5]
+        cb = 15.75f * n;
+        n = 0;
         // Calculate the contribution from the four corners
-        t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0) {
-            n0 = 0f;
-        } else {
-            t0 *= t0;
-            n0 = t0 * t0 * dotf(grad3f[gi0 & 31], x0, y0, z0);
+        t = dist0;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed2, i, j, k, x0, y0, z0);
         }
-        t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0) {
-            n1 = 0f;
-        } else {
-            t1 *= t1;
-            n1 = t1 * t1 * dotf(grad3f[gi1 & 31], x1, y1, z1);
+
+        t = dist1;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed2, i + i1, j + j1, k + k1, x1, y1, z1);
         }
-        t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0) {
-            n2 = 0f;
-        } else {
-            t2 *= t2;
-            n2 = t2 * t2 * dotf(grad3f[gi2 & 31], x2, y2, z2);
+
+        t = dist2;
+        if (t > 0) {
+            t *= t;
+            n += t * t * gradCoord3D(seed2, i + i2, j + j2, k + k2, x2, y2, z2);
         }
-        t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0) {
-            n3 = 0f;
-        } else {
-            t3 *= t3;
-            n3 = t3 * t3 * dotf(grad3f[gi3 & 31], x3, y3, z3);
+
+        t = dist3;
+        if (t > 0)  {
+            t *= t;
+            n += t * t * gradCoord3D(seed2, i + 1, j + 1, k + 1, x3, y3, z3);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to stay just inside [-1,1]
-        green = 15.75f * (n0 + n1 + n2 + n3) + 0.5f;
-        gi0 >>>= 8;
-        gi1 >>>= 8;
-        gi2 >>>= 8;
-        gi3 >>>= 8;
-        // Calculate the contribution from the four corners
-        t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0) {
-            n0 = 0f;
-        } else {
-            t0 *= t0;
-            n0 = t0 * t0 * dotf(grad3f[gi0 & 31], x0, y0, z0);
-        }
-        t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0) {
-            n1 = 0f;
-        } else {
-            t1 *= t1;
-            n1 = t1 * t1 * dotf(grad3f[gi1 & 31], x1, y1, z1);
-        }
-        t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0) {
-            n2 = 0f;
-        } else {
-            t2 *= t2;
-            n2 = t2 * t2 * dotf(grad3f[gi2 & 31], x2, y2, z2);
-        }
-        t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0) {
-            n3 = 0f;
-        } else {
-            t3 *= t3;
-            n3 = t3 * t3 * dotf(grad3f[gi3 & 31], x3, y3, z3);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is scaled to stay just inside [-1,1]
-        blue = 15.75f * (n0 + n1 + n2 + n3) + 0.5f;
-        return SColor.floatGet(red, green, blue, 1f);
+        // The result is scaled to stay just inside [-0.5,0.5]
+        cr = 15.75f * n;
+        return SColor.floatGetYCbCr(luma, cb, cr, 1f);
     }
 }

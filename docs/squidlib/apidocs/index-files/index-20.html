@@ -167,10 +167,6 @@
 <dd>
 <div class="block">This color constant "Terra Cotta" has RGB code <code>0xE2725B</code>, red 0.8862745, green 0.44705883, blue 0.35686275, alpha 1, hue 0.028395057, saturation 0.5973452, and value 0.8862745.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#text">text</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="class in squidpony.squidgrid.gui.gdx">AbstractTextScreen</a></dt>
-<dd>
-<div class="block">Can contain null members (denoting empty lines)</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#text">text</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx">TextPanel</a></dt>
 <dd>
 <div class="block">The text to display</div>
@@ -231,8 +227,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#TextPanel-squidpony.panel.IMarkup-squidpony.squidgrid.gui.gdx.TextCellFactory-">TextPanel(IMarkup&lt;T&gt;, TextCellFactory)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx">TextPanel</a></dt>
 <dd>
-<div class="block">The text to display MUST be set later on with
- <a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#init-float-float-java.util.Collection-"><code>TextPanel.init(float, float, Collection)</code></a>.</div>
+<div class="block">The text to display MUST be set later on with <a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#init-float-float-java.util.Collection-"><code>TextPanel.init(float, float, Collection)</code></a> (which can't be updated) or
+ <a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#initShared-float-float-java.util.ArrayList-"><code>TextPanel.initShared(float, float, ArrayList)</code></a> (which reflects changes in the given ArrayList).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#THIN_VIOLET">THIN_VIOLET</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
@@ -353,8 +349,6 @@
 <dd>
 <div class="block">Returns a new array containing the remaining keys.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html#toDraw-squidpony.panel.IColoredString-int-">toDraw(IColoredString&lt;T&gt;, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">LinesPanel</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#toEditedFloat-float-float-float-">toEditedFloat(float, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Gets a variation on this SColor as a packed float that has its hue, saturation, and value adjusted by the
@@ -383,12 +377,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--">toFloatBits()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Packs the color components into a 32-bit integer with the format ABGR and then converts it to a float.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#toIntArray-java.util.Collection-">toIntArray(Collection&lt;Integer&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="class in squidpony.squidgrid.gui.gdx">AbstractTextScreen</a></dt>
-<dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="block"><span class="deprecationComment">Prefer using primitive-specific classes as mentioned in the full JavaDocs for this method</span></div>
-</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#TOMATO">TOMATO</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
@@ -430,10 +418,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ScreenSizeManager.html#toScreenSize--">toScreenSize()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ScreenSizeManager.html" title="class in squidpony.squidgrid.gui.gdx">ScreenSizeManager</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.html#toSquidScreenInput--">toSquidScreenInput()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.html" title="class in squidpony.squidgrid.gui.gdx">AbstractSquidScreen</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html#toString--">toString()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AbstractTextScreen.html" title="class in squidpony.squidgrid.gui.gdx">AbstractTextScreen</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/Radiance.html#toString--">toString()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#toString--">toString()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
@@ -446,6 +430,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#toString--">toString()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/FilterBatch.html#totalRenderCalls">totalRenderCalls</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/FilterBatch.html" title="class in squidpony.squidgrid.gui.gdx">FilterBatch</a></dt>
+<dd>
+<div class="block">Number of rendering calls, ever.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidInput.html#touchDown-int-int-int-int-">touchDown(int, int, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidKey.html#touchDown-int-int-int-int-">touchDown(int, int, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidKey.html" title="class in squidpony.squidgrid.gui.gdx">SquidKey</a></dt>

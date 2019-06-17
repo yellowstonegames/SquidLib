@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html" target="_top">Frames</a></li>
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.24">ClassicRogueMapGenerator</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.23">ClassicRogueMapGenerator</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
 <div class="block">Creates a dungeon in the style of the original Rogue game. It will always
@@ -185,18 +185,12 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidgrid/mapping/Terrain.html" title="class in squidpony.squidgrid.mapping">Terrain</a>[][]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#create--">create</a></span>()</code>
-<div class="block">Builds and returns a map in the Classic Rogue style.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#generate--">generate</a></span>()</code>
 <div class="block">Builds and returns a map in the Classic Rogue style, returned as a 2D char array.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#getDungeon--">getDungeon</a></span>()</code>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--"><code>IDungeonGenerator.generate()</code></a> or
@@ -231,7 +225,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>ClassicRogueMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.91">ClassicRogueMapGenerator</a>(int&nbsp;horizontalRooms,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.90">ClassicRogueMapGenerator</a>(int&nbsp;horizontalRooms,
                                 int&nbsp;verticalRooms,
                                 int&nbsp;dungeonWidth,
                                 int&nbsp;dungeonHeight,
@@ -263,7 +257,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ClassicRogueMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.112">ClassicRogueMapGenerator</a>(int&nbsp;horizontalRooms,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.111">ClassicRogueMapGenerator</a>(int&nbsp;horizontalRooms,
                                 int&nbsp;verticalRooms,
                                 int&nbsp;dungeonWidth,
                                 int&nbsp;dungeonHeight,
@@ -298,31 +292,13 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="create--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>create</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/Terrain.html" title="class in squidpony.squidgrid.mapping">Terrain</a>[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.148">create</a>()</pre>
-<div class="block">Builds and returns a map in the Classic Rogue style.
- <br>
- Only includes rooms, corridors and doors.
- <br>
- There is also a generate method that produces a 2D char array, which may be more suitable.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of Terrain objects</dd>
-</dl>
-</li>
-</ul>
 <a name="generate--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.167">generate</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.149">generate</a>()</pre>
 <div class="block">Builds and returns a map in the Classic Rogue style, returned as a 2D char array.
 
  Only includes rooms ('.' for floor and '#' for walls), corridors (using the same chars as rooms) and doors ('+'
@@ -344,7 +320,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getDungeon</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.182">getDungeon</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#line.160">getDungeon</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#getDungeon--">IDungeonGenerator</a></code></span></div>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--"><code>IDungeonGenerator.generate()</code></a> or
  some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
@@ -386,7 +362,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../index.html?squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html" target="_top">Frames</a></li>
