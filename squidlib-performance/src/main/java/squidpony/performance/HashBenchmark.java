@@ -561,6 +561,18 @@ public class HashBenchmark {
     }
 
     @Benchmark
+    public long doLongWater_64(BenchmarkState state)
+    {
+        return CrossHash.Water.hash64_(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doLongWater_32(BenchmarkState state)
+    {
+        return CrossHash.Water.hash_(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
     public int doJDK32(BenchmarkState state)
     {
         return hashCode(state.words[state.idx = state.idx + 1 & 4095]);
