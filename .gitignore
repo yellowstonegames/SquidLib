@@ -21,3 +21,5 @@ assets.tar.gz
 assets.zip
 
 ColorOutput\.txt
+
+.attach_pid*
