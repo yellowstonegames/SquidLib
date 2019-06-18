@@ -5837,11 +5837,11 @@ public class CrossHash {
                     c = (b0 << 31 | b0 >>> 33) ^ b2, d = (b0 << 47 | b0 >>> 17) ^ b1;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                a = (data[i-3] ^ a) * b1; a = (a << 25 | a >>> 39);
-                b = (data[i-2] ^ b) * b2; b = (b << 27 | b >>> 37);
-                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35);
-                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33);
-                seed += a * b3 ^ b * b4 ^ c * b5 ^ d * b1;
+                a = (data[i-3] ^ a) * b1; a = (a << 22 | a >>> 42) * b3;
+                b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
+                c = (data[i-1] ^ c) * b3; c = (c << 28 | c >>> 36) * b5;
+                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+                seed += a + b + c + d;
             }
             seed += b5;
             switch (len & 3) {
@@ -6221,11 +6221,11 @@ public class CrossHash {
                     c = (b0 << 31 | b0 >>> 33) ^ b2, d = (b0 << 47 | b0 >>> 17) ^ b1;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                a = (data[i-3] ^ a) * b1; a = (a << 25 | a >>> 39);
-                b = (data[i-2] ^ b) * b2; b = (b << 27 | b >>> 37);
-                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35);
-                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33);
-                seed += a * b3 ^ b * b4 ^ c * b5 ^ d * b1;
+                a = (data[i-3] ^ a) * b1; a = (a << 22 | a >>> 42) * b3;
+                b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
+                c = (data[i-1] ^ c) * b3; c = (c << 28 | c >>> 36) * b5;
+                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+                seed += a + b + c + d;
             }
             seed += b5;
             switch (len & 3) {
