@@ -225,7 +225,7 @@ public class HashVisualizer extends ApplicationAdapter {
         return (NumberTools.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
     }
 
-    // not much different from Wisp
+    // not much different from Water
     public static int ion32(int[] a)
     {
         if (a == null)
@@ -238,7 +238,7 @@ public class HashVisualizer extends ApplicationAdapter {
 //        return (int)((result ^ (result >>> 25)) * (result | 0xA529L));
         //return (int)(counter ^ counter >>> 22);
     }
-    // not much different from Wisp
+    // not much different from Water
     public static long ion64(int[] a)
     {
         if (a == null)
@@ -2565,42 +2565,42 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.Hive.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash on length 2, high bits");
+                        Gdx.graphics.setTitle("Hive, hash on length 2, high bits");
                         break;
                     case 29:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.Hive.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash on length 1, high bits");
+                        Gdx.graphics.setTitle("Hive, hash on length 1, high bits");
                         break;
                     case 30:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.Hive.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash64 on length 2, high bits");
+                        Gdx.graphics.setTitle("Hive, hash64 on length 2, high bits");
                         break;
                     case 31:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.Hive.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash64 on length 1, high bits");
+                        Gdx.graphics.setTitle("Hive, hash64 on length 1, high bits");
                         break;
                     case 32:
                         for (int x = 0; x < width; x++) {
@@ -2611,7 +2611,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash on length 2, high bits");
+                        Gdx.graphics.setTitle("Water, hash on length 2, high bits");
                         break;
                     case 33:
                         for (int x = 0; x < width; x++) {
@@ -2621,7 +2621,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash on length 1, high bits");
+                        Gdx.graphics.setTitle("Water, hash on length 1, high bits");
                         break;
                     case 34:
                         for (int x = 0; x < width; x++) {
@@ -2632,7 +2632,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash64 on length 2, high bits");
+                        Gdx.graphics.setTitle("Water, hash64 on length 2, high bits");
                         break;
                     case 35:
                         for (int x = 0; x < width; x++) {
@@ -2642,7 +2642,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash64 on length 1, high bits");
+                        Gdx.graphics.setTitle("Water, hash64 on length 1, high bits");
                         break;
                     case 36:
                         for (int x = 0; x < width; x++) {
@@ -2661,7 +2661,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash on length 1, low bits");
+                        Gdx.graphics.setTitle("Water, hash on length 1, low bits");
                         break;
                     case 38:
                         for (int x = 0; x < width; x++) {
@@ -2671,7 +2671,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash64 on length 1, low bits");
+                        Gdx.graphics.setTitle("Water, hash64 on length 1, low bits");
                         break;
                     case 39:
                         for (int x = 0; x < width; x++) {
@@ -2682,7 +2682,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash on length 2, low bits");
+                        Gdx.graphics.setTitle("Water, hash on length 2, low bits");
                         break;
                     case 40:
                         for (int x = 0; x < width; x++) {
@@ -2693,49 +2693,49 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp, hash64 on length 2, low bits");
+                        Gdx.graphics.setTitle("Water, hash64 on length 2, low bits");
                         break;
                     case 41:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Falcon.hash(coordinates) << 8 | 255L;
+                                code = CrossHash.Hive.hash(coordinates) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash on length 2, low bits");
+                        Gdx.graphics.setTitle("Hive, hash on length 2, low bits");
                         break;
                     case 42:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash(coordinate) << 8 | 255L;
+                                code = CrossHash.Hive.hash(coordinate) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash on length 1, low bits");
+                        Gdx.graphics.setTitle("Hive, hash on length 1, low bits");
                         break;
                     case 43:
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Falcon.hash64(coordinates) << 8 | 255L;
+                                code = CrossHash.Hive.hash64(coordinates) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash64 on length 2, low bits");
+                        Gdx.graphics.setTitle("Hive, hash64 on length 2, low bits");
                         break;
                     case 44:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Falcon.hash64(coordinate) << 8 | 255L;
+                                code = CrossHash.Hive.hash64(coordinate) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Falcon, hash64 on length 1, low bits");
+                        Gdx.graphics.setTitle("Hive, hash64 on length 1, low bits");
                         break;
 
                     case 45:
@@ -2747,7 +2747,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash on length 2, high bits");
+                        Gdx.graphics.setTitle("Water Double, hash on length 2, high bits");
                         break;
                     case 46:
                         for (int x = 0; x < width; x++) {
@@ -2757,7 +2757,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash on length 1, high bits");
+                        Gdx.graphics.setTitle("Water Double, hash on length 1, high bits");
                         break;
                     case 47:
                         for (int x = 0; x < width; x++) {
@@ -2768,7 +2768,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 2, high bits");
+                        Gdx.graphics.setTitle("Water Double, hash64 on length 2, high bits");
                         break;
                     case 48:
                         for (int x = 0; x < width; x++) {
@@ -2778,7 +2778,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 1, high bits");
+                        Gdx.graphics.setTitle("Water Double, hash64 on length 1, high bits");
                         break;
                     case 49:
                         for (int x = 0; x < width; x++) {
@@ -2788,7 +2788,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash on length 1, low bits");
+                        Gdx.graphics.setTitle("Water Double, hash on length 1, low bits");
                         break;
                     case 50:
                         for (int x = 0; x < width; x++) {
@@ -2798,7 +2798,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 1, low bits");
+                        Gdx.graphics.setTitle("Water Double, hash64 on length 1, low bits");
                         break;
                     case 51:
                         for (int x = 0; x < width; x++) {
@@ -2809,7 +2809,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash on length 2, low bits");
+                        Gdx.graphics.setTitle("Water Double, hash on length 2, low bits");
                         break;
                     case 52:
                         for (int x = 0; x < width; x++) {
@@ -2820,7 +2820,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("Wisp Double, hash64 on length 2, low bits");
+                        Gdx.graphics.setTitle("Water Double, hash64 on length 2, low bits");
                         break;
                 }
             }
