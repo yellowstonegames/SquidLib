@@ -68,7 +68,8 @@ public class DefaultResources implements LifecycleListener {
             smooth1 = null, smooth2 = null, smoothSquare = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null,
-            arial15 = null, tiny = null, lessTiny;
+            arial15 = null, tiny = null, lessTiny = null,
+            sevenTwelve = null, computerSaysNo = null;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceCodeJP = null,
@@ -90,6 +91,8 @@ public class DefaultResources implements LifecycleListener {
             narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt", narrowTextureExtraLarge = "Rogue-Zodiac-18x36_0.png",
             tinyName = "Monty-4x10.fnt", tinyTexture = "Monty-4x10.png",
             lessTinyName = "Monty-8x20.fnt", lessTinyTexture = "Monty-8x20.png",
+            sevenTwelveName = "7-12-serif.fnt", sevenTwelveTexture = "7-12-serif.png",
+            computerSaysNoName = "ComputerSaysNo.fnt", computerSaysNoTexture = "ComputerSaysNo.png",
             smoothName = "Inconsolata-LGC-8x18.fnt", smoothTexture = "Inconsolata-LGC-8x18.png",
             smoothNameLarge = "Inconsolata-LGC-12x24.fnt", smoothTextureLarge = "Inconsolata-LGC-12x24.png",
             smoothSquareName = "Inconsolata-LGC-Square-25x25.fnt", smoothSquareTexture = "Inconsolata-LGC-Square-25x25.png",
@@ -661,6 +664,100 @@ public class DefaultResources implements LifecycleListener {
             }
         }
         return copyFont(instance.lessTiny);
+    }
+    /**
+     * Returns a 7x12px font with identical (excellent) Unicode coverage to Iosevka, as an embedded resource.
+     * The font is 7-12-serif by Christian Munk, but not all of the Unicode glyphs supported in his amazingly-huge font
+     * are present here; just the subset that's compatible with Iosevka (which is way more than is required for SquidLib
+     * to present most things). Caches the font for later calls. Attribution to Christian Munk (or the username he used,
+     * CMunk) is required to use this font; this is in the license file linked below.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif-license.txt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/7-12-serif-readme.txt</li>
+     * </ul>
+     * @return the BitmapFont object representing 7-12-serif.ttf at a size that gives exactly 7 px wide by 12 px tall
+     */
+    public static BitmapFont getSevenTwelveFont()
+    {
+        initialize();
+        if(instance.sevenTwelve == null)
+        {
+            try {
+                instance.sevenTwelve = new BitmapFont(Gdx.files.internal(sevenTwelveName), Gdx.files.internal(sevenTwelveTexture), false);
+            } catch (Exception e) {
+            }
+        }
+        return copyFont(instance.sevenTwelve);
+    }
+    /**
+     * Returns a 14x27px font with fairly good Unicode coverage and an octagonal, angular look, as an embedded resource.
+     * The font is Computer Says No by Christian Munk, which has a nice clean appearance. Caches the font for later
+     * calls, but be aware that if you copy the BitmapFont instead of calling this method again, it won't stay
+     * monospaced because of a quirk of LibGDX. Attribution to Christian Munk (or the username he used,
+     * CMunk) is required to use this font; this is in the license file linked below.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo-license.txt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/ComputerSaysNo-readme.txt</li>
+     * </ul>
+     * @return the BitmapFont object representing ComputerSaysNo.ttf at a size that gives about 14 px wide by 27 px tall
+     */
+    public static BitmapFont getOctagonalMonoFont()
+    {
+        initialize();
+        if(instance.computerSaysNo == null)
+        {
+            try {
+                instance.computerSaysNo = new BitmapFont(Gdx.files.internal(computerSaysNoName), Gdx.files.internal(computerSaysNoTexture), false);
+            } catch (Exception e) {
+                instance.computerSaysNo = new BitmapFont();
+            }
+        }
+        BitmapFont cpy = copyFont(instance.computerSaysNo);
+        // ugh, this shouldn't be required...
+        cpy.setFixedWidthGlyphs("\u0000" +
+                " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmno\n" +
+                "pqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬\u00AD®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàá\n" +
+                "âãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİı\n" +
+                "ĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſƀƁ\n" +
+                "ƂƃƄƅƆƇƈƉƊƋƌƍƎƏƐƑƒƓƔƕƖƗƘƙƚƛƜƝƞƟƠơƢƣƤƥƦƧƨƩƪƫƬƭƮƯưƱƲƳƴƵƶƷƸƹƺƻƼƽƾƿǀǁǂǃǄǅǆǇǈǉǊǋǌǍǎǏǐǑ\n" +
+                "ǒǓǔǕǖǗǘǙǚǛǜǝǞǟǠǡǢǣǤǥǦǧǨǩǪǫǬǭǮǯǰǱǲǳǴǵǶǷǸǹǺǻǼǽǾǿȀȁȂȃȄȅȆȇȈȉȊȋȌȍȎȏȐȑȒȓȔȕȖȗȘșȚțȜȝȞȟȠȡ\n" +
+                "ȢȣȤȥȦȧȨȩȪȫȬȭȮȯȰȱȲȳȴȵȶȷȸȹȺȻȼȽȾȿɀɁɂɃɄɅɆɇɈɉɊɋɌɍɎɏɐɑɒɓɔɕɖɗɘəɚɛɜɝɞɟɠɡɢɣɤɥɦɧɨɩɪɫɬɭɮɯɰɱ\n" +
+                "ɲɳɴɵɶɷɸɹɺɻɼɽɾɿʀʁʂʃʄʅʆʇʈʉʊʋʌʍʎʏʐʑʒʓʔʕʖʗʘʙʚʛʜʝʞʟʠʡʢʣʤʥʦʧʨʩʪʫʬʭʮʯʰʱʲʳʴʵʶʷʸʹʺʻʼʽʾʿˀˁ\n" +
+                "˂˃˄˅ˆˇˈˉˊˋˌˍˎˏːˑ˒˓˔˕˖˗˘˙˚˛˜˝˞ˠˡˢˣˤ˥˦˧˨˩˪˫ˬ˭ˮ˳˴˵˶˷˸˹˺˻˼˽˾ͰͱͲͳʹ͵Ͷͷͺͻͼͽ;΄΅Ά·ΈΉΊΌΎΏΐ\n" +
+                "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώϏϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟϠϡ\n" +
+                "ϢϣϤϥϦϧϨϩϪϫϬϭϮϯϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯаб\n" +
+                "вгдежзийклмнопрстуфхцчшщъыьэюяѐёђѓєѕіїјљњћќѝўџѠѡѢѣѤѥѦѧѨѩѪѫѬѭѮѯѰѱѲѳѴѵѶѷѸѹѺѻѼѽѾѿҀҁ\n" +
+                "҃ҊҋҌҍҎҏҐґҒғҔҕҖҗҘҙҚқҜҝҞҟҠҡҢңҤҥҦҧҨҩҪҫҬҭҮүҰұҲҳҴҵҶҷҸҹҺһҼҽҾҿӀӁӂӃӄӅӆӇӈӉӊӋӌӍӎӏӐӑӒӓӔӕӖӗӘ\n" +
+                "әӚӛӜӝӞӟӠӡӢӣӤӥӦӧӨөӪӫӬӭӮӯӰӱӲӳӴӵӶӷӸӹӺӻӼӽӾӿԀԁԂԃԄԅԆԇԈԉԊԋԌԍԎԏԐԑԒԓԔԕԖԗԘԙԚԛԜԝԞԟԠԡԢԣԤԥԦԧԨ\n" +
+                "ԩԪԫԬԭԮԯԱԲԳԴԵԶԷԸԹԺԻԼԽԾԿՀՁՂՃՄՅՆՇՈՉՊՋՌՍՎՏՐՑՒՓՔՕՖՙ՚՛՜՝՞՟աբգդեզէըթժիլխծկհձղճմյնշոչպջռ\n" +
+                "սվտրցւփքօֆև։֊֏฿ႠႡႢႣႤႥႦႧႨႩႪႫႬႭႮႯႰႱႲႳႴႵႶႷႸႹႺႻႼႽႾႿჀჁჂჃჄჅჇჍაბგდევზთიკლმნოპჟრსტუფქღყშ\n" +
+                "ჩცძწჭხჯჰჱჲჳჴჵჶჷჸჹჺ჻ჽჾჿᎠᎡᎢᎣᎤᎥᎦᎧᎨᎩᎪᎫᎬᎭᎮᎯᎰᎱᎲᎳᎴᎵᎶᎷᎸᎹᎺᎻᎼᎽᎾᎿᏀᏁᏂᏃᏄᏅᏆᏇᏈᏉᏊᏋᏌᏍᏎᏏᏐᏑᏒᏓᏔᏕᏖᏗᏘᏙ\n" +
+                "ᏚᏛᏜᏝᏞᏟᏠᏡᏢᏣᏤᏥᏦᏧᏨᏩᏪᏫᏬᏭᏮᏯᏰᏱᏲᏳᏴᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯᚰᚱᚲᚳᚴᚵᚶᚷᚸᚹᚺᚻᚼᚽᚾᚿᛀᛁᛂᛃᛄᛅᛆᛇᛈᛉᛊᛋᛌᛍᛎᛏᛐᛑᛒᛓᛔ\n" +
+                "ᛕᛖᛗᛘᛙᛚᛛᛜᛝᛞᛟᛠᛡᛢᛣᛤᛥᛦᛧᛨᛩᛪ᛫᛬᛭ᛮᛯᛰᴀᴁᴂᴃᴄᴅᴆᴇᴈᴉᴊᴋᴌᴍᴎᴏᴐᴑᴒᴓᴔᴕᴖᴗᴘᴙᴚᴛᴜᴝᴞᴟᴠᴡᴢᴣᴤᴥᴦᴧᴨᴩᴪᴫᴬᴭᴮᴯᴰᴱᴲᴳ\n" +
+                "ᴴᴵᴶᴷᴸᴹᴺᴻᴼᴽᴾᴿᵀᵁᵂᵃᵄᵅᵆᵇᵈᵉᵊᵋᵌᵍᵎᵏᵐᵑᵒᵓᵔᵕᵖᵗᵘᵙᵚᵛᵜᵝᵞᵟᵠᵡᵢᵣᵤᵥᵦᵧᵨᵩᵪᵫᵬᵭᵮᵯᵰᵱᵲᵳᵴᵵᵶᵷᵸᵹᵺᵻᵼᵽᵾᵿᶀᶁᶂᶃ\n" +
+                "ᶄᶅᶆᶇᶈᶉᶊᶋᶌᶍᶎᶏᶐᶑᶒᶓᶔᶕᶖᶗᶘᶙᶚᶛᶜᶝᶞᶟᶠᶡᶢᶣᶤᶥᶦᶧᶨᶩᶪᶫᶬᶭᶮᶯᶰᶱᶲᶳᶴᶵᶶᶷᶸᶹᶺᶻᶼᶽᶾᶿḀḁḂḃḄḅḆḇḈḉḊḋḌḍḎḏḐḑḒḓ\n" +
+                "ḔḕḖḗḘḙḚḛḜḝḞḟḠḡḢḣḤḥḦḧḨḩḪḫḬḭḮḯḰḱḲḳḴḵḶḷḸḹḺḻḼḽḾḿṀṁṂṃṄṅṆṇṈṉṊṋṌṍṎṏṐṑṒṓṔṕṖṗṘṙṚṛṜṝṞṟṠṡṢṣ\n" +
+                "ṤṥṦṧṨṩṪṫṬṭṮṯṰṱṲṳṴṵṶṷṸṹṺṻṼṽṾṿẀẁẂẃẄẅẆẇẈẉẊẋẌẍẎẏẐẑẒẓẔẕẖẗẘẙẚẛẜẝẞẟẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳ\n" +
+                "ẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹỺỻỼỽỾỿἀἁἂἃ\n" +
+                "ἄἅἆἇἈἉἊἋἌἍἎἏἐἑἒἓἔἕἘἙἚἛἜἝἠἡἢἣἤἥἦἧἨἩἪἫἬἭἮἯἰἱἲἳἴἵἶἷἸἹἺἻἼἽἾἿὀὁὂὃὄὅὈὉὊὋὌὍὐὑὒὓὔὕὖὗὙὛὝὟ\n" +
+                "ὠὡὢὣὤὥὦὧὨὩὪὫὬὭὮὯὰάὲέὴήὶίὸόὺύὼώᾀᾁᾂᾃᾄᾅᾆᾇᾈᾉᾊᾋᾌᾍᾎᾏᾐᾑᾒᾓᾔᾕᾖᾗᾘᾙᾚᾛᾜᾝᾞᾟᾠᾡᾢᾣᾤᾥᾦᾧᾨᾩᾪᾫᾬᾭᾮᾯᾰᾱ\n" +
+                "ᾲᾳᾴᾶᾷᾸᾹᾺΆᾼ᾽ι᾿῀῁ῂῃῄῆῇῈΈῊΉῌ῍῎῏ῐῑῒΐῖῗῘῙῚΊ῝῞῟ῠῡῢΰῤῥῦῧῨῩῪΎῬ῭΅`ῲῳῴῶῷῸΌῺΏῼ´῾‐‑‒–—―‖‗‘’‚\n" +
+                "‛“”„‟†‡•‣․‥…‧‰‱‸‹›※‼‽‾⁂⁄⁅⁆⁇⁈⁉⁊⁋⁌⁍⁎⁏⁑⁒⁖⁘⁙⁚⁛⁝⁞⁰ⁱ⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾ⁿ₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎ₐₑₒₓₔₕₖ\n" +
+                "ₗₘₙₚₛₜ₠₡₢₣₤₥₦₧₨₩₪₫€₭₮₯₰₱₲₳₴₵₶₷₸₹₺₽ℂ℃℄ℇ℈℉ℍ№™Ω℧℩KÅ℮Ⅎ⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅬⅭ\n" +
+                "ⅮⅯⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿↀↁↂↃↄↅↆↇↈ↉─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳\n" +
+                "┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒\n" +
+                "▓▔▕▖▗▘▙▚▛▜▝▞▟ⱠⱡⱢⱣⱤⱥⱦⱧⱨⱩⱪⱫⱬⱭⱮⱯⱰⱱⱲⱳⱴⱵⱶⱷⱸⱹⱺⱻⱼⱽⱾⱿ꜠꜡ꜢꜣꜤꜥꜦꜧꜨꜩꜪꜫꜬꜭꜮꜯꜰꜱꜲꜳꜴꜵꜶꜷꜸꜹꜺꜻꜼꜽꜾꜿꝀꝁꝂ\n" +
+                "ꝃꝄꝅꝆꝇꝈꝉꝊꝋꝌꝍꝎꝏꝐꝑꝒꝓꝔꝕꝖꝗꝘꝙꝚꝛꝜꝝꝞꝟꝠꝡꝢꝣꝤꝥꝦꝧꝨꝩꝪꝫꝬꝭꝮꝯꝰꝱꝲꝳꝴꝵꝶꝷꝸꝹꝺꝻꝼꝽꝾꝿꞀꞁꞂꞃꞄꞅꞆꞇꞈ꞉꞊ꞋꞌꞍꞎꞐꞑꞒꞓ\n" +
+                "ꞔꞕꞖꞗꞘꞙꞚꞛꞜꞝꞞꞟꞠꞡꞢꞣꞤꞥꞦꞧꞨꞩꞪꞫꞬꞭꞰꞱꟷꟸꟹꟺꟻꟼꟽꟾꟿﬀﬁﬂﬃﬄﬅﬆﬓﬔﬕﬖﬗ");
+        return cpy;
     }
 
     /**
