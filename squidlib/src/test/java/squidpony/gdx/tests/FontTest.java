@@ -58,6 +58,24 @@ public class FontTest extends ApplicationAdapter {
     private static final int ZOOM = 1;
     @Override
     public void create() {
+
+//        // hacky code used to get the contents of a BitmapFont
+//        BitmapFont.BitmapFontData sevenTwelve = DefaultResources.getSevenTwelveFont().getData();
+//        System.out.println(sevenTwelve.missingGlyph);
+//        sevenTwelve.missingGlyph = null;
+//        StringBuilder sb = new StringBuilder(10000);
+//        int count = 0;
+//        for (int i = 0; i <= 0xFFFF; i++) {
+//            if(sevenTwelve.hasGlyph((char)i))
+//            {
+//                sb.append((char)i);
+//                if((++count) % 80 == 0)
+//                    sb.append('\n');
+//            }
+//        }
+//        Gdx.files.local("SevenTwelveContents.txt").writeString(sb.toString(), false, "UTF8");
+
+
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
