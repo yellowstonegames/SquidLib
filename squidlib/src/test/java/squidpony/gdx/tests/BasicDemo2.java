@@ -67,13 +67,13 @@ public class BasicDemo2 extends ApplicationAdapter {
     /** In number of cells */
     public static final int gridWidth = 100;
     /** In number of cells */
-    public static final int gridHeight = 30;
+    public static final int gridHeight = 24;
     /** In number of cells */
     public static final int bonusHeight = 7;
     /** The initial pixel width of a cell */
-    public static final int cellWidth = 4;//10;
+    public static final int cellWidth = 14;//10;
     /** The initial pixel height of a cell */
-    public static final int cellHeight = 10;//17;
+    public static final int cellHeight = 27;//17;
 
     private SquidInput input;
     private Color bgColor;
@@ -111,7 +111,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
-                new TextCellFactory().font(DefaultResources.getTinyFont())
+                new TextCellFactory().font(DefaultResources.getOctagonalMonoFont())
                 //DefaultResources.getCrispDejaVuFont()
         );//.setSmoothingMultiplier(1.625f));
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
