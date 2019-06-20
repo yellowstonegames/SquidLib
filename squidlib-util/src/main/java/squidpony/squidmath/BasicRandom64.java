@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -26,16 +28,62 @@ import java.util.Random;
  * @author Tommy Ettinger
  */
 public class BasicRandom64 extends Random implements RandomnessSource, Serializable {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
+
     public long state;
 
+    /**
+     * Calls {@link #seed(int)} with a random int value (obtained using {@link Math#random()}).
+     */
     public BasicRandom64()
     {
-        state = 1L;
+        seed((int)((Math.random() * 2.0 - 1.0) * 0x80000000));
     }
 
-    public BasicRandom64(final long seed) {
-        setState(seed);
+    /**
+     * The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly
+     * one million, but most if not all initial states will have much longer periods). All ints are permissible values
+     * for the {@code seed} parameter.
+     * @param seed any int; will be used to get the actual state used in the generator (which is a long internally)
+     */
+    public BasicRandom64(final int seed)
+    {
+        seed(seed);
+    }
+
+    /**
+     * Like {@link #BasicRandom64(int)}, this doesn't use the seed as-is, and instead uses it to get a valid state
+     * (which is a long internally). If you want to duplicate the state of another BasicRandom64, get the existing state
+     * either with the field {@link #state} or with {@link #getState()} (you could store the state and load it later
+     * at this stage), then make some new BasicRandom64 (such as with {@code new BasicRandom64(0);}) and call
+     * {@link #setState(long)} with the previous state. You can also use {@link #copy()}.
+     * @param seed any long; will be mixed around and given to {@link #seed(int)} as an int, not used as-is
+     */
+    public BasicRandom64(final long seed)
+    {
+        seed((int)(seed ^ seed >>> 11 ^ seed >>> 21 ^ seed >>> 32));
+    }
+
+    /**
+     * Seeds the state using all bits of the given int {@code s}. Between 33554432 and 4294967296 seeds are possible,
+     * with the actual count probably much closer to 4294967296. This treats the top 25 bits of {@code s} (moved to the
+     * bottom, plus 1, to avoid a seed of 0) as the starting point and then generates the next state at most 127 times,
+     * with each generated state taking less time than {@link #nextLong()}. Some of the starting states are entirely
+     * possible to be within 127 steps of another starting state, so not all seeds are necessarily unique. This is not
+     * guaranteed to put the generator on an optimal subcycle, but it is guaranteed that any subcycle will have a period
+     * of at least 1048575.
+     * @param s all bits are used, none verbatim (0 is tolerated)
+     */
+    public final void seed(final int s) {
+        long v = (s >>> 7) + 1L; // at least 2 to the 25 sequential seeds have periods of at least 1048575.
+        for (int i = (s & 0x7F); i > 0; i--) {
+            v = (v << 29 | v >>> 35) * 0xAC564B05L;
+        }
+        state = v;
+    }
+
+    public long getState() {
+        return state;
     }
 
     public void setState(final long seed)
@@ -171,6 +219,24 @@ public class BasicRandom64 extends Random implements RandomnessSource, Serializa
         }
         return elements;
     }
+    /**
+     * Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.
+     * This only shuffles List data structures.
+     * <br>
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
+     *
+     * @param elements a List of T; <b>will</b> be modified
+     * @param <T>      can be any non-primitive type.
+     * @return elements after shuffling it in-place
+     */
+    public <T> List<T> shuffleInPlace(List<T> elements) {
+        final int n = elements.size();
+        for (int i = n; i > 1; i--) {
+            Collections.swap(elements, nextInt(i), i - 1);
+        }
+        return elements;
+    }
+
 
     public BasicRandom64 copy() {
         BasicRandom64 sr = new BasicRandom64();
