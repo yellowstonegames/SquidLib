@@ -102,9 +102,10 @@ public final class LZSPlus {
     public static String compress(String uncompressedStr, long[] keys) {
         if (uncompressedStr == null) return null;
         if (uncompressedStr.isEmpty()) return "";
+        int len = uncompressedStr.length();
         int i, value;
-        UnorderedSet<char[]> context_dictionary = new UnorderedSet<>(128, 0.7f, stringWithIntHasher);
-        UnorderedSet<char[]> context_dictionaryToCreate = new UnorderedSet<>(128, 0.7f, stringWithIntHasher);
+        UnorderedSet<char[]> context_dictionary = new UnorderedSet<>(len >>> 4, 0.7f, stringWithIntHasher);
+        UnorderedSet<char[]> context_dictionaryToCreate = new UnorderedSet<>(len >>> 4, 0.7f, stringWithIntHasher);
         char[] context_c;
         char[] context_wc;
         char[] context_w = new char[2];
@@ -112,7 +113,6 @@ public final class LZSPlus {
         int context_enlargeIn = 2; // Compensate for the first entry which should not count
         int context_dictSize = 3;
         int context_numBits = 2;
-        int len = uncompressedStr.length();
         StringBuilder context_data = new StringBuilder(len >>> 1);
         int context_data_val = 0;
         int context_data_position = 0;
