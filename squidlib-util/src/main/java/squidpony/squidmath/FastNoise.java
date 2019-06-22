@@ -887,47 +887,20 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         fractalBounding = 1 / ampFractal;
     }
 
-    // Hashing
-    private final static int X_PRIME = 0xB4C4D;
-    private final static int Y_PRIME = 0xEE2C1;
-    private final static int Z_PRIME = 0xA7E07;
-    private final static int W_PRIME = 0x8F19B;
-    //public static int randomize8(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 24;}
-    //public static int randomize6(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 26;}
-    //public static int randomize5(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 27;}
-    //public static int randomize4(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 28;}
-
-    private static int hash2D(int seed, int x, int y) {
-        return Integer.rotateLeft(((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5), 7) - seed >>> 24;
-//        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
-    }
-
-    private static int hash3D(int seed, int x, int y, int z) {
-        return Integer.rotateLeft(((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5), 7) - seed >>> 24;
-//        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
-    }
-
-    private static int hash4D(int seed, int x, int y, int z, int w) {
-        return Integer.rotateLeft(((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5), 7) - seed >>> 24;
-//        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
-    }
-
     private static float valCoord2D(int seed, int x, int y) {
         return (hashAll(x, y, seed) & 0xFFFFFF) * 0x1.0p-24f;
-//        final int n = (seed ^ X_PRIME * x ^ Y_PRIME * y) >> 12;
-//        return ((n * n ^ n * 0xEC4D ^ seed) & 0xFFFFFF) * 0x1.0p-24f;
     }
 
     private static float valCoord3D(int seed, int x, int y, int z) {
         return (hashAll(x, y, z, seed) & 0xFFFFFF) * 0x1.0p-24f;
-//        final int n = (seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) >> 12;
-//        return ((n * n ^ n * 0xEC4D ^ seed) & 0xFFFFFF) * 0x1.0p-24f;
     }
 
     private static float valCoord4D(int seed, int x, int y, int z, int w) {
         return (hashAll(x, y, z, w, seed) & 0xFFFFFF) * 0x1.0p-24f;
-//        final int n = (seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) >> 12;
-//        return ((n * n ^ n * 0xEC4D ^ seed) & 0xFFFFFF) * 0x1.0p-24f;
+    }
+
+    private static float valCoord6D(int seed, int x, int y, int z, int w, int u, int v) {
+        return (hashAll(x, y, z, w, u, v, seed) & 0xFFFFFF) * 0x1.0p-24f;
     }
 
     protected static float gradCoord2D(int seed, int x, int y, float xd, float yd) {
@@ -3330,7 +3303,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             F6 = (float) ((Math.sqrt(7.0) - 1.0) / 6.0),
             G6 = F6 / (1f + 6f * F6),
             LIMIT6 = 0.8375f;
-//            LIMIT6 = 0.75f;
 
 
     public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
@@ -3338,9 +3310,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-//        final float[] m = mShared, cellDist = cellDistShared;
-//        final float[] gradient6DLUT = FastNoise.gradient6DLUT;
-//        final int[] distOrder = distOrderShared, intLoc = intLocShared;
         intLoc[0] = skewX;
         intLoc[1] = skewY;
         intLoc[2] = skewZ;
@@ -3665,7 +3634,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
+                            Float3 vec = CELL_3D[hash256(xi, yi, zi, seed)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -3687,7 +3656,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
+                            Float3 vec = CELL_3D[hash256(xi, yi, zi, seed)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -3709,7 +3678,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
+                            Float3 vec = CELL_3D[hash256(xi, yi, zi, seed)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -3734,7 +3703,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 return valCoord3D(0, xc, yc, zc);
 
             case NOISE_LOOKUP:
-                Float3 vec = CELL_3D[hash3D(seed, xc, yc, zc)];
+                Float3 vec = CELL_3D[hash256(xc, yc, zc, seed)];
                 return cellularNoiseLookup.getConfiguredNoise(xc + vec.x, yc + vec.y, zc + vec.z);
 
             case DISTANCE:
@@ -3757,7 +3726,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
+                            Float3 vec = CELL_3D[hash256(xi, yi, zi, seed)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -3775,7 +3744,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
+                            Float3 vec = CELL_3D[hash256(xi, yi, zi, seed)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -3793,7 +3762,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
+                            Float3 vec = CELL_3D[hash256(xi, yi, zi, seed)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -3853,7 +3822,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case EUCLIDEAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
+                        Float2 vec = CELL_2D[hash256(xi, yi, seed)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -3871,7 +3840,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case MANHATTAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
+                        Float2 vec = CELL_2D[hash256(xi, yi, seed)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -3889,7 +3858,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case NATURAL:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
+                        Float2 vec = CELL_2D[hash256(xi, yi, seed)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -3911,7 +3880,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 return valCoord2D(0, xc, yc);
 
             case NOISE_LOOKUP:
-                Float2 vec = CELL_2D[hash2D(seed, xc, yc)];
+                Float2 vec = CELL_2D[hash256(xc, yc, seed)];
                 return cellularNoiseLookup.getConfiguredNoise(xc + vec.x, yc + vec.y);
 
             case DISTANCE:
@@ -3933,7 +3902,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case EUCLIDEAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
+                        Float2 vec = CELL_2D[hash256(xi, yi, seed)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -3948,7 +3917,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case MANHATTAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
+                        Float2 vec = CELL_2D[hash256(xi, yi, seed)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -3963,7 +3932,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case NATURAL:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
+                        Float2 vec = CELL_2D[hash256(xi, yi, seed)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -3993,25 +3962,25 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
     }
 
-    public void GradientPerturb3(float[] v3) {
-        SingleGradientPerturb3(seed, gradientPerturbAmp, frequency, v3);
+    public void gradientPerturb3(float[] v3) {
+        singleGradientPerturb3(seed, gradientPerturbAmp, frequency, v3);
     }
 
-    public void GradientPerturbFractal3(float[] v3) {
+    public void gradientPerturbFractal3(float[] v3) {
         int seed = this.seed;
         float amp = gradientPerturbAmp * fractalBounding;
         float freq = frequency;
 
-        SingleGradientPerturb3(seed, amp, frequency, v3);
+        singleGradientPerturb3(seed, amp, frequency, v3);
 
         for (int i = 1; i < octaves; i++) {
             freq *= lacunarity;
             amp *= gain;
-            SingleGradientPerturb3(++seed, amp, freq, v3);
+            singleGradientPerturb3(++seed, amp, freq, v3);
         }
     }
 
-    private void SingleGradientPerturb3(int seed, float perturbAmp, float frequency, float[] v3) {
+    private void singleGradientPerturb3(int seed, float perturbAmp, float frequency, float[] v3) {
         float xf = v3[0] * frequency;
         float yf = v3[1] * frequency;
         float zf = v3[2] * frequency;
@@ -4043,15 +4012,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 break;
         }
 
-        Float3 vec0 = CELL_3D[hash3D(seed, x0, y0, z0)];
-        Float3 vec1 = CELL_3D[hash3D(seed, x1, y0, z0)];
+        Float3 vec0 = CELL_3D[hash256(x0, y0, z0, seed)];
+        Float3 vec1 = CELL_3D[hash256(x1, y0, z0, seed)];
 
         float lx0x = lerp(vec0.x, vec1.x, xs);
         float ly0x = lerp(vec0.y, vec1.y, xs);
         float lz0x = lerp(vec0.z, vec1.z, xs);
 
-        vec0 = CELL_3D[hash3D(seed, x0, y1, z0)];
-        vec1 = CELL_3D[hash3D(seed, x1, y1, z0)];
+        vec0 = CELL_3D[hash256(x0, y1, z0, seed)];
+        vec1 = CELL_3D[hash256(x1, y1, z0, seed)];
 
         float lx1x = lerp(vec0.x, vec1.x, xs);
         float ly1x = lerp(vec0.y, vec1.y, xs);
@@ -4061,15 +4030,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float ly0y = lerp(ly0x, ly1x, ys);
         float lz0y = lerp(lz0x, lz1x, ys);
 
-        vec0 = CELL_3D[hash3D(seed, x0, y0, z1)];
-        vec1 = CELL_3D[hash3D(seed, x1, y0, z1)];
+        vec0 = CELL_3D[hash256(x0, y0, z1, seed)];
+        vec1 = CELL_3D[hash256(x1, y0, z1, seed)];
 
         lx0x = lerp(vec0.x, vec1.x, xs);
         ly0x = lerp(vec0.y, vec1.y, xs);
         lz0x = lerp(vec0.z, vec1.z, xs);
 
-        vec0 = CELL_3D[hash3D(seed, x0, y1, z1)];
-        vec1 = CELL_3D[hash3D(seed, x1, y1, z1)];
+        vec0 = CELL_3D[hash256(x0, y1, z1, seed)];
+        vec1 = CELL_3D[hash256(x1, y1, z1, seed)];
 
         lx1x = lerp(vec0.x, vec1.x, xs);
         ly1x = lerp(vec0.y, vec1.y, xs);
@@ -4080,25 +4049,25 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         v3[2] += lerp(lz0y, lerp(lz0x, lz1x, ys), zs) * perturbAmp;
     }
 
-    public void GradientPerturb2(float[] v2) {
-        SingleGradientPerturb2(seed, gradientPerturbAmp, frequency, v2);
+    public void gradientPerturb2(float[] v2) {
+        singleGradientPerturb2(seed, gradientPerturbAmp, frequency, v2);
     }
 
-    public void GradientPerturbFractal2(float[] v2) {
+    public void gradientPerturbFractal2(float[] v2) {
         int seed = this.seed;
         float amp = gradientPerturbAmp * fractalBounding;
         float freq = frequency;
 
-        SingleGradientPerturb2(seed, amp, frequency, v2);
+        singleGradientPerturb2(seed, amp, frequency, v2);
 
         for (int i = 1; i < octaves; i++) {
             freq *= lacunarity;
             amp *= gain;
-            SingleGradientPerturb2(++seed, amp, freq, v2);
+            singleGradientPerturb2(++seed, amp, freq, v2);
         }
     }
 
-    private void SingleGradientPerturb2(int seed, float perturbAmp, float frequency, float[] v2) {
+    private void singleGradientPerturb2(int seed, float perturbAmp, float frequency, float[] v2) {
         float xf = v2[0] * frequency;
         float yf = v2[1] * frequency;
 
@@ -4124,14 +4093,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 break;
         }
 
-        Float2 vec0 = CELL_2D[hash2D(seed, x0, y0)];
-        Float2 vec1 = CELL_2D[hash2D(seed, x1, y0)];
+        Float2 vec0 = CELL_2D[hash256(x0, y0, seed)];
+        Float2 vec1 = CELL_2D[hash256(x1, y0, seed)];
 
         float lx0x = lerp(vec0.x, vec1.x, xs);
         float ly0x = lerp(vec0.y, vec1.y, xs);
 
-        vec0 = CELL_2D[hash2D(seed, x0, y1)];
-        vec1 = CELL_2D[hash2D(seed, x1, y1)];
+        vec0 = CELL_2D[hash256(x0, y1, seed)];
+        vec1 = CELL_2D[hash256(x1, y1, seed)];
 
         float lx1x = lerp(vec0.x, vec1.x, xs);
         float ly1x = lerp(vec0.y, vec1.y, xs);
@@ -4139,5 +4108,4 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         v2[0] += lerp(lx0x, lx1x, ys) * perturbAmp;
         v2[1] += lerp(ly0x, ly1x, ys) * perturbAmp;
     }
-
 }
