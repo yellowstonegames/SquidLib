@@ -35,10 +35,10 @@ import static squidpony.squidmath.Noise.IntPointHash.*;
 
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
- * FastNoise library, hence the name (these functions are sometimes, but not always, very fast). This implements
- * Noise2D, Noise3D, Noise4D, and Noise6D, and this is the fastest continuous noise algorithm in the library. Though it
- * doesn't implement an interface for them, you can also use this to get ridged-multi simplex
- * noise (the same type as {@link Noise.Ridged2D}) with {@link #ridged2D(float, float, int, int)},
+ * FastNoise library, hence the name (these functions are sometimes, but not always, very fast for noise that doesn't
+ * use the GPU). This implements Noise2D, Noise3D, Noise4D, and Noise6D, and this is the fastest continuous noise
+ * algorithm in the library. Though it doesn't implement an interface for them, you can also use this to get
+ * ridged-multi simplex noise (the same type as {@link Noise.Ridged2D}) with {@link #ridged2D(float, float, int, int)},
  * {@link #ridged3D(float, float, float, int, int)}, or any of the overloads that allow specifying alternate lacunarity
  * and gain.
  */
@@ -680,15 +680,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
-    //TODO: Configured noise is not set up for 6D
     @Override
     public double getNoise(double x, double y, double z, double w, double u, double v) {
-        return singleSimplex(seed, (float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
+        return getConfiguredNoise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
     }
-    //TODO: Configured noise is not set up for 6D
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
-        return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
+        int s = this.seed;
+        this.seed = (int) (seed ^ seed >>> 32);
+        double r = getConfiguredNoise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
+        this.seed = s;
+        return r;
     }
 
     public float getNoiseWithSeed(float x, float y, int seed) {
@@ -712,12 +714,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         this.seed = s;
         return r;
     }
-    
-    //TODO: Configured noise is not set up for 6D
+
     public float getNoiseWithSeed(float x, float y, float z, float w, float u, float v, int seed) {
-        return singleSimplex(seed, x, y, z, w, u, v);
+        final int s = this.seed;
+        this.seed = seed;
+        float r = getConfiguredNoise(x, y, z, w, u, v);
+        this.seed = s;
+        return r;
     }
 
+    // takes slightly less storage than an array of float[2]
     private static class Float2 {
         public final float x, y;
 
@@ -727,6 +733,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
     }
 
+    // takes slightly less storage than an array of float[3]
     private static class Float3 {
         public final float x, y, z;
 
@@ -736,42 +743,42 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             this.z = z;
         }
     }
-    
+
     private static final Float3[] GRAD_3D =
             {
-            new Float3(-0.448549002408981f,  1.174316525459290f,  0.000000000000001f  ),
-            new Float3(0.000000000000001f,  1.069324374198914f,  0.660878777503967f   ),
-            new Float3(0.448549002408981f,  1.174316525459290f,  0.000000000000001f   ),
-            new Float3(0.000000000000001f,  1.069324374198914f, -0.660878777503967f   ),
-            new Float3(-0.725767493247986f,  0.725767493247986f, -0.725767493247986f  ),
-            new Float3(-1.069324374198914f,  0.660878777503967f,  0.000000000000001f  ),
-            new Float3(-0.725767493247986f,  0.725767493247986f,  0.725767493247986f  ),
-            new Float3(0.725767493247986f,  0.725767493247986f,  0.725767493247986f   ),
-            new Float3(1.069324374198914f,  0.660878777503967f,  0.000000000000000f   ),
-            new Float3(0.725767493247986f,  0.725767493247986f, -0.725767493247986f   ),
-            new Float3(-0.660878777503967f,  0.000000000000003f, -1.069324374198914f  ),
-            new Float3(-1.174316525459290f,  0.000000000000003f, -0.448549002408981f  ),
-            new Float3(0.000000000000000f,  0.448549002408981f, -1.174316525459290f   ),
-            new Float3(-0.660878777503967f,  0.000000000000001f,  1.069324374198914f  ),
-            new Float3(0.000000000000001f,  0.448549002408981f,  1.174316525459290f   ),
-            new Float3(-1.174316525459290f,  0.000000000000001f,  0.448549002408981f  ),
-            new Float3(0.660878777503967f,  0.000000000000001f,  1.069324374198914f   ),
-            new Float3(1.174316525459290f,  0.000000000000001f,  0.448549002408981f   ),
-            new Float3(0.660878777503967f,  0.000000000000001f, -1.069324374198914f   ),
-            new Float3(1.174316525459290f,  0.000000000000001f, -0.448549002408981f   ),
-            new Float3(-0.725767493247986f, -0.725767493247986f, -0.725767493247986f  ),
-            new Float3(-1.069324374198914f, -0.660878777503967f, -0.000000000000001f  ),
-            new Float3(-0.000000000000001f, -0.448549002408981f, -1.174316525459290f  ),
-            new Float3(-0.000000000000001f, -0.448549002408981f,  1.174316525459290f  ),
-            new Float3(-0.725767493247986f, -0.725767493247986f,  0.725767493247986f  ),
-            new Float3(0.725767493247986f, -0.725767493247986f,  0.725767493247986f   ),
-            new Float3(1.069324374198914f, -0.660878777503967f,  0.000000000000001f   ),
-            new Float3(0.725767493247986f, -0.725767493247986f, -0.725767493247986f   ),
-            new Float3(-0.000000000000004f, -1.069324374198914f, -0.660878777503967f  ),
-            new Float3(-0.448549002408981f, -1.174316525459290f, -0.000000000000003f  ),
-            new Float3(-0.000000000000003f, -1.069324374198914f,  0.660878777503967f  ),
-            new Float3(0.448549002408981f, -1.174316525459290f,  0.000000000000003f   ),
-    };
+                    new Float3(-0.448549002408981f,  1.174316525459290f,  0.000000000000001f  ),
+                    new Float3(0.000000000000001f,  1.069324374198914f,  0.660878777503967f   ),
+                    new Float3(0.448549002408981f,  1.174316525459290f,  0.000000000000001f   ),
+                    new Float3(0.000000000000001f,  1.069324374198914f, -0.660878777503967f   ),
+                    new Float3(-0.725767493247986f,  0.725767493247986f, -0.725767493247986f  ),
+                    new Float3(-1.069324374198914f,  0.660878777503967f,  0.000000000000001f  ),
+                    new Float3(-0.725767493247986f,  0.725767493247986f,  0.725767493247986f  ),
+                    new Float3(0.725767493247986f,  0.725767493247986f,  0.725767493247986f   ),
+                    new Float3(1.069324374198914f,  0.660878777503967f,  0.000000000000000f   ),
+                    new Float3(0.725767493247986f,  0.725767493247986f, -0.725767493247986f   ),
+                    new Float3(-0.660878777503967f,  0.000000000000003f, -1.069324374198914f  ),
+                    new Float3(-1.174316525459290f,  0.000000000000003f, -0.448549002408981f  ),
+                    new Float3(0.000000000000000f,  0.448549002408981f, -1.174316525459290f   ),
+                    new Float3(-0.660878777503967f,  0.000000000000001f,  1.069324374198914f  ),
+                    new Float3(0.000000000000001f,  0.448549002408981f,  1.174316525459290f   ),
+                    new Float3(-1.174316525459290f,  0.000000000000001f,  0.448549002408981f  ),
+                    new Float3(0.660878777503967f,  0.000000000000001f,  1.069324374198914f   ),
+                    new Float3(1.174316525459290f,  0.000000000000001f,  0.448549002408981f   ),
+                    new Float3(0.660878777503967f,  0.000000000000001f, -1.069324374198914f   ),
+                    new Float3(1.174316525459290f,  0.000000000000001f, -0.448549002408981f   ),
+                    new Float3(-0.725767493247986f, -0.725767493247986f, -0.725767493247986f  ),
+                    new Float3(-1.069324374198914f, -0.660878777503967f, -0.000000000000001f  ),
+                    new Float3(-0.000000000000001f, -0.448549002408981f, -1.174316525459290f  ),
+                    new Float3(-0.000000000000001f, -0.448549002408981f,  1.174316525459290f  ),
+                    new Float3(-0.725767493247986f, -0.725767493247986f,  0.725767493247986f  ),
+                    new Float3(0.725767493247986f, -0.725767493247986f,  0.725767493247986f   ),
+                    new Float3(1.069324374198914f, -0.660878777503967f,  0.000000000000001f   ),
+                    new Float3(0.725767493247986f, -0.725767493247986f, -0.725767493247986f   ),
+                    new Float3(-0.000000000000004f, -1.069324374198914f, -0.660878777503967f  ),
+                    new Float3(-0.448549002408981f, -1.174316525459290f, -0.000000000000003f  ),
+                    new Float3(-0.000000000000003f, -1.069324374198914f,  0.660878777503967f  ),
+                    new Float3(0.448549002408981f, -1.174316525459290f,  0.000000000000003f   ),
+            };
 
 
     private static final Float2[] CELL_2D =
@@ -888,19 +895,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private static float valCoord2D(int seed, int x, int y) {
-        return (hashAll(x, y, seed) & 0xFFFFFF) * 0x1.0p-24f;
+        return (hashAll(x, y, seed) >> 7) * 0x1.0p-24f;
     }
 
     private static float valCoord3D(int seed, int x, int y, int z) {
-        return (hashAll(x, y, z, seed) & 0xFFFFFF) * 0x1.0p-24f;
+        return (hashAll(x, y, z, seed) >> 7) * 0x1.0p-24f;
     }
 
     private static float valCoord4D(int seed, int x, int y, int z, int w) {
-        return (hashAll(x, y, z, w, seed) & 0xFFFFFF) * 0x1.0p-24f;
+        return (hashAll(x, y, z, w, seed) >> 7) * 0x1.0p-24f;
     }
 
     private static float valCoord6D(int seed, int x, int y, int z, int w, int u, int v) {
-        return (hashAll(x, y, z, w, u, v, seed) & 0xFFFFFF) * 0x1.0p-24f;
+        return (hashAll(x, y, z, w, u, v, seed) >> 7) * 0x1.0p-24f;
     }
 
     protected static float gradCoord2D(int seed, int x, int y, float xd, float yd) {
@@ -916,6 +923,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     protected static float gradCoord4D(int seed, int x, int y, int z, int w, float xd, float yd, float zd, float wd) {
         final int hash = hash256(x, y, z, w, seed) & 0xFC;
         return xd * grad4f[hash] + yd * grad4f[hash + 1] + zd * grad4f[hash + 2] + wd * grad4f[hash + 3];
+    }
+
+    protected static float gradCoord6D(int seed, int x, int y, int z, int w, int u, int v,
+                                       float xd, float yd, float zd, float wd, float ud, float vd) {
+        final int hash = hash256(x, y, z, w, u, v, seed) * 6;
+        return xd * grad6f[hash] + yd * grad6f[hash + 1] + zd * grad6f[hash + 2]
+                + wd * grad6f[hash + 3] + ud * grad6f[hash + 4] + vd * grad6f[hash + 5];
     }
     /**
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
@@ -1060,7 +1074,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 return singleSimplex(seed, x, y);
         }
     }
-
     /**
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
      * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
@@ -1068,7 +1081,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      * @param x
      * @param y
      * @param z
-     * @param w 
+     * @param w
      * @return noise as a float from -1f to 1f
      */
     public float getConfiguredNoise(float x, float y, float z, float w) {
@@ -1109,15 +1122,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     default:
                         return singleSimplexFractalFBM(x, y, z, w);
                 }
-            case CELLULAR:
-                switch (cellularReturnType) {
-                    case CELL_VALUE:
-                    case NOISE_LOOKUP:
-                    case DISTANCE:
-                        return singleCellular(x, y, z);
-                    default:
-                        return singleCellular2Edge(x, y, z);
-                }
+//            case CELLULAR:
+//                switch (cellularReturnType) {
+//                    case CELL_VALUE:
+//                    case NOISE_LOOKUP:
+//                    case DISTANCE:
+//                        return singleCellular(x, y, z);
+//                    default:
+//                        return singleCellular2Edge(x, y, z);
+//                }
             case WHITE_NOISE:
                 return getWhiteNoise(x, y, z, w);
             default:
@@ -1125,36 +1138,109 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
     }
 
+    /**
+     * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
+     * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
+     * you can call this method to get the particular variety of noise you specified, in 3D.
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @param u
+     * @param v
+     * @return noise as a float from -1f to 1f
+     */
+    public float getConfiguredNoise(float x, float y, float z, float w, float u, float v) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+        v *= frequency;
+
+        switch (noiseType) {
+            case VALUE:
+                return singleValue(seed, x, y, z, w, u, v);
+            case VALUE_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleValueFractalBillow(x, y, z, w, u, v);
+                    case RIDGED_MULTI:
+                        return singleValueFractalRidgedMulti(x, y, z, w, u, v);
+                    default:
+                        return singleValueFractalFBM(x, y, z, w, u, v);
+                }
+            case WHITE_NOISE:
+                return getWhiteNoise(x, y, z, w, u, v);
+            case PERLIN:
+                return singlePerlin(seed, x, y, z, w, u, v);
+            case PERLIN_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singlePerlinFractalBillow(x, y, z, w, u, v);
+                    case RIDGED_MULTI:
+                        return singlePerlinFractalRidgedMulti(x, y, z, w, u, v);
+                    default:
+                        return singlePerlinFractalFBM(x, y, z, w, u, v);
+                }
+            case SIMPLEX_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleSimplexFractalBillow(x, y, z, w, u, v);
+                    case RIDGED_MULTI:
+                        return singleSimplexFractalRidgedMulti(x, y, z, w, u, v);
+                    default:
+                        return singleSimplexFractalFBM(x, y, z, w, u, v);
+                }
+            default:
+                return singleSimplex(seed, x, y, z, w, u, v);
+        }
+    }
 
     // White Noise
 
-    private int FloatCast2Int(final float f) {
-        final int i = NumberTools.floatToIntBits(f);
+    private int floatToIntMixed(final float f) {
+        final int i = Float.floatToIntBits(f);
         return i ^ i >>> 16;
     }
 
+    public float getWhiteNoise(float x, float y, float z, float w, float u, float v) {
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
+        int zi = floatToIntMixed(z);
+        int wi = floatToIntMixed(w);
+        int ui = floatToIntMixed(u);
+        int vi = floatToIntMixed(v);
+
+        return valCoord6D(seed, xi, yi, zi, wi, ui, vi);
+    }
+
     public float getWhiteNoise(float x, float y, float z, float w) {
-        int xi = FloatCast2Int(x);
-        int yi = FloatCast2Int(y);
-        int zi = FloatCast2Int(z);
-        int wi = FloatCast2Int(w);
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
+        int zi = floatToIntMixed(z);
+        int wi = floatToIntMixed(w);
 
         return valCoord4D(seed, xi, yi, zi, wi);
     }
 
     public float getWhiteNoise(float x, float y, float z) {
-        int xi = FloatCast2Int(x);
-        int yi = FloatCast2Int(y);
-        int zi = FloatCast2Int(z);
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
+        int zi = floatToIntMixed(z);
 
         return valCoord3D(seed, xi, yi, zi);
     }
 
     public float getWhiteNoise(float x, float y) {
-        int xi = FloatCast2Int(x);
-        int yi = FloatCast2Int(y);
+        int xi = floatToIntMixed(x);
+        int yi = floatToIntMixed(y);
 
         return valCoord2D(seed, xi, yi);
+    }
+
+    public float getWhiteNoiseInt(int x, int y, int z, int w, int u, int v) {
+        return valCoord6D(seed, x, y, z, w, u, v);
     }
 
     public float getWhiteNoiseInt(int x, int y, int z, int w) {
@@ -1279,6 +1365,22 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return lerp(yf0, yf1, zs);
     }
 
+    public float getValueFractal(float x, float y, float z, float w) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+
+        switch (fractalType) {
+            case BILLOW:
+                return singleValueFractalBillow(x, y, z, w);
+            case RIDGED_MULTI:
+                return singleValueFractalRidgedMulti(x, y, z, w);
+            default:
+                return singleValueFractalFBM(x, y, z, w);
+        }
+    }
+
 
     public float getValue(float x, float y, float z, float w) {
         return singleValue(seed, x * frequency, y * frequency, z * frequency, w * frequency);
@@ -1316,7 +1418,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 ws = quinticInterpolator(w - w0);
                 break;
         }
-        
+
         final float xf000 = lerp(valCoord4D(seed, x0, y0, z0, w0), valCoord4D(seed, x1, y0, z0, w0), xs);
         final float xf100 = lerp(valCoord4D(seed, x0, y1, z0, w0), valCoord4D(seed, x1, y1, z0, w0), xs);
         final float xf010 = lerp(valCoord4D(seed, x0, y0, z1, w0), valCoord4D(seed, x1, y0, z1, w0), xs);
@@ -1484,6 +1586,211 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return lerp(xf0, xf1, ys);
     }
+
+    public float getValueFractal(float x, float y, float z, float w, float u, float v) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+        v *= frequency;
+
+        switch (fractalType) {
+            case BILLOW:
+                return singleValueFractalBillow(x, y, z, w, u, v);
+            case RIDGED_MULTI:
+                return singleValueFractalRidgedMulti(x, y, z, w, u, v);
+            default:
+                return singleValueFractalFBM(x, y, z, w, u, v);
+        }
+    }
+
+    public float getValue(float x, float y, float z, float w, float u, float v) {
+        return singleValue(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
+    }
+
+    private float singleValue(int seed, float x, float y, float z, float w, float u, float v) {
+        int x0 = fastFloor(x);
+        int y0 = fastFloor(y);
+        int z0 = fastFloor(z);
+        int w0 = fastFloor(w);
+        int u0 = fastFloor(u);
+        int v0 = fastFloor(v);
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+        int z1 = z0 + 1;
+        int w1 = w0 + 1;
+        int u1 = u0 + 1;
+        int v1 = v0 + 1;
+
+        float xs, ys, zs, ws, us, vs;
+        switch (interpolation) {
+            default:
+            case LINEAR:
+                xs = x - x0;
+                ys = y - y0;
+                zs = z - z0;
+                ws = w - w0;
+                us = u - u0;
+                vs = v - v0;
+                break;
+            case HERMITE:
+                xs = hermiteInterpolator(x - x0);
+                ys = hermiteInterpolator(y - y0);
+                zs = hermiteInterpolator(z - z0);
+                ws = hermiteInterpolator(w - w0);
+                us = hermiteInterpolator(u - u0);
+                vs = hermiteInterpolator(v - v0);
+                break;
+            case QUINTIC:
+                xs = quinticInterpolator(x - x0);
+                ys = quinticInterpolator(y - y0);
+                zs = quinticInterpolator(z - z0);
+                ws = quinticInterpolator(w - w0);
+                us = quinticInterpolator(u - u0);
+                vs = quinticInterpolator(v - v0);
+                break;
+        }
+
+        final float xf00000 = lerp(valCoord6D(seed, x0, y0, z0, w0, u0, v0), valCoord6D(seed, x1, y0, z0, w0, u0, v0), xs);
+        final float xf10000 = lerp(valCoord6D(seed, x0, y1, z0, w0, u0, v0), valCoord6D(seed, x1, y1, z0, w0, u0, v0), xs);
+        final float xf01000 = lerp(valCoord6D(seed, x0, y0, z1, w0, u0, v0), valCoord6D(seed, x1, y0, z1, w0, u0, v0), xs);
+        final float xf11000 = lerp(valCoord6D(seed, x0, y1, z1, w0, u0, v0), valCoord6D(seed, x1, y1, z1, w0, u0, v0), xs);
+        final float xf00100 = lerp(valCoord6D(seed, x0, y0, z0, w1, u0, v0), valCoord6D(seed, x1, y0, z0, w1, u0, v0), xs);
+        final float xf10100 = lerp(valCoord6D(seed, x0, y1, z0, w1, u0, v0), valCoord6D(seed, x1, y1, z0, w1, u0, v0), xs);
+        final float xf01100 = lerp(valCoord6D(seed, x0, y0, z1, w1, u0, v0), valCoord6D(seed, x1, y0, z1, w1, u0, v0), xs);
+        final float xf11100 = lerp(valCoord6D(seed, x0, y1, z1, w1, u0, v0), valCoord6D(seed, x1, y1, z1, w1, u0, v0), xs);
+
+        final float xf00010 = lerp(valCoord6D(seed, x0, y0, z0, w0, u1, v0), valCoord6D(seed, x1, y0, z0, w0, u1, v0), xs);
+        final float xf10010 = lerp(valCoord6D(seed, x0, y1, z0, w0, u1, v0), valCoord6D(seed, x1, y1, z0, w0, u1, v0), xs);
+        final float xf01010 = lerp(valCoord6D(seed, x0, y0, z1, w0, u1, v0), valCoord6D(seed, x1, y0, z1, w0, u1, v0), xs);
+        final float xf11010 = lerp(valCoord6D(seed, x0, y1, z1, w0, u1, v0), valCoord6D(seed, x1, y1, z1, w0, u1, v0), xs);
+        final float xf00110 = lerp(valCoord6D(seed, x0, y0, z0, w1, u1, v0), valCoord6D(seed, x1, y0, z0, w1, u1, v0), xs);
+        final float xf10110 = lerp(valCoord6D(seed, x0, y1, z0, w1, u1, v0), valCoord6D(seed, x1, y1, z0, w1, u1, v0), xs);
+        final float xf01110 = lerp(valCoord6D(seed, x0, y0, z1, w1, u1, v0), valCoord6D(seed, x1, y0, z1, w1, u1, v0), xs);
+        final float xf11110 = lerp(valCoord6D(seed, x0, y1, z1, w1, u1, v0), valCoord6D(seed, x1, y1, z1, w1, u1, v0), xs);
+
+        final float xf00001 = lerp(valCoord6D(seed, x0, y0, z0, w0, u0, v1), valCoord6D(seed, x1, y0, z0, w0, u0, v1), xs);
+        final float xf10001 = lerp(valCoord6D(seed, x0, y1, z0, w0, u0, v1), valCoord6D(seed, x1, y1, z0, w0, u0, v1), xs);
+        final float xf01001 = lerp(valCoord6D(seed, x0, y0, z1, w0, u0, v1), valCoord6D(seed, x1, y0, z1, w0, u0, v1), xs);
+        final float xf11001 = lerp(valCoord6D(seed, x0, y1, z1, w0, u0, v1), valCoord6D(seed, x1, y1, z1, w0, u0, v1), xs);
+        final float xf00101 = lerp(valCoord6D(seed, x0, y0, z0, w1, u0, v1), valCoord6D(seed, x1, y0, z0, w1, u0, v1), xs);
+        final float xf10101 = lerp(valCoord6D(seed, x0, y1, z0, w1, u0, v1), valCoord6D(seed, x1, y1, z0, w1, u0, v1), xs);
+        final float xf01101 = lerp(valCoord6D(seed, x0, y0, z1, w1, u0, v1), valCoord6D(seed, x1, y0, z1, w1, u0, v1), xs);
+        final float xf11101 = lerp(valCoord6D(seed, x0, y1, z1, w1, u0, v1), valCoord6D(seed, x1, y1, z1, w1, u0, v1), xs);
+
+        final float xf00011 = lerp(valCoord6D(seed, x0, y0, z0, w0, u1, v1), valCoord6D(seed, x1, y0, z0, w0, u1, v1), xs);
+        final float xf10011 = lerp(valCoord6D(seed, x0, y1, z0, w0, u1, v1), valCoord6D(seed, x1, y1, z0, w0, u1, v1), xs);
+        final float xf01011 = lerp(valCoord6D(seed, x0, y0, z1, w0, u1, v1), valCoord6D(seed, x1, y0, z1, w0, u1, v1), xs);
+        final float xf11011 = lerp(valCoord6D(seed, x0, y1, z1, w0, u1, v1), valCoord6D(seed, x1, y1, z1, w0, u1, v1), xs);
+        final float xf00111 = lerp(valCoord6D(seed, x0, y0, z0, w1, u1, v1), valCoord6D(seed, x1, y0, z0, w1, u1, v1), xs);
+        final float xf10111 = lerp(valCoord6D(seed, x0, y1, z0, w1, u1, v1), valCoord6D(seed, x1, y1, z0, w1, u1, v1), xs);
+        final float xf01111 = lerp(valCoord6D(seed, x0, y0, z1, w1, u1, v1), valCoord6D(seed, x1, y0, z1, w1, u1, v1), xs);
+        final float xf11111 = lerp(valCoord6D(seed, x0, y1, z1, w1, u1, v1), valCoord6D(seed, x1, y1, z1, w1, u1, v1), xs);
+
+        final float yf0000 = lerp(xf00000, xf10000, ys);
+        final float yf1000 = lerp(xf01000, xf11000, ys);
+        final float yf0100 = lerp(xf00100, xf10100, ys);
+        final float yf1100 = lerp(xf01100, xf11100, ys);
+
+        final float yf0010 = lerp(xf00010, xf10010, ys);
+        final float yf1010 = lerp(xf01010, xf11010, ys);
+        final float yf0110 = lerp(xf00110, xf10110, ys);
+        final float yf1110 = lerp(xf01110, xf11110, ys);
+
+        final float yf0001 = lerp(xf00001, xf10001, ys);
+        final float yf1001 = lerp(xf01001, xf11001, ys);
+        final float yf0101 = lerp(xf00101, xf10101, ys);
+        final float yf1101 = lerp(xf01101, xf11101, ys);
+
+        final float yf0011 = lerp(xf00011, xf10011, ys);
+        final float yf1011 = lerp(xf01011, xf11011, ys);
+        final float yf0111 = lerp(xf00111, xf10111, ys);
+        final float yf1111 = lerp(xf01111, xf11111, ys);
+
+        final float zf000 = lerp(yf0000, yf1000, zs);
+        final float zf100 = lerp(yf0100, yf1100, zs);
+
+        final float zf010 = lerp(yf0010, yf1010, zs);
+        final float zf110 = lerp(yf0110, yf1110, zs);
+
+        final float zf001 = lerp(yf0001, yf1001, zs);
+        final float zf101 = lerp(yf0101, yf1101, zs);
+
+        final float zf011 = lerp(yf0011, yf1011, zs);
+        final float zf111 = lerp(yf0111, yf1111, zs);
+
+        final float wf00 = lerp(zf000, zf100, ws);
+        final float wf10 = lerp(zf010, zf110, ws);
+        final float wf01 = lerp(zf001, zf101, ws);
+        final float wf11 = lerp(zf011, zf111, ws);
+
+        final float uf0 = lerp(wf00, wf10, us);
+        final float uf1 = lerp(wf01, wf11, us);
+
+        return lerp(uf0, uf1, vs);
+    }
+    private float singleValueFractalFBM(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = singleValue(seed, x, y, z, w, u, v);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += singleValue(++seed, x, y, z, w, u, v) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleValueFractalBillow(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = Math.abs(singleValue(seed, x, y, z, w, u, v)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleValue(++seed, x, y, z, w, u, v)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleValueFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = 1 - Math.abs(singleValue(seed, x, y, z, w, u, v));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singleValue(++seed, x, y, z, w, u, v))) * amp;
+        }
+
+        return sum;
+    }
+
+
 
     // Gradient Noise
     public float getPerlinFractal(float x, float y, float z) {
@@ -1821,6 +2128,203 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float xf1 = lerp(gradCoord2D(seed, x0, y1, xd0, yd1), gradCoord2D(seed, x1, y1, xd1, yd1), xs);
 
         return lerp(xf0, xf1, ys);
+    }
+    public float getPerlin(float x, float y, float z, float w, float u, float v) {
+        return singlePerlin(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
+    }
+
+    private float singlePerlin(int seed, float x, float y, float z, float w, float u, float v) {
+        int x0 = fastFloor(x);
+        int y0 = fastFloor(y);
+        int z0 = fastFloor(z);
+        int w0 = fastFloor(w);
+        int u0 = fastFloor(u);
+        int v0 = fastFloor(v);
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+        int z1 = z0 + 1;
+        int w1 = w0 + 1;
+        int u1 = u0 + 1;
+        int v1 = v0 + 1;
+
+        float xs, ys, zs, ws, us, vs;
+        switch (interpolation) {
+            default:
+            case LINEAR:
+                xs = x - x0;
+                ys = y - y0;
+                zs = z - z0;
+                ws = w - w0;
+                us = u - u0;
+                vs = v - v0;
+                break;
+            case HERMITE:
+                xs = hermiteInterpolator(x - x0);
+                ys = hermiteInterpolator(y - y0);
+                zs = hermiteInterpolator(z - z0);
+                ws = hermiteInterpolator(w - w0);
+                us = hermiteInterpolator(u - u0);
+                vs = hermiteInterpolator(v - v0);
+                break;
+            case QUINTIC:
+                xs = quinticInterpolator(x - x0);
+                ys = quinticInterpolator(y - y0);
+                zs = quinticInterpolator(z - z0);
+                ws = quinticInterpolator(w - w0);
+                us = quinticInterpolator(u - u0);
+                vs = quinticInterpolator(v - v0);
+                break;
+        }
+
+        final float xd0 = x - x0;
+        final float yd0 = y - y0;
+        final float zd0 = z - z0;
+        final float wd0 = w - w0;
+        final float ud0 = u - u0;
+        final float vd0 = v - v0;
+        final float xd1 = xd0 - 1;
+        final float yd1 = yd0 - 1;
+        final float zd1 = zd0 - 1;
+        final float wd1 = wd0 - 1;
+        final float ud1 = ud0 - 1;
+        final float vd1 = vd0 - 1;
+
+        final float xf00000 = lerp(gradCoord6D(seed, x0, y0, z0, w0, u0, v0, xd0, yd0, zd0, wd0, ud0, vd0), gradCoord6D(seed, x1, y0, z0, w0, u0, v0, xd1, yd0, zd0, wd0, ud0, vd0), xs);
+        final float xf10000 = lerp(gradCoord6D(seed, x0, y1, z0, w0, u0, v0, xd0, yd1, zd0, wd0, ud0, vd0), gradCoord6D(seed, x1, y1, z0, w0, u0, v0, xd1, yd1, zd0, wd0, ud0, vd0), xs);
+        final float xf01000 = lerp(gradCoord6D(seed, x0, y0, z1, w0, u0, v0, xd0, yd0, zd1, wd0, ud0, vd0), gradCoord6D(seed, x1, y0, z1, w0, u0, v0, xd1, yd0, zd1, wd0, ud0, vd0), xs);
+        final float xf11000 = lerp(gradCoord6D(seed, x0, y1, z1, w0, u0, v0, xd0, yd1, zd1, wd0, ud0, vd0), gradCoord6D(seed, x1, y1, z1, w0, u0, v0, xd1, yd1, zd1, wd0, ud0, vd0), xs);
+        final float xf00100 = lerp(gradCoord6D(seed, x0, y0, z0, w1, u0, v0, xd0, yd0, zd0, wd1, ud0, vd0), gradCoord6D(seed, x1, y0, z0, w1, u0, v0, xd1, yd0, zd0, wd1, ud0, vd0), xs);
+        final float xf10100 = lerp(gradCoord6D(seed, x0, y1, z0, w1, u0, v0, xd0, yd1, zd0, wd1, ud0, vd0), gradCoord6D(seed, x1, y1, z0, w1, u0, v0, xd1, yd1, zd0, wd1, ud0, vd0), xs);
+        final float xf01100 = lerp(gradCoord6D(seed, x0, y0, z1, w1, u0, v0, xd0, yd0, zd1, wd1, ud0, vd0), gradCoord6D(seed, x1, y0, z1, w1, u0, v0, xd1, yd0, zd1, wd1, ud0, vd0), xs);
+        final float xf11100 = lerp(gradCoord6D(seed, x0, y1, z1, w1, u0, v0, xd0, yd1, zd1, wd1, ud0, vd0), gradCoord6D(seed, x1, y1, z1, w1, u0, v0, xd1, yd1, zd1, wd1, ud0, vd0), xs);
+
+        final float xf00010 = lerp(gradCoord6D(seed, x0, y0, z0, w0, u1, v0, xd0, yd0, zd0, wd0, ud1, vd0), gradCoord6D(seed, x1, y0, z0, w0, u1, v0, xd1, yd0, zd0, wd0, ud1, vd0), xs);
+        final float xf10010 = lerp(gradCoord6D(seed, x0, y1, z0, w0, u1, v0, xd0, yd1, zd0, wd0, ud1, vd0), gradCoord6D(seed, x1, y1, z0, w0, u1, v0, xd1, yd1, zd0, wd0, ud1, vd0), xs);
+        final float xf01010 = lerp(gradCoord6D(seed, x0, y0, z1, w0, u1, v0, xd0, yd0, zd1, wd0, ud1, vd0), gradCoord6D(seed, x1, y0, z1, w0, u1, v0, xd1, yd0, zd1, wd0, ud1, vd0), xs);
+        final float xf11010 = lerp(gradCoord6D(seed, x0, y1, z1, w0, u1, v0, xd0, yd1, zd1, wd0, ud1, vd0), gradCoord6D(seed, x1, y1, z1, w0, u1, v0, xd1, yd1, zd1, wd0, ud1, vd0), xs);
+        final float xf00110 = lerp(gradCoord6D(seed, x0, y0, z0, w1, u1, v0, xd0, yd0, zd0, wd1, ud1, vd0), gradCoord6D(seed, x1, y0, z0, w1, u1, v0, xd1, yd0, zd0, wd1, ud1, vd0), xs);
+        final float xf10110 = lerp(gradCoord6D(seed, x0, y1, z0, w1, u1, v0, xd0, yd1, zd0, wd1, ud1, vd0), gradCoord6D(seed, x1, y1, z0, w1, u1, v0, xd1, yd1, zd0, wd1, ud1, vd0), xs);
+        final float xf01110 = lerp(gradCoord6D(seed, x0, y0, z1, w1, u1, v0, xd0, yd0, zd1, wd1, ud1, vd0), gradCoord6D(seed, x1, y0, z1, w1, u1, v0, xd1, yd0, zd1, wd1, ud1, vd0), xs);
+        final float xf11110 = lerp(gradCoord6D(seed, x0, y1, z1, w1, u1, v0, xd0, yd1, zd1, wd1, ud1, vd0), gradCoord6D(seed, x1, y1, z1, w1, u1, v0, xd1, yd1, zd1, wd1, ud1, vd0), xs);
+
+        final float xf00001 = lerp(gradCoord6D(seed, x0, y0, z0, w0, u0, v1, xd0, yd0, zd0, wd0, ud0, vd1), gradCoord6D(seed, x1, y0, z0, w0, u0, v1, xd1, yd0, zd0, wd0, ud0, vd1), xs);
+        final float xf10001 = lerp(gradCoord6D(seed, x0, y1, z0, w0, u0, v1, xd0, yd1, zd0, wd0, ud0, vd1), gradCoord6D(seed, x1, y1, z0, w0, u0, v1, xd1, yd1, zd0, wd0, ud0, vd1), xs);
+        final float xf01001 = lerp(gradCoord6D(seed, x0, y0, z1, w0, u0, v1, xd0, yd0, zd1, wd0, ud0, vd1), gradCoord6D(seed, x1, y0, z1, w0, u0, v1, xd1, yd0, zd1, wd0, ud0, vd1), xs);
+        final float xf11001 = lerp(gradCoord6D(seed, x0, y1, z1, w0, u0, v1, xd0, yd1, zd1, wd0, ud0, vd1), gradCoord6D(seed, x1, y1, z1, w0, u0, v1, xd1, yd1, zd1, wd0, ud0, vd1), xs);
+        final float xf00101 = lerp(gradCoord6D(seed, x0, y0, z0, w1, u0, v1, xd0, yd0, zd0, wd1, ud0, vd1), gradCoord6D(seed, x1, y0, z0, w1, u0, v1, xd1, yd0, zd0, wd1, ud0, vd1), xs);
+        final float xf10101 = lerp(gradCoord6D(seed, x0, y1, z0, w1, u0, v1, xd0, yd1, zd0, wd1, ud0, vd1), gradCoord6D(seed, x1, y1, z0, w1, u0, v1, xd1, yd1, zd0, wd1, ud0, vd1), xs);
+        final float xf01101 = lerp(gradCoord6D(seed, x0, y0, z1, w1, u0, v1, xd0, yd0, zd1, wd1, ud0, vd1), gradCoord6D(seed, x1, y0, z1, w1, u0, v1, xd1, yd0, zd1, wd1, ud0, vd1), xs);
+        final float xf11101 = lerp(gradCoord6D(seed, x0, y1, z1, w1, u0, v1, xd0, yd1, zd1, wd1, ud0, vd1), gradCoord6D(seed, x1, y1, z1, w1, u0, v1, xd1, yd1, zd1, wd1, ud0, vd1), xs);
+
+        final float xf00011 = lerp(gradCoord6D(seed, x0, y0, z0, w0, u1, v1, xd0, yd0, zd0, wd0, ud1, vd1), gradCoord6D(seed, x1, y0, z0, w0, u1, v1, xd1, yd0, zd0, wd0, ud1, vd1), xs);
+        final float xf10011 = lerp(gradCoord6D(seed, x0, y1, z0, w0, u1, v1, xd0, yd1, zd0, wd0, ud1, vd1), gradCoord6D(seed, x1, y1, z0, w0, u1, v1, xd1, yd1, zd0, wd0, ud1, vd1), xs);
+        final float xf01011 = lerp(gradCoord6D(seed, x0, y0, z1, w0, u1, v1, xd0, yd0, zd1, wd0, ud1, vd1), gradCoord6D(seed, x1, y0, z1, w0, u1, v1, xd1, yd0, zd1, wd0, ud1, vd1), xs);
+        final float xf11011 = lerp(gradCoord6D(seed, x0, y1, z1, w0, u1, v1, xd0, yd1, zd1, wd0, ud1, vd1), gradCoord6D(seed, x1, y1, z1, w0, u1, v1, xd1, yd1, zd1, wd0, ud1, vd1), xs);
+        final float xf00111 = lerp(gradCoord6D(seed, x0, y0, z0, w1, u1, v1, xd0, yd0, zd0, wd1, ud1, vd1), gradCoord6D(seed, x1, y0, z0, w1, u1, v1, xd1, yd0, zd0, wd1, ud1, vd1), xs);
+        final float xf10111 = lerp(gradCoord6D(seed, x0, y1, z0, w1, u1, v1, xd0, yd1, zd0, wd1, ud1, vd1), gradCoord6D(seed, x1, y1, z0, w1, u1, v1, xd1, yd1, zd0, wd1, ud1, vd1), xs);
+        final float xf01111 = lerp(gradCoord6D(seed, x0, y0, z1, w1, u1, v1, xd0, yd0, zd1, wd1, ud1, vd1), gradCoord6D(seed, x1, y0, z1, w1, u1, v1, xd1, yd0, zd1, wd1, ud1, vd1), xs);
+        final float xf11111 = lerp(gradCoord6D(seed, x0, y1, z1, w1, u1, v1, xd0, yd1, zd1, wd1, ud1, vd1), gradCoord6D(seed, x1, y1, z1, w1, u1, v1, xd1, yd1, zd1, wd1, ud1, vd1), xs);
+
+        final float yf0000 = lerp(xf00000, xf10000, ys);
+        final float yf1000 = lerp(xf01000, xf11000, ys);
+        final float yf0100 = lerp(xf00100, xf10100, ys);
+        final float yf1100 = lerp(xf01100, xf11100, ys);
+
+        final float yf0010 = lerp(xf00010, xf10010, ys);
+        final float yf1010 = lerp(xf01010, xf11010, ys);
+        final float yf0110 = lerp(xf00110, xf10110, ys);
+        final float yf1110 = lerp(xf01110, xf11110, ys);
+
+        final float yf0001 = lerp(xf00001, xf10001, ys);
+        final float yf1001 = lerp(xf01001, xf11001, ys);
+        final float yf0101 = lerp(xf00101, xf10101, ys);
+        final float yf1101 = lerp(xf01101, xf11101, ys);
+
+        final float yf0011 = lerp(xf00011, xf10011, ys);
+        final float yf1011 = lerp(xf01011, xf11011, ys);
+        final float yf0111 = lerp(xf00111, xf10111, ys);
+        final float yf1111 = lerp(xf01111, xf11111, ys);
+
+        final float zf000 = lerp(yf0000, yf1000, zs);
+        final float zf100 = lerp(yf0100, yf1100, zs);
+
+        final float zf010 = lerp(yf0010, yf1010, zs);
+        final float zf110 = lerp(yf0110, yf1110, zs);
+
+        final float zf001 = lerp(yf0001, yf1001, zs);
+        final float zf101 = lerp(yf0101, yf1101, zs);
+
+        final float zf011 = lerp(yf0011, yf1011, zs);
+        final float zf111 = lerp(yf0111, yf1111, zs);
+
+        final float wf00 = lerp(zf000, zf100, ws);
+        final float wf10 = lerp(zf010, zf110, ws);
+        final float wf01 = lerp(zf001, zf101, ws);
+        final float wf11 = lerp(zf011, zf111, ws);
+
+        final float uf0 = lerp(wf00, wf10, us);
+        final float uf1 = lerp(wf01, wf11, us);
+
+        return lerp(uf0, uf1, vs);
+    }
+    private float singlePerlinFractalFBM(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = singlePerlin(seed, x, y, z, w, u, v);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += singlePerlin(++seed, x, y, z, w, u, v) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singlePerlinFractalBillow(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = Math.abs(singlePerlin(seed, x, y, z, w, u, v)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singlePerlin(++seed, x, y, z, w, u, v)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singlePerlinFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = 1 - Math.abs(singlePerlin(seed, x, y, z, w, u, v));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singlePerlin(++seed, x, y, z, w, u, v))) * amp;
+        }
+
+        return sum;
     }
 
     // Simplex Noise
@@ -2625,9 +3129,26 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public float getSimplex(float x, float y, float z, float w) {
         return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency);
     }
-    
-    private final static float F4 = (float) ((2.23606797 - 1.0) / 4.0);
-    private final static float G4 = (float) ((5.0 - 2.23606797) / 20.0);
+
+    private static final float F4 = (float) ((2.23606797 - 1.0) / 4.0);
+    private static final float G4 = (float) ((5.0 - 2.23606797) / 20.0);
+    private static final int[] SIMPLEX_4D = {0, 1, 3, 7, 0, 1, 7, 3,
+            0, 0, 0, 0, 0, 3, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 1, 3, 7, 0, 0, 3, 1, 7, 0, 0, 0, 0,
+            0, 7, 1, 3, 0, 7, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 1, 7, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 7, 0, 0, 0, 0,
+            1, 7, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            3, 7, 0, 1, 3, 7, 1, 0, 1, 0, 3, 7, 1, 0, 7, 3,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 7, 1,
+            0, 0, 0, 0, 3, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 7, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 1, 3, 7, 0, 3, 1,
+            0, 0, 0, 0, 7, 1, 3, 0, 3, 1, 0, 7, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 3, 0, 0, 0, 0,
+            7, 3, 0, 1, 7, 3, 1, 0};
 
     public float singleSimplex(int seed, float x, float y, float z, float w) {
         float n = 0f;
@@ -2646,7 +3167,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float z0 = z - Z0;
         final float w0 = w - W0;
 
-        final int[] SIMPLEX_4D = SeededNoise.SIMPLEX_4D;
+        final int[] SIMPLEX_4D = FastNoise.SIMPLEX_4D;
         final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
         final int i1 = SIMPLEX_4D[c] >>> 2,
                 j1 = SIMPLEX_4D[c | 1] >>> 2,
@@ -2706,14 +3227,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return 14.75f * n;
     }
-    
+
     // Simplex Noise
     public float getSimplexFractal(float x, float y, float z, float w) {
         x *= frequency;
         y *= frequency;
         z *= frequency;
         w *= frequency;
-        
+
         switch (fractalType) {
             case FBM:
                 return singleSimplexFractalFBM(x, y, z, w);
@@ -2778,10 +3299,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return sum * fractalBounding;
     }
-    
+
     // 6D Simplex
 
-    protected static final float[] gradient6DLUT = {
+    protected static final float[] grad6f = {
             0.31733186658157f, 0.043599150809166f, -0.63578104939541f,
             0.60224147484783f, -0.061995657882187f, 0.35587048501823f,
             -0.54645425808647f, -0.75981513883963f, -0.035144342454363f,
@@ -2864,8 +3385,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             -0.25235098830686f, 0.13490559284448f, 0.10708155847142f,
             -0.20613512232544f, 0.39533044356843f, -0.34422306275706f,
             0.4792145528465f, -0.19178040223502f, -0.64521804411898f,
-            0.3304779611047f, 0.49148538926455f, -0.30004348427342f, 0.33473309391851f,
-            0.31079743137844f, 0.59208027276116f,
+            0.3304779611047f, 0.49148538926455f, -0.30004348427342f,
+            0.33473309391851f, 0.31079743137844f, 0.59208027276116f,
             -0.52688857216953f, 0.40250311061529f, 0.38833191043333f,
             0.50432308135853f, -0.33327489215794f, -0.21015252001231f,
             -0.30306420816123f, -0.34460825415019f, -0.26894228639121f,
@@ -2910,16 +3431,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.48748209854708f, 0.16148937559829f, -0.43191028009105f,
             -0.38131649706702f, 0.46242477534251f, 0.46416075424014f,
             -0.20634110277567f, -0.53778490132009f, 0.30582118902172f,
-            0.6245043069106f, 0.14316692963071f, -0.1436103838143f, 0.27519251589203f,
-            -0.60467865310212f, -0.35708047307373f,
+            0.6245043069106f, 0.14316692963071f, -0.1436103838143f,
+            0.27519251589203f, -0.60467865310212f, -0.35708047307373f,
             0.52425890739441f, -0.20390682829262f, -0.33609142609195f,
             0.51803372559413f, 0.28921536255925f, 0.46756035964091f,
-            -0.4455164148456f, 0.31831805515328f, 0.24217750314789f, 0.49821219078654f,
-            -0.47209418708575f, 0.41285649844363f,
+            -0.4455164148456f, 0.31831805515328f, 0.24217750314789f,
+            0.49821219078654f, -0.47209418708575f, 0.41285649844363f,
             -0.015857310429397f, -0.45214512052441f, -0.14591363373753f,
             0.74070676188619f, 0.0098874230592725f, -0.47463489014478f,
-            0.24260837156464f, 0.44639366601915f, 0.31528570191456f, 0.45334773303464f,
-            -0.47964168123625f, -0.45484996397296f,
+            0.24260837156464f, 0.44639366601915f, 0.31528570191456f,
+            0.45334773303464f, -0.47964168123625f, -0.45484996397296f,
             0.47123463487178f, 0.64525048646519f, -0.064257637508608f,
             -0.18737730572971f, -0.11735335340515f, -0.55549853319118f,
             -0.025197229767488f, -0.257963271803f, 0.26277107860996f,
@@ -2954,22 +3475,22 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.034436041975613f, -0.29332731631919f, 0.39774172001359f,
             -0.1459159803857f, -0.59726183207777f, -0.036384224081948f,
             -0.65093487874945f, 0.39515711468056f, -0.20198429937477f,
-            0.60092128630869f, 0.18110182176699f, 0.2579491954112f, -0.39594768022975f,
-            0.15112959843347f, 0.59995268930018f,
+            0.60092128630869f, 0.18110182176699f, 0.2579491954112f,
+            -0.39594768022975f, 0.15112959843347f, 0.59995268930018f,
             -0.42310244265976f, -0.26937197256148f, 0.074700012546319f,
             0.53119510349465f, 0.41614374632783f, 0.53618944036115f,
             0.0071605427687482f, -0.69599782505338f, -0.053138604739257f,
             -0.00054500262230378f, 0.69533871546989f, 0.1709263483943f,
-            0.12447149375466f, 0.33265313001972f, 0.35070015349473f, 0.53879932284829f,
-            0.37648083373421f, 0.56463759722353f,
+            0.12447149375466f, 0.33265313001972f, 0.35070015349473f,
+            0.53879932284829f, 0.37648083373421f, 0.56463759722353f,
             0.29540077719054f, 0.04954124873475f, -0.48345087234985f,
             0.72758494948264f, 0.070069102610626f, 0.377186640377f,
-            0.4882414260383f, 0.45135801463006f, 0.48450857902353f, -0.26042407965644f,
-            -0.4251358047458f, 0.2731053563007f,
+            0.4882414260383f, 0.45135801463006f, 0.48450857902353f,
+            -0.26042407965644f, -0.4251358047458f, 0.2731053563007f,
             -0.49806371818291f, -0.4719759672029f, 0.029647087810764f,
             -0.13788472163255f, -0.45346141932978f, -0.5510470160674f,
-            -0.5359511936033f, -0.53585470245895f, 0.1771036246335f, -0.4537763243703f,
-            0.41838964069644f, 0.11527149720722f,
+            -0.5359511936033f, -0.53585470245895f, 0.1771036246335f,
+            -0.4537763243703f, 0.41838964069644f, 0.11527149720722f,
             -0.36846431808379f, -0.46533180802325f, 0.65800816763703f,
             -0.28691297783558f, 0.31521457275327f, 0.18178647457201f,
             -0.29243126901345f, -0.4352956525447f, -0.58895978125929f,
@@ -2980,18 +3501,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.43033451471976f, 0.014334271843521f, -0.32066459724334f,
             0.26752725373294f, 0.50477344684769f, 0.065069516529324f,
             0.36001097578267f, 0.59393393889869f, -0.43247366096278f,
-            0.48945720845334f, 0.6043315650632f, 0.12458128550608f, -0.48327805813458f,
-            -0.25681943056744f, 0.28316179557217f,
+            0.48945720845334f, 0.6043315650632f, 0.12458128550608f,
+            -0.48327805813458f, -0.25681943056744f, 0.28316179557217f,
             -0.45182760404001f, 0.21574002665039f, -0.31462623994251f,
             0.25279349500371f, 0.44865729380505f, -0.62058075048081f,
-            0.44017304540101f, 0.43789555905674f, 0.58423563606269f, 0.41842994331139f,
-            -0.26836655962348f, 0.16143005677844f,
+            0.44017304540101f, 0.43789555905674f, 0.58423563606269f,
+            0.41842994331139f, -0.26836655962348f, 0.16143005677844f,
             -0.67897032028819f, -0.32730885869255f, -0.0243997359109f,
             0.40649244381227f, 0.47711065295824f, -0.19596475712206f,
-            0.57441588138131f, 0.09386994843744f, 0.28400793066375f, 0.59394229842661f,
-            0.45349906020748f, 0.14881354725974f,
-            -0.3393739967757f, -0.54929055652002f, 0.26209493900588f, 0.0733800373509f,
-            0.56557076402003f, 0.43492125584075f,
+            0.57441588138131f, 0.09386994843744f, 0.28400793066375f,
+            0.59394229842661f, 0.45349906020748f, 0.14881354725974f,
+            -0.3393739967757f, -0.54929055652002f, 0.26209493900588f,
+            0.0733800373509f, 0.56557076402003f, 0.43492125584075f,
             0.050007991188197f, 0.74652764513134f, -0.36432144611385f,
             -0.20993543754239f, -0.1352041047841f, 0.49508839805322f,
             -0.041332158875019f, -0.20655741061568f, 0.52511282214888f,
@@ -3082,8 +3603,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.30670278147618f, -0.18573195942296f, 0.65383825999316f,
             -0.089919562456316f, -0.28968403215216f, -0.60618287937171f,
             0.53370861364121f, 0.37921556323246f, -0.33450055738044f,
-            -0.47481167613763f, 0.3899274103573f, -0.1047963185367f, 0.45545456567005f,
-            0.12142073778317f, 0.62397625076847f,
+            -0.47481167613763f, 0.3899274103573f, -0.1047963185367f,
+            0.45545456567005f, 0.12142073778317f, 0.62397625076847f,
             0.59154225785278f, -0.10812441303593f, -0.4685834521013f,
             -0.36007270807588f, -0.1012374701199f, 0.52812407295968f,
             -0.01292122984647f, -0.23607532114711f, -0.57680411110671f,
@@ -3096,8 +3617,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.33075363850824f, 0.39071115867626f, 0.3340294973255f,
             -0.51485161085589f, -0.34037011091125f, -0.46826090820473f,
             -0.60086679836276f, -0.075069409610657f, 0.18202033570633f,
-            -0.49669644859095f, 0.13236483793072f, 0.53440735955877f, 0.4720120049858f,
-            -0.05992551666341f, -0.47306929861073f,
+            -0.49669644859095f, 0.13236483793072f, 0.53440735955877f,
+            0.4720120049858f, -0.05992551666341f, -0.47306929861073f,
             -0.32796852486185f, 0.65593302097807f, 0.20800030327303f,
             -0.38965914824176f, -0.51564565153044f, -0.034636725857177f,
             -0.30473794783797f, 0.12584230588041f, 0.63911213518179f,
@@ -3138,14 +3659,14 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             -0.48088968590275f, 0.18029290312902f, -0.10220931735307f,
             -0.058902573502295f, 0.0082595236590186f, 0.7136596141971f,
             -0.53043791172483f, 0.22906331492979f, 0.39155822265168f,
-            0.43459649233879f, 0.18964470832196f, 0.15217427204218f, 0.59694624534505f,
-            0.053786588105393f, 0.62671041756872f,
+            0.43459649233879f, 0.18964470832196f, 0.15217427204218f,
+            0.59694624534505f, 0.053786588105393f, 0.62671041756872f,
             -0.48833575031057f, 0.068909881680922f, 0.60168404074737f,
             -0.055455043023162f, -0.62426261497771f, -0.044461939113733f,
             -0.71822145541427f, 0.054494951105527f, 0.25733756171599f,
             -0.42706881935297f, -0.44024663347316f, 0.19687748949208f,
-            0.4723221071836f, 0.63009683957253f, 0.2166256995021f, 0.31063720960745f,
-            0.079455887335627f, 0.47974409023622f,
+            0.4723221071836f, 0.63009683957253f, 0.2166256995021f,
+            0.31063720960745f, 0.079455887335627f, 0.47974409023622f,
             -0.39506538843406f, 0.42517729990346f, 0.29375773990216f,
             0.044503633424429f, -0.46173213926286f, 0.60139575234582f,
             -0.40354126620316f, 0.41304136826673f, -0.29533980868045f,
@@ -3166,10 +3687,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.35186997012044f, -0.46483432791096f, 0.22857392808385f,
             0.52970834834669f, -0.50684486922008f, -0.39782161731912f,
             -0.3932709335414f, -0.34863027587322f, 0.16748196501934f,
-            -0.46048505533f, -0.3887126918161f, -0.68287320410729f, -0.18448530888361f,
-            -0.25358256326157f, 0.26870280714361f,
-            0.6889557358588f, -0.3101022706485f, -0.35882194962822f, 0.30088738418801f,
-            -0.039139540883101f, -0.45646277242166f,
+            -0.46048505533f, -0.3887126918161f, -0.68287320410729f,
+            -0.18448530888361f, -0.25358256326157f, 0.26870280714361f,
+            0.6889557358588f, -0.3101022706485f, -0.35882194962822f,
+            0.30088738418801f, -0.039139540883101f, -0.45646277242166f,
             -0.21954767479275f, 0.40838837410593f, 0.23284186868997f,
             0.30349649888064f, 0.57233263099925f, 0.55778817953937f,
             0.57731035290905f, 0.091218309942656f, 0.70670016667131f,
@@ -3178,8 +3699,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.50580176326624f, 0.34691320957643f, 0.22478399991032f,
             -0.37901911159632f, 0.53804099887537f, -0.46780195460858f,
             0.51497346779204f, -0.27981005467588f, 0.067278440906787f,
-            0.67241900483514f, 0.074099582737f, 0.43138117954806f, 0.054567519697911f,
-            -0.37927768894619f, 0.45764946429346f,
+            0.67241900483514f, 0.074099582737f, 0.43138117954806f,
+            0.054567519697911f, -0.37927768894619f, 0.45764946429346f,
             0.14529189179172f, -0.23854982910384f, 0.45401647091062f,
             0.25466539906731f, 0.46182069803887f, -0.66160446396375f,
             -0.15570980059397f, -0.38476787034627f, 0.37322840954917f,
@@ -3246,10 +3767,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.16722813432165f, -0.25503640214793f, -0.65462662498637f,
             -0.37112528006203f, 0.43100319401562f, -0.11342774633614f,
             0.14418808646988f, 0.5753326931164f, 0.55842502411684f,
-            0.55378724068611f, 0.21098160548047f, -0.3224976646632f, 0.31268307369255f,
-            -0.37624695517597f, -0.55269271266764f,
-            0.2601465870231f, 0.56373458886982f, -0.21638357910201f, 0.41216916619413f,
-            -0.25078072187299f, -0.57873208070982f,
+            0.55378724068611f, 0.21098160548047f, -0.3224976646632f,
+            0.31268307369255f, -0.37624695517597f, -0.55269271266764f,
+            0.2601465870231f, 0.56373458886982f, -0.21638357910201f,
+            0.41216916619413f, -0.25078072187299f, -0.57873208070982f,
             0.11217864148346f, 0.54196554704815f, -0.31989128683717f,
             0.54691221598945f, 0.24062434044524f, 0.48409277788476f,
             0.087564423746579f, -0.12083081671284f, 0.69931172084498f,
@@ -3292,13 +3813,13 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.33217472508825f, 0.73917165688328f, 0.33479099915638f,
             -0.02973230696179f, -0.51371026289118f, 0.34133522703692f,
             -0.41361792362786f, -0.51561746819514f, -0.4263412462482f,
-            0.51057171220039f, -0.23740201245544f, 0.26673587003088f, 0.5521767379032f,
-            0.16849318602455f, 0.52774964064755f,
+            0.51057171220039f, -0.23740201245544f, 0.26673587003088f,
+            0.5521767379032f, 0.16849318602455f, 0.52774964064755f,
     };
 
     private final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
     private final int[] distOrder = {0, 0, 0, 0, 0, 0}, intLoc = {0, 0, 0, 0, 0, 0};
-    
+
     private static final float
             F6 = (float) ((Math.sqrt(7.0) - 1.0) / 6.0),
             G6 = F6 / (1f + 6f * F6),
@@ -3361,9 +3882,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             if (tc > 0) {
                 final int h = hash256(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
                         intLoc[4], intLoc[5], seed) * 6;
-                final float gr = gradient6DLUT[h] * m[0] + gradient6DLUT[h + 1] * m[1]
-                        + gradient6DLUT[h + 2] * m[2] + gradient6DLUT[h + 3] * m[3]
-                        + gradient6DLUT[h + 4] * m[4] + gradient6DLUT[h + 5] * m[5];
+                final float gr = grad6f[h] * m[0] + grad6f[h + 1] * m[1]
+                        + grad6f[h + 2] * m[2] + grad6f[h + 3] * m[3]
+                        + grad6f[h + 4] * m[4] + grad6f[h + 5] * m[5];
                 tc *= tc;
                 n += gr * tc * tc;
             }
@@ -3375,6 +3896,85 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     public float getSimplex(float x, float y, float z, float w, float u, float v) {
         return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
+    }
+    // Simplex Noise
+    public float getSimplexFractal(float x, float y, float z, float w, float u, float v) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        u *= frequency;
+        v *= frequency;
+
+        switch (fractalType) {
+            case FBM:
+                return singleSimplexFractalFBM(x, y, z, w, u, v);
+            case BILLOW:
+                return singleSimplexFractalBillow(x, y, z, w, u, v);
+            case RIDGED_MULTI:
+                return singleSimplexFractalRidgedMulti(x, y, z, w, u, v);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleSimplexFractalFBM(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = singleSimplex(seed, x, y, z, w, u, v);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += singleSimplex(seed + i, x, y, z, w, u, v) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z, w, u, v));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z, w, u, v))) * amp;
+        }
+
+        return sum;
+    }
+
+    private float singleSimplexFractalBillow(float x, float y, float z, float w, float u, float v) {
+        int seed = this.seed;
+        float sum = Math.abs(singleSimplex(seed, x, y, z, w, u, v)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+            u *= lacunarity;
+            v *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleSimplex(seed + i, x, y, z, w, u, v)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
     }
 
     // Cubic Noise
@@ -4108,4 +4708,5 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         v2[0] += lerp(lx0x, lx1x, ys) * perturbAmp;
         v2[1] += lerp(ly0x, ly1x, ys) * perturbAmp;
     }
+
 }
