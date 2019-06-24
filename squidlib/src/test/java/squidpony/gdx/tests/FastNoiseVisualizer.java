@@ -17,6 +17,7 @@ import squidpony.squidmath.NumberTools;
 
 import static squidpony.squidgrid.gui.gdx.SColor.FLOAT_WHITE;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
+import static squidpony.squidmath.NumberTools.swayRandomized;
 import static squidpony.squidmath.NumberTools.swayTight;
 
 /**
@@ -124,7 +125,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                         break;
                     case 'D':
                     case 'd':
-                        dim = (dim+1) % 3;
+                        dim = (dim+1) & 3;
                         putMap();
                         break;
                     case 'F':
@@ -200,11 +201,24 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
             case 2:
                 for (int x = 0; x < 512; x++) {
                     for (int y = 0; y < 512; y++) {
-                        bright = basicPrepare(noise.getSimplexFractal(x - ctr, y - ctr, x + y, y - x + ctr));
+                        bright = basicPrepare(noise.getConfiguredNoise(x, y, ctr, swayRandomized(0x12345678, 0x1p-4f * (ctr + x + y))));
                         back[x][y] = floatGet(bright, bright, bright, 1f);
                     }
                 }
-                
+                break;
+            case 3:
+                float xx, yy;
+                for (int x = 0; x < 512; x++) {
+                    xx = x * 0x1p-6f;
+                    for (int y = 0; y < 512; y++) {
+                        yy = y * 0x1p-6f;
+                        bright = basicPrepare(noise.getConfiguredNoise(
+                                ctr + swayRandomized(0x23456781, xx), x + swayRandomized(0x34567812, -yy), y + swayRandomized(0x45678123, -ctr),
+                                ctr - swayRandomized(0x12345678, yy), x - swayRandomized(0x81234567, ctr), y - swayRandomized(0x78123456, -xx)));
+                        back[x][y] = floatGet(bright, bright, bright, 1f);
+                    }
+                }
+                break;
         }
     }
 
