@@ -396,7 +396,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
         //world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, FastNoise.instance, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, CosmicNumbering.instance, 0.6, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, CosmicNumbering.instance, 0.7, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), FastNoise.instance, 0.9);
