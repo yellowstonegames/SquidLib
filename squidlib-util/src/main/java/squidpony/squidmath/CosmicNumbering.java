@@ -5,8 +5,7 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 import static squidpony.squidmath.Noise.emphasizeSigned;
-import static squidpony.squidmath.Noise.extremeSigned;
-import static squidpony.squidmath.NumberTools.swayRandomized;
+import static squidpony.squidmath.NumberTools.*;
 
 /**
  * Like a kind of RNG, but fully deterministic in a way that depends on a "connected" double array.
@@ -225,13 +224,17 @@ public class CosmicNumbering implements Serializable, Noise.Noise2D, Noise.Noise
 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
-        x *= 2.25;
-        y *= 2.25;
-        z *= 2.25;
-        double sum = swayRandomized(seed, x - y) * swayRandomized(~seed, x - z);
-        sum += swayRandomized(seed, sum + y - z) * swayRandomized(~seed, x + y - sum);
-        sum += swayRandomized(seed, sum + z - x) * swayRandomized(~seed, -y - z + sum);
-        return extremeSigned(sum * 0.3333333333333333);
+        x *= 1.5;
+        y *= 1.5;
+        z *= 1.5;
+        x += swayRandomized(seed ^ 0xD1B54A32D192ED03L, y + z) - swayRandomized(0xABC98388FB8FAC03L - seed, x - y);
+        y += swayRandomized(seed ^ 0xDB4F0B9175AE2165L, x + z) - swayRandomized(0xBBE0563303A4615FL - seed, y - z);
+        z += swayRandomized(seed ^ 0xE19B01AA9D42C633L, x + y) - swayRandomized(0xC6D1D6C8ED0C9631L - seed, z - x);
+//        double sum = swayRandomized(seed, x - y) * (swayRandomized(~seed, x - z));
+//        sum += swayRandomized(seed ^ 0xDB4F0B9175AE2165L, sum + y - z) * (swayRandomized(0xBBE0563303A4615FL - seed, x + y - sum));
+//        sum += swayRandomized(seed ^ 0xE19B01AA9D42C633L, sum + z - x) * (swayRandomized(0xC6D1D6C8ED0C9631L - seed, -y - z + sum));
+        return sway((x + y + z) * 0.3333333333333333);
+        //return emphasizeSigned(sum * 0.3333333333333333);
     }
 
     @Override
