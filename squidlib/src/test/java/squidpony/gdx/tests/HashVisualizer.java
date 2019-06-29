@@ -67,9 +67,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 77, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 104, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -921,11 +921,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
 
-    public static double swayRandomized2(final long seed, final double value)
+    public static float swayRandomized3(int seed, float value)
     {
-        final long floor = Noise.longFloor(value);
-        final double start = NumberTools.randomSignedDouble(floor + seed), end = NumberTools.randomSignedDouble(floor + seed +1L);
-        return Noise.cerp(start, end, value - floor);
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        final float start = (((seed += floor) ^ 0xD1B54A35) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f,
+                end = ((seed + 1 ^ 0xD1B54A35) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f;
+//        final float start = ((seed + floor * 0x9E377 ^ 0xD1B54A35) * 0x1D2473) * 0x0.ffffffp-31f,
+//                end = ((seed + (floor + 1) * 0x9E377 ^ 0xD1B54A35) * 0x1D2473) * 0x0.ffffffp-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
     }
 
     public static float swayRandomized2(final long seed, final float value)
@@ -4252,7 +4257,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         //if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.75f, 1, 1);
-                            iBright = (int) (NumberTools.swayRandomized(9999999999999L, ctr * 0x1p-7f) * 240f);
+                            iBright = (int) (NumberTools.swayRandomized(0L, ctr * 0x1p-7f) * 240f);
                             back[511][255 + iBright] =  bright;
                             back[511][256 + iBright] =  bright;
                             back[511][257 + iBright] =  bright;
@@ -4265,8 +4270,22 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             back[509][256 + iBright] =  bright;
                             back[509][257 + iBright] =  bright;
 
-                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 0.6f, 1);
+                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 0.7f, 1);
                             iBright = (int) (basic1D.getNoise(ctr * 0x1p-7f) * 240f);
+                            back[511][255 + iBright] =  bright;
+                            back[511][256 + iBright] =  bright;
+                            back[511][257 + iBright] =  bright;
+
+                            back[510][255 + iBright] =  bright;
+                            back[510][256 + iBright] =  bright;
+                            back[510][257 + iBright] =  bright;
+
+                            back[509][255 + iBright] =  bright;
+                            back[509][256 + iBright] =  bright;
+                            back[509][257 + iBright] =  bright;
+
+                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.4f, 1f, 1);
+                            iBright = (int) (swayRandomized3(0, ctr * 0x1p-7f) * 240f);
                             back[511][255 + iBright] =  bright;
                             back[511][256 + iBright] =  bright;
                             back[511][257 + iBright] =  bright;
