@@ -6,18 +6,18 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 /**
- * A mid-quality StatefulRandomness based on {@link LinnormRNG} but modified to allow any odd number as a stream,
- * instead of LinnormRNG's hardcoded stream of 1; at least some streams fail statistical testing, but only after at
- * least 8TB of data is analyzed, failing at 16TB. Has 64 bits of state, 64 bits used to store a stream (which cannot be
+ * A high-quality StatefulRandomness based on {@link LinnormRNG} but modified to allow any odd number as a stream,
+ * instead of LinnormRNG's hardcoded stream of 1. Although some streams may have quality issues, the structure is based
+ * on a linear congruential generator where the stream is the additive component, and in that context all odd numbers
+ * are usually considered equally effective. Has 64 bits of state, 64 bits used to store a stream (which cannot be
  * changed after construction) and natively outputs 64 bits at a time. Changes its state with a basic linear
- * congruential generator (it is simply {@code state = state * 1103515245 + stream}). Starting with that LCG's
- * output, it xorshifts that output, multiplies by a very large negative long, then returns another xorshift. Like
- * LinnormRNG, the output of this simple function passes all 32TB of PractRand with no anomalies (at least for the
- * tested streams), meaning its statistical quality is excellent. The speed of this particular class isn't fully clear
- * yet, but benchmarks performed under the heavy load of PractRand testing happening at the same time appeared to show
- * no significant difference between LinnormRNG and MizuchiRNG in speed (which means it's tied for second place in its
- * category, behind {@link DiverRNG}). Since at least some streams fail before the 32TB goal, this class will probably
- * be changed to use a different algorithm, and as such is marked as Beta.
+ * congruential generator (it is simply {@code state = state * 3935559000370003845L + stream}). Starting with that LCG's
+ * output, it xorshifts that output twice, multiplies by a very large negative long, then returns another xorshift. Like
+ * LinnormRNG, the output of this simple function passes all 32TB of PractRand (for one stream, it had 3 anomalies, but
+ * another had none, and none were ever significant or persistent), meaning its statistical quality is excellent. The
+ * speed of this particular class isn't fully clear yet, but benchmarks performed under the heavy load of PractRand
+ * testing happening at the same time appeared to show no significant difference between LinnormRNG and MizuchiRNG in
+ * speed (which means it's tied for second place in its category, behind {@link DiverRNG}).
  * <br>
  * This generator is a StatefulRandomness but not a SkippingRandomness, so it can't (efficiently) have the skip() method
  * that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the
@@ -33,14 +33,15 @@ import java.io.Serializable;
  * streams, since Mizuchi allows many possible streams, to get the concept of a river-or-stream-dwelling dragon. The
  * mizuchi is a (by some versions of the story) river dragon from Japanese mythology.
  * <br>
- * Written May 14, 2018 by Tommy Ettinger. Thanks to M.E. O'Neill for her insights into the family of generators both
+ * Written June 29, 2019 by Tommy Ettinger. Thanks to M.E. O'Neill for her insights into the family of generators both
  * this and her PCG-Random fall into, and to the team that worked on SplitMix64 for SplittableRandom in JDK 8. Chris
- * Doty-Humphrey's work on PractRand has been invaluable, and the LCG multiplier this uses is the same one used by
- * PractRand in its "varqual" LCGs (the other, longer multiplier is from PCG-Random, and that's both the
- * nothing-up-my-sleeve numbers used here). Thanks also to Sebastiano Vigna and David Blackwell for creating the
- * incredibly fast xoroshiro128+ generator and also very fast <a href="http://xoshiro.di.unimi.it/hwd.php">HWD tool</a>;
- * the former inspired me to make my code even faster and the latter tool seems useful so far in proving the quality of
- * the generator (LinnormRNG passes over 100TB of HWD, and probably would pass much more if I gave it more days to run).
+ * Doty-Humphrey's work on PractRand has been invaluable. The LCG state multiplier is listed in a paper by L'Ecuyer from
+ * 1999, Tables of Linear Congruential Generators of Different Sizes and Good Lattice Structure. The other
+ * multiplier is from PCG-Random, and that's both the nothing-up-my-sleeve numbers used here. Thanks also to Sebastiano
+ * Vigna and David Blackwell for creating the incredibly fast xoroshiro128+ generator and also very fast
+ * <a href="http://xoshiro.di.unimi.it/hwd.php">HWD tool</a>; the former inspired me to make my code even faster and the
+ * latter tool seems useful so far in proving the quality of the generator (LinnormRNG passes over 100TB of HWD, and
+ * probably would pass much more if I gave it more days to run).
  * @author Tommy Ettinger
  */
 @Beta
@@ -82,8 +83,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
     @Override
     public final int next(int bits)
     {
-        long z = (state = state * 0x41C64E6DL + stream);
-        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+        long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
         return (int)(z ^ z >>> 25) >>> (32 - bits);
     }
 
@@ -94,8 +95,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public final long nextLong() {
-        long z = (state = state * 0x41C64E6DL + stream);
-        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+        long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
         return (z ^ z >>> 25);
     }
 
@@ -117,8 +118,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * @return any int, all 32 bits are random
      */
     public final int nextInt() {
-        long z = (state = state * 0x41C64E6DL + stream);
-        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+        long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
         return (int)(z ^ z >>> 25);
     }
 
@@ -130,8 +131,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * @return a random int between 0 (inclusive) and bound (exclusive)
      */
     public final int nextInt(final int bound) {
-        long z = (state = state * 0x41C64E6DL + stream);
-        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+        long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
         return (int)((bound * ((z ^ z >>> 25) & 0xFFFFFFFFL)) >> 32);
     }
 
@@ -180,8 +181,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * @return a random double at least equal to 0.0 and less than 1.0
      */
     public final double nextDouble() {
-        long z = (state = state * 0x41C64E6DL + stream);
-        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+        long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
         return ((z ^ z >>> 25) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
 
     }
@@ -194,8 +195,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * @return a random double between 0.0 (inclusive) and outer (exclusive)
      */
     public final double nextDouble(final double outer) {
-        long z = (state = state * 0x41C64E6DL + stream);
-        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+        long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        z = (z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L;
         return ((z ^ z >>> 25) & 0x1FFFFFFFFFFFFFL) * 0x1p-53 * outer;
     }
 
@@ -205,8 +206,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * @return a random float at least equal to 0.0 and less than 1.0
      */
     public final float nextFloat() {
-        final long z = (state = state * 0x41C64E6DL + stream);
-        return ((z ^ z >>> 27) * 0xAEF17502108EF2D9L >>> 40) * 0x1p-24f;
+        final long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        return ((z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L >>> 40) * 0x1p-24f;
     }
 
     /**
@@ -216,8 +217,8 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * @return a random true or false value.
      */
     public final boolean nextBoolean() {
-        final long z = (state = state * 0x41C64E6DL + stream);
-        return ((z ^ z >>> 27) * 0xAEF17502108EF2D9L) < 0;
+        final long z = (state = state * 0x369DEA0F31A53F85L + stream);
+        return ((z ^ z >>> 23 ^ z >>> 47) * 0xAEF17502108EF2D9L) < 0;
     }
 
     /**
@@ -269,7 +270,7 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
 
     @Override
     public int hashCode() {
-        return (int) ((state ^ (state >>> 32)) * 31L + (stream ^ (stream >>> 32)));
+        return (int) ((state ^ (state >>> 32)) * 0xDB4F0B9175AE2165L + (stream ^ (stream >>> 32)));
     }
 
 //    public static void main(String[] args)
