@@ -4807,7 +4807,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
-                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, b1 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
             seed = (seed ^ seed << 16) * (len ^ b0);
             return seed - (seed >>> 31) + (seed << 33);
@@ -4826,7 +4826,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
-                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, b1 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
             seed = (seed ^ seed << 16) * (len ^ b0);
             return seed - (seed >>> 31) + (seed << 33);
@@ -4845,7 +4845,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data.charAt(len-1)); break;
                 case 2: seed = mum(seed ^ data.charAt(len-2), b3 ^ data.charAt(len-1)); break;
-                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, b1 ^ data.charAt(len-1)); break;
+                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 16, b1 ^ data.charAt(len-1)); break;
             }
             seed = (seed ^ seed << 16) * (len ^ b0);
             return seed - (seed >>> 31) + (seed << 33);
@@ -4969,7 +4969,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
-                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, b1 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
             return (int) mum(seed ^ seed << 16, len - start ^ b0);
         }
@@ -4996,7 +4996,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data.charAt(len-1)); break;
                 case 2: seed = mum(seed ^ data.charAt(len-2), b3 ^ data.charAt(len-1)); break;
-                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, b1 ^ data.charAt(len-1)); break;
+                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 16, b1 ^ data.charAt(len-1)); break;
             }
             return (int) mum(seed ^ seed << 16, len - start ^ b0);
         }
@@ -5215,7 +5215,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
-                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, b1 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
             return (int) mum(seed ^ seed << 16, len ^ b0);
         }
@@ -5233,7 +5233,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
-                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, b1 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
             return (int) mum(seed ^ seed << 16, len ^ b0);
         }
@@ -5251,7 +5251,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data.charAt(len-1)); break;
                 case 2: seed = mum(seed ^ data.charAt(len-2), b3 ^ data.charAt(len-1)); break;
-                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, b1 ^ data.charAt(len-1)); break;
+                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 16, b1 ^ data.charAt(len-1)); break;
             }
             return (int) mum(seed ^ seed << 16, len ^ b0);
         }
@@ -5369,7 +5369,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
-                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, b1 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
             return (int) mum(seed ^ seed << 16, len - start ^ b0);
         }
@@ -5396,7 +5396,7 @@ public class CrossHash {
                 case 0: seed = mum(b1 ^ seed, b4 + seed); break;
                 case 1: seed = mum(seed ^ b3, b4 ^ data.charAt(len-1)); break;
                 case 2: seed = mum(seed ^ data.charAt(len-2), b3 ^ data.charAt(len-1)); break;
-                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, b1 ^ data.charAt(len-1)); break;
+                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 16, b1 ^ data.charAt(len-1)); break;
             }
             return (int) mum(seed ^ seed << 16, len - start ^ b0);
         }

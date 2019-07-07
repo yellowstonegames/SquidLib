@@ -4,6 +4,9 @@ import regexodus.Category;
 
 import java.io.Serializable;
 
+import static regexodus.Category.caseFold;
+import static squidpony.squidmath.CrossHash.Water.*;
+
 /**
  * Additional implementations of the {@link CrossHash.IHasher} interface for more specialized uses, like for use in an
  * OrderedSet or OrderedMap with String keys that should use case-insensitive equality/hashing.
@@ -17,21 +20,26 @@ public class Hashers {
         }
 
         @Override
-        public int hash(final Object data) {
-            if(data == null)
+        public int hash(final Object data0) {
+            if(data0 == null)
                 return 0;
-            if(!(data instanceof CharSequence))
-                return data.hashCode();
-            CharSequence data2 = (CharSequence)data;
-            long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-            final int len = data2.length();
-            for (int i = 0; i < len; i++) {
-                result ^= (z += (Category.caseFold(data2.charAt(i)) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-                result = (result << 54 | result >>> 10);
+            if(!(data0 instanceof CharSequence))
+                return data0.hashCode();
+            CharSequence data = (CharSequence)data0;
+            long seed = -260224914646652572L;//b1 ^ b1 >>> 41 ^ b1 << 53;
+            final int len = data.length();
+            for (int i = 3; i < len; i+=4) {
+                seed = mum(
+                        mum(caseFold(data.charAt(i-3)) ^ b1, caseFold(data.charAt(i-2)) ^ b2) + seed,
+                        mum(caseFold(data.charAt(i-1)) ^ b3, caseFold(data.charAt(i  )) ^ b4));
             }
-            result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-            result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-            return (int) ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
+            switch (len & 3) {
+                case 0: seed = mum(b1 ^ seed, b4 + seed); break;
+                case 1: seed = mum(seed ^ b3, b4 ^ caseFold(data.charAt(len-1))); break;
+                case 2: seed = mum(seed ^ caseFold(data.charAt(len-2)), b3 ^ caseFold(data.charAt(len-1))); break;
+                case 3: seed = mum(seed ^ caseFold(data.charAt(len-3)) ^ caseFold(data.charAt(len-2)) << 16, b1 ^ caseFold(data.charAt(len-1))); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ b0);
         }
 
         @Override
@@ -45,7 +53,7 @@ public class Hashers {
             if(llen != rlen)
                 return false;
             for (int i = 0; i < llen; i++) {
-                if(Category.caseFold(l.charAt(i)) != Category.caseFold(r.charAt(i)))
+                if(caseFold(l.charAt(i)) != caseFold(r.charAt(i)))
                     return false;
             }
             return true;
