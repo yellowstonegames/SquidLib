@@ -76,7 +76,7 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
     }
 
     public MizuchiRNG(final String seed) {
-        state = CrossHash.hash64(seed);
+        state = CrossHash.Mist.predefined[32].hash64(seed);
         stream = (CrossHash.Mist.predefined[(int) state & 31].hash64(seed) | 1L);
     }
 
