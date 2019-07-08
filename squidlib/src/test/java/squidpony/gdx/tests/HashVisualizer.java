@@ -933,11 +933,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return (1 - value) * start + value * end;
     }
 
-    public static float swayRandomized2(final long seed, final float value)
+    public static float swayRandomized2(int seed, float value)
     {
-        final long floor = Noise.longFloor(value);
-        final float start = NumberTools.randomSignedFloat(floor + seed), end = NumberTools.randomSignedFloat(floor + seed + 1L);
-        return Noise.cerp(start, end, value - floor);
+        final float a = swayRandomized3(seed, value);
+        final float b = swayRandomized3(seed ^ 0x9E3779B9, value * 0.8f + a);
+        final float c = swayRandomized3(seed ^ 0x7F4A7C15, value * 0.6f + b);
+        final float d = swayRandomized3(seed ^ 0x6C8E9CF5, value * 0.4f + c);
+        return a * 0.125f + b * 0.1875f + c * 0.3125f + d * 0.375f;
+//        return (a + b + c + d) * 0.25f;
     }
 
     public static double swayRandomized2(final long seed, final double xin, final double yin)
@@ -4250,14 +4253,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        back[509][256 + iBright] =  bright;
 //                        back[509][257 + iBright] =  bright;
 //                    }
-                        Gdx.graphics.setTitle("SwayRandomized 1D Noise Battle, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("SwayRandomized 1D Noise Battle, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("1D noise for terrain, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, 512);
                         Arrays.fill(back[511], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
                         {
-                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.75f, 1, 1);
-                            iBright = (int) (NumberTools.swayRandomized(0L, ctr * 0x1p-7f) * 240f);
+//                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.75f, 1, 1);
+//                            iBright = (int) (NumberTools.swayRandomized(0L, ctr * 0x1p-7f) * 240f);
+//                            back[511][255 + iBright] =  bright;
+//                            back[511][256 + iBright] =  bright;
+//                            back[511][257 + iBright] =  bright;
+//
+//                            back[510][255 + iBright] =  bright;
+//                            back[510][256 + iBright] =  bright;
+//                            back[510][257 + iBright] =  bright;
+//
+//                            back[509][255 + iBright] =  bright;
+//                            back[509][256 + iBright] =  bright;
+//                            back[509][257 + iBright] =  bright;
+
+//                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 0.7f, 1);
+//                            iBright = (int) (basic1D.getNoise(ctr * 0x1p-7f) * 240f);
+                            iBright = (int)((257+ctr) * 0x1.44cbc89p-8f) % YELLOW_GREEN_SERIES.length; 
+                            bright = lerpFloatColors(YELLOW_GREEN_SERIES[iBright].toFloatBits(),
+                                    YELLOW_GREEN_SERIES[(iBright + 1) % YELLOW_GREEN_SERIES.length].toFloatBits(),
+                                    (257+ctr) * 0x1.44cbc89p-8f - (int)((257+ctr) * 0x1.44cbc89p-8f));
+                            iBright = (int) (swayRandomized2(0, ctr * 0x1p-7f) * 240f);
                             back[511][255 + iBright] =  bright;
                             back[511][256 + iBright] =  bright;
                             back[511][257 + iBright] =  bright;
@@ -4270,33 +4293,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             back[509][256 + iBright] =  bright;
                             back[509][257 + iBright] =  bright;
 
-                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 0.7f, 1);
-                            iBright = (int) (basic1D.getNoise(ctr * 0x1p-7f) * 240f);
-                            back[511][255 + iBright] =  bright;
-                            back[511][256 + iBright] =  bright;
-                            back[511][257 + iBright] =  bright;
-
-                            back[510][255 + iBright] =  bright;
-                            back[510][256 + iBright] =  bright;
-                            back[510][257 + iBright] =  bright;
-
-                            back[509][255 + iBright] =  bright;
-                            back[509][256 + iBright] =  bright;
-                            back[509][257 + iBright] =  bright;
-
-                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.4f, 1f, 1);
-                            iBright = (int) (swayRandomized3(0, ctr * 0x1p-7f) * 240f);
-                            back[511][255 + iBright] =  bright;
-                            back[511][256 + iBright] =  bright;
-                            back[511][257 + iBright] =  bright;
-
-                            back[510][255 + iBright] =  bright;
-                            back[510][256 + iBright] =  bright;
-                            back[510][257 + iBright] =  bright;
-
-                            back[509][255 + iBright] =  bright;
-                            back[509][256 + iBright] =  bright;
-                            back[509][257 + iBright] =  bright;
+//                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.4f, 1f, 1);
+//                            iBright = (int) (swayRandomized3(0, ctr * 0x1p-7f) * 240f);
+//                            back[511][255 + iBright] =  bright;
+//                            back[511][256 + iBright] =  bright;
+//                            back[511][257 + iBright] =  bright;
+//
+//                            back[510][255 + iBright] =  bright;
+//                            back[510][256 + iBright] =  bright;
+//                            back[510][257 + iBright] =  bright;
+//
+//                            back[509][255 + iBright] =  bright;
+//                            back[509][256 + iBright] =  bright;
+//                            back[509][257 + iBright] =  bright;
                         }
                         break;
                     case 107:
