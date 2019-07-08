@@ -54,8 +54,10 @@ public class GarblerTest {
             System.out.println(garbled);
             String degarbled = Garbler.degarble(garbled, keys);
             System.out.println(degarbled);
-            if(!degarbled.equals(oz))
+            if (!degarbled.equals(oz)) {
+                System.out.println("BAD");
                 System.exit(1);
+            }
         }
     }
 }
