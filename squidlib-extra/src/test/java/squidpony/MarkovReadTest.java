@@ -17,10 +17,14 @@ public class MarkovReadTest extends ApplicationAdapter {
     public void create() {
         super.create();
         long time = System.currentTimeMillis();
-        String text = LZSPlus.decompress(Gdx.files.classpath("bible_markov_order_2_compressed.dat").readString("UTF16"));
-        MarkovText mt = MarkovText.deserializeFromString(text);
+        String bible = LZSPlus.decompress(Gdx.files.classpath("bible_no_numbers_compressed.dat").readString("UTF16"));
         System.out.print((System.currentTimeMillis() - time));
         System.out.println(" ms");
+        time = System.currentTimeMillis();
+        String text = LZSPlus.decompress(Gdx.files.classpath("bible_markov_order_2_compressed.dat").readString("UTF16"));
+        System.out.print((System.currentTimeMillis() - time));
+        System.out.println(" ms");
+        MarkovText mt = MarkovText.deserializeFromString(text);
 
         StringBuilder sb = new StringBuilder(10000);
         long seed = 1234567890L;

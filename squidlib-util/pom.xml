@@ -72,5 +72,11 @@
             <artifactId>regexodus</artifactId>
             <version>${regexodus.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.jbellis</groupId>
+            <artifactId>jamm</artifactId>
+            <version>0.3.3</version>
+        </dependency>
     </dependencies>
 </project>

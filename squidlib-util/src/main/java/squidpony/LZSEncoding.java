@@ -9,9 +9,9 @@
 
 package squidpony;
 
+import org.github.jamm.MemoryMeter;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * LZ-String compression; wrapped by {@link LZSPlus} for convenience, but extended functionality is available here.
@@ -136,9 +136,20 @@ public final class LZSEncoding {
     private static String _compress(String uncompressedStr, int bitsPerChar, char[] getCharFromInt, int offset) {
         if (uncompressedStr == null) return null;
         if (uncompressedStr.isEmpty()) return "";
+        MemoryMeter meter = new MemoryMeter();
         int i, value;
-        HashMap<String, Integer> context_dictionary = new HashMap<>();
-        HashSet<String> context_dictionaryToCreate = new HashSet<>();
+//        HashMap<String, Integer> context_dictionary = new HashMap<>();   //67345272 bytes
+//        HashSet<String> context_dictionaryToCreate = new HashSet<>();
+//        HashMap<String, Integer> context_dictionary = new HashMap<>(1024, 0.5f);       //71539576 bytes
+//        HashSet<String> context_dictionaryToCreate = new HashSet<>();
+//        HashMap<String, Integer> context_dictionary = new HashMap<>(1024, 0.8f);       //67345272 bytes
+//        HashSet<String> context_dictionaryToCreate = new HashSet<>();
+//        ObjectMap<String, Integer> context_dictionary = new ObjectMap<>(1024, 0.5f); //61142360 bytes
+//        ObjectSet<String> context_dictionaryToCreate = new ObjectSet<>();
+        ObjectMap<String, Integer> context_dictionary = new ObjectMap<>(1024, 0.8f); //52753736 bytes
+        ObjectSet<String> context_dictionaryToCreate = new ObjectSet<>();
+//        ObjectMap<String, Integer> context_dictionary = new ObjectMap<>(); //52753736 bytes
+//        ObjectSet<String> context_dictionaryToCreate = new ObjectSet<>();
         String context_c;
         String context_wc;
         String context_w = "";
@@ -335,6 +346,7 @@ public final class LZSEncoding {
             } else
                 context_data_position++;
         }
+        System.out.println(meter.measureDeep(context_dictionary) + " bytes used for the dictionary");
         return context_data.toString();
     }
     /**
