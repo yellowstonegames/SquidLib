@@ -15,12 +15,19 @@ public class MarkovStorageTest extends ApplicationAdapter {
     @Override
     public void create() {
         super.create();
-        long time = System.currentTimeMillis();
+        long time;// = System.currentTimeMillis();
         final String text = Gdx.files.classpath("bible_no_numbers.txt").readString("UTF8");
+        
+        time = System.currentTimeMillis();
+        Gdx.files.local("bible_no_numbers_compressed.dat").writeString(LZSPlus.compress(text), false, "UTF16");
+        System.out.print((System.currentTimeMillis() - time));
+        System.out.println(" ms");
+        
         MarkovText mt = new MarkovText();
         mt.analyze(text.replace("\n\n", "\n."));
         String data = mt.serializeToString();
         //Gdx.files.local("bible_markov.dat").writeString(data, false, "UTF8");
+        time = System.currentTimeMillis();
         Gdx.files.local("bible_markov_order_2_compressed.dat").writeString(LZSPlus.compress(data), false, "UTF16");
         System.out.print((System.currentTimeMillis() - time));
         System.out.println(" ms");
