@@ -14,23 +14,6 @@ import java.util.Set;
  */
 public class SoundMap
 {
-    /**
-     * The type of heuristic to use. Note that EUCLIDEAN is not an option here because it would only affect paths, and
-     * there is no path-finding functionality in this class.
-     */
-    public enum Measurement {
-
-        /**
-         * The distance it takes when only the four primary directions can be
-         * moved in. The default.
-         */
-        MANHATTAN,
-        /**
-         * The distance it takes when diagonal movement costs the same as
-         * cardinal movement.
-         */
-        CHEBYSHEV
-    }
 
     /**
      * This affects how sound travels on diagonal directions vs. orthogonal directions. MANHATTAN should form a diamond

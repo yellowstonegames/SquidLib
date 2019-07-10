@@ -4,6 +4,7 @@ import squidpony.ArrayTools;
 import squidpony.squidai.Technique;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
@@ -41,95 +42,7 @@ import java.util.*;
  */
 public class DijkstraMap implements Serializable {
     private static final long serialVersionUID = -2456306898212944441L;
-
-    private static final double root2 = Math.sqrt(2.0);
-
-    /**
-     * The type of heuristic to use.
-     */
-    public static enum Measurement {
-
-        /**
-         * The distance it takes when only the four primary directions can be
-         * moved in. The default.
-         */
-        MANHATTAN,
-        /**
-         * The distance it takes when diagonal movement costs the same as
-         * cardinal movement.
-         */
-        CHEBYSHEV,
-        /**
-         * The distance it takes as the crow flies. This will NOT affect movement cost when calculating a path,
-         * only the preferred squares to travel to (resulting in drastically more reasonable-looking paths).
-         */
-        EUCLIDEAN;
-
-        public double heuristic(Direction target) {
-            switch (this) {
-                case EUCLIDEAN:
-                    switch (target) {
-                        case DOWN_LEFT:
-                        case DOWN_RIGHT:
-                        case UP_LEFT:
-                        case UP_RIGHT:
-                            return root2;
-                    }
-                default: 
-                    return 1.0;
-            }
-        }
-
-        public int directionCount() {
-            switch (this) {
-                case MANHATTAN: return 4;
-                default: return 8;
-            }
-        }
-        /**
-         * Gets the appropriate DijkstraMap.Measurement that matches a Radius enum.
-         * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
-         * <br>
-         * Equivalent to {@link DijkstraMap#findMeasurement(Radius)}.
-         *
-         * @param radius the Radius to find the corresponding Measurement for
-         * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
-         */
-        public static Measurement matchingMeasurement(Radius radius) {
-            switch (radius)
-            {
-                case CUBE:
-                case SQUARE:
-                    return DijkstraMap.Measurement.CHEBYSHEV;
-                case DIAMOND:
-                case OCTAHEDRON:
-                    return DijkstraMap.Measurement.MANHATTAN;
-                default:
-                    return DijkstraMap.Measurement.EUCLIDEAN;
-            }
-        }
-
-        /**
-         * Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
-         * Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.
-         * <br>
-         * You may also consider {@link DijkstraMap#findRadius(Measurement)}, which is a static method with the same
-         * general capability.
-         * @return a Radius enum that matches this Measurement; CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, etc.
-         */
-        public Radius matchingRadius() {
-            switch (this) {
-                case CHEBYSHEV:
-                    return Radius.SQUARE;
-                case EUCLIDEAN:
-                    return Radius.CIRCLE;
-                default:
-                    return Radius.DIAMOND;
-            }
-        }
-
-    }
-
+    
     /**
      * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
      * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. EUCLIDEAN does not affect

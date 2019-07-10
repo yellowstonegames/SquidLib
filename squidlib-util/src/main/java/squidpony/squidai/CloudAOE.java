@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
 import squidpony.squidmath.*;
@@ -9,6 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static squidpony.squidgrid.Measurement.*;
 
 /**
  * An AOE type that has a center and a volume, and will randomly expand in all directions until it reaches volume or
@@ -49,14 +52,14 @@ public class CloudAOE implements AOE, Serializable {
         {
             case SPHERE:
             case CIRCLE:
-                spill.measurement = Spill.Measurement.EUCLIDEAN;
+                spill.measurement = EUCLIDEAN;
                 break;
             case CUBE:
             case SQUARE:
-                spill.measurement = Spill.Measurement.CHEBYSHEV;
+                spill.measurement = CHEBYSHEV;
                 break;
             default:
-                spill.measurement = Spill.Measurement.MANHATTAN;
+                spill.measurement = MANHATTAN;
                 break;
         }
     }
@@ -76,14 +79,14 @@ public class CloudAOE implements AOE, Serializable {
         {
             case SPHERE:
             case CIRCLE:
-                spill.measurement = Spill.Measurement.EUCLIDEAN;
+                spill.measurement = EUCLIDEAN;
                 break;
             case CUBE:
             case SQUARE:
-                spill.measurement = Spill.Measurement.CHEBYSHEV;
+                spill.measurement = CHEBYSHEV;
                 break;
             default:
-                spill.measurement = Spill.Measurement.MANHATTAN;
+                spill.measurement = MANHATTAN;
                 break;
         }
     }
@@ -99,14 +102,14 @@ public class CloudAOE implements AOE, Serializable {
         {
             case SPHERE:
             case CIRCLE:
-                spill.measurement = Spill.Measurement.EUCLIDEAN;
+                spill.measurement = EUCLIDEAN;
                 break;
             case CUBE:
             case SQUARE:
-                spill.measurement = Spill.Measurement.CHEBYSHEV;
+                spill.measurement = CHEBYSHEV;
                 break;
             default:
-                spill.measurement = Spill.Measurement.MANHATTAN;
+                spill.measurement = MANHATTAN;
                 break;
         }
     }
@@ -122,14 +125,14 @@ public class CloudAOE implements AOE, Serializable {
         {
             case SPHERE:
             case CIRCLE:
-                spill.measurement = Spill.Measurement.EUCLIDEAN;
+                spill.measurement = EUCLIDEAN;
                 break;
             case CUBE:
             case SQUARE:
-                spill.measurement = Spill.Measurement.CHEBYSHEV;
+                spill.measurement = CHEBYSHEV;
                 break;
             default:
-                spill.measurement = Spill.Measurement.MANHATTAN;
+                spill.measurement = MANHATTAN;
                 break;
         }
         reach.minDistance = minRange;
@@ -242,9 +245,9 @@ public class CloudAOE implements AOE, Serializable {
             }
         }
 
-        DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
-        if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
-        else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
+        Measurement dmm = Measurement.MANHATTAN;
+        if(spill.measurement == CHEBYSHEV) dmm = Measurement.CHEBYSHEV;
+        else if(spill.measurement == EUCLIDEAN) dmm = Measurement.EUCLIDEAN;
 
         double radius = Math.sqrt(volume) * 0.75;
 
@@ -389,9 +392,9 @@ public class CloudAOE implements AOE, Serializable {
 
         t = pts[0];
 
-        DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
-        if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
-        else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
+        Measurement dmm = Measurement.MANHATTAN;
+        if(spill.measurement == CHEBYSHEV) dmm = Measurement.CHEBYSHEV;
+        else if(spill.measurement == EUCLIDEAN) dmm = Measurement.EUCLIDEAN;
 
         double radius = Math.sqrt(volume) * 0.75;
 

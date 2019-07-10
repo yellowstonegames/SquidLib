@@ -55,7 +55,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import static squidpony.squidai.DijkstraMap.Measurement.CHEBYSHEV;
+import static squidpony.squidgrid.Measurement.CHEBYSHEV;
 
 /**
  * Times:

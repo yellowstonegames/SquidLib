@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -34,7 +35,7 @@ public class LargeDijkstraTest {
         System.out.println(sb);
     }
     public static void main(String[] args) {
-        for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
+        for (Measurement m : Measurement.values()) {
             LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
             RNG rng = new RNG(lrng);
             int size = 2;
@@ -146,7 +147,7 @@ public class LargeDijkstraTest {
             entry = dg.utility.randomFloorLarge(dun, size);
 
             LOS los = new LOS();
-            if(m == DijkstraMap.Measurement.MANHATTAN)
+            if(m == Measurement.MANHATTAN)
             {
                 los.setRadiusStrategy(Radius.DIAMOND);
             }

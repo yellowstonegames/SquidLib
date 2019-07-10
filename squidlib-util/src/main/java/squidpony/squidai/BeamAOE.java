@@ -2,6 +2,7 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
@@ -56,7 +57,7 @@ public class BeamAOE implements AOE, Serializable {
     public BeamAOE(Coord origin, Coord end)
     {
         dijkstra = new DijkstraMap();
-        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra.measurement = Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         this.end = end;
@@ -68,7 +69,7 @@ public class BeamAOE implements AOE, Serializable {
     public BeamAOE(Coord origin, Coord end, int radius)
     {
         dijkstra = new DijkstraMap();
-        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra.measurement = Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         this.end = end;
@@ -85,14 +86,14 @@ public class BeamAOE implements AOE, Serializable {
         {
             case OCTAHEDRON:
             case DIAMOND:
-                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+                dijkstra.measurement = Measurement.MANHATTAN;
                 break;
             case CUBE:
             case SQUARE:
-                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+                dijkstra.measurement = Measurement.CHEBYSHEV;
                 break;
             default:
-                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+                dijkstra.measurement = Measurement.EUCLIDEAN;
                 break;
         }
         this.origin = origin;
@@ -106,7 +107,7 @@ public class BeamAOE implements AOE, Serializable {
     public BeamAOE(Coord origin, double angle, int length)
     {
         dijkstra = new DijkstraMap();
-        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra.measurement = Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         double theta = Math.toRadians(angle);
@@ -120,7 +121,7 @@ public class BeamAOE implements AOE, Serializable {
     public BeamAOE(Coord origin, double angle, int length, int radius)
     {
         dijkstra = new DijkstraMap();
-        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra.measurement = Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         double theta = Math.toRadians(angle);
@@ -139,14 +140,14 @@ public class BeamAOE implements AOE, Serializable {
         {
             case OCTAHEDRON:
             case DIAMOND:
-                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+                dijkstra.measurement = Measurement.MANHATTAN;
                 break;
             case CUBE:
             case SQUARE:
-                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+                dijkstra.measurement = Measurement.CHEBYSHEV;
                 break;
             default:
-                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+                dijkstra.measurement = Measurement.EUCLIDEAN;
                 break;
         }
         this.origin = origin;
@@ -281,14 +282,14 @@ public class BeamAOE implements AOE, Serializable {
         {
             case OCTAHEDRON:
             case DIAMOND:
-                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+                dijkstra.measurement = Measurement.MANHATTAN;
                 break;
             case CUBE:
             case SQUARE:
-                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+                dijkstra.measurement = Measurement.CHEBYSHEV;
                 break;
             default:
-                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+                dijkstra.measurement = Measurement.EUCLIDEAN;
                 break;
         }
     }

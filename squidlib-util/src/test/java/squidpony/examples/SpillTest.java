@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -24,7 +25,7 @@ public class SpillTest {
 
     public static void main(String[] args) {
         for (int which = 0; which < 2; which++) {
-            for (Spill.Measurement m : Spill.Measurement.values()) {
+            for (Measurement m : Measurement.values()) {
                 StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
                 DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
 
@@ -60,7 +61,7 @@ public class SpillTest {
 
                 System.out.println();
             }
-            for (Spill.Measurement m : Spill.Measurement.values()) {
+            for (Measurement m : Measurement.values()) {
                 StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
                 DungeonGenerator dg = new DungeonGenerator(80, 80, rng);
                 char[][] dun = dg.generate();
@@ -104,7 +105,7 @@ public class SpillTest {
                 StatefulRNG rng = new StatefulRNG(); //i * 5617
                 int dim = 40 + i * 40, count = 20 + 10 * i * i;
                 char[][] blank = ArrayTools.fill('~', dim, dim);
-                MultiSpill spreader = new MultiSpill(blank, Spill.Measurement.MANHATTAN, rng);
+                MultiSpill spreader = new MultiSpill(blank, Measurement.MANHATTAN, rng);
 
                 //SobolQRNG sobol = new SobolQRNG(3);
                 //double[] filler = sobol.skipTo(rng.between(1000, 6500));

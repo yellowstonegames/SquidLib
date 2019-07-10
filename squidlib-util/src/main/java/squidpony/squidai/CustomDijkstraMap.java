@@ -1,7 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.annotation.Beta;
-import squidpony.squidai.DijkstraMap.Measurement;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Adjacency.BasicAdjacency;
 import squidpony.squidgrid.Adjacency.RotationAdjacency;

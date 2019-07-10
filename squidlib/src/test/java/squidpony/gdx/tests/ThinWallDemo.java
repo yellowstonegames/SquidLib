@@ -14,9 +14,9 @@ import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.CustomDijkstraMap;
-import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -123,7 +123,7 @@ public class ThinWallDemo extends ApplicationAdapter {
     private Viewport viewport;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
 
-    public static final Adjacency adjacency = new Adjacency.ThinWallAdjacency(overlapWidth, overlapHeight, DijkstraMap.Measurement.EUCLIDEAN);
+    public static final Adjacency adjacency = new Adjacency.ThinWallAdjacency(overlapWidth, overlapHeight, Measurement.EUCLIDEAN);
     @Override
     public void create() {
         // gotta have a random number generator. We can pass a seed as a long or String to an RNG.

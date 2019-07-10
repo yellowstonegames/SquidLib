@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import squidpony.squidai.*;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -137,9 +138,9 @@ public class SquidAIDemo extends ApplicationAdapter {
         blueBeam.setMap(bareDungeon);
 
 
-        getToRed = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
+        getToRed = new DijkstraMap(bareDungeon, Measurement.EUCLIDEAN);
         getToRed.rng = rng;
-        getToBlue = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
+        getToBlue = new DijkstraMap(bareDungeon, Measurement.EUCLIDEAN);
         getToBlue.rng = rng;
 
         dijkstraAlert();

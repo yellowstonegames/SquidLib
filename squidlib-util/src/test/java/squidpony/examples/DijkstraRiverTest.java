@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
@@ -92,7 +93,7 @@ public class DijkstraRiverTest {
         Coord[] shores = land.copy().not().fringe().asCoords();
         DijkstraMap dm = new DijkstraMap(map, '~');
         dm.rng = random;
-        dm.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dm.measurement = Measurement.EUCLIDEAN;
         double[][] heights2 = ArrayTools.copy(heights);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {

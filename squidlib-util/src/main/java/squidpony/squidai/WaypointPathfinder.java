@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.*;
@@ -47,7 +48,7 @@ public class WaypointPathfinder {
         int centerCount = centers.size();
         expansionMap = new int[width][height];
         waypoints = new OrderedMap<>(64);
-        dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
+        dm = new DijkstraMap(simplified, Measurement.MANHATTAN);
 
         for (Coord center : centers) {
             dm.clearGoals();
@@ -161,7 +162,7 @@ public class WaypointPathfinder {
             OrderedSet<Coord> centers = PoissonDisk.sampleMap(simplified,
                     Math.min(width, height) * 0.4f, this.rng, '#');
             int centerCount = centers.size();
-            dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
+            dm = new DijkstraMap(simplified, Measurement.MANHATTAN);
 
             for (Coord center : centers) {
                 dm.clearGoals();
@@ -317,7 +318,7 @@ public class WaypointPathfinder {
         int centerCount = centers.size();
         expansionMap = new int[width][height];
         waypoints = new OrderedMap<>(64);
-        dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
+        dm = new DijkstraMap(simplified, Measurement.MANHATTAN);
 
         for (Coord center : centers) {
             dm.clearGoals();

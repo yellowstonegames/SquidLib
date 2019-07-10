@@ -1,6 +1,5 @@
 package squidpony.squidgrid;
 
-import squidpony.squidgrid.Spill.Measurement;
 import squidpony.squidmath.*;
 
 import java.util.*;
