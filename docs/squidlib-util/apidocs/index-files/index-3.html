@@ -182,7 +182,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Basic1D.html#Basic1D-long-">Basic1D(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Basic1D.html" title="class in squidpony.squidmath">Noise.Basic1D</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.BasicAdjacency.html#BasicAdjacency-int-int-squidpony.squidai.DijkstraMap.Measurement-">BasicAdjacency(int, int, DijkstraMap.Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.BasicAdjacency.html" title="class in squidpony.squidgrid">Adjacency.BasicAdjacency</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.BasicAdjacency.html#BasicAdjacency-int-int-squidpony.squidgrid.Measurement-">BasicAdjacency(int, int, Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.BasicAdjacency.html" title="class in squidpony.squidgrid">Adjacency.BasicAdjacency</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ObText.html#basicMap--">basicMap()</a></span> - Method in class squidpony.<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a></dt>
 <dd>
@@ -213,9 +213,19 @@
  generator type, with a multiplication on the output.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#BasicRandom64--">BasicRandom64()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Calls <a href="../squidpony/squidmath/BasicRandom64.html#seed-int-"><code>BasicRandom64.seed(int)</code></a> with a random int value (obtained using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a>).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#BasicRandom64-int-">BasicRandom64(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
+<dd>
+<div class="block">The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly
+ one million, but most if not all initial states will have much longer periods).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#BasicRandom64-long-">BasicRandom64(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/BasicRandom64.html#BasicRandom64-int-"><code>BasicRandom64.BasicRandom64(int)</code></a>, this doesn't use the seed as-is, and instead uses it to get a valid state
+ (which is a long internally).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.InverseLayered1D.html#basis">basis</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.InverseLayered1D.html" title="class in squidpony.squidmath">Noise.InverseLayered1D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.InverseLayered2D.html#basis">basis</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.InverseLayered2D.html" title="class in squidpony.squidmath">Noise.InverseLayered2D</a></dt>

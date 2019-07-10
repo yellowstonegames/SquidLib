@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../index.html?squidpony/squidgrid/SoundMap.html" target="_top">Frames</a></li>
@@ -74,7 +74,7 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -119,27 +119,6 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a></span></code>
-<div class="block">The type of heuristic to use.</div>
-</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field.summary">
@@ -174,7 +153,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a></code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#measurement">measurement</a></span></code>
 <div class="block">This affects how sound travels on diagonal directions vs.</div>
 </td>
@@ -249,8 +228,8 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-squidpony.squidgrid.SoundMap.Measurement-">SoundMap</a></span>(char[][]&nbsp;level,
-        <a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a>&nbsp;measurement)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#SoundMap-char:A:A-squidpony.squidgrid.Measurement-">SoundMap</a></span>(char[][]&nbsp;level,
+        <a href="../../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement)</code>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
@@ -261,8 +240,8 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#SoundMap-double:A:A-squidpony.squidgrid.SoundMap.Measurement-">SoundMap</a></span>(double[][]&nbsp;level,
-        <a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a>&nbsp;measurement)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/SoundMap.html#SoundMap-double:A:A-squidpony.squidgrid.Measurement-">SoundMap</a></span>(double[][]&nbsp;level,
+        <a href="../../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement)</code>
 <div class="block">Used to construct a DijkstraMap from the output of another, specifying a distance calculation.</div>
 </td>
 </tr>
@@ -430,7 +409,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>measurement</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a> <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.39">measurement</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a> <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.22">measurement</a></pre>
 <div class="block">This affects how sound travels on diagonal directions vs. orthogonal directions. MANHATTAN should form a diamond
  shape on a featureless map, while CHEBYSHEV will form a square.</div>
 </li>
@@ -441,7 +420,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>physicalMap</h4>
-<pre>public&nbsp;double[][] <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.46">physicalMap</a></pre>
+<pre>public&nbsp;double[][] <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.29">physicalMap</a></pre>
 <div class="block">Stores which parts of the map are accessible and which are not. Should not be changed unless the actual physical
  terrain has changed. You should call initialize() with a new map instead of changing this directly.</div>
 </li>
@@ -452,7 +431,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>gradientMap</h4>
-<pre>public&nbsp;double[][] <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.52">gradientMap</a></pre>
+<pre>public&nbsp;double[][] <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.35">gradientMap</a></pre>
 <div class="block">The frequently-changing values that are often the point of using this class; cells producing sound will have a
  value greater than 0, cells that cannot possibly be reached by a sound will have a value of exactly 0, and walls
  will have a value equal to the WALL constant (a negative number).</div>
@@ -464,7 +443,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.56">height</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.39">height</a></pre>
 <div class="block">Height of the map. Exciting stuff. Don't change this, instead call initialize().</div>
 </li>
 </ul>
@@ -474,7 +453,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.60">width</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.43">width</a></pre>
 <div class="block">Width of the map. Exciting stuff. Don't change this, instead call initialize().</div>
 </li>
 </ul>
@@ -484,7 +463,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>alerted</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt; <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.65">alerted</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt; <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.48">alerted</a></pre>
 <div class="block">The latest results of findAlerted(), with Coord keys representing the positions of creatures that were alerted
  and Double values representing how loud the sound was when it reached them.</div>
 </li>
@@ -495,7 +474,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>SILENT</h4>
-<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.69">SILENT</a></pre>
+<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.52">SILENT</a></pre>
 <div class="block">Cells with no sound are always marked with 0.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -509,7 +488,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>WALL</h4>
-<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.73">WALL</a></pre>
+<pre>public static final&nbsp;double <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.56">WALL</a></pre>
 <div class="block">Walls, which are solid no-entry cells, are marked with a significant negative number equal to -999500.0 .</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -523,7 +502,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sounds</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt; <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.78">sounds</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt; <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.61">sounds</a></pre>
 <div class="block">Sources of sound on the map; keys are positions, values are how loud the noise is (10.0 should spread 10 cells
  away, with diminishing values assigned to further positions).</div>
 </li>
@@ -534,7 +513,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a> <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.83">rng</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a> <a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.66">rng</a></pre>
 <div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
 </li>
 </ul>
@@ -552,7 +531,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>SoundMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.90">SoundMap</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.73">SoundMap</a>()</pre>
 <div class="block">Construct a SoundMap without a level to actually scan. If you use this constructor, you must call an
  initialize() method before using this class.</div>
 </li>
@@ -563,7 +542,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>SoundMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.101">SoundMap</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.84">SoundMap</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</pre>
 <div class="block">Construct a SoundMap without a level to actually scan. This constructor allows you to specify an RNG before it is
  used. If you use this constructor, you must call an initialize() method before using this class.</div>
 </li>
@@ -574,7 +553,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>SoundMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.112">SoundMap</a>(double[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.95">SoundMap</a>(double[][]&nbsp;level)</pre>
 <div class="block">Used to construct a SoundMap from the output of another. Any sounds will need to be assigned again.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -582,14 +561,14 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="SoundMap-double:A:A-squidpony.squidgrid.SoundMap.Measurement-">
+<a name="SoundMap-double:A:A-squidpony.squidgrid.Measurement-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>SoundMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.124">SoundMap</a>(double[][]&nbsp;level,
-                <a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a>&nbsp;measurement)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.107">SoundMap</a>(double[][]&nbsp;level,
+                <a href="../../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Used to construct a DijkstraMap from the output of another, specifying a distance calculation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -604,7 +583,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>SoundMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.141">SoundMap</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.124">SoundMap</a>(char[][]&nbsp;level)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
@@ -621,7 +600,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>SoundMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.156">SoundMap</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.139">SoundMap</a>(char[][]&nbsp;level,
                 char&nbsp;alternateWall)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
@@ -633,14 +612,14 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="SoundMap-char:A:A-squidpony.squidgrid.SoundMap.Measurement-">
+<a name="SoundMap-char:A:A-squidpony.squidgrid.Measurement-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SoundMap</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.173">SoundMap</a>(char[][]&nbsp;level,
-                <a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid">SoundMap.Measurement</a>&nbsp;measurement)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.156">SoundMap</a>(char[][]&nbsp;level,
+                <a href="../../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
@@ -666,7 +645,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.188">initialize</a>(double[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.171">initialize</a>(double[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a SoundMap that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl>
@@ -682,7 +661,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.209">initialize</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.192">initialize</a>(char[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a SoundMap that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl>
@@ -698,7 +677,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.233">initialize</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.216">initialize</a>(char[][]&nbsp;level,
                            char&nbsp;alternateWall)</pre>
 <div class="block">Used to initialize or re-initialize a SoundMap that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently. This
@@ -717,7 +696,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>resetMap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.253">resetMap</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.236">resetMap</a>()</pre>
 <div class="block">Resets the gradientMap to its original value from physicalMap. Does not remove sounds (they will still affect
  scan() normally).</div>
 </li>
@@ -728,7 +707,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>reset</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.266">reset</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.249">reset</a>()</pre>
 <div class="block">Resets this SoundMap to a state with no sounds, no alerted creatures, and no changes made to gradientMap
  relative to physicalMap.</div>
 </li>
@@ -739,7 +718,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setSound</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.282">setSound</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.265">setSound</a>(int&nbsp;x,
                      int&nbsp;y,
                      double&nbsp;loudness)</pre>
 <div class="block">Marks a cell as producing a sound with the given loudness; this can be placed on a wall or unreachable area,
@@ -760,7 +739,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setSound</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.298">setSound</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.281">setSound</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
                      double&nbsp;loudness)</pre>
 <div class="block">Marks a cell as producing a sound with the given loudness; this can be placed on a wall or unreachable area,
  but that may cause the sound to be un-hear-able. A sound emanating from a cell on one side of a 2-cell-thick
@@ -779,7 +758,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>removeSound</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.310">removeSound</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.293">removeSound</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <div class="block">If a sound is being produced at a given (x, y) location, this removes it.</div>
 <dl>
@@ -795,7 +774,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>removeSound</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.321">removeSound</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.304">removeSound</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 <div class="block">If a sound is being produced at a given location (a Coord), this removes it.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -809,7 +788,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setOccupied</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.332">setOccupied</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.315">setOccupied</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <div class="block">Marks a specific cell in gradientMap as a wall, which makes sounds potentially unable to pass through it.</div>
 <dl>
@@ -825,7 +804,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.342">resetCell</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.325">resetCell</a>(int&nbsp;x,
                       int&nbsp;y)</pre>
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
 <dl>
@@ -841,7 +820,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.351">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.334">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -855,7 +834,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>clearSounds</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.359">clearSounds</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.342">clearSounds</a>()</pre>
 <div class="block">Used to remove all sounds.</div>
 </li>
 </ul>
@@ -865,7 +844,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.364">setFresh</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.347">setFresh</a>(int&nbsp;x,
                         int&nbsp;y,
                         double&nbsp;counter)</pre>
 </li>
@@ -876,7 +855,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.370">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.353">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
                         double&nbsp;counter)</pre>
 </li>
 </ul>
@@ -886,7 +865,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>scan</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.387">scan</a>()</pre>
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.370">scan</a>()</pre>
 <div class="block">Recalculate the sound map and return it. Cells that were marked as goals with setSound will have
  a value greater than 0 (higher numbers are louder sounds), the cells adjacent to sounds will have a value 1 less
  than the loudest adjacent cell, and cells progressively further from sounds will have a value equal to the
@@ -906,7 +885,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>findAlerted</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.452">findAlerted</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;creatures,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/SoundMap.html#line.435">findAlerted</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;creatures,
                                             <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;extraSounds)</pre>
 <div class="block">Scans the dungeon using SoundMap.scan, adding any positions in extraSounds to the group of known sounds before
  scanning.  The creatures passed to this function as a Set of Points will have the loudness of all sounds at
@@ -948,7 +927,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../squidpony/squidgrid/SoundMap.Measurement.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../index.html?squidpony/squidgrid/SoundMap.html" target="_top">Frames</a></li>
@@ -972,7 +951,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

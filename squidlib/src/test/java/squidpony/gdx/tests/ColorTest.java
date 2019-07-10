@@ -436,7 +436,7 @@ public class ColorTest extends ApplicationAdapter {
 
     public static float coYOG(final Color color)
     {
-        return color.r * 0x8p-4f /* + color.g * -0x1p-4f */ + color.b * -0x8p-4f;
+        return color.r * 0x8p-4f + color.b * -0x8p-4f;
     }
 
     public static float cgYOG(final Color color)
@@ -480,7 +480,6 @@ public class ColorTest extends ApplicationAdapter {
         int[] reverse = new int[COUNT];
         byte[][] ramps = new byte[COUNT][4];
         float[] lumas = new float[COUNT], cos = new float[COUNT], cgs = new float[COUNT];
-        //String[] names = new String[COUNT];
         final int yLim = 63, coLim = 31, cgLim = 31, shift1 = 6, shift2 = 11;
 //        final OrderedSet<Color> flesurrectSet = new OrderedSet<>(COUNT);
 //        for (int i = 0; i < COUNT; i++) {
@@ -497,10 +496,7 @@ public class ColorTest extends ApplicationAdapter {
 //            }
 //        }, 1, COUNT);
         for (int i = 1; i < COUNT; i++) {
-            //col.set(flesurrectSet.getAt(i));
-            //FLESURRECT[i] = Color.rgba8888(col);
             col.set(palette[i]);
-            //names[i] = col.name;
             reverse[i] =
                     (int) ((lumas[i] = lumaYOG(col)) * yLim)
                             | (int) (((cos[i] = coYOG(col)) + 0.5f) * coLim) << shift1
@@ -543,8 +539,6 @@ public class ColorTest extends ApplicationAdapter {
                             if (Math.abs(lumas[i] - yf) < 0.2f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
                                 paletteMapping[c2] = (byte) i;
                         }
-//                        if(paletteMapping[c2] == 0)
-//                            System.out.println("what gives? y=" + y + ", co=" + cb + ", cg=" + cr);
                     }
                 }
             }

@@ -4,22 +4,12 @@ import squidpony.ArrayTools;
 import squidpony.squidai.Technique;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.IntVLA;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient floodfill.
@@ -52,55 +42,7 @@ import java.util.Map;
  */
 public class NextDijkstraMap implements Serializable {
     private static final long serialVersionUID = -2456306898212944441L;
-
-    private static final double root2 = Math.sqrt(2.0);
-    /**
-     * The type of heuristic to use.
-     */
-    public enum Measurement {
-
-        /**
-         * The distance it takes when only the four primary directions can be
-         * moved in. The default.
-         */
-        MANHATTAN,
-        /**
-         * The distance it takes when diagonal movement costs the same as
-         * cardinal movement.
-         */
-        CHEBYSHEV,
-        /**
-         * The distance it takes as the crow flies. This will NOT affect movement cost when calculating a path,
-         * only the preferred squares to travel to (resulting in drastically more reasonable-looking paths).
-         */
-        EUCLIDEAN;
-
-        public double heuristic(Direction target) {
-            switch (this) {
-                case CHEBYSHEV:
-                    return 1.0;
-                case EUCLIDEAN:
-                    switch (target) {
-                        case DOWN_LEFT:
-                        case DOWN_RIGHT:
-                        case UP_LEFT:
-                        case UP_RIGHT:
-                            return root2;
-                        default:
-                            return 1.0;
-                    }
-            }
-            return 1.0;
-        }
-
-        public int directionCount() {
-            switch (this) {
-                case MANHATTAN: return 4;
-                default: return 8;
-            }
-        }
-    }
-
+    
     /**
      * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
      * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. EUCLIDEAN does not affect
@@ -517,11 +459,11 @@ public class NextDijkstraMap implements Serializable {
      */
     public static Measurement findMeasurement(Radius radius) {
         if (radius.equals2D(Radius.SQUARE))
-            return NextDijkstraMap.Measurement.CHEBYSHEV;
+            return Measurement.CHEBYSHEV;
         else if (radius.equals2D(Radius.DIAMOND))
-            return NextDijkstraMap.Measurement.MANHATTAN;
+            return Measurement.MANHATTAN;
         else
-            return NextDijkstraMap.Measurement.EUCLIDEAN;
+            return Measurement.EUCLIDEAN;
     }
 
     /**

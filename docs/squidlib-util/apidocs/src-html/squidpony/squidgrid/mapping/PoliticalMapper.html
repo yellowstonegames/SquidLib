@@ -13,8 +13,8 @@
 <span class="sourceLineNo">005</span>import squidpony.Maker;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import squidpony.Thesaurus;<a name="line.6"></a>
 <span class="sourceLineNo">007</span>import squidpony.annotation.Beta;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import squidpony.squidgrid.MultiSpill;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import squidpony.squidgrid.Spill;<a name="line.9"></a>
+<span class="sourceLineNo">008</span>import squidpony.squidgrid.Measurement;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import squidpony.squidgrid.MultiSpill;<a name="line.9"></a>
 <span class="sourceLineNo">010</span>import squidpony.squidmath.*;<a name="line.10"></a>
 <span class="sourceLineNo">011</span><a name="line.11"></a>
 <span class="sourceLineNo">012</span>import java.util.ArrayList;<a name="line.12"></a>
@@ -120,7 +120,7 @@
 <span class="sourceLineNo">112</span>        factionCount &amp;= 255;<a name="line.112"></a>
 <span class="sourceLineNo">113</span>        width = land.width;<a name="line.113"></a>
 <span class="sourceLineNo">114</span>        height = land.height;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);<a name="line.115"></a>
+<span class="sourceLineNo">115</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Measurement.MANHATTAN, rng);<a name="line.115"></a>
 <span class="sourceLineNo">116</span>        Coord.expandPoolTo(width, height);<a name="line.116"></a>
 <span class="sourceLineNo">117</span>        GreasedRegion map = land.copy();<a name="line.117"></a>
 <span class="sourceLineNo">118</span>        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);<a name="line.118"></a>
@@ -216,7 +216,7 @@
 <span class="sourceLineNo">208</span>        briefAtlas.putAll(atlas);<a name="line.208"></a>
 <span class="sourceLineNo">209</span>        width = land.width;<a name="line.209"></a>
 <span class="sourceLineNo">210</span>        height = land.height;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);<a name="line.211"></a>
+<span class="sourceLineNo">211</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Measurement.MANHATTAN, rng);<a name="line.211"></a>
 <span class="sourceLineNo">212</span>        Coord.expandPoolTo(width, height);<a name="line.212"></a>
 <span class="sourceLineNo">213</span>        GreasedRegion map = land.copy();<a name="line.213"></a>
 <span class="sourceLineNo">214</span>        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);<a name="line.214"></a>
@@ -324,7 +324,7 @@
 <span class="sourceLineNo">316</span>        int factionCount = atlas.size() - 2;<a name="line.316"></a>
 <span class="sourceLineNo">317</span>        width = land.width;<a name="line.317"></a>
 <span class="sourceLineNo">318</span>        height = land.height;<a name="line.318"></a>
-<span class="sourceLineNo">319</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);<a name="line.319"></a>
+<span class="sourceLineNo">319</span>        MultiSpill spreader = new MultiSpill(new short[width][height], Measurement.MANHATTAN, rng);<a name="line.319"></a>
 <span class="sourceLineNo">320</span>        Coord.expandPoolTo(width, height);<a name="line.320"></a>
 <span class="sourceLineNo">321</span>        GreasedRegion map = land.copy();<a name="line.321"></a>
 <span class="sourceLineNo">322</span>        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);<a name="line.322"></a>

@@ -142,7 +142,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Garbler.html#makeKeyArray-int-java.lang.String-">makeKeyArray(int, String)</a></span> - Static method in class squidpony.<a href="../squidpony/Garbler.html" title="class in squidpony">Garbler</a></dt>
 <dd>
-<div class="block">If you need to produce an int array as a key for <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>Garbler.garble(String, long[])</code></a> when you only have a String,
+<div class="block">If you need to produce an long array as a key for <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>Garbler.garble(String, long[])</code></a> when you only have a String,
  you can use this method if the String isn't too small (at least 8 char Strings should be fine).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#makeLake-java.util.ArrayList-java.util.ArrayList-">makeLake(ArrayList&lt;char[][]&gt;, ArrayList&lt;char[][]&gt;)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
@@ -504,13 +504,13 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MasonNoise.html#MasonNoise-long-">MasonNoise(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MasonNoise.html" title="class in squidpony.squidmath">MasonNoise</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.Measurement.html#matchingMeasurement-squidpony.squidgrid.Radius-">matchingMeasurement(Radius)</a></span> - Static method in enum squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Measurement.html#matchingMeasurement-squidpony.squidgrid.Radius-">matchingMeasurement(Radius)</a></span> - Static method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a></dt>
 <dd>
-<div class="block">Gets the appropriate DijkstraMap.Measurement that matches a Radius enum.</div>
+<div class="block">Gets the appropriate Measurement that matches a Radius enum.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.Measurement.html#matchingRadius--">matchingRadius()</a></span> - Method in enum squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Measurement.html#matchingRadius--">matchingRadius()</a></span> - Method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a></dt>
 <dd>
-<div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.</div>
+<div class="block">Gets the appropriate Radius corresponding to a Measurement.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/MathExtras.html" title="class in squidpony.squidmath"><span class="typeNameLink">MathExtras</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
@@ -729,6 +729,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#measurement">measurement</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>
 <div class="block">This affects how distance is measured on diagonal directions vs.</div>
+</dd>
+<dt><a href="../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Measurement</span></a> - Enum in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
+<dd>
+<div class="block">A way of measuring what cells are adjacent and how much further any adjacent cells are from other adjacent cells.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#measurement">measurement</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>
@@ -1110,9 +1114,8 @@
 </dd>
 <dt><a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">MizuchiRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
-<div class="block">A mid-quality StatefulRandomness based on <a href="../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a> but modified to allow any odd number as a stream,
- instead of LinnormRNG's hardcoded stream of 1; at least some streams fail statistical testing, but only after at
- least 8TB of data is analyzed, failing at 16TB.</div>
+<div class="block">A high-quality StatefulRandomness based on <a href="../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a> but modified to allow any odd number as a stream,
+ instead of LinnormRNG's hardcoded stream of 1.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#MizuchiRNG--">MizuchiRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
 <dd>
@@ -1431,11 +1434,11 @@
 <dd>
 <div class="block">Used to construct a Spill from the output of another.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-short:A:A-squidpony.squidgrid.Spill.Measurement-">MultiSpill(short[][], Spill.Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-short:A:A-squidpony.squidgrid.Measurement-">MultiSpill(short[][], Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>
 <div class="block">Used to construct a Spill from the output of another, specifying a distance calculation.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-short:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IRNG-">MultiSpill(short[][], Spill.Measurement, IRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-short:A:A-squidpony.squidgrid.Measurement-squidpony.squidmath.IRNG-">MultiSpill(short[][], Measurement, IRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>
 <div class="block">Used to construct a Spill from the output of another, specifying a distance calculation and RNG.</div>
 </dd>
@@ -1449,12 +1452,12 @@
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-char:A:A-squidpony.squidgrid.Spill.Measurement-">MultiSpill(char[][], Spill.Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-char:A:A-squidpony.squidgrid.Measurement-">MultiSpill(char[][], Measurement)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IRNG-">MultiSpill(char[][], Spill.Measurement, IRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#MultiSpill-char:A:A-squidpony.squidgrid.Measurement-squidpony.squidmath.IRNG-">MultiSpill(char[][], Measurement, IRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>

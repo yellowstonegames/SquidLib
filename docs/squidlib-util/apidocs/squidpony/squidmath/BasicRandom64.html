@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.28">BasicRandom64</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.30">BasicRandom64</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A high-quality and very fast RNG that has no apparent visual artifacts here; uses Mark Overton's CMR subcycle
@@ -181,10 +181,21 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#BasicRandom64--">BasicRandom64</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#BasicRandom64--">BasicRandom64</a></span>()</code>
+<div class="block">Calls <a href="../../squidpony/squidmath/BasicRandom64.html#seed-int-"><code>seed(int)</code></a> with a random int value (obtained using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a>).</div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#BasicRandom64-long-">BasicRandom64</a></span>(long&nbsp;seed)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#BasicRandom64-int-">BasicRandom64</a></span>(int&nbsp;seed)</code>
+<div class="block">The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly
+ one million, but most if not all initial states will have much longer periods).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#BasicRandom64-long-">BasicRandom64</a></span>(long&nbsp;seed)</code>
+<div class="block">Like <a href="../../squidpony/squidmath/BasicRandom64.html#BasicRandom64-int-"><code>BasicRandom64(int)</code></a>, this doesn't use the seed as-is, and instead uses it to get a valid state
+ (which is a long internally).</div>
+</td>
 </tr>
 </table>
 </li>
@@ -209,60 +220,76 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#getState--">getState</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Gets an int with at most the specified amount of bits; don't confuse this with <a href="../../squidpony/squidmath/BasicRandom64.html#nextInt-int-"><code>nextInt(int)</code></a>, which gets
  a number between 0 and its int argument, where this draws from a different (larger) range of random results.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#nextInt--">nextInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#nextInt-int-">nextInt</a></span>(int&nbsp;bound)</code>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#nextLong-long-">nextLong</a></span>(long&nbsp;bound)</code>
 <div class="block">Exclusive on bound (which must be positive), with an inner bound of 0.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#seed-int-">seed</a></span>(int&nbsp;s)</code>
+<div class="block">Seeds the state using all bits of the given int <code>s</code>.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#setSeed-long-">setSeed</a></span>(long&nbsp;seed)</code>
 <div class="block">Sets the seed using a long, passing its argument to <a href="../../squidpony/squidmath/BasicRandom64.html#setState-long-"><code>setState(long)</code></a>.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#setState-long-">setState</a></span>(long&nbsp;seed)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#shuffle-T:A-">shuffle</a></span>(T[]&nbsp;elements)</code>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy, freshly-allocated, without
  modifying elements.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#shuffleInPlace-java.util.List-">shuffleInPlace</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;elements)</code>
+<div class="block">Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#shuffleInPlace-T:A-">shuffleInPlace</a></span>(T[]&nbsp;elements)</code>
 <div class="block">Shuffles an array in-place using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#shuffleInPlace-T:A-int-">shuffleInPlace</a></span>(T[]&nbsp;elements,
               int&nbsp;length)</code>
@@ -270,7 +297,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
  (exclusive).</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected static &lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BasicRandom64.html#swap-T:A-int-int-">swap</a></span>(T[]&nbsp;arr,
     int&nbsp;pos1,
@@ -313,7 +340,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>state</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.30">state</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.33">state</a></pre>
 </li>
 </ul>
 </li>
@@ -330,7 +357,24 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>BasicRandom64</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.32">BasicRandom64</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.38">BasicRandom64</a>()</pre>
+<div class="block">Calls <a href="../../squidpony/squidmath/BasicRandom64.html#seed-int-"><code>seed(int)</code></a> with a random int value (obtained using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a>).</div>
+</li>
+</ul>
+<a name="BasicRandom64-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BasicRandom64</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.49">BasicRandom64</a>(int&nbsp;seed)</pre>
+<div class="block">The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly
+ one million, but most if not all initial states will have much longer periods). All ints are permissible values
+ for the <code>seed</code> parameter.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - any int; will be used to get the actual state used in the generator (which is a long internally)</dd>
+</dl>
 </li>
 </ul>
 <a name="BasicRandom64-long-">
@@ -339,7 +383,16 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BasicRandom64</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.37">BasicRandom64</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.62">BasicRandom64</a>(long&nbsp;seed)</pre>
+<div class="block">Like <a href="../../squidpony/squidmath/BasicRandom64.html#BasicRandom64-int-"><code>BasicRandom64(int)</code></a>, this doesn't use the seed as-is, and instead uses it to get a valid state
+ (which is a long internally). If you want to duplicate the state of another BasicRandom64, get the existing state
+ either with the field <a href="../../squidpony/squidmath/BasicRandom64.html#state"><code>state</code></a> or with <a href="../../squidpony/squidmath/BasicRandom64.html#getState--"><code>getState()</code></a> (you could store the state and load it later
+ at this stage), then make some new BasicRandom64 (such as with <code>new BasicRandom64(0);</code>) and call
+ <a href="../../squidpony/squidmath/BasicRandom64.html#setState-long-"><code>setState(long)</code></a> with the previous state. You can also use <a href="../../squidpony/squidmath/BasicRandom64.html#copy--"><code>copy()</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - any long; will be mixed around and given to <a href="../../squidpony/squidmath/BasicRandom64.html#seed-int-"><code>seed(int)</code></a> as an int, not used as-is</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -350,13 +403,42 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="seed-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>seed</h4>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.77">seed</a>(int&nbsp;s)</pre>
+<div class="block">Seeds the state using all bits of the given int <code>s</code>. Between 33554432 and 4294967296 seeds are possible,
+ with the actual count probably much closer to 4294967296. This treats the top 25 bits of <code>s</code> (moved to the
+ bottom, plus 1, to avoid a seed of 0) as the starting point and then generates the next state at most 127 times,
+ with each generated state taking less time than <a href="../../squidpony/squidmath/BasicRandom64.html#nextLong--"><code>nextLong()</code></a>. Some of the starting states are entirely
+ possible to be within 127 steps of another starting state, so not all seeds are necessarily unique. This is not
+ guaranteed to put the generator on an optimal subcycle, but it is guaranteed that any subcycle will have a period
+ of at least 1048575.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>s</code> - all bits are used, none verbatim (0 is tolerated)</dd>
+</dl>
+</li>
+</ul>
+<a name="getState--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getState</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.85">getState</a>()</pre>
+</li>
+</ul>
 <a name="setState-long-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.41">setState</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.89">setState</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="nextLong--">
@@ -365,7 +447,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.47">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.95">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -387,7 +469,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.59">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.107">next</a>(int&nbsp;bits)</pre>
 <div class="block">Gets an int with at most the specified amount of bits; don't confuse this with <a href="../../squidpony/squidmath/BasicRandom64.html#nextInt-int-"><code>nextInt(int)</code></a>, which gets
  a number between 0 and its int argument, where this draws from a different (larger) range of random results. For
  example, <code>next(2)</code> can return any 2-bit int,
@@ -410,7 +492,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.62">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.110">nextInt</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextInt--" title="class or interface in java.util">nextInt</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a></code></dd>
@@ -423,7 +505,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.75">nextInt</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.123">nextInt</a>(int&nbsp;bound)</pre>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
  <br>
@@ -444,7 +526,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.88">nextLong</a>(long&nbsp;bound)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.136">nextLong</a>(long&nbsp;bound)</pre>
 <div class="block">Exclusive on bound (which must be positive), with an inner bound of 0.
  If bound is negative or 0 this always returns 0.
  <br>
@@ -465,7 +547,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.106">setSeed</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.154">setSeed</a>(long&nbsp;seed)</pre>
 <div class="block">Sets the seed using a long, passing its argument to <a href="../../squidpony/squidmath/BasicRandom64.html#setState-long-"><code>setState(long)</code></a>. That method just sets the public
  field <a href="../../squidpony/squidmath/BasicRandom64.html#state"><code>state</code></a> to its argument currently, but it may do more to ensure cycle length in the future.</div>
 <dl>
@@ -484,7 +566,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>swap</h4>
-<pre>protected static&nbsp;&lt;T&gt;&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.115">swap</a>(T[]&nbsp;arr,
+<pre>protected static&nbsp;&lt;T&gt;&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.163">swap</a>(T[]&nbsp;arr,
                                int&nbsp;pos1,
                                int&nbsp;pos2)</pre>
 <div class="block">Mutates the array arr by switching the contents at pos1 and pos2.</div>
@@ -504,7 +586,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.130">shuffle</a>(T[]&nbsp;elements)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.178">shuffle</a>(T[]&nbsp;elements)</pre>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy, freshly-allocated, without
  modifying elements.
  <br>
@@ -525,7 +607,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffleInPlace</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.150">shuffleInPlace</a>(T[]&nbsp;elements,
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.198">shuffleInPlace</a>(T[]&nbsp;elements,
                               int&nbsp;length)</pre>
 <div class="block">Shuffles an array in-place using the Fisher-Yates algorithm, affecting indices from 0 (inclusive) to length
  (exclusive). May be useful with libGDX Array instances, which can be shuffled with
@@ -549,7 +631,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffleInPlace</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.167">shuffleInPlace</a>(T[]&nbsp;elements)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.215">shuffleInPlace</a>(T[]&nbsp;elements)</pre>
 <div class="block">Shuffles an array in-place using the Fisher-Yates algorithm.
  If you don't want the array modified, use <a href="../../squidpony/squidmath/BasicRandom64.html#shuffle-T:A-"><code>shuffle(Object[])</code></a>.
  <br>
@@ -562,13 +644,34 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </dl>
 </li>
 </ul>
+<a name="shuffleInPlace-java.util.List-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shuffleInPlace</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.232">shuffleInPlace</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;elements)</pre>
+<div class="block">Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.
+ This only shuffles List data structures.
+ <br>
+ <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - can be any non-primitive type.</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>elements</code> - a List of T; <b>will</b> be modified</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>elements after shuffling it in-place</dd>
+</dl>
+</li>
+</ul>
 <a name="copy--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a>&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.175">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a>&nbsp;<a href="../../src-html/squidpony/squidmath/BasicRandom64.html#line.241">copy</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#copy--">RandomnessSource</a></code></span></div>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to

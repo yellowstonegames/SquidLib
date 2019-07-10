@@ -141,11 +141,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-long-">garble(String, long)</a></span> - Static method in class squidpony.<a href="../squidpony/Garbler.html" title="class in squidpony">Garbler</a></dt>
 <dd>
-<div class="block">Garbles text with the given key as an int.</div>
+<div class="block">Garbles text with the given key as a long.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-">garble(String, long[])</a></span> - Static method in class squidpony.<a href="../squidpony/Garbler.html" title="class in squidpony">Garbler</a></dt>
 <dd>
-<div class="block">Garbles text with the given keys as an int array, effectively garbling the same text one time per item in keys.</div>
+<div class="block">Garbles text with the given keys as a long array, effectively garbling the same text one time per item in keys.</div>
 </dd>
 <dt><a href="../squidpony/Garbler.html" title="class in squidpony"><span class="typeNameLink">Garbler</span></a> - Class in <a href="../squidpony/package-summary.html">squidpony</a></dt>
 <dd>
@@ -813,6 +813,12 @@
  you can call this method to get the particular variety of noise you specified, in 2D.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getConfiguredNoise-float-float-float-float-">getConfiguredNoise(float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>
+<div class="block">After being configured with the setters in this class, such as <a href="../squidpony/squidmath/FastNoise.html#setNoiseType-int-"><code>FastNoise.setNoiseType(int)</code></a>,
+ <a href="../squidpony/squidmath/FastNoise.html#setFrequency-float-"><code>FastNoise.setFrequency(float)</code></a>, <a href="../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>FastNoise.setFractalOctaves(int)</code></a>, and <a href="../squidpony/squidmath/FastNoise.html#setFractalType-int-"><code>FastNoise.setFractalType(int)</code></a>, among others,
+ you can call this method to get the particular variety of noise you specified, in 3D.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getConfiguredNoise-float-float-float-float-float-float-">getConfiguredNoise(float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>
 <div class="block">After being configured with the setters in this class, such as <a href="../squidpony/squidmath/FastNoise.html#setNoiseType-int-"><code>FastNoise.setNoiseType(int)</code></a>,
  <a href="../squidpony/squidmath/FastNoise.html#setFrequency-float-"><code>FastNoise.setFrequency(float)</code></a>, <a href="../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>FastNoise.setFractalOctaves(int)</code></a>, and <a href="../squidpony/squidmath/FastNoise.html#setFractalType-int-"><code>FastNoise.setFractalType(int)</code></a>, among others,
@@ -1748,6 +1754,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getPerlin-float-float-">getPerlin(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getPerlin-float-float-float-float-float-float-">getPerlin(float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getPerlinFractal-float-float-float-">getPerlinFractal(float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getPerlinFractal-float-float-">getPerlinFractal(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
@@ -2066,9 +2074,13 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getSimplexFractal-float-float-float-float-">getSimplexFractal(float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getSimplexFractal-float-float-float-float-float-float-">getSimplexFractal(float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/ConeAOE.html#getSpan--">getSpan()</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/ConeAOE.html" title="class in squidpony.squidai">ConeAOE</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/ListZone.html#getState--">getState()</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/ListZone.html" title="class in squidpony.squidgrid.zone">ListZone</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#getState--">getState()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#getState--">getState()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>
@@ -2303,13 +2315,19 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getValue-float-float-">getValue(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getValue-float-float-float-float-float-float-">getValue(float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html#getValue--">getValue()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.MapEntry.html#getValue--">getValue()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntIntOrderedMap.MapEntry</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getValueFractal-float-float-float-">getValueFractal(float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getValueFractal-float-float-float-float-">getValueFractal(float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getValueFractal-float-float-">getValueFractal(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getValueFractal-float-float-float-float-float-float-">getValueFractal(float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/CloudAOE.html#getVolume--">getVolume()</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CloudAOE.html" title="class in squidpony.squidai">CloudAOE</a></dt>
 <dd>&nbsp;</dd>
@@ -2319,11 +2337,15 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#getWhite--">getWhite()</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getWhiteNoise-float-float-float-float-float-float-">getWhiteNoise(float, float, float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getWhiteNoise-float-float-float-float-">getWhiteNoise(float, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getWhiteNoise-float-float-float-">getWhiteNoise(float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getWhiteNoise-float-float-">getWhiteNoise(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getWhiteNoiseInt-int-int-int-int-int-int-">getWhiteNoiseInt(int, int, int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getWhiteNoiseInt-int-int-int-int-">getWhiteNoiseInt(int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -2431,6 +2453,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#grad4f">grad4f</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#grad6f">grad6f</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ClassicNoise.html#gradCoord2D-long-int-int-double-double-">gradCoord2D(long, int, int, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#gradCoord2D-int-int-int-float-float-">gradCoord2D(int, int, int, float, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
@@ -2457,6 +2481,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ClassicNoise.html#gradCoord6D-long-int-int-int-int-int-int-double-double-double-double-double-double-">gradCoord6D(long, int, int, int, int, int, int, double, double, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#gradCoord6D-int-int-int-int-int-int-int-float-float-float-float-float-float-">gradCoord6D(int, int, int, int, int, int, int, float, float, float, float, float, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/JitterNoise.html#gradCoord6D-long-int-int-int-int-int-int-double-double-double-double-double-double-">gradCoord6D(long, int, int, int, int, int, int, double, double, double, double, double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#gradedFOV">gradedFOV</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
@@ -2474,8 +2500,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#gradient-T-T-">gradient(T, T)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#gradient-T-T-int-">gradient(T, T, int)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#gradient6DLUT">gradient6DLUT</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SeededNoise.html#gradient6DLUT">gradient6DLUT</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -2495,13 +2519,13 @@
  value greater than 0, cells that cannot possibly be reached by a sound will have a value of exactly 0, and walls
  will have a value equal to the WALL constant (a negative number).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#GradientPerturb2-float:A-">GradientPerturb2(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#gradientPerturb2-float:A-">gradientPerturb2(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#GradientPerturb3-float:A-">GradientPerturb3(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#gradientPerturb3-float:A-">gradientPerturb3(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#GradientPerturbFractal2-float:A-">GradientPerturbFractal2(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#gradientPerturbFractal2-float:A-">gradientPerturbFractal2(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#GradientPerturbFractal3-float:A-">GradientPerturbFractal3(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#gradientPerturbFractal3-float:A-">gradientPerturbFractal3(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.GranularHasher.html#GranularHasher--">GranularHasher()</a></span> - Constructor for class squidpony.<a href="../squidpony/IColorCenter.Skeleton.GranularHasher.html" title="class in squidpony">IColorCenter.Skeleton.GranularHasher</a></dt>
 <dd>&nbsp;</dd>

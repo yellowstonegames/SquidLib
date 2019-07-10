@@ -5,8 +5,8 @@ import squidpony.FakeLanguageGen;
 import squidpony.Maker;
 import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.MultiSpill;
-import squidpony.squidgrid.Spill;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
@@ -112,7 +112,7 @@ public class PoliticalMapper {
         factionCount &= 255;
         width = land.width;
         height = land.height;
-        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
+        MultiSpill spreader = new MultiSpill(new short[width][height], Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
         //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
@@ -208,7 +208,7 @@ public class PoliticalMapper {
         briefAtlas.putAll(atlas);
         width = land.width;
         height = land.height;
-        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
+        MultiSpill spreader = new MultiSpill(new short[width][height], Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
         //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
@@ -316,7 +316,7 @@ public class PoliticalMapper {
         int factionCount = atlas.size() - 2;
         width = land.width;
         height = land.height;
-        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
+        MultiSpill spreader = new MultiSpill(new short[width][height], Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
         //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);

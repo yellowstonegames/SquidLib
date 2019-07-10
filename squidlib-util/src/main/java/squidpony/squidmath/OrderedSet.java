@@ -19,6 +19,8 @@ import squidpony.annotation.GwtIncompatible;
 
 import java.util.*;
 
+import static squidpony.squidmath.CrossHash.Water.*;
+
 /**
  * A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
  * modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
@@ -1427,7 +1429,22 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
 
     public long hash64()
     {
-        return 31L * size + CrossHash.hash64(key);
+        long seed = 9069147967908697017L;
+        final int len = order.size;
+        final int[] data = order.items;
+        for (int i = 3; i < len; i+=4) {
+            seed = mum(
+                    mum(Objects.hashCode(key[data[i-3]]) ^ b1, Objects.hashCode(key[data[i-2]]) ^ b2) + seed,
+                    mum(Objects.hashCode(key[data[i-1]]) ^ b3, Objects.hashCode(key[data[i]]) ^ b4));
+        }
+        switch (len & 3) {
+            case 0: seed = mum(b1 ^ seed, b4 + seed); break;
+            case 1: seed = mum(seed ^ Objects.hashCode(key[data[len-1]]) >>> 16, b3 ^ (Objects.hashCode(key[data[len-1]]) & 0xFFFFL)); break;
+            case 2: seed = mum(seed ^ Objects.hashCode(key[data[len-2]]), b0 ^ Objects.hashCode(key[data[len-1]])); break;
+            case 3: seed = mum(seed ^ Objects.hashCode(key[data[len-3]]), b2 ^ Objects.hashCode(key[data[len-2]])) ^ mum(seed ^ Objects.hashCode(key[data[len-1]]), b4); break;
+        }
+        seed = (seed ^ seed << 16) * (len ^ b0);
+        return seed - (seed >>> 31) + (seed << 33);
     }
 
     /**

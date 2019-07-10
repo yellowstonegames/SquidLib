@@ -103,7 +103,7 @@
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/Hashers.html#line.12">Hashers</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/Hashers.html#line.15">Hashers</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Additional implementations of the <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath"><code>CrossHash.IHasher</code></a> interface for more specialized uses, like for use in an
  OrderedSet or OrderedMap with String keys that should use case-insensitive equality/hashing.
@@ -226,7 +226,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>caseInsensitiveStringHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.59">caseInsensitiveStringHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.67">caseInsensitiveStringHasher</a></pre>
 <div class="block">Hashes and equality-checks CharSequences, such as Strings and StringBuilders, using case-insensitive comparison
  in a cross-platform way.</div>
 </li>
@@ -237,7 +237,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>letterOnlyStringHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.165">letterOnlyStringHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.173">letterOnlyStringHasher</a></pre>
 <div class="block">Hashes and equality-checks CharSequences, such as Strings and StringBuilders, but only considers letters (that
  is, characters that are in the Unicode category "L", including A-Z, a-z, most characters used in most non-English
  languages (katakana glyphs from Japanese count as letters, for instance)), and works in a cross-platform way.</div>
@@ -249,7 +249,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>identifierOnlyStringHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.173">identifierOnlyStringHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.181">identifierOnlyStringHasher</a></pre>
 <div class="block">Hashes and equality-checks CharSequences, such as Strings and StringBuilders, but only considers valid chars that
  are valid components of Java identifiers (it does not check that the Strings are valid identifiers, but considers
  only letters, digits, currency symbols, underscores (and related underscore-like characters), and a few other
@@ -262,7 +262,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>noSpaceStringHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.179">noSpaceStringHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.187">noSpaceStringHasher</a></pre>
 <div class="block">Hashes and equality-checks CharSequences, such as Strings and StringBuilders, but does not consider whitespace
  (including space, newline, carriage return, tab, and so on), and works in a cross-platform way.</div>
 </li>
@@ -273,7 +273,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>noNumberStringHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.186">noNumberStringHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.194">noNumberStringHasher</a></pre>
 <div class="block">Hashes and equality-checks CharSequences, such as Strings and StringBuilders, but does not consider any number
  glyphs (Unicode category "N", including 0-9, but also various numbers in other languages, such as the dedicated
  Roman numeral characters), and works in a cross-platform way.</div>
@@ -285,7 +285,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>noLetterStringHasher</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.193">noLetterStringHasher</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/Hashers.html#line.201">noLetterStringHasher</a></pre>
 <div class="block">Hashes and equality-checks CharSequences, such as Strings and StringBuilders, but does not consider letters (that
  is, characters that are in the Unicode category "L", including A-Z, a-z, most characters used in most non-English
  languages (katakana glyphs from Japanese count as letters, for instance)), and works in a cross-platform way.</div>
@@ -305,7 +305,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Hashers</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Hashers.html#line.12">Hashers</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Hashers.html#line.15">Hashers</a>()</pre>
 </li>
 </ul>
 </li>

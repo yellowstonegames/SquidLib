@@ -882,6 +882,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.RotationAdjacency.html#composite-int-int-int-int-">composite(int, int, int, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.RotationAdjacency.html" title="class in squidpony.squidgrid">Adjacency.RotationAdjacency</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#compress-java.lang.String-">compress(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Compresses a String as tightly as possible by using 16 bits of each 16-bit character, which can infrequently
+ result in invalid UTF-16 codepoints, but that may not matter for all applications.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/LZSPlus.html#compress-java.lang.String-">compress(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSPlus.html" title="class in squidpony">LZSPlus</a></dt>
 <dd>
 <div class="block">Compresses the given text using LZ-String compression; does not encrypt the result.</div>
@@ -890,6 +895,22 @@
 <dd>
 <div class="block">Compresses the given text using LZ-String compression and encrypts (somewhat) the compressed result so it can't
  be read back without the same keys as a long array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#compressToBase64-java.lang.String-">compressToBase64(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Compress a String using LZ-String encoding but only using Base64 characters ('A'-'Z', 'a'-'z', '0'-'9', '+', '/',
+ and '=' for Base64 validity).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#compressToEncodedURIComponent-java.lang.String-">compressToEncodedURIComponent(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Compress a String using LZ-String encoding but only using valid URI component characters ('A'-'Z', 'a'-'z',
+ '0'-'9', '+', '-', and possibly '$').</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#compressToUTF16-java.lang.String-">compressToUTF16(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Compresses a String using the properties of UTF-16 encoding to store approximately 15 bits of LZW-compressed text
+ in each 2-byte Unicode character, which does particularly well with ASCII text and can be smaller than UTF-8 in
+ some cases, especially where each char must be stored as UTF-16, e.g.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IndexedDelaunayTriangulator.html#computeTriangles-double:A-boolean-">computeTriangles(double[], boolean)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IndexedDelaunayTriangulator.html" title="class in squidpony.squidmath">IndexedDelaunayTriangulator</a></dt>
 <dd>&nbsp;</dd>

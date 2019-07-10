@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -307,8 +308,8 @@ public class EverythingDemo extends ApplicationAdapter {
         //Measurement used is EUCLIDEAN, which allows 8 directions, but will prefer orthogonal moves unless diagonal
         //ones are clearly closer "as the crow flies." Alternatives are MANHATTAN, which means 4-way movement only, no
         //diagonals possible, and CHEBYSHEV, which allows 8 directions of movement at the same cost for all directions.
-        playerToCursor = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
-        getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.EUCLIDEAN);
+        playerToCursor = new DijkstraMap(bareDungeon, Measurement.EUCLIDEAN);
+        getToPlayer = new DijkstraMap(decoDungeon, Measurement.EUCLIDEAN);
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(player);

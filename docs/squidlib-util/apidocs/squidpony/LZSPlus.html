@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../squidpony/IFilter.html" title="interface in squidpony"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../squidpony/LZSEncoding.html" title="class in squidpony"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../squidpony/Maker.html" title="class in squidpony"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public final class <a href="../src-html/squidpony/LZSPlus.html#line.51">LZSPlus</a>
+<pre>public final class <a href="../src-html/squidpony/LZSPlus.html#line.44">LZSPlus</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">LZ-String compression, taking Strings and compressing them to other Strings, optionally with some encryption.
  This role was performed by the <a href="https://github.com/tommyettinger/BlazingChain">BlazingChain library</a>,
@@ -118,11 +118,10 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  very unusual, with the LZ-String encoding part derived from
  <a href="https://github.com/rufushuang/lz-string4java">rufushuang's lz-string4java</a> (which is a port of
  <a href="https://github.com/pieroxy/lz-string">pieroxy's lz-string</a>), while the encryption-like part (which is not
- very strong) was added in SquidLib. The unusual part is how instead of relying on a HashMap of String keys to boxed
- Integer values as BlazingChain did, this uses an UnorderedSet of char arrays, using a custom IHasher to consider some
- of the array a key to hash and some only to read in as a value (producing an int like the Integer from before). This
- allows quite a bit of RAM to be conserved on larger texts. This version includes the fixes present in version 1.4.4.2
- of BlazingChain, which allow decompression for very large texts to work.
+ very strong) was added in SquidLib. This uses <a href="../squidpony/Garbler.html" title="class in squidpony"><code>Garbler</code></a> to do the encryption and <a href="../squidpony/LZSEncoding.html" title="class in squidpony"><code>LZSEncoding</code></a> to do the
+ compression; LZSEncoding uses the original JavaScript lz-string library almost verbatim when run on GWT, so it
+ performs better than code that has been compiled to JavaScript from Java by GWT, and it performs like Java when run
+ on a real JVM. 
  <br>
  Created by Tommy Ettinger on 7/13/2017.</div>
 </li>
@@ -218,7 +217,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LZSPlus</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.51">LZSPlus</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.44">LZSPlus</a>()</pre>
 </li>
 </ul>
 </li>
@@ -235,7 +234,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>compress</h4>
-<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.58">compress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uncompressedStr)</pre>
+<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.51">compress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uncompressedStr)</pre>
 <div class="block">Compresses the given text using LZ-String compression; does not encrypt the result.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -251,7 +250,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>compress</h4>
-<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.102">compress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uncompressedStr,
+<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.65">compress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uncompressedStr,
                               long[]&nbsp;keys)</pre>
 <div class="block">Compresses the given text using LZ-String compression and encrypts (somewhat) the compressed result so it can't
  be read back without the same keys as a long array. Shorter long arrays give less security to encryption, though
@@ -273,7 +272,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>decompress</h4>
-<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.361">decompress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;compressed)</pre>
+<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.79">decompress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;compressed)</pre>
 <div class="block">Decompresses text that was compressed with LZ-String compression; does not reverse decryption so it can only
  decompress Strings produced by <a href="../squidpony/LZSPlus.html#compress-java.lang.String-"><code>compress(String)</code></a>, or <a href="../squidpony/LZSPlus.html#compress-java.lang.String-long:A-"><code>compress(String, long[])</code></a> with an empty or
  null keys parameter.</div>
@@ -291,7 +290,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>decompress</h4>
-<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.372">decompress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;compressed,
+<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/LZSPlus.html#line.90">decompress</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;compressed,
                                 long[]&nbsp;keys)</pre>
 <div class="block">Decompresses text that was compressed with LZ-String compression, reversing any encryption if the keys long array
  matches the long array passed to <a href="../squidpony/LZSPlus.html#compress-java.lang.String-long:A-"><code>compress(String, long[])</code></a> (keys can be null if no array was passed).</div>
@@ -332,7 +331,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../squidpony/IFilter.html" title="interface in squidpony"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../squidpony/LZSEncoding.html" title="class in squidpony"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../squidpony/Maker.html" title="class in squidpony"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

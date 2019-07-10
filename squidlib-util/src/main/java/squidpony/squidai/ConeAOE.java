@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
@@ -242,9 +243,9 @@ public class ConeAOE implements AOE, Serializable {
             }
         }
         
-        DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
-        if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
-        else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
+        Measurement dmm = Measurement.MANHATTAN;
+        if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
+        else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = Measurement.EUCLIDEAN;
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
         for (int i = 0; i < ts.length; ++i) {
             dm.initialize(dungeon);
@@ -377,9 +378,9 @@ public class ConeAOE implements AOE, Serializable {
 
         t = pts[0];
 
-        DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
-        if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
-        else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
+        Measurement dmm = Measurement.MANHATTAN;
+        if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
+        else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = Measurement.EUCLIDEAN;
 
         for (int i = 0; i < pts.length; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);

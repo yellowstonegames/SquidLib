@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -17,7 +18,7 @@ import java.util.HashMap;
  */
 public class DijkstraCostTest {
     public static void main(String[] args) {
-        for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
+        for (Measurement m : Measurement.values()) {
             LightRNG lrng = new LightRNG(0xdeadbeef0ffaL);
             RNG rng = new RNG(lrng);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);

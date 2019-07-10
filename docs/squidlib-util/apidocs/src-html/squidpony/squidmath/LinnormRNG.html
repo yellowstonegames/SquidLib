@@ -15,341 +15,343 @@
 <span class="sourceLineNo">007</span>/**<a name="line.7"></a>
 <span class="sourceLineNo">008</span> * A mid-high-quality StatefulRandomness that is the second-fastest 64-bit generator in this library that is<a name="line.8"></a>
 <span class="sourceLineNo">009</span> * 1-dimensionally equidistributed across its 64-bit outputs. Has a period of 2 to the 64, and permits all states.<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * Passes all but one statistical test in PractRand, only failing the recently-added TMFn test (Triple Mirror Frequency)<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * at 16TB. {@link DiverRNG} does not fail at that point and is faster, while keeping the same other qualities, so it is<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * currently recommended over LinnormRNG. Has 64 bits of state and natively outputs 64 bits at a time, changing the<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * state with a basic linear congruential generator (it is simply {@code state = state * 1103515245 + 1}). Starting with<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * that LCG's output, it xorshifts that output, multiplies by a very large negative long, then returns another xorshift.<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * Considering that it needs analysis of 8TB to even find an anomaly in Linnorm, the quality is probably fine, and<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * PractRand 0.93 didn't find any failures in it (PractRand 0.94 added the TMFn test, which detects LCGs).<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * {@link ThrustAltRNG} and {@link MiniMover64RNG} are faster (tied for first place), but unlike those, Linnorm can<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * produce all long values as output; ThrustAltRNG bunches some outputs and makes producing them more likely while<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * others can't be produced at all, while MiniMover64RNG cycles at some point before 2 to the 64 but after 2 to the 42<a name="line.19"></a>
-<span class="sourceLineNo">020</span> * (it doesn't produce any duplicates until then, but it also can't produce all values). Notably, this generator is<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * faster than {@link LightRNG} with similar quality other than the TMFn failure, and also faster than {@link XoRoRNG}<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * while passing tests that XoRoRNG always or frequently fails (and fails early), such as binary matrix rank tests. It<a name="line.22"></a>
-<span class="sourceLineNo">023</span> * is slower than {@link DiverRNG}, which is a variant on the structure of LinnormRNG, and DiverRNG passes PractRand to<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * a further point than LinnormRNG (Diver passes 32TB, and doesn't show any of the problems where Linnorm fails).<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * This generator is a StatefulRandomness but not a SkippingRandomness, so it can't (efficiently) have the skip() method<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * state from an output of {@link #nextLong()}. {@link MizuchiRNG} uses the same algorithm except for the number added<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * in the LCG state update; here this number is always 1, but in MizuchiRNG it can be any odd long. This means that any<a name="line.29"></a>
-<span class="sourceLineNo">030</span> * given MizuchiRNG object has two long values stored in it instead of the one here, but it allows two MizuchiRNG<a name="line.30"></a>
-<span class="sourceLineNo">031</span> * objects with different streams to produce different, probably-not-correlated sequences of results, even with the same<a name="line.31"></a>
-<span class="sourceLineNo">032</span> * seed. This property may be useful for cases where an adversary is trying to predict results in some way, though using<a name="line.32"></a>
-<span class="sourceLineNo">033</span> * different streams for this purpose isn't enough and should be coupled with truncation of a large part of output (see<a name="line.33"></a>
-<span class="sourceLineNo">034</span> * PCG-Random's techniques for this).<a name="line.34"></a>
-<span class="sourceLineNo">035</span> * &lt;br&gt;<a name="line.35"></a>
-<span class="sourceLineNo">036</span> * The name comes from LINear congruential generator this uses to change it state, while the rest is a NORMal<a name="line.36"></a>
-<span class="sourceLineNo">037</span> * SplitMix64-like generator. "Linnorm" is a Norwegian name for a kind of dragon, as well. <a name="line.37"></a>
-<span class="sourceLineNo">038</span> * &lt;br&gt;<a name="line.38"></a>
-<span class="sourceLineNo">039</span> * Written May 19, 2018 by Tommy Ettinger. Thanks to M.E. O'Neill for her insights into the family of generators both<a name="line.39"></a>
-<span class="sourceLineNo">040</span> * this and her PCG-Random fall into, and to the team that worked on SplitMix64 for SplittableRandom in JDK 8. Chris<a name="line.40"></a>
-<span class="sourceLineNo">041</span> * Doty-Humphrey's work on PractRand has been invaluable, and the LCG multiplier this uses is the same one used by<a name="line.41"></a>
-<span class="sourceLineNo">042</span> * PractRand in its "varqual" LCGs (the other, longer multiplier is from PCG-Random, and that's both the<a name="line.42"></a>
-<span class="sourceLineNo">043</span> * nothing-up-my-sleeve numbers used here). Thanks also to Sebastiano Vigna and David Blackwell for creating the<a name="line.43"></a>
-<span class="sourceLineNo">044</span> * incredibly fast xoroshiro128+ generator and also very fast &lt;a href="http://xoshiro.di.unimi.it/hwd.php"&gt;HWD tool&lt;/a&gt;;<a name="line.44"></a>
-<span class="sourceLineNo">045</span> * the former inspired me to make my code even faster and the latter tool seems useful so far in proving the quality of<a name="line.45"></a>
-<span class="sourceLineNo">046</span> * the generator (LinnormRNG passes over 100TB of HWD, and probably would pass much more if I gave it more days to run).<a name="line.46"></a>
-<span class="sourceLineNo">047</span> * @author Tommy Ettinger<a name="line.47"></a>
-<span class="sourceLineNo">048</span> */<a name="line.48"></a>
-<span class="sourceLineNo">049</span>public final class LinnormRNG implements RandomnessSource, StatefulRandomness, Serializable {<a name="line.49"></a>
-<span class="sourceLineNo">050</span><a name="line.50"></a>
-<span class="sourceLineNo">051</span>    private static final long serialVersionUID = 153186732328748834L;<a name="line.51"></a>
+<span class="sourceLineNo">010</span> * Passes all statistical tests in PractRand up to 32TB of data. {@link DiverRNG} is a variant that is a little faster,<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * while keeping the same other qualities, so it is currently recommended over LinnormRNG (however, the same structure<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * is shared between LinnormRNG and {@link MizuchiRNG}, and Mizuchi has some extra features that Diver lacks). Has 64<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * bits of state and natively outputs 64 bits at a time, changing the state with a basic linear congruential generator<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * (it is simply {@code state = state * 3935559000370003845L + 1L}, with the large multiplier found by L'Ecuyer in a<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * 1999 paper). Starting with that LCG's output, it xorshifts that output twice (using<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * {@code z ^= (z &gt;&gt;&gt; 23) ^ (z &gt;&gt;&gt; 47);}), multiplies by a very large negative long, then returns another xorshift.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Considering that some seeds don't have any anomalies in 8TB with Linnorm, the quality is probably fine except for the<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * known potential issue that it can't return duplicate outputs until its period has cycled.<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * {@link ThrustAltRNG} and {@link MiniMover64RNG} are faster (tied for first place), but unlike those, Linnorm can<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * produce all long values as output; ThrustAltRNG bunches some outputs and makes producing them more likely while<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * others can't be produced at all, while MiniMover64RNG cycles at some point before 2 to the 64 but after 2 to the 42<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * (it doesn't produce any duplicates until then, but it also can't produce all values). Notably, this generator is<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * faster than {@link LightRNG} with similar quality, and also faster than {@link XoRoRNG} while passing tests that<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * XoRoRNG always or frequently fails (and fails early), such as binary matrix rank tests. It is slower than<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * {@link DiverRNG}, which is a variant on the structure of LinnormRNG.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;br&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * This generator is a StatefulRandomness but not a SkippingRandomness, so it can't (efficiently) have the skip() method<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * state from an output of {@link #nextLong()}. {@link MizuchiRNG} uses the same algorithm except for the number added<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * in the LCG state update; here this number is always 1, but in MizuchiRNG it can be any odd long. This means that any<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * given MizuchiRNG object has two long values stored in it instead of the one here, but it allows two MizuchiRNG<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * objects with different streams to produce different, probably-not-correlated sequences of results, even with the same<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * seed. This property may be useful for cases where an adversary is trying to predict results in some way, though using<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * different streams for this purpose isn't enough and should be coupled with truncation of a large part of output (see<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * PCG-Random's techniques for this).<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * &lt;br&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * The name comes from LINear congruential generator this uses to change it state, while the rest is a NORMal<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * SplitMix64-like generator. "Linnorm" is a Norwegian name for a kind of dragon, as well. <a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;br&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * Written June 29, 2019 by Tommy Ettinger. Thanks to M.E. O'Neill for her insights into the family of generators both<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * this and her PCG-Random fall into, and to the team that worked on SplitMix64 for SplittableRandom in JDK 8. Chris<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * Doty-Humphrey's work on PractRand has been invaluable. The LCG state multiplier is listed in a paper by L'Ecuyer from<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * 1999, Tables of Linear Congruential Generators of Different Sizes and Good Lattice Structure. The other<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * multiplier is from PCG-Random, and that's both the nothing-up-my-sleeve numbers used here. Thanks also to Sebastiano<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * Vigna and David Blackwell for creating the incredibly fast xoroshiro128+ generator and also very fast<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;a href="http://xoshiro.di.unimi.it/hwd.php"&gt;HWD tool&lt;/a&gt;; the former inspired me to make my code even faster and the<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * latter tool seems useful so far in proving the quality of the generator (LinnormRNG passes over 100TB of HWD, and<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * probably would pass much more if I gave it more days to run).<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * @author Tommy Ettinger<a name="line.49"></a>
+<span class="sourceLineNo">050</span> */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>public final class LinnormRNG implements RandomnessSource, StatefulRandomness, Serializable {<a name="line.51"></a>
 <span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>    private long state; /* The state can be seeded with any value. */<a name="line.53"></a>
+<span class="sourceLineNo">053</span>    private static final long serialVersionUID = 153186732328748834L;<a name="line.53"></a>
 <span class="sourceLineNo">054</span><a name="line.54"></a>
-<span class="sourceLineNo">055</span>    /**<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     * Constructor that seeds the generator with two calls to Math.random.<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    public LinnormRNG() {<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        this((long) ((Math.random() - 0.5) * 0x10000000000000L)<a name="line.59"></a>
-<span class="sourceLineNo">060</span>                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    }<a name="line.61"></a>
-<span class="sourceLineNo">062</span><a name="line.62"></a>
-<span class="sourceLineNo">063</span>    /**<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     * Constructor that uses the given seed as the state without changes; all long seeds are acceptable.<a name="line.64"></a>
-<span class="sourceLineNo">065</span>     * @param seed any long, will be used exactly<a name="line.65"></a>
-<span class="sourceLineNo">066</span>     */<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    public LinnormRNG(final long seed) {<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        state = seed;<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
-<span class="sourceLineNo">070</span><a name="line.70"></a>
-<span class="sourceLineNo">071</span>    /**<a name="line.71"></a>
-<span class="sourceLineNo">072</span>     * Constructor that hashes seed with {@link CrossHash#hash64(CharSequence)} and uses the result as the state.<a name="line.72"></a>
-<span class="sourceLineNo">073</span>     * @param seed any CharSequence, such as a String or StringBuilder; should probably not be null (it might work?)<a name="line.73"></a>
-<span class="sourceLineNo">074</span>     */<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    public LinnormRNG(final CharSequence seed) {<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        state = CrossHash.hash64(seed);<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
-<span class="sourceLineNo">078</span><a name="line.78"></a>
-<span class="sourceLineNo">079</span>    @Override<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    public final int next(int bits)<a name="line.80"></a>
-<span class="sourceLineNo">081</span>    {<a name="line.81"></a>
-<span class="sourceLineNo">082</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.82"></a>
-<span class="sourceLineNo">083</span>        z = (z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L;<a name="line.83"></a>
-<span class="sourceLineNo">084</span>        return (int)(z ^ z &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    }<a name="line.85"></a>
-<span class="sourceLineNo">086</span><a name="line.86"></a>
-<span class="sourceLineNo">087</span>    /**<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     *<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * @return any long, all 64 bits are random<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     */<a name="line.91"></a>
-<span class="sourceLineNo">092</span>    @Override<a name="line.92"></a>
-<span class="sourceLineNo">093</span>    public final long nextLong() {<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        z = (z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L;<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        return (z ^ z &gt;&gt;&gt; 25);<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    }<a name="line.97"></a>
-<span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>    /**<a name="line.99"></a>
-<span class="sourceLineNo">100</span>     * Produces a copy of this LinnormRNG that, if next() and/or nextLong() are called on this object and the<a name="line.100"></a>
-<span class="sourceLineNo">101</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.101"></a>
-<span class="sourceLineNo">102</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     *<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     * @return a copy of this LinnormRNG<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     */<a name="line.105"></a>
-<span class="sourceLineNo">106</span>    @Override<a name="line.106"></a>
-<span class="sourceLineNo">107</span>    public LinnormRNG copy() {<a name="line.107"></a>
-<span class="sourceLineNo">108</span>        return new LinnormRNG(state);<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    }<a name="line.109"></a>
-<span class="sourceLineNo">110</span><a name="line.110"></a>
-<span class="sourceLineNo">111</span>    /**<a name="line.111"></a>
-<span class="sourceLineNo">112</span>     * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.<a name="line.112"></a>
-<span class="sourceLineNo">113</span>     *<a name="line.113"></a>
-<span class="sourceLineNo">114</span>     * @return any int, all 32 bits are random<a name="line.114"></a>
-<span class="sourceLineNo">115</span>     */<a name="line.115"></a>
-<span class="sourceLineNo">116</span>    public final int nextInt() {<a name="line.116"></a>
-<span class="sourceLineNo">117</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.117"></a>
-<span class="sourceLineNo">118</span>        z = (z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        return (int)(z ^ z &gt;&gt;&gt; 25);<a name="line.119"></a>
-<span class="sourceLineNo">120</span>    }<a name="line.120"></a>
-<span class="sourceLineNo">121</span><a name="line.121"></a>
-<span class="sourceLineNo">122</span>    /**<a name="line.122"></a>
-<span class="sourceLineNo">123</span>     * Exclusive on the outer bound.  The inner bound is 0.<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     * The bound can be negative, which makes this produce either a negative int or 0.<a name="line.124"></a>
-<span class="sourceLineNo">125</span>     *<a name="line.125"></a>
-<span class="sourceLineNo">126</span>     * @param bound the upper bound; should be positive<a name="line.126"></a>
-<span class="sourceLineNo">127</span>     * @return a random int between 0 (inclusive) and bound (exclusive)<a name="line.127"></a>
-<span class="sourceLineNo">128</span>     */<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    public final int nextInt(final int bound) {<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        z = (z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L;<a name="line.131"></a>
-<span class="sourceLineNo">132</span>        return (int)((bound * ((z ^ z &gt;&gt;&gt; 25) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.132"></a>
-<span class="sourceLineNo">133</span>    }<a name="line.133"></a>
-<span class="sourceLineNo">134</span><a name="line.134"></a>
-<span class="sourceLineNo">135</span>    /**<a name="line.135"></a>
-<span class="sourceLineNo">136</span>     * Inclusive inner, exclusive outer.<a name="line.136"></a>
-<span class="sourceLineNo">137</span>     *<a name="line.137"></a>
-<span class="sourceLineNo">138</span>     * @param inner the inner bound, inclusive, can be positive or negative<a name="line.138"></a>
-<span class="sourceLineNo">139</span>     * @param outer the outer bound, exclusive, can be positive or negative, usually greater than inner<a name="line.139"></a>
-<span class="sourceLineNo">140</span>     * @return a random int between inner (inclusive) and outer (exclusive)<a name="line.140"></a>
-<span class="sourceLineNo">141</span>     */<a name="line.141"></a>
-<span class="sourceLineNo">142</span>    public final int nextInt(final int inner, final int outer) {<a name="line.142"></a>
-<span class="sourceLineNo">143</span>        return inner + nextInt(outer - inner);<a name="line.143"></a>
-<span class="sourceLineNo">144</span>    }<a name="line.144"></a>
-<span class="sourceLineNo">145</span><a name="line.145"></a>
-<span class="sourceLineNo">146</span>    /**<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * Exclusive on bound (which may be positive or negative), with an inner bound of 0.<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound<a name="line.148"></a>
-<span class="sourceLineNo">149</span>     * can even be 0, which will cause this to return 0L every time. This uses a biased technique to get numbers from<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     * large ranges, but the amount of bias is incredibly small (expected to be under 1/1000 if enough random ranged<a name="line.150"></a>
-<span class="sourceLineNo">151</span>     * numbers are requested, which is about the same as an unbiased method that was also considered). It may have<a name="line.151"></a>
-<span class="sourceLineNo">152</span>     * noticeable bias if the LinnormRNG's period is exhausted by only calls to this method, which would take months on<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * 2018-era consumer hardware. Unlike all unbiased methods, this advances the state by an equivalent to exactly one<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * call to {@link #nextLong()}, where rejection sampling would sometimes advance by one call, but other times by<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * arbitrarily many more.<a name="line.155"></a>
-<span class="sourceLineNo">156</span>     * &lt;br&gt;<a name="line.156"></a>
-<span class="sourceLineNo">157</span>     * Credit for this method goes to &lt;a href="https://oroboro.com/large-random-in-range/"&gt;Rafael Baptista's blog&lt;/a&gt;,<a name="line.157"></a>
-<span class="sourceLineNo">158</span>     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * most one random number, so it advances the state as much as {@link #nextInt(int)} or {@link #nextLong()}.<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * @param bound the outer exclusive bound; can be positive or negative<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * @return a random long between 0 (inclusive) and bound (exclusive)<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     */<a name="line.163"></a>
-<span class="sourceLineNo">164</span>    public long nextLong(long bound) {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        long rand = (state = state * 0x41C64E6DL + 1L);<a name="line.165"></a>
-<span class="sourceLineNo">166</span>        rand = (rand ^ rand &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L;<a name="line.166"></a>
-<span class="sourceLineNo">167</span>        rand ^= rand &gt;&gt;&gt; 25;<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        final long randLow = rand &amp; 0xFFFFFFFFL;<a name="line.168"></a>
-<span class="sourceLineNo">169</span>        final long boundLow = bound &amp; 0xFFFFFFFFL;<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        rand &gt;&gt;&gt;= 32;<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        bound &gt;&gt;= 32;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        final long z = (randLow * boundLow &gt;&gt; 32);<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        final long t = rand * boundLow + z;<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        return rand * bound + (t &gt;&gt; 32) + ((t &amp; 0xFFFFFFFFL) + randLow * bound &gt;&gt; 32) - (z &gt;&gt; 63);<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    }<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    /**<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     * Inclusive inner, exclusive outer; lower and upper can be positive or negative and there's no requirement for one<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * to be greater than or less than the other.<a name="line.178"></a>
-<span class="sourceLineNo">179</span>     *<a name="line.179"></a>
-<span class="sourceLineNo">180</span>     * @param lower the lower bound, inclusive, can be positive or negative<a name="line.180"></a>
-<span class="sourceLineNo">181</span>     * @param upper the upper bound, exclusive, can be positive or negative<a name="line.181"></a>
-<span class="sourceLineNo">182</span>     * @return a random long that may be equal to lower and will otherwise be between lower and upper<a name="line.182"></a>
-<span class="sourceLineNo">183</span>     */<a name="line.183"></a>
-<span class="sourceLineNo">184</span>    public final long nextLong(final long lower, final long upper) {<a name="line.184"></a>
-<span class="sourceLineNo">185</span>        return lower + nextLong(upper - lower);<a name="line.185"></a>
-<span class="sourceLineNo">186</span>    }<a name="line.186"></a>
-<span class="sourceLineNo">187</span><a name="line.187"></a>
-<span class="sourceLineNo">188</span>    /**<a name="line.188"></a>
-<span class="sourceLineNo">189</span>     * Gets a uniform random double in the range [0.0,1.0)<a name="line.189"></a>
-<span class="sourceLineNo">190</span>     *<a name="line.190"></a>
-<span class="sourceLineNo">191</span>     * @return a random double at least equal to 0.0 and less than 1.0<a name="line.191"></a>
-<span class="sourceLineNo">192</span>     */<a name="line.192"></a>
-<span class="sourceLineNo">193</span>    public final double nextDouble() {<a name="line.193"></a>
-<span class="sourceLineNo">194</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        z = (z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.196"></a>
-<span class="sourceLineNo">197</span><a name="line.197"></a>
-<span class="sourceLineNo">198</span>    }<a name="line.198"></a>
+<span class="sourceLineNo">055</span>    private long state; /* The state can be seeded with any value. */<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>    /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * Constructor that seeds the generator with two calls to Math.random.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    public LinnormRNG() {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        this((long) ((Math.random() - 0.5) * 0x10000000000000L)<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    }<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * Constructor that uses the given seed as the state without changes; all long seeds are acceptable.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @param seed any long, will be used exactly<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     */<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    public LinnormRNG(final long seed) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        state = seed;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>    /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * Constructor that hashes seed with {@link CrossHash#hash64(CharSequence)} and uses the result as the state.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * @param seed any CharSequence, such as a String or StringBuilder; should probably not be null (it might work?)<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    public LinnormRNG(final CharSequence seed) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        state = CrossHash.hash64(seed);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    }<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>    @Override<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    public final int next(int bits)<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        return (int)(z ^ z &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>    /**<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     *<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * @return any long, all 64 bits are random<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    @Override<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    public final long nextLong() {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        return (z ^ z &gt;&gt;&gt; 25);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    /**<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * Produces a copy of this LinnormRNG that, if next() and/or nextLong() are called on this object and the<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     *<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * @return a copy of this LinnormRNG<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     */<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    @Override<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    public LinnormRNG copy() {<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        return new LinnormRNG(state);<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    }<a name="line.111"></a>
+<span class="sourceLineNo">112</span><a name="line.112"></a>
+<span class="sourceLineNo">113</span>    /**<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     *<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * @return any int, all 32 bits are random<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    public final int nextInt() {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        return (int)(z ^ z &gt;&gt;&gt; 25);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    }<a name="line.122"></a>
+<span class="sourceLineNo">123</span><a name="line.123"></a>
+<span class="sourceLineNo">124</span>    /**<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * Exclusive on the outer bound.  The inner bound is 0.<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * The bound can be negative, which makes this produce either a negative int or 0.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     *<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * @param bound the upper bound; should be positive<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @return a random int between 0 (inclusive) and bound (exclusive)<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     */<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    public final int nextInt(final int bound) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        return (int)((bound * ((z ^ z &gt;&gt;&gt; 25) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    }<a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>    /**<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * Inclusive inner, exclusive outer.<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     *<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * @param inner the inner bound, inclusive, can be positive or negative<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * @param outer the outer bound, exclusive, can be positive or negative, usually greater than inner<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @return a random int between inner (inclusive) and outer (exclusive)<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     */<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    public final int nextInt(final int inner, final int outer) {<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        return inner + nextInt(outer - inner);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    }<a name="line.146"></a>
+<span class="sourceLineNo">147</span><a name="line.147"></a>
+<span class="sourceLineNo">148</span>    /**<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * Exclusive on bound (which may be positive or negative), with an inner bound of 0.<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * can even be 0, which will cause this to return 0L every time. This uses a biased technique to get numbers from<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * large ranges, but the amount of bias is incredibly small (expected to be under 1/1000 if enough random ranged<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * numbers are requested, which is about the same as an unbiased method that was also considered). It may have<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * noticeable bias if the LinnormRNG's period is exhausted by only calls to this method, which would take months on<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * 2018-era consumer hardware. Unlike all unbiased methods, this advances the state by an equivalent to exactly one<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * call to {@link #nextLong()}, where rejection sampling would sometimes advance by one call, but other times by<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * arbitrarily many more.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * &lt;br&gt;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * Credit for this method goes to &lt;a href="https://oroboro.com/large-random-in-range/"&gt;Rafael Baptista's blog&lt;/a&gt;,<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * most one random number, so it advances the state as much as {@link #nextInt(int)} or {@link #nextLong()}.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @param bound the outer exclusive bound; can be positive or negative<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * @return a random long between 0 (inclusive) and bound (exclusive)<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     */<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    public long nextLong(long bound) {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        long rand = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        rand = (rand ^ rand &gt;&gt;&gt; 23 ^ rand &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        rand ^= rand &gt;&gt;&gt; 25;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        final long randLow = rand &amp; 0xFFFFFFFFL;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        final long boundLow = bound &amp; 0xFFFFFFFFL;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        rand &gt;&gt;&gt;= 32;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        bound &gt;&gt;= 32;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        final long z = (randLow * boundLow &gt;&gt; 32);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>        final long t = rand * boundLow + z;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        return rand * bound + (t &gt;&gt; 32) + ((t &amp; 0xFFFFFFFFL) + randLow * bound &gt;&gt; 32) - (z &gt;&gt; 63);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    }<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    /**<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * Inclusive inner, exclusive outer; lower and upper can be positive or negative and there's no requirement for one<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * to be greater than or less than the other.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     *<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * @param lower the lower bound, inclusive, can be positive or negative<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * @param upper the upper bound, exclusive, can be positive or negative<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * @return a random long that may be equal to lower and will otherwise be between lower and upper<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     */<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    public final long nextLong(final long lower, final long upper) {<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        return lower + nextLong(upper - lower);<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    }<a name="line.188"></a>
+<span class="sourceLineNo">189</span><a name="line.189"></a>
+<span class="sourceLineNo">190</span>    /**<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * Gets a uniform random double in the range [0.0,1.0)<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     *<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * @return a random double at least equal to 0.0 and less than 1.0<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     */<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    public final double nextDouble() {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.198"></a>
 <span class="sourceLineNo">199</span><a name="line.199"></a>
-<span class="sourceLineNo">200</span>    /**<a name="line.200"></a>
-<span class="sourceLineNo">201</span>     * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer<a name="line.201"></a>
-<span class="sourceLineNo">202</span>     * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.<a name="line.202"></a>
-<span class="sourceLineNo">203</span>     *<a name="line.203"></a>
-<span class="sourceLineNo">204</span>     * @param outer the exclusive outer bound, can be negative<a name="line.204"></a>
-<span class="sourceLineNo">205</span>     * @return a random double between 0.0 (inclusive) and outer (exclusive)<a name="line.205"></a>
-<span class="sourceLineNo">206</span>     */<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    public final double nextDouble(final double outer) {<a name="line.207"></a>
-<span class="sourceLineNo">208</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.208"></a>
-<span class="sourceLineNo">209</span>        z = (z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L;<a name="line.209"></a>
-<span class="sourceLineNo">210</span>        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53 * outer;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
-<span class="sourceLineNo">212</span><a name="line.212"></a>
-<span class="sourceLineNo">213</span>    /**<a name="line.213"></a>
-<span class="sourceLineNo">214</span>     * Gets a uniform random float in the range [0.0,1.0)<a name="line.214"></a>
-<span class="sourceLineNo">215</span>     *<a name="line.215"></a>
-<span class="sourceLineNo">216</span>     * @return a random float at least equal to 0.0 and less than 1.0<a name="line.216"></a>
-<span class="sourceLineNo">217</span>     */<a name="line.217"></a>
-<span class="sourceLineNo">218</span>    public final float nextFloat() {<a name="line.218"></a>
-<span class="sourceLineNo">219</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        return ((z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L &gt;&gt;&gt; 40) * 0x1p-24f;<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    }<a name="line.221"></a>
-<span class="sourceLineNo">222</span><a name="line.222"></a>
-<span class="sourceLineNo">223</span>    /**<a name="line.223"></a>
-<span class="sourceLineNo">224</span>     * Gets a random value, true or false.<a name="line.224"></a>
-<span class="sourceLineNo">225</span>     * Calls nextLong() once.<a name="line.225"></a>
-<span class="sourceLineNo">226</span>     *<a name="line.226"></a>
-<span class="sourceLineNo">227</span>     * @return a random true or false value.<a name="line.227"></a>
-<span class="sourceLineNo">228</span>     */<a name="line.228"></a>
-<span class="sourceLineNo">229</span>    public final boolean nextBoolean() {<a name="line.229"></a>
-<span class="sourceLineNo">230</span>        long z = (state = state * 0x41C64E6DL + 1L);<a name="line.230"></a>
-<span class="sourceLineNo">231</span>        return ((z ^ z &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) &lt; 0;<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    }<a name="line.232"></a>
-<span class="sourceLineNo">233</span><a name="line.233"></a>
-<span class="sourceLineNo">234</span>    /**<a name="line.234"></a>
-<span class="sourceLineNo">235</span>     * Given a byte array as a parameter, this will fill the array with random bytes (modifying it<a name="line.235"></a>
-<span class="sourceLineNo">236</span>     * in-place). Calls nextLong() {@code Math.ceil(bytes.length / 8.0)} times.<a name="line.236"></a>
-<span class="sourceLineNo">237</span>     *<a name="line.237"></a>
-<span class="sourceLineNo">238</span>     * @param bytes a byte array that will have its contents overwritten with random bytes.<a name="line.238"></a>
-<span class="sourceLineNo">239</span>     */<a name="line.239"></a>
-<span class="sourceLineNo">240</span>    public final void nextBytes(final byte[] bytes) {<a name="line.240"></a>
-<span class="sourceLineNo">241</span>        int i = bytes.length, n;<a name="line.241"></a>
-<span class="sourceLineNo">242</span>        while (i != 0) {<a name="line.242"></a>
-<span class="sourceLineNo">243</span>            n = Math.min(i, 8);<a name="line.243"></a>
-<span class="sourceLineNo">244</span>            for (long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8) bytes[--i] = (byte) bits;<a name="line.244"></a>
-<span class="sourceLineNo">245</span>        }<a name="line.245"></a>
-<span class="sourceLineNo">246</span>    }<a name="line.246"></a>
-<span class="sourceLineNo">247</span><a name="line.247"></a>
-<span class="sourceLineNo">248</span>    /**<a name="line.248"></a>
-<span class="sourceLineNo">249</span>     * Sets the seed (also the current state) of this generator.<a name="line.249"></a>
-<span class="sourceLineNo">250</span>     *<a name="line.250"></a>
-<span class="sourceLineNo">251</span>     * @param seed the seed to use for this LinnormRNG, as if it was constructed with this seed.<a name="line.251"></a>
-<span class="sourceLineNo">252</span>     */<a name="line.252"></a>
-<span class="sourceLineNo">253</span>    @Override<a name="line.253"></a>
-<span class="sourceLineNo">254</span>    public final void setState(final long seed) {<a name="line.254"></a>
-<span class="sourceLineNo">255</span>        state = seed;<a name="line.255"></a>
-<span class="sourceLineNo">256</span>    }<a name="line.256"></a>
-<span class="sourceLineNo">257</span><a name="line.257"></a>
-<span class="sourceLineNo">258</span>    /**<a name="line.258"></a>
-<span class="sourceLineNo">259</span>     * Gets the current state of this generator.<a name="line.259"></a>
-<span class="sourceLineNo">260</span>     *<a name="line.260"></a>
-<span class="sourceLineNo">261</span>     * @return the current seed of this LinnormRNG, changed once per call to nextLong()<a name="line.261"></a>
-<span class="sourceLineNo">262</span>     */<a name="line.262"></a>
-<span class="sourceLineNo">263</span>    @Override<a name="line.263"></a>
-<span class="sourceLineNo">264</span>    public final long getState() {<a name="line.264"></a>
-<span class="sourceLineNo">265</span>        return state;<a name="line.265"></a>
-<span class="sourceLineNo">266</span>    }<a name="line.266"></a>
-<span class="sourceLineNo">267</span><a name="line.267"></a>
-<span class="sourceLineNo">268</span>    @Override<a name="line.268"></a>
-<span class="sourceLineNo">269</span>    public String toString() {<a name="line.269"></a>
-<span class="sourceLineNo">270</span>        return "LinnormRNG with state 0x" + StringKit.hex(state) + 'L';<a name="line.270"></a>
-<span class="sourceLineNo">271</span>    }<a name="line.271"></a>
-<span class="sourceLineNo">272</span><a name="line.272"></a>
-<span class="sourceLineNo">273</span>    @Override<a name="line.273"></a>
-<span class="sourceLineNo">274</span>    public boolean equals(Object o) {<a name="line.274"></a>
-<span class="sourceLineNo">275</span>        if (this == o) return true;<a name="line.275"></a>
-<span class="sourceLineNo">276</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.276"></a>
-<span class="sourceLineNo">277</span>        return state == ((LinnormRNG) o).state;<a name="line.277"></a>
-<span class="sourceLineNo">278</span>    }<a name="line.278"></a>
-<span class="sourceLineNo">279</span><a name="line.279"></a>
-<span class="sourceLineNo">280</span>    @Override<a name="line.280"></a>
-<span class="sourceLineNo">281</span>    public int hashCode() {<a name="line.281"></a>
-<span class="sourceLineNo">282</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.282"></a>
-<span class="sourceLineNo">283</span>    }<a name="line.283"></a>
-<span class="sourceLineNo">284</span><a name="line.284"></a>
-<span class="sourceLineNo">285</span>    /**<a name="line.285"></a>
-<span class="sourceLineNo">286</span>     * Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.<a name="line.286"></a>
-<span class="sourceLineNo">287</span>     * It is recommended that you use {@code LinnormRNG.determine(++state)} or {@code LinnormRNG.determine(--state)} to<a name="line.287"></a>
-<span class="sourceLineNo">288</span>     * produce a sequence of different numbers, but you can also use {@code LinnormRNG.determine(state += 12345L)} or<a name="line.288"></a>
-<span class="sourceLineNo">289</span>     * any odd-number increment. All longs are accepted by this method, and all longs can be produced; unlike several<a name="line.289"></a>
-<span class="sourceLineNo">290</span>     * other classes' determine() methods, passing 0 here does not return 0.<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     * @return any long<a name="line.292"></a>
-<span class="sourceLineNo">293</span>     */<a name="line.293"></a>
-<span class="sourceLineNo">294</span>    public static long determine(long state)<a name="line.294"></a>
-<span class="sourceLineNo">295</span>    {<a name="line.295"></a>
-<span class="sourceLineNo">296</span>        return (state = ((state = ((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25;<a name="line.296"></a>
-<span class="sourceLineNo">297</span>    }<a name="line.297"></a>
-<span class="sourceLineNo">298</span><a name="line.298"></a>
-<span class="sourceLineNo">299</span>    /**<a name="line.299"></a>
-<span class="sourceLineNo">300</span>     * Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)<a name="line.300"></a>
-<span class="sourceLineNo">301</span>     * and bound (exclusive); state is expected to change between calls to this. It is recommended that you use<a name="line.301"></a>
-<span class="sourceLineNo">302</span>     * {@code LinnormRNG.determineBounded(++state, bound)} or {@code LinnormRNG.determineBounded(--state, bound)} to<a name="line.302"></a>
-<span class="sourceLineNo">303</span>     * produce a sequence of different numbers, but you can also use<a name="line.303"></a>
-<span class="sourceLineNo">304</span>     * {@code LinnormRNG.determineBounded(state += 12345L, bound)} or any odd-number increment. All longs are accepted<a name="line.304"></a>
-<span class="sourceLineNo">305</span>     * by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any<a name="line.305"></a>
-<span class="sourceLineNo">306</span>     * odd-number values for bound, this isn't possible for most generators). The bound can be negative.<a name="line.306"></a>
-<span class="sourceLineNo">307</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.307"></a>
-<span class="sourceLineNo">308</span>     * @param bound the outer exclusive bound, as an int<a name="line.308"></a>
-<span class="sourceLineNo">309</span>     * @return an int between 0 (inclusive) and bound (exclusive)<a name="line.309"></a>
-<span class="sourceLineNo">310</span>     */<a name="line.310"></a>
-<span class="sourceLineNo">311</span>    public static int determineBounded(long state, final int bound)<a name="line.311"></a>
-<span class="sourceLineNo">312</span>    {<a name="line.312"></a>
-<span class="sourceLineNo">313</span>        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.313"></a>
-<span class="sourceLineNo">314</span>    }<a name="line.314"></a>
-<span class="sourceLineNo">315</span><a name="line.315"></a>
-<span class="sourceLineNo">316</span>    /**<a name="line.316"></a>
-<span class="sourceLineNo">317</span>     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will<a name="line.317"></a>
-<span class="sourceLineNo">318</span>     * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},<a name="line.318"></a>
-<span class="sourceLineNo">319</span>     * where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by<a name="line.319"></a>
-<span class="sourceLineNo">320</span>     * {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much different from using a<a name="line.320"></a>
-<span class="sourceLineNo">321</span>     * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are<a name="line.321"></a>
-<span class="sourceLineNo">322</span>     * less than 2 to the 30 possible floats between 0 and 1.<a name="line.322"></a>
-<span class="sourceLineNo">323</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.323"></a>
-<span class="sourceLineNo">324</span>     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to<a name="line.324"></a>
-<span class="sourceLineNo">325</span>     *              generate numbers in reverse order<a name="line.325"></a>
-<span class="sourceLineNo">326</span>     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}<a name="line.326"></a>
-<span class="sourceLineNo">327</span>     */<a name="line.327"></a>
-<span class="sourceLineNo">328</span>    public static float determineFloat(long state) { return ((((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 40) * 0x1p-24f; }<a name="line.328"></a>
-<span class="sourceLineNo">329</span><a name="line.329"></a>
-<span class="sourceLineNo">330</span>    /**<a name="line.330"></a>
-<span class="sourceLineNo">331</span>     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this<a name="line.331"></a>
-<span class="sourceLineNo">332</span>     * will return the same float. This is expected to be called with a changing variable, e.g.<a name="line.332"></a>
-<span class="sourceLineNo">333</span>     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't really matter. This<a name="line.333"></a>
-<span class="sourceLineNo">334</span>     * multiplies state by {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much<a name="line.334"></a>
-<span class="sourceLineNo">335</span>     * different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or<a name="line.335"></a>
-<span class="sourceLineNo">336</span>     * decrement by 1, but there are less than 2 to the 62 possible doubles between 0 and 1.<a name="line.336"></a>
-<span class="sourceLineNo">337</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.337"></a>
-<span class="sourceLineNo">338</span>     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to<a name="line.338"></a>
-<span class="sourceLineNo">339</span>     *              generate numbers in reverse order<a name="line.339"></a>
-<span class="sourceLineNo">340</span>     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}<a name="line.340"></a>
-<span class="sourceLineNo">341</span>     */<a name="line.341"></a>
-<span class="sourceLineNo">342</span>    public static double determineDouble(long state) { return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53; }<a name="line.342"></a>
-<span class="sourceLineNo">343</span><a name="line.343"></a>
-<span class="sourceLineNo">344</span>}<a name="line.344"></a>
+<span class="sourceLineNo">200</span>    }<a name="line.200"></a>
+<span class="sourceLineNo">201</span><a name="line.201"></a>
+<span class="sourceLineNo">202</span>    /**<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     *<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * @param outer the exclusive outer bound, can be negative<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * @return a random double between 0.0 (inclusive) and outer (exclusive)<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     */<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    public final double nextDouble(final double outer) {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        z = (z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L;<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53 * outer;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    }<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>    /**<a name="line.215"></a>
+<span class="sourceLineNo">216</span>     * Gets a uniform random float in the range [0.0,1.0)<a name="line.216"></a>
+<span class="sourceLineNo">217</span>     *<a name="line.217"></a>
+<span class="sourceLineNo">218</span>     * @return a random float at least equal to 0.0 and less than 1.0<a name="line.218"></a>
+<span class="sourceLineNo">219</span>     */<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    public final float nextFloat() {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.221"></a>
+<span class="sourceLineNo">222</span>        return ((z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L &gt;&gt;&gt; 40) * 0x1p-24f;<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    }<a name="line.223"></a>
+<span class="sourceLineNo">224</span><a name="line.224"></a>
+<span class="sourceLineNo">225</span>    /**<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * Gets a random value, true or false.<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     * Calls nextLong() once.<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     *<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * @return a random true or false value.<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     */<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    public final boolean nextBoolean() {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        long z = (state = state * 0x369DEA0F31A53F85L + 1L);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        return ((z ^ z &gt;&gt;&gt; 23 ^ z &gt;&gt;&gt; 47) * 0xAEF17502108EF2D9L) &lt; 0;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    }<a name="line.234"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>    /**<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     * Given a byte array as a parameter, this will fill the array with random bytes (modifying it<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * in-place). Calls nextLong() {@code Math.ceil(bytes.length / 8.0)} times.<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     *<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * @param bytes a byte array that will have its contents overwritten with random bytes.<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     */<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    public final void nextBytes(final byte[] bytes) {<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        int i = bytes.length, n;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>        while (i != 0) {<a name="line.244"></a>
+<span class="sourceLineNo">245</span>            n = Math.min(i, 8);<a name="line.245"></a>
+<span class="sourceLineNo">246</span>            for (long bits = nextLong(); n-- != 0; bits &gt;&gt;&gt;= 8) bytes[--i] = (byte) bits;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>        }<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    }<a name="line.248"></a>
+<span class="sourceLineNo">249</span><a name="line.249"></a>
+<span class="sourceLineNo">250</span>    /**<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     * Sets the seed (also the current state) of this generator.<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     *<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     * @param seed the seed to use for this LinnormRNG, as if it was constructed with this seed.<a name="line.253"></a>
+<span class="sourceLineNo">254</span>     */<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    @Override<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    public final void setState(final long seed) {<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        state = seed;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    }<a name="line.258"></a>
+<span class="sourceLineNo">259</span><a name="line.259"></a>
+<span class="sourceLineNo">260</span>    /**<a name="line.260"></a>
+<span class="sourceLineNo">261</span>     * Gets the current state of this generator.<a name="line.261"></a>
+<span class="sourceLineNo">262</span>     *<a name="line.262"></a>
+<span class="sourceLineNo">263</span>     * @return the current seed of this LinnormRNG, changed once per call to nextLong()<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     */<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    @Override<a name="line.265"></a>
+<span class="sourceLineNo">266</span>    public final long getState() {<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        return state;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    }<a name="line.268"></a>
+<span class="sourceLineNo">269</span><a name="line.269"></a>
+<span class="sourceLineNo">270</span>    @Override<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    public String toString() {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        return "LinnormRNG with state 0x" + StringKit.hex(state) + 'L';<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    }<a name="line.273"></a>
+<span class="sourceLineNo">274</span><a name="line.274"></a>
+<span class="sourceLineNo">275</span>    @Override<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    public boolean equals(Object o) {<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        if (this == o) return true;<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        return state == ((LinnormRNG) o).state;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    }<a name="line.280"></a>
+<span class="sourceLineNo">281</span><a name="line.281"></a>
+<span class="sourceLineNo">282</span>    @Override<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    public int hashCode() {<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    }<a name="line.285"></a>
+<span class="sourceLineNo">286</span><a name="line.286"></a>
+<span class="sourceLineNo">287</span>    /**<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     * Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * It is recommended that you use {@code LinnormRNG.determine(++state)} or {@code LinnormRNG.determine(--state)} to<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * produce a sequence of different numbers, but you can also use {@code LinnormRNG.determine(state += 12345L)} or<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     * any odd-number increment. All longs are accepted by this method, and all longs can be produced; unlike several<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     * other classes' determine() methods, passing 0 here does not return 0.<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     * @return any long<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     */<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    public static long determine(long state)<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        return (state = ((state = ((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25;<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    }<a name="line.299"></a>
+<span class="sourceLineNo">300</span><a name="line.300"></a>
+<span class="sourceLineNo">301</span>    /**<a name="line.301"></a>
+<span class="sourceLineNo">302</span>     * Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)<a name="line.302"></a>
+<span class="sourceLineNo">303</span>     * and bound (exclusive); state is expected to change between calls to this. It is recommended that you use<a name="line.303"></a>
+<span class="sourceLineNo">304</span>     * {@code LinnormRNG.determineBounded(++state, bound)} or {@code LinnormRNG.determineBounded(--state, bound)} to<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     * produce a sequence of different numbers, but you can also use<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     * {@code LinnormRNG.determineBounded(state += 12345L, bound)} or any odd-number increment. All longs are accepted<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     * by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * odd-number values for bound, this isn't possible for most generators). The bound can be negative.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * @param bound the outer exclusive bound, as an int<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * @return an int between 0 (inclusive) and bound (exclusive)<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     */<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    public static int determineBounded(long state, final int bound)<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    {<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    }<a name="line.316"></a>
+<span class="sourceLineNo">317</span><a name="line.317"></a>
+<span class="sourceLineNo">318</span>    /**<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much different from using a<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     * less than 2 to the 30 possible floats between 0 and 1.<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to<a name="line.326"></a>
+<span class="sourceLineNo">327</span>     *              generate numbers in reverse order<a name="line.327"></a>
+<span class="sourceLineNo">328</span>     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     */<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    public static float determineFloat(long state) { return ((((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 40) * 0x1p-24f; }<a name="line.330"></a>
+<span class="sourceLineNo">331</span><a name="line.331"></a>
+<span class="sourceLineNo">332</span>    /**<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * will return the same float. This is expected to be called with a changing variable, e.g.<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't really matter. This<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     * multiplies state by {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much<a name="line.336"></a>
+<span class="sourceLineNo">337</span>     * different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or<a name="line.337"></a>
+<span class="sourceLineNo">338</span>     * decrement by 1, but there are less than 2 to the 62 possible doubles between 0 and 1.<a name="line.338"></a>
+<span class="sourceLineNo">339</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.339"></a>
+<span class="sourceLineNo">340</span>     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     *              generate numbers in reverse order<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}<a name="line.342"></a>
+<span class="sourceLineNo">343</span>     */<a name="line.343"></a>
+<span class="sourceLineNo">344</span>    public static double determineDouble(long state) { return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53; }<a name="line.344"></a>
+<span class="sourceLineNo">345</span><a name="line.345"></a>
+<span class="sourceLineNo">346</span>}<a name="line.346"></a>
 
 
 

@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.SoundMap;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -16,8 +17,8 @@ import java.util.Map;
  */
 public class SoundTest {
     public static void main(String[] args) {
-        for (SoundMap.Measurement m : SoundMap.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
+        for (Measurement m : Measurement.values()) {
+            LightRNG lrng = new LightRNG(0x57A8DEADBEEF0FFAL);
             RNG rng = new RNG(lrng);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
             char[][] dun = dg.generate();
@@ -36,7 +37,7 @@ public class SoundTest {
             for(int i = 0; i < 6; i++)
             {
                 noises.put(dg.utility.randomStep(dun, dg.utility.randomFloor(dun),
-                        (m == SoundMap.Measurement.CHEBYSHEV)), rng.nextDouble(10.0) + 1.0 + i);
+                        (m == Measurement.CHEBYSHEV)), rng.nextDouble(10.0) + 1.0 + i);
             }
 
             audio.findAlerted(dudes, noises);

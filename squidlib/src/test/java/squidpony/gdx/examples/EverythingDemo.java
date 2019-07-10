@@ -20,6 +20,7 @@ import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.SpatialMap;
 import squidpony.squidgrid.gui.gdx.*;
@@ -368,7 +369,7 @@ public class EverythingDemo extends ApplicationAdapter {
         seen = blockage.not().copy();
         currentlySeen = seen.copy();
         blockage.fringe8way();
-        getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
+        getToPlayer = new DijkstraMap(decoDungeon, Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(playerPos);
         getToPlayer.scan(null, null);
@@ -384,7 +385,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //EUCLIDEAN value is used, which allows 8 directions of movement but prefers orthogonal moves, unless a
         //diagonal move is clearly closer "as the crow flies." Alternatives are CHEBYSHEV,  which allows 8 directions of
         //movement at the same cost for all directions, and MANHATTAN, which means 4-way movement only, no diagonals.
-        playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.EUCLIDEAN);
+        playerToCursor = new DijkstraMap(decoDungeon, Measurement.EUCLIDEAN);
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(playerPos);

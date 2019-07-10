@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
@@ -359,7 +360,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     {
         OrderedSet<Coord> doors = new OrderedSet<>();
         OrderedSet<Coord> blocked = new OrderedSet<>(4);
-        DijkstraMap dm = new DijkstraMap(map, DijkstraMap.Measurement.EUCLIDEAN);
+        DijkstraMap dm = new DijkstraMap(map, Measurement.EUCLIDEAN);
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#')

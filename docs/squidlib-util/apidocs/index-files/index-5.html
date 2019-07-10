@@ -251,6 +251,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeY-int-">decodeY(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#decompress-java.lang.String-">decompress(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Decompresses a String that had been compressed with <a href="../squidpony/LZSEncoding.html#compress-java.lang.String-"><code>LZSEncoding.compress(String)</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/LZSPlus.html#decompress-java.lang.String-">decompress(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSPlus.html" title="class in squidpony">LZSPlus</a></dt>
 <dd>
 <div class="block">Decompresses text that was compressed with LZ-String compression; does not reverse decryption so it can only
@@ -261,6 +265,18 @@
 <dd>
 <div class="block">Decompresses text that was compressed with LZ-String compression, reversing any encryption if the keys long array
  matches the long array passed to <a href="../squidpony/LZSPlus.html#compress-java.lang.String-long:A-"><code>LZSPlus.compress(String, long[])</code></a> (keys can be null if no array was passed).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#decompressFromBase64-java.lang.String-">decompressFromBase64(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Decompresses a String that had been compressed with <a href="../squidpony/LZSEncoding.html#compressToBase64-java.lang.String-"><code>LZSEncoding.compressToBase64(String)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#decompressFromEncodedURIComponent-java.lang.String-">decompressFromEncodedURIComponent(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Decompresses a String that had been compressed with <a href="../squidpony/LZSEncoding.html#compressToEncodedURIComponent-java.lang.String-"><code>LZSEncoding.compressToEncodedURIComponent(String)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/LZSEncoding.html#decompressFromUTF16-java.lang.String-">decompressFromUTF16(String)</a></span> - Static method in class squidpony.<a href="../squidpony/LZSEncoding.html" title="class in squidpony">LZSEncoding</a></dt>
+<dd>
+<div class="block">Decompresses a String that had been compressed with <a href="../squidpony/LZSEncoding.html#compressToUTF16-java.lang.String-"><code>LZSEncoding.compressToUTF16(String)</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html#DEEP_SEA_LEVEL">DEEP_SEA_LEVEL</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></dt>
 <dd>&nbsp;</dd>
@@ -909,7 +925,7 @@
 <dd>
 <div class="block">Used to construct a DijkstraMap from the output of another.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-double:A:A-squidpony.squidai.DijkstraMap.Measurement-">DijkstraMap(double[][], DijkstraMap.Measurement)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-double:A:A-squidpony.squidgrid.Measurement-">DijkstraMap(double[][], Measurement)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">Used to construct a DijkstraMap from the output of another, specifying a distance calculation.</div>
 </dd>
@@ -928,19 +944,15 @@
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidai.DijkstraMap.Measurement-">DijkstraMap(char[][], DijkstraMap.Measurement)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidgrid.Measurement-">DijkstraMap(char[][], Measurement)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidai.DijkstraMap.Measurement-squidpony.squidmath.IRNG-">DijkstraMap(char[][], DijkstraMap.Measurement, IRNG)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#DijkstraMap-char:A:A-squidpony.squidgrid.Measurement-squidpony.squidmath.IRNG-">DijkstraMap(char[][], Measurement, IRNG)</a></span> - Constructor for class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
-</dd>
-<dt><a href="../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai"><span class="typeNameLink">DijkstraMap.Measurement</span></a> - Enum in <a href="../squidpony/squidai/package-summary.html">squidpony.squidai</a></dt>
-<dd>
-<div class="block">The type of heuristic to use.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#dijkstraScan-char:A:A-squidpony.squidmath.Coord...-">dijkstraScan(char[][], Coord...)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
@@ -964,7 +976,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#directionAngles">directionAngles</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.Measurement.html#directionCount--">directionCount()</a></span> - Method in enum squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Measurement.html#directionCount--">directionCount()</a></span> - Method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Measurement.html" title="enum in squidpony.squidgrid">Measurement</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#directions">directions</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>

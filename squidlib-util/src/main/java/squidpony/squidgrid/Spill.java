@@ -1,5 +1,6 @@
 package squidpony.squidgrid;
 
+import squidpony.squidgrid.mapping.IDungeonGenerator;
 import squidpony.squidmath.*;
 
 import java.io.Serializable;
@@ -9,33 +10,10 @@ import java.util.Set;
  * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
  * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.
  * Created by Tommy Ettinger on 4/7/2015.
- * 
- * @see Splash An alternative implementation with a lighter API
  */
 public class Spill implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * The type of heuristic to use.
-     */
-    public enum Measurement {
-
-        /**
-         * The distance it takes when only the four primary directions can be
-         * moved in. The default.
-         */
-        MANHATTAN,
-        /**
-         * The distance it takes when diagonal movement costs the same as
-         * cardinal movement.
-         */
-        CHEBYSHEV,
-        /**
-         * The distance it takes as the crow flies.
-         */
-        EUCLIDEAN
-    }
-
+    
     /**
      * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
      * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. If you only call
@@ -109,11 +87,10 @@ public class Spill implements Serializable {
     }
 
     /**
-     * Construct a Spill without a level to actually scan. This constructor allows you to specify a StatefulRandomness
-     * such as Lathe32RNG, which will be referenced in this class (if the state of random changes because this
-     * object needed a random number, the state change will be reflected in the code that passed random to here).
-     *
-     * If you use this constructor, you must call an  initialize() method before using this class.
+     * Construct a Spill without a level to actually scan. This constructor allows you to specify an IStatefulRNG such
+     * as {@link StatefulRNG} or {@link GWTRNG}, which will be referenced in this class (if the state of random changes
+     * because this object needed a random number, the state change will be reflected in the code that passed random to
+     * here). If you use this constructor, you must call an  initialize() method before using this class.
      */
     public Spill(IStatefulRNG random) {
         rng = random;
@@ -144,7 +121,7 @@ public class Spill implements Serializable {
     }
 
     /**
-     * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+     * Constructor meant to take a char[][] returned by {@link IDungeonGenerator#generate()}, or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here.
@@ -236,11 +213,9 @@ public class Spill implements Serializable {
         height = level[0].length;
         spillMap = new boolean[width][height];
         physicalMap = new boolean[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                spillMap[x][y] = level[x][y];
-                physicalMap[x][y] = level[x][y];
-            }
+        for (int x = 0; x < width; x++) {
+            System.arraycopy(level, 0, physicalMap, 0, height);
+            System.arraycopy(level, 0, spillMap, 0, height);
         }
         initialized = true;
         return this;
@@ -370,9 +345,7 @@ public class Spill implements Serializable {
      */
     public ArrayList<Coord> start(Coord entry, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
-        if(impassable == null)
-            impassable = new OrderedSet<>();
-        if(!physicalMap[entry.x][entry.y] || impassable.contains(entry))
+        if(!physicalMap[entry.x][entry.y] || (impassable != null && impassable.contains(entry)))
             return null;
         spreadPattern = new ArrayList<>(volume);
         spillMap[entry.x][entry.y] = true;
@@ -382,7 +355,7 @@ public class Spill implements Serializable {
             for(int y = 0; y < spillMap[x].length; y++)
             {
                 temp = Coord.get(x, y);
-                if(spillMap[x][y] && !impassable.contains(temp))
+                if(spillMap[x][y] && (impassable == null || !impassable.contains(temp)))
                     fresh.add(temp);
             }
         }
@@ -394,8 +367,8 @@ public class Spill implements Serializable {
             spillMap[cell.x][cell.y] = true;
             for (int d = 0; d < dirs.length; d++) {
                 Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
-                double h = heuristic(dirs[d]);
-                if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && !impassable.contains(adj) && rng.nextDouble() <= 1.0 / h) {
+                double h = measurement.heuristic(dirs[d]);
+                if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && (impassable == null || !impassable.contains(adj)) && rng.nextDouble() <= 1.0 / h) {
                     setFresh(adj);
                 }
             }
@@ -405,22 +378,4 @@ public class Spill implements Serializable {
         return spreadPattern;
     }
 
-    private static final double root2 = Math.sqrt(2.0);
-    private double heuristic(Direction target) {
-        switch (measurement) {
-            case MANHATTAN:
-            case CHEBYSHEV:
-                return 1.0;
-            default:
-                switch (target) {
-                    case DOWN_LEFT:
-                    case DOWN_RIGHT:
-                    case UP_LEFT:
-                    case UP_RIGHT:
-                        return root2;
-                    default:
-                        return  1.0;
-                }
-        }
-    }
 }

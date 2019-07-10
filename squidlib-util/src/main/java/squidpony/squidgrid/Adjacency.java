@@ -1,6 +1,5 @@
 package squidpony.squidgrid;
 
-import squidpony.squidai.DijkstraMap.Measurement;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.IntDoubleOrderedMap;
 import squidpony.squidmath.IntVLA;

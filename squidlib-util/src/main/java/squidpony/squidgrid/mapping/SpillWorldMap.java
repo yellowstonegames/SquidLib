@@ -3,8 +3,8 @@ package squidpony.squidgrid.mapping;
 import squidpony.ArrayTools;
 import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.MultiSpill;
-import squidpony.squidgrid.Spill;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
@@ -151,7 +151,7 @@ public class SpillWorldMap {
     public char[][] generate(int factionCount, boolean makeAtlas, boolean makeHeight, double controlledFraction, double waterStrength) {
         factionCount &= 255;
         //, extra = 25 + (height * width >>> 4);
-        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
+        MultiSpill spreader = new MultiSpill(new short[width][height], Measurement.MANHATTAN, rng);
         GreasedRegion bounds = new GreasedRegion(width, height).not().retract(5),
                 smallerBounds = bounds.copy().retract(5), area = new GreasedRegion(width, height),
                 tmpEdge = new GreasedRegion(width, height), tmpInner = new GreasedRegion(width, height),

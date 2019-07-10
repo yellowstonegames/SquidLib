@@ -114,21 +114,21 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public final class <a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.47">MizuchiRNG</a>
+public final class <a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.48">MizuchiRNG</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">A mid-quality StatefulRandomness based on <a href="../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a> but modified to allow any odd number as a stream,
- instead of LinnormRNG's hardcoded stream of 1; at least some streams fail statistical testing, but only after at
- least 8TB of data is analyzed, failing at 16TB. Has 64 bits of state, 64 bits used to store a stream (which cannot be
+<div class="block">A high-quality StatefulRandomness based on <a href="../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a> but modified to allow any odd number as a stream,
+ instead of LinnormRNG's hardcoded stream of 1. Although some streams may have quality issues, the structure is based
+ on a linear congruential generator where the stream is the additive component, and in that context all odd numbers
+ are usually considered equally effective. Has 64 bits of state, 64 bits used to store a stream (which cannot be
  changed after construction) and natively outputs 64 bits at a time. Changes its state with a basic linear
- congruential generator (it is simply <code>state = state * 1103515245 + stream</code>). Starting with that LCG's
- output, it xorshifts that output, multiplies by a very large negative long, then returns another xorshift. Like
- LinnormRNG, the output of this simple function passes all 32TB of PractRand with no anomalies (at least for the
- tested streams), meaning its statistical quality is excellent. The speed of this particular class isn't fully clear
- yet, but benchmarks performed under the heavy load of PractRand testing happening at the same time appeared to show
- no significant difference between LinnormRNG and MizuchiRNG in speed (which means it's tied for second place in its
- category, behind <a href="../../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath"><code>DiverRNG</code></a>). Since at least some streams fail before the 32TB goal, this class will probably
- be changed to use a different algorithm, and as such is marked as Beta.
+ congruential generator (it is simply <code>state = state * 3935559000370003845L + stream</code>). Starting with that LCG's
+ output, it xorshifts that output twice, multiplies by a very large negative long, then returns another xorshift. Like
+ LinnormRNG, the output of this simple function passes all 32TB of PractRand (for one stream, it had 3 anomalies, but
+ another had none, and none were ever significant or persistent), meaning its statistical quality is excellent. The
+ speed of this particular class isn't fully clear yet, but benchmarks performed under the heavy load of PractRand
+ testing happening at the same time appeared to show no significant difference between LinnormRNG and MizuchiRNG in
+ speed (which means it's tied for second place in its category, behind <a href="../../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath"><code>DiverRNG</code></a>).
  <br>
  This generator is a StatefulRandomness but not a SkippingRandomness, so it can't (efficiently) have the skip() method
  that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the
@@ -144,14 +144,15 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  streams, since Mizuchi allows many possible streams, to get the concept of a river-or-stream-dwelling dragon. The
  mizuchi is a (by some versions of the story) river dragon from Japanese mythology.
  <br>
- Written May 14, 2018 by Tommy Ettinger. Thanks to M.E. O'Neill for her insights into the family of generators both
+ Written June 29, 2019 by Tommy Ettinger. Thanks to M.E. O'Neill for her insights into the family of generators both
  this and her PCG-Random fall into, and to the team that worked on SplitMix64 for SplittableRandom in JDK 8. Chris
- Doty-Humphrey's work on PractRand has been invaluable, and the LCG multiplier this uses is the same one used by
- PractRand in its "varqual" LCGs (the other, longer multiplier is from PCG-Random, and that's both the
- nothing-up-my-sleeve numbers used here). Thanks also to Sebastiano Vigna and David Blackwell for creating the
- incredibly fast xoroshiro128+ generator and also very fast <a href="http://xoshiro.di.unimi.it/hwd.php">HWD tool</a>;
- the former inspired me to make my code even faster and the latter tool seems useful so far in proving the quality of
- the generator (LinnormRNG passes over 100TB of HWD, and probably would pass much more if I gave it more days to run).</div>
+ Doty-Humphrey's work on PractRand has been invaluable. The LCG state multiplier is listed in a paper by L'Ecuyer from
+ 1999, Tables of Linear Congruential Generators of Different Sizes and Good Lattice Structure. The other
+ multiplier is from PCG-Random, and that's both the nothing-up-my-sleeve numbers used here. Thanks also to Sebastiano
+ Vigna and David Blackwell for creating the incredibly fast xoroshiro128+ generator and also very fast
+ <a href="http://xoshiro.di.unimi.it/hwd.php">HWD tool</a>; the former inspired me to make my code even faster and the
+ latter tool seems useful so far in proving the quality of the generator (LinnormRNG passes over 100TB of HWD, and
+ probably would pass much more if I gave it more days to run).</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Tommy Ettinger</dd>
@@ -340,7 +341,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>MizuchiRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.58">MizuchiRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.59">MizuchiRNG</a>()</pre>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </li>
 </ul>
@@ -350,7 +351,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>MizuchiRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.65">MizuchiRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.66">MizuchiRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="MizuchiRNG-long-long-">
@@ -359,7 +360,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>MizuchiRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.72">MizuchiRNG</a>(long&nbsp;seed,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.73">MizuchiRNG</a>(long&nbsp;seed,
                   long&nbsp;stream)</pre>
 </li>
 </ul>
@@ -369,7 +370,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MizuchiRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.77">MizuchiRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.78">MizuchiRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -386,7 +387,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.83">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.84">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -406,7 +407,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.96">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.97">nextLong</a>()</pre>
 <div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -422,7 +423,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.110">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.111">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -442,7 +443,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.119">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.120">nextInt</a>()</pre>
 <div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -456,7 +457,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.132">nextInt</a>(int&nbsp;bound)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.133">nextInt</a>(int&nbsp;bound)</pre>
 <div class="block">Exclusive on the outer bound.  The inner bound is 0.
  The bound can be negative, which makes this produce either a negative int or 0.</div>
 <dl>
@@ -473,7 +474,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.145">nextInt</a>(int&nbsp;inner,
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.146">nextInt</a>(int&nbsp;inner,
                          int&nbsp;outer)</pre>
 <div class="block">Inclusive inner, exclusive outer.</div>
 <dl>
@@ -491,7 +492,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.155">nextLong</a>(long&nbsp;bound)</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.156">nextLong</a>(long&nbsp;bound)</pre>
 <div class="block">Exclusive on the upper bound. The lower bound is 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -507,7 +508,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.172">nextLong</a>(long&nbsp;lower,
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.173">nextLong</a>(long&nbsp;lower,
                            long&nbsp;upper)</pre>
 <div class="block">Inclusive lower, exclusive upper.</div>
 <dl>
@@ -525,7 +526,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.182">nextDouble</a>()</pre>
+<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.183">nextDouble</a>()</pre>
 <div class="block">Gets a uniform random double in the range [0.0,1.0)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -539,7 +540,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.196">nextDouble</a>(double&nbsp;outer)</pre>
+<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.197">nextDouble</a>(double&nbsp;outer)</pre>
 <div class="block">Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer
  is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.</div>
 <dl>
@@ -556,7 +557,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextFloat</h4>
-<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.207">nextFloat</a>()</pre>
+<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.208">nextFloat</a>()</pre>
 <div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -570,7 +571,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBoolean</h4>
-<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.218">nextBoolean</a>()</pre>
+<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.219">nextBoolean</a>()</pre>
 <div class="block">Gets a random value, true or false.
  Calls nextLong() once.</div>
 <dl>
@@ -585,7 +586,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBytes</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.229">nextBytes</a>(byte[]&nbsp;bytes)</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.230">nextBytes</a>(byte[]&nbsp;bytes)</pre>
 <div class="block">Given a byte array as a parameter, this will fill the array with random bytes (modifying it
  in-place). Calls nextLong() <code>Math.ceil(bytes.length / 8.0)</code> times.</div>
 <dl>
@@ -600,7 +601,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.243">setState</a>(long&nbsp;seed)</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.244">setState</a>(long&nbsp;seed)</pre>
 <div class="block">Sets the seed (also the current state) of this generator.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -616,7 +617,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.253">getState</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.254">getState</a>()</pre>
 <div class="block">Gets the current state of this generator.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -632,7 +633,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.258">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.259">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -645,7 +646,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.263">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.264">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -658,7 +659,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.271">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MizuchiRNG.html#line.272">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

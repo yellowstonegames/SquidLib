@@ -14,6 +14,7 @@ import squidpony.StringKit;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -209,7 +210,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         // EUCLIDEAN is ideal for NPC movement when diagonals are allowed, because it will cause them to prefer paths in
         // straight lines when they are optimal or tied for optimal, while CHEBYSHEV will make erratic zig-zagging paths
         // just as optimal as straight lines, and that tends to make enemies look crazy or stupid.
-        playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.MANHATTAN);
+        playerToCursor = new DijkstraMap(decoDungeon, Measurement.MANHATTAN);
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(playerPosition);

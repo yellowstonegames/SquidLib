@@ -2,10 +2,7 @@ package squidpony.performance.alternate;
 
 import squidpony.GwtCompatibility;
 import squidpony.squidai.Threat;
-import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.FOV;
-import squidpony.squidgrid.LOS;
-import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.*;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
@@ -18,27 +15,6 @@ import java.util.*;
  * Created by Tommy Ettinger on 4/4/2015.
  */
 public class DijkstraMap {
-    /**
-     * The type of heuristic to use.
-     */
-    public enum Measurement {
-
-        /**
-         * The distance it takes when only the four primary directions can be
-         * moved in. The default.
-         */
-        MANHATTAN,
-        /**
-         * The distance it takes when diagonal movement costs the same as
-         * cardinal movement.
-         */
-        CHEBYSHEV,
-        /**
-         * The distance it takes as the crow flies. This will NOT affect movement cost when calculating a path,
-         * only the preferred squares to travel to (resulting in drastically more reasonable-looking paths).
-         */
-        EUCLIDEAN
-    }
 
     /**
      * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
@@ -454,11 +430,11 @@ public class DijkstraMap {
      */
     public static Measurement findMeasurement(Radius radius) {
         if (radius.equals2D(Radius.SQUARE))
-            return DijkstraMap.Measurement.CHEBYSHEV;
+            return Measurement.CHEBYSHEV;
         else if (radius.equals2D(Radius.DIAMOND))
-            return DijkstraMap.Measurement.MANHATTAN;
+            return Measurement.MANHATTAN;
         else
-            return DijkstraMap.Measurement.EUCLIDEAN;
+            return Measurement.EUCLIDEAN;
     }
 
     /**
