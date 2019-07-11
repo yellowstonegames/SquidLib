@@ -920,27 +920,41 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 + az * ((1f - ay) * ((1f - ax) * x0y0z1 + ax * x1y0z1) + ay * ((1f - ax) * x0y1z1 + ax * x1y1z1));
     }
 
-
-    public static float swayRandomized3(int seed, float value)
-    {
-        final int floor = value >= 0f ? (int) value : (int) value - 1;
-        final float start = (((seed += floor) ^ 0xD1B54A35) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f,
-                end = ((seed + 1 ^ 0xD1B54A35) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f;
 //        final float start = ((seed + floor * 0x9E377 ^ 0xD1B54A35) * 0x1D2473) * 0x0.ffffffp-31f,
 //                end = ((seed + (floor + 1) * 0x9E377 ^ 0xD1B54A35) * 0x1D2473) * 0x0.ffffffp-31f;
+
+    public static float baseSway(int seed, float value)
+    {
+        //int fast floor
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        //basic XLCG adjustment to the seed; makes small-scale wavering stronger
+        seed = seed * 0x9E37B ^ 0xD1B54A35; 
+        //get start and end for interpolation, each from -1 to 1.
+        //uses another XLCG step (backwards), then gets the low 20 bits, multiplies to get them into 0-2 range, etc. 
+        final float start = (((seed += floor) ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f,
+                end = ((seed + 1 ^ 0xD0E89D2D) * 0x1D2473 & 0xFFFFF) * 0x0.FFFFFp-19f - 1f;
+        //fract()
         value -= floor;
+        //cubic interpolation
         value *= value * (3 - 2 * value);
+        //lerp
         return (1 - value) * start + value * end;
     }
 
-    public static float swayRandomized2(int seed, float value)
+    public static float riverSway(int seed, float value)
     {
-        final float a = swayRandomized3(seed, value);
-        final float b = swayRandomized3(seed ^ 0x9E3779B9, value * 0.8f + a);
-        final float c = swayRandomized3(seed ^ 0x7F4A7C15, value * 0.6f + b);
-        final float d = swayRandomized3(seed ^ 0x6C8E9CF5, value * 0.4f + c);
-        return a * 0.125f + b * 0.1875f + c * 0.3125f + d * 0.375f;
-//        return (a + b + c + d) * 0.25f;
+        return riverSway(seed, seed ^ 0x9E3779B9, seed ^ 0x7F4A7C15, seed ^ 0x6C8E9CF5, value);
+    }
+
+    public static float riverSway(int seedA, int seedB, int seedC, int seedD, float value)
+    {
+        final float a = baseSway(seedA, value);
+        //each previous result is added to a scaled-down version of value
+        final float b = baseSway(seedB, value * 0.75f + a);
+        final float c = baseSway(seedC, value * 0.5f + b);
+        final float d = baseSway(seedD, value * 0.25f + c);
+        //the baseSway results are added with different priorities, like octaves of continuous noise (which this is)
+        return a * 0.375f + b * 0.3125f + c * 0.1875f + d * 0.125f;
     }
 
     public static double swayRandomized2(final long seed, final double xin, final double yin)
@@ -4276,11 +4290,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 //                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 0.7f, 1);
 //                            iBright = (int) (basic1D.getNoise(ctr * 0x1p-7f) * 240f);
-                            iBright = (int)((257+ctr) * 0x1.44cbc89p-8f) % YELLOW_GREEN_SERIES.length; 
-                            bright = lerpFloatColors(YELLOW_GREEN_SERIES[iBright].toFloatBits(),
-                                    YELLOW_GREEN_SERIES[(iBright + 1) % YELLOW_GREEN_SERIES.length].toFloatBits(),
+                            iBright = (int)((257+ctr) * 0x1.44cbc89p-8f) % BLUE_GREEN_SERIES.length; 
+                            bright = lerpFloatColors(BLUE_GREEN_SERIES[iBright].toFloatBits(),
+                                    BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
                                     (257+ctr) * 0x1.44cbc89p-8f - (int)((257+ctr) * 0x1.44cbc89p-8f));
-                            iBright = (int) (swayRandomized2(0, ctr * 0x1p-7f) * 240f);
+                            iBright = (int) (riverSway(0, ctr * 0x3p-9f) * 240f);
                             back[511][255 + iBright] =  bright;
                             back[511][256 + iBright] =  bright;
                             back[511][257 + iBright] =  bright;
