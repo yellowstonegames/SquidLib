@@ -1,6 +1,10 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -17,30 +21,42 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
+import squidpony.squidgrid.gui.gdx.FloatFilters;
+import squidpony.squidgrid.gui.gdx.GDXMarkup;
+import squidpony.squidgrid.gui.gdx.MapUtility;
+import squidpony.squidgrid.gui.gdx.PanelEffect;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SparseLayers;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.SquidMouse;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.LineKit;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This is a small, not-overly-simple demo that presents some important features of SquidLib and shows a faster,
  * cleaner, and more recently-introduced way of displaying the map and other text. Features include dungeon map
- * generation, field of view, pathfinding (to the mouse position), simplex noise (used for a flickering torch effect),
+ * generation, field of view, pathfinding (to the mouse position), color filtering (which has many uses in games),
  * language generation/ciphering, a colorful glow effect, and ever-present random number generation (with a seed).
  * You can increase the size of the map on most target platforms (but GWT struggles with large... anything) by
  * changing gridHeight and gridWidth to affect the visible area or bigWidth and bigHeight to adjust the size of the
  * dungeon you can move through, with the camera following your '@' symbol.
  */
 public class SparseDemo extends ApplicationAdapter {
-    // FilterBatch is almost the same as SpriteBatch
+    // FilterBatch is almost the same as SpriteBatch, but is a bit faster with SquidLib and allows color filtering
     private FilterBatch batch;
-
-    private IRNG rng;
+    // a type of random number generator, see below
+    private GWTRNG rng;
+    // rendering classes that show only the chars and backgrounds that they've been told to render, unlike some earlier
+    // classes in SquidLib.
     private SparseLayers display, languageDisplay;
+    // generates a dungeon as a 2D char array; can also fill some simple features into the dungeon.
     private DungeonGenerator dungeonGen;
     // decoDungeon stores the dungeon map with features like grass and water, if present, as chars like '"' and '~'.
     // bareDungeon stores the dungeon map with just walls as '#' and anything not a wall as '.'.
@@ -85,13 +101,15 @@ public class SparseDemo extends ApplicationAdapter {
     private DijkstraMap playerToCursor;
     private Coord cursor, player;
     private ArrayList<Coord> toCursor;
-    private List<Coord> awaitedMoves;
+    private ArrayList<Coord> awaitedMoves;
 
     private Vector2 screenPosition;
 
 
     // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
     // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
+    // markup has been added to color some words differently and italicize/bold/upper-case/lower-case others.
+    // see GDXMarkup's docs for more info.
     private final String artOfWar =
             "[@ 0.8 0.06329113 0.30980393][/]Sun Tzu[/] said: In the [!]practical[!] art of war, the best thing of all is " +
                     "to take the enemy's country whole and intact; to shatter and destroy it is not so good. So, " +
@@ -145,33 +163,28 @@ public class SparseDemo extends ApplicationAdapter {
             GRAY_FLOAT = -0x1.7e7e7ep125F; // same result as SColor.CW_GRAY_BLACK.toFloatBits()
     // This filters colors in a way we adjust over time, producing a sort of hue shift effect.
     // It can also be used to over- or under-saturate colors, change their brightness, or any combination of these. 
-//    private FloatFilters.PaletteFilter pal;
-//    private FloatFilters.MultiLerpFilter mlerp;
-    private FloatFilters.YCwCmFilter ycwcm;
-//    private FloatFilter sepia;
+    private FloatFilters.YCwCmFilter warmMildFilter;
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         // if the seed is identical between two runs, any random factors will also be identical (until user input may
         // cause the usage of an RNG to change). You can randomize the dungeon and several other initial settings by
-        // just removing the String seed, making the line "rng = new RNG();" . Keeping the seed as a default allows
+        // just removing the String seed, making the line "rng = new GWTRNG();" . Keeping the seed as a default allows
         // changes to be more easily reproducible, and using a fixed seed is strongly recommended for tests. 
-        rng = new RNG(artOfWar);
-//        pal = new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_32);
-//        mlerp = new FloatFilters.MultiLerpFilter(1f,
-//                SColor.translucentColor(SColor.CW_RICH_GREEN, 0.6f),
-//                SColor.translucentColor(SColor.CW_LIGHT_AZURE, 0.4f),
-//                SColor.translucentColor(SColor.CW_ROSE, 0.8f),
-//                SColor.translucentColor(SColor.CW_LIGHT_BROWN, 0.5f)
-//        );
-        // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
-        ycwcm = new FloatFilters.YCwCmFilter(0.875f, 0.6f, 0.6f);
-//        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
-        //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
-        // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or
-        // for tinting images.
-        batch = new FilterBatch(ycwcm);
+        // SquidLib has many methods that expect an IRNG instance, and there's several classes to choose from.
+        // In this program we'll use GWTRNG, which will behave better on the HTML target than other generators.
+        rng = new GWTRNG(artOfWar);
+        // YCwCmFilter multiplies the brightness (Y), warmth (Cw), and mildness (Cm) of a color 
+        warmMildFilter = new FloatFilters.YCwCmFilter(0.875f, 0.6f, 0.6f);
+
+        // FilterBatch is exactly like libGDX' SpriteBatch, except it is a fair bit faster when the Batch color is set
+        // often (which is always true for SquidLib's text-based display), and it allows a FloatFilter to be optionally
+        // set that can adjust colors in various ways. The FloatFilter here, a YCwCmFilter, can have its adjustments to
+        // brightness (Y, also called luma), warmth (blue/green vs. red/yellow) and mildness (blue/red vs. green/yellow)
+        // changed at runtime, and the putMap() method does this. This can be very powerful; you might increase the
+        // warmth of all colors (additively) if the player is on fire, for instance.
+        batch = new FilterBatch(warmMildFilter);
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -542,9 +555,13 @@ public class SparseDemo extends ApplicationAdapter {
         if (newX >= 0 && newY >= 0 && newX < bigWidth && newY < bigHeight
                 && bareDungeon[newX][newY] != '#')
         {
+            // we can call some methods on a SparseLayers to show effects on Glyphs it knows about.
+            // sliding pg, the player glyph, makes that '@' move smoothly between grid cells.
             display.slide(pg, player.x, player.y, newX, newY, 0.12f, null);
+            // this just moves the grid position of the player as it is internally tracked.
             player = player.translate(xmod, ymod);
-            FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);//, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
+            // calculates field of vision around the player again, in a circle of radius 9.0 .
+            FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
             // a new one just for this movement.
             blockage.refill(visible, 0.0);
@@ -558,9 +575,10 @@ public class SparseDemo extends ApplicationAdapter {
         {
             // A SparseLayers knows how to move a Glyph (like the one for the player, pg) out of its normal alignment
             // on the grid, and also how to move it back again. Using bump() will move pg quickly about a third of the
-            // way into a wall, then back to its former position at normal speed.
+            // way into a wall, then back to its former position at normal speed. Direction.getRoughDirection is a
+            // simple way to get which of the 8-way directions small xmod and ymod values point in.
             display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
-            // PanelEffect is a type of Action (from libGDX) that can run on a SparseLayers or SquidPanel.
+            // PanelEffect (from SquidLib) is a type of Action (from libGDX) that can run on a SparseLayers.
             // This particular kind of PanelEffect creates a purple glow around the player when he bumps into a wall.
             // Other kinds can make explosions or projectiles appear.
             display.addAction(new PanelEffect.PulseEffect(display, 1f, currentlySeen, player, 3
@@ -603,9 +621,7 @@ public class SparseDemo extends ApplicationAdapter {
         //display.clear();
         
         // causes colors to cycle semi-randomly from warm reds and browns to cold cyan-blues
-        ycwcm.cwMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
-        // causes colors to move semi-randomly in a different direction, from green-yellow to purple
-        //ycwcm.cmMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+        warmMildFilter.cwMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
         
         // The loop here only will draw tiles if they are potentially in the visible part of the map.
         // It starts at an x,y position equal to the player's position minus half of the shown gridWidth and gridHeight,
