@@ -2736,6 +2736,63 @@ public class FakeLanguageGen implements Serializable {
      * Kashanyah satebok bisal bekain akinuk an as, penah lukul...
      */
     public static final FakeLanguageGen MALAY = malay().register("Malay");
+    private static FakeLanguageGen celestial(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "a", "a", "a", "e", "e", "e", "i", "i", "i", "i", "i", "o", "o", "o",
+                        "a", "a", "a", "a", "a", "a", "a", "e", "e", "e", "i", "i", "i", "i", "i", "o", "o", "o",
+                        "ă", "ă", "ĕ", "ĭ", "ŏ"
+                },
+                new String[]{},
+                new String[]{
+                        "l", "r", "n", "m", "v", "b", "d", "s", "th", "sh", "z", "h", "y", "w", "j",
+                        "l", "r", "n", "m", "v", "b", "d", "s", "th", "sh", "z", "h", "y", "w", "j",
+                        "l", "r", "n", "m", "v", "b", "d", "s", "th", "sh", "z", "h", "y", "w", "j",
+                        "n", "m", "v", "s", "z", "h", "y", "w", "j",
+                        "n", "m", "v", "s", "z", "h", "y", "w", "j",
+                        "n", "m", "s", "h", "y", "j",
+                        "n", "m", "s", "h", "y", "j",
+                        "n", "m", "s", "h", "y", "j",
+                        "h", "h", "h", "h", "h", "h", "h", "h",
+                        "m", "m", "m", "m", "m", "m",
+                        "ry", "ly", "by", "dy", "ny", "my", "vy", "by", "dy", "sy", "zy",
+                        "bl", "br", "dr", "shl", "shr", "hr"
+                },
+                new String[]{
+                        "j", "j", "j",
+                        "mh", "mb", "md", "mr", "ms", "mz", "mv",
+                        "nh", "nb", "nd", "nr", "ns", "nz", "nv",
+                        "zh", "zb", "zd", "zr", "zv",
+                        "bd", "db", "bm", "bn", "dm", "dn",
+                        "ry", "ly", "by", "dy", "ny", "my", "vy", "by", "dy", "sy", "zy", "wy", "jy",
+                        "bl", "br", "dr", "shl", "shr", "hr"
+                },
+                new String[]{
+                        "l", "r", "n", "m", "v", "b", "d", "s", "th", "sh", "z",
+                        "l", "r", "n", "m", "v", "b", "d", "s", "th", "sh",
+                        "l", "r", "n", "m", "v", "b", "d", "th",
+                        "l", "r", "n", "m", "b", "d", "th",
+                        "r", "n", "m", "r", "n", "m", "r", "n", "m", "r", "n", "m", "r", "n", "m", "r", "n", "m",
+                },
+                new String[]{
+                        "am", "an", "ar", "av", "em", "el", "ez", "eth", "ev", "es", "im", "id", "in", "oth", "om",
+                        "ar", "el", "es", "im", "oth",
+                        "ăyom", "ĕzra", "ĭdniv", "ŏlor", "evyăd", "iyĕr", "abĭl", "onrŏv"
+                },
+                new String[]{"'"}, new int[]{1, 2, 3}, new double[]{5, 6, 2}, 0.45, 0.1, 0.04, 0.14, genericSanityChecks, true);
+    }
+
+    /**
+     * Fantasy language that is meant to sound like it could be spoken by divine or (magical) otherworldly beings.
+     * Sometimes uses the breve mark (as in {@code ăĕĭŏ}) over vowels and rarely splits consonants with {@code '}.
+     * Uses very few harsh sounds, and may be easy to confuse with {@link #ELF} (this tends to use much shorter words).
+     * This happens to sound a little like Hebrew, but since this doesn't have some consonants that are commonly used in
+     * Hebrew, and because this uses accented vowels that aren't in Hebrew, they should be different enough that this
+     * language can seem "not of this world."
+     * <br>
+     * Emŏl ebin hanzi'ab, isharar omrihrel nevyăd.
+     */
+    public static final FakeLanguageGen CELESTIAL = celestial().register("Celestial");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
@@ -3401,7 +3458,7 @@ public class FakeLanguageGen implements Serializable {
                     close = rng.getRandomElement(closingSyllables);
                     if (close.contains("@") && (syllables & 1) == 0) {
                         redouble = true;
-                        syllables = (syllables | 1) >> 1;
+                        syllables >>= 1;
 
                         //sb.append(close.replaceAll("@\\d", sb.toString()));
                     }
@@ -3426,7 +3483,7 @@ public class FakeLanguageGen implements Serializable {
                             close = rng.getRandomElement(closingSyllables);
                             if (close.contains("@") && (syllables & 1) == 0) {
                                 redouble = true;
-                                syllables = (syllables | 1) >> 1;
+                                syllables >>= 1;
 
                                 //sb.append(close.replaceAll("@\\d", sb.toString()));
                             }
