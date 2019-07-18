@@ -25,22 +25,22 @@ There's a [SquidLib IRC channel on Freenode](http://webchat.freenode.net/?channe
 Documentation:
 ---
 Jars of javadocs are distributed with each release via Maven Central, and with the current latest via JitPack. You can
-get the docs and source of the latest version, 3.0.0-b9, in two parts for each; squidlib-util (the core of the library,
+get the docs and source of the latest version, 3.0.0-b10, in two parts for each; squidlib-util (the core of the library,
 and also the largest part) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b9/squidlib-util-3.0.0-b9.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b9/squidlib-util-3.0.0-b9-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b9/squidlib-util-3.0.0-b9-sources.jar),
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b10/squidlib-util-3.0.0-b10.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b10/squidlib-util-3.0.0-b10-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b10/squidlib-util-3.0.0-b10-sources.jar),
 while squidlib (the display part of the library, named the way it is because depending on squidlib should also pull in
 squidlib-util to make it a "one-stop shop" dependency) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b9/squidlib-3.0.0-b9.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b9/squidlib-3.0.0-b9-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b9/squidlib-3.0.0-b9-sources.jar).
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b10/squidlib-3.0.0-b10.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b10/squidlib-3.0.0-b10-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b10/squidlib-3.0.0-b10-sources.jar).
 The completely-optional squidlib-extra module (primarily used for serialization; relies on libGDX but doesn't use it for display) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9-sources.jar).
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b10/squidlib-extra-3.0.0-b10.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b10/squidlib-extra-3.0.0-b10-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b10/squidlib-extra-3.0.0-b10-sources.jar).
 
-You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.0-b9, but no older) here:
+You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.0-b10, but no older) here:
   - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/apidocs/index.html)
   - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/apidocs/index.html)
   - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/apidocs/index.html)
@@ -53,7 +53,7 @@ Current Features:
   -   There's squidlib-util for game logic that doesn't specify a display mode, squidlib for text-based display and input, and squidlib-extra for saving/loading data
 -   Emphasis on cross-platform compatibility
   -   This means not just Windows, MacOS (formerly OS X), and Linux, but Android and HTML targets are important as well
-  -   HTML targeting uses Google Web Toolkit (GWT) 2.6.x and is expected to update to GWT 2.8.0 when libGDX has a new release
+  -   HTML targeting uses Google Web Toolkit (GWT) GWT 2.8.2 as of the latest snapshot
     -   All the code in SquidLib is written with GWT compatibility in mind, and things we know are incompatible are marked as GwtIncompatible with an annotation
   -   Android targeting is known to work, but the UI conventions tend to be rather different (e.g. an 80x24 character
       console-style screen would be hard to navigate by touching a char on a phone with a small screen)
@@ -287,9 +287,10 @@ Current Features:
     - This should also enable SquidLib to be used for rendering on Android/iOS/HTML and not only the desktop platforms Swing is limited to
   - There is now a tool that sets up a project for people who want an easy way to handle the dependencies of SquidLib and/or libGDX
     - You should use [the stable version of SquidSetup](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-b9) if you want to use
-      the latest stable SquidLib, since it has squidlib 3.0.0-b9 (as well as squidlib-util and regexodus) all configured as default.
+      an old but stable SquidLib, since it has squidlib 3.0.0-b9 (as well as squidlib-util and regexodus) all configured as default.
+      It should be updated to v3.0.0-b10 soon and depend on a much more recent version.
       There's a SquidLib demo as an example that defaults to being selected. You should probably select libGDX version 1.9.6 if you use the
-      stable version, or 1.9.9 if you use the snapshot (1.9.9 includes important fixes to bugs from 1.9.7).
+      stable version, or 1.9.10 if you use the snapshot (1.9.10 includes important fixes to bugs from 1.9.7).
     - Some ways of setting up a project won't include assets, so if you use the DefaultResources class in the display
       module (recommended for several things, like distance field fonts), you need to get the assets you want separately.
       They're in the assets/ folder of this GitHub repo, or you can get all the assets in a .zip file from SquidSetup's
@@ -319,25 +320,25 @@ Core of SquidLib:
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-util</artifactId>
-    <version>3.0.0-b9</version>
+    <version>3.0.0-b10</version>
 </dependency>
 ```
 
-Optional Text-Based Display (depends on libGDX 1.9.6)
+Optional Text-Based Display (depends on libGDX 1.9.10)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>3.0.0-b9</version>
+    <version>3.0.0-b10</version>
 </dependency>
 ```
 
-Optional Serialization Support (depends on libGDX 1.9.6)
+Optional Serialization Support (depends on libGDX 1.9.10)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-extra</artifactId>
-    <version>3.0.0-b9</version>
+    <version>3.0.0-b10</version>
 </dependency>
 ```
 
@@ -345,20 +346,20 @@ Or these dependencies for Gradle:
 
 Core of SquidLib:
 ```
-compile 'com.squidpony:squidlib-util:3.0.0-b9'
+compile 'com.squidpony:squidlib-util:3.0.0-b10'
 ```
 
 Optional Text-Based Display
 ```
-compile 'com.squidpony:squidlib:3.0.0-b9'
+compile 'com.squidpony:squidlib:3.0.0-b10'
 ```
 
 Optional Serialization Support
 ```
-compile 'com.squidpony:squidlib-extra:3.0.0-b9'
+compile 'com.squidpony:squidlib-extra:3.0.0-b10'
 ```
 
-If you want the latest version of SquidLib, which uses libGDX 1.9.9 and GWT 2.8.0 (if you use GWT), you can use JitPack
+If you want the latest version of SquidLib, which uses libGDX 1.9.10 and GWT 2.8.2 (if you use GWT), you can use JitPack
 to build the latest commit on-demand. It needs an additional repository, which is this for Maven:
 
 ```

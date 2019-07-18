@@ -50,13 +50,13 @@ sourceSets {
 // define 'gdxVersion' if not defined yet. This allows
 // a project depending on SquidLib (like: your game) to define
 // 'gdxVersion' itself, and yet be able to build SquidLib standalone too.
-def gdxVersion = System.getenv("gdxVersion") ?: "1.9.9" // As in pom.xml
+def gdxVersion = System.getenv("gdxVersion") ?: "1.9.10" // As in pom.xml
 project.sourceCompatibility = 1.7
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile "com.github.tommyettinger:regexodus:0.1.9"
+    compile "com.github.tommyettinger:regexodus:0.1.10"
 	testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 	testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 	testCompile 'junit:junit:4.12'
