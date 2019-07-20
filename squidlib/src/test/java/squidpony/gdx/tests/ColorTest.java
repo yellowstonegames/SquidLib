@@ -14,6 +14,9 @@ import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedSet;
+
+import java.util.Comparator;
 
 import static squidpony.StringKit.safeSubstring;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
@@ -981,9 +984,9 @@ public class ColorTest extends ApplicationAdapter {
 //            "* This color constant \"Name\" has RGB code {@code 0xFEDCBA}, red `RED, green `GREEN, blue `BLUE, alpha 1, hue `HUE, saturation `SAT, and value `VAL.\n" +
 //            "* It can be represented as a packed float with the constant {@code `PACKEDF}.\n" +
 //            "* <pre>\n" +
-//            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
+//            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
+//            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
+//            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
 //            "* </pre>\n" +
 ////            "* <br>\n" +
 ////            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>\n" +
@@ -1004,14 +1007,90 @@ public class ColorTest extends ApplicationAdapter {
 //                    .replace("`RED", Float.toString(c.r))
 //                    .replace("`GREEN", Float.toString(c.g))
 //                    .replace("`BLUE", Float.toString(c.b))
-//                    .replace("`HUE", Float.toString(scc.getHue(c)))
-//                    .replace("`SAT", Float.toString(scc.getSaturation(c)))
-//                    .replace("`VAL", Float.toString(scc.getValue(c)))
+//                    .replace("`HUE", Float.toString(SColor.hue(c)))
+//                    .replace("`SAT", Float.toString(SColor.saturation(c)))
+//                    .replace("`VAL", Float.toString(SColor.value(c)))
 //                    .replace("`PACKED", Float.toHexString(c.toFloatBits()))
 //            );
 //            //System.out.println("Processed " + i);
 //        }
 //        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
+
+        String templateTable = "<tr>\n<td>Name</td>\n<td>0xFEDCBAFF</td>\n<td>`HUE</td>\n<td>`SAT</td>\n<td>`VAL</td>\n<td style='background-color: #FEDCBA;'></td>\n</tr>\n";
+        final OrderedSet<SColor> PAL = new OrderedSet<>(SColor.FULL_PALETTE);
+        SColor c;
+        StringBuilder sb = new StringBuilder(100000);
+        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
+        for (int i = 0; i < PAL.size(); i++) {
+            c = PAL.getAt(i);
+            sb.append(templateTable.replace("Name", c.name)
+                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(c)).substring(0, 6))
+//                    .replace("`RED", Float.toString(c.r))
+//                    .replace("`GREEN", Float.toString(c.g))
+//                    .replace("`BLUE", Float.toString(c.b))
+                    .replace("`HUE", Float.toString(SColor.hue(c)))
+                    .replace("`SAT", Float.toString(SColor.saturation(c)))
+                    .replace("`VAL", Float.toString(SColor.value(c)))
+//                    .replace("`LUMA", Float.toString(SColor.lumaYCwCm(c)))
+//                    .replace("`WARM", Float.toString(SColor.chromaWarm(c)))
+//                    .replace("`MILD", Float.toString(SColor.chromaMild(c)))
+            );
+            //System.out.println("Processed " + i);
+        }
+        sb.append("</table>\n</body>\n</html>");
+        Gdx.files.local("ColorTable.html").writeString(sb.toString(), false);
+
+        sb.setLength(0);
+        PAL.sort(new Comparator<SColor>() {
+            @Override
+            public int compare(SColor c1, SColor c2) {
+                float s1 = c1.saturation(), s2 = c2.saturation();
+                if(s1 < 0x1p-7f && s2 >= 0x1p-7f)
+                    return -1000;
+                else if(s1 >= 0x1p-7f && s2 < 0x1p-7f)
+                    return 1000;
+                else if(s1 < 0x1p-7f && s2 < 0x1p-7f)
+                    return (int)Math.signum(c1.value() - c2.value());
+                else
+                    return (int)Math.signum(c1.hue() - c2.hue());
+            }
+        });
+        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
+        for (int i = 0; i < PAL.size(); i++) {
+            c = PAL.getAt(i);
+            sb.append(templateTable.replace("Name", c.name)
+                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(c)).substring(0, 6))
+                    .replace("`HUE", Float.toString(SColor.hue(c)))
+                    .replace("`SAT", Float.toString(SColor.saturation(c)))
+                    .replace("`VAL", Float.toString(SColor.value(c)))
+            );
+            //System.out.println("Processed " + i);
+        }
+        sb.append("</table>\n</body>\n</html>");
+        Gdx.files.local("ColorTableHue.html").writeString(sb.toString(), false);
+
+
+        sb.setLength(0);
+        PAL.sort(new Comparator<SColor>() {
+            @Override
+            public int compare(SColor c1, SColor c2) {                 
+                return (int)Math.signum(c1.value() - c2.value());
+            }
+        });
+        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
+        for (int i = 0; i < PAL.size(); i++) {
+            c = PAL.getAt(i);
+            sb.append(templateTable.replace("Name", c.name)
+                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(c)).substring(0, 6))
+                    .replace("`HUE", Float.toString(SColor.hue(c)))
+                    .replace("`SAT", Float.toString(SColor.saturation(c)))
+                    .replace("`VAL", Float.toString(SColor.value(c)))
+            );
+            //System.out.println("Processed " + i);
+        }
+        sb.append("</table>\n</body>\n</html>");
+        Gdx.files.local("ColorTableValue.html").writeString(sb.toString(), false);
+
     }
 
     private static double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
