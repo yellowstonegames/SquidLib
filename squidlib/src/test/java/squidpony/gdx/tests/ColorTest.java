@@ -446,6 +446,16 @@ public class ColorTest extends ApplicationAdapter {
     {
         return color.r * -0x4p-4f + color.g * 0x8p-4f + color.b * -0x4p-4f;
     }
+    public double lightnessLAB(Color color)
+    {
+        double r = color.r, g = color.g, b = color.b, y;
+        r = ((r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92);
+        g = ((g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92);
+        b = ((b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92);
+        y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+        y = (y > 0.008856) ? Math.cbrt(y) : (7.787037037037037 * y) + 0.13793103448275862;
+        return (116.0 * y) - 16.0;
+    }
     
     @Override
     public void create() {
@@ -1050,9 +1060,9 @@ public class ColorTest extends ApplicationAdapter {
                 else if(s1 >= 0x1p-7f && s2 < 0x1p-7f)
                     return 1000;
                 else if(s1 < 0x1p-7f && s2 < 0x1p-7f)
-                    return (int)Math.signum(c1.value() - c2.value());
+                    return (int)Math.signum(lightnessLAB(c1) - lightnessLAB(c2));
                 else
-                    return (int)Math.signum(c1.hue() - c2.hue());
+                    return 3 * (int)Math.signum(c1.hue() - c2.hue()) + (int)Math.signum(lightnessLAB(c1) - lightnessLAB(c2));
             }
         });
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
@@ -1074,7 +1084,7 @@ public class ColorTest extends ApplicationAdapter {
         PAL.sort(new Comparator<SColor>() {
             @Override
             public int compare(SColor c1, SColor c2) {                 
-                return (int)Math.signum(c1.value() - c2.value());
+                return (int)Math.signum(lightnessLAB(c1) - lightnessLAB(c2));
             }
         });
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
