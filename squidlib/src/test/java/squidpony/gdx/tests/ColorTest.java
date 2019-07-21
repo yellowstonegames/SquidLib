@@ -446,17 +446,39 @@ public class ColorTest extends ApplicationAdapter {
     {
         return color.r * -0x4p-4f + color.g * 0x8p-4f + color.b * -0x4p-4f;
     }
-    public double lightnessLAB(Color color)
+    public double lightnessCIELAB(Color color)
     {
         double r = color.r, g = color.g, b = color.b, y;
-        r = ((r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92);
-        g = ((g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92);
-        b = ((b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92);
-        y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+//        r = ((r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92);
+//        g = ((g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92);
+//        b = ((b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92);
+//        y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+        r = Math.pow(r, 2.19921875);
+        g = Math.pow(g, 2.19921875);
+        b = Math.pow(b, 2.19921875);
+        y = (r * 0.29738 + g * 0.62735 + b * 0.07527);
         y = (y > 0.008856) ? Math.cbrt(y) : (7.787037037037037 * y) + 0.13793103448275862;
         return (116.0 * y) - 16.0;
     }
-    
+
+    public double lightnessAltLAB(Color color)
+    {
+        double r = color.r, g = color.g, b = color.b, y;
+        r = Math.pow(r, 2.19921875);
+        g = Math.pow(g, 2.19921875);
+        b = Math.pow(b, 2.19921875);
+        y = (r * 0.3125 + g * 0.5625 + b * 0.125);
+        return Math.sqrt(y);
+
+//        r = ((r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92);
+//        g = ((g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92);
+//        b = ((b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92);
+//        y = (r * 0.2126 + g * 0.7152 + b * 0.0722);
+//        y = (r * 0.29738 + g * 0.62735 + b * 0.07527);
+//        y = (y > 0.008856) ? Math.cbrt(y) : (7.787037037037037 * y) + 0.13793103448275862;
+//        return (116.0 * y) - 16.0;
+    }
+
     @Override
     public void create() {
         batch = new FilterBatch();
@@ -1060,9 +1082,9 @@ public class ColorTest extends ApplicationAdapter {
                 else if(s1 >= 0x1p-7f && s2 < 0x1p-7f)
                     return 1000;
                 else if(s1 < 0x1p-7f && s2 < 0x1p-7f)
-                    return (int)Math.signum(lightnessLAB(c1) - lightnessLAB(c2));
+                    return (int)Math.signum(lightnessAltLAB(c1) - lightnessAltLAB(c2));
                 else
-                    return 3 * (int)Math.signum(c1.hue() - c2.hue()) + (int)Math.signum(lightnessLAB(c1) - lightnessLAB(c2));
+                    return 3 * (int)Math.signum(c1.hue() - c2.hue()) + (int)Math.signum(lightnessAltLAB(c1) - lightnessAltLAB(c2));
             }
         });
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
@@ -1074,17 +1096,37 @@ public class ColorTest extends ApplicationAdapter {
                     .replace("`SAT", Float.toString(SColor.saturation(c)))
                     .replace("`VAL", Float.toString(SColor.value(c)))
             );
-            //System.out.println("Processed " + i);
         }
         sb.append("</table>\n</body>\n</html>");
         Gdx.files.local("ColorTableHue.html").writeString(sb.toString(), false);
+
+//        sb.setLength(0);
+//        PAL.sort(new Comparator<SColor>() {
+//            @Override
+//            public int compare(SColor c1, SColor c2) {
+//                return (int)Math.signum(lightnessCIELAB(c1) - lightnessCIELAB(c2));
+//            }
+//        });
+//        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
+//        for (int i = 0; i < PAL.size(); i++) {
+//            c = PAL.getAt(i);
+//            sb.append(templateTable.replace("Name", c.name)
+//                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(c)).substring(0, 6))
+//                    .replace("`HUE", Float.toString(SColor.hue(c)))
+//                    .replace("`SAT", Float.toString(SColor.saturation(c)))
+//                    .replace("`VAL", Float.toString(SColor.value(c)))
+//            );
+//            //System.out.println("Processed " + i);
+//        }
+//        sb.append("</table>\n</body>\n</html>");
+//        Gdx.files.local("ColorTableValue.html").writeString(sb.toString(), false);
 
 
         sb.setLength(0);
         PAL.sort(new Comparator<SColor>() {
             @Override
-            public int compare(SColor c1, SColor c2) {                 
-                return (int)Math.signum(lightnessLAB(c1) - lightnessLAB(c2));
+            public int compare(SColor c1, SColor c2) {
+                return (int)Math.signum(lightnessAltLAB(c1) - lightnessAltLAB(c2));
             }
         });
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
