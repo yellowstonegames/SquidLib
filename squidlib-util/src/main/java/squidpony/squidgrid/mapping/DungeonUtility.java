@@ -1086,7 +1086,7 @@ public class DungeonUtility {
      * chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).
      *
      * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
-     * @return a resistance map suitable for use with the FOV class
+     * @return a resistance map suitable for use with the FOV class, with clear cells assigned 0.0 and blocked ones 1.0
      */
     public static double[][] generateResistances(char[][] map) {
         int width = map.length;
