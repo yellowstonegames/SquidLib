@@ -55,36 +55,34 @@ import java.util.*;
  */
 public class FOV implements Serializable {
     private static final long serialVersionUID = 3258723684733275798L;
-
-    public static final int
-            /**
-             * Performs FOV by pushing values outwards from the source location.
-             * It will go around corners a bit.
-             */
-            RIPPLE = 1,
-            /**
-             * Performs FOV by pushing values outwards from the source location.
-             * It will spread around edges like smoke or water, but maintain a
-             * tendency to curl towards the start position when going around
-             * edges.
-             */
-            RIPPLE_LOOSE = 2,
-            /**
-             * Performs FOV by pushing values outwards from the source location.
-             * It will only go around corners slightly.
-             */
-            RIPPLE_TIGHT = 3,
-            /**
-             * Performs FOV by pushing values outwards from the source location.
-             * It will go around corners massively.
-             */
-            RIPPLE_VERY_LOOSE = 4,
-            /**
-             * Uses Shadow Casting FOV algorithm. Treats all translucent cells
-             * as fully transparent. Returns a percentage from 1.0 (center of
-             * FOV) to 0.0 (outside of FOV).
-             */
-            SHADOW = 5;
+    /**
+     * Performs FOV by pushing values outwards from the source location.
+     * It will go around corners a bit.
+     */
+    public static final int RIPPLE = 1;
+    /**
+     * Performs FOV by pushing values outwards from the source location.
+     * It will spread around edges like smoke or water, but maintain a
+     * tendency to curl towards the start position when going around
+     * edges.
+     */
+    public static final int RIPPLE_LOOSE = 2;
+    /**
+     * Performs FOV by pushing values outwards from the source location.
+     * It will only go around corners slightly.
+     */
+    public static final int RIPPLE_TIGHT = 3;
+    /**
+     * Performs FOV by pushing values outwards from the source location.
+     * It will go around corners massively.
+     */
+    public static final int RIPPLE_VERY_LOOSE = 4;
+    /**
+     * Uses Shadow Casting FOV algorithm. Treats all translucent cells
+     * as fully transparent. Returns a percentage from 1.0 (center of
+     * FOV) to 0.0 (outside of FOV).
+     */
+    public static final int SHADOW = 5;
     private int type = SHADOW;
 
 	/**
@@ -110,8 +108,8 @@ public class FOV implements Serializable {
     }
 
     /**
-     * Creates a solver which will use the provided FOV solver type.
-     *
+     * Creates a solver which will use the provided FOV solver type, typically one of {@link #SHADOW} (the default),
+     * {@link #RIPPLE}, {@link #RIPPLE_TIGHT}, {@link #RIPPLE_LOOSE}, or {@link #RIPPLE_VERY_LOOSE}.
      * @param type
      */
     public FOV(int type) {
@@ -165,7 +163,7 @@ public class FOV implements Serializable {
      * of the origin cell. Radius determinations are determined by the provided
      * RadiusStrategy.
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -272,9 +270,10 @@ public class FOV implements Serializable {
      * radius.
      *
      * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light a non-null 2D double array that will have its contents overwritten, modified, and returned
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
-     * @return the computed light grid
+     * @return the computed light grid (the same as {@code light})
      */
     public static double[][] calculateFOV(double[][] resistanceMap, double[][] light, int startx, int starty) {
         return reuseFOV(resistanceMap, light, startx, starty, Integer.MAX_VALUE, Radius.CIRCLE);
@@ -342,6 +341,102 @@ public class FOV implements Serializable {
 
         shadowCast(0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         shadowCast(-1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        return light;
+    }
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter. The values in light are always cleared before
+     * this is run, because prior state can make this give incorrect results.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are determined by the provided
+     * RadiusStrategy.
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @param radius the distance the light will extend to
+     * @param radiusTechnique provides a means to calculate the radius as desired
+     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}
+     */
+    public static double[][] reuseFOVSymmetrical(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique)
+    {
+        double decay = 1.0 / radius;
+        ArrayTools.fill(light, 0);
+        light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
+
+
+        shadowCast(0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int row = 0; row <= radius + 1.0; row++) {
+            for (int col = row; col <= radius + 1.0; col++) {
+                if(startX + col < light.length && startY + row < light[0].length &&
+                        !shadowCastCheck(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX + col][startY + row] = 0.0; 
+            }
+        }
+        shadowCast(1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int col = 0; col <= radius + 1.0; col++) {
+            for (int row = col; row <= radius + 1.0; row++) {
+                if(startX + col < light.length && startY + row < light[0].length &&
+                        !shadowCastCheck(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX + col][startY + row] = 0.0;
+            }
+        }
+
+        shadowCast(0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int row = 0; row <= radius + 1.0; row++) {
+            for (int col = row; col <= radius + 1.0; col++) {
+                if(startX + col < light.length && startY - row >= 0 && 
+                        !shadowCastCheck(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX + col][startY - row] = 0.0;
+            }
+        }
+        shadowCast(1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int col = 0; col <= radius + 1.0; col++) {
+            for (int row = col; row <= radius + 1.0; row++) {
+                if(startX + col < light.length && startY - row >= 0 && 
+                        !shadowCastCheck(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX + col][startY - row] = 0.0;
+            }
+        }
+
+        shadowCast(0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int row = 0; row <= radius + 1.0; row++) {
+            for (int col = row; col <= radius + 1.0; col++) {
+                if(startX + col >= 0 && startY - row >= 0 && 
+                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX - col][startY - row] = 0.0;
+            }
+        }
+        shadowCast(-1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int col = 0; col <= radius + 1.0; col++) {
+            for (int row = col; row <= radius + 1.0; row++) {
+                if(startX + col >= 0 && startY - row >= 0 && 
+                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX - col][startY - row] = 0.0;
+            }
+        }
+
+        shadowCast(0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int row = 0; row <= radius + 1.0 && startY + row < light[0].length; row++) {
+            for (int col = row; col <= radius + 1.0; col++) {
+                if(startX + col >= 0 && startY - row < light[0].length &&
+                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX - col][startY + row] = 0.0;
+            }
+        }
+        shadowCast(-1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        for (int col = 0; col <= radius + 1.0; col++) {
+            for (int row = col; row <= radius + 1.0; row++) {
+                if(startX + col >= 0 && startY - row < light[0].length &&
+                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                    light[startX - col][startY + row] = 0.0;
+            }
+        }
         return light;
     }
     /**
@@ -718,9 +813,9 @@ public class FOV implements Serializable {
     }
 
     private static void shadowCastBinary(int row, double start, double end, int xx, int xy, int yx, int yy,
-                                   double radius, int startx, int starty, double decay, double[][] lightMap,
-                                   double[][] map, Radius radiusStrategy,
-                                   int minX, int minY, int maxX, int maxY) {
+                                         double radius, int startx, int starty, double decay, double[][] lightMap,
+                                         double[][] map, Radius radiusStrategy,
+                                         int minX, int minY, int maxX, int maxY) {
         double newStart = 0;
         if (start < end) {
             return;
@@ -740,9 +835,9 @@ public class FOV implements Serializable {
                 } else if (end > leftSlope) {
                     break;
                 }
-                
+
                 lightMap[currentX][currentY] = 1.0;
-                
+
                 if (blocked) { //previous cell was a blocking one
                     if (map[currentX][currentY] >= 1) {//hit a wall
                         newStart = rightSlope;
@@ -760,6 +855,53 @@ public class FOV implements Serializable {
                 }
             }
         }
+    }
+
+    private static boolean shadowCastCheck(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                         double radius, int startx, int starty, double decay, double[][] lightMap,
+                                         double[][] map, Radius radiusStrategy,
+                                         int minX, int minY, int maxX, int maxY, int targetX, int targetY) {
+        double newStart = 0;
+        if (start < end) {
+            return false;
+        }
+
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && distance < maxX - minX + maxY - minY && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startx + deltaX * xx + deltaY * xy;
+                int currentY = starty + deltaX * yx + deltaY * yy;
+                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= minX && currentY >= minY && currentX < maxX && currentY < maxY) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+
+                if(currentX == targetX && currentY == targetY) return true;
+
+                if (blocked) { //previous cell was a blocking one
+                    if (map[currentX][currentY] >= 1.0) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (map[currentX][currentY] >= 1.0 && distance < radius) {//hit a wall within sight line
+                        blocked = true;
+                        if(shadowCastCheck(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay,
+                                lightMap, map, radiusStrategy, minX, minY, maxX, maxY, targetX, targetY))
+                            return true;
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private static void shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,

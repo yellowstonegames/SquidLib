@@ -1,5 +1,7 @@
 package squidpony.examples;
 
+import org.junit.Ignore;
+import org.junit.Test;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
@@ -19,13 +21,15 @@ import java.util.ArrayList;
 public class FOVTest {
     public static int width = 100, height = 40;
 
-    public static void main(String[] args) {
+    @Test
+    @Ignore
+    public void testAngles() {
         StatefulRNG rng = new StatefulRNG(0xCAFEBA77L);
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
 
-        dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(15);
-        dungeonGenerator.addGrass(5);
+//        dungeonGenerator.addDoors(15, true);
+//        dungeonGenerator.addWater(15);
+//        dungeonGenerator.addGrass(5);
         dungeonGenerator.addBoulders(5);
         SerpentMapGenerator organic = new SerpentMapGenerator(width, height, rng, 0.2);
         organic.putWalledBoxRoomCarvers(4);
@@ -48,6 +52,7 @@ public class FOVTest {
         for (int i = 0; i < 20; i++) {
             pt = points.getAt(i);
             fovMaps.add(FOV.reuseFOV(resMap, new double[width][height], pt.x, pt.y, 6, Radius.CIRCLE, i * 40, 60.0));
+//            fovMaps.add(FOV.reuseFOVSymmetrical(resMap, new double[width][height], pt.x, pt.y, 6, Radius.CIRCLE));
 //            fovMaps.add(FOV.bouncingLine(resMap, new double[width][height], pt.x, pt.y, rng.between(25.0, 40.0),
 //                    rng.nextDouble(360)));
         }
