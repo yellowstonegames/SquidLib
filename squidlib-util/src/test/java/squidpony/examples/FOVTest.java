@@ -130,48 +130,48 @@ public class FOVTest {
             FOV.reuseFOVSymmetrical(resMap, allVision[i], c.x, c.y, 6, Radius.CIRCLE);
         }
         int bad = 0, total = 0;
-        for (int i = 91; i < floors.length; i++) {
+        for (int i = 0; i < floors.length; i++) {
             Coord outer = floors[i];
-            for (int j = 90; j < floors.length; j++) {
+            for (int j = 0; j < floors.length; j++) {
                 Coord inner = floors[j];
                 if((allVision[i][inner.x][inner.y] == 0.0) != (allVision[j][outer.x][outer.y] == 0.0))
                 {
-                    System.out.println("From position " + outer + " which holds a " + dungeon[outer.x][outer.y] +
-                            ", looking at the point " + inner + " gives " + allVision[i][inner.x][inner.y]);
-                    System.out.println("From position " + inner + " which holds a " + dungeon[inner.x][inner.y] +
-                            ", looking at the point " + outer + " gives " + allVision[j][outer.x][outer.y]);
                     bad++;
-                    for (int y = 0; y < height; y++) {
-                        for (int x = 0; x < width; x++) {
-                            if(dungeon[x][y] == '#')
-                            {
-                                System.out.print("# ");
-                            }
-                            else if (outer.x == x && outer.y == y)
-                            {
-                                System.out.print("!!");
-                            }
-                            else if (inner.x == x && inner.y == y)
-                            {
-                                System.out.print("**");
-                            }
-                            else
-                            {
-//                                System.out.print(Math.round(allVision[i][x][y] * 9.4999));
-                                System.out.print(' ');
-                                System.out.print(Math.round(allVision[j][x][y] * 9.4999));
-                            }
-                        }
-                        System.out.println();
-                    }
-
-                    System.out.println();
-                    return;
-
                 }
                 total++;
             }
         }
         System.out.println("Bad matchups? " + bad + "/" + total + " matchups were bad.");
+
+        int i = 42, j = i + 3;
+        Coord outer = floors[i], inner = floors[j];
+        System.out.println("From position " + outer + " which holds a " + dungeon[outer.x][outer.y] +
+                ", looking at the point " + inner + " gives " + allVision[i][inner.x][inner.y]);
+        System.out.println("From position " + inner + " which holds a " + dungeon[inner.x][inner.y] +
+                ", looking at the point " + outer + " gives " + allVision[j][outer.x][outer.y]);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if(dungeon[x][y] == '#')
+                {
+                    System.out.print("# ");
+                }
+                else if (outer.x == x && outer.y == y)
+                {
+                    System.out.print("!!");
+                }
+                else if (inner.x == x && inner.y == y)
+                {
+                    System.out.print("**");
+                }
+                else
+                {                     
+                    System.out.print(Math.round(allVision[i][x][y] * 9.4999));
+                    System.out.print(Math.round(allVision[j][x][y] * 9.4999));
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println();
     }
 }
