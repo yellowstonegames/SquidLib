@@ -391,7 +391,7 @@ public class FOV implements Serializable {
         for (int row = 0; row <= radius + 1.0; row++) {
             for (int col = row; col <= radius + 1.0; col++) {
                 if(startX + col < light.length && startY - row >= 0 && 
-                        !shadowCastCheck(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                        !shadowCastCheck(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX + col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
                     light[startX + col][startY - row] = 0.0;
             }
         }
@@ -399,7 +399,7 @@ public class FOV implements Serializable {
         for (int col = 0; col <= radius + 1.0; col++) {
             for (int row = col; row <= radius + 1.0; row++) {
                 if(startX + col < light.length && startY - row >= 0 && 
-                        !shadowCastCheck(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                        !shadowCastCheck(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX + col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
                     light[startX + col][startY - row] = 0.0;
             }
         }
@@ -407,16 +407,16 @@ public class FOV implements Serializable {
         shadowCast(0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         for (int row = 0; row <= radius + 1.0; row++) {
             for (int col = row; col <= radius + 1.0; col++) {
-                if(startX + col >= 0 && startY - row >= 0 && 
-                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                if(startX - col >= 0 && startY - row >= 0 && 
+                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX - col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
                     light[startX - col][startY - row] = 0.0;
             }
         }
         shadowCast(-1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         for (int col = 0; col <= radius + 1.0; col++) {
             for (int row = col; row <= radius + 1.0; row++) {
-                if(startX + col >= 0 && startY - row >= 0 && 
-                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                if(startX - col >= 0 && startY - row >= 0 && 
+                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX - col, startY - row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
                     light[startX - col][startY - row] = 0.0;
             }
         }
@@ -424,16 +424,16 @@ public class FOV implements Serializable {
         shadowCast(0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         for (int row = 0; row <= radius + 1.0 && startY + row < light[0].length; row++) {
             for (int col = row; col <= radius + 1.0; col++) {
-                if(startX + col >= 0 && startY - row < light[0].length &&
-                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                if(startX - col >= 0 && startY + row < light[0].length &&
+                        !shadowCastCheck(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX - col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
                     light[startX - col][startY + row] = 0.0;
             }
         }
         shadowCast(-1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         for (int col = 0; col <= radius + 1.0; col++) {
             for (int row = col; row <= radius + 1.0; row++) {
-                if(startX + col >= 0 && startY - row < light[0].length &&
-                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX + col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
+                if(startX - col >= 0 && startY + row < light[0].length &&
+                        !shadowCastCheck(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX - col, startY + row, decay, light, resistanceMap, radiusTechnique, 0, 0, light.length, light[0].length, startX, startY))
                     light[startX - col][startY + row] = 0.0;
             }
         }
