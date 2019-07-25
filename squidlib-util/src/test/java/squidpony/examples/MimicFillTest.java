@@ -1,8 +1,12 @@
 package squidpony.examples;
 
+import squidpony.ArrayTools;
 import squidpony.squidgrid.MimicFill;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidgrid.mapping.WorldMapGenerator;
+import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.RNG;
 
 /**
  * Created by Tommy Ettinger on 5/14/2016.
@@ -11,37 +15,48 @@ public class MimicFillTest {
     public static void main(String[] args)
     {
         //seed is, in base 36, the number SQUIDLIB
-        ThunderRNG thunder = new ThunderRNG(2252637788195L);
-        LightRNG light = new LightRNG(2252637788195L);
-        XoRoRNG xoro = new XoRoRNG(2252637788195L);
+        DiverRNG light = new DiverRNG(2252637788195L);
         RNG rng;
         //rng = new RNG(thunder);
         //rng = new RNG(light);
-        rng = new RNG(xoro);
+        rng = new RNG(light);
         boolean[][] result;
         boolean[] solo;
         long time1d = 0L, time2d = 0L, time, junk = 0L;
 
-        GreasedRegion gr = new GreasedRegion(200, 200);
-        thunder.reseed(2252637788195L); light.setState(2252637788195L); xoro.setSeed(2252637788195L);
+        light.setState(2252637788195L);
+
+        boolean[][] world = new WorldMapGenerator.MimicMap(1L, FastNoise.instance, 0.1).earthOriginal.decode();
+        boolean[][] doubleWorld = new boolean[world.length][world.length];
+        ArrayTools.insert(world, doubleWorld, 0, 0);
+        ArrayTools.insert(world, doubleWorld, 0, world[0].length);
+        result = MimicFill.fill(doubleWorld, 220, 0.2, 5, rng);
+
+        DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
+                DungeonUtility.wallWrap(MimicFill.sampleToMap(result, '.', '#')),
+                true));
+        System.out.println();
+
+
         time = System.currentTimeMillis();
         for(boolean[][] sample : MimicFill.samples)
         {
-            result = MimicFill.fill(sample, 200, 0.2, 3, rng);
+            result = MimicFill.fill(sample, 140, 0.2, 3, rng);
 
             DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
                     DungeonUtility.wallWrap(MimicFill.sampleToMap(result, '.', '#')),
                     true));
             System.out.println();
+
+
 //            DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
 //                    DungeonUtility.wallWrap(gr.refill(result).toChars())));
 //            System.out.println("\n\n*****************\n\n");
-
         }
         time2d += System.currentTimeMillis() - time;
-
-        junk += thunder.nextLong(); junk += light.nextLong(); junk += xoro.nextLong();
-        thunder.reseed(2252637788195L); light.setState(2252637788195L); xoro.setSeed(2252637788195L);
+        
+        junk += light.nextLong();
+        light.setState(2252637788195L);
 
         time = System.currentTimeMillis();
         for(boolean[][] sample : MimicFill.samples)
@@ -49,7 +64,7 @@ public class MimicFillTest {
             solo = MimicFill.fillSolo(sample, 200, 0.2, 3, rng);
 
             DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
-                    DungeonUtility.wallWrap(MimicFill.sampleToMap(solo, 200, 200, '.', '#')),
+                    DungeonUtility.wallWrap(MimicFill.sampleToMap(solo, 140, 140, '.', '#')),
                     true));
             System.out.println();
 //            DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
@@ -58,7 +73,7 @@ public class MimicFillTest {
 
         }
         time1d += System.currentTimeMillis() - time;
-        junk += thunder.nextLong(); junk += light.nextLong(); junk += xoro.nextLong();
+        junk += light.nextLong();
 
         /*
         thunder.reseed(2252637788195L); light.setState(2252637788195L); xoro.setSeed(2252637788195L);
