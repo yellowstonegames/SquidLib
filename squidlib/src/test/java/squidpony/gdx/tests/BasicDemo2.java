@@ -179,7 +179,10 @@ public class BasicDemo2 extends ApplicationAdapter {
         playerPosition = placement.singleRandom(rng);
         playerMobile = display.animateActor(playerPosition.x, playerPosition.y, '@', SColor.CW_FLUSH_BLUE);
         // Uses shadowcasting FOV and reuses the visible array without creating new arrays constantly.
-        FOV.reuseFOV(resistance, visible, playerPosition.x, playerPosition.y, 9.0, Radius.CIRCLE);
+        // you can also use FOV.reuseFOV() here with the same arguments.
+        // reuseFOVSymmetrical() will just remove cells that the player would be able to see but that couldn't
+        // see the player in return, requiring two-way visibility for a cell to be visible at all.
+        FOV.reuseFOVSymmetrical(resistance, visible, playerPosition.x, playerPosition.y, 9.0, Radius.CIRCLE);
         // 0.0 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.0 will _not_ be in
         // the blockage Collection, but anything 0.0 or less will be in it. This lets us use blockage to prevent access
         // to cells we can't see from the start of the move.
@@ -399,7 +402,10 @@ public class BasicDemo2 extends ApplicationAdapter {
                 && bareDungeon[newX][newY] != '#') {
             display.slide(playerMobile, newX, newY);
             playerPosition = playerPosition.translate(xmod, ymod);
-            FOV.reuseFOV(resistance, visible, playerPosition.x, playerPosition.y, 9.0, Radius.CIRCLE);
+            // you can also use FOV.reuseFOV() here with the same arguments.
+            // reuseFOVSymmetrical() will just remove cells that the player would be able to see but that couldn't
+            // see the player in return, requiring two-way visibility for a cell to be visible at all.
+            FOV.reuseFOVSymmetrical(resistance, visible, playerPosition.x, playerPosition.y, 9.0, Radius.CIRCLE);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
             // a new one just for this movement.
             blockage.refill(visible, 0.0);
