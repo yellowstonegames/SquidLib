@@ -4008,15 +4008,17 @@ public class SColor extends Color implements Serializable {
     public static final SColor PINK_ORANGE = new SColor(0xFF9966, "Pink Orange");
 
     /**
-     * This color constant "Plain Mosue" has RGB code {@code 0x6E5F57}, red 0.43137255, green 0.37254903, blue 0.34117648, alpha 1, hue 0.05797112, saturation 0.20909089, and value 0.43137255.
+     * This color constant "Plain Mouse" has RGB code {@code 0x6E5F57}, red 0.43137255, green 0.37254903, blue 0.34117648, alpha 1, hue 0.05797112, saturation 0.20909089, and value 0.43137255.
      * It can be represented as a packed float with the constant {@code -0x1.aebedcp125F}.
+     * <br>
+     * This had used a misspelled {@link #name}, "Plain Mosue", but has since been corrected.
      * <pre>
      * <font style='background-color: #6E5F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6E5F57; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6E5F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6E5F57'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6E5F57'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6E5F57'>&nbsp;@&nbsp;</font><font style='background-color: #6E5F57; color: #888888'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6E5F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6E5F57; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor PLAIN_MOUSE = new SColor(0x6E5F57, "Plain Mosue");
+    public static final SColor PLAIN_MOUSE = new SColor(0x6E5F57, "Plain Mouse");
 
     /**
      * This color constant "Platinum" has RGB code {@code 0xE5E4E2}, red 0.8980392, green 0.89411765, blue 0.8862745, alpha 1, hue 0.111111164, saturation 0.013100436, and value 0.8980392.
@@ -5526,15 +5528,17 @@ public class SColor extends Color implements Serializable {
     public static final SColor WHITE = new SColor(0xFFFFFF, "White");
 
     /**
-     * This color constant "white Mouse" has RGB code {@code 0xB9A193}, red 0.7254902, green 0.6313726, blue 0.5764706, alpha 1, hue 0.061403513, saturation 0.20540538, and value 0.7254902.
+     * This color constant "White Mouse" has RGB code {@code 0xB9A193}, red 0.7254902, green 0.6313726, blue 0.5764706, alpha 1, hue 0.061403513, saturation 0.20540538, and value 0.7254902.
      * It can be represented as a packed float with the constant {@code -0x1.274372p126F}.
+     * <br>
+     * This had used an incorrectly-capitalized {@link #name}, "white Mouse", but has since been corrected.
      * <pre>
      * <font style='background-color: #B9A193;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B9A193; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B9A193;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B9A193'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B9A193'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B9A193'>&nbsp;@&nbsp;</font><font style='background-color: #B9A193; color: #888888'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B9A193;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B9A193; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor WHITE_MOUSE = new SColor(0xB9A193, "white Mouse");
+    public static final SColor WHITE_MOUSE = new SColor(0xB9A193, "White Mouse");
 
     /**
      * This color constant "White Oak" has RGB code {@code 0xCE9F6F}, red 0.80784315, green 0.62352943, blue 0.43529412, alpha 1, hue 0.084210515, saturation 0.46116504, and value 0.80784315.

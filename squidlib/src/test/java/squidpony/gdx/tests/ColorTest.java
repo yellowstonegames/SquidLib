@@ -1087,11 +1087,11 @@ public class ColorTest extends ApplicationAdapter {
 //        }
 //        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
 
-        String templateTable = "<tr>\n<td>Name</td>\n<td>0xFEDCBAFF</td>\n<td>`HUE</td>\n<td>`SAT</td>\n<td>`VAL</td>\n<td>`LUMA</td>\n<td>`WARM</td>\n<td>`MILD</td>\n<td>`TWEA</td>\n<td style='background-color: #FEDCBA;'></td>\n</tr>\n";
+        String templateTable = "<tr>\n<td style='background-color: #FEDCBA;'></td>\n<td>Name</td>\n<td>0xFEDCBAFF</td>\n<td>`HUE</td>\n<td>`SAT</td>\n<td>`VAL</td>\n<td>`LUMA</td>\n<td>`WARM</td>\n<td>`MILD</td>\n<td>`TWEA</td>\n</tr>\n";
         final OrderedSet<SColor> PAL = new OrderedSet<>(SColor.FULL_PALETTE);
         SColor c;
         StringBuilder sb = new StringBuilder(100000);
-        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n<th>Preview Section</th>\n</tr>\n");
+        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Preview Section</th>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n</tr>\n");
         for (int i = 0; i < PAL.size(); i++) {
             c = PAL.getAt(i);
             sb.append(templateTable.replace("Name", c.name)
@@ -1105,7 +1105,7 @@ public class ColorTest extends ApplicationAdapter {
                     .replace("`LUMA", Float.toString(SColor.lumaYCwCm(c)))
                     .replace("`WARM", Float.toString(SColor.chromaWarm(c)))
                     .replace("`MILD", Float.toString(SColor.chromaMild(c)))
-                    .replace("`TWEA", Double.toString(lightnessAltLAB(c)))
+                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(c)))
             );
             //System.out.println("Processed " + i);
         }
@@ -1127,7 +1127,7 @@ public class ColorTest extends ApplicationAdapter {
                     return 3 * (int)Math.signum(c1.hue() - c2.hue()) + (int)Math.signum(lightnessAltLAB(c1) - lightnessAltLAB(c2));
             }
         });
-        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n<th>Preview Section</th>\n</tr>\n");
+        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Preview Section</th>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n</tr>\n");
 //        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
         for (int i = 0; i < PAL.size(); i++) {
             c = PAL.getAt(i);
@@ -1139,7 +1139,7 @@ public class ColorTest extends ApplicationAdapter {
                     .replace("`LUMA", Float.toString(SColor.lumaYCwCm(c)))
                     .replace("`WARM", Float.toString(SColor.chromaWarm(c)))
                     .replace("`MILD", Float.toString(SColor.chromaMild(c)))
-                    .replace("`TWEA", Double.toString(lightnessAltLAB(c)))
+                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(c)))
             );
         }
         sb.append("</table>\n</body>\n</html>");
@@ -1174,7 +1174,7 @@ public class ColorTest extends ApplicationAdapter {
                 return (int)Math.signum(lightnessAltLAB(c1) - lightnessAltLAB(c2));
             }
         });
-        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n<th>Preview Section</th>\n</tr>\n");
+        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Preview Section</th>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n</tr>\n");
         for (int i = 0; i < PAL.size(); i++) {
             c = PAL.getAt(i);
             sb.append(templateTable.replace("Name", c.name)
@@ -1185,7 +1185,7 @@ public class ColorTest extends ApplicationAdapter {
                     .replace("`LUMA", Float.toString(SColor.lumaYCwCm(c)))
                     .replace("`WARM", Float.toString(SColor.chromaWarm(c)))
                     .replace("`MILD", Float.toString(SColor.chromaMild(c)))
-                    .replace("`TWEA", Double.toString(lightnessAltLAB(c)))
+                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(c)))
             );
             //System.out.println("Processed " + i);
         }
