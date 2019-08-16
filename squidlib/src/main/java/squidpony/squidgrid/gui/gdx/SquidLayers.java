@@ -430,13 +430,13 @@ public class SquidLayers extends Group {
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, TextCellFactory tcf,
                        SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter, char[][] actualMap) {
+        this.setTransform(false);
 
         width = gridWidth;
         height = gridHeight;
 
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
-
         textFactory = tcf.width(cellWidth).height(cellHeight).initBySize();
 
         if (actualMap == null || actualMap.length <= 0) {

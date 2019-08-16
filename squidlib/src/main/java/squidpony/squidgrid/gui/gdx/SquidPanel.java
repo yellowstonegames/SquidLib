@@ -185,6 +185,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      */
     public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center,
                       float xOffset, float yOffset, char[][] actualMap) {
+        this.setTransform(false);
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         if(center == null)

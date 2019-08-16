@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.ArrayTools;
 import squidpony.StringKit;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.GapShuffler;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
 
@@ -13225,7 +13228,7 @@ public class SColor extends Color implements Serializable {
      * as "FFFFFFFE", and pure red with 50% alpha will be shown as "FF00007E".
      * <br>
      * The value of {@code color} should be the same type used internally in libGDX and SquidLib, that is, an ABGR
-     * packed float that could be passed directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}.
+     * packed float that could be passed directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}.
      *
      * @param changing a char array that will be changed in place; must not be null and must have length of at least 8
      * @param color    a color
@@ -13249,7 +13252,7 @@ public class SColor extends Color implements Serializable {
      * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in
      * RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
      * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
      * @param data   a char array that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer
@@ -13264,7 +13267,7 @@ public class SColor extends Color implements Serializable {
      * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as
      * as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in RGBA8888 format. Some parts of
      * libGDX use and expect RGBA8888 order, such as most constructors for Color and {@link Color#set(int)}, while
-     * others use ABGR8888 (often with packed floats), like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)},
+     * others use ABGR8888 (often with packed floats), like {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)},
      * which is the fastest and least wasteful way to set the current color used by a Batch for tinting.
      *
      * @param data   a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer
@@ -13279,7 +13282,7 @@ public class SColor extends Color implements Serializable {
      * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
      * construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
      * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
      * @param data   a char array that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer
@@ -13295,7 +13298,7 @@ public class SColor extends Color implements Serializable {
      * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct an int in ABGR8888 format.
      * Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
      * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
      * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer
@@ -13310,7 +13313,7 @@ public class SColor extends Color implements Serializable {
      * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
      * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
      * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
      * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer
@@ -13326,7 +13329,7 @@ public class SColor extends Color implements Serializable {
      * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
      * construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
      * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
      * @param data a char array that must not be null + offset; the first 8 chars after offset should be an RGBA8888 hex integer
@@ -13343,7 +13346,7 @@ public class SColor extends Color implements Serializable {
      * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
      * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
      * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
      * @param data a CharSequence that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer
@@ -13360,7 +13363,7 @@ public class SColor extends Color implements Serializable {
      * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format
      * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
      * packed floats like what this returns are ABGR format, the kind that can be passed directly to
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.
      * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
      * associates colors to cells; this has changed from earlier releases and should be much more efficient.
      *
@@ -13379,7 +13382,7 @@ public class SColor extends Color implements Serializable {
      * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format
      * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
      * packed floats like what this returns are ABGR format, the kind that can be passed directly to
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.
      * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
      * associates colors to cells; this has changed from earlier releases and should be much more efficient.
      * <br>
@@ -13400,7 +13403,7 @@ public class SColor extends Color implements Serializable {
      * Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format
      * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
      * packed floats like what this returns are ABGR format, the kind that can be passed directly to
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.
      * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
      * associates colors to cells; this has changed from earlier releases and should be much more efficient.
      * <br>
@@ -13420,7 +13423,7 @@ public class SColor extends Color implements Serializable {
      * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX
      * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,
      * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed
-     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate
+     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate
      * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
      * associates colors to cells; this has changed from earlier releases and should be much more efficient.
      *
@@ -13659,9 +13662,9 @@ B = t - Co;
         //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
         //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
         //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
-        return floatGet(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
-                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
-                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+        return floatGet(MathUtils.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+                MathUtils.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+                MathUtils.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
 
     }
     /**
@@ -13687,9 +13690,9 @@ B = t - Co;
      * @return a libGDX Color with the given properties
      */
     public static Color ycwcm(float luma, float warm, float mild, float opacity) {
-        return new Color(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
-                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
-                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+        return new Color(MathUtils.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+                MathUtils.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+                MathUtils.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
     }
 
 
@@ -13862,7 +13865,7 @@ B = t - Co;
      * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an IRNG), as well as
      * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
      * can be used as a packed or encoded color with methods like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like SparseLayers or
      * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
      * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
      * <br>
@@ -13892,7 +13895,7 @@ B = t - Co;
      * consider setting the state of that IRNG with {@link squidpony.squidmath.StatefulRNG#setState(long)}), as well as
      * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
      * can be used as a packed or encoded color with methods like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like SparseLayers or
      * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
      * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
      * <br>
@@ -13921,7 +13924,7 @@ B = t - Co;
      * need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an IRNG), as well
      * as floats representing the amounts of change that can be applied to hue, saturation, value, and opacity. Returns
      * a float that can be used as a packed or encoded color with methods like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like SparseLayers or
      * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
      * saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.
      * <br>
@@ -13950,7 +13953,7 @@ B = t - Co;
      * specific need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an
      * IRNG), as well as floats representing the amounts of change that can be applied to hue, saturation, value, and
      * opacity. Returns a float that can be used as a packed or encoded color with methods like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like SparseLayers or
      * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
      * saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.
      * <br>
@@ -14028,7 +14031,7 @@ B = t - Co;
      * Gets a variation on this SColor as a packed float that has its hue, saturation, and value adjusted by the
      * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these
      * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like SparseLayers or
      * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
      * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
      * <br>
@@ -14051,7 +14054,7 @@ B = t - Co;
      * Gets a variation on the Color basis as a packed float that has its hue, saturation, and value adjusted by the
      * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these
      * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like
-     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like SparseLayers or
      * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
      * saturation, and value are all 0. This won't modify the given SColor, nor will it allocate any objects.
      * <br>
@@ -14074,7 +14077,7 @@ B = t - Co;
      * Gets a variation on this SColor as a packed float that has its hue, saturation, value, and opacity adjusted by
      * the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and
      * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with
-     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like
+     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like
      * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless
      * hue saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any
      * objects.
@@ -14098,7 +14101,7 @@ B = t - Co;
      * Gets a variation on the Color basis as a packed float that has its hue, saturation, value, and opacity adjusted
      * by the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and
      * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with
-     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like
+     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like
      * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless
      * hue saturation, value, and opacity are all 0. This won't modify the given SColor, nor will it allocate any
      * objects.
@@ -14172,7 +14175,7 @@ B = t - Co;
      * Gets a variation on the packed float color basis as another packed float that has its hue, saturation, value, and
      * opacity adjusted by the specified amounts. Takes floats representing the amounts of change to apply to hue,
      * saturation, value, and opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or
-     * encoded color with methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various
+     * encoded color with methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various
      * SquidLib classes like SparseLayers or SquidLayers. The float is likely to be different than the result of
      * {@link #toFloatBits()} unless hue saturation, value, and opacity are all 0. This won't allocate any objects.
      * <br>
