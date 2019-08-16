@@ -387,8 +387,21 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
-
         
+        
+        dungeonGenerator = new DungeonGenerator(200, 200, new StatefulRNG(new DiverRNG(1L)));
+        dungeon = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        dungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        dungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+//        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+//        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
         
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
