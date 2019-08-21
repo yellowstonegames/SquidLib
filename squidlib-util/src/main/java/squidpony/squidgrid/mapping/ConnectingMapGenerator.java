@@ -1,18 +1,24 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
-import squidpony.squidmath.*;
+import squidpony.annotation.Beta;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IntIntOrderedMap;
+import squidpony.squidmath.IntVLA;
 
 /**
- * A dungeon-or-other-map generator that can start with a pre-placed {@code char[][]} and connect any features in that
- * map by placing rooms and corridors where there is blank space ({@code ' '}) in the original {@code char[][]}.
+ * Work in progress.
  * <br>
  * Created by Tommy Ettinger on 5/7/2019.
  */
+@Beta
 public class ConnectingMapGenerator implements IDungeonGenerator {
     
     public int width;
     public int height;
+    public int roomWidth;
+    public int roomHeight;
     public char[][] dungeon;
     public int[][] environment;
     public IRNG rng;
@@ -23,17 +29,15 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
     }
     public ConnectingMapGenerator(int width, int height, IRNG random)
     {
+        this(width, height, width >> 3, height >> 3, random);
+    }
+    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random)
+    {
         this.width = Math.max(1, width);
         this.height = Math.max(1, height);
+        this.roomWidth = Math.max(3, roomWidth);
+        this.roomHeight = Math.max(3, roomHeight);
         dungeon = ArrayTools.fill(' ', this.width, this.height);
-        environment = new int[this.width][this.height];
-        rng = random;
-    }
-    public ConnectingMapGenerator(char[][] prePlaced, IRNG random)
-    {
-        dungeon = ArrayTools.copy(prePlaced);
-        width = dungeon.length;
-        height = dungeon[0].length;
         environment = new int[this.width][this.height];
         rng = random;
     }
@@ -47,50 +51,133 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
      */
     @Override
     public char[][] generate() {
-        GreasedRegion empty = new GreasedRegion(dungeon, ' ').retract8way();
-        //GreasedRegion blocked = empty.copy().not();
-        GreasedRegion working = empty.copy().empty(), working2 = working.copy(), working3 = working.copy();
-        GreasedRegion rooms = working.copy(), corridors = working.copy(), doors = new GreasedRegion(dungeon, '+');
-        Coord pt;
-        int frustration = 0, targetSize = width * height * 3 >> 3;
-        while (frustration < 100 && empty.size() > targetSize)
-        {
-            pt = empty.singleRandom(rng);
-            working.insertRectangle(
-                    MathExtras.clamp(pt.x + 4 - rng.nextSignedInt(9), 0, width - 1),
-                    MathExtras.clamp(pt.y + 4 - rng.nextSignedInt(9), 0, height - 1),
-                    rng.between(6, 12), rng.between(6, 12));
-            if (empty.not().intersects(working))
-            {
-                empty.or(working);
-                rooms.or(working.retract8way());
+        int gridWidth = Math.min(width / roomWidth, 8), gridHeight = Math.min(height / roomHeight, 8), gridMax = gridWidth * gridHeight;
+        if(gridWidth <= 0 || gridHeight <= 0)
+            return dungeon;
+        ArrayTools.fill(dungeon, '.');
+        IntIntOrderedMap links = new IntIntOrderedMap(gridMax), surface = new IntIntOrderedMap(gridMax);
+        IntVLA choices = new IntVLA(4);
+        int dx = rng.nextSignedInt(gridWidth), dy = rng.nextSignedInt(gridHeight),
+                d = dy << 16 | dx;
+        links.put(d, 0);
+        surface.put(d, 0);
+        for (int i = 0; i < 15 && links.size() < gridMax && !surface.isEmpty(); i++) {
+            choices.clear();
+            if (dx < gridWidth - 1 && !links.containsKey(d + 1)) choices.add(1);
+            if (dy < gridHeight - 1 && !links.containsKey(d + 0x10000)) choices.add(2);
+            if (dx > 0 && !links.containsKey(d - 1)) choices.add(4);
+            if (dy > 0 && !links.containsKey(d - 0x10000)) choices.add(8);
+            if (choices.isEmpty()) {
+                surface.remove(d);
+                i--;
+                continue;
             }
-            else frustration++;
-            empty.not();
-            working.clear();
+            int choice = choices.getRandomElement(rng);
+            links.replace(d, links.get(d) | choice);
+            if (choices.size == 1)
+                surface.remove(d);
+            switch (choice) {
+                case 1:
+                    d += 1;
+                    links.put(d, 4);
+                    surface.put(d, 4);
+                    break;
+                case 2:
+                    d += 0x10000;
+                    links.put(d, 8);
+                    surface.put(d, 8);
+                    break;
+                case 4:
+                    d -= 1;
+                    links.put(d, 1);
+                    surface.put(d, 1);
+                    break;
+                default:
+                    d -= 0x10000;
+                    links.put(d, 2);
+                    surface.put(d, 2);
+                    break;
+            }
+            dx = d & 0xFFFF;
+            dy = d >>> 16;
         }
-        doors.or(working.remake(rooms).fringe().removeEdges().quasiRandomRegion(0.075));
-        working.remake(doors);
-        frustration = 0;
-        for(Coord door : working)
+        while(links.size() < gridMax)
         {
-            pt = doors.singleRandom(rng);
-            working2.insertRectangle(Math.min(door.x, pt.x), Math.min(door.y, pt.y),
-                    Math.abs(door.x - pt.x), Math.abs(door.y - pt.y)).and(empty).largestPart();
-            working3.remake(working2).expand();
-            if(working3.contains(door) && working3.contains(pt))
-                corridors.or(working2);
-            else if(++frustration >= 150)
-                break;
+            d = surface.randomKey(rng);
+            dx = d & 0xFFFF;
+            dy = d >>> 16;
+            for (int i = 0; i < 5 && links.size() < gridMax && !surface.isEmpty(); i++) {
+                choices.clear();
+                if (dx < gridWidth - 1 && !links.containsKey(d + 1)) choices.add(1);
+                if (dy < gridHeight - 1 && !links.containsKey(d + 0x10000)) choices.add(2);
+                if (dx > 0 && !links.containsKey(d - 1)) choices.add(4);
+                if (dy > 0 && !links.containsKey(d - 0x10000)) choices.add(8);
+                if (choices.isEmpty()) {
+                    surface.remove(d);
+                    break;
+                }
+                int choice = choices.getRandomElement(rng);
+                links.replace(d, links.get(d) | choice);
+                if (choices.size == 1)
+                    surface.remove(d);
+                switch (choice) {
+                    case 1:
+                        d += 1;
+                        links.put(d, 4);
+                        surface.put(d, 4);
+                        break;
+                    case 2:
+                        d += 0x10000;
+                        links.put(d, 8);
+                        surface.put(d, 8);
+                        break;
+                    case 4:
+                        d -= 1;
+                        links.put(d, 1);
+                        surface.put(d, 1);
+                        break;
+                    default:
+                        d -= 0x10000;
+                        links.put(d, 2);
+                        surface.put(d, 2);
+                        break;
+                }
+                dx = d & 0xFFFF;
+                dy = d >>> 16;
+            }
         }
-        rooms.writeCharsInto(dungeon, '.');
-        rooms.writeIntsInto(environment, MixedGenerator.ROOM_FLOOR);
-        corridors.writeCharsInto(dungeon, '.');
-        corridors.writeIntsInto(environment, MixedGenerator.CORRIDOR_FLOOR);
-        doors.writeCharsInto(dungeon, '+');
-        corridors.fringe8way().writeIntsInto(environment, MixedGenerator.CORRIDOR_WALL);
-        rooms.fringe8way().writeIntsInto(environment, MixedGenerator.ROOM_WALL);
-        doors.writeIntsInto(environment, MixedGenerator.CORRIDOR_FLOOR);
+        for (int i = 0; i < links.size(); i++) {
+            d = links.keyAt(i);
+            dx = d & 0xFFFF;
+            dy = d >>> 16;
+            int conn = links.getAt(i);
+            
+            dungeon[dx * roomWidth][dy * roomHeight] = '#';
+            dungeon[dx * roomWidth + roomWidth - 1][dy * roomHeight] = '#';
+            dungeon[dx * roomWidth][dy * roomHeight + roomHeight - 1] = '#';
+            dungeon[dx * roomWidth + roomWidth - 1][dy * roomHeight + roomHeight - 1] = '#';
+
+            if((conn & 1) == 0)
+            {
+                ArrayTools.fill(dungeon, '#', dx * roomWidth + roomWidth - 1, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
+            }
+
+            if((conn & 2) == 0)
+            {
+                ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight + roomHeight - 1, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
+            }
+
+            if((conn & 4) == 0)
+            {
+                ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight, dx * roomWidth, dy * roomHeight + roomHeight - 1);
+            }
+
+            if((conn & 8) == 0)
+            {
+                ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight);
+            }
+            
+        }
         return dungeon;
     }
 
