@@ -391,7 +391,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             {0.9744164792492415f, 0.22474991650168097f},
             {0.462509014279733f, 0.8866145790082576f},
     };
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     public static final int VALUE = 0, VALUE_FRACTAL = 1, PERLIN = 2, PERLIN_FRACTAL = 3,
             SIMPLEX = 4, SIMPLEX_FRACTAL = 5, CELLULAR = 6, WHITE_NOISE = 7, CUBIC = 8, CUBIC_FRACTAL = 9;
 
@@ -422,24 +422,74 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float gradientPerturbAmp = 1f / 0.45f;
 
-    public static final FastNoise instance = new FastNoise(1337, 1f, SIMPLEX_FRACTAL);
-    
+    /**
+     * A publicly available FastNoise object with seed 1337, frequency 1.0f/32.0f, 1 octave of Simplex noise using
+     * SIMPLEX_FRACTAL noiseType, 2f lacunarity and 0.5f gain. It's encouraged to use methods that temporarily configure
+     * this variable, like {@link #getNoiseWithSeed(float, float, int)} rather than changing its settings and using a
+     * method that needs that lasting configuration, like {@link #getConfiguredNoise(float, float)}.
+     */
+    public static final FastNoise instance = new FastNoise();
+    /**
+     * A constructor that takes no parameters, and uses all default settings with a seed of 1337. An example call to
+     * this would be {@code new FastNoise()}, which makes noise with the seed 1337, a default frequency of 1.0f/32.0f, 1
+     * octave of Simplex noise (since this doesn't specify octave count, it always uses 1 even for the 
+     * SIMPLEX_FRACTAL noiseType this uses, but you can call {@link #setFractalOctaves(int)} later to benefit from the
+     * fractal noiseType), and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).
+     */
     public FastNoise() {
         this(1337);
     }
 
+    /**
+     * A constructor that takes only a parameter for the FastNoise's seed, which should produce different results for
+     * any different seeds. An example call to this would be {@code new FastNoise(1337)}, which makes noise with the
+     * seed 1337, a default frequency of 1.0f/32.0f, 1 octave of Simplex noise (since this doesn't specify octave count,
+     * it always uses 1 even for the SIMPLEX_FRACTAL noiseType this uses, but you can call
+     * {@link #setFractalOctaves(int)} later to benefit from the fractal noiseType), and normal lacunarity and gain
+     * (when unspecified, they are 2f and 0.5f).
+     * @param seed the int seed for the noise, which should significantly affect the produced noise
+     */
     public FastNoise(int seed) {
         this.seed = seed;
         calculateFractalBounding();
     }
+    /**
+     * A constructor that takes two parameters to specify the FastNoise from the start. An example call to this
+     * would be {@code new FastNoise(1337, 0.02f)}, which makes noise with the seed 1337, a lower
+     * frequency, 1 octave of Simplex noise (since this doesn't specify octave count, it always uses 1 even for the 
+     * SIMPLEX_FRACTAL noiseType this uses, but you can call {@link #setFractalOctaves(int)} later to benefit from the
+     * fractal noiseType), and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).
+     * @param seed the int seed for the noise, which should significantly affect the produced noise
+     * @param frequency the multiplier for all dimensions, which is usually fairly small (1.0f/32.0f is the default)
+     */
     public FastNoise(int seed, float frequency)
     {
         this(seed, frequency, SIMPLEX_FRACTAL, 1, 2f, 0.5f);
     }
+    /**
+     * A constructor that takes a few parameters to specify the FastNoise from the start. An example call to this
+     * would be {@code new FastNoise(1337, 0.02f, FastNoise.SIMPLEX)}, which makes noise with the seed 1337, a lower
+     * frequency, 1 octave of Simplex noise (since this doesn't specify octave count, it always uses 1 even for 
+     * noiseTypes like SIMPLEX_FRACTAL, but using a fractal noiseType can make sense if you call
+     * {@link #setFractalOctaves(int)} later), and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).
+     * @param seed the int seed for the noise, which should significantly affect the produced noise
+     * @param frequency the multiplier for all dimensions, which is usually fairly small (1.0f/32.0f is the default)
+     * @param noiseType the noiseType, which should be a constant from this class (see {@link #setNoiseType(int)})
+     */
     public FastNoise(int seed, float frequency, int noiseType)
     {
         this(seed, frequency, noiseType, 1, 2f, 0.5f);
     }
+
+    /**
+     * A constructor that takes several parameters to specify the FastNoise from the start. An example call to this
+     * would be {@code new FastNoise(1337, 0.02f, FastNoise.SIMPLEX_FRACTAL, 4)}, which makes noise with the seed 1337, a lower
+     * frequency, 4 octaves of Simplex noise, and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).
+     * @param seed the int seed for the noise, which should significantly affect the produced noise
+     * @param frequency the multiplier for all dimensions, which is usually fairly small (1.0f/32.0f is the default)
+     * @param noiseType the noiseType, which should be a constant from this class (see {@link #setNoiseType(int)})
+     * @param octaves how many octaves of noise to use when the noiseType is one of the _FRACTAL types
+     */
     public FastNoise(int seed, float frequency, int noiseType, int octaves)
     {
         this(seed, frequency, noiseType, octaves, 2f, 0.5f);
@@ -626,24 +676,22 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         this.cellularReturnType = cellularReturnType;
     }
 
-    // Noise used to calculate a cell value if cellular return type is NoiseLookup
+    // FastNoise used to calculate a cell value if cellular return type is NoiseLookup
     // The lookup value is acquired through getConfiguredNoise() so ensure you setNoiseType() on the noise lookup, value, gradient or simplex is recommended
     public void setCellularNoiseLookup(FastNoise noise) {
         cellularNoiseLookup = noise;
     }
 
-    // Sets the maximum perturb distance from original location when using GradientPerturb{Fractal}(...)
+    // Sets the maximum perturb distance from original location when using gradientPerturb{Fractal}(...)
     // Default: 1.0
     public void setGradientPerturbAmp(float gradientPerturbAmp) {
         this.gradientPerturbAmp = gradientPerturbAmp / (float) 0.45;
     }
 
-    @Override
     public double getNoise(double x, double y) {
         return getConfiguredNoise((float)x, (float)y);
     }
 
-    @Override
     public double getNoiseWithSeed(double x, double y, long seed) {
         int s = this.seed;
         this.seed = (int) (seed ^ seed >>> 32);
@@ -652,12 +700,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
-    @Override
     public double getNoise(double x, double y, double z) {
         return getConfiguredNoise((float)x, (float)y, (float)z);
     }
 
-    @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
         int s = this.seed;
         this.seed = (int) (seed ^ seed >>> 32);
@@ -666,12 +712,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
-    @Override
     public double getNoise(double x, double y, double z, double w) {
         return getConfiguredNoise((float)x, (float)y, (float)z, (float)w);
     }
 
-    @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
         int s = this.seed;
         this.seed = (int) (seed ^ seed >>> 32);
@@ -680,11 +724,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
-    @Override
     public double getNoise(double x, double y, double z, double w, double u, double v) {
         return getConfiguredNoise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
     }
-    @Override
+
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
         int s = this.seed;
         this.seed = (int) (seed ^ seed >>> 32);
@@ -693,22 +736,23 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return r;
     }
 
+
     public float getNoiseWithSeed(float x, float y, int seed) {
-        int s = this.seed;
+        final int s = this.seed;
         this.seed = seed;
         float r = getConfiguredNoise(x, y);
         this.seed = s;
         return r;
     }
     public float getNoiseWithSeed(float x, float y, float z, int seed) {
-        int s = this.seed;
+        final int s = this.seed;
         this.seed = seed;
         float r = getConfiguredNoise(x, y, z);
         this.seed = s;
         return r;
     }
     public float getNoiseWithSeed(float x, float y, float z, float w, int seed) {
-        int s = this.seed;
+        final int s = this.seed;
         this.seed = seed;
         float r = getConfiguredNoise(x, y, z, w);
         this.seed = s;
@@ -995,7 +1039,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     case BILLOW:
                         return singleCubicFractalBillow(x, y, z);
                     case RIDGED_MULTI:
-                        return singleCubicFractalRigidMulti(x, y, z);
+                        return singleCubicFractalRidgedMulti(x, y, z);
                     default:
                         return singleCubicFractalFBM(x, y, z);
                 }
@@ -1066,7 +1110,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                     case BILLOW:
                         return singleCubicFractalBillow(x, y);
                     case RIDGED_MULTI:
-                        return singleCubicFractalRigidMulti(x, y);
+                        return singleCubicFractalRidgedMulti(x, y);
                     default:
                         return singleCubicFractalFBM(x, y);
                 }
@@ -1307,19 +1351,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singleValueFractalRidgedMulti(float x, float y, float z) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleValue(seed, x, y, z));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleValue(seed + i, x, y, z));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleValue(++seed, x, y, z))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getValue(float x, float y, float z) {
@@ -1475,20 +1518,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singleValueFractalRidgedMulti(float x, float y, float z, float w) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleValue(seed, x, y, z, w));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
             w *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleValue(++seed, x, y, z, w))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getValueFractal(float x, float y) {
@@ -1540,18 +1582,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singleValueFractalRidgedMulti(float x, float y) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleValue(seed, x, y));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleValue(seed + i, x, y));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleValue(++seed, x, y))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getValue(float x, float y) {
@@ -1772,22 +1813,21 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singleValueFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleValue(seed, x, y, z, w, u, v));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleValue(seed + i, x, y, z, w, u, v));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
             w *= lacunarity;
             u *= lacunarity;
             v *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleValue(++seed, x, y, z, w, u, v))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
 
@@ -1846,19 +1886,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singlePerlinFractalRidgedMulti(float x, float y, float z) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singlePerlin(seed, x, y, z));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singlePerlin(++seed, x, y, z))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getPerlin(float x, float y, float z) {
@@ -2012,20 +2051,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singlePerlinFractalRidgedMulti(float x, float y, float z, float w) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singlePerlin(seed, x, y, z, w));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singlePerlin(seed + i, x, y,  z, w));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
             w *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singlePerlin(++seed, x, y, z, w))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getPerlinFractal(float x, float y) {
@@ -2078,18 +2116,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singlePerlinFractalRidgedMulti(float x, float y) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singlePerlin(seed, x, y));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singlePerlin(seed + i, x, y));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singlePerlin(++seed, x, y))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getPerlin(float x, float y) {
@@ -2309,22 +2346,21 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float singlePerlinFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singlePerlin(seed, x, y, z, w, u, v));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singlePerlin(seed + i, x, y, z, w, u, v));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
             w *= lacunarity;
             u *= lacunarity;
             v *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singlePerlin(++seed, x, y, z, w, u, v))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     // Simplex Noise
@@ -2538,22 +2574,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      */
     public float ridged3D(float x, float y, float z, int seed, int octaves)
     {
-        x *= 0.03125f;
-        y *= 0.03125f;
-        z *= 0.03125f;
-
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
-            x *= 2f;
-            y *= 2f;
-            z *= 2f;
-
-            amp *= 0.5f;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
-        }
-        return sum;
+        return ridged3D(x, y, z, seed, octaves, 0.03125f, 2f);
     }
     /**
      * Generates ridged-multi simplex noise with the given amount of octaves, specified frequency, and the default
@@ -2567,31 +2588,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      */
     public float ridged3D(float x, float y, float z, int seed, int octaves, float frequency)
     {
-        x *= frequency;
-        y *= frequency;
-        z *= frequency;
-
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
-            x *= 2f;
-            y *= 2f;
-            z *= 2f;
-
-            amp *= 0.5f;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
-        }
-        return sum;
+        return ridged3D(x, y, z, seed, octaves, frequency, 2f);
     }
     /**
      * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
-     * frequency change between octaves) and gain (0.5).
+     * frequency change between octaves); gain is not used.
      * @param x
      * @param y
      * @param z
-     * @param seed
-     * @param octaves
+     * @param seed any int
+     * @param octaves how many "layers of detail" to generate; at least 1, but note this slows down with many octaves
+     * @param frequency often about {@code 1f / 32f}, but generally adjusted for the use case
+     * @param lacunarity when {@code octaves} is 2 or more, this affects the change between layers
      * @return noise as a float between -1f and 1f
      */
     public float ridged3D(float x, float y, float z, int seed, int octaves, float frequency, float lacunarity)
@@ -2600,65 +2608,34 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         y *= frequency;
         z *= frequency;
 
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
-
-            amp *= 0.5f;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
         }
-        return sum;
-    }
-
-    /**
-     * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
-     * frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).
-     * @param x
-     * @param y
-     * @param z
-     * @param seed
-     * @param octaves
-     * @return noise as a float between -1f and 1f
-     */
-    public float ridged3D(float x, float y, float z, int seed, int octaves, float frequency, float lacunarity, float gain)
-    {
-        x *= frequency;
-        y *= frequency;
-        z *= frequency;
-
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
-            x *= lacunarity;
-            y *= lacunarity;
-            z *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
-        }
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     private float singleSimplexFractalRidgedMulti(float x, float y, float z) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getSimplex(float x, float y, float z) {
@@ -2962,20 +2939,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      */
     public float ridged2D(float x, float y, int seed, int octaves)
     {
-        x *= 0.03125f;
-        y *= 0.03125f;
-
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
-            x *= 2f;
-            y *= 2f;
-
-            amp *= 0.5f;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
-        }
-        return sum;
+        return ridged2D(x, y, seed, octaves, 0.03125f, 2f);
     }
     /**
      * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
@@ -2988,28 +2952,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
      */
     public float ridged2D(float x, float y, int seed, int octaves, float frequency)
     {
-        x *= frequency;
-        y *= frequency;
-
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
-            x *= 2f;
-            y *= 2f;
-
-            amp *= 0.5f;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
-        }
-        return sum;
+        return ridged2D(x, y, seed, octaves, frequency, 2f);
     }
     /**
      * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
-     * frequency change between octaves) and gain (0.5).
+     * frequency change between octaves); gain is not used.
      * @param x
      * @param y
-     * @param seed
-     * @param octaves
+     * @param seed any int
+     * @param octaves how many "layers of detail" to generate; at least 1, but note this slows down with many octaves
+     * @param frequency often about {@code 1f / 32f}, but generally adjusted for the use case
+     * @param lacunarity when {@code octaves} is 2 or more, this affects the change between layers
      * @return noise as a float between -1f and 1f
      */
     public float ridged2D(float x, float y, int seed, int octaves, float frequency, float lacunarity)
@@ -3017,60 +2970,32 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         x *= frequency;
         y *= frequency;
 
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
-
-            amp *= 0.5f;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
         }
-        return sum;
-    }
-
-    /**
-     * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
-     * frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).
-     * @param x
-     * @param y
-     * @param seed
-     * @param octaves
-     * @return noise as a float between -1f and 1f
-     */
-    public float ridged2D(float x, float y, int seed, int octaves, float frequency, float lacunarity, float gain)
-    {
-        x *= frequency;
-        y *= frequency;
-
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
-            x *= lacunarity;
-            y *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
-        }
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     private float singleSimplexFractalRidgedMulti(float x, float y) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleSimplex(++seed, x, y))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getSimplex(float x, float y) {
@@ -3123,7 +3048,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             n += t * t * gradCoord2D(seed, i + 1, j + 1, x2, y2);
         }
 
-        return 9.125f * n;
+        return 9.11f * n;
     }
 
     public float getSimplex(float x, float y, float z, float w) {
@@ -3266,20 +3191,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
     private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z, w));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
             w *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z, w))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     private float singleSimplexFractalBillow(float x, float y, float z, float w) {
@@ -3890,7 +3814,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             }
             skewOffset += G6;
         }
-        return 7.5f * n;
+        return 8.1f * n;
 
     }
 
@@ -3939,22 +3863,21 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
     private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w, float u, float v) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z, w, u, v));
-        float amp = 1;
-
-        for (int i = 1; i < octaves; i++) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleSimplex(seed + i, x, y, z, w, u, v));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
             w *= lacunarity;
             u *= lacunarity;
             v *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z, w, u, v))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     private float singleSimplexFractalBillow(float x, float y, float z, float w, float u, float v) {
@@ -3989,7 +3912,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case BILLOW:
                 return singleCubicFractalBillow(x, y, z);
             case RIDGED_MULTI:
-                return singleCubicFractalRigidMulti(x, y, z);
+                return singleCubicFractalRidgedMulti(x, y, z);
             default:
                 return 0;
         }
@@ -4031,22 +3954,20 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return sum * fractalBounding;
     }
 
-    private float singleCubicFractalRigidMulti(float x, float y, float z) {
+    private float singleCubicFractalRidgedMulti(float x, float y, float z) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleCubic(seed, x, y, z));
-        float amp = 1;
-        int i = 0;
-
-        while (++i < octaves) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleCubic(seed + i, x, y, z));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
             z *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleCubic(++seed, x, y, z))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getCubic(float x, float y, float z) {
@@ -4113,7 +4034,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             case BILLOW:
                 return singleCubicFractalBillow(x, y);
             case RIDGED_MULTI:
-                return singleCubicFractalRigidMulti(x, y);
+                return singleCubicFractalRidgedMulti(x, y);
             default:
                 return 0;
         }
@@ -4153,21 +4074,19 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return sum * fractalBounding;
     }
 
-    private float singleCubicFractalRigidMulti(float x, float y) {
+    private float singleCubicFractalRidgedMulti(float x, float y) {
         int seed = this.seed;
-        float sum = 1 - Math.abs(singleCubic(seed, x, y));
-        float amp = 1;
-        int i = 0;
-
-        while (++i < octaves) {
+        float sum = 0, amp = 1, ampBias = 1f, spike;
+        for (int i = 0; i < octaves; i++) {
+            spike = 1f - Math.abs(singleCubic(seed + i, x, y));
+            spike *= spike * amp;
+            amp = Math.max(0f, Math.min(1f, spike * 2f));
+            sum += (spike * ampBias);
+            ampBias *= 2f;
             x *= lacunarity;
             y *= lacunarity;
-
-            amp *= gain;
-            sum -= (1 - Math.abs(singleCubic(++seed, x, y))) * amp;
         }
-
-        return sum;
+        return sum / ((ampBias - 1f) * 0.5f) - 1f;
     }
 
     public float getCubic(float x, float y) {
