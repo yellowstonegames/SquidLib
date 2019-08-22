@@ -51,10 +51,11 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
      */
     @Override
     public char[][] generate() {
-        int gridWidth = Math.min(width / roomWidth, 8), gridHeight = Math.min(height / roomHeight, 8), gridMax = gridWidth * gridHeight;
+        int gridWidth = width / roomWidth, gridHeight = height / roomHeight, gridMax = gridWidth * gridHeight;
         if(gridWidth <= 0 || gridHeight <= 0)
             return dungeon;
         ArrayTools.fill(dungeon, '.');
+        ArrayTools.fill(environment, DungeonUtility.ROOM_FLOOR);
         IntIntOrderedMap links = new IntIntOrderedMap(gridMax), surface = new IntIntOrderedMap(gridMax);
         IntVLA choices = new IntVLA(4);
         int dx = rng.nextSignedInt(gridWidth), dy = rng.nextSignedInt(gridHeight),
@@ -157,24 +158,44 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
             dungeon[dx * roomWidth][dy * roomHeight + roomHeight - 1] = '#';
             dungeon[dx * roomWidth + roomWidth - 1][dy * roomHeight + roomHeight - 1] = '#';
 
-            if((conn & 1) == 0)
-            {
+            if((conn & 1) == 0) {
                 ArrayTools.fill(dungeon, '#', dx * roomWidth + roomWidth - 1, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
+                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth + roomWidth - 1, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
+            }
+            else {
+                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth + roomWidth - 1, dy * roomHeight + 1, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 2);
+                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
+                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
             }
 
-            if((conn & 2) == 0)
-            {
+            if((conn & 2) == 0) {
                 ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight + roomHeight - 1, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
+                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth, dy * roomHeight + roomHeight - 1, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
+            }
+            else {
+                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth + 1, dy * roomHeight + roomHeight - 1, dx * roomWidth + roomWidth - 2, dy * roomHeight + roomHeight - 1);
+                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
+                environment[dx * roomWidth][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
             }
 
-            if((conn & 4) == 0)
-            {
+            if((conn & 4) == 0) {
                 ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight, dx * roomWidth, dy * roomHeight + roomHeight - 1);
+                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth, dy * roomHeight, dx * roomWidth, dy * roomHeight + roomHeight - 1);
+            }
+            else {
+                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth, dy * roomHeight + 1, dx * roomWidth, dy * roomHeight + roomHeight - 2);
+                environment[dx * roomWidth][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
+                environment[dx * roomWidth][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
             }
 
-            if((conn & 8) == 0)
-            {
+            if((conn & 8) == 0) {
                 ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight);
+                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight);
+            }
+            else {
+                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth + 1, dy * roomHeight, dx * roomWidth + roomWidth - 2, dy * roomHeight);
+                environment[dx * roomWidth][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
+                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
             }
             
         }
@@ -194,19 +215,19 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
     }
     /**
      * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
-     * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value
+     * DungeonUtility. This array will have the same size as the last char 2D array produced by generate(); the value
      * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
      * <ul>
-     * <li>MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>
-     * <li>MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.</li>
-     * <li>MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.</li>
-     * <li>MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.</li>
-     * <li>MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.</li>
-     * <li>MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.</li>
-     * <li>MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.</li>
+     * <li>DungeonUtility.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>
+     * <li>DungeonUtility.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.</li>
+     * <li>DungeonUtility.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.</li>
+     * <li>DungeonUtility.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.</li>
+     * <li>DungeonUtility.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.</li>
+     * <li>DungeonUtility.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.</li>
+     * <li>DungeonUtility.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.</li>
      * </ul>
      *
-     * @return a 2D int array where each element is an environment type constant in MixedGenerator
+     * @return a 2D int array where each element is an environment type constant in DungeonUtility
      */
     public int[][] getEnvironment() {
         return environment;
