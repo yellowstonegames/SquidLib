@@ -67,9 +67,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 104, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 16, noiseMode = 104, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -84,22 +84,23 @@ public class HashVisualizer extends ApplicationAdapter {
     
     private CrossHash.Mist Mist_, Mist_C;
     private CrossHash.Mist mist, mistA, mistB, mistC;
-    private NLFSR nlfsr = new NLFSR();
-    private FlapRNG flap = new FlapRNG();
-    private IsaacRNG isaac = new IsaacRNG();
-    private LapRNG lap = new LapRNG();
-    private LightRNG light = new LightRNG();
-    private LongPeriodRNG longPeriod = new LongPeriodRNG();
-    private PermutedRNG permuted = new PermutedRNG();
-    private PintRNG pint = new PintRNG();
-    private JabRNG jab = new JabRNG();
-    private ThunderRNG thunder = new ThunderRNG();
-    private XoRoRNG xoRo = new XoRoRNG();
-    private XorRNG xor = new XorRNG();
-    private BasicRandom64 basic64 = new BasicRandom64();
-    private LinnormRNG linnorm = new LinnormRNG();
-    private ThrustAltRNG ta = new ThrustAltRNG();
-    private Starfish32RNG starfish = new Starfish32RNG();
+    private NLFSR nlfsr = new NLFSR(1);
+    private IsaacRNG isaac = new IsaacRNG(1L);
+    private OrbitRNG orbit = new OrbitRNG(1L);
+    private LightRNG light = new LightRNG(1L);
+    private LongPeriodRNG longPeriod = new LongPeriodRNG(1L);
+    private PermutedRNG permuted = new PermutedRNG(1L);
+    private DiverRNG diver = new DiverRNG(1L);
+    private JabRNG jab = new JabRNG(1L);
+    private ThunderRNG thunder = new ThunderRNG(1L);
+    private XoRoRNG xoRo = new XoRoRNG(1L);
+    private XorRNG xor = new XorRNG(1L);
+    private BasicRandom64 basic64 = new BasicRandom64(1L);
+    private LinnormRNG linnorm = new LinnormRNG(1L);
+    private ThrustAltRNG ta = new ThrustAltRNG(1L);
+    private Starfish32RNG starfish = new Starfish32RNG(1L);
+    
+    private LapRNG lap = new LapRNG(1);
 
 
     private final int[] coordinates = new int[2];
@@ -207,10 +208,10 @@ public class HashVisualizer extends ApplicationAdapter {
             fillField3DB = new float[1][width][height];
 
     private RandomnessSource fuzzy;
-    private Random jreRandom = new Random(0xFEDCBA987654321L);
-    private RandomXS128 gdxRandom = new RandomXS128(0xFEDCBA987654321L);
-    private BasicRandom32 br32 = new BasicRandom32();
-    private BasicRandom64 br64 = new BasicRandom64();
+    private Random jreRandom = new Random(1L);
+    private RandomXS128 gdxRandom = new RandomXS128(1L);
+    private BasicRandom32 br32 = new BasicRandom32(1);
+    private BasicRandom64 br64 = new BasicRandom64(1L);
     private CellularAutomaton ca = new CellularAutomaton(512, 512);
     private int ctr = -256;
     private boolean keepGoing = true;
@@ -1209,7 +1210,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
-                float bright;
                 switch (key) {
                     case '-':
                         switch (testType)
@@ -1422,9 +1422,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         //Gdx.graphics.requestRendering();
                         break;
                     case 'C':
+                        keepGoing = !keepGoing;
+                        putMap();
+                        break;
                     case 'c':
                         ctr++;
-                        if(alt) keepGoing = !keepGoing;
                         putMap();
                         break;
                     case 'S':
@@ -4839,58 +4841,59 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         gdxRandom.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = gdxRandom.nextInt() >>> 24;
-                                back[x][y] = floatGetI(iBright, iBright, iBright);
+                                code = -(gdxRandom.nextLong() & 1L) | 255L;
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 18:
-                        pint.setState(System.nanoTime());
+                        diver.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = pint.nextInt() | 255L;
+                                code = -(diver.nextLong() & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("DiverRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 19:
-                        pint.setState(System.nanoTime());
+                        diver.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = pint.next(8);
+                                iBright = diver.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("DiverRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 20:
-                        lap.setState0(System.nanoTime() * 0x9E3779B9L + 0xAC8C0FE02D14624DL);
-                        lap.setState1((~System.nanoTime() * 0xAC8C0FE02D14624DL) * 0x9E3779B9L);
+                        orbit.setStateA(System.nanoTime());
+                        orbit.setStateB(~System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = lap.nextLong() | 255L;
+                                code = -(orbit.nextLong() & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("OrbitRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 21:
-                        lap.setState0(System.nanoTime() * 0x9E3779B9L + 0xAC8C0FE02D14624DL);
-                        lap.setState1((~System.nanoTime() * 0xAC8C0FE02D14624DL) * 0x9E3779B9L);
+                        orbit.setStateA(System.nanoTime());
+                        orbit.setStateB(~System.nanoTime());
+//                        orbit.setState1(~System.nanoTime()); //(System.nanoTime() ^ 0xDB4F0B9175AE2165L) * 0x369DEA0F31A53F85L)
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = lap.next(8);
+                                iBright = orbit.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("OrbitRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 22:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (br64.nextLong() & 0xFFFFFF00L) | 255L;
+                                code = -(br64.nextLong() & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -4926,7 +4929,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 24:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (br32.nextInt() & 0xFFFFFF00L) | 255L;
+                                code = -(br32.nextInt() & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -4942,24 +4945,26 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("BasicRandom32 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 26:
-                        jab.setState(System.nanoTime());
+                        lap.setState0(System.nanoTime());
+                        lap.setState1(lap.getState0());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = jab.nextLong() | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                code = -(lap.nextLong() & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("JabRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LapRNG (seriously flawed) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 27:
-                        jab.setState(System.nanoTime());
+                        lap.setState0(System.nanoTime());
+                        lap.setState1(lap.getState0());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = jab.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = lap.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("JabRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LapRNG (seriously flawed) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 28:
                         xoRo.setSeed(System.nanoTime());
@@ -5045,7 +5050,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         nlfsr.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = nlfsr.nextInt() << 5 | 255L;
+                                code = -(nlfsr.nextInt() & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -5055,7 +5060,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         nlfsr.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = nlfsr.nextInt() >>> 3;
+                                iBright = nlfsr.nextInt() & 255;
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
@@ -5065,7 +5070,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         linnorm.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = floatGet(linnorm.nextLong() | 255L);
+                                back[x][y] = floatGet(-(linnorm.nextLong() & 1L) | 255L);
                             }
                         }
                         Gdx.graphics.setTitle("LinnormRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -5105,7 +5110,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         ta.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = floatGet(ta.nextLong() | 255L);
+                                back[x][y] = floatGet(-(ta.nextLong() & 1L) | 255L);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustAltRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
