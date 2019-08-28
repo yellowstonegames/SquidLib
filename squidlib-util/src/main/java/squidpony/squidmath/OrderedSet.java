@@ -131,7 +131,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     /**
      * The default load factor of a hash table.
      */
-    public static final float DEFAULT_LOAD_FACTOR = .75f; // .1875f; // .75f;
+    public static final float DEFAULT_LOAD_FACTOR = .375f; // .1875f; // .75f;
     /**
      * The load factor for a (usually small) table that is meant to be particularly fast.
      */
