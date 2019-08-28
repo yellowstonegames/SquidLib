@@ -8,6 +8,8 @@ import squidpony.squidmath.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * When you have a world map as produced by {@link WorldMapGenerator}, you may want to fill it with claims by various
@@ -41,13 +43,13 @@ public class FantasyPoliticalMapper implements Serializable {
          * An UnorderedSet of String keys, where each key is the name of a biome this Faction wants to occupy.
          * May be null if no biomes are specifically preferred.
          */
-        public UnorderedSet<String> preferredBiomes;
+        public HashSet<String> preferredBiomes;
         /**
          * An UnorderedSet of String keys, where each key is the name of a biome this Faction will never occupy.
          * May be null if all biomes are available, but unless this is specified in a constructor, the default will be
          * to consider "Ocean" blocked.
          */
-        public UnorderedSet<String> blockedBiomes;
+        public HashSet<String> blockedBiomes;
 
         /**
          * An int array of height codes that this Faction prefers; 0, 1, 2, and 3 are all oceans, while 4 is shoreline
@@ -76,7 +78,7 @@ public class FantasyPoliticalMapper implements Serializable {
                     (long) ((Math.random() - 0.5) * 0x10000000000000L)
                             ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
             shortName = name = language.word(true);
-            blockedBiomes = new UnorderedSet<>();
+            this.blockedBiomes = new HashSet<>(1, 0.375f);
             blockedBiomes.add("Ocean");
         }
 
@@ -89,7 +91,7 @@ public class FantasyPoliticalMapper implements Serializable {
         {
             this.language = language;
             shortName = name = language.word(true);
-            blockedBiomes = new UnorderedSet<>();
+            this.blockedBiomes = new HashSet<>(1, 0.375f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -102,7 +104,7 @@ public class FantasyPoliticalMapper implements Serializable {
         {
             this.language = language;
             shortName = this.name = name;
-            blockedBiomes = new UnorderedSet<>();
+            this.blockedBiomes = new HashSet<>(1, 0.375f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -117,7 +119,7 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            blockedBiomes = new UnorderedSet<>();
+            this.blockedBiomes = new HashSet<>(1, 0.375f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -136,8 +138,9 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new UnorderedSet<>(preferredBiomes);
-            blockedBiomes = new UnorderedSet<>();
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            Collections.addAll(this.preferredBiomes, preferredBiomes);
+            this.blockedBiomes = new HashSet<>(1, 0.375f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -157,8 +160,10 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new UnorderedSet<>(preferredBiomes);
-            this.blockedBiomes = new UnorderedSet<>(blockedBiomes);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            Collections.addAll(this.preferredBiomes, preferredBiomes);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            Collections.addAll(this.blockedBiomes, blockedBiomes);
         }
         /**
          * Constructor that sets the language to the specified FakeLanguageGen, sets the name to the specified name and
@@ -179,8 +184,10 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new UnorderedSet<>(preferredBiomes);
-            this.blockedBiomes = new UnorderedSet<>(blockedBiomes);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            Collections.addAll(this.preferredBiomes, preferredBiomes);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            Collections.addAll(this.blockedBiomes, blockedBiomes);
             this.preferredHeight = preferredHeight;
         }
 
@@ -207,8 +214,10 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new UnorderedSet<>(preferredBiomes);
-            this.blockedBiomes = new UnorderedSet<>(blockedBiomes);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            Collections.addAll(this.preferredBiomes, preferredBiomes);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            Collections.addAll(this.blockedBiomes, blockedBiomes);
             this.preferredHeight = preferredHeight;
             this.preferredHeat = preferredHeat;
         }
@@ -237,8 +246,10 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new UnorderedSet<>(preferredBiomes);
-            this.blockedBiomes = new UnorderedSet<>(blockedBiomes);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            Collections.addAll(this.preferredBiomes, preferredBiomes);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            Collections.addAll(this.blockedBiomes, blockedBiomes);
             this.preferredHeight = preferredHeight;
             this.preferredHeat = preferredHeat;
             this.preferredMoisture = preferredMoisture;

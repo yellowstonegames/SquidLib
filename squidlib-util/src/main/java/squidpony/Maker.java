@@ -2,10 +2,7 @@ package squidpony;
 
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 /**
  * Utility methods for more easily constructing data structures, particularly those in Java's standard library.
@@ -122,6 +119,45 @@ public class Maker {
         if(elements == null) return null;
         LinkedHashSet<T> set = new LinkedHashSet<>(elements.length);
         Collections.addAll(set, elements);
+        return set;
+    }
+
+    /**
+     * Makes a LinkedHashSet (LHS) of T given a single T element.
+     * @param element a single T
+     * @param <T> just about any non-primitive type
+     * @return a newly-allocated LinkedHashSet containing only {@code element}
+     */
+    public static <T> LinkedHashSet<T> makeLHS(T element) {
+        LinkedHashSet<T> set = new LinkedHashSet<T>(1);
+        set.add(element);
+        return set;
+    }
+
+    /**
+     * Makes a HashSet (HS) of T given an array or vararg of T elements. Duplicate items in elements will have
+     * all but one item discarded, using the later item in elements.
+     * @param elements an array or vararg of T
+     * @param <T> just about any non-primitive type
+     * @return a newly-allocated HashSet containing all of the non-duplicate items in elements, in order
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> HashSet<T> makeHS(T... elements) {
+        if(elements == null) return null;
+        HashSet<T> set = new HashSet<>(elements.length);
+        Collections.addAll(set, elements);
+        return set;
+    }
+
+    /**
+     * Makes a HashSet (HS) of T given a single T element.
+     * @param element a single T
+     * @param <T> just about any non-primitive type
+     * @return a newly-allocated HashSet containing only {@code element}
+     */
+    public static <T> HashSet<T> makeHS(T element) {
+        HashSet<T> set = new HashSet<T>(1);
+        set.add(element);
         return set;
     }
 

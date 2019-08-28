@@ -2,9 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Basic radius strategy implementations likely to be used for roguelikes.
@@ -659,10 +657,10 @@ public enum Radius {
      * @param points an Iterable (such as a List or Set) of Coord that this will make a "thickened" version of
      * @return a Set of Coord that covers a wider area than what points covers; each Coord will be unique (it's a Set)
      */
-    public Set<Coord> expand(int distance, int width, int height, Iterable<Coord> points)
+    public OrderedSet<Coord> expand(int distance, int width, int height, Iterable<Coord> points)
     {
         List<Coord> around = pointsInside(Coord.get(distance, distance), distance, false, width, height);
-        UnorderedSet<Coord> expanded = new UnorderedSet<>(around.size() * 16);
+        OrderedSet<Coord> expanded = new OrderedSet<>(around.size() * 16, 0.25f);
         int tx, ty;
         for(Coord pt : points)
         {
