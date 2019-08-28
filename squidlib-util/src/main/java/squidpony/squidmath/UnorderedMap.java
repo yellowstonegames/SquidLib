@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * A generic unordered hash map with with a fast implementation, originally from fastutil as
- * Object2ObjectOpenCustomHashMap but modified to support SquidLib's {@link squidpony.squidmath.CrossHash.IHasher}
+ * A generic unordered hash map; generally prefer {@link HashMap} unless you need array keys. Originally from fastutil
+ * as Object2ObjectOpenCustomHashMap but modified to support SquidLib's {@link squidpony.squidmath.CrossHash.IHasher}
  * interface for custom hashing instead of fastutil's Strategy interface.
  * <br>
  * Instances of this class use a hash table to represent a map. The table is filled up to a specified <em>load factor</em>, and then doubled in size to accommodate new entries. If the table is

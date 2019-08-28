@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.ArrayTools;
+import squidpony.Maker;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Measurement;
@@ -91,7 +92,7 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> path;
 
-    private UnorderedSet<Coord> impassable2, friends;
+    private HashSet<Coord> impassable2, friends, tempSet;
     
     public boolean cutShort = false;
 
@@ -268,8 +269,9 @@ public class DijkstraMap implements Serializable {
             Arrays.fill(costMap[x], 1.0);
         }
         standardCosts = true;
-        impassable2 = new UnorderedSet<>(CrossHash.mildHasher);
-        friends = new UnorderedSet<>(CrossHash.mildHasher);
+        impassable2 = new HashSet<>(32, 0.375f);
+        friends = new HashSet<>(32, 0.375f);
+        tempSet = new HashSet<>(32, 0.375f);
         initialized = true;
         return this;
     }
@@ -298,8 +300,9 @@ public class DijkstraMap implements Serializable {
             }
         }
         standardCosts = true;
-        impassable2 = new UnorderedSet<>(CrossHash.mildHasher);
-        friends = new UnorderedSet<>(CrossHash.mildHasher);
+        impassable2 = new HashSet<>(32, 0.375f);
+        friends = new HashSet<>(32, 0.375f);
+        tempSet = new HashSet<>(32, 0.375f);
         initialized = true;
         return this;
     }
@@ -330,8 +333,9 @@ public class DijkstraMap implements Serializable {
             }
         }
         standardCosts = true;
-        impassable2 = new UnorderedSet<>(CrossHash.mildHasher);
-        friends = new UnorderedSet<>(CrossHash.mildHasher);
+        impassable2 = new HashSet<>(32, 0.375f);
+        friends = new HashSet<>(32, 0.375f);
+        tempSet = new HashSet<>(32, 0.375f);
         initialized = true;
         return this;
     }
@@ -1182,7 +1186,7 @@ public class DijkstraMap implements Serializable {
      * @return the Coord that it found first.
      */
     public Coord findNearest(Coord start, Coord... targets) {
-        return findNearest(start, new UnorderedSet<>(targets, CrossHash.mildHasher));
+        return findNearest(start, Maker.makeHS(targets));
     }
 
     /**
@@ -1842,9 +1846,10 @@ public class DijkstraMap implements Serializable {
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findPath(buffer, length, scanLimit, imp, onlyPassable, start, targets);
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findPath(buffer, length, scanLimit, tempSet, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -2100,9 +2105,10 @@ public class DijkstraMap implements Serializable {
             if (paidLength > moveLength - 1.0) {
 
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findAttackPath(buffer, moveLength, minPreferredRange, maxPreferredRange, los, imp,
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findAttackPath(buffer, moveLength, minPreferredRange, maxPreferredRange, los, tempSet,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -2388,9 +2394,10 @@ public class DijkstraMap implements Serializable {
             }
             if (best >= gradientMap[currentPos.x][currentPos.y]) {
                 if (friends.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, imp,
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, tempSet,
                             friends, start, targets);
                 }
                 break;
@@ -2412,9 +2419,10 @@ public class DijkstraMap implements Serializable {
             frustration++;
             if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, imp,
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, tempSet,
                             friends, start, targets);
                 }
                 break;
@@ -2436,7 +2444,7 @@ public class DijkstraMap implements Serializable {
 
 
     private double cachedLongerPaths = 1.2;
-    private UnorderedSet<Coord> cachedImpassable = new UnorderedSet<>(CrossHash.mildHasher);
+    private HashSet<Coord> cachedImpassable = new HashSet<>(32, 0.25f);
     private Coord[] cachedFearSources;
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
@@ -2670,9 +2678,10 @@ public class DijkstraMap implements Serializable {
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findFleePath(buffer, length, scanLimit, preferLongerPaths, imp, onlyPassable, start, fearSources);
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findFleePath(buffer, length, scanLimit, preferLongerPaths, tempSet, onlyPassable, start, fearSources);
                 }
                 break;
             }
@@ -2786,9 +2795,10 @@ public class DijkstraMap implements Serializable {
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findPathLarge(size, length, imp, onlyPassable, start, targets);
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findPathLarge(size, length, tempSet, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -2929,9 +2939,10 @@ public class DijkstraMap implements Serializable {
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > moveLength - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findAttackPathLarge(size, moveLength, preferredRange, los, imp, onlyPassable, start, targets);
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findAttackPathLarge(size, moveLength, preferredRange, los, tempSet, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -3075,9 +3086,10 @@ public class DijkstraMap implements Serializable {
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > moveLength - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, imp,
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, tempSet,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -3205,9 +3217,10 @@ public class DijkstraMap implements Serializable {
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
-                    UnorderedSet<Coord> imp = new UnorderedSet<>(impassable2, CrossHash.mildHasher);
-                    imp.add(currentPos);
-                    return findFleePathLarge(size, length, preferLongerPaths, imp, onlyPassable, start, fearSources);
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findFleePathLarge(size, length, preferLongerPaths, tempSet, onlyPassable, start, fearSources);
                 }
                 break;
             }

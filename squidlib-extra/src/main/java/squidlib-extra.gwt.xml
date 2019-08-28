@@ -11,6 +11,8 @@
     <inherits name="regexodus"/>
     <extend-configuration-property name="gdx.reflect.include" value="java.util.SortedSet" />
     <extend-configuration-property name="gdx.reflect.include" value="java.util.EnumMap" />
+    <extend-configuration-property name="gdx.reflect.include" value="java.util.HashMap" />
+    <extend-configuration-property name="gdx.reflect.include" value="java.util.HashSet" />
     <extend-configuration-property name="gdx.reflect.include" value="regexodus.Pattern" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.StringStringMap" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.FakeLanguageGen" />

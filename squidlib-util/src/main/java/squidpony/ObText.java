@@ -8,9 +8,7 @@ import squidpony.squidmath.*;
 
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static squidpony.ArrayTools.letters;
 
@@ -462,7 +460,7 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
 
     /**
      * Gets all Strings from the top level of this ObText, not including any associated values, and puts them in
-     * an {@link ArrayList} of String. The returned lisy will retain the same order the Strings were entered in, and
+     * an {@link ArrayList} of String. The returned list will retain the same order the Strings were entered in, and
      * unlike {@link #keySet()} or {@link #keyOrderedSet()}, duplicate keys will all be preserved. Changes to the
      * returned List won't be reflected in this ObText.
      * @return all top-level Strings (without associated values) as an ArrayList of String
@@ -496,16 +494,15 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
 
     /**
      * Gets all unique Strings from the top level of this ObText, not including any associated values, and puts them in
-     * an {@link UnorderedSet} of String. Although the returned set won't be insertion-ordered or necessarily retain the
-     * same order the Strings were entered in, the order will be the same on different JVMs, including GWT, because the
-     * hashing algorithm is set to one that behaves the same across JVM versions. Changes to the returned Set won't be
+     * a {@link HashSet} of String. The returned set won't be insertion-ordered or necessarily retain the same order the
+     * Strings were entered in; use {@link #keyOrderedSet()} if you want this. Changes to the returned Set won't be
      * reflected in this ObText.
-     * @return all unique top-level Strings (without associated values) as an UnorderedSet of String keys
+     * @return all unique top-level Strings (without associated values) as a HashSet of String keys
      */
-    public UnorderedSet<String> keySet()
+    public HashSet<String> keySet()
     {
         final int sz = size();
-        UnorderedSet<String> keys = new UnorderedSet<>(sz, CrossHash.stringHasher);
+        HashSet<String> keys = new HashSet<>(sz, 0.25f);
         for (int i = 0; i < sz; i++) {
             keys.add(get(i).primary);
         }
@@ -531,17 +528,16 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
         return keys;
     }
     /**
-     * Gets all unique Strings from the top level of this ObText as keys in an {@link UnorderedMap}, with the first
-     * String associated with each key as its value (or null if nothing is associated with a key String). Although the
-     * returned map won't be insertion-ordered or necessarily retain the same order the Strings were entered in, the
-     * order will be the same on different JVMs, including GWT, because the hashing algorithm is set to one that behaves
-     * the same across JVM versions. Changes to the returned Map won't be reflected in this ObText.
-     * @return an UnorderedMap of unique String keys associated with the first associated String for each key (or null)
+     * Gets all unique Strings from the top level of this ObText as keys in a {@link HashMap}, with the first
+     * String associated with each key as its value (or null if nothing is associated with a key String). The returned
+     * map won't be insertion-ordered or necessarily retain the same order the Strings were entered in; use
+     * {@link #shallowOrderedMap()} if you want this. Changes to the returned Map won't be reflected in this ObText.
+     * @return a HashMap of unique String keys associated with the first associated String for each key (or null)
      */
-    public UnorderedMap<String, String> basicMap()
+    public HashMap<String, String> basicMap()
     {
         final int sz = size();
-        UnorderedMap<String, String> keys = new UnorderedMap<>(sz, CrossHash.stringHasher);
+        HashMap<String, String> keys = new HashMap<>(sz, 0.25f);
         ObTextEntry got;
         for (int i = 0; i < sz; i++) {
             got = get(i);
@@ -570,17 +566,16 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
         return keys;
     }
     /**
-     * Gets all unique Strings from the top level of this ObText as keys in an {@link UnorderedMap}, with any Strings
+     * Gets all unique Strings from the top level of this ObText as keys in a {@link HashMap}, with any Strings
      * associated with those keys as their values (in a possibly-empty ArrayList of String for each value).
-     * Although the returned map won't be insertion-ordered or necessarily retain the same order the Strings were
-     * entered in, the order will be the same on different JVMs, including GWT, because the hashing algorithm is set to
-     * one that behaves the same across JVM versions. Changes to the returned Map won't be reflected in this ObText.
-     * @return an UnorderedMap of unique String keys associated with ArrayList values containing associated Strings
+     * The returned map won't be insertion-ordered or necessarily retain the same order the Strings were entered in; use
+     * {@link #basicOrderedMap()} if you want this. Changes to the returned Map won't be reflected in this ObText.
+     * @return a HashMap of unique String keys associated with ArrayList values containing associated Strings
      */
-    public UnorderedMap<String, ArrayList<String>> shallowMap()
+    public HashMap<String, ArrayList<String>> shallowMap()
     {
         final int sz = size();
-        UnorderedMap<String, ArrayList<String>> keys = new UnorderedMap<>(sz, CrossHash.stringHasher);
+        HashMap<String, ArrayList<String>> keys = new HashMap<>(sz, 0.25f);
         ObTextEntry got;
         for (int i = 0; i < sz; i++) {
             got = get(i);
