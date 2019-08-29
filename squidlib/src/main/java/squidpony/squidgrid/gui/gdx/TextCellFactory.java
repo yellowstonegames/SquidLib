@@ -169,7 +169,7 @@ public class TextCellFactory implements Disposable {
 
         actualCellWidth = width;
         actualCellHeight = height;
-        BitmapFont.Glyph g = bmpFont.getData().getGlyph('\0');
+        BitmapFont.Glyph g = bmpFont.getData().missingGlyph;
         if(g != null)
         {
             block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
@@ -208,7 +208,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory initBySize() {
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
-        BitmapFont.Glyph g = bmpFont.getData().getGlyph('\0');
+        BitmapFont.Glyph g = bmpFont.getData().missingGlyph;
         if(g != null)
         {
             block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
@@ -877,15 +877,15 @@ public class TextCellFactory implements Disposable {
         return got == '\uffff' ? toGet : got;
     }
     /**
-     * Use the specified Batch to draw a String (often just one char long) with the default color (white), with x and y
-     * determining the world-space coordinates for the upper-left corner.
+     * Use the specified Batch to draw a String or other CharSequence (often just one char long) with the default color
+     * (white), with x and y determining the world-space coordinates for the upper-left corner.
      *
      * @param batch the LibGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
-    public void draw(Batch batch, String s, float x, float y) {
+    public void draw(Batch batch, CharSequence s, float x, float y) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -894,8 +894,8 @@ public class TextCellFactory implements Disposable {
         // - distanceFieldScaleY / 12f
 
         //height - lineTweak * 2f
-        if (s == null || s.isEmpty() || s.charAt(0) == 0) {
-            batch.setColor(1f,1f,1f,1f);
+        if (s == null || s.length() == 0 || s.charAt(0) == 0) {
+            batch.setPackedColor(SColor.FLOAT_WHITE);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
             batch.setPackedColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
@@ -934,8 +934,8 @@ public class TextCellFactory implements Disposable {
         }
     }
     /**
-     * Use the specified Batch to draw a String (often just one char long) in the specified rgba color, with x and y
-     * determining the world-space coordinates for the upper-left corner.
+     * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified rgba
+     * color, with x and y determining the world-space coordinates for the upper-left corner.
      *
      * @param batch the LibGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
@@ -946,7 +946,7 @@ public class TextCellFactory implements Disposable {
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
-    public void draw(Batch batch, String s, float r, float g, float b, float a, float x, float y) {
+    public void draw(Batch batch, CharSequence s, float r, float g, float b, float a, float x, float y) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -969,7 +969,8 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified LibGDX
+     * Color, with x and y
      * determining the world-space coordinates for the upper-left corner.
      *
      * @param batch the LibGDX Batch to do the drawing
@@ -978,7 +979,7 @@ public class TextCellFactory implements Disposable {
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
-    public void draw(Batch batch, String s, Color color, float x, float y) {
+    public void draw(Batch batch, CharSequence s, Color color, float x, float y) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -1000,8 +1001,8 @@ public class TextCellFactory implements Disposable {
         }
     }
     /**
-     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
-     * determining the world-space coordinates for the upper-left corner.
+     * Use the specified Batch to draw a String or other CharSequence (often just one char long) in the specified LibGDX
+     * Color, with x and y determining the world-space coordinates for the upper-left corner.
      *
      * @param batch the LibGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
@@ -1009,7 +1010,7 @@ public class TextCellFactory implements Disposable {
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
-    public void draw(Batch batch, String s, float encodedColor, float x, float y) {
+    public void draw(Batch batch, CharSequence s, float encodedColor, float x, float y) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
