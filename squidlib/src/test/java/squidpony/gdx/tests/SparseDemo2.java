@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -89,6 +90,8 @@ public class SparseDemo2 extends ApplicationAdapter {
 
     private Vector2 screenPosition;
 
+    private GLProfiler glp;
+    private StringBuilder tempSB;
 
     // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
     // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
@@ -157,6 +160,9 @@ public class SparseDemo2 extends ApplicationAdapter {
     //    private FloatFilter sepia;
     @Override
     public void create () {
+        glp = new GLProfiler(Gdx.graphics);
+        tempSB = new StringBuilder(80);
+        glp.enable();
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         // if the seed is identical between two runs, any random factors will also be identical (until user input may
         // cause the usage of an RNG to change). You can randomize the dungeon and several other initial settings by
@@ -675,6 +681,7 @@ public class SparseDemo2 extends ApplicationAdapter {
     }
     @Override
     public void render () {
+        glp.reset();
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -724,20 +731,36 @@ public class SparseDemo2 extends ApplicationAdapter {
         // its viewport so it is in place and won't be altered by the map. Then we just tell the Stage for the language
         // texts to draw.
         languageStage.getViewport().apply(false);
-        languageStage.draw();
+        batch.setProjectionMatrix(languageStage.getViewport().getCamera().combined);
+        batch.begin();
+        languageStage.getRoot().draw(batch, 1);
         // certain classes that use scene2d.ui widgets need to be told to act() to process input.
         stage.act();
         // we have the main stage set itself up after the language stage has already drawn.
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         batch.setProjectionMatrix(stage.getCamera().combined);
-        screenPosition.set(cellWidth * 25, cellHeight);
+        screenPosition.set(cellWidth * 25, 0);
         stage.screenToStageCoordinates(screenPosition);
-        batch.begin();
+
         stage.getRoot().draw(batch, 1);
-        display.font.draw(batch, 
+        int drawCalls = glp.getDrawCalls();
+        int textureBindings = glp.getTextureBindings();
+        int calls = glp.getCalls();
+        int switches = glp.getShaderSwitches();
+        display.font.draw(batch,
                 ((batch.filter instanceof FloatFilters.IdentityFilter) ? "Filter OFF, POINTS: " : "Filter ON, POINTS: ")
-                + points, screenPosition.x, screenPosition.y);
+                        + points, screenPosition.x, screenPosition.y);
+        tempSB.setLength(0);
+        tempSB.append(Gdx.graphics.getFramesPerSecond())
+                .append(" FPS, Draw Calls: ").append(drawCalls)
+                .append(", Calls: ").append(calls)
+                .append(",\nTexture Binds: ").append(textureBindings)
+                .append(", Shader Switches: ").append(switches);
+        screenPosition.set(cellWidth * gridWidth * 0.5f, cellHeight);
+        stage.screenToStageCoordinates(screenPosition);
+        display.font.draw(batch, tempSB, screenPosition.x, screenPosition.y);
+
         batch.end();
         Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
     }
