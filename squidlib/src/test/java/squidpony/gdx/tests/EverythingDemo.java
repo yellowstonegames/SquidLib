@@ -738,6 +738,7 @@ public class EverythingDemo extends ApplicationAdapter {
         batch.begin();
         stage.getRoot().draw(batch, 1);
         batch.end();
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
     }
 
     @Override
