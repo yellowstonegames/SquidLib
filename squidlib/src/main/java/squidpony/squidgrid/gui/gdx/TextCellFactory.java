@@ -65,7 +65,7 @@ public class TextCellFactory implements Disposable {
      */
     protected /* Nullable */AssetManager assetManager;
     public BitmapFont bmpFont = null;
-    protected Texture block = null;
+    protected TextureRegion block = null;
     protected TextureRegion dirMarker = null;
     protected String fitting = SQUID_FITTING;
     protected IColorCenter<Color> scc;
@@ -169,15 +169,24 @@ public class TextCellFactory implements Disposable {
 
         actualCellWidth = width;
         actualCellHeight = height;
-        Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        temp.setColor(Color.WHITE);
-        temp.fill();
-        block = new Texture(1, 1, Pixmap.Format.RGBA8888);
-        block.draw(temp, 0, 0);
-        temp.dispose();
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph('\0');
+        if(g != null)
+        {
+            block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
+        }
+        else {
+            Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            temp.setColor(Color.WHITE);
+            temp.fill();
+            Texture white = new Texture(1, 1, Pixmap.Format.RGBA8888);
+            white.draw(temp, 0, 0);
+            block = new TextureRegion(white);
+            temp.dispose();
+        }
         style = new Label.LabelStyle(bmpFont, null);
-        BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
-        dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+        BitmapFont.Glyph dg = bmpFont.getData().getGlyph(directionGlyph);
+        if(g != null)
+            dirMarker = new TextureRegion(bmpFont.getRegion(dg.page), dg.srcX, dg.srcY, dg.width, dg.height);
         initialized = true;
         initializedByFont = true;
         return this;
@@ -199,12 +208,20 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory initBySize() {
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
-        Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        temp.setColor(Color.WHITE);
-        temp.fill();
-        block = new Texture(1, 1, Pixmap.Format.RGBA8888);
-        block.draw(temp, 0, 0);
-        temp.dispose();
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph('\0');
+        if(g != null)
+        {
+            block = new TextureRegion(bmpFont.getRegion(), g.srcX + 1, g.srcY + 1, 1, 1);
+        }
+        else {
+            Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            temp.setColor(Color.WHITE);
+            temp.fill();
+            Texture white = new Texture(1, 1, Pixmap.Format.RGBA8888);
+            white.draw(temp, 0, 0);
+            block = new TextureRegion(white);
+            temp.dispose();
+        }
         if(msdf)
         {
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
@@ -231,9 +248,9 @@ public class TextCellFactory implements Disposable {
         lineHeight = bmpFont.getLineHeight();
         descent = bmpFont.getDescent();
         style = new Label.LabelStyle(bmpFont, null);
-        BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
-        if(g != null) 
-            dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
+        BitmapFont.Glyph dg = bmpFont.getData().getGlyph(directionGlyph);
+        if(g != null)
+            dirMarker = new TextureRegion(bmpFont.getRegion(dg.page), dg.srcX, dg.srcY, dg.width, dg.height);
         initialized = true;
         initializedBySize = true;
         return this;
@@ -1870,7 +1887,7 @@ public class TextCellFactory implements Disposable {
      * Returns a solid block of white, 1x1 pixel in size; can be drawn at other sizes by Batch.
      * @return a white 1x1 pixel Texture.
      */
-    public Texture getSolid() {
+    public TextureRegion getSolid() {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -1980,8 +1997,8 @@ public class TextCellFactory implements Disposable {
      */
     @Override
     public void dispose() {
+        if(block != null) block.getTexture().dispose();
         if(bmpFont != null) bmpFont.dispose();
-        if(block != null) block.dispose();
     }
 
     /**
