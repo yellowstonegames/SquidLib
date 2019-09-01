@@ -44,20 +44,20 @@ public class TuringPattern {
      * Initializes a substance array that can be given to other static methods.
      * @param width the width of the substance array; should be consistent throughout calls
      * @param height the height of the substance array; should be consistent throughout calls
-     * @param seed the int seed to use for the random contents
+     * @param seed the long seed to use for the random contents
      * @return a 1D double array that represents a 2D array with random contents; should be given to other methods
      */
-    public static double[] initialize(int width, int height, int seed){
+    public static double[] initialize(int width, int height, long seed){
         return initializeInto(new double[width * height], seed);
     }
 
     /**
      * Refills a substance array that can be given to other static methods.
      * @param substance a 1D double array that will be modified and filled with random values
-     * @param seed the int seed to use for the random contents
+     * @param seed the long seed to use for the random contents
      * @return substance, after modification; should be given to other methods
      */
-    public static double[] initializeInto(double[] substance, int seed){
+    public static double[] initializeInto(double[] substance, long seed){
         if(substance == null) return null;
         for (int i = 0; i < substance.length; i++) {
             substance[i] = (DiverRNG.determine(++seed) >> 11) * fraction;
@@ -100,7 +100,7 @@ public class TuringPattern {
      * @param seed the seed to use with the noise generator
      * @return a 1D double array that represents a 2D array with random contents; should be given to other methods
      */
-    public static double[] initialize(int width, int height, Noise.Noise2D noise, int seed) {
+    public static double[] initialize(int width, int height, Noise.Noise2D noise, long seed) {
         return initializeInto(new double[width * height], width, height, noise, seed);
     }
     /**
@@ -112,7 +112,7 @@ public class TuringPattern {
      * @param seed the seed to use with the noise generator
      * @return a 1D double array that represents a 2D array with random contents; should be given to other methods
      */
-    public static double[] initializeInto(double[] substance, int width, int height, Noise.Noise2D noise, int seed){
+    public static double[] initializeInto(double[] substance, int width, int height, Noise.Noise2D noise, long seed){
         if(substance == null || noise == null) return null;
         int i = 0;
         for (int x = 0; x < width; x++) {
@@ -278,14 +278,14 @@ public class TuringPattern {
      * @param noise a Noise2D instance, such as {@link SeededNoise#instance}, that will be used to alter offsets
      * @param seed a seed for the Noise2D
      */
-    public static void distort(int[][] offsets, int width, int height, Noise.Noise2D noise, int seed)
+    public static void distort(int[][] offsets, int width, int height, Noise.Noise2D noise, long seed)
     {
-        int pointSize = offsets.length, altSeed = ThrustAlt32RNG.determine(seed);
+        int pointSize = offsets.length;
         int[] vp;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int pushX = (int)(2.5 * (noise.getNoiseWithSeed(x, y, seed) + 1)) - 2,
-                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, altSeed) + 1)) - 2;
+                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, DiverRNG.determine(seed)) + 1)) - 2;
                 for (int p = 0; p < pointSize; p++) {
                     vp = offsets[p];
                     int a = vp[x * height + y], px = a / height, py = a % height;
@@ -306,14 +306,14 @@ public class TuringPattern {
      * @param z a z position to be given to the Noise3D along with a point's x and y
      * @param seed a seed for the Noise3D
      */
-    public static void distort(int[][] offsets, int width, int height, Noise.Noise3D noise, double z, int seed)
+    public static void distort(int[][] offsets, int width, int height, Noise.Noise3D noise, double z, long seed)
     {
-        int pointSize = offsets.length, altSeed = ThrustAlt32RNG.determine(seed);
+        int pointSize = offsets.length;
         int[] vp;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int pushX = (int)(2.5 * (noise.getNoiseWithSeed(x, y, z, seed) + 1)) - 2,
-                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, z, altSeed) + 1)) - 2;
+                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, z, DiverRNG.determine(seed)) + 1)) - 2;
                 for (int p = 0; p < pointSize; p++) {
                     vp = offsets[p];
                     int a = vp[x * height + y], px = a / height, py = a % height;
@@ -363,7 +363,7 @@ public class TuringPattern {
     /**
      * Computes the first part of a step, allowing other adjustments to be mixed in before finishing by calling
      * {@link #normalize(double[])}. A sample adjustment would be
-     * {@link #addNoise(double[], int, int, double, Noise.Noise2D, int)}. This is probably not very useful yet.
+     * {@link #addNoise(double[], int, int, double, Noise.Noise2D, long)}. This is probably not very useful yet.
      * @param substance as produced by initialize; will be modified!
      * @param activator as produced by an offsets method
      * @param activation the small double amount to use when the activator is dominant; should usually be positive
@@ -396,7 +396,7 @@ public class TuringPattern {
      * @param seed a seed for the Noise2D
      */
     public static void addNoise(final double[] substance, final int width, final int height,
-                                final double multiplier, final Noise.Noise2D noise, final int seed)
+                                final double multiplier, final Noise.Noise2D noise, final long seed)
     {
         int s = 0;
         for (int x = 0; x < width; x++) {
@@ -417,7 +417,7 @@ public class TuringPattern {
      * @param seed a seed for the Noise3D
      */
     public static void addNoise(final double[] substance, final int width, final int height,
-                                final double multiplier, final Noise.Noise3D noise, final double z, final int seed)
+                                final double multiplier, final Noise.Noise3D noise, final double z, final long seed)
     {
         int s = 0;
         for (int x = 0; x < width; x++) {

@@ -11,15 +11,17 @@ import squidpony.StringKit;
  * This seems to do well in PractRand testing (32 TB passed), but this is not a generator Overton tested. "Chaotic"
  * generators like this one tend to score well in PractRand, but it isn't clear if they will fail other tests (in
  * particular, they can't generate all possible long values, and also can't generate 0 or possibly some other ints). As
- * for desktop/server speed, this is faster than {@link Lathe32RNG} (which is also high-quality) and is also faster than
- * {@link Starfish32RNG} (which is very fast but has quality issues) and {@link ThrustAlt32RNG} (which has a very small
- * period and probably isn't very useful). However, this is slower than Lathe32RNG when using GWT and viewing in
- * Firefox; for some reason {@link Starfish32RNG} optimizes well on Firefox and less well on Chrome, but Mover does very
- * well in older Chrome (faster than Lathe) and rather poorly on Firefox. It doesn't do amazingly well in current Chrome
- * versions, however, and Lathe beats it most of the time there. On 64-bit desktop or server Java, you may want to
- * prefer {@link Mover64RNG}, which is the same algorithm using larger words and constants. While each of the two parts
+ * for desktop/server speed, this is faster than {@link Starfish32RNG} (which is also high-quality) and is also faster
+ * than {@link Lathe32RNG} (which is very fast but has quality issues). However, this is slower than Lathe32RNG when
+ * using GWT and viewing in Firefox; for some reason {@link Starfish32RNG} optimizes well on Firefox and less well on
+ * Chrome, but Mover does ver well in older Chrome (faster than Lathe) and rather poorly on Firefox. It doesn't do
+ * amazingly well in current Chrome versions, however, and Lathe beats it most of the time there. On 64-bit desktop or
+ * server Java, you may want to prefer {@link Mover64RNG}, which is the same algorithm using larger words and constants,
+ * or {@link MiniMover64RNG}, which is even faster but probably has a shorter period than this generator (millions of
+ * seeds have been checked to ensure a minimum period of 2 to the 20 for it, though). While each of the two parts
  * of a Mover32RNG can have their full period evaluated, making the total period possible to calculate, the same cannot
- * be said for Mover64RNG (its period is high enough for most usage, but the actual total is still unknown).
+ * be said for Mover64RNG or MiniMover64RNG (their maximum periods are high enough for most usage, but the actual totals
+ * are still unknown).
  * <br>
  * Its period is 0xFFF1F6F18B2A1330 for the largest cycle, which it always initializes into if {@link #setState(int)} is
  * used. setState() only allows 2 to the 32 starting states, but less than 2 to the 64 states are in the largest cycle,
@@ -442,7 +444,7 @@ public final class Mover32RNG implements RandomnessSource {
 //        System.out.println(lin.getState());
 //        Random rand = new RNG(lin).asRandom();
 //        for (int c = 1; c <= 200; c++) {
-//            //final int r = (ThrustAlt32RNG.determine(20007 + c) & 0xFFFF)|1;
+//            //final int r = (ThrustAltRNG.determineInt(20007 + c) & 0xFFFF)|1;
 //            final int r = BigInteger.probablePrime(20, rand).intValue();
 //            //System.out.printf("(x ^ x << %d) + 0xC68E9CB7\n", c);
 //            System.out.printf("%03d/200, testing r = 0x%08X\n", c, r);

@@ -4372,10 +4372,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
 //                        Arrays.fill(back[511], FLOAT_WHITE);
 //                        if((ctr & 3) == 0) {
-//                            s0 = (ThrustAlt32RNG.determine(9001) >>> 8) * 0x1.5p-25f + 0.25f;
-//                            s1 = (ThrustAlt32RNG.determine(9002) >>> 8) * 0x1.5p-25f + 0.25f;
-//                            c0 = (ThrustAlt32RNG.determine(9003) >>> 8) * 0x1.5p-25f + 0.25f;
-//                            c1 = (ThrustAlt32RNG.determine(9004) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            s0 = (ThrustAltRNG.determineInt(9001) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            s1 = (ThrustAltRNG.determineInt(9002) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            c0 = (ThrustAltRNG.determineInt(9003) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            c1 = (ThrustAltRNG.determineInt(9004) >>> 8) * 0x1.5p-25f + 0.25f;
 //                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
 //                            iBright = (int) (randomWobble(ctr * 0.0125f, s0, s1, c0, c1) * 240f);
 //                            back[511][255 + iBright] =  bright;

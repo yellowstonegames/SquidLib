@@ -22,7 +22,7 @@ public class TextFamily extends TextCellFactory {
     /**
      * How many styles are supported by this TextCellFactory; always 4 in TextFamily.
      */
-    public final int STYLES = 4;
+    public static int STYLES = 4;
     /**
      * Creates a default valued factory. One of the initialization methods must
      * be called before this factory can be used!

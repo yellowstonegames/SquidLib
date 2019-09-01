@@ -576,24 +576,24 @@ public class RNGBenchmark {
 //    }
 //
 //
-    private ThrustAlt32RNG ThrustAlt32 = new ThrustAlt32RNG(9999);
-    private RNG ThrustAlt32R = new RNG(ThrustAlt32);
+    private MizuchiRNG Mizuchi = new MizuchiRNG(9999);
+    private RNG MizuchiR = new RNG(Mizuchi);
     @Benchmark
-    public long measureThrustAlt32()
+    public long measureMizuchi()
     {
-        return ThrustAlt32.nextLong();
+        return Mizuchi.nextLong();
     }
     @Benchmark
-    public int measureThrustAlt32Int()
+    public int measureMizuchiInt()
     {
-        return ThrustAlt32.next(32);
+        return Mizuchi.next(32);
     }
     @Benchmark
-    public long measureThrustAlt32R() { return ThrustAlt32R.nextLong(); }
+    public long measureMizuchiR() { return MizuchiR.nextLong(); }
     @Benchmark
-    public int measureThrustAlt32IntR()
+    public int measureMizuchiIntR()
     {
-        return ThrustAlt32R.nextInt();
+        return MizuchiR.nextInt();
     }
 
 //    private Light32RNG Light32 = new Light32RNG(9999);
