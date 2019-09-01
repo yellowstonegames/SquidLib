@@ -8,8 +8,9 @@ import java.io.Serializable;
  * A modification of Blackman and Vigna's xoroshiro128+ generator using two 32-bit ints of state instead of two 64-bit
  * longs and also incorporating a large-increment counter (Weyl sequence) that is added to the rotated xoroshiro output;
  * this is tied with {@link Lathe32RNG} for the fastest generator on GWT I have found that also passes the full 32TB
- * battery of PractRand's statistical tests. ThrustAlt32RNG is faster in some browsers and also passes tests, but
- * cannot produce all outputs, and its period is too small for serious usage. In statistical testing, xoroshiro always
+ * battery of PractRand's statistical tests. Starfish32RNG has 2D equidistribution while this only has 1D; this means
+ * Starfish32RNG (and GWTRNG) can produce all pairs of ints or all longs (except for one) with equal likelihood, while
+ * Oriole32RNG (and Lathe32RNG) produce some pairs more often than others. In statistical testing, xoroshiro always
  * fails some binary matrix rank tests, but smaller-state versions fail other tests as well. The changes Oriole makes
  * apply only to the output of xoroshiro, not its well-tested state transition for the "xoroshiro state" part of this
  * generator, and these changes eliminate all statistical failures on 32TB of tested data, avoiding the failures the

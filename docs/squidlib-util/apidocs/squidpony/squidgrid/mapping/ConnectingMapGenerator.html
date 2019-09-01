@@ -113,11 +113,11 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.12">ConnectingMapGenerator</a>
+<pre><a href="../../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
+public class <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.16">ConnectingMapGenerator</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
-<div class="block">A dungeon-or-other-map generator that can start with a pre-placed <code>char[][]</code> and connect any features in that
- map by placing rooms and corridors where there is blank space (<code>' '</code>) in the original <code>char[][]</code>.
+<div class="block">Work in progress.
  <br>
  Created by Tommy Ettinger on 5/7/2019.</div>
 </li>
@@ -156,6 +156,14 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#roomHeight">roomHeight</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#roomWidth">roomWidth</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#width">width</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -176,7 +184,10 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#ConnectingMapGenerator--">ConnectingMapGenerator</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#ConnectingMapGenerator-char:A:A-squidpony.squidmath.IRNG-">ConnectingMapGenerator</a></span>(char[][]&nbsp;prePlaced,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#ConnectingMapGenerator-int-int-int-int-squidpony.squidmath.IRNG-">ConnectingMapGenerator</a></span>(int&nbsp;width,
+                      int&nbsp;height,
+                      int&nbsp;roomWidth,
+                      int&nbsp;roomHeight,
                       <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -216,7 +227,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <td class="colFirst"><code>int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#getEnvironment--">getEnvironment</a></span>()</code>
 <div class="block">Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
- MixedGenerator.</div>
+ DungeonUtility.</div>
 </td>
 </tr>
 </table>
@@ -247,7 +258,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.14">width</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.18">width</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -256,7 +267,25 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.15">height</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.19">height</a></pre>
+</li>
+</ul>
+<a name="roomWidth">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>roomWidth</h4>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.20">roomWidth</a></pre>
+</li>
+</ul>
+<a name="roomHeight">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>roomHeight</h4>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.21">roomHeight</a></pre>
 </li>
 </ul>
 <a name="dungeon">
@@ -265,7 +294,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>dungeon</h4>
-<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.16">dungeon</a></pre>
+<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.22">dungeon</a></pre>
 </li>
 </ul>
 <a name="environment">
@@ -274,7 +303,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>environment</h4>
-<pre>public&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.17">environment</a></pre>
+<pre>public&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.23">environment</a></pre>
 </li>
 </ul>
 <a name="rng">
@@ -283,7 +312,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.18">rng</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.24">rng</a></pre>
 </li>
 </ul>
 </li>
@@ -300,7 +329,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>ConnectingMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.20">ConnectingMapGenerator</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.26">ConnectingMapGenerator</a>()</pre>
 </li>
 </ul>
 <a name="ConnectingMapGenerator-int-int-squidpony.squidmath.IRNG-">
@@ -309,18 +338,21 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>ConnectingMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.24">ConnectingMapGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.30">ConnectingMapGenerator</a>(int&nbsp;width,
                               int&nbsp;height,
                               <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</pre>
 </li>
 </ul>
-<a name="ConnectingMapGenerator-char:A:A-squidpony.squidmath.IRNG-">
+<a name="ConnectingMapGenerator-int-int-int-int-squidpony.squidmath.IRNG-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ConnectingMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.32">ConnectingMapGenerator</a>(char[][]&nbsp;prePlaced,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.34">ConnectingMapGenerator</a>(int&nbsp;width,
+                              int&nbsp;height,
+                              int&nbsp;roomWidth,
+                              int&nbsp;roomHeight,
                               <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</pre>
 </li>
 </ul>
@@ -338,7 +370,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.49">generate</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.53">generate</a>()</pre>
 <div class="block">Generates a dungeon or other map as a 2D char array. Any implementation may allow its own configuration and
  customization of how dungeons are generated, but each must provide this as a sane default. Most implementations
  should use the convention of '#' representing a wall and '.' representing a bare floor, but beyond that, anything
@@ -357,7 +389,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>getDungeon</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.105">getDungeon</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.213">getDungeon</a>()</pre>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#generate--"><code>generate()</code></a> or
  some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
  so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</div>
@@ -375,22 +407,22 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getEnvironment</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.124">getEnvironment</a>()</pre>
+<pre>public&nbsp;int[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.232">getEnvironment</a>()</pre>
 <div class="block">Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
- MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value
+ DungeonUtility. This array will have the same size as the last char 2D array produced by generate(); the value
  of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
  <ul>
- <li>MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>
- <li>MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.</li>
- <li>MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.</li>
- <li>MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.</li>
- <li>MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.</li>
- <li>MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.</li>
- <li>MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.</li>
+ <li>DungeonUtility.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>
+ <li>DungeonUtility.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.</li>
+ <li>DungeonUtility.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.</li>
+ <li>DungeonUtility.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.</li>
+ <li>DungeonUtility.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.</li>
+ <li>DungeonUtility.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.</li>
+ <li>DungeonUtility.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.</li>
  </ul></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D int array where each element is an environment type constant in MixedGenerator</dd>
+<dd>a 2D int array where each element is an environment type constant in DungeonUtility</dd>
 </dl>
 </li>
 </ul>

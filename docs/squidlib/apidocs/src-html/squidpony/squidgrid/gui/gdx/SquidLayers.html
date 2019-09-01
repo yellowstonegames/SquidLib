@@ -438,13 +438,13 @@
 <span class="sourceLineNo">430</span>     */<a name="line.430"></a>
 <span class="sourceLineNo">431</span>    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, TextCellFactory tcf,<a name="line.431"></a>
 <span class="sourceLineNo">432</span>                       SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter, char[][] actualMap) {<a name="line.432"></a>
-<span class="sourceLineNo">433</span><a name="line.433"></a>
-<span class="sourceLineNo">434</span>        width = gridWidth;<a name="line.434"></a>
-<span class="sourceLineNo">435</span>        height = gridHeight;<a name="line.435"></a>
-<span class="sourceLineNo">436</span><a name="line.436"></a>
-<span class="sourceLineNo">437</span>        this.cellWidth = cellWidth;<a name="line.437"></a>
-<span class="sourceLineNo">438</span>        this.cellHeight = cellHeight;<a name="line.438"></a>
-<span class="sourceLineNo">439</span><a name="line.439"></a>
+<span class="sourceLineNo">433</span>        this.setTransform(false);<a name="line.433"></a>
+<span class="sourceLineNo">434</span><a name="line.434"></a>
+<span class="sourceLineNo">435</span>        width = gridWidth;<a name="line.435"></a>
+<span class="sourceLineNo">436</span>        height = gridHeight;<a name="line.436"></a>
+<span class="sourceLineNo">437</span><a name="line.437"></a>
+<span class="sourceLineNo">438</span>        this.cellWidth = cellWidth;<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        this.cellHeight = cellHeight;<a name="line.439"></a>
 <span class="sourceLineNo">440</span>        textFactory = tcf.width(cellWidth).height(cellHeight).initBySize();<a name="line.440"></a>
 <span class="sourceLineNo">441</span><a name="line.441"></a>
 <span class="sourceLineNo">442</span>        if (actualMap == null || actualMap.length &lt;= 0) {<a name="line.442"></a>

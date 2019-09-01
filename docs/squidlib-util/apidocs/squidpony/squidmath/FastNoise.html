@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":9,"i59":9,"i60":9,"i61":9,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10,"i96":10,"i97":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":9,"i59":9,"i60":9,"i61":9,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -231,7 +231,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#instance">instance</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#instance">instance</a></span></code>
+<div class="block">A publicly available FastNoise object with seed 1337, frequency 1.0f/32.0f, 1 octave of Simplex noise using
+ SIMPLEX_FRACTAL noiseType, 2f lacunarity and 0.5f gain.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
@@ -304,25 +307,36 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise--">FastNoise</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise--">FastNoise</a></span>()</code>
+<div class="block">A constructor that takes no parameters, and uses all default settings with a seed of 1337.</div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise-int-">FastNoise</a></span>(int&nbsp;seed)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise-int-">FastNoise</a></span>(int&nbsp;seed)</code>
+<div class="block">A constructor that takes only a parameter for the FastNoise's seed, which should produce different results for
+ any different seeds.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise-int-float-">FastNoise</a></span>(int&nbsp;seed,
-         float&nbsp;frequency)</code>&nbsp;</td>
+         float&nbsp;frequency)</code>
+<div class="block">A constructor that takes two parameters to specify the FastNoise from the start.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise-int-float-int-">FastNoise</a></span>(int&nbsp;seed,
          float&nbsp;frequency,
-         int&nbsp;noiseType)</code>&nbsp;</td>
+         int&nbsp;noiseType)</code>
+<div class="block">A constructor that takes a few parameters to specify the FastNoise from the start.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise-int-float-int-int-">FastNoise</a></span>(int&nbsp;seed,
          float&nbsp;frequency,
          int&nbsp;noiseType,
-         int&nbsp;octaves)</code>&nbsp;</td>
+         int&nbsp;octaves)</code>
+<div class="block">A constructor that takes several parameters to specify the FastNoise from the start.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#FastNoise-int-float-int-int-float-float-">FastNoise</a></span>(int&nbsp;seed,
@@ -941,23 +955,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
         float&nbsp;frequency,
         float&nbsp;lacunarity)</code>
 <div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (0.5).</div>
+ frequency change between octaves); gain is not used.</div>
 </td>
 </tr>
 <tr id="i77" class="rowColor">
-<td class="colFirst"><code>float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#ridged2D-float-float-int-int-float-float-float-">ridged2D</a></span>(float&nbsp;x,
-        float&nbsp;y,
-        int&nbsp;seed,
-        int&nbsp;octaves,
-        float&nbsp;frequency,
-        float&nbsp;lacunarity,
-        float&nbsp;gain)</code>
-<div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).</div>
-</td>
-</tr>
-<tr id="i78" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#ridged3D-float-float-float-int-int-">ridged3D</a></span>(float&nbsp;x,
         float&nbsp;y,
@@ -968,7 +969,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  (2) and gain (0.5).</div>
 </td>
 </tr>
-<tr id="i79" class="rowColor">
+<tr id="i78" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#ridged3D-float-float-float-int-int-float-">ridged3D</a></span>(float&nbsp;x,
         float&nbsp;y,
@@ -980,7 +981,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  lacunarity (2) and gain (0.5).</div>
 </td>
 </tr>
-<tr id="i80" class="altColor">
+<tr id="i79" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#ridged3D-float-float-float-int-int-float-float-">ridged3D</a></span>(float&nbsp;x,
         float&nbsp;y,
@@ -990,35 +991,21 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
         float&nbsp;frequency,
         float&nbsp;lacunarity)</code>
 <div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (0.5).</div>
+ frequency change between octaves); gain is not used.</div>
 </td>
 </tr>
-<tr id="i81" class="rowColor">
-<td class="colFirst"><code>float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#ridged3D-float-float-float-int-int-float-float-float-">ridged3D</a></span>(float&nbsp;x,
-        float&nbsp;y,
-        float&nbsp;z,
-        int&nbsp;seed,
-        int&nbsp;octaves,
-        float&nbsp;frequency,
-        float&nbsp;lacunarity,
-        float&nbsp;gain)</code>
-<div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).</div>
-</td>
-</tr>
-<tr id="i82" class="altColor">
+<tr id="i80" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setCellularDistanceFunction-int-">setCellularDistanceFunction</a></span>(int&nbsp;cellularDistanceFunction)</code>
 <div class="block">Sets the distance function used in cellular noise calculations, allowing an int argument corresponding to one of
  the following constants from this class: <a href="../../squidpony/squidmath/FastNoise.html#EUCLIDEAN"><code>EUCLIDEAN</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#MANHATTAN"><code>MANHATTAN</code></a> (1), or <a href="../../squidpony/squidmath/FastNoise.html#NATURAL"><code>NATURAL</code></a> (2).</div>
 </td>
 </tr>
-<tr id="i83" class="rowColor">
+<tr id="i81" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setCellularNoiseLookup-squidpony.squidmath.FastNoise-">setCellularNoiseLookup</a></span>(<a href="../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a>&nbsp;noise)</code>&nbsp;</td>
 </tr>
-<tr id="i84" class="altColor">
+<tr id="i82" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setCellularReturnType-int-">setCellularReturnType</a></span>(int&nbsp;cellularReturnType)</code>
 <div class="block">Sets the return type from cellular noise calculations, allowing an int argument corresponding to one of the
@@ -1027,49 +1014,49 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  or <a href="../../squidpony/squidmath/FastNoise.html#DISTANCE_2_DIV"><code>DISTANCE_2_DIV</code></a> (7).</div>
 </td>
 </tr>
-<tr id="i85" class="rowColor">
+<tr id="i83" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setFractalGain-float-">setFractalGain</a></span>(float&nbsp;gain)</code>
 <div class="block">Sets the octave gain for all fractal noise types.</div>
 </td>
 </tr>
-<tr id="i86" class="altColor">
+<tr id="i84" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setFractalLacunarity-float-">setFractalLacunarity</a></span>(float&nbsp;lacunarity)</code>
 <div class="block">Sets the octave lacunarity for all fractal noise types.</div>
 </td>
 </tr>
-<tr id="i87" class="rowColor">
+<tr id="i85" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-">setFractalOctaves</a></span>(int&nbsp;octaves)</code>
 <div class="block">Sets the octave count for all fractal noise types.</div>
 </td>
 </tr>
-<tr id="i88" class="altColor">
+<tr id="i86" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setFractalType-int-">setFractalType</a></span>(int&nbsp;fractalType)</code>
 <div class="block">Sets the method for combining octaves in all fractal noise types, allowing an int argument corresponding to one
  of the following constants from this class: <a href="../../squidpony/squidmath/FastNoise.html#FBM"><code>FBM</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#BILLOW"><code>BILLOW</code></a> (1), or <a href="../../squidpony/squidmath/FastNoise.html#RIDGED_MULTI"><code>RIDGED_MULTI</code></a> (2).</div>
 </td>
 </tr>
-<tr id="i89" class="rowColor">
+<tr id="i87" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setFrequency-float-">setFrequency</a></span>(float&nbsp;frequency)</code>
 <div class="block">Sets the frequency for all noise types.</div>
 </td>
 </tr>
-<tr id="i90" class="altColor">
+<tr id="i88" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setGradientPerturbAmp-float-">setGradientPerturbAmp</a></span>(float&nbsp;gradientPerturbAmp)</code>&nbsp;</td>
 </tr>
-<tr id="i91" class="rowColor">
+<tr id="i89" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setInterpolation-int-">setInterpolation</a></span>(int&nbsp;interpolation)</code>
 <div class="block">Changes the interpolation method used to smooth between noise values, using on of the following constants from
  this class (lowest to highest quality): <a href="../../squidpony/squidmath/FastNoise.html#LINEAR"><code>LINEAR</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#HERMITE"><code>HERMITE</code></a> (1), or <a href="../../squidpony/squidmath/FastNoise.html#QUINTIC"><code>QUINTIC</code></a> (2).</div>
 </td>
 </tr>
-<tr id="i92" class="altColor">
+<tr id="i90" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setNoiseType-int-">setNoiseType</a></span>(int&nbsp;noiseType)</code>
 <div class="block">Sets the default type of noise returned by <a href="../../squidpony/squidmath/FastNoise.html#getConfiguredNoise-float-float-"><code>getConfiguredNoise(float, float)</code></a>, using one of the following constants
@@ -1079,26 +1066,26 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  <a href="../../squidpony/squidmath/FastNoise.html#CUBIC"><code>CUBIC</code></a> (8), or <a href="../../squidpony/squidmath/FastNoise.html#CUBIC_FRACTAL"><code>CUBIC_FRACTAL</code></a> (9).</div>
 </td>
 </tr>
-<tr id="i93" class="rowColor">
+<tr id="i91" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#setSeed-int-">setSeed</a></span>(int&nbsp;seed)</code>
 <div class="block">Sets the seed used for all noise types, as a long.</div>
 </td>
 </tr>
-<tr id="i94" class="altColor">
+<tr id="i92" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-">singleSimplex</a></span>(int&nbsp;seed,
              float&nbsp;x,
              float&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i95" class="rowColor">
+<tr id="i93" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-float-">singleSimplex</a></span>(int&nbsp;seed,
              float&nbsp;x,
              float&nbsp;y,
              float&nbsp;z)</code>&nbsp;</td>
 </tr>
-<tr id="i96" class="altColor">
+<tr id="i94" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-float-float-">singleSimplex</a></span>(int&nbsp;seed,
              float&nbsp;x,
@@ -1106,7 +1093,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
              float&nbsp;z,
              float&nbsp;w)</code>&nbsp;</td>
 </tr>
-<tr id="i97" class="rowColor">
+<tr id="i95" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FastNoise.html#singleSimplex-int-float-float-float-float-float-float-">singleSimplex</a></span>(int&nbsp;seed,
              float&nbsp;x,
@@ -1578,7 +1565,11 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>instance</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a> <a href="../../src-html/squidpony/squidmath/FastNoise.html#line.425">instance</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a> <a href="../../src-html/squidpony/squidmath/FastNoise.html#line.431">instance</a></pre>
+<div class="block">A publicly available FastNoise object with seed 1337, frequency 1.0f/32.0f, 1 octave of Simplex noise using
+ SIMPLEX_FRACTAL noiseType, 2f lacunarity and 0.5f gain. It's encouraged to use methods that temporarily configure
+ this variable, like <a href="../../squidpony/squidmath/FastNoise.html#getNoiseWithSeed-float-float-int-"><code>getNoiseWithSeed(float, float, int)</code></a> rather than changing its settings and using a
+ method that needs that lasting configuration, like <a href="../../squidpony/squidmath/FastNoise.html#getConfiguredNoise-float-float-"><code>getConfiguredNoise(float, float)</code></a>.</div>
 </li>
 </ul>
 <a name="grad6f">
@@ -1587,7 +1578,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>grad6f</h4>
-<pre>protected static final&nbsp;float[] <a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3305">grad6f</a></pre>
+<pre>protected static final&nbsp;float[] <a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3229">grad6f</a></pre>
 </li>
 </ul>
 </li>
@@ -1604,7 +1595,12 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>FastNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.427">FastNoise</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.439">FastNoise</a>()</pre>
+<div class="block">A constructor that takes no parameters, and uses all default settings with a seed of 1337. An example call to
+ this would be <code>new FastNoise()</code>, which makes noise with the seed 1337, a default frequency of 1.0f/32.0f, 1
+ octave of Simplex noise (since this doesn't specify octave count, it always uses 1 even for the 
+ SIMPLEX_FRACTAL noiseType this uses, but you can call <a href="../../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>setFractalOctaves(int)</code></a> later to benefit from the
+ fractal noiseType), and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).</div>
 </li>
 </ul>
 <a name="FastNoise-int-">
@@ -1613,7 +1609,17 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>FastNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.431">FastNoise</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.452">FastNoise</a>(int&nbsp;seed)</pre>
+<div class="block">A constructor that takes only a parameter for the FastNoise's seed, which should produce different results for
+ any different seeds. An example call to this would be <code>new FastNoise(1337)</code>, which makes noise with the
+ seed 1337, a default frequency of 1.0f/32.0f, 1 octave of Simplex noise (since this doesn't specify octave count,
+ it always uses 1 even for the SIMPLEX_FRACTAL noiseType this uses, but you can call
+ <a href="../../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>setFractalOctaves(int)</code></a> later to benefit from the fractal noiseType), and normal lacunarity and gain
+ (when unspecified, they are 2f and 0.5f).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - the int seed for the noise, which should significantly affect the produced noise</dd>
+</dl>
 </li>
 </ul>
 <a name="FastNoise-int-float-">
@@ -1622,8 +1628,18 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>FastNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.435">FastNoise</a>(int&nbsp;seed,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.465">FastNoise</a>(int&nbsp;seed,
                  float&nbsp;frequency)</pre>
+<div class="block">A constructor that takes two parameters to specify the FastNoise from the start. An example call to this
+ would be <code>new FastNoise(1337, 0.02f)</code>, which makes noise with the seed 1337, a lower
+ frequency, 1 octave of Simplex noise (since this doesn't specify octave count, it always uses 1 even for the 
+ SIMPLEX_FRACTAL noiseType this uses, but you can call <a href="../../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>setFractalOctaves(int)</code></a> later to benefit from the
+ fractal noiseType), and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - the int seed for the noise, which should significantly affect the produced noise</dd>
+<dd><code>frequency</code> - the multiplier for all dimensions, which is usually fairly small (1.0f/32.0f is the default)</dd>
+</dl>
 </li>
 </ul>
 <a name="FastNoise-int-float-int-">
@@ -1632,9 +1648,20 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>FastNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.439">FastNoise</a>(int&nbsp;seed,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.479">FastNoise</a>(int&nbsp;seed,
                  float&nbsp;frequency,
                  int&nbsp;noiseType)</pre>
+<div class="block">A constructor that takes a few parameters to specify the FastNoise from the start. An example call to this
+ would be <code>new FastNoise(1337, 0.02f, FastNoise.SIMPLEX)</code>, which makes noise with the seed 1337, a lower
+ frequency, 1 octave of Simplex noise (since this doesn't specify octave count, it always uses 1 even for 
+ noiseTypes like SIMPLEX_FRACTAL, but using a fractal noiseType can make sense if you call
+ <a href="../../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>setFractalOctaves(int)</code></a> later), and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - the int seed for the noise, which should significantly affect the produced noise</dd>
+<dd><code>frequency</code> - the multiplier for all dimensions, which is usually fairly small (1.0f/32.0f is the default)</dd>
+<dd><code>noiseType</code> - the noiseType, which should be a constant from this class (see <a href="../../squidpony/squidmath/FastNoise.html#setNoiseType-int-"><code>setNoiseType(int)</code></a>)</dd>
+</dl>
 </li>
 </ul>
 <a name="FastNoise-int-float-int-int-">
@@ -1643,10 +1670,20 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>FastNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.443">FastNoise</a>(int&nbsp;seed,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.493">FastNoise</a>(int&nbsp;seed,
                  float&nbsp;frequency,
                  int&nbsp;noiseType,
                  int&nbsp;octaves)</pre>
+<div class="block">A constructor that takes several parameters to specify the FastNoise from the start. An example call to this
+ would be <code>new FastNoise(1337, 0.02f, FastNoise.SIMPLEX_FRACTAL, 4)</code>, which makes noise with the seed 1337, a lower
+ frequency, 4 octaves of Simplex noise, and normal lacunarity and gain (when unspecified, they are 2f and 0.5f).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - the int seed for the noise, which should significantly affect the produced noise</dd>
+<dd><code>frequency</code> - the multiplier for all dimensions, which is usually fairly small (1.0f/32.0f is the default)</dd>
+<dd><code>noiseType</code> - the noiseType, which should be a constant from this class (see <a href="../../squidpony/squidmath/FastNoise.html#setNoiseType-int-"><code>setNoiseType(int)</code></a>)</dd>
+<dd><code>octaves</code> - how many octaves of noise to use when the noiseType is one of the _FRACTAL types</dd>
+</dl>
 </li>
 </ul>
 <a name="FastNoise-int-float-int-int-float-float-">
@@ -1655,7 +1692,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FastNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.461">FastNoise</a>(int&nbsp;seed,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.511">FastNoise</a>(int&nbsp;seed,
                  float&nbsp;frequency,
                  int&nbsp;noiseType,
                  int&nbsp;octaves,
@@ -1691,7 +1728,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>dotf</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.472">dotf</a>(float[]&nbsp;g,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.522">dotf</a>(float[]&nbsp;g,
                             float&nbsp;x,
                             float&nbsp;y)</pre>
 </li>
@@ -1702,7 +1739,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSeed</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.479">getSeed</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.529">getSeed</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Returns the seed used by this object</dd>
@@ -1715,7 +1752,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.491">setSeed</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.541">setSeed</a>(int&nbsp;seed)</pre>
 <div class="block">Sets the seed used for all noise types, as a long.
  If this is not called, defaults to 1337L.</div>
 <dl>
@@ -1730,7 +1767,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setFrequency</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.499">setFrequency</a>(float&nbsp;frequency)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.549">setFrequency</a>(float&nbsp;frequency)</pre>
 <div class="block">Sets the frequency for all noise types. If this is not called, it defaults to 0.03125f (or 1f/32f).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1744,7 +1781,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getFrequency</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.507">getFrequency</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.557">getFrequency</a>()</pre>
 <div class="block">Gets the frequency for all noise types. The default is 0.03125f, or 1f/32f.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1758,7 +1795,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setInterpolation</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.518">setInterpolation</a>(int&nbsp;interpolation)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.568">setInterpolation</a>(int&nbsp;interpolation)</pre>
 <div class="block">Changes the interpolation method used to smooth between noise values, using on of the following constants from
  this class (lowest to highest quality): <a href="../../squidpony/squidmath/FastNoise.html#LINEAR"><code>LINEAR</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#HERMITE"><code>HERMITE</code></a> (1), or <a href="../../squidpony/squidmath/FastNoise.html#QUINTIC"><code>QUINTIC</code></a> (2). If
  this is not called, it defaults to HERMITE. This is used in Value, Gradient Noise and Position Perturbing.</div>
@@ -1774,7 +1811,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setNoiseType</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.530">setNoiseType</a>(int&nbsp;noiseType)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.580">setNoiseType</a>(int&nbsp;noiseType)</pre>
 <div class="block">Sets the default type of noise returned by <a href="../../squidpony/squidmath/FastNoise.html#getConfiguredNoise-float-float-"><code>getConfiguredNoise(float, float)</code></a>, using one of the following constants
  in this class:
  <a href="../../squidpony/squidmath/FastNoise.html#VALUE"><code>VALUE</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#VALUE_FRACTAL"><code>VALUE_FRACTAL</code></a> (1), <a href="../../squidpony/squidmath/FastNoise.html#PERLIN"><code>PERLIN</code></a> (2), <a href="../../squidpony/squidmath/FastNoise.html#PERLIN_FRACTAL"><code>PERLIN_FRACTAL</code></a> (3),
@@ -1792,7 +1829,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseType</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.542">getNoiseType</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.592">getNoiseType</a>()</pre>
 <div class="block">Gets the default type of noise returned by <a href="../../squidpony/squidmath/FastNoise.html#getConfiguredNoise-float-float-"><code>getConfiguredNoise(float, float)</code></a>, using one of the following constants
  in this class:
  <a href="../../squidpony/squidmath/FastNoise.html#VALUE"><code>VALUE</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#VALUE_FRACTAL"><code>VALUE_FRACTAL</code></a> (1), <a href="../../squidpony/squidmath/FastNoise.html#PERLIN"><code>PERLIN</code></a> (2), <a href="../../squidpony/squidmath/FastNoise.html#PERLIN_FRACTAL"><code>PERLIN_FRACTAL</code></a> (3),
@@ -1810,7 +1847,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setFractalOctaves</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.552">setFractalOctaves</a>(int&nbsp;octaves)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.602">setFractalOctaves</a>(int&nbsp;octaves)</pre>
 <div class="block">Sets the octave count for all fractal noise types.
  If this isn't called, it will default to 3.</div>
 <dl>
@@ -1825,7 +1862,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getFractalOctaves</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.561">getFractalOctaves</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.611">getFractalOctaves</a>()</pre>
 <div class="block">Gets the octave count for all fractal noise types. The default is 3.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1839,7 +1876,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setFractalLacunarity</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.571">setFractalLacunarity</a>(float&nbsp;lacunarity)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.621">setFractalLacunarity</a>(float&nbsp;lacunarity)</pre>
 <div class="block">Sets the octave lacunarity for all fractal noise types.
  Lacunarity is a multiplicative change to frequency between octaves. If this isn't called, it defaults to 2.</div>
 <dl>
@@ -1854,7 +1891,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setFractalGain</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.580">setFractalGain</a>(float&nbsp;gain)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.630">setFractalGain</a>(float&nbsp;gain)</pre>
 <div class="block">Sets the octave gain for all fractal noise types.
  If this isn't called, it defaults to 0.5.</div>
 <dl>
@@ -1869,7 +1906,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setFractalType</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.591">setFractalType</a>(int&nbsp;fractalType)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.641">setFractalType</a>(int&nbsp;fractalType)</pre>
 <div class="block">Sets the method for combining octaves in all fractal noise types, allowing an int argument corresponding to one
  of the following constants from this class: <a href="../../squidpony/squidmath/FastNoise.html#FBM"><code>FBM</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#BILLOW"><code>BILLOW</code></a> (1), or <a href="../../squidpony/squidmath/FastNoise.html#RIDGED_MULTI"><code>RIDGED_MULTI</code></a> (2).
  If this hasn't been called, it will use FBM.</div>
@@ -1885,7 +1922,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getFractalType</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.601">getFractalType</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.651">getFractalType</a>()</pre>
 <div class="block">Gets the method for combining octaves in all fractal noise types, allowing an int argument corresponding to one
  of the following constants from this class: <a href="../../squidpony/squidmath/FastNoise.html#FBM"><code>FBM</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#BILLOW"><code>BILLOW</code></a> (1), or <a href="../../squidpony/squidmath/FastNoise.html#RIDGED_MULTI"><code>RIDGED_MULTI</code></a> (2).
  The default is FBM.</div>
@@ -1901,7 +1938,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setCellularDistanceFunction</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.611">setCellularDistanceFunction</a>(int&nbsp;cellularDistanceFunction)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.661">setCellularDistanceFunction</a>(int&nbsp;cellularDistanceFunction)</pre>
 <div class="block">Sets the distance function used in cellular noise calculations, allowing an int argument corresponding to one of
  the following constants from this class: <a href="../../squidpony/squidmath/FastNoise.html#EUCLIDEAN"><code>EUCLIDEAN</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#MANHATTAN"><code>MANHATTAN</code></a> (1), or <a href="../../squidpony/squidmath/FastNoise.html#NATURAL"><code>NATURAL</code></a> (2).
  If this hasn't been called, it will use EUCLIDEAN.</div>
@@ -1917,7 +1954,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setCellularReturnType</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.625">setCellularReturnType</a>(int&nbsp;cellularReturnType)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.675">setCellularReturnType</a>(int&nbsp;cellularReturnType)</pre>
 <div class="block">Sets the return type from cellular noise calculations, allowing an int argument corresponding to one of the
  following constants from this class: <a href="../../squidpony/squidmath/FastNoise.html#CELL_VALUE"><code>CELL_VALUE</code></a> (0), <a href="../../squidpony/squidmath/FastNoise.html#NOISE_LOOKUP"><code>NOISE_LOOKUP</code></a> (1), <a href="../../squidpony/squidmath/FastNoise.html#DISTANCE"><code>DISTANCE</code></a> (2),
  <a href="../../squidpony/squidmath/FastNoise.html#DISTANCE_2"><code>DISTANCE_2</code></a> (3), <a href="../../squidpony/squidmath/FastNoise.html#DISTANCE_2_ADD"><code>DISTANCE_2_ADD</code></a> (4), <a href="../../squidpony/squidmath/FastNoise.html#DISTANCE_2_SUB"><code>DISTANCE_2_SUB</code></a> (5), <a href="../../squidpony/squidmath/FastNoise.html#DISTANCE_2_MUL"><code>DISTANCE_2_MUL</code></a> (6),
@@ -1934,7 +1971,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setCellularNoiseLookup</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.631">setCellularNoiseLookup</a>(<a href="../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a>&nbsp;noise)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.681">setCellularNoiseLookup</a>(<a href="../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a>&nbsp;noise)</pre>
 </li>
 </ul>
 <a name="setGradientPerturbAmp-float-">
@@ -1943,7 +1980,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setGradientPerturbAmp</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.637">setGradientPerturbAmp</a>(float&nbsp;gradientPerturbAmp)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.687">setGradientPerturbAmp</a>(float&nbsp;gradientPerturbAmp)</pre>
 </li>
 </ul>
 <a name="getNoise-double-double-">
@@ -1952,7 +1989,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.642">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.691">getNoise</a>(double&nbsp;x,
                        double&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1966,7 +2003,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.647">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.695">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                long&nbsp;seed)</pre>
 <dl>
@@ -1981,7 +2018,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.656">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.703">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z)</pre>
 <dl>
@@ -1996,7 +2033,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.661">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.707">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                long&nbsp;seed)</pre>
@@ -2012,7 +2049,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.670">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.715">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w)</pre>
@@ -2028,7 +2065,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.675">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.719">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
@@ -2045,7 +2082,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.684">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.727">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w,
@@ -2063,7 +2100,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.688">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.731">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
@@ -2082,7 +2119,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.696">getNoiseWithSeed</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.740">getNoiseWithSeed</a>(float&nbsp;x,
                               float&nbsp;y,
                               int&nbsp;seed)</pre>
 </li>
@@ -2093,7 +2130,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.703">getNoiseWithSeed</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.747">getNoiseWithSeed</a>(float&nbsp;x,
                               float&nbsp;y,
                               float&nbsp;z,
                               int&nbsp;seed)</pre>
@@ -2105,7 +2142,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.710">getNoiseWithSeed</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.754">getNoiseWithSeed</a>(float&nbsp;x,
                               float&nbsp;y,
                               float&nbsp;z,
                               float&nbsp;w,
@@ -2118,7 +2155,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.718">getNoiseWithSeed</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.762">getNoiseWithSeed</a>(float&nbsp;x,
                               float&nbsp;y,
                               float&nbsp;z,
                               float&nbsp;w,
@@ -2133,7 +2170,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>gradCoord2D</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.913">gradCoord2D</a>(int&nbsp;seed,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.957">gradCoord2D</a>(int&nbsp;seed,
                                    int&nbsp;x,
                                    int&nbsp;y,
                                    float&nbsp;xd,
@@ -2146,7 +2183,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>gradCoord3D</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.918">gradCoord3D</a>(int&nbsp;seed,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.962">gradCoord3D</a>(int&nbsp;seed,
                                    int&nbsp;x,
                                    int&nbsp;y,
                                    int&nbsp;z,
@@ -2161,7 +2198,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>gradCoord4D</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.923">gradCoord4D</a>(int&nbsp;seed,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.967">gradCoord4D</a>(int&nbsp;seed,
                                    int&nbsp;x,
                                    int&nbsp;y,
                                    int&nbsp;z,
@@ -2178,7 +2215,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>gradCoord6D</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.928">gradCoord6D</a>(int&nbsp;seed,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.972">gradCoord6D</a>(int&nbsp;seed,
                                    int&nbsp;x,
                                    int&nbsp;y,
                                    int&nbsp;z,
@@ -2199,7 +2236,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getConfiguredNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.943">getConfiguredNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.987">getConfiguredNoise</a>(float&nbsp;x,
                                 float&nbsp;y,
                                 float&nbsp;z)</pre>
 <div class="block">After being configured with the setters in this class, such as <a href="../../squidpony/squidmath/FastNoise.html#setNoiseType-int-"><code>setNoiseType(int)</code></a>,
@@ -2221,7 +2258,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getConfiguredNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1015">getConfiguredNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1059">getConfiguredNoise</a>(float&nbsp;x,
                                 float&nbsp;y)</pre>
 <div class="block">After being configured with the setters in this class, such as <a href="../../squidpony/squidmath/FastNoise.html#setNoiseType-int-"><code>setNoiseType(int)</code></a>,
  <a href="../../squidpony/squidmath/FastNoise.html#setFrequency-float-"><code>setFrequency(float)</code></a>, <a href="../../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>setFractalOctaves(int)</code></a>, and <a href="../../squidpony/squidmath/FastNoise.html#setFractalType-int-"><code>setFractalType(int)</code></a>, among others,
@@ -2241,7 +2278,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getConfiguredNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1087">getConfiguredNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1131">getConfiguredNoise</a>(float&nbsp;x,
                                 float&nbsp;y,
                                 float&nbsp;z,
                                 float&nbsp;w)</pre>
@@ -2265,7 +2302,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getConfiguredNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1153">getConfiguredNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1197">getConfiguredNoise</a>(float&nbsp;x,
                                 float&nbsp;y,
                                 float&nbsp;z,
                                 float&nbsp;w,
@@ -2293,7 +2330,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1207">getWhiteNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1251">getWhiteNoise</a>(float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z,
                            float&nbsp;w,
@@ -2307,7 +2344,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1218">getWhiteNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1262">getWhiteNoise</a>(float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z,
                            float&nbsp;w)</pre>
@@ -2319,7 +2356,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1227">getWhiteNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1271">getWhiteNoise</a>(float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z)</pre>
 </li>
@@ -2330,7 +2367,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoise</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1235">getWhiteNoise</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1279">getWhiteNoise</a>(float&nbsp;x,
                            float&nbsp;y)</pre>
 </li>
 </ul>
@@ -2340,7 +2377,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoiseInt</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1242">getWhiteNoiseInt</a>(int&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1286">getWhiteNoiseInt</a>(int&nbsp;x,
                               int&nbsp;y,
                               int&nbsp;z,
                               int&nbsp;w,
@@ -2354,7 +2391,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoiseInt</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1246">getWhiteNoiseInt</a>(int&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1290">getWhiteNoiseInt</a>(int&nbsp;x,
                               int&nbsp;y,
                               int&nbsp;z,
                               int&nbsp;w)</pre>
@@ -2366,7 +2403,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoiseInt</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1250">getWhiteNoiseInt</a>(int&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1294">getWhiteNoiseInt</a>(int&nbsp;x,
                               int&nbsp;y,
                               int&nbsp;z)</pre>
 </li>
@@ -2377,7 +2414,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhiteNoiseInt</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1254">getWhiteNoiseInt</a>(int&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1298">getWhiteNoiseInt</a>(int&nbsp;x,
                               int&nbsp;y)</pre>
 </li>
 </ul>
@@ -2387,7 +2424,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValueFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1259">getValueFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1303">getValueFractal</a>(float&nbsp;x,
                              float&nbsp;y,
                              float&nbsp;z)</pre>
 </li>
@@ -2398,7 +2435,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1325">getValue</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1368">getValue</a>(float&nbsp;x,
                       float&nbsp;y,
                       float&nbsp;z)</pre>
 </li>
@@ -2409,7 +2446,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValueFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1368">getValueFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1411">getValueFractal</a>(float&nbsp;x,
                              float&nbsp;y,
                              float&nbsp;z,
                              float&nbsp;w)</pre>
@@ -2421,7 +2458,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1385">getValue</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1428">getValue</a>(float&nbsp;x,
                       float&nbsp;y,
                       float&nbsp;z,
                       float&nbsp;w)</pre>
@@ -2433,7 +2470,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValueFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1494">getValueFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1536">getValueFractal</a>(float&nbsp;x,
                              float&nbsp;y)</pre>
 </li>
 </ul>
@@ -2443,7 +2480,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1557">getValue</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1598">getValue</a>(float&nbsp;x,
                       float&nbsp;y)</pre>
 </li>
 </ul>
@@ -2453,7 +2490,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValueFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1590">getValueFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1631">getValueFractal</a>(float&nbsp;x,
                              float&nbsp;y,
                              float&nbsp;z,
                              float&nbsp;w,
@@ -2467,7 +2504,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1608">getValue</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1649">getValue</a>(float&nbsp;x,
                       float&nbsp;y,
                       float&nbsp;z,
                       float&nbsp;w,
@@ -2481,7 +2518,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getPerlinFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1796">getPerlinFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1836">getPerlinFractal</a>(float&nbsp;x,
                               float&nbsp;y,
                               float&nbsp;z)</pre>
 </li>
@@ -2492,7 +2529,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getPerlin</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1864">getPerlin</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1903">getPerlin</a>(float&nbsp;x,
                        float&nbsp;y,
                        float&nbsp;z)</pre>
 </li>
@@ -2503,7 +2540,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getPerlin</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1913">getPerlin</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.1952">getPerlin</a>(float&nbsp;x,
                        float&nbsp;y,
                        float&nbsp;z,
                        float&nbsp;w)</pre>
@@ -2515,7 +2552,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getPerlinFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2031">getPerlinFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2069">getPerlinFractal</a>(float&nbsp;x,
                               float&nbsp;y)</pre>
 </li>
 </ul>
@@ -2525,7 +2562,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getPerlin</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2095">getPerlin</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2132">getPerlin</a>(float&nbsp;x,
                        float&nbsp;y)</pre>
 </li>
 </ul>
@@ -2535,7 +2572,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getPerlin</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2132">getPerlin</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2169">getPerlin</a>(float&nbsp;x,
                        float&nbsp;y,
                        float&nbsp;z,
                        float&nbsp;w,
@@ -2549,7 +2586,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplexFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2331">getSimplexFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2367">getSimplexFractal</a>(float&nbsp;x,
                                float&nbsp;y,
                                float&nbsp;z)</pre>
 </li>
@@ -2560,7 +2597,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2358">layered3D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2394">layered3D</a>(float&nbsp;x,
                        float&nbsp;y,
                        float&nbsp;z,
                        int&nbsp;seed,
@@ -2585,7 +2622,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2393">layered3D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2429">layered3D</a>(float&nbsp;x,
                        float&nbsp;y,
                        float&nbsp;z,
                        int&nbsp;seed,
@@ -2611,7 +2648,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2430">layered3D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2466">layered3D</a>(float&nbsp;x,
                        float&nbsp;y,
                        float&nbsp;z,
                        int&nbsp;seed,
@@ -2640,7 +2677,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2469">layered3D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2505">layered3D</a>(float&nbsp;x,
                        float&nbsp;y,
                        float&nbsp;z,
                        int&nbsp;seed,
@@ -2671,7 +2708,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ridged3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2539">ridged3D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2575">ridged3D</a>(float&nbsp;x,
                       float&nbsp;y,
                       float&nbsp;z,
                       int&nbsp;seed,
@@ -2696,7 +2733,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ridged3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2568">ridged3D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2589">ridged3D</a>(float&nbsp;x,
                       float&nbsp;y,
                       float&nbsp;z,
                       int&nbsp;seed,
@@ -2722,7 +2759,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ridged3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2597">ridged3D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2605">ridged3D</a>(float&nbsp;x,
                       float&nbsp;y,
                       float&nbsp;z,
                       int&nbsp;seed,
@@ -2730,42 +2767,16 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
                       float&nbsp;frequency,
                       float&nbsp;lacunarity)</pre>
 <div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (0.5).</div>
+ frequency change between octaves); gain is not used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - </dd>
 <dd><code>y</code> - </dd>
 <dd><code>z</code> - </dd>
-<dd><code>seed</code> - </dd>
-<dd><code>octaves</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>noise as a float between -1f and 1f</dd>
-</dl>
-</li>
-</ul>
-<a name="ridged3D-float-float-float-int-int-float-float-float-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ridged3D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2627">ridged3D</a>(float&nbsp;x,
-                      float&nbsp;y,
-                      float&nbsp;z,
-                      int&nbsp;seed,
-                      int&nbsp;octaves,
-                      float&nbsp;frequency,
-                      float&nbsp;lacunarity,
-                      float&nbsp;gain)</pre>
-<div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>seed</code> - </dd>
-<dd><code>octaves</code> - </dd>
+<dd><code>seed</code> - any int</dd>
+<dd><code>octaves</code> - how many "layers of detail" to generate; at least 1, but note this slows down with many octaves</dd>
+<dd><code>frequency</code> - often about <code>1f / 32f</code>, but generally adjusted for the use case</dd>
+<dd><code>lacunarity</code> - when <code>octaves</code> is 2 or more, this affects the change between layers</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise as a float between -1f and 1f</dd>
 </dl>
@@ -2777,7 +2788,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2664">getSimplex</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2641">getSimplex</a>(float&nbsp;x,
                         float&nbsp;y,
                         float&nbsp;z)</pre>
 </li>
@@ -2788,7 +2799,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>singleSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2672">singleSimplex</a>(int&nbsp;seed,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2649">singleSimplex</a>(int&nbsp;seed,
                            float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z)</pre>
@@ -2800,7 +2811,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplexFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2776">getSimplexFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2753">getSimplexFractal</a>(float&nbsp;x,
                                float&nbsp;y)</pre>
 </li>
 </ul>
@@ -2810,7 +2821,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2801">layered2D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2778">layered2D</a>(float&nbsp;x,
                        float&nbsp;y,
                        int&nbsp;seed,
                        int&nbsp;octaves)</pre>
@@ -2833,7 +2844,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2833">layered2D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2810">layered2D</a>(float&nbsp;x,
                        float&nbsp;y,
                        int&nbsp;seed,
                        int&nbsp;octaves,
@@ -2857,7 +2868,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2865">layered2D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2842">layered2D</a>(float&nbsp;x,
                        float&nbsp;y,
                        int&nbsp;seed,
                        int&nbsp;octaves,
@@ -2882,7 +2893,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>layered2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2898">layered2D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2875">layered2D</a>(float&nbsp;x,
                        float&nbsp;y,
                        int&nbsp;seed,
                        int&nbsp;octaves,
@@ -2908,7 +2919,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ridged2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2963">ridged2D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2940">ridged2D</a>(float&nbsp;x,
                       float&nbsp;y,
                       int&nbsp;seed,
                       int&nbsp;octaves)</pre>
@@ -2931,7 +2942,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ridged2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2989">ridged2D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2953">ridged2D</a>(float&nbsp;x,
                       float&nbsp;y,
                       int&nbsp;seed,
                       int&nbsp;octaves,
@@ -2955,46 +2966,22 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ridged2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3015">ridged2D</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.2968">ridged2D</a>(float&nbsp;x,
                       float&nbsp;y,
                       int&nbsp;seed,
                       int&nbsp;octaves,
                       float&nbsp;frequency,
                       float&nbsp;lacunarity)</pre>
 <div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (0.5).</div>
+ frequency change between octaves); gain is not used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - </dd>
 <dd><code>y</code> - </dd>
-<dd><code>seed</code> - </dd>
-<dd><code>octaves</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>noise as a float between -1f and 1f</dd>
-</dl>
-</li>
-</ul>
-<a name="ridged2D-float-float-int-int-float-float-float-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ridged2D</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3042">ridged2D</a>(float&nbsp;x,
-                      float&nbsp;y,
-                      int&nbsp;seed,
-                      int&nbsp;octaves,
-                      float&nbsp;frequency,
-                      float&nbsp;lacunarity,
-                      float&nbsp;gain)</pre>
-<div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>seed</code> - </dd>
-<dd><code>octaves</code> - </dd>
+<dd><code>seed</code> - any int</dd>
+<dd><code>octaves</code> - how many "layers of detail" to generate; at least 1, but note this slows down with many octaves</dd>
+<dd><code>frequency</code> - often about <code>1f / 32f</code>, but generally adjusted for the use case</dd>
+<dd><code>lacunarity</code> - when <code>octaves</code> is 2 or more, this affects the change between layers</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise as a float between -1f and 1f</dd>
 </dl>
@@ -3006,7 +2993,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3076">getSimplex</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3001">getSimplex</a>(float&nbsp;x,
                         float&nbsp;y)</pre>
 </li>
 </ul>
@@ -3016,7 +3003,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>singleSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3080">singleSimplex</a>(int&nbsp;seed,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3005">singleSimplex</a>(int&nbsp;seed,
                            float&nbsp;x,
                            float&nbsp;y)</pre>
 </li>
@@ -3027,7 +3014,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3129">getSimplex</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3054">getSimplex</a>(float&nbsp;x,
                         float&nbsp;y,
                         float&nbsp;z,
                         float&nbsp;w)</pre>
@@ -3039,7 +3026,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>singleSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3153">singleSimplex</a>(int&nbsp;seed,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3078">singleSimplex</a>(int&nbsp;seed,
                            float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z,
@@ -3052,7 +3039,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplexFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3232">getSimplexFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3157">getSimplexFractal</a>(float&nbsp;x,
                                float&nbsp;y,
                                float&nbsp;z,
                                float&nbsp;w)</pre>
@@ -3064,7 +3051,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>singleSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3829">singleSimplex</a>(int&nbsp;seed,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3753">singleSimplex</a>(int&nbsp;seed,
                            float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z,
@@ -3079,7 +3066,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplex</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3897">getSimplex</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3821">getSimplex</a>(float&nbsp;x,
                         float&nbsp;y,
                         float&nbsp;z,
                         float&nbsp;w,
@@ -3093,7 +3080,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimplexFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3901">getSimplexFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3825">getSimplexFractal</a>(float&nbsp;x,
                                float&nbsp;y,
                                float&nbsp;z,
                                float&nbsp;w,
@@ -3107,7 +3094,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getCubicFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3981">getCubicFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3904">getCubicFractal</a>(float&nbsp;x,
                              float&nbsp;y,
                              float&nbsp;z)</pre>
 </li>
@@ -3118,7 +3105,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getCubic</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4052">getCubic</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.3973">getCubic</a>(float&nbsp;x,
                       float&nbsp;y,
                       float&nbsp;z)</pre>
 </li>
@@ -3129,7 +3116,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getCubicFractal</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4106">getCubicFractal</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4027">getCubicFractal</a>(float&nbsp;x,
                              float&nbsp;y)</pre>
 </li>
 </ul>
@@ -3139,7 +3126,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getCubic</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4173">getCubic</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4092">getCubic</a>(float&nbsp;x,
                       float&nbsp;y)</pre>
 </li>
 </ul>
@@ -3149,7 +3136,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getCellular</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4209">getCellular</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4128">getCellular</a>(float&nbsp;x,
                          float&nbsp;y,
                          float&nbsp;z)</pre>
 </li>
@@ -3160,7 +3147,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getCellular</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4399">getCellular</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4318">getCellular</a>(float&nbsp;x,
                          float&nbsp;y)</pre>
 </li>
 </ul>
@@ -3170,7 +3157,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>gradientPerturb3</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4565">gradientPerturb3</a>(float[]&nbsp;v3)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4484">gradientPerturb3</a>(float[]&nbsp;v3)</pre>
 </li>
 </ul>
 <a name="gradientPerturbFractal3-float:A-">
@@ -3179,7 +3166,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>gradientPerturbFractal3</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4569">gradientPerturbFractal3</a>(float[]&nbsp;v3)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4488">gradientPerturbFractal3</a>(float[]&nbsp;v3)</pre>
 </li>
 </ul>
 <a name="gradientPerturb2-float:A-">
@@ -3188,7 +3175,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>gradientPerturb2</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4652">gradientPerturb2</a>(float[]&nbsp;v2)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4571">gradientPerturb2</a>(float[]&nbsp;v2)</pre>
 </li>
 </ul>
 <a name="gradientPerturbFractal2-float:A-">
@@ -3197,7 +3184,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>gradientPerturbFractal2</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4656">gradientPerturbFractal2</a>(float[]&nbsp;v2)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FastNoise.html#line.4575">gradientPerturbFractal2</a>(float[]&nbsp;v2)</pre>
 </li>
 </ul>
 </li>

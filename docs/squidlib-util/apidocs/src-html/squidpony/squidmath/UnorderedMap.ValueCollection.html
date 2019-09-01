@@ -29,8 +29,8 @@
 <span class="sourceLineNo">021</span>import java.util.*;<a name="line.21"></a>
 <span class="sourceLineNo">022</span><a name="line.22"></a>
 <span class="sourceLineNo">023</span>/**<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * A generic unordered hash map with with a fast implementation, originally from fastutil as<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * Object2ObjectOpenCustomHashMap but modified to support SquidLib's {@link squidpony.squidmath.CrossHash.IHasher}<a name="line.25"></a>
+<span class="sourceLineNo">024</span> * A generic unordered hash map; generally prefer {@link HashMap} unless you need array keys. Originally from fastutil<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * as Object2ObjectOpenCustomHashMap but modified to support SquidLib's {@link squidpony.squidmath.CrossHash.IHasher}<a name="line.25"></a>
 <span class="sourceLineNo">026</span> * interface for custom hashing instead of fastutil's Strategy interface.<a name="line.26"></a>
 <span class="sourceLineNo">027</span> * &lt;br&gt;<a name="line.27"></a>
 <span class="sourceLineNo">028</span> * Instances of this class use a hash table to represent a map. The table is filled up to a specified &lt;em&gt;load factor&lt;/em&gt;, and then doubled in size to accommodate new entries. If the table is<a name="line.28"></a>
@@ -128,7 +128,7 @@
 <span class="sourceLineNo">120</span>    /**<a name="line.120"></a>
 <span class="sourceLineNo">121</span>     * The default load factor of a hash table.<a name="line.121"></a>
 <span class="sourceLineNo">122</span>     */<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    public static final float DEFAULT_LOAD_FACTOR = .75f; // .1875f; // .75f;<a name="line.123"></a>
+<span class="sourceLineNo">123</span>    public static final float DEFAULT_LOAD_FACTOR = .375f; // .1875f; // .75f;<a name="line.123"></a>
 <span class="sourceLineNo">124</span>    /**<a name="line.124"></a>
 <span class="sourceLineNo">125</span>     * The load factor for a (usually small) table that is meant to be particularly fast.<a name="line.125"></a>
 <span class="sourceLineNo">126</span>     */<a name="line.126"></a>

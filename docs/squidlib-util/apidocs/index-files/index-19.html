@@ -347,11 +347,6 @@
 <dd>
 <div class="block">Makes the IDs generated after calling this non-repeatable, with a random 128-bit seed.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAlt32RNG.html#randomize-int-">randomize(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAlt32RNG.html" title="class in squidpony.squidmath">ThrustAlt32RNG</a></dt>
-<dd>
-<div class="block">Limited-use; when called with successive state values that differ by 0x62BD5, this produces fairly
- high-quality random 32-bit numbers.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#randomizeAppearance-squidpony.squidmath.RNG-squidpony.MonsterGen.Chimera-java.lang.String-int-">randomizeAppearance(RNG, MonsterGen.Chimera, String, int)</a></span> - Method in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>
 <div class="block">Randomly add appearance descriptors to a copy of the Chimera creature.</div>
@@ -1851,6 +1846,11 @@
  coordinates, lighting with the view "pointed at" the given <code>angle</code> in degrees,
  extending to different ranges based on the direction the light is traveling.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#reuseFOVSymmetrical-double:A:A-double:A:A-int-int-double-squidpony.squidgrid.Radius-">reuseFOVSymmetrical(double[][], double[][], int, int, double, Radius)</a></span> - Static method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
+<dd>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#reuseLOS-double:A:A-double:A:A-int-int-">reuseLOS(double[][], double[][], int, int)</a></span> - Static method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>
 <div class="block">Calculates which cells have line of sight from the given x, y coordinates.</div>
@@ -1919,12 +1919,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#ridged2D-float-float-int-int-float-float-">ridged2D(float, float, int, int, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>
 <div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (0.5).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#ridged2D-float-float-int-int-float-float-float-">ridged2D(float, float, int, int, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
-<dd>
-<div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).</div>
+ frequency change between octaves); gain is not used.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Ridged2D.html#Ridged2D--">Ridged2D()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Ridged2D.html" title="class in squidpony.squidmath">Noise.Ridged2D</a></dt>
 <dd>&nbsp;</dd>
@@ -1945,12 +1940,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#ridged3D-float-float-float-int-int-float-float-">ridged3D(float, float, float, int, int, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>
 <div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (0.5).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#ridged3D-float-float-float-int-int-float-float-float-">ridged3D(float, float, float, int, int, float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
-<dd>
-<div class="block">Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
- frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).</div>
+ frequency change between octaves); gain is not used.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Ridged3D.html#Ridged3D--">Ridged3D()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Ridged3D.html" title="class in squidpony.squidmath">Noise.Ridged3D</a></dt>
 <dd>&nbsp;</dd>
@@ -1981,13 +1971,21 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LowStorageShuffler.html#rightMask">rightMask</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/LowStorageShuffler.html" title="class in squidpony.squidmath">LowStorageShuffler</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#RIPPLE">RIPPLE</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#RIPPLE_LOOSE">RIPPLE_LOOSE</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#RIPPLE_TIGHT">RIPPLE_TIGHT</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#RIPPLE_VERY_LOOSE">RIPPLE_VERY_LOOSE</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MimicFill.html#river">river</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MimicFill.html" title="class in squidpony.squidgrid">MimicFill</a></dt>
 <dd>
 <div class="block">Predefined sample; produces multiple directions of flowing, river-like shapes made of "false".</div>
@@ -2169,6 +2167,8 @@
 <dd>
 <div class="block">The effects that will be applied when generate is called.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#roomHeight">roomHeight</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MixedGenerator.html#roomHeight">roomHeight</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MixedGenerator.html" title="class in squidpony.squidgrid.mapping">MixedGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/RoomFinder.html#rooms">rooms</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></dt>
@@ -2191,6 +2191,8 @@
 <dt><a href="../squidpony/tileset/RoomsLimitConnectivity.html" title="class in squidpony.tileset"><span class="typeNameLink">RoomsLimitConnectivity</span></a> - Class in <a href="../squidpony/tileset/package-summary.html">squidpony.tileset</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/tileset/RoomsLimitConnectivity.html#RoomsLimitConnectivity--">RoomsLimitConnectivity()</a></span> - Constructor for class squidpony.tileset.<a href="../squidpony/tileset/RoomsLimitConnectivity.html" title="class in squidpony.tileset">RoomsLimitConnectivity</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#roomWidth">roomWidth</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MixedGenerator.html#roomWidth">roomWidth</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MixedGenerator.html" title="class in squidpony.squidgrid.mapping">MixedGenerator</a></dt>
 <dd>&nbsp;</dd>

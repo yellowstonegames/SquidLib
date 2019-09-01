@@ -453,7 +453,7 @@
 <dd>
 <div class="block">Initializes a substance array that can be given to other static methods.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initialize-int-int-int-">initialize(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initialize-int-int-long-">initialize(int, int, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
 <dd>
 <div class="block">Initializes a substance array that can be given to other static methods.</div>
 </dd>
@@ -461,7 +461,7 @@
 <dd>
 <div class="block">Initializes a substance array that can be given to other static methods.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initialize-int-int-squidpony.squidmath.Noise.Noise2D-int-">initialize(int, int, Noise.Noise2D, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initialize-int-int-squidpony.squidmath.Noise.Noise2D-long-">initialize(int, int, Noise.Noise2D, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
 <dd>
 <div class="block">Initializes a substance array that can be given to other static methods.</div>
 </dd>
@@ -489,7 +489,7 @@
 <dd>
 <div class="block">Refills a substance array that can be given to other static methods.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initializeInto-double:A-int-">initializeInto(double[], int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initializeInto-double:A-long-">initializeInto(double[], long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
 <dd>
 <div class="block">Refills a substance array that can be given to other static methods.</div>
 </dd>
@@ -497,7 +497,7 @@
 <dd>
 <div class="block">Initializes a substance array that can be given to other static methods.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initializeInto-double:A-int-int-squidpony.squidmath.Noise.Noise2D-int-">initializeInto(double[], int, int, Noise.Noise2D, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#initializeInto-double:A-int-int-squidpony.squidmath.Noise.Noise2D-long-">initializeInto(double[], int, int, Noise.Noise2D, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
 <dd>
 <div class="block">Initializes a substance array that can be given to other static methods.</div>
 </dd>
@@ -691,7 +691,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CosmicNumbering.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">A publicly available FastNoise object with seed 1337, frequency 1.0f/32.0f, 1 octave of Simplex noise using
+ SIMPLEX_FRACTAL noiseType, 2f lacunarity and 0.5f gain.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GlitchNoise.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/GlitchNoise.html" title="class in squidpony.squidmath">GlitchNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/JitterNoise.html#instance">instance</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></dt>
@@ -1089,6 +1092,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MoonwalkRNG.html#inverseNextLong-long-">inverseNextLong(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></dt>
 <dd>
 <div class="block">Given the output of a call to <a href="../squidpony/squidmath/MoonwalkRNG.html#nextLong--"><code>MoonwalkRNG.nextLong()</code></a> as <code>out</code>, this finds the state of the MoonwalkRNG that
+ produce that output.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PulleyRNG.html#inverseNextLong-long-">inverseNextLong(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PulleyRNG.html" title="class in squidpony.squidmath">PulleyRNG</a></dt>
+<dd>
+<div class="block">Given the output of a call to <a href="../squidpony/squidmath/PulleyRNG.html#nextLong--"><code>PulleyRNG.nextLong()</code></a> as <code>out</code>, this finds the state of the PulleyRNG that
  produce that output.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#invertAdjacent">invertAdjacent</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>

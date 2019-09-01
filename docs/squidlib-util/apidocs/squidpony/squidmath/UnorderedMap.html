@@ -116,8 +116,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.65">UnorderedMap</a>&lt;K,V&gt;
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;K,V&gt;, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></pre>
-<div class="block">A generic unordered hash map with with a fast implementation, originally from fastutil as
- Object2ObjectOpenCustomHashMap but modified to support SquidLib's <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath"><code>CrossHash.IHasher</code></a>
+<div class="block">A generic unordered hash map; generally prefer <a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util"><code>HashMap</code></a> unless you need array keys. Originally from fastutil
+ as Object2ObjectOpenCustomHashMap but modified to support SquidLib's <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath"><code>CrossHash.IHasher</code></a>
  interface for custom hashing instead of fastutil's Strategy interface.
  <br>
  Instances of this class use a hash table to represent a map. The table is filled up to a specified <em>load factor</em>, and then doubled in size to accommodate new entries. If the table is

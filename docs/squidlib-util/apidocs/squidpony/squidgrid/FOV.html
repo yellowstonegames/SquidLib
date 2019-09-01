@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -207,23 +207,33 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE">RIPPLE</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE">RIPPLE</a></span></code>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE_LOOSE">RIPPLE_LOOSE</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE_LOOSE">RIPPLE_LOOSE</a></span></code>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE_TIGHT">RIPPLE_TIGHT</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE_TIGHT">RIPPLE_TIGHT</a></span></code>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE_VERY_LOOSE">RIPPLE_VERY_LOOSE</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#RIPPLE_VERY_LOOSE">RIPPLE_VERY_LOOSE</a></span></code>
+<div class="block">Performs FOV by pushing values outwards from the source location.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#SHADOW">SHADOW</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#SHADOW">SHADOW</a></span></code>
+<div class="block">Uses Shadow Casting FOV algorithm.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -246,7 +256,8 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#FOV-int-">FOV</a></span>(int&nbsp;type)</code>
-<div class="block">Creates a solver which will use the provided FOV solver type.</div>
+<div class="block">Creates a solver which will use the provided FOV solver type, typically one of <a href="../../squidpony/squidgrid/FOV.html#SHADOW"><code>SHADOW</code></a> (the default),
+ <a href="../../squidpony/squidgrid/FOV.html#RIPPLE"><code>RIPPLE</code></a>, <a href="../../squidpony/squidgrid/FOV.html#RIPPLE_TIGHT"><code>RIPPLE_TIGHT</code></a>, <a href="../../squidpony/squidgrid/FOV.html#RIPPLE_LOOSE"><code>RIPPLE_LOOSE</code></a>, or <a href="../../squidpony/squidgrid/FOV.html#RIPPLE_VERY_LOOSE"><code>RIPPLE_VERY_LOOSE</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -445,6 +456,18 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#reuseFOVSymmetrical-double:A:A-double:A:A-int-int-double-squidpony.squidgrid.Radius-">reuseFOVSymmetrical</a></span>(double[][]&nbsp;resistanceMap,
+                   double[][]&nbsp;light,
+                   int&nbsp;startX,
+                   int&nbsp;startY,
+                   double&nbsp;radius,
+                   <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique)</code>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#reuseLOS-double:A:A-double:A:A-int-int-">reuseLOS</a></span>(double[][]&nbsp;resistanceMap,
         double[][]&nbsp;light,
         int&nbsp;startX,
@@ -452,7 +475,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <div class="block">Calculates which cells have line of sight from the given x, y coordinates.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/FOV.html#reuseLOS-double:A:A-double:A:A-int-int-int-int-int-int-">reuseLOS</a></span>(double[][]&nbsp;resistanceMap,
         double[][]&nbsp;light,
@@ -493,7 +516,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>RIPPLE</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.64">RIPPLE</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.62">RIPPLE</a></pre>
+<div class="block">Performs FOV by pushing values outwards from the source location.
+ It will go around corners a bit.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidgrid.FOV.RIPPLE">Constant Field Values</a></dd>
@@ -506,7 +531,11 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>RIPPLE_LOOSE</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.71">RIPPLE_LOOSE</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.69">RIPPLE_LOOSE</a></pre>
+<div class="block">Performs FOV by pushing values outwards from the source location.
+ It will spread around edges like smoke or water, but maintain a
+ tendency to curl towards the start position when going around
+ edges.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidgrid.FOV.RIPPLE_LOOSE">Constant Field Values</a></dd>
@@ -519,7 +548,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>RIPPLE_TIGHT</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.76">RIPPLE_TIGHT</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.74">RIPPLE_TIGHT</a></pre>
+<div class="block">Performs FOV by pushing values outwards from the source location.
+ It will only go around corners slightly.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidgrid.FOV.RIPPLE_TIGHT">Constant Field Values</a></dd>
@@ -532,7 +563,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>RIPPLE_VERY_LOOSE</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.81">RIPPLE_VERY_LOOSE</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.79">RIPPLE_VERY_LOOSE</a></pre>
+<div class="block">Performs FOV by pushing values outwards from the source location.
+ It will go around corners massively.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidgrid.FOV.RIPPLE_VERY_LOOSE">Constant Field Values</a></dd>
@@ -545,7 +578,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>SHADOW</h4>
-<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.87">SHADOW</a></pre>
+<pre>public static final&nbsp;int <a href="../../src-html/squidpony/squidgrid/FOV.html#line.85">SHADOW</a></pre>
+<div class="block">Uses Shadow Casting FOV algorithm. Treats all translucent cells
+ as fully transparent. Returns a percentage from 1.0 (center of
+ FOV) to 0.0 (outside of FOV).</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidgrid.FOV.SHADOW">Constant Field Values</a></dd>
@@ -558,7 +594,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>light</h4>
-<pre>protected&nbsp;double[][] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.94">light</a></pre>
+<pre>protected&nbsp;double[][] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.92">light</a></pre>
 <div class="block">Data allocated in the previous calls to the public API, if any. Used to
  save allocations when multiple calls are done on the same instance.</div>
 </li>
@@ -569,7 +605,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>nearLight</h4>
-<pre>protected&nbsp;boolean[][] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.99">nearLight</a></pre>
+<pre>protected&nbsp;boolean[][] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.97">nearLight</a></pre>
 <div class="block">Data allocated in the previous calls to the public API, if any. Used to
  save allocations when multiple calls are done on the same instance.</div>
 </li>
@@ -580,7 +616,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ccw</h4>
-<pre>protected static final&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.101">ccw</a></pre>
+<pre>protected static final&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.99">ccw</a></pre>
 </li>
 </ul>
 <a name="ccw_full">
@@ -589,7 +625,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ccw_full</h4>
-<pre>protected static final&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.103">ccw_full</a></pre>
+<pre>protected static final&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] <a href="../../src-html/squidpony/squidgrid/FOV.html#line.101">ccw_full</a></pre>
 </li>
 </ul>
 </li>
@@ -606,7 +642,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>FOV</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.109">FOV</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.107">FOV</a>()</pre>
 <div class="block">Creates a solver which will use the default SHADOW solver.</div>
 </li>
 </ul>
@@ -616,8 +652,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FOV</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.117">FOV</a>(int&nbsp;type)</pre>
-<div class="block">Creates a solver which will use the provided FOV solver type.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.115">FOV</a>(int&nbsp;type)</pre>
+<div class="block">Creates a solver which will use the provided FOV solver type, typically one of <a href="../../squidpony/squidgrid/FOV.html#SHADOW"><code>SHADOW</code></a> (the default),
+ <a href="../../squidpony/squidgrid/FOV.html#RIPPLE"><code>RIPPLE</code></a>, <a href="../../squidpony/squidgrid/FOV.html#RIPPLE_TIGHT"><code>RIPPLE_TIGHT</code></a>, <a href="../../squidpony/squidgrid/FOV.html#RIPPLE_LOOSE"><code>RIPPLE_LOOSE</code></a>, or <a href="../../squidpony/squidgrid/FOV.html#RIPPLE_VERY_LOOSE"><code>RIPPLE_VERY_LOOSE</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - </dd>
@@ -638,7 +675,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.136">calculateFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.134">calculateFOV</a>(double[][]&nbsp;resistanceMap,
                                int&nbsp;startx,
                                int&nbsp;starty)</pre>
 <div class="block">Calculates the Field Of View for the provided map from the given x, y
@@ -665,7 +702,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.155">calculateFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.153">calculateFOV</a>(double[][]&nbsp;resistanceMap,
                                int&nbsp;startx,
                                int&nbsp;starty,
                                double&nbsp;radius)</pre>
@@ -693,7 +730,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.175">calculateFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.173">calculateFOV</a>(double[][]&nbsp;resistanceMap,
                                int&nbsp;startX,
                                int&nbsp;startY,
                                double&nbsp;radius,
@@ -707,7 +744,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  RadiusStrategy.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>resistanceMap</code> - the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()</dd>
+<dd><code>resistanceMap</code> - the grid of cells to calculate on; the kind made by <a href="../../squidpony/squidgrid/mapping/DungeonUtility.html#generateResistances-char:A:A-"><code>DungeonUtility.generateResistances(char[][])</code></a></dd>
 <dd><code>startX</code> - the horizontal component of the starting location</dd>
 <dd><code>startY</code> - the vertical component of the starting location</dd>
 <dd><code>radius</code> - the distance the light will extend to</dd>
@@ -723,7 +760,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.221">calculateFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.219">calculateFOV</a>(double[][]&nbsp;resistanceMap,
                                int&nbsp;startX,
                                int&nbsp;startY,
                                double&nbsp;radius,
@@ -758,7 +795,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.279">calculateFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.278">calculateFOV</a>(double[][]&nbsp;resistanceMap,
                                       double[][]&nbsp;light,
                                       int&nbsp;startx,
                                       int&nbsp;starty)</pre>
@@ -777,10 +814,11 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>resistanceMap</code> - the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()</dd>
+<dd><code>light</code> - a non-null 2D double array that will have its contents overwritten, modified, and returned</dd>
 <dd><code>startx</code> - the horizontal component of the starting location</dd>
 <dd><code>starty</code> - the vertical component of the starting location</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the computed light grid</dd>
+<dd>the computed light grid (the same as <code>light</code>)</dd>
 </dl>
 </li>
 </ul>
@@ -790,7 +828,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reuseFOV</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.302">reuseFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.301">reuseFOV</a>(double[][]&nbsp;resistanceMap,
                                   double[][]&nbsp;light,
                                   int&nbsp;startx,
                                   int&nbsp;starty,
@@ -823,12 +861,48 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reuseFOV</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.327">reuseFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.326">reuseFOV</a>(double[][]&nbsp;resistanceMap,
                                   double[][]&nbsp;light,
                                   int&nbsp;startX,
                                   int&nbsp;startY,
                                   double&nbsp;radius,
                                   <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique)</pre>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates. Assigns to, and returns, a light map where the values
+ represent a percentage of fully lit. Always uses shadowcasting FOV,
+ which allows this method to be static since it doesn't need to keep any
+ state around, and can reuse the state the user gives it via the
+ <code>light</code> parameter. The values in light are always cleared before
+ this is run, because prior state can make this give incorrect results.
+ <br>
+ The starting point for the calculation is considered to be at the center
+ of the origin cell. Radius determinations are determined by the provided
+ RadiusStrategy.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resistanceMap</code> - the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()</dd>
+<dd><code>light</code> - the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"</dd>
+<dd><code>startX</code> - the horizontal component of the starting location</dd>
+<dd><code>startY</code> - the vertical component of the starting location</dd>
+<dd><code>radius</code> - the distance the light will extend to</dd>
+<dd><code>radiusTechnique</code> - provides a means to calculate the radius as desired</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the computed light grid, which is the same 2D array as the value assigned to <code>light</code></dd>
+</dl>
+</li>
+</ul>
+<a name="reuseFOVSymmetrical-double:A:A-double:A:A-int-int-double-squidpony.squidgrid.Radius-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reuseFOVSymmetrical</h4>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.366">reuseFOVSymmetrical</a>(double[][]&nbsp;resistanceMap,
+                                             double[][]&nbsp;light,
+                                             int&nbsp;startX,
+                                             int&nbsp;startY,
+                                             double&nbsp;radius,
+                                             <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique)</pre>
 <div class="block">Calculates the Field Of View for the provided map from the given x, y
  coordinates. Assigns to, and returns, a light map where the values
  represent a percentage of fully lit. Always uses shadowcasting FOV,
@@ -859,7 +933,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reuseLOS</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.368">reuseLOS</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.463">reuseLOS</a>(double[][]&nbsp;resistanceMap,
                                   double[][]&nbsp;light,
                                   int&nbsp;startX,
                                   int&nbsp;startY)</pre>
@@ -894,7 +968,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reuseLOS</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.393">reuseLOS</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.488">reuseLOS</a>(double[][]&nbsp;resistanceMap,
                                   double[][]&nbsp;light,
                                   int&nbsp;startX,
                                   int&nbsp;startY,
@@ -933,7 +1007,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reuseFOV</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.437">reuseFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.532">reuseFOV</a>(double[][]&nbsp;resistanceMap,
                                   double[][]&nbsp;light,
                                   int&nbsp;startX,
                                   int&nbsp;startY,
@@ -975,7 +1049,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>bouncingLine</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.478">bouncingLine</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.573">bouncingLine</a>(double[][]&nbsp;resistanceMap,
                                       double[][]&nbsp;light,
                                       int&nbsp;startX,
                                       int&nbsp;startY,
@@ -1008,7 +1082,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reuseFOV</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.897">reuseFOV</a>(double[][]&nbsp;resistanceMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1039">reuseFOV</a>(double[][]&nbsp;resistanceMap,
                                   double[][]&nbsp;light,
                                   int&nbsp;startX,
                                   int&nbsp;startY,
@@ -1060,7 +1134,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>addFOVsInto</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.984">addFOVsInto</a>(double[][]&nbsp;basis,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1126">addFOVsInto</a>(double[][]&nbsp;basis,
                                      double[][]&nbsp;addend)</pre>
 <div class="block">Adds an FOV map to another in the simplest way possible; does not check line-of-sight between FOV maps.
  Clamps the highest value for any single position at 1.0. Modifies the basis parameter in-place and makes no
@@ -1080,7 +1154,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>addFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.999">addFOVs</a>(double[][]...&nbsp;maps)</pre>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1141">addFOVs</a>(double[][]...&nbsp;maps)</pre>
 <div class="block">Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
  Clamps the highest value for any single position at 1.0. Allocates a new 2D double array and returns it.</div>
 <dl>
@@ -1097,7 +1171,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>addFOVsInto</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1026">addFOVsInto</a>(double[][]&nbsp;basis,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1168">addFOVsInto</a>(double[][]&nbsp;basis,
                                      double[][]...&nbsp;maps)</pre>
 <div class="block">Adds multiple FOV maps to basis cell-by-cell, modifying basis; does not check line-of-sight between FOV maps.
  Clamps the highest value for any single position at 1.0. Returns basis without allocating new objects.</div>
@@ -1116,7 +1190,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>addFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1051">addFOVs</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;double[][]&gt;&nbsp;maps)</pre>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1193">addFOVs</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;double[][]&gt;&nbsp;maps)</pre>
 <div class="block">Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
  Clamps the highest value for any single position at 1.0. Allocates a new 2D double array and returns it.</div>
 <dl>
@@ -1134,7 +1208,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>mixVisibleFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1085">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1227">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
                                         double[][]...&nbsp;maps)</pre>
 <div class="block">Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
  you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
@@ -1155,7 +1229,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>mixVisibleFOVsInto</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1121">mixVisibleFOVsInto</a>(double[][]&nbsp;losMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1263">mixVisibleFOVsInto</a>(double[][]&nbsp;losMap,
                                             double[][]&nbsp;basis,
                                             double[][]...&nbsp;maps)</pre>
 <div class="block">Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
@@ -1178,7 +1252,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>mixVisibleFOVs</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1157">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1299">mixVisibleFOVs</a>(double[][]&nbsp;losMap,
                                         <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;double[][]&gt;&nbsp;maps)</pre>
 <div class="block">Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
  you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
@@ -1199,7 +1273,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>calculateLOSMap</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1188">calculateLOSMap</a>(double[][]&nbsp;resistanceMap,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidgrid/FOV.html#line.1330">calculateLOSMap</a>(double[][]&nbsp;resistanceMap,
                                   int&nbsp;startX,
                                   int&nbsp;startY)</pre>
 <div class="block">Calculates what cells are visible from (startX,startY) using the given resistanceMap; this can be given to

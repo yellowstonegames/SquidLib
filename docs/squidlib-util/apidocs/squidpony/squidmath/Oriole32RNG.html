@@ -113,14 +113,15 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.41">Oriole32RNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.42">Oriole32RNG</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A modification of Blackman and Vigna's xoroshiro128+ generator using two 32-bit ints of state instead of two 64-bit
  longs and also incorporating a large-increment counter (Weyl sequence) that is added to the rotated xoroshiro output;
  this is tied with <a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a> for the fastest generator on GWT I have found that also passes the full 32TB
- battery of PractRand's statistical tests. ThrustAlt32RNG is faster in some browsers and also passes tests, but
- cannot produce all outputs, and its period is too small for serious usage. In statistical testing, xoroshiro always
+ battery of PractRand's statistical tests. Starfish32RNG has 2D equidistribution while this only has 1D; this means
+ Starfish32RNG (and GWTRNG) can produce all pairs of ints or all longs (except for one) with equal likelihood, while
+ Oriole32RNG (and Lathe32RNG) produce some pairs more often than others. In statistical testing, xoroshiro always
  fails some binary matrix rank tests, but smaller-state versions fail other tests as well. The changes Oriole makes
  apply only to the output of xoroshiro, not its well-tested state transition for the "xoroshiro state" part of this
  generator, and these changes eliminate all statistical failures on 32TB of tested data, avoiding the failures the
@@ -317,7 +318,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Oriole32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.50">Oriole32RNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.51">Oriole32RNG</a>()</pre>
 <div class="block">Creates a new generator seeded using three calls to Math.random().</div>
 </li>
 </ul>
@@ -327,7 +328,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Oriole32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.59">Oriole32RNG</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.60">Oriole32RNG</a>(int&nbsp;seed)</pre>
 <div class="block">Constructs this Oriole32RNG by dispersing the bits of seed using <a href="../../squidpony/squidmath/Oriole32RNG.html#setSeed-int-"><code>setSeed(int)</code></a> across the two parts of state
  this has.</div>
 <dl>
@@ -342,7 +343,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Oriole32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.69">Oriole32RNG</a>(int&nbsp;stateA,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.70">Oriole32RNG</a>(int&nbsp;stateA,
                    int&nbsp;stateB)</pre>
 <div class="block">Constructs this Oriole32RNG by calling <a href="../../squidpony/squidmath/Oriole32RNG.html#setState-int-int-int-"><code>setState(int, int, int)</code></a> on stateA and stateB as given but
  producing stateC via <code>stateA ^ stateB</code>; see that method for the specific details (stateA and stateB are
@@ -360,7 +361,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Oriole32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.80">Oriole32RNG</a>(int&nbsp;stateA,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.81">Oriole32RNG</a>(int&nbsp;stateA,
                    int&nbsp;stateB,
                    int&nbsp;stateC)</pre>
 <div class="block">Constructs this Oriole32RNG by calling <a href="../../squidpony/squidmath/Oriole32RNG.html#setState-int-int-int-"><code>setState(int, int, int)</code></a> on the arguments as given; see that
@@ -387,7 +388,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.85">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.86">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -407,7 +408,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.99">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.100">nextInt</a>()</pre>
 <div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -421,7 +422,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.110">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.111">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -441,7 +442,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Oriole32RNG.html" title="class in squidpony.squidmath">Oriole32RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.132">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Oriole32RNG.html" title="class in squidpony.squidmath">Oriole32RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.133">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -459,7 +460,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.141">setSeed</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.142">setSeed</a>(int&nbsp;seed)</pre>
 <div class="block">Sets the state of this generator using one int, running it through Zog32RNG's algorithm three times to get 
  three ints.</div>
 <dl>
@@ -474,7 +475,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateA</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.161">getStateA</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.162">getStateA</a>()</pre>
 </li>
 </ul>
 <a name="setStateA-int-">
@@ -483,7 +484,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateA</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.165">setStateA</a>(int&nbsp;stateA)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.166">setStateA</a>(int&nbsp;stateA)</pre>
 </li>
 </ul>
 <a name="getStateB--">
@@ -492,7 +493,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateB</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.169">getStateB</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.170">getStateB</a>()</pre>
 </li>
 </ul>
 <a name="setStateB-int-">
@@ -501,7 +502,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateB</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.173">setStateB</a>(int&nbsp;stateB)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.174">setStateB</a>(int&nbsp;stateB)</pre>
 </li>
 </ul>
 <a name="getStateC--">
@@ -510,7 +511,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateC</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.178">getStateC</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.179">getStateC</a>()</pre>
 </li>
 </ul>
 <a name="setStateC-int-">
@@ -519,7 +520,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateC</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.182">setStateC</a>(int&nbsp;stateC)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.183">setStateC</a>(int&nbsp;stateC)</pre>
 </li>
 </ul>
 <a name="setState-int-int-int-">
@@ -528,7 +529,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.193">setState</a>(int&nbsp;stateA,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.194">setState</a>(int&nbsp;stateA,
                      int&nbsp;stateB,
                      int&nbsp;stateC)</pre>
 <div class="block">Sets the current internal state of this Oriole32RNG with three ints, where stateA and stateB can each be any int
@@ -546,7 +547,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.200">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.201">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -559,7 +560,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.205">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.206">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -572,7 +573,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.215">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Oriole32RNG.html#line.216">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

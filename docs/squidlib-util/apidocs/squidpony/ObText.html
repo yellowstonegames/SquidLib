@@ -129,7 +129,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../src-html/squidpony/ObText.html#line.84">ObText</a>
+public class <a href="../src-html/squidpony/ObText.html#line.82">ObText</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/ObText.ObTextEntry.html" title="class in squidpony">ObText.ObTextEntry</a>&gt;
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A simple format parser for String-based configuration or data files where JSON is overkill.
@@ -361,9 +361,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
                   <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#basicMap--">basicMap</a></span>()</code>
-<div class="block">Gets all unique Strings from the top level of this ObText as keys in an <a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath"><code>UnorderedMap</code></a>, with the first
+<div class="block">Gets all unique Strings from the top level of this ObText as keys in a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util"><code>HashMap</code></a>, with the first
  String associated with each key as its value (or null if nothing is associated with a key String).</div>
 </td>
 </tr>
@@ -405,10 +405,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#keySet--">keySet</a></span>()</code>
 <div class="block">Gets all unique Strings from the top level of this ObText, not including any associated values, and puts them in
- an <a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath"><code>UnorderedSet</code></a> of String.</div>
+ a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util"><code>HashSet</code></a> of String.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -441,9 +441,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#serializeToString--">serializeToString</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i18" class="altColor">
-<td class="colFirst"><code><a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#shallowMap--">shallowMap</a></span>()</code>
-<div class="block">Gets all unique Strings from the top level of this ObText as keys in an <a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath"><code>UnorderedMap</code></a>, with any Strings
+<div class="block">Gets all unique Strings from the top level of this ObText as keys in a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util"><code>HashMap</code></a>, with any Strings
  associated with those keys as their values (in a possibly-empty ArrayList of String for each value).</div>
 </td>
 </tr>
@@ -521,7 +521,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>pattern</h4>
-<pre>public static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.190">pattern</a></pre>
+<pre>public static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.188">pattern</a></pre>
 </li>
 </ul>
 <a name="patternRelaxed">
@@ -530,7 +530,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>patternRelaxed</h4>
-<pre>public static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.201">patternRelaxed</a></pre>
+<pre>public static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.199">patternRelaxed</a></pre>
 </li>
 </ul>
 <a name="stringId">
@@ -539,7 +539,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>stringId</h4>
-<pre>public static final&nbsp;int <a href="../src-html/squidpony/ObText.html#line.213">stringId</a></pre>
+<pre>public static final&nbsp;int <a href="../src-html/squidpony/ObText.html#line.211">stringId</a></pre>
 </li>
 </ul>
 <a name="openId">
@@ -548,7 +548,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>openId</h4>
-<pre>public static final&nbsp;int <a href="../src-html/squidpony/ObText.html#line.214">openId</a></pre>
+<pre>public static final&nbsp;int <a href="../src-html/squidpony/ObText.html#line.212">openId</a></pre>
 </li>
 </ul>
 <a name="closeId">
@@ -557,7 +557,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>closeId</h4>
-<pre>public static final&nbsp;int <a href="../src-html/squidpony/ObText.html#line.214">closeId</a></pre>
+<pre>public static final&nbsp;int <a href="../src-html/squidpony/ObText.html#line.212">closeId</a></pre>
 </li>
 </ul>
 <a name="illegalBareWord">
@@ -566,7 +566,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>illegalBareWord</h4>
-<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.216">illegalBareWord</a></pre>
+<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.214">illegalBareWord</a></pre>
 </li>
 </ul>
 <a name="reallyIllegalBareWord">
@@ -575,7 +575,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reallyIllegalBareWord</h4>
-<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.217">reallyIllegalBareWord</a></pre>
+<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.215">reallyIllegalBareWord</a></pre>
 </li>
 </ul>
 <a name="needsRaw">
@@ -584,7 +584,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>needsRaw</h4>
-<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.218">needsRaw</a></pre>
+<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/ObText.html#line.216">needsRaw</a></pre>
 </li>
 </ul>
 <a name="m">
@@ -593,7 +593,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>m</h4>
-<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.219">m</a></pre>
+<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.217">m</a></pre>
 </li>
 </ul>
 <a name="bare">
@@ -602,7 +602,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>bare</h4>
-<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.220">bare</a></pre>
+<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.218">bare</a></pre>
 </li>
 </ul>
 <a name="raw">
@@ -611,7 +611,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>raw</h4>
-<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.220">raw</a></pre>
+<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.218">raw</a></pre>
 </li>
 </ul>
 <a name="reallyBare">
@@ -620,7 +620,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>reallyBare</h4>
-<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.221">reallyBare</a></pre>
+<pre>protected static final&nbsp;regexodus.Matcher <a href="../src-html/squidpony/ObText.html#line.219">reallyBare</a></pre>
 </li>
 </ul>
 </li>
@@ -637,7 +637,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ObText</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.227">ObText</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.225">ObText</a>()</pre>
 </li>
 </ul>
 <a name="ObText-java.lang.CharSequence-">
@@ -646,7 +646,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ObText</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.232">ObText</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.230">ObText</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 </li>
 </ul>
 </li>
@@ -663,7 +663,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>parse</h4>
-<pre>public&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.242">parse</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.240">parse</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Parses the given text (a String or other CharSequence) and appends it into this ObText.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -679,7 +679,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.283">add</a>(int&nbsp;index,
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.281">add</a>(int&nbsp;index,
                 <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block">Inserts the given String element at the specified position in this ObText's top level.
  Shifts the element currently at that position (if any) and any subsequent
@@ -697,7 +697,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/ObText.html#line.292">add</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/ObText.html#line.290">add</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block">Appends the given String element to the end of this ObText at the top level.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -713,7 +713,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../src-html/squidpony/ObText.html#line.296">hash64</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../src-html/squidpony/ObText.html#line.294">hash64</a>()</pre>
 </li>
 </ul>
 <a name="hashCode--">
@@ -722,7 +722,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/ObText.html#line.310">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/ObText.html#line.308">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#hashCode--" title="class or interface in java.util">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../squidpony/ObText.ObTextEntry.html" title="class in squidpony">ObText.ObTextEntry</a>&gt;</code></dd>
@@ -739,7 +739,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>appendQuoted</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.335">appendQuoted</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.333">appendQuoted</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
                                 <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 </li>
 </ul>
@@ -749,7 +749,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>appendQuotedObText</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.340">appendQuotedObText</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.338">appendQuotedObText</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
                                       <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 </li>
 </ul>
@@ -759,7 +759,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>appendQuoted</h4>
-<pre>protected static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.344">appendQuoted</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+<pre>protected static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.342">appendQuoted</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
                                    <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                                    regexodus.Matcher&nbsp;bareFinder)</pre>
 </li>
@@ -770,7 +770,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.407">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.405">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#toString--" title="class or interface in java.util">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="../squidpony/ObText.ObTextEntry.html" title="class in squidpony">ObText.ObTextEntry</a>&gt;</code></dd>
@@ -783,7 +783,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>serializeToString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.411">serializeToString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.409">serializeToString</a>()</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -792,7 +792,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.425">deserializeFromString</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.423">deserializeFromString</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
 <div class="block">Deserializes an ObText that was serialized by <a href="../squidpony/ObText.html#serializeToString--"><code>serializeToString()</code></a> or <a href="../squidpony/ObText.html#toString--"><code>toString()</code></a>, and will
  ignore the prefix and suffix that toString appends for readability (these are "ObText object: [[[[ " and " ]]]]",
  for reference). This is otherwise the same as calling the constructor <a href="../squidpony/ObText.html#ObText-java.lang.CharSequence-"><code>ObText(CharSequence)</code></a>.</div>
@@ -810,9 +810,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>keyList</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.470">keyList</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.468">keyList</a>()</pre>
 <div class="block">Gets all Strings from the top level of this ObText, not including any associated values, and puts them in
- an <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util"><code>ArrayList</code></a> of String. The returned lisy will retain the same order the Strings were entered in, and
+ an <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util"><code>ArrayList</code></a> of String. The returned list will retain the same order the Strings were entered in, and
  unlike <a href="../squidpony/ObText.html#keySet--"><code>keySet()</code></a> or <a href="../squidpony/ObText.html#keyOrderedSet--"><code>keyOrderedSet()</code></a>, duplicate keys will all be preserved. Changes to the
  returned List won't be reflected in this ObText.</div>
 <dl>
@@ -827,7 +827,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>keyOrderedSet</h4>
-<pre>public&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.487">keyOrderedSet</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.485">keyOrderedSet</a>()</pre>
 <div class="block">Gets all unique Strings from the top level of this ObText, not including any associated values, and puts them in
  an <a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> of String. The returned set will retain the same order the Strings were entered in, and you
  can use OrderedSet methods like <a href="../squidpony/squidmath/OrderedSet.html#getAt-int-"><code>OrderedSet.getAt(int)</code></a> to look up keys by index. Changes to the returned
@@ -844,15 +844,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>keySet</h4>
-<pre>public&nbsp;<a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.505">keySet</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util">HashSet</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.502">keySet</a>()</pre>
 <div class="block">Gets all unique Strings from the top level of this ObText, not including any associated values, and puts them in
- an <a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath"><code>UnorderedSet</code></a> of String. Although the returned set won't be insertion-ordered or necessarily retain the
- same order the Strings were entered in, the order will be the same on different JVMs, including GWT, because the
- hashing algorithm is set to one that behaves the same across JVM versions. Changes to the returned Set won't be
+ a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashSet.html?is-external=true" title="class or interface in java.util"><code>HashSet</code></a> of String. The returned set won't be insertion-ordered or necessarily retain the same order the
+ Strings were entered in; use <a href="../squidpony/ObText.html#keyOrderedSet--"><code>keyOrderedSet()</code></a> if you want this. Changes to the returned Set won't be
  reflected in this ObText.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>all unique top-level Strings (without associated values) as an UnorderedSet of String keys</dd>
+<dd>all unique top-level Strings (without associated values) as a HashSet of String keys</dd>
 </dl>
 </li>
 </ul>
@@ -862,7 +861,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>basicOrderedMap</h4>
-<pre>public&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.522">basicOrderedMap</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.519">basicOrderedMap</a>()</pre>
 <div class="block">Gets all unique Strings from the top level of this ObText as keys in an <a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>, with the first String
  associated with each key as its value (or null if nothing is associated with a key String). The returned map will
  retain the same order the keys were entered in, and you can use OrderedMap methods like
@@ -880,15 +879,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>basicMap</h4>
-<pre>public&nbsp;<a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.541">basicMap</a>()</pre>
-<div class="block">Gets all unique Strings from the top level of this ObText as keys in an <a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath"><code>UnorderedMap</code></a>, with the first
- String associated with each key as its value (or null if nothing is associated with a key String). Although the
- returned map won't be insertion-ordered or necessarily retain the same order the Strings were entered in, the
- order will be the same on different JVMs, including GWT, because the hashing algorithm is set to one that behaves
- the same across JVM versions. Changes to the returned Map won't be reflected in this ObText.</div>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.537">basicMap</a>()</pre>
+<div class="block">Gets all unique Strings from the top level of this ObText as keys in a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util"><code>HashMap</code></a>, with the first
+ String associated with each key as its value (or null if nothing is associated with a key String). The returned
+ map won't be insertion-ordered or necessarily retain the same order the Strings were entered in; use
+ <a href="../squidpony/ObText.html#shallowOrderedMap--"><code>shallowOrderedMap()</code></a> if you want this. Changes to the returned Map won't be reflected in this ObText.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an UnorderedMap of unique String keys associated with the first associated String for each key (or null)</dd>
+<dd>a HashMap of unique String keys associated with the first associated String for each key (or null)</dd>
 </dl>
 </li>
 </ul>
@@ -898,7 +896,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>shallowOrderedMap</h4>
-<pre>public&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.561">shallowOrderedMap</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.557">shallowOrderedMap</a>()</pre>
 <div class="block">Gets all unique Strings from the top level of this ObText as keys in an <a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>, with any Strings
  associated with those keys as their values (in a possibly-empty ArrayList of String for each value).
  The returned map will retain the same order the keys were entered in, and you can use OrderedMap methods like
@@ -916,15 +914,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>shallowMap</h4>
-<pre>public&nbsp;<a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.580">shallowMap</a>()</pre>
-<div class="block">Gets all unique Strings from the top level of this ObText as keys in an <a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath"><code>UnorderedMap</code></a>, with any Strings
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;<a href="../src-html/squidpony/ObText.html#line.575">shallowMap</a>()</pre>
+<div class="block">Gets all unique Strings from the top level of this ObText as keys in a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util"><code>HashMap</code></a>, with any Strings
  associated with those keys as their values (in a possibly-empty ArrayList of String for each value).
- Although the returned map won't be insertion-ordered or necessarily retain the same order the Strings were
- entered in, the order will be the same on different JVMs, including GWT, because the hashing algorithm is set to
- one that behaves the same across JVM versions. Changes to the returned Map won't be reflected in this ObText.</div>
+ The returned map won't be insertion-ordered or necessarily retain the same order the Strings were entered in; use
+ <a href="../squidpony/ObText.html#basicOrderedMap--"><code>basicOrderedMap()</code></a> if you want this. Changes to the returned Map won't be reflected in this ObText.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an UnorderedMap of unique String keys associated with ArrayList values containing associated Strings</dd>
+<dd>a HashMap of unique String keys associated with ArrayList values containing associated Strings</dd>
 </dl>
 </li>
 </ul>
@@ -934,7 +931,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>makeMatcher</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.604">makeMatcher</a>()</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.599">makeMatcher</a>()</pre>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
  This returns a <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony"><code>ObText.ContentMatcher</code></a> object that you must call setTarget on before using it.
  The argument(s) to setTarget should be the text that might contain quotes, heredoc-style quotes, or just bare
@@ -956,7 +953,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>makeMatcher</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.621">makeMatcher</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.616">makeMatcher</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
  This returns a <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony"><code>ObText.ContentMatcher</code></a> object that is already configured to read from <code>text</code>.
  The <code>text</code> should contain Strings that may be surrounded by quotes, heredoc-style quotes, or just bare
@@ -980,7 +977,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeMatcherNoComments</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.638">makeMatcherNoComments</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.633">makeMatcherNoComments</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries, but no
  comments (which allows some additional characters to be used in bare words, like '#').
  This returns a <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony"><code>ObText.ContentMatcher</code></a> object that is already configured to read from <code>text</code>.

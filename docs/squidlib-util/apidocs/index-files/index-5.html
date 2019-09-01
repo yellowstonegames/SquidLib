@@ -631,15 +631,14 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determine-int-int-">determine(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PulleyRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PulleyRNG.html" title="class in squidpony.squidmath">PulleyRNG</a></dt>
+<dd>
+<div class="block">Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determine-long-long-">determine(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAlt32RNG.html#determine-int-">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAlt32RNG.html" title="class in squidpony.squidmath">ThrustAlt32RNG</a></dt>
-<dd>
-<div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
- number.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
@@ -719,15 +718,15 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PulleyRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PulleyRNG.html" title="class in squidpony.squidmath">PulleyRNG</a></dt>
+<dd>
+<div class="block">Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)
+ and bound (exclusive); state is expected to change between calls to this.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineBounded-long-long-int-">determineBounded(long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAlt32RNG.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAlt32RNG.html" title="class in squidpony.squidmath">ThrustAlt32RNG</a></dt>
-<dd>
-<div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
- (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive).</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
@@ -741,6 +740,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded-long-long-long-long-int-">determineBounded(long, long, long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineBoundedShort-int-int-">determineBoundedShort(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
+<dd>
+<div class="block">Given an int state that should usually change each time this is called, and a bound that limits the result to
+ some (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineByte-byte-">determineByte(byte)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>
 <div class="block">Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was <code>state</code>.</div>
@@ -761,6 +765,11 @@
  will return the same float.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LinnormRNG.html#determineDouble-long-">determineDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath">LinnormRNG</a></dt>
+<dd>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PulleyRNG.html#determineDouble-long-">determineDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PulleyRNG.html" title="class in squidpony.squidmath">PulleyRNG</a></dt>
 <dd>
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
  will return the same float.</div>
@@ -794,19 +803,24 @@
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineFloat-long-">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineFloat-long-long-">determineFloat(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAlt32RNG.html#determineFloat-int-">determineFloat(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAlt32RNG.html" title="class in squidpony.squidmath">ThrustAlt32RNG</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PulleyRNG.html#determineFloat-long-">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PulleyRNG.html" title="class in squidpony.squidmath">PulleyRNG</a></dt>
 <dd>
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineFloat-long-">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineFloat-long-long-">determineFloat(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineFloat-long-">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineFloatFromInt-int-">determineFloatFromInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
+<dd>
+<div class="block">Returns a random float that is deterministic based on an int state; if state is the same on two calls to this,
+ this will return the same float.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determineInt-int-">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
 <dd>
@@ -816,6 +830,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineInt-int-">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>
 <div class="block">Gets the next number that a different kind of 32-bit LFSR would produce if its state was <code>state</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineInt-int-">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
+<dd>
+<div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
+ number.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineIntSymmetrical-int-">determineIntSymmetrical(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>
@@ -1059,11 +1078,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#distanceSq-squidpony.squidmath.CoordDouble-">distanceSq(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#distort-int:A:A-int-int-squidpony.squidmath.Noise.Noise2D-int-">distort(int[][], int, int, Noise.Noise2D, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#distort-int:A:A-int-int-squidpony.squidmath.Noise.Noise2D-long-">distort(int[][], int, int, Noise.Noise2D, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
 <dd>
 <div class="block">Alters the given offset information (as a jagged 2D int array) with the given Noise2D instance and seed.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#distort-int:A:A-int-int-squidpony.squidmath.Noise.Noise3D-double-int-">distort(int[][], int, int, Noise.Noise3D, double, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#distort-int:A:A-int-int-squidpony.squidmath.Noise.Noise3D-double-long-">distort(int[][], int, int, Noise.Noise3D, double, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
 <dd>
 <div class="block">Alters the given offset information (as a jagged 2D int array) with the given Noise3D instance and seed, allowing
  a z position for the 3D component so this can change over time with changing z.</div>

@@ -1162,7 +1162,7 @@ public class HashQualityTest {
 //                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
 //                    }
                         for (int y = 1; y <= SIZE; y++) {
-//                        int x = (ThrustAlt32RNG.determine(y));
+//                        int x = (ThrustAltRNG.determineInt(y));
 //                        int x = xs3(y*0x1FFFFFFF);
                             int x = Integer.rotateLeft(y * mul, r);
 //                        x = x << 16 | x >>> 16;

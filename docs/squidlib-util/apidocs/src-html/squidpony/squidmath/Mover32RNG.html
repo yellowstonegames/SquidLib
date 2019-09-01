@@ -19,504 +19,506 @@
 <span class="sourceLineNo">011</span> * This seems to do well in PractRand testing (32 TB passed), but this is not a generator Overton tested. "Chaotic"<a name="line.11"></a>
 <span class="sourceLineNo">012</span> * generators like this one tend to score well in PractRand, but it isn't clear if they will fail other tests (in<a name="line.12"></a>
 <span class="sourceLineNo">013</span> * particular, they can't generate all possible long values, and also can't generate 0 or possibly some other ints). As<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * for desktop/server speed, this is faster than {@link Lathe32RNG} (which is also high-quality) and is also faster than<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * {@link Starfish32RNG} (which is very fast but has quality issues) and {@link ThrustAlt32RNG} (which has a very small<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * period and probably isn't very useful). However, this is slower than Lathe32RNG when using GWT and viewing in<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * Firefox; for some reason {@link Starfish32RNG} optimizes well on Firefox and less well on Chrome, but Mover does very<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * well in older Chrome (faster than Lathe) and rather poorly on Firefox. It doesn't do amazingly well in current Chrome<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * versions, however, and Lathe beats it most of the time there. On 64-bit desktop or server Java, you may want to<a name="line.19"></a>
-<span class="sourceLineNo">020</span> * prefer {@link Mover64RNG}, which is the same algorithm using larger words and constants. While each of the two parts<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * of a Mover32RNG can have their full period evaluated, making the total period possible to calculate, the same cannot<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * be said for Mover64RNG (its period is high enough for most usage, but the actual total is still unknown).<a name="line.22"></a>
-<span class="sourceLineNo">023</span> * &lt;br&gt;<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * Its period is 0xFFF1F6F18B2A1330 for the largest cycle, which it always initializes into if {@link #setState(int)} is<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * used. setState() only allows 2 to the 32 starting states, but less than 2 to the 64 states are in the largest cycle,<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * so using a long or two ints to set the state seems ill-advised. The generator has two similar parts, each updated<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * without needing to read from the other part. Each is a 32-bit CMR generator, which multiplies a state by a constant,<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * rotates by another constant, and stores that as the next state. The particular constants used here were found by<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * randomly picking 16-bit odd numbers as multipliers, checking the period for every non-zero rotation, and reporting<a name="line.29"></a>
-<span class="sourceLineNo">030</span> * the multiplier and rotation amount when a period was found that was greater than 0xFF000000. Better multipliers are<a name="line.30"></a>
-<span class="sourceLineNo">031</span> * almost guaranteed to exist, but finding them would be a challenge.<a name="line.31"></a>
-<span class="sourceLineNo">032</span> * &lt;br&gt;<a name="line.32"></a>
-<span class="sourceLineNo">033</span> * This is a RandomnessSource but not a StatefulRandomness because it needs to take care and avoid seeds that would put<a name="line.33"></a>
-<span class="sourceLineNo">034</span> * it in a short-period subcycle. It uses two generators with different cycle lengths, and skips at most 65536 times<a name="line.34"></a>
-<span class="sourceLineNo">035</span> * into each generator's cycle independently when seeding. It uses constants to store 128 known midpoints for each<a name="line.35"></a>
-<span class="sourceLineNo">036</span> * generator, which ensures it calculates an advance for each generator at most 511 times. <a name="line.36"></a>
-<span class="sourceLineNo">037</span> * &lt;br&gt;<a name="line.37"></a>
-<span class="sourceLineNo">038</span> * The name comes from M. Overton, who discovered this category of subcycle generators, and also how this generator can<a name="line.38"></a>
-<span class="sourceLineNo">039</span> * really move when it comes to speed.<a name="line.39"></a>
-<span class="sourceLineNo">040</span> * &lt;br&gt;<a name="line.40"></a>
-<span class="sourceLineNo">041</span> * Created by Tommy Ettinger on 8/6/2018.<a name="line.41"></a>
-<span class="sourceLineNo">042</span> * @author Mark Overton<a name="line.42"></a>
-<span class="sourceLineNo">043</span> * @author Tommy Ettinger<a name="line.43"></a>
-<span class="sourceLineNo">044</span> */<a name="line.44"></a>
-<span class="sourceLineNo">045</span>public final class Mover32RNG implements RandomnessSource {<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    private int stateA, stateB;<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    public Mover32RNG()<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        setState((int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    public Mover32RNG(final int state)<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>        setState(state);<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    }<a name="line.54"></a>
-<span class="sourceLineNo">055</span><a name="line.55"></a>
-<span class="sourceLineNo">056</span>    /**<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     * Not advised for external use; prefer {@link #Mover32RNG(int)} because it guarantees a good subcycle. This<a name="line.57"></a>
-<span class="sourceLineNo">058</span>     * constructor allows all subcycles to be produced, including ones with a shorter period.<a name="line.58"></a>
-<span class="sourceLineNo">059</span>     * @param stateA<a name="line.59"></a>
-<span class="sourceLineNo">060</span>     * @param stateB<a name="line.60"></a>
-<span class="sourceLineNo">061</span>     */<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    public Mover32RNG(final int stateA, final int stateB)<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    {<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        this.stateA = stateA == 0 ? 1 : stateA;<a name="line.64"></a>
-<span class="sourceLineNo">065</span>        this.stateB = stateB == 0 ? 1 : stateB;<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
-<span class="sourceLineNo">067</span><a name="line.67"></a>
-<span class="sourceLineNo">068</span>    private static final int[] startingA = {<a name="line.68"></a>
-<span class="sourceLineNo">069</span>            0x00000001, 0xCB2DA1A7, 0x215A5ADF, 0x2688266B, 0xEA31ECEE, 0x3F02F6A8, 0xB0833422, 0xC791ACA6,<a name="line.69"></a>
-<span class="sourceLineNo">070</span>            0x976236C8, 0xF57961C0, 0x16EBE830, 0xCCCC2F10, 0x165D9801, 0x15E02FEA, 0xA302CC65, 0xAF68AE37,<a name="line.70"></a>
-<span class="sourceLineNo">071</span>            0x4997CCA3, 0xF331F604, 0xF1DE5DA7, 0x07F21BA7, 0xD1752EC7, 0x308B16F2, 0x1B92D899, 0xF1A38AC8,<a name="line.71"></a>
-<span class="sourceLineNo">072</span>            0x58F317B2, 0x1CC8EC79, 0x62588F4B, 0x975BF8FE, 0xE589C2D0, 0xB087C03D, 0x600F5DD0, 0xA32BD629,<a name="line.72"></a>
-<span class="sourceLineNo">073</span>            0x3B52D26D, 0x0C7C18FD, 0xEB037A63, 0xE6F8BC93, 0x2CD250CF, 0x84327882, 0xA708FC6E, 0x5873EF12,<a name="line.73"></a>
-<span class="sourceLineNo">074</span>            0x72FD78CF, 0xFFE73771, 0x18817285, 0x8EB3BC50, 0xE68597E0, 0xDF719E77, 0x35FE32C8, 0xF60532A1,<a name="line.74"></a>
-<span class="sourceLineNo">075</span>            0xE93A1484, 0x697DF36B, 0xDFD41306, 0x37E0FADD, 0x6883EB39, 0xAF9CF955, 0xE11EB329, 0xDA951CC2,<a name="line.75"></a>
-<span class="sourceLineNo">076</span>            0x325ECD67, 0x1DD8AC79, 0x7632669F, 0x0949BCB0, 0x965B0557, 0xB72DC0BC, 0x84448A7C, 0x6AC9B9CF,<a name="line.76"></a>
-<span class="sourceLineNo">077</span>            0x92B7742A, 0xCFB27744, 0xFF154B26, 0xFD11E5F7, 0x5B6DE8D4, 0x59727211, 0x0A36FF7F, 0x56657899,<a name="line.77"></a>
-<span class="sourceLineNo">078</span>            0xF9848758, 0x59415D9E, 0xE70E6901, 0x90858D00, 0x10B73995, 0x324FC7AD, 0xC62F801D, 0x4BBDA0E8,<a name="line.78"></a>
-<span class="sourceLineNo">079</span>            0x70C8FDD5, 0xCC4376F1, 0x489AD7B7, 0xF4FB2500, 0x2279E051, 0x7840BF9E, 0x876AABF9, 0xF374F7BD,<a name="line.79"></a>
-<span class="sourceLineNo">080</span>            0x6074B429, 0xC2EE6430, 0x238172DA, 0xFE3D050E, 0x5EF2F6B4, 0xF6359946, 0x127AAD89, 0xECA6FA56,<a name="line.80"></a>
-<span class="sourceLineNo">081</span>            0x678B27CE, 0xDCD03A3C, 0xA45371BB, 0x5F2F422C, 0xE26B613C, 0x70DD9AF4, 0x1B0787BB, 0x0B8D2553,<a name="line.81"></a>
-<span class="sourceLineNo">082</span>            0x3A430C3F, 0xAFF29AE2, 0x9DFAEB51, 0x1DE0F40E, 0x0467D74A, 0x85949411, 0xF8BC0358, 0x558BA744,<a name="line.82"></a>
-<span class="sourceLineNo">083</span>            0x41A5B43A, 0x6B7E1C89, 0x9BF095BD, 0x5E2473CC, 0x4DFBF45B, 0xFB3510DC, 0xB7EC5786, 0xA99D6129,<a name="line.83"></a>
-<span class="sourceLineNo">084</span>            0x120988F6, 0x796A7DE7, 0x9DEFD945, 0x0D2B25CE, 0xB7C1107E, 0x72E29D75, 0x85E01D79, 0x69AB992F,<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    }, startingB = {<a name="line.85"></a>
-<span class="sourceLineNo">086</span>            0x00000001, 0xAB7EE445, 0x6FB35C9C, 0x459AB7A2, 0xEA61D065, 0x306F5E5F, 0xCE50A64A, 0x6D76B642,<a name="line.86"></a>
-<span class="sourceLineNo">087</span>            0x11F3C6D4, 0xB3FF1D66, 0x657E6790, 0x4C62472D, 0xBEABAB16, 0xFD455176, 0xDCB98EDB, 0x1FC27360,<a name="line.87"></a>
-<span class="sourceLineNo">088</span>            0x80C1241C, 0xC0C5BCC0, 0x6A67518B, 0xF2D69A39, 0xFA7D6C16, 0xE906A517, 0x899FFA7B, 0x2E42A99D,<a name="line.88"></a>
-<span class="sourceLineNo">089</span>            0xBAF5B6E8, 0x3BBDC45A, 0x2497A707, 0xEA2DB138, 0x7D4ABF97, 0x552F5D4E, 0x15FE4BBD, 0xBC51DF5A,<a name="line.89"></a>
-<span class="sourceLineNo">090</span>            0x465BDC95, 0x736A018F, 0x8A72CB63, 0x103119BE, 0x40403117, 0xA295957B, 0xCDDA9C19, 0xF0551CC6,<a name="line.90"></a>
-<span class="sourceLineNo">091</span>            0x77CBAB76, 0xA054FD6A, 0x8974C93F, 0x8E314DC1, 0x42BC030E, 0x7F090540, 0x177998EA, 0x20457F09,<a name="line.91"></a>
-<span class="sourceLineNo">092</span>            0xC13609D7, 0xA2683753, 0xE9F84638, 0x1BE07B83, 0x5DB36480, 0x39AE5B3A, 0xE044E164, 0x6E6B6191,<a name="line.92"></a>
-<span class="sourceLineNo">093</span>            0x6036E5C8, 0x00703FE1, 0x53935ED8, 0x6B4443F5, 0x8FB91605, 0x146478C9, 0x2D0429BB, 0x86E8F88A,<a name="line.93"></a>
-<span class="sourceLineNo">094</span>            0xD8DFFDB7, 0x77223F7D, 0x2B065674, 0xD80D2DD6, 0x0DFE5CEB, 0x44A495A5, 0x758EF0A9, 0x5FB55BA5,<a name="line.94"></a>
-<span class="sourceLineNo">095</span>            0x8935A9B1, 0x84189069, 0xAA2194BC, 0x5FB95103, 0x6B60B887, 0xC63A769E, 0xA74BE357, 0x9F71B1F8,<a name="line.95"></a>
-<span class="sourceLineNo">096</span>            0x3320B09E, 0xD369B3FC, 0xBCDB4B4E, 0xDC4DBCC9, 0x01F67CD2, 0xB3F6AA2B, 0x082CA2B3, 0xA54F168F,<a name="line.96"></a>
-<span class="sourceLineNo">097</span>            0x0A9F82C9, 0x77DC3F93, 0x18D32D96, 0x1FC3FCE5, 0x97542B7A, 0x88CA9F81, 0x75370CE4, 0x8C2749C3,<a name="line.97"></a>
-<span class="sourceLineNo">098</span>            0x94B63AE4, 0xC55E3BB7, 0x176BA775, 0x8C2BFEFC, 0x8C457557, 0xD8BFFD54, 0xB3D322DC, 0x072D766C,<a name="line.98"></a>
-<span class="sourceLineNo">099</span>            0x40912BF4, 0x99CA7F36, 0xBC78BE45, 0x22F95B6B, 0xB37B05C9, 0x23493DB3, 0xCFBDC9C3, 0xB0379084,<a name="line.99"></a>
-<span class="sourceLineNo">100</span>            0x2A2BFA20, 0x9A9DA93D, 0xCDE62486, 0x079CF8E6, 0x5B45CF64, 0xA19945A8, 0x196C1AA8, 0x9B19C771,<a name="line.100"></a>
-<span class="sourceLineNo">101</span>            0x702CC28B, 0xFF4C5B02, 0x2FDD78D2, 0x71FFBD4E, 0xDF4C60A4, 0x143FAB0B, 0xAD9C8EB0, 0x6F35837D,<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    };<a name="line.102"></a>
-<span class="sourceLineNo">103</span><a name="line.103"></a>
-<span class="sourceLineNo">104</span>    public final void setState(final int s) {<a name="line.104"></a>
-<span class="sourceLineNo">105</span>        stateA = startingA[s &gt;&gt;&gt; 9 &amp; 0x7F];<a name="line.105"></a>
-<span class="sourceLineNo">106</span>        for (int i = s &amp; 0x1FF; i &gt; 0; i--) {<a name="line.106"></a>
-<span class="sourceLineNo">107</span>            stateA *= 0x89A7;<a name="line.107"></a>
-<span class="sourceLineNo">108</span>            stateA = (stateA &lt;&lt; 13 | stateA &gt;&gt;&gt; 19);<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        }<a name="line.109"></a>
-<span class="sourceLineNo">110</span>        stateB = startingB[s &gt;&gt;&gt; 25];<a name="line.110"></a>
-<span class="sourceLineNo">111</span>        for (int i = s &gt;&gt;&gt; 16 &amp; 0x1FF; i &gt; 0; i--) {<a name="line.111"></a>
-<span class="sourceLineNo">112</span>            stateB *= 0xBCFD;<a name="line.112"></a>
-<span class="sourceLineNo">113</span>            stateB = (stateB &lt;&lt; 17 | stateB &gt;&gt;&gt; 15);<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        }<a name="line.114"></a>
-<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>    public final int nextInt()<a name="line.117"></a>
-<span class="sourceLineNo">118</span>    {<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        int y = stateA * 0x89A7;<a name="line.119"></a>
-<span class="sourceLineNo">120</span>        stateA = (y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19));<a name="line.120"></a>
-<span class="sourceLineNo">121</span>        final int x = stateB * 0xBCFD;<a name="line.121"></a>
-<span class="sourceLineNo">122</span>        return (y ^ (stateB = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15)));<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
-<span class="sourceLineNo">124</span>    @Override<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    public final int next(final int bits)<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    {<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        int y = stateA * 0x89A7;<a name="line.127"></a>
-<span class="sourceLineNo">128</span>        stateA = (y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19));<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        final int x = stateB * 0xBCFD;<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        return (y ^ (stateB = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15))) &gt;&gt;&gt; (32 - bits);<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    }<a name="line.131"></a>
-<span class="sourceLineNo">132</span>    @Override<a name="line.132"></a>
-<span class="sourceLineNo">133</span>    public final long nextLong()<a name="line.133"></a>
-<span class="sourceLineNo">134</span>    {<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        int y = stateA * 0x89A7;<a name="line.135"></a>
-<span class="sourceLineNo">136</span>        y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19);<a name="line.136"></a>
-<span class="sourceLineNo">137</span>        int x = stateB * 0xBCFD;<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        final long t = (y ^ (x = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15))) &amp; 0xFFFFFFFFL;<a name="line.138"></a>
-<span class="sourceLineNo">139</span>        y *= 0x89A7;<a name="line.139"></a>
-<span class="sourceLineNo">140</span>        stateA = (y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19));<a name="line.140"></a>
-<span class="sourceLineNo">141</span>        x *= 0xBCFD;<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        return t &lt;&lt; 32 | ((y ^ (stateB = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15))) &amp; 0xFFFFFFFFL);<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
-<span class="sourceLineNo">145</span>    /**<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * Produces a copy of this Mover32RNG that, if next() and/or nextLong() are called on this object and the<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.148"></a>
-<span class="sourceLineNo">149</span>     *<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     * @return a copy of this Mover32RNG<a name="line.150"></a>
-<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    @Override<a name="line.152"></a>
-<span class="sourceLineNo">153</span>    public Mover32RNG copy() {<a name="line.153"></a>
-<span class="sourceLineNo">154</span>        return new Mover32RNG(stateA, stateB);<a name="line.154"></a>
-<span class="sourceLineNo">155</span>    }<a name="line.155"></a>
-<span class="sourceLineNo">156</span><a name="line.156"></a>
-<span class="sourceLineNo">157</span>    /**<a name="line.157"></a>
-<span class="sourceLineNo">158</span>     * Gets the "A" part of the state; if this generator was set with {@link #Mover32RNG()}, {@link #Mover32RNG(int)},<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     * or {@link #setState(int)}, then this will be on the optimal subcycle, otherwise it may not be. <a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * @return the "A" part of the state, an int<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     */<a name="line.161"></a>
-<span class="sourceLineNo">162</span>    public int getStateA()<a name="line.162"></a>
-<span class="sourceLineNo">163</span>    {<a name="line.163"></a>
-<span class="sourceLineNo">164</span>        return stateA;<a name="line.164"></a>
-<span class="sourceLineNo">165</span>    }<a name="line.165"></a>
-<span class="sourceLineNo">166</span><a name="line.166"></a>
-<span class="sourceLineNo">167</span>    /**<a name="line.167"></a>
-<span class="sourceLineNo">168</span>     * Gets the "B" part of the state; if this generator was set with {@link #Mover32RNG()}, {@link #Mover32RNG(int)},<a name="line.168"></a>
-<span class="sourceLineNo">169</span>     * or {@link #setState(int)}, then this will be on the optimal subcycle, otherwise it may not be. <a name="line.169"></a>
-<span class="sourceLineNo">170</span>     * @return the "B" part of the state, an int<a name="line.170"></a>
-<span class="sourceLineNo">171</span>     */<a name="line.171"></a>
-<span class="sourceLineNo">172</span>    public int getStateB()<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    {<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        return stateB;<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    }<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    /**<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     * Sets the "A" part of the state to any int, which may put the generator in a low-period subcycle.<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * Use {@link #setState(int)} to guarantee a good subcycle.<a name="line.178"></a>
-<span class="sourceLineNo">179</span>     * @param stateA any int<a name="line.179"></a>
-<span class="sourceLineNo">180</span>     */<a name="line.180"></a>
-<span class="sourceLineNo">181</span>    public void setStateA(final int stateA)<a name="line.181"></a>
-<span class="sourceLineNo">182</span>    {<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        this.stateA = stateA;<a name="line.183"></a>
-<span class="sourceLineNo">184</span>    }<a name="line.184"></a>
-<span class="sourceLineNo">185</span><a name="line.185"></a>
-<span class="sourceLineNo">186</span>    /**<a name="line.186"></a>
-<span class="sourceLineNo">187</span>     * Sets the "B" part of the state to any int, which may put the generator in a low-period subcycle.<a name="line.187"></a>
-<span class="sourceLineNo">188</span>     * Use {@link #setState(int)} to guarantee a good subcycle.<a name="line.188"></a>
-<span class="sourceLineNo">189</span>     * @param stateB any int<a name="line.189"></a>
-<span class="sourceLineNo">190</span>     */<a name="line.190"></a>
-<span class="sourceLineNo">191</span>    public void setStateB(final int stateB)<a name="line.191"></a>
-<span class="sourceLineNo">192</span>    {<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        this.stateB = stateB;<a name="line.193"></a>
-<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
-<span class="sourceLineNo">195</span>    <a name="line.195"></a>
-<span class="sourceLineNo">196</span>    @Override<a name="line.196"></a>
-<span class="sourceLineNo">197</span>    public String toString() {<a name="line.197"></a>
-<span class="sourceLineNo">198</span>        return "Mover32RNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);<a name="line.198"></a>
-<span class="sourceLineNo">199</span>    }<a name="line.199"></a>
-<span class="sourceLineNo">200</span><a name="line.200"></a>
-<span class="sourceLineNo">201</span>    @Override<a name="line.201"></a>
-<span class="sourceLineNo">202</span>    public boolean equals(Object o) {<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        if (this == o) return true;<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.204"></a>
-<span class="sourceLineNo">205</span><a name="line.205"></a>
-<span class="sourceLineNo">206</span>        Mover32RNG mover32RNG = (Mover32RNG) o;<a name="line.206"></a>
+<span class="sourceLineNo">014</span> * for desktop/server speed, this is faster than {@link Starfish32RNG} (which is also high-quality) and is also faster<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * than {@link Lathe32RNG} (which is very fast but has quality issues). However, this is slower than Lathe32RNG when<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * using GWT and viewing in Firefox; for some reason {@link Starfish32RNG} optimizes well on Firefox and less well on<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Chrome, but Mover does ver well in older Chrome (faster than Lathe) and rather poorly on Firefox. It doesn't do<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * amazingly well in current Chrome versions, however, and Lathe beats it most of the time there. On 64-bit desktop or<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * server Java, you may want to prefer {@link Mover64RNG}, which is the same algorithm using larger words and constants,<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * or {@link MiniMover64RNG}, which is even faster but probably has a shorter period than this generator (millions of<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * seeds have been checked to ensure a minimum period of 2 to the 20 for it, though). While each of the two parts<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * of a Mover32RNG can have their full period evaluated, making the total period possible to calculate, the same cannot<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * be said for Mover64RNG or MiniMover64RNG (their maximum periods are high enough for most usage, but the actual totals<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * are still unknown).<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * Its period is 0xFFF1F6F18B2A1330 for the largest cycle, which it always initializes into if {@link #setState(int)} is<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * used. setState() only allows 2 to the 32 starting states, but less than 2 to the 64 states are in the largest cycle,<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * so using a long or two ints to set the state seems ill-advised. The generator has two similar parts, each updated<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * without needing to read from the other part. Each is a 32-bit CMR generator, which multiplies a state by a constant,<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * rotates by another constant, and stores that as the next state. The particular constants used here were found by<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * randomly picking 16-bit odd numbers as multipliers, checking the period for every non-zero rotation, and reporting<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * the multiplier and rotation amount when a period was found that was greater than 0xFF000000. Better multipliers are<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * almost guaranteed to exist, but finding them would be a challenge.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;br&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * This is a RandomnessSource but not a StatefulRandomness because it needs to take care and avoid seeds that would put<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * it in a short-period subcycle. It uses two generators with different cycle lengths, and skips at most 65536 times<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * into each generator's cycle independently when seeding. It uses constants to store 128 known midpoints for each<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * generator, which ensures it calculates an advance for each generator at most 511 times. <a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;br&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * The name comes from M. Overton, who discovered this category of subcycle generators, and also how this generator can<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * really move when it comes to speed.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;br&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * Created by Tommy Ettinger on 8/6/2018.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * @author Mark Overton<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * @author Tommy Ettinger<a name="line.45"></a>
+<span class="sourceLineNo">046</span> */<a name="line.46"></a>
+<span class="sourceLineNo">047</span>public final class Mover32RNG implements RandomnessSource {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    private int stateA, stateB;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    public Mover32RNG()<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    {<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        setState((int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    }<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    public Mover32RNG(final int state)<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        setState(state);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>    /**<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * Not advised for external use; prefer {@link #Mover32RNG(int)} because it guarantees a good subcycle. This<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * constructor allows all subcycles to be produced, including ones with a shorter period.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * @param stateA<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * @param stateB<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    public Mover32RNG(final int stateA, final int stateB)<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        this.stateA = stateA == 0 ? 1 : stateA;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        this.stateB = stateB == 0 ? 1 : stateB;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    }<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>    private static final int[] startingA = {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            0x00000001, 0xCB2DA1A7, 0x215A5ADF, 0x2688266B, 0xEA31ECEE, 0x3F02F6A8, 0xB0833422, 0xC791ACA6,<a name="line.71"></a>
+<span class="sourceLineNo">072</span>            0x976236C8, 0xF57961C0, 0x16EBE830, 0xCCCC2F10, 0x165D9801, 0x15E02FEA, 0xA302CC65, 0xAF68AE37,<a name="line.72"></a>
+<span class="sourceLineNo">073</span>            0x4997CCA3, 0xF331F604, 0xF1DE5DA7, 0x07F21BA7, 0xD1752EC7, 0x308B16F2, 0x1B92D899, 0xF1A38AC8,<a name="line.73"></a>
+<span class="sourceLineNo">074</span>            0x58F317B2, 0x1CC8EC79, 0x62588F4B, 0x975BF8FE, 0xE589C2D0, 0xB087C03D, 0x600F5DD0, 0xA32BD629,<a name="line.74"></a>
+<span class="sourceLineNo">075</span>            0x3B52D26D, 0x0C7C18FD, 0xEB037A63, 0xE6F8BC93, 0x2CD250CF, 0x84327882, 0xA708FC6E, 0x5873EF12,<a name="line.75"></a>
+<span class="sourceLineNo">076</span>            0x72FD78CF, 0xFFE73771, 0x18817285, 0x8EB3BC50, 0xE68597E0, 0xDF719E77, 0x35FE32C8, 0xF60532A1,<a name="line.76"></a>
+<span class="sourceLineNo">077</span>            0xE93A1484, 0x697DF36B, 0xDFD41306, 0x37E0FADD, 0x6883EB39, 0xAF9CF955, 0xE11EB329, 0xDA951CC2,<a name="line.77"></a>
+<span class="sourceLineNo">078</span>            0x325ECD67, 0x1DD8AC79, 0x7632669F, 0x0949BCB0, 0x965B0557, 0xB72DC0BC, 0x84448A7C, 0x6AC9B9CF,<a name="line.78"></a>
+<span class="sourceLineNo">079</span>            0x92B7742A, 0xCFB27744, 0xFF154B26, 0xFD11E5F7, 0x5B6DE8D4, 0x59727211, 0x0A36FF7F, 0x56657899,<a name="line.79"></a>
+<span class="sourceLineNo">080</span>            0xF9848758, 0x59415D9E, 0xE70E6901, 0x90858D00, 0x10B73995, 0x324FC7AD, 0xC62F801D, 0x4BBDA0E8,<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            0x70C8FDD5, 0xCC4376F1, 0x489AD7B7, 0xF4FB2500, 0x2279E051, 0x7840BF9E, 0x876AABF9, 0xF374F7BD,<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            0x6074B429, 0xC2EE6430, 0x238172DA, 0xFE3D050E, 0x5EF2F6B4, 0xF6359946, 0x127AAD89, 0xECA6FA56,<a name="line.82"></a>
+<span class="sourceLineNo">083</span>            0x678B27CE, 0xDCD03A3C, 0xA45371BB, 0x5F2F422C, 0xE26B613C, 0x70DD9AF4, 0x1B0787BB, 0x0B8D2553,<a name="line.83"></a>
+<span class="sourceLineNo">084</span>            0x3A430C3F, 0xAFF29AE2, 0x9DFAEB51, 0x1DE0F40E, 0x0467D74A, 0x85949411, 0xF8BC0358, 0x558BA744,<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            0x41A5B43A, 0x6B7E1C89, 0x9BF095BD, 0x5E2473CC, 0x4DFBF45B, 0xFB3510DC, 0xB7EC5786, 0xA99D6129,<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            0x120988F6, 0x796A7DE7, 0x9DEFD945, 0x0D2B25CE, 0xB7C1107E, 0x72E29D75, 0x85E01D79, 0x69AB992F,<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }, startingB = {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>            0x00000001, 0xAB7EE445, 0x6FB35C9C, 0x459AB7A2, 0xEA61D065, 0x306F5E5F, 0xCE50A64A, 0x6D76B642,<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            0x11F3C6D4, 0xB3FF1D66, 0x657E6790, 0x4C62472D, 0xBEABAB16, 0xFD455176, 0xDCB98EDB, 0x1FC27360,<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            0x80C1241C, 0xC0C5BCC0, 0x6A67518B, 0xF2D69A39, 0xFA7D6C16, 0xE906A517, 0x899FFA7B, 0x2E42A99D,<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            0xBAF5B6E8, 0x3BBDC45A, 0x2497A707, 0xEA2DB138, 0x7D4ABF97, 0x552F5D4E, 0x15FE4BBD, 0xBC51DF5A,<a name="line.91"></a>
+<span class="sourceLineNo">092</span>            0x465BDC95, 0x736A018F, 0x8A72CB63, 0x103119BE, 0x40403117, 0xA295957B, 0xCDDA9C19, 0xF0551CC6,<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            0x77CBAB76, 0xA054FD6A, 0x8974C93F, 0x8E314DC1, 0x42BC030E, 0x7F090540, 0x177998EA, 0x20457F09,<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            0xC13609D7, 0xA2683753, 0xE9F84638, 0x1BE07B83, 0x5DB36480, 0x39AE5B3A, 0xE044E164, 0x6E6B6191,<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            0x6036E5C8, 0x00703FE1, 0x53935ED8, 0x6B4443F5, 0x8FB91605, 0x146478C9, 0x2D0429BB, 0x86E8F88A,<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            0xD8DFFDB7, 0x77223F7D, 0x2B065674, 0xD80D2DD6, 0x0DFE5CEB, 0x44A495A5, 0x758EF0A9, 0x5FB55BA5,<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            0x8935A9B1, 0x84189069, 0xAA2194BC, 0x5FB95103, 0x6B60B887, 0xC63A769E, 0xA74BE357, 0x9F71B1F8,<a name="line.97"></a>
+<span class="sourceLineNo">098</span>            0x3320B09E, 0xD369B3FC, 0xBCDB4B4E, 0xDC4DBCC9, 0x01F67CD2, 0xB3F6AA2B, 0x082CA2B3, 0xA54F168F,<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            0x0A9F82C9, 0x77DC3F93, 0x18D32D96, 0x1FC3FCE5, 0x97542B7A, 0x88CA9F81, 0x75370CE4, 0x8C2749C3,<a name="line.99"></a>
+<span class="sourceLineNo">100</span>            0x94B63AE4, 0xC55E3BB7, 0x176BA775, 0x8C2BFEFC, 0x8C457557, 0xD8BFFD54, 0xB3D322DC, 0x072D766C,<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            0x40912BF4, 0x99CA7F36, 0xBC78BE45, 0x22F95B6B, 0xB37B05C9, 0x23493DB3, 0xCFBDC9C3, 0xB0379084,<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            0x2A2BFA20, 0x9A9DA93D, 0xCDE62486, 0x079CF8E6, 0x5B45CF64, 0xA19945A8, 0x196C1AA8, 0x9B19C771,<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            0x702CC28B, 0xFF4C5B02, 0x2FDD78D2, 0x71FFBD4E, 0xDF4C60A4, 0x143FAB0B, 0xAD9C8EB0, 0x6F35837D,<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    };<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>    public final void setState(final int s) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        stateA = startingA[s &gt;&gt;&gt; 9 &amp; 0x7F];<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        for (int i = s &amp; 0x1FF; i &gt; 0; i--) {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            stateA *= 0x89A7;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            stateA = (stateA &lt;&lt; 13 | stateA &gt;&gt;&gt; 19);<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        }<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        stateB = startingB[s &gt;&gt;&gt; 25];<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        for (int i = s &gt;&gt;&gt; 16 &amp; 0x1FF; i &gt; 0; i--) {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            stateB *= 0xBCFD;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>            stateB = (stateB &lt;&lt; 17 | stateB &gt;&gt;&gt; 15);<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        }<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    }<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>    public final int nextInt()<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        int y = stateA * 0x89A7;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        stateA = (y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19));<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        final int x = stateB * 0xBCFD;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        return (y ^ (stateB = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15)));<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    }<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    @Override<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    public final int next(final int bits)<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    {<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        int y = stateA * 0x89A7;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        stateA = (y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19));<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        final int x = stateB * 0xBCFD;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        return (y ^ (stateB = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15))) &gt;&gt;&gt; (32 - bits);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    }<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    @Override<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    public final long nextLong()<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        int y = stateA * 0x89A7;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        int x = stateB * 0xBCFD;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        final long t = (y ^ (x = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15))) &amp; 0xFFFFFFFFL;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        y *= 0x89A7;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        stateA = (y = (y &lt;&lt; 13 | y &gt;&gt;&gt; 19));<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        x *= 0xBCFD;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        return t &lt;&lt; 32 | ((y ^ (stateB = (x &lt;&lt; 17 | x &gt;&gt;&gt; 15))) &amp; 0xFFFFFFFFL);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    }<a name="line.145"></a>
+<span class="sourceLineNo">146</span><a name="line.146"></a>
+<span class="sourceLineNo">147</span>    /**<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * Produces a copy of this Mover32RNG that, if next() and/or nextLong() are called on this object and the<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     *<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * @return a copy of this Mover32RNG<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     */<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    @Override<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    public Mover32RNG copy() {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>        return new Mover32RNG(stateA, stateB);<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    }<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>    /**<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * Gets the "A" part of the state; if this generator was set with {@link #Mover32RNG()}, {@link #Mover32RNG(int)},<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * or {@link #setState(int)}, then this will be on the optimal subcycle, otherwise it may not be. <a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * @return the "A" part of the state, an int<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     */<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    public int getStateA()<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    {<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        return stateA;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    }<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>    /**<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * Gets the "B" part of the state; if this generator was set with {@link #Mover32RNG()}, {@link #Mover32RNG(int)},<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * or {@link #setState(int)}, then this will be on the optimal subcycle, otherwise it may not be. <a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * @return the "B" part of the state, an int<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     */<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    public int getStateB()<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        return stateB;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    }<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    /**<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * Sets the "A" part of the state to any int, which may put the generator in a low-period subcycle.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * Use {@link #setState(int)} to guarantee a good subcycle.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * @param stateA any int<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     */<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    public void setStateA(final int stateA)<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    {<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        this.stateA = stateA;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    }<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>    /**<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     * Sets the "B" part of the state to any int, which may put the generator in a low-period subcycle.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * Use {@link #setState(int)} to guarantee a good subcycle.<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * @param stateB any int<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     */<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    public void setStateB(final int stateB)<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    {<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        this.stateB = stateB;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    }<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    <a name="line.197"></a>
+<span class="sourceLineNo">198</span>    @Override<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    public String toString() {<a name="line.199"></a>
+<span class="sourceLineNo">200</span>        return "Mover32RNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    }<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>    @Override<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    public boolean equals(Object o) {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        if (this == o) return true;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.206"></a>
 <span class="sourceLineNo">207</span><a name="line.207"></a>
-<span class="sourceLineNo">208</span>        return stateA == mover32RNG.stateA &amp;&amp; stateB == mover32RNG.stateB;<a name="line.208"></a>
-<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
-<span class="sourceLineNo">210</span><a name="line.210"></a>
-<span class="sourceLineNo">211</span>    @Override<a name="line.211"></a>
-<span class="sourceLineNo">212</span>    public int hashCode() {<a name="line.212"></a>
-<span class="sourceLineNo">213</span>        return 31 * stateA + stateB | 0;<a name="line.213"></a>
-<span class="sourceLineNo">214</span>    }<a name="line.214"></a>
-<span class="sourceLineNo">215</span><a name="line.215"></a>
-<span class="sourceLineNo">216</span>//    public static void main(String[] args)<a name="line.216"></a>
-<span class="sourceLineNo">217</span>//    {<a name="line.217"></a>
-<span class="sourceLineNo">218</span>//        // A 10 0xC010AEB4<a name="line.218"></a>
-<span class="sourceLineNo">219</span>//        // B 22 0x195B9108<a name="line.219"></a>
-<span class="sourceLineNo">220</span>//        // all  0x04C194F3485D5A68<a name="line.220"></a>
-<span class="sourceLineNo">221</span>//<a name="line.221"></a>
-<span class="sourceLineNo">222</span>//        // A 17 0xF7F87D28<a name="line.222"></a>
-<span class="sourceLineNo">223</span>//        // B 14 0xF023E25B <a name="line.223"></a>
-<span class="sourceLineNo">224</span>//        // all  0xE89BB7902049CD38<a name="line.224"></a>
-<span class="sourceLineNo">225</span>//<a name="line.225"></a>
-<span class="sourceLineNo">226</span>//<a name="line.226"></a>
-<span class="sourceLineNo">227</span>//        // A11 B14 0xBBDA9763B6CA318D<a name="line.227"></a>
-<span class="sourceLineNo">228</span>//        // A8  B14 0xC109F954C76CB09C<a name="line.228"></a>
-<span class="sourceLineNo">229</span>//        // A17 B14 0xE89BB7902049CD38<a name="line.229"></a>
-<span class="sourceLineNo">230</span>////        BigInteger result = BigInteger.valueOf(0xF7F87D28L);<a name="line.230"></a>
-<span class="sourceLineNo">231</span>////        BigInteger tmp = BigInteger.valueOf(0xF023E25BL);<a name="line.231"></a>
-<span class="sourceLineNo">232</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.232"></a>
-<span class="sourceLineNo">233</span>////        System.out.printf("0x%016X\n", result.longValue());<a name="line.233"></a>
-<span class="sourceLineNo">234</span>//        int stateA = 1, i = 0;<a name="line.234"></a>
-<span class="sourceLineNo">235</span>//        for (; ; i++) {<a name="line.235"></a>
-<span class="sourceLineNo">236</span>//            if((stateA = Integer.rotateLeft(stateA * 0x9E37, 17)) == 1)<a name="line.236"></a>
-<span class="sourceLineNo">237</span>//            {<a name="line.237"></a>
-<span class="sourceLineNo">238</span>//                System.out.printf("0x%08X\n", i);<a name="line.238"></a>
-<span class="sourceLineNo">239</span>//                break;<a name="line.239"></a>
-<span class="sourceLineNo">240</span>//            }<a name="line.240"></a>
-<span class="sourceLineNo">241</span>//        }<a name="line.241"></a>
-<span class="sourceLineNo">242</span>//        BigInteger result = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.242"></a>
-<span class="sourceLineNo">243</span>//        i = 0;<a name="line.243"></a>
-<span class="sourceLineNo">244</span>//        for (; ; i++) {<a name="line.244"></a>
-<span class="sourceLineNo">245</span>//            if((stateA = Integer.rotateLeft(stateA * 0x4E6D, 14)) == 1)<a name="line.245"></a>
-<span class="sourceLineNo">246</span>//            {<a name="line.246"></a>
-<span class="sourceLineNo">247</span>//                System.out.printf("0x%08X\n", i);<a name="line.247"></a>
-<span class="sourceLineNo">248</span>//                break;<a name="line.248"></a>
-<span class="sourceLineNo">249</span>//            }<a name="line.249"></a>
-<span class="sourceLineNo">250</span>//        }         <a name="line.250"></a>
-<span class="sourceLineNo">251</span>//        BigInteger tmp = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.251"></a>
-<span class="sourceLineNo">252</span>//        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.252"></a>
-<span class="sourceLineNo">253</span>//        System.out.printf("\n0x%016X\n", result.longValue());<a name="line.253"></a>
-<span class="sourceLineNo">254</span>//<a name="line.254"></a>
-<span class="sourceLineNo">255</span>//    }<a name="line.255"></a>
-<span class="sourceLineNo">256</span><a name="line.256"></a>
-<span class="sourceLineNo">257</span>//    public static void main(String[] args)<a name="line.257"></a>
-<span class="sourceLineNo">258</span>//    {<a name="line.258"></a>
-<span class="sourceLineNo">259</span>//        Mover32RNG m = new Mover32RNG();<a name="line.259"></a>
-<span class="sourceLineNo">260</span>//        System.out.println("int[] startingA = {");<a name="line.260"></a>
-<span class="sourceLineNo">261</span>//        for (int i = 0, ctr = 0; ctr &lt; 128; ctr++, i+= 0x00000200) {<a name="line.261"></a>
-<span class="sourceLineNo">262</span>//            m.setState(i);<a name="line.262"></a>
-<span class="sourceLineNo">263</span>//            System.out.printf("0x%08X, ", m.stateA);<a name="line.263"></a>
-<span class="sourceLineNo">264</span>//            if((ctr &amp; 7) == 7)<a name="line.264"></a>
-<span class="sourceLineNo">265</span>//                System.out.println();<a name="line.265"></a>
-<span class="sourceLineNo">266</span>//        }<a name="line.266"></a>
-<span class="sourceLineNo">267</span>//        System.out.println("}, startingB = {");<a name="line.267"></a>
-<span class="sourceLineNo">268</span>//        for (int i = 0, ctr = 0; ctr &lt; 128; ctr++, i+= 0x02000000) {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>//            m.setState(i);<a name="line.269"></a>
-<span class="sourceLineNo">270</span>//            System.out.printf("0x%08X, ", m.stateB);<a name="line.270"></a>
-<span class="sourceLineNo">271</span>//            if((ctr &amp; 7) == 7)<a name="line.271"></a>
-<span class="sourceLineNo">272</span>//                System.out.println();<a name="line.272"></a>
-<span class="sourceLineNo">273</span>//        }<a name="line.273"></a>
-<span class="sourceLineNo">274</span>//        System.out.println("};");<a name="line.274"></a>
-<span class="sourceLineNo">275</span>//    }<a name="line.275"></a>
-<span class="sourceLineNo">276</span>    <a name="line.276"></a>
-<span class="sourceLineNo">277</span>///////// BEGIN subcycle finder code and period evaluator<a name="line.277"></a>
-<span class="sourceLineNo">278</span>//    public static void main(String[] args)<a name="line.278"></a>
-<span class="sourceLineNo">279</span>//    {<a name="line.279"></a>
-<span class="sourceLineNo">280</span>//        // multiplying<a name="line.280"></a>
-<span class="sourceLineNo">281</span>//        // A refers to 0x9E377<a name="line.281"></a>
-<span class="sourceLineNo">282</span>//        // A 10 0xC010AEB4<a name="line.282"></a>
-<span class="sourceLineNo">283</span>//        // B refers to 0x64E6D<a name="line.283"></a>
-<span class="sourceLineNo">284</span>//        // B 22 0x195B9108<a name="line.284"></a>
-<span class="sourceLineNo">285</span>//        // all  0x04C194F3485D5A68<a name="line.285"></a>
-<span class="sourceLineNo">286</span>//<a name="line.286"></a>
-<span class="sourceLineNo">287</span>//        // A=Integer.rotateLeft(A*0x9E377, 17) 0xF7F87D28<a name="line.287"></a>
-<span class="sourceLineNo">288</span>//        // B=Integer.rotateLeft(A*0x64E6D, 14) 0xF023E25B <a name="line.288"></a>
-<span class="sourceLineNo">289</span>//        // all  0xE89BB7902049CD38<a name="line.289"></a>
-<span class="sourceLineNo">290</span>//<a name="line.290"></a>
-<span class="sourceLineNo">291</span>//<a name="line.291"></a>
-<span class="sourceLineNo">292</span>//        // A11 B14 0xBBDA9763B6CA318D<a name="line.292"></a>
-<span class="sourceLineNo">293</span>//        // A8  B14 0xC109F954C76CB09C<a name="line.293"></a>
-<span class="sourceLineNo">294</span>//        // A17 B14 0xE89BB7902049CD38<a name="line.294"></a>
-<span class="sourceLineNo">295</span>////        BigInteger result = BigInteger.valueOf(0xF7F87D28L);<a name="line.295"></a>
-<span class="sourceLineNo">296</span>////        BigInteger tmp = BigInteger.valueOf(0xF023E25BL);<a name="line.296"></a>
-<span class="sourceLineNo">297</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.297"></a>
-<span class="sourceLineNo">298</span>////        System.out.printf("0x%016X\n", result.longValue());<a name="line.298"></a>
-<span class="sourceLineNo">299</span>//        // 0x9E37<a name="line.299"></a>
-<span class="sourceLineNo">300</span>//        // rotation 27: 0xEE06F34D<a name="line.300"></a>
-<span class="sourceLineNo">301</span>//        // 0x9E35<a name="line.301"></a>
-<span class="sourceLineNo">302</span>//        // rotation 6 : 0xE1183C3A<a name="line.302"></a>
-<span class="sourceLineNo">303</span>//        // rotation 19: 0xC4FCFC55<a name="line.303"></a>
-<span class="sourceLineNo">304</span>//        // 0x9E3B<a name="line.304"></a>
-<span class="sourceLineNo">305</span>//        // rotation 25: 0xE69313ED<a name="line.305"></a>
-<span class="sourceLineNo">306</span>//        // 0xDE4D<a name="line.306"></a>
-<span class="sourceLineNo">307</span>//        // rotation 3 : 0xF6C16607<a name="line.307"></a>
-<span class="sourceLineNo">308</span>//        // rotation 23: 0xD23AD58D<a name="line.308"></a>
-<span class="sourceLineNo">309</span>//        // rotation 29: 0xC56DC41F<a name="line.309"></a>
-<span class="sourceLineNo">310</span>//        // 0x1337<a name="line.310"></a>
-<span class="sourceLineNo">311</span>//        // rotation 7: 0xF41BD009<a name="line.311"></a>
-<span class="sourceLineNo">312</span>//        // rotation 20: 0xF5846878<a name="line.312"></a>
-<span class="sourceLineNo">313</span>//        // rotation 25: 0xF38658F9<a name="line.313"></a>
-<span class="sourceLineNo">314</span>//        // 0xACED<a name="line.314"></a>
-<span class="sourceLineNo">315</span>//        // rotation 28: 0xFC98CC08<a name="line.315"></a>
-<span class="sourceLineNo">316</span>//        // rotation 31: 0xFA18CD57<a name="line.316"></a>
-<span class="sourceLineNo">317</span>//        // 0xBA55<a name="line.317"></a>
-<span class="sourceLineNo">318</span>//        // rotation 19: 0xFB059E43<a name="line.318"></a>
-<span class="sourceLineNo">319</span>//        // 0xC6D5<a name="line.319"></a>
-<span class="sourceLineNo">320</span>//        // rotation 05: 0xFFD78FD4<a name="line.320"></a>
-<span class="sourceLineNo">321</span>//        // 0x5995<a name="line.321"></a>
-<span class="sourceLineNo">322</span>//        // rotation 28: 0xFF4AB87D<a name="line.322"></a>
-<span class="sourceLineNo">323</span>//        // rotation 02: 0xFF2AA5D5<a name="line.323"></a>
-<span class="sourceLineNo">324</span>//        // 0xA3A9<a name="line.324"></a>
-<span class="sourceLineNo">325</span>//        // rotation 09: 0xFF6B3AF7<a name="line.325"></a>
-<span class="sourceLineNo">326</span>//        // 0xB9EF<a name="line.326"></a>
-<span class="sourceLineNo">327</span>//        // rotation 23: 0xFFAEB037<a name="line.327"></a>
-<span class="sourceLineNo">328</span>//        // 0x3D29<a name="line.328"></a>
-<span class="sourceLineNo">329</span>//        // rotation 04: 0xFF6B92C5<a name="line.329"></a>
-<span class="sourceLineNo">330</span>//        // 0x5FAB<a name="line.330"></a>
-<span class="sourceLineNo">331</span>//        // rotation 09: 0xFF7E3277 // seems to be very composite<a name="line.331"></a>
-<span class="sourceLineNo">332</span>//        // 0xCB7F<a name="line.332"></a>
-<span class="sourceLineNo">333</span>//        // rotation 01: 0xFF7F28FE<a name="line.333"></a>
-<span class="sourceLineNo">334</span>//        // 0x89A7<a name="line.334"></a>
-<span class="sourceLineNo">335</span>//        // rotation 13: 0xFFFDBF50 // wow! note that this is a multiple of 16<a name="line.335"></a>
-<span class="sourceLineNo">336</span>//        // 0xBCFD<a name="line.336"></a>
-<span class="sourceLineNo">337</span>//        // rotation 17: 0xFFF43787 // second-highest yet, also an odd number<a name="line.337"></a>
-<span class="sourceLineNo">338</span>//        // 0xA01B<a name="line.338"></a>
-<span class="sourceLineNo">339</span>//        // rotation 28: 0xFFEDA0B5<a name="line.339"></a>
-<span class="sourceLineNo">340</span>//        // 0xC2B9<a name="line.340"></a>
-<span class="sourceLineNo">341</span>//        // rotation 16: 0xFFEA9001<a name="line.341"></a>
-<span class="sourceLineNo">342</span>//        <a name="line.342"></a>
-<span class="sourceLineNo">343</span>//        <a name="line.343"></a>
-<span class="sourceLineNo">344</span>//        // adding<a name="line.344"></a>
-<span class="sourceLineNo">345</span>//        // 0x9E3779B9<a name="line.345"></a>
-<span class="sourceLineNo">346</span>//        // rotation 2 : 0xFFCC8933<a name="line.346"></a>
-<span class="sourceLineNo">347</span>//        // rotation 7 : 0xF715CEDF<a name="line.347"></a>
-<span class="sourceLineNo">348</span>//        // rotation 25: 0xF715CEDF<a name="line.348"></a>
-<span class="sourceLineNo">349</span>//        // rotation 30: 0xFFCC8933<a name="line.349"></a>
-<span class="sourceLineNo">350</span>//        // 0x6C8E9CF5<a name="line.350"></a>
-<span class="sourceLineNo">351</span>//        // rotation 6 : 0xF721971A<a name="line.351"></a>
-<span class="sourceLineNo">352</span>//        // 0x41C64E6D<a name="line.352"></a>
-<span class="sourceLineNo">353</span>//        // rotation 13: 0xFA312DBF<a name="line.353"></a>
-<span class="sourceLineNo">354</span>//        // rotation 19: 0xFA312DBF<a name="line.354"></a>
-<span class="sourceLineNo">355</span>//        // rotation 1 : 0xF945B8A7<a name="line.355"></a>
-<span class="sourceLineNo">356</span>//        // rotation 31: 0xF945B8A7<a name="line.356"></a>
-<span class="sourceLineNo">357</span>//        // 0xC3564E95<a name="line.357"></a>
-<span class="sourceLineNo">358</span>//        // rotation 1 : 0xFA69E895 also 31<a name="line.358"></a>
-<span class="sourceLineNo">359</span>//        // rotation 5 : 0xF2BF5E23 also 27<a name="line.359"></a>
-<span class="sourceLineNo">360</span>//        // 0x76BAF5E3<a name="line.360"></a>
-<span class="sourceLineNo">361</span>//        // rotation 14: 0xF4DDFC5A also 18<a name="line.361"></a>
-<span class="sourceLineNo">362</span>//        // 0xA67943A3 <a name="line.362"></a>
-<span class="sourceLineNo">363</span>//        // rotation 11: 0xF1044048 also 21<a name="line.363"></a>
-<span class="sourceLineNo">364</span>//        // 0x6C96FEE7<a name="line.364"></a>
-<span class="sourceLineNo">365</span>//        // rotation 2 : 0xF4098F0D<a name="line.365"></a>
-<span class="sourceLineNo">366</span>//        // 0xA3014337<a name="line.366"></a>
-<span class="sourceLineNo">367</span>//        // rotation 15: 0xF3700ABF also 17<a name="line.367"></a>
-<span class="sourceLineNo">368</span>//        // 0x9E3759B9<a name="line.368"></a>
-<span class="sourceLineNo">369</span>//        // rotation 1 : 0xFB6547A2 also 31<a name="line.369"></a>
-<span class="sourceLineNo">370</span>//        // 0x6C8E9CF7<a name="line.370"></a>
-<span class="sourceLineNo">371</span>//        // rotation 7 : 0xFF151D74 also 25<a name="line.371"></a>
-<span class="sourceLineNo">372</span>//        // rotation 13: 0xFD468E2B also 19<a name="line.372"></a>
-<span class="sourceLineNo">373</span>//        // rotation 6 : 0xF145A7EB also 26<a name="line.373"></a>
-<span class="sourceLineNo">374</span>//        // 0xB531A935<a name="line.374"></a>
-<span class="sourceLineNo">375</span>//        // rotation 13: 0xFF9E2F67 also 19<a name="line.375"></a>
-<span class="sourceLineNo">376</span>//        // 0xC0EF50EB<a name="line.376"></a>
-<span class="sourceLineNo">377</span>//        // rotation 07: 0xFFF8A98D also 25<a name="line.377"></a>
-<span class="sourceLineNo">378</span>//        // 0x518DC14F<a name="line.378"></a>
-<span class="sourceLineNo">379</span>//        // rotation 09: 0xFFABD755 also 23 // probably not prime<a name="line.379"></a>
-<span class="sourceLineNo">380</span>//        // 0xA5F152BF<a name="line.380"></a>
-<span class="sourceLineNo">381</span>//        // rotation 07: 0xFFB234B2 also 27<a name="line.381"></a>
-<span class="sourceLineNo">382</span>//        // 0x8092D909<a name="line.382"></a>
-<span class="sourceLineNo">383</span>//        // rotation 10: 0xFFA82F7C also 22<a name="line.383"></a>
-<span class="sourceLineNo">384</span>//        // 0x73E2CCAB<a name="line.384"></a>
-<span class="sourceLineNo">385</span>//        // rotation 09: 0xFF9DE8B1 also 23<a name="line.385"></a>
-<span class="sourceLineNo">386</span>//        // stateB = rotate32(stateB + 0xB531A935, 13)<a name="line.386"></a>
-<span class="sourceLineNo">387</span>//        // stateC = rotate32(stateC + 0xC0EF50EB, 7)<a name="line.387"></a>
-<span class="sourceLineNo">388</span>//<a name="line.388"></a>
-<span class="sourceLineNo">389</span>//        // subtracting, rotating, and bitwise NOT:<a name="line.389"></a>
-<span class="sourceLineNo">390</span>//        // 0xC68E9CF3<a name="line.390"></a>
-<span class="sourceLineNo">391</span>//        // rotation 13: 0xFEF97E17, also 19 <a name="line.391"></a>
-<span class="sourceLineNo">392</span>//        // 0xC68E9CB7<a name="line.392"></a>
-<span class="sourceLineNo">393</span>//        // rotation 12: 0xFE3D7A2E<a name="line.393"></a>
-<span class="sourceLineNo">394</span>//<a name="line.394"></a>
-<span class="sourceLineNo">395</span>//        // left xorshift<a name="line.395"></a>
-<span class="sourceLineNo">396</span>//        // 5<a name="line.396"></a>
-<span class="sourceLineNo">397</span>//        // rotation 15: 0xFFF7E000<a name="line.397"></a>
-<span class="sourceLineNo">398</span>//        // 13<a name="line.398"></a>
-<span class="sourceLineNo">399</span>//        // rotation 17: 0xFFFD8000<a name="line.399"></a>
-<span class="sourceLineNo">400</span>//<a name="line.400"></a>
-<span class="sourceLineNo">401</span>//        // minus left shift, then xor<a name="line.401"></a>
-<span class="sourceLineNo">402</span>//        // state - (state &lt;&lt; 12) ^ 0xC68E9CB7, rotation 21: 0xFFD299CB<a name="line.402"></a>
-<span class="sourceLineNo">403</span>//        // add xor<a name="line.403"></a>
-<span class="sourceLineNo">404</span>//        // state + 0xC68E9CB7 ^ 0xDFF4ECB9, rotation 30: 0xFFDAEDF7<a name="line.404"></a>
-<span class="sourceLineNo">405</span>//        // state + 0xC68E9CB7 ^ 0xB5402ED7, rotation 01: 0xFFE73631<a name="line.405"></a>
-<span class="sourceLineNo">406</span>//        // state + 0xC68E9CB7 ^ 0xB2B386E5, rotation 24: 0xFFE29F5D<a name="line.406"></a>
-<span class="sourceLineNo">407</span>//        // sub xor<a name="line.407"></a>
-<span class="sourceLineNo">408</span>//        // state - 0x9E3779B9 ^ 0xE541440F, rotation 22: 0xFFFC9E3E<a name="line.408"></a>
-<span class="sourceLineNo">409</span>//<a name="line.409"></a>
-<span class="sourceLineNo">410</span>//<a name="line.410"></a>
-<span class="sourceLineNo">411</span>//        // best power of two:<a name="line.411"></a>
-<span class="sourceLineNo">412</span>//        // can get 63.999691 with: (period is 0xFFF1F6F18B2A1330)<a name="line.412"></a>
-<span class="sourceLineNo">413</span>//        // multiplying A by 0x89A7 and rotating left by 13<a name="line.413"></a>
-<span class="sourceLineNo">414</span>//        // multiplying B by 0xBCFD and rotating left by 17<a name="line.414"></a>
-<span class="sourceLineNo">415</span>//        // can get 63.998159 with: (period is 0xFFAC703E2B6B1A30)<a name="line.415"></a>
-<span class="sourceLineNo">416</span>//        // multiplying A by 0x89A7 and rotating left by 13<a name="line.416"></a>
-<span class="sourceLineNo">417</span>//        // multiplying B by 0xB9EF and rotating left by 23<a name="line.417"></a>
-<span class="sourceLineNo">418</span>//        // can get 63.998 with:<a name="line.418"></a>
-<span class="sourceLineNo">419</span>//        // adding 0x9E3779B9 for A and rotating left by 2<a name="line.419"></a>
-<span class="sourceLineNo">420</span>//        // xorshifting B left by 5 (B ^ B &lt;&lt; 5) and rotating left by 15<a name="line.420"></a>
-<span class="sourceLineNo">421</span>//        // can get 63.99 with:<a name="line.421"></a>
-<span class="sourceLineNo">422</span>//        // adding 0x9E3779B9 for A and rotating left by 2<a name="line.422"></a>
-<span class="sourceLineNo">423</span>//        // adding 0x6C8E9CF7 for B and rotating left by 7<a name="line.423"></a>
-<span class="sourceLineNo">424</span>//        // can get 63.98 with:<a name="line.424"></a>
-<span class="sourceLineNo">425</span>//        // adding 0x9E3779B9 for A and rotating left by 2<a name="line.425"></a>
-<span class="sourceLineNo">426</span>//        // multiplying by 0xACED, NOTing, and rotating left by 28 for B<a name="line.426"></a>
-<span class="sourceLineNo">427</span>//        // 0xFF6B3AF7L 0xFFAEB037L 0xFFD78FD4L<a name="line.427"></a>
-<span class="sourceLineNo">428</span>//        <a name="line.428"></a>
-<span class="sourceLineNo">429</span>//        // 0xFF42E24AF92DCD8C, 63.995831<a name="line.429"></a>
-<span class="sourceLineNo">430</span>//        //BigInteger result = BigInteger.valueOf(0xFF6B3AF7L), tmp = BigInteger.valueOf(0xFFD78FD4L);<a name="line.430"></a>
-<span class="sourceLineNo">431</span>//<a name="line.431"></a>
-<span class="sourceLineNo">432</span>//        BigInteger result = BigInteger.valueOf(0xFFFDBF50L), tmp = BigInteger.valueOf(0xFFF43787L);<a name="line.432"></a>
-<span class="sourceLineNo">433</span>//        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.433"></a>
-<span class="sourceLineNo">434</span>//        tmp = BigInteger.valueOf(0xFFEDA0B5L);<a name="line.434"></a>
+<span class="sourceLineNo">208</span>        Mover32RNG mover32RNG = (Mover32RNG) o;<a name="line.208"></a>
+<span class="sourceLineNo">209</span><a name="line.209"></a>
+<span class="sourceLineNo">210</span>        return stateA == mover32RNG.stateA &amp;&amp; stateB == mover32RNG.stateB;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
+<span class="sourceLineNo">212</span><a name="line.212"></a>
+<span class="sourceLineNo">213</span>    @Override<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    public int hashCode() {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        return 31 * stateA + stateB | 0;<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    }<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>//    public static void main(String[] args)<a name="line.218"></a>
+<span class="sourceLineNo">219</span>//    {<a name="line.219"></a>
+<span class="sourceLineNo">220</span>//        // A 10 0xC010AEB4<a name="line.220"></a>
+<span class="sourceLineNo">221</span>//        // B 22 0x195B9108<a name="line.221"></a>
+<span class="sourceLineNo">222</span>//        // all  0x04C194F3485D5A68<a name="line.222"></a>
+<span class="sourceLineNo">223</span>//<a name="line.223"></a>
+<span class="sourceLineNo">224</span>//        // A 17 0xF7F87D28<a name="line.224"></a>
+<span class="sourceLineNo">225</span>//        // B 14 0xF023E25B <a name="line.225"></a>
+<span class="sourceLineNo">226</span>//        // all  0xE89BB7902049CD38<a name="line.226"></a>
+<span class="sourceLineNo">227</span>//<a name="line.227"></a>
+<span class="sourceLineNo">228</span>//<a name="line.228"></a>
+<span class="sourceLineNo">229</span>//        // A11 B14 0xBBDA9763B6CA318D<a name="line.229"></a>
+<span class="sourceLineNo">230</span>//        // A8  B14 0xC109F954C76CB09C<a name="line.230"></a>
+<span class="sourceLineNo">231</span>//        // A17 B14 0xE89BB7902049CD38<a name="line.231"></a>
+<span class="sourceLineNo">232</span>////        BigInteger result = BigInteger.valueOf(0xF7F87D28L);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>////        BigInteger tmp = BigInteger.valueOf(0xF023E25BL);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.234"></a>
+<span class="sourceLineNo">235</span>////        System.out.printf("0x%016X\n", result.longValue());<a name="line.235"></a>
+<span class="sourceLineNo">236</span>//        int stateA = 1, i = 0;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>//        for (; ; i++) {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>//            if((stateA = Integer.rotateLeft(stateA * 0x9E37, 17)) == 1)<a name="line.238"></a>
+<span class="sourceLineNo">239</span>//            {<a name="line.239"></a>
+<span class="sourceLineNo">240</span>//                System.out.printf("0x%08X\n", i);<a name="line.240"></a>
+<span class="sourceLineNo">241</span>//                break;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>//            }<a name="line.242"></a>
+<span class="sourceLineNo">243</span>//        }<a name="line.243"></a>
+<span class="sourceLineNo">244</span>//        BigInteger result = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.244"></a>
+<span class="sourceLineNo">245</span>//        i = 0;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>//        for (; ; i++) {<a name="line.246"></a>
+<span class="sourceLineNo">247</span>//            if((stateA = Integer.rotateLeft(stateA * 0x4E6D, 14)) == 1)<a name="line.247"></a>
+<span class="sourceLineNo">248</span>//            {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>//                System.out.printf("0x%08X\n", i);<a name="line.249"></a>
+<span class="sourceLineNo">250</span>//                break;<a name="line.250"></a>
+<span class="sourceLineNo">251</span>//            }<a name="line.251"></a>
+<span class="sourceLineNo">252</span>//        }         <a name="line.252"></a>
+<span class="sourceLineNo">253</span>//        BigInteger tmp = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.253"></a>
+<span class="sourceLineNo">254</span>//        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.254"></a>
+<span class="sourceLineNo">255</span>//        System.out.printf("\n0x%016X\n", result.longValue());<a name="line.255"></a>
+<span class="sourceLineNo">256</span>//<a name="line.256"></a>
+<span class="sourceLineNo">257</span>//    }<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>//    public static void main(String[] args)<a name="line.259"></a>
+<span class="sourceLineNo">260</span>//    {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>//        Mover32RNG m = new Mover32RNG();<a name="line.261"></a>
+<span class="sourceLineNo">262</span>//        System.out.println("int[] startingA = {");<a name="line.262"></a>
+<span class="sourceLineNo">263</span>//        for (int i = 0, ctr = 0; ctr &lt; 128; ctr++, i+= 0x00000200) {<a name="line.263"></a>
+<span class="sourceLineNo">264</span>//            m.setState(i);<a name="line.264"></a>
+<span class="sourceLineNo">265</span>//            System.out.printf("0x%08X, ", m.stateA);<a name="line.265"></a>
+<span class="sourceLineNo">266</span>//            if((ctr &amp; 7) == 7)<a name="line.266"></a>
+<span class="sourceLineNo">267</span>//                System.out.println();<a name="line.267"></a>
+<span class="sourceLineNo">268</span>//        }<a name="line.268"></a>
+<span class="sourceLineNo">269</span>//        System.out.println("}, startingB = {");<a name="line.269"></a>
+<span class="sourceLineNo">270</span>//        for (int i = 0, ctr = 0; ctr &lt; 128; ctr++, i+= 0x02000000) {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>//            m.setState(i);<a name="line.271"></a>
+<span class="sourceLineNo">272</span>//            System.out.printf("0x%08X, ", m.stateB);<a name="line.272"></a>
+<span class="sourceLineNo">273</span>//            if((ctr &amp; 7) == 7)<a name="line.273"></a>
+<span class="sourceLineNo">274</span>//                System.out.println();<a name="line.274"></a>
+<span class="sourceLineNo">275</span>//        }<a name="line.275"></a>
+<span class="sourceLineNo">276</span>//        System.out.println("};");<a name="line.276"></a>
+<span class="sourceLineNo">277</span>//    }<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    <a name="line.278"></a>
+<span class="sourceLineNo">279</span>///////// BEGIN subcycle finder code and period evaluator<a name="line.279"></a>
+<span class="sourceLineNo">280</span>//    public static void main(String[] args)<a name="line.280"></a>
+<span class="sourceLineNo">281</span>//    {<a name="line.281"></a>
+<span class="sourceLineNo">282</span>//        // multiplying<a name="line.282"></a>
+<span class="sourceLineNo">283</span>//        // A refers to 0x9E377<a name="line.283"></a>
+<span class="sourceLineNo">284</span>//        // A 10 0xC010AEB4<a name="line.284"></a>
+<span class="sourceLineNo">285</span>//        // B refers to 0x64E6D<a name="line.285"></a>
+<span class="sourceLineNo">286</span>//        // B 22 0x195B9108<a name="line.286"></a>
+<span class="sourceLineNo">287</span>//        // all  0x04C194F3485D5A68<a name="line.287"></a>
+<span class="sourceLineNo">288</span>//<a name="line.288"></a>
+<span class="sourceLineNo">289</span>//        // A=Integer.rotateLeft(A*0x9E377, 17) 0xF7F87D28<a name="line.289"></a>
+<span class="sourceLineNo">290</span>//        // B=Integer.rotateLeft(A*0x64E6D, 14) 0xF023E25B <a name="line.290"></a>
+<span class="sourceLineNo">291</span>//        // all  0xE89BB7902049CD38<a name="line.291"></a>
+<span class="sourceLineNo">292</span>//<a name="line.292"></a>
+<span class="sourceLineNo">293</span>//<a name="line.293"></a>
+<span class="sourceLineNo">294</span>//        // A11 B14 0xBBDA9763B6CA318D<a name="line.294"></a>
+<span class="sourceLineNo">295</span>//        // A8  B14 0xC109F954C76CB09C<a name="line.295"></a>
+<span class="sourceLineNo">296</span>//        // A17 B14 0xE89BB7902049CD38<a name="line.296"></a>
+<span class="sourceLineNo">297</span>////        BigInteger result = BigInteger.valueOf(0xF7F87D28L);<a name="line.297"></a>
+<span class="sourceLineNo">298</span>////        BigInteger tmp = BigInteger.valueOf(0xF023E25BL);<a name="line.298"></a>
+<span class="sourceLineNo">299</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.299"></a>
+<span class="sourceLineNo">300</span>////        System.out.printf("0x%016X\n", result.longValue());<a name="line.300"></a>
+<span class="sourceLineNo">301</span>//        // 0x9E37<a name="line.301"></a>
+<span class="sourceLineNo">302</span>//        // rotation 27: 0xEE06F34D<a name="line.302"></a>
+<span class="sourceLineNo">303</span>//        // 0x9E35<a name="line.303"></a>
+<span class="sourceLineNo">304</span>//        // rotation 6 : 0xE1183C3A<a name="line.304"></a>
+<span class="sourceLineNo">305</span>//        // rotation 19: 0xC4FCFC55<a name="line.305"></a>
+<span class="sourceLineNo">306</span>//        // 0x9E3B<a name="line.306"></a>
+<span class="sourceLineNo">307</span>//        // rotation 25: 0xE69313ED<a name="line.307"></a>
+<span class="sourceLineNo">308</span>//        // 0xDE4D<a name="line.308"></a>
+<span class="sourceLineNo">309</span>//        // rotation 3 : 0xF6C16607<a name="line.309"></a>
+<span class="sourceLineNo">310</span>//        // rotation 23: 0xD23AD58D<a name="line.310"></a>
+<span class="sourceLineNo">311</span>//        // rotation 29: 0xC56DC41F<a name="line.311"></a>
+<span class="sourceLineNo">312</span>//        // 0x1337<a name="line.312"></a>
+<span class="sourceLineNo">313</span>//        // rotation 7: 0xF41BD009<a name="line.313"></a>
+<span class="sourceLineNo">314</span>//        // rotation 20: 0xF5846878<a name="line.314"></a>
+<span class="sourceLineNo">315</span>//        // rotation 25: 0xF38658F9<a name="line.315"></a>
+<span class="sourceLineNo">316</span>//        // 0xACED<a name="line.316"></a>
+<span class="sourceLineNo">317</span>//        // rotation 28: 0xFC98CC08<a name="line.317"></a>
+<span class="sourceLineNo">318</span>//        // rotation 31: 0xFA18CD57<a name="line.318"></a>
+<span class="sourceLineNo">319</span>//        // 0xBA55<a name="line.319"></a>
+<span class="sourceLineNo">320</span>//        // rotation 19: 0xFB059E43<a name="line.320"></a>
+<span class="sourceLineNo">321</span>//        // 0xC6D5<a name="line.321"></a>
+<span class="sourceLineNo">322</span>//        // rotation 05: 0xFFD78FD4<a name="line.322"></a>
+<span class="sourceLineNo">323</span>//        // 0x5995<a name="line.323"></a>
+<span class="sourceLineNo">324</span>//        // rotation 28: 0xFF4AB87D<a name="line.324"></a>
+<span class="sourceLineNo">325</span>//        // rotation 02: 0xFF2AA5D5<a name="line.325"></a>
+<span class="sourceLineNo">326</span>//        // 0xA3A9<a name="line.326"></a>
+<span class="sourceLineNo">327</span>//        // rotation 09: 0xFF6B3AF7<a name="line.327"></a>
+<span class="sourceLineNo">328</span>//        // 0xB9EF<a name="line.328"></a>
+<span class="sourceLineNo">329</span>//        // rotation 23: 0xFFAEB037<a name="line.329"></a>
+<span class="sourceLineNo">330</span>//        // 0x3D29<a name="line.330"></a>
+<span class="sourceLineNo">331</span>//        // rotation 04: 0xFF6B92C5<a name="line.331"></a>
+<span class="sourceLineNo">332</span>//        // 0x5FAB<a name="line.332"></a>
+<span class="sourceLineNo">333</span>//        // rotation 09: 0xFF7E3277 // seems to be very composite<a name="line.333"></a>
+<span class="sourceLineNo">334</span>//        // 0xCB7F<a name="line.334"></a>
+<span class="sourceLineNo">335</span>//        // rotation 01: 0xFF7F28FE<a name="line.335"></a>
+<span class="sourceLineNo">336</span>//        // 0x89A7<a name="line.336"></a>
+<span class="sourceLineNo">337</span>//        // rotation 13: 0xFFFDBF50 // wow! note that this is a multiple of 16<a name="line.337"></a>
+<span class="sourceLineNo">338</span>//        // 0xBCFD<a name="line.338"></a>
+<span class="sourceLineNo">339</span>//        // rotation 17: 0xFFF43787 // second-highest yet, also an odd number<a name="line.339"></a>
+<span class="sourceLineNo">340</span>//        // 0xA01B<a name="line.340"></a>
+<span class="sourceLineNo">341</span>//        // rotation 28: 0xFFEDA0B5<a name="line.341"></a>
+<span class="sourceLineNo">342</span>//        // 0xC2B9<a name="line.342"></a>
+<span class="sourceLineNo">343</span>//        // rotation 16: 0xFFEA9001<a name="line.343"></a>
+<span class="sourceLineNo">344</span>//        <a name="line.344"></a>
+<span class="sourceLineNo">345</span>//        <a name="line.345"></a>
+<span class="sourceLineNo">346</span>//        // adding<a name="line.346"></a>
+<span class="sourceLineNo">347</span>//        // 0x9E3779B9<a name="line.347"></a>
+<span class="sourceLineNo">348</span>//        // rotation 2 : 0xFFCC8933<a name="line.348"></a>
+<span class="sourceLineNo">349</span>//        // rotation 7 : 0xF715CEDF<a name="line.349"></a>
+<span class="sourceLineNo">350</span>//        // rotation 25: 0xF715CEDF<a name="line.350"></a>
+<span class="sourceLineNo">351</span>//        // rotation 30: 0xFFCC8933<a name="line.351"></a>
+<span class="sourceLineNo">352</span>//        // 0x6C8E9CF5<a name="line.352"></a>
+<span class="sourceLineNo">353</span>//        // rotation 6 : 0xF721971A<a name="line.353"></a>
+<span class="sourceLineNo">354</span>//        // 0x41C64E6D<a name="line.354"></a>
+<span class="sourceLineNo">355</span>//        // rotation 13: 0xFA312DBF<a name="line.355"></a>
+<span class="sourceLineNo">356</span>//        // rotation 19: 0xFA312DBF<a name="line.356"></a>
+<span class="sourceLineNo">357</span>//        // rotation 1 : 0xF945B8A7<a name="line.357"></a>
+<span class="sourceLineNo">358</span>//        // rotation 31: 0xF945B8A7<a name="line.358"></a>
+<span class="sourceLineNo">359</span>//        // 0xC3564E95<a name="line.359"></a>
+<span class="sourceLineNo">360</span>//        // rotation 1 : 0xFA69E895 also 31<a name="line.360"></a>
+<span class="sourceLineNo">361</span>//        // rotation 5 : 0xF2BF5E23 also 27<a name="line.361"></a>
+<span class="sourceLineNo">362</span>//        // 0x76BAF5E3<a name="line.362"></a>
+<span class="sourceLineNo">363</span>//        // rotation 14: 0xF4DDFC5A also 18<a name="line.363"></a>
+<span class="sourceLineNo">364</span>//        // 0xA67943A3 <a name="line.364"></a>
+<span class="sourceLineNo">365</span>//        // rotation 11: 0xF1044048 also 21<a name="line.365"></a>
+<span class="sourceLineNo">366</span>//        // 0x6C96FEE7<a name="line.366"></a>
+<span class="sourceLineNo">367</span>//        // rotation 2 : 0xF4098F0D<a name="line.367"></a>
+<span class="sourceLineNo">368</span>//        // 0xA3014337<a name="line.368"></a>
+<span class="sourceLineNo">369</span>//        // rotation 15: 0xF3700ABF also 17<a name="line.369"></a>
+<span class="sourceLineNo">370</span>//        // 0x9E3759B9<a name="line.370"></a>
+<span class="sourceLineNo">371</span>//        // rotation 1 : 0xFB6547A2 also 31<a name="line.371"></a>
+<span class="sourceLineNo">372</span>//        // 0x6C8E9CF7<a name="line.372"></a>
+<span class="sourceLineNo">373</span>//        // rotation 7 : 0xFF151D74 also 25<a name="line.373"></a>
+<span class="sourceLineNo">374</span>//        // rotation 13: 0xFD468E2B also 19<a name="line.374"></a>
+<span class="sourceLineNo">375</span>//        // rotation 6 : 0xF145A7EB also 26<a name="line.375"></a>
+<span class="sourceLineNo">376</span>//        // 0xB531A935<a name="line.376"></a>
+<span class="sourceLineNo">377</span>//        // rotation 13: 0xFF9E2F67 also 19<a name="line.377"></a>
+<span class="sourceLineNo">378</span>//        // 0xC0EF50EB<a name="line.378"></a>
+<span class="sourceLineNo">379</span>//        // rotation 07: 0xFFF8A98D also 25<a name="line.379"></a>
+<span class="sourceLineNo">380</span>//        // 0x518DC14F<a name="line.380"></a>
+<span class="sourceLineNo">381</span>//        // rotation 09: 0xFFABD755 also 23 // probably not prime<a name="line.381"></a>
+<span class="sourceLineNo">382</span>//        // 0xA5F152BF<a name="line.382"></a>
+<span class="sourceLineNo">383</span>//        // rotation 07: 0xFFB234B2 also 27<a name="line.383"></a>
+<span class="sourceLineNo">384</span>//        // 0x8092D909<a name="line.384"></a>
+<span class="sourceLineNo">385</span>//        // rotation 10: 0xFFA82F7C also 22<a name="line.385"></a>
+<span class="sourceLineNo">386</span>//        // 0x73E2CCAB<a name="line.386"></a>
+<span class="sourceLineNo">387</span>//        // rotation 09: 0xFF9DE8B1 also 23<a name="line.387"></a>
+<span class="sourceLineNo">388</span>//        // stateB = rotate32(stateB + 0xB531A935, 13)<a name="line.388"></a>
+<span class="sourceLineNo">389</span>//        // stateC = rotate32(stateC + 0xC0EF50EB, 7)<a name="line.389"></a>
+<span class="sourceLineNo">390</span>//<a name="line.390"></a>
+<span class="sourceLineNo">391</span>//        // subtracting, rotating, and bitwise NOT:<a name="line.391"></a>
+<span class="sourceLineNo">392</span>//        // 0xC68E9CF3<a name="line.392"></a>
+<span class="sourceLineNo">393</span>//        // rotation 13: 0xFEF97E17, also 19 <a name="line.393"></a>
+<span class="sourceLineNo">394</span>//        // 0xC68E9CB7<a name="line.394"></a>
+<span class="sourceLineNo">395</span>//        // rotation 12: 0xFE3D7A2E<a name="line.395"></a>
+<span class="sourceLineNo">396</span>//<a name="line.396"></a>
+<span class="sourceLineNo">397</span>//        // left xorshift<a name="line.397"></a>
+<span class="sourceLineNo">398</span>//        // 5<a name="line.398"></a>
+<span class="sourceLineNo">399</span>//        // rotation 15: 0xFFF7E000<a name="line.399"></a>
+<span class="sourceLineNo">400</span>//        // 13<a name="line.400"></a>
+<span class="sourceLineNo">401</span>//        // rotation 17: 0xFFFD8000<a name="line.401"></a>
+<span class="sourceLineNo">402</span>//<a name="line.402"></a>
+<span class="sourceLineNo">403</span>//        // minus left shift, then xor<a name="line.403"></a>
+<span class="sourceLineNo">404</span>//        // state - (state &lt;&lt; 12) ^ 0xC68E9CB7, rotation 21: 0xFFD299CB<a name="line.404"></a>
+<span class="sourceLineNo">405</span>//        // add xor<a name="line.405"></a>
+<span class="sourceLineNo">406</span>//        // state + 0xC68E9CB7 ^ 0xDFF4ECB9, rotation 30: 0xFFDAEDF7<a name="line.406"></a>
+<span class="sourceLineNo">407</span>//        // state + 0xC68E9CB7 ^ 0xB5402ED7, rotation 01: 0xFFE73631<a name="line.407"></a>
+<span class="sourceLineNo">408</span>//        // state + 0xC68E9CB7 ^ 0xB2B386E5, rotation 24: 0xFFE29F5D<a name="line.408"></a>
+<span class="sourceLineNo">409</span>//        // sub xor<a name="line.409"></a>
+<span class="sourceLineNo">410</span>//        // state - 0x9E3779B9 ^ 0xE541440F, rotation 22: 0xFFFC9E3E<a name="line.410"></a>
+<span class="sourceLineNo">411</span>//<a name="line.411"></a>
+<span class="sourceLineNo">412</span>//<a name="line.412"></a>
+<span class="sourceLineNo">413</span>//        // best power of two:<a name="line.413"></a>
+<span class="sourceLineNo">414</span>//        // can get 63.999691 with: (period is 0xFFF1F6F18B2A1330)<a name="line.414"></a>
+<span class="sourceLineNo">415</span>//        // multiplying A by 0x89A7 and rotating left by 13<a name="line.415"></a>
+<span class="sourceLineNo">416</span>//        // multiplying B by 0xBCFD and rotating left by 17<a name="line.416"></a>
+<span class="sourceLineNo">417</span>//        // can get 63.998159 with: (period is 0xFFAC703E2B6B1A30)<a name="line.417"></a>
+<span class="sourceLineNo">418</span>//        // multiplying A by 0x89A7 and rotating left by 13<a name="line.418"></a>
+<span class="sourceLineNo">419</span>//        // multiplying B by 0xB9EF and rotating left by 23<a name="line.419"></a>
+<span class="sourceLineNo">420</span>//        // can get 63.998 with:<a name="line.420"></a>
+<span class="sourceLineNo">421</span>//        // adding 0x9E3779B9 for A and rotating left by 2<a name="line.421"></a>
+<span class="sourceLineNo">422</span>//        // xorshifting B left by 5 (B ^ B &lt;&lt; 5) and rotating left by 15<a name="line.422"></a>
+<span class="sourceLineNo">423</span>//        // can get 63.99 with:<a name="line.423"></a>
+<span class="sourceLineNo">424</span>//        // adding 0x9E3779B9 for A and rotating left by 2<a name="line.424"></a>
+<span class="sourceLineNo">425</span>//        // adding 0x6C8E9CF7 for B and rotating left by 7<a name="line.425"></a>
+<span class="sourceLineNo">426</span>//        // can get 63.98 with:<a name="line.426"></a>
+<span class="sourceLineNo">427</span>//        // adding 0x9E3779B9 for A and rotating left by 2<a name="line.427"></a>
+<span class="sourceLineNo">428</span>//        // multiplying by 0xACED, NOTing, and rotating left by 28 for B<a name="line.428"></a>
+<span class="sourceLineNo">429</span>//        // 0xFF6B3AF7L 0xFFAEB037L 0xFFD78FD4L<a name="line.429"></a>
+<span class="sourceLineNo">430</span>//        <a name="line.430"></a>
+<span class="sourceLineNo">431</span>//        // 0xFF42E24AF92DCD8C, 63.995831<a name="line.431"></a>
+<span class="sourceLineNo">432</span>//        //BigInteger result = BigInteger.valueOf(0xFF6B3AF7L), tmp = BigInteger.valueOf(0xFFD78FD4L);<a name="line.432"></a>
+<span class="sourceLineNo">433</span>//<a name="line.433"></a>
+<span class="sourceLineNo">434</span>//        BigInteger result = BigInteger.valueOf(0xFFFDBF50L), tmp = BigInteger.valueOf(0xFFF43787L);<a name="line.434"></a>
 <span class="sourceLineNo">435</span>//        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.435"></a>
-<span class="sourceLineNo">436</span>//        System.out.printf("\n0x%s, %2.6f\n", result.toString(16).toUpperCase(), Math.log(result.doubleValue()) / Math.log(2));<a name="line.436"></a>
-<span class="sourceLineNo">437</span>////        tmp = BigInteger.valueOf(0xFFABD755L);<a name="line.437"></a>
-<span class="sourceLineNo">438</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.438"></a>
-<span class="sourceLineNo">439</span>////        System.out.printf("\n0x%s, %2.6f\n", result.toString(16).toUpperCase(), Math.log(result.doubleValue()) / Math.log(2));<a name="line.439"></a>
-<span class="sourceLineNo">440</span>//        int stateA = 1, i;<a name="line.440"></a>
-<span class="sourceLineNo">441</span>//        LinnormRNG lin = new LinnormRNG();<a name="line.441"></a>
-<span class="sourceLineNo">442</span>//        System.out.println(lin.getState());<a name="line.442"></a>
-<span class="sourceLineNo">443</span>//        Random rand = new RNG(lin).asRandom();<a name="line.443"></a>
-<span class="sourceLineNo">444</span>//        for (int c = 1; c &lt;= 200; c++) {<a name="line.444"></a>
-<span class="sourceLineNo">445</span>//            //final int r = (ThrustAlt32RNG.determine(20007 + c) &amp; 0xFFFF)|1;<a name="line.445"></a>
-<span class="sourceLineNo">446</span>//            final int r = BigInteger.probablePrime(20, rand).intValue();<a name="line.446"></a>
-<span class="sourceLineNo">447</span>//            //System.out.printf("(x ^ x &lt;&lt; %d) + 0xC68E9CB7\n", c);<a name="line.447"></a>
-<span class="sourceLineNo">448</span>//            System.out.printf("%03d/200, testing r = 0x%08X\n", c, r);<a name="line.448"></a>
-<span class="sourceLineNo">449</span>//            for (int j = 1; j &lt; 32; j++) {<a name="line.449"></a>
-<span class="sourceLineNo">450</span>//                i = 0;<a name="line.450"></a>
-<span class="sourceLineNo">451</span>//                for (; ; i++) {<a name="line.451"></a>
-<span class="sourceLineNo">452</span>//                    if ((stateA = Integer.rotateLeft(stateA * r, j)) == 1) {<a name="line.452"></a>
-<span class="sourceLineNo">453</span>//                        if (i &gt;&gt;&gt; 24 == 0xFF)<a name="line.453"></a>
-<span class="sourceLineNo">454</span>//                            System.out.printf("(state * 0x%08X, rotation %02d: 0x%08X\n", r, j, i);<a name="line.454"></a>
-<span class="sourceLineNo">455</span>//                        break;<a name="line.455"></a>
-<span class="sourceLineNo">456</span>//                    }<a name="line.456"></a>
-<span class="sourceLineNo">457</span>//                }<a name="line.457"></a>
-<span class="sourceLineNo">458</span>//            }<a name="line.458"></a>
-<span class="sourceLineNo">459</span>//        }<a name="line.459"></a>
-<span class="sourceLineNo">460</span>//<a name="line.460"></a>
-<span class="sourceLineNo">461</span>////        int stateA = 1, i = 0;<a name="line.461"></a>
-<span class="sourceLineNo">462</span>////        for (; ; i++) {<a name="line.462"></a>
-<span class="sourceLineNo">463</span>////            if((stateA = Integer.rotateLeft(~(stateA * 0x9E37), 7)) == 1)<a name="line.463"></a>
-<span class="sourceLineNo">464</span>////            {<a name="line.464"></a>
-<span class="sourceLineNo">465</span>////                System.out.printf("0x%08X\n", i);<a name="line.465"></a>
-<span class="sourceLineNo">466</span>////                break;<a name="line.466"></a>
-<span class="sourceLineNo">467</span>////            }<a name="line.467"></a>
-<span class="sourceLineNo">468</span>////        }<a name="line.468"></a>
-<span class="sourceLineNo">469</span>////        BigInteger result = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.469"></a>
-<span class="sourceLineNo">470</span>////        i = 0;<a name="line.470"></a>
-<span class="sourceLineNo">471</span>////        for (; ; i++) {<a name="line.471"></a>
-<span class="sourceLineNo">472</span>////            if((stateA = Integer.rotateLeft(~(stateA * 0x4E6D), 17)) == 1)<a name="line.472"></a>
-<span class="sourceLineNo">473</span>////            {<a name="line.473"></a>
-<span class="sourceLineNo">474</span>////                System.out.printf("0x%08X\n", i);<a name="line.474"></a>
-<span class="sourceLineNo">475</span>////                break;<a name="line.475"></a>
-<span class="sourceLineNo">476</span>////            }<a name="line.476"></a>
-<span class="sourceLineNo">477</span>////        }         <a name="line.477"></a>
-<span class="sourceLineNo">478</span>////        BigInteger tmp = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.478"></a>
-<span class="sourceLineNo">479</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.479"></a>
-<span class="sourceLineNo">480</span>////        System.out.printf("\n0x%016X\n", result.longValue());<a name="line.480"></a>
-<span class="sourceLineNo">481</span>//<a name="line.481"></a>
-<span class="sourceLineNo">482</span>//    }<a name="line.482"></a>
-<span class="sourceLineNo">483</span>///////// END subcycle finder code and period evaluator<a name="line.483"></a>
-<span class="sourceLineNo">484</span>    <a name="line.484"></a>
-<span class="sourceLineNo">485</span>    <a name="line.485"></a>
-<span class="sourceLineNo">486</span>//    public static void main(String[] args)<a name="line.486"></a>
-<span class="sourceLineNo">487</span>//    {<a name="line.487"></a>
-<span class="sourceLineNo">488</span>//        int stateA = 1, stateB = 1;<a name="line.488"></a>
-<span class="sourceLineNo">489</span>//        System.out.println("int[] startingA = {");<a name="line.489"></a>
-<span class="sourceLineNo">490</span>//        for (int ctr = 0; ctr &lt; 128; ctr++) {<a name="line.490"></a>
-<span class="sourceLineNo">491</span>//            System.out.printf("0x%08X, ", stateA);<a name="line.491"></a>
-<span class="sourceLineNo">492</span>//            if((ctr &amp; 7) == 7)<a name="line.492"></a>
-<span class="sourceLineNo">493</span>//                System.out.println();<a name="line.493"></a>
-<span class="sourceLineNo">494</span>//            for (int i = 0; i &lt; 512; i++) {<a name="line.494"></a>
-<span class="sourceLineNo">495</span>//                stateA *= 0x89A7;<a name="line.495"></a>
-<span class="sourceLineNo">496</span>//                stateA = (stateA &lt;&lt; 13 | stateA &gt;&gt;&gt; 19);<a name="line.496"></a>
-<span class="sourceLineNo">497</span>//            }<a name="line.497"></a>
-<span class="sourceLineNo">498</span>//        }<a name="line.498"></a>
-<span class="sourceLineNo">499</span>//        System.out.println("}, startingB = {");<a name="line.499"></a>
-<span class="sourceLineNo">500</span>//        for (int ctr = 0; ctr &lt; 128; ctr++) {<a name="line.500"></a>
-<span class="sourceLineNo">501</span>//            System.out.printf("0x%08X, ", stateB);<a name="line.501"></a>
-<span class="sourceLineNo">502</span>//            if((ctr &amp; 7) == 7)<a name="line.502"></a>
-<span class="sourceLineNo">503</span>//                System.out.println();<a name="line.503"></a>
-<span class="sourceLineNo">504</span>//            for (int i = 0; i &lt; 512; i++) {<a name="line.504"></a>
-<span class="sourceLineNo">505</span>//                stateB *= 0xBCFD;<a name="line.505"></a>
-<span class="sourceLineNo">506</span>//                stateB = (stateB &lt;&lt; 17 | stateB &gt;&gt;&gt; 15);<a name="line.506"></a>
-<span class="sourceLineNo">507</span>//            }<a name="line.507"></a>
-<span class="sourceLineNo">508</span>//        }<a name="line.508"></a>
-<span class="sourceLineNo">509</span>//        System.out.println("};");<a name="line.509"></a>
-<span class="sourceLineNo">510</span>//    }<a name="line.510"></a>
-<span class="sourceLineNo">511</span>}<a name="line.511"></a>
+<span class="sourceLineNo">436</span>//        tmp = BigInteger.valueOf(0xFFEDA0B5L);<a name="line.436"></a>
+<span class="sourceLineNo">437</span>//        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.437"></a>
+<span class="sourceLineNo">438</span>//        System.out.printf("\n0x%s, %2.6f\n", result.toString(16).toUpperCase(), Math.log(result.doubleValue()) / Math.log(2));<a name="line.438"></a>
+<span class="sourceLineNo">439</span>////        tmp = BigInteger.valueOf(0xFFABD755L);<a name="line.439"></a>
+<span class="sourceLineNo">440</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.440"></a>
+<span class="sourceLineNo">441</span>////        System.out.printf("\n0x%s, %2.6f\n", result.toString(16).toUpperCase(), Math.log(result.doubleValue()) / Math.log(2));<a name="line.441"></a>
+<span class="sourceLineNo">442</span>//        int stateA = 1, i;<a name="line.442"></a>
+<span class="sourceLineNo">443</span>//        LinnormRNG lin = new LinnormRNG();<a name="line.443"></a>
+<span class="sourceLineNo">444</span>//        System.out.println(lin.getState());<a name="line.444"></a>
+<span class="sourceLineNo">445</span>//        Random rand = new RNG(lin).asRandom();<a name="line.445"></a>
+<span class="sourceLineNo">446</span>//        for (int c = 1; c &lt;= 200; c++) {<a name="line.446"></a>
+<span class="sourceLineNo">447</span>//            //final int r = (ThrustAltRNG.determineInt(20007 + c) &amp; 0xFFFF)|1;<a name="line.447"></a>
+<span class="sourceLineNo">448</span>//            final int r = BigInteger.probablePrime(20, rand).intValue();<a name="line.448"></a>
+<span class="sourceLineNo">449</span>//            //System.out.printf("(x ^ x &lt;&lt; %d) + 0xC68E9CB7\n", c);<a name="line.449"></a>
+<span class="sourceLineNo">450</span>//            System.out.printf("%03d/200, testing r = 0x%08X\n", c, r);<a name="line.450"></a>
+<span class="sourceLineNo">451</span>//            for (int j = 1; j &lt; 32; j++) {<a name="line.451"></a>
+<span class="sourceLineNo">452</span>//                i = 0;<a name="line.452"></a>
+<span class="sourceLineNo">453</span>//                for (; ; i++) {<a name="line.453"></a>
+<span class="sourceLineNo">454</span>//                    if ((stateA = Integer.rotateLeft(stateA * r, j)) == 1) {<a name="line.454"></a>
+<span class="sourceLineNo">455</span>//                        if (i &gt;&gt;&gt; 24 == 0xFF)<a name="line.455"></a>
+<span class="sourceLineNo">456</span>//                            System.out.printf("(state * 0x%08X, rotation %02d: 0x%08X\n", r, j, i);<a name="line.456"></a>
+<span class="sourceLineNo">457</span>//                        break;<a name="line.457"></a>
+<span class="sourceLineNo">458</span>//                    }<a name="line.458"></a>
+<span class="sourceLineNo">459</span>//                }<a name="line.459"></a>
+<span class="sourceLineNo">460</span>//            }<a name="line.460"></a>
+<span class="sourceLineNo">461</span>//        }<a name="line.461"></a>
+<span class="sourceLineNo">462</span>//<a name="line.462"></a>
+<span class="sourceLineNo">463</span>////        int stateA = 1, i = 0;<a name="line.463"></a>
+<span class="sourceLineNo">464</span>////        for (; ; i++) {<a name="line.464"></a>
+<span class="sourceLineNo">465</span>////            if((stateA = Integer.rotateLeft(~(stateA * 0x9E37), 7)) == 1)<a name="line.465"></a>
+<span class="sourceLineNo">466</span>////            {<a name="line.466"></a>
+<span class="sourceLineNo">467</span>////                System.out.printf("0x%08X\n", i);<a name="line.467"></a>
+<span class="sourceLineNo">468</span>////                break;<a name="line.468"></a>
+<span class="sourceLineNo">469</span>////            }<a name="line.469"></a>
+<span class="sourceLineNo">470</span>////        }<a name="line.470"></a>
+<span class="sourceLineNo">471</span>////        BigInteger result = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.471"></a>
+<span class="sourceLineNo">472</span>////        i = 0;<a name="line.472"></a>
+<span class="sourceLineNo">473</span>////        for (; ; i++) {<a name="line.473"></a>
+<span class="sourceLineNo">474</span>////            if((stateA = Integer.rotateLeft(~(stateA * 0x4E6D), 17)) == 1)<a name="line.474"></a>
+<span class="sourceLineNo">475</span>////            {<a name="line.475"></a>
+<span class="sourceLineNo">476</span>////                System.out.printf("0x%08X\n", i);<a name="line.476"></a>
+<span class="sourceLineNo">477</span>////                break;<a name="line.477"></a>
+<span class="sourceLineNo">478</span>////            }<a name="line.478"></a>
+<span class="sourceLineNo">479</span>////        }         <a name="line.479"></a>
+<span class="sourceLineNo">480</span>////        BigInteger tmp = BigInteger.valueOf(i &amp; 0xFFFFFFFFL);<a name="line.480"></a>
+<span class="sourceLineNo">481</span>////        result = tmp.divide(result.gcd(tmp)).multiply(result);<a name="line.481"></a>
+<span class="sourceLineNo">482</span>////        System.out.printf("\n0x%016X\n", result.longValue());<a name="line.482"></a>
+<span class="sourceLineNo">483</span>//<a name="line.483"></a>
+<span class="sourceLineNo">484</span>//    }<a name="line.484"></a>
+<span class="sourceLineNo">485</span>///////// END subcycle finder code and period evaluator<a name="line.485"></a>
+<span class="sourceLineNo">486</span>    <a name="line.486"></a>
+<span class="sourceLineNo">487</span>    <a name="line.487"></a>
+<span class="sourceLineNo">488</span>//    public static void main(String[] args)<a name="line.488"></a>
+<span class="sourceLineNo">489</span>//    {<a name="line.489"></a>
+<span class="sourceLineNo">490</span>//        int stateA = 1, stateB = 1;<a name="line.490"></a>
+<span class="sourceLineNo">491</span>//        System.out.println("int[] startingA = {");<a name="line.491"></a>
+<span class="sourceLineNo">492</span>//        for (int ctr = 0; ctr &lt; 128; ctr++) {<a name="line.492"></a>
+<span class="sourceLineNo">493</span>//            System.out.printf("0x%08X, ", stateA);<a name="line.493"></a>
+<span class="sourceLineNo">494</span>//            if((ctr &amp; 7) == 7)<a name="line.494"></a>
+<span class="sourceLineNo">495</span>//                System.out.println();<a name="line.495"></a>
+<span class="sourceLineNo">496</span>//            for (int i = 0; i &lt; 512; i++) {<a name="line.496"></a>
+<span class="sourceLineNo">497</span>//                stateA *= 0x89A7;<a name="line.497"></a>
+<span class="sourceLineNo">498</span>//                stateA = (stateA &lt;&lt; 13 | stateA &gt;&gt;&gt; 19);<a name="line.498"></a>
+<span class="sourceLineNo">499</span>//            }<a name="line.499"></a>
+<span class="sourceLineNo">500</span>//        }<a name="line.500"></a>
+<span class="sourceLineNo">501</span>//        System.out.println("}, startingB = {");<a name="line.501"></a>
+<span class="sourceLineNo">502</span>//        for (int ctr = 0; ctr &lt; 128; ctr++) {<a name="line.502"></a>
+<span class="sourceLineNo">503</span>//            System.out.printf("0x%08X, ", stateB);<a name="line.503"></a>
+<span class="sourceLineNo">504</span>//            if((ctr &amp; 7) == 7)<a name="line.504"></a>
+<span class="sourceLineNo">505</span>//                System.out.println();<a name="line.505"></a>
+<span class="sourceLineNo">506</span>//            for (int i = 0; i &lt; 512; i++) {<a name="line.506"></a>
+<span class="sourceLineNo">507</span>//                stateB *= 0xBCFD;<a name="line.507"></a>
+<span class="sourceLineNo">508</span>//                stateB = (stateB &lt;&lt; 17 | stateB &gt;&gt;&gt; 15);<a name="line.508"></a>
+<span class="sourceLineNo">509</span>//            }<a name="line.509"></a>
+<span class="sourceLineNo">510</span>//        }<a name="line.510"></a>
+<span class="sourceLineNo">511</span>//        System.out.println("};");<a name="line.511"></a>
+<span class="sourceLineNo">512</span>//    }<a name="line.512"></a>
+<span class="sourceLineNo">513</span>}<a name="line.513"></a>
 
 
 

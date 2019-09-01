@@ -52,20 +52,20 @@
 <span class="sourceLineNo">044</span>     * Initializes a substance array that can be given to other static methods.<a name="line.44"></a>
 <span class="sourceLineNo">045</span>     * @param width the width of the substance array; should be consistent throughout calls<a name="line.45"></a>
 <span class="sourceLineNo">046</span>     * @param height the height of the substance array; should be consistent throughout calls<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     * @param seed the int seed to use for the random contents<a name="line.47"></a>
+<span class="sourceLineNo">047</span>     * @param seed the long seed to use for the random contents<a name="line.47"></a>
 <span class="sourceLineNo">048</span>     * @return a 1D double array that represents a 2D array with random contents; should be given to other methods<a name="line.48"></a>
 <span class="sourceLineNo">049</span>     */<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    public static double[] initialize(int width, int height, int seed){<a name="line.50"></a>
+<span class="sourceLineNo">050</span>    public static double[] initialize(int width, int height, long seed){<a name="line.50"></a>
 <span class="sourceLineNo">051</span>        return initializeInto(new double[width * height], seed);<a name="line.51"></a>
 <span class="sourceLineNo">052</span>    }<a name="line.52"></a>
 <span class="sourceLineNo">053</span><a name="line.53"></a>
 <span class="sourceLineNo">054</span>    /**<a name="line.54"></a>
 <span class="sourceLineNo">055</span>     * Refills a substance array that can be given to other static methods.<a name="line.55"></a>
 <span class="sourceLineNo">056</span>     * @param substance a 1D double array that will be modified and filled with random values<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     * @param seed the int seed to use for the random contents<a name="line.57"></a>
+<span class="sourceLineNo">057</span>     * @param seed the long seed to use for the random contents<a name="line.57"></a>
 <span class="sourceLineNo">058</span>     * @return substance, after modification; should be given to other methods<a name="line.58"></a>
 <span class="sourceLineNo">059</span>     */<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    public static double[] initializeInto(double[] substance, int seed){<a name="line.60"></a>
+<span class="sourceLineNo">060</span>    public static double[] initializeInto(double[] substance, long seed){<a name="line.60"></a>
 <span class="sourceLineNo">061</span>        if(substance == null) return null;<a name="line.61"></a>
 <span class="sourceLineNo">062</span>        for (int i = 0; i &lt; substance.length; i++) {<a name="line.62"></a>
 <span class="sourceLineNo">063</span>            substance[i] = (DiverRNG.determine(++seed) &gt;&gt; 11) * fraction;<a name="line.63"></a>
@@ -108,7 +108,7 @@
 <span class="sourceLineNo">100</span>     * @param seed the seed to use with the noise generator<a name="line.100"></a>
 <span class="sourceLineNo">101</span>     * @return a 1D double array that represents a 2D array with random contents; should be given to other methods<a name="line.101"></a>
 <span class="sourceLineNo">102</span>     */<a name="line.102"></a>
-<span class="sourceLineNo">103</span>    public static double[] initialize(int width, int height, Noise.Noise2D noise, int seed) {<a name="line.103"></a>
+<span class="sourceLineNo">103</span>    public static double[] initialize(int width, int height, Noise.Noise2D noise, long seed) {<a name="line.103"></a>
 <span class="sourceLineNo">104</span>        return initializeInto(new double[width * height], width, height, noise, seed);<a name="line.104"></a>
 <span class="sourceLineNo">105</span>    }<a name="line.105"></a>
 <span class="sourceLineNo">106</span>    /**<a name="line.106"></a>
@@ -120,7 +120,7 @@
 <span class="sourceLineNo">112</span>     * @param seed the seed to use with the noise generator<a name="line.112"></a>
 <span class="sourceLineNo">113</span>     * @return a 1D double array that represents a 2D array with random contents; should be given to other methods<a name="line.113"></a>
 <span class="sourceLineNo">114</span>     */<a name="line.114"></a>
-<span class="sourceLineNo">115</span>    public static double[] initializeInto(double[] substance, int width, int height, Noise.Noise2D noise, int seed){<a name="line.115"></a>
+<span class="sourceLineNo">115</span>    public static double[] initializeInto(double[] substance, int width, int height, Noise.Noise2D noise, long seed){<a name="line.115"></a>
 <span class="sourceLineNo">116</span>        if(substance == null || noise == null) return null;<a name="line.116"></a>
 <span class="sourceLineNo">117</span>        int i = 0;<a name="line.117"></a>
 <span class="sourceLineNo">118</span>        for (int x = 0; x &lt; width; x++) {<a name="line.118"></a>
@@ -286,14 +286,14 @@
 <span class="sourceLineNo">278</span>     * @param noise a Noise2D instance, such as {@link SeededNoise#instance}, that will be used to alter offsets<a name="line.278"></a>
 <span class="sourceLineNo">279</span>     * @param seed a seed for the Noise2D<a name="line.279"></a>
 <span class="sourceLineNo">280</span>     */<a name="line.280"></a>
-<span class="sourceLineNo">281</span>    public static void distort(int[][] offsets, int width, int height, Noise.Noise2D noise, int seed)<a name="line.281"></a>
+<span class="sourceLineNo">281</span>    public static void distort(int[][] offsets, int width, int height, Noise.Noise2D noise, long seed)<a name="line.281"></a>
 <span class="sourceLineNo">282</span>    {<a name="line.282"></a>
-<span class="sourceLineNo">283</span>        int pointSize = offsets.length, altSeed = ThrustAlt32RNG.determine(seed);<a name="line.283"></a>
+<span class="sourceLineNo">283</span>        int pointSize = offsets.length;<a name="line.283"></a>
 <span class="sourceLineNo">284</span>        int[] vp;<a name="line.284"></a>
 <span class="sourceLineNo">285</span>        for (int x = 0; x &lt; width; x++) {<a name="line.285"></a>
 <span class="sourceLineNo">286</span>            for (int y = 0; y &lt; height; y++) {<a name="line.286"></a>
 <span class="sourceLineNo">287</span>                int pushX = (int)(2.5 * (noise.getNoiseWithSeed(x, y, seed) + 1)) - 2,<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, altSeed) + 1)) - 2;<a name="line.288"></a>
+<span class="sourceLineNo">288</span>                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, DiverRNG.determine(seed)) + 1)) - 2;<a name="line.288"></a>
 <span class="sourceLineNo">289</span>                for (int p = 0; p &lt; pointSize; p++) {<a name="line.289"></a>
 <span class="sourceLineNo">290</span>                    vp = offsets[p];<a name="line.290"></a>
 <span class="sourceLineNo">291</span>                    int a = vp[x * height + y], px = a / height, py = a % height;<a name="line.291"></a>
@@ -314,14 +314,14 @@
 <span class="sourceLineNo">306</span>     * @param z a z position to be given to the Noise3D along with a point's x and y<a name="line.306"></a>
 <span class="sourceLineNo">307</span>     * @param seed a seed for the Noise3D<a name="line.307"></a>
 <span class="sourceLineNo">308</span>     */<a name="line.308"></a>
-<span class="sourceLineNo">309</span>    public static void distort(int[][] offsets, int width, int height, Noise.Noise3D noise, double z, int seed)<a name="line.309"></a>
+<span class="sourceLineNo">309</span>    public static void distort(int[][] offsets, int width, int height, Noise.Noise3D noise, double z, long seed)<a name="line.309"></a>
 <span class="sourceLineNo">310</span>    {<a name="line.310"></a>
-<span class="sourceLineNo">311</span>        int pointSize = offsets.length, altSeed = ThrustAlt32RNG.determine(seed);<a name="line.311"></a>
+<span class="sourceLineNo">311</span>        int pointSize = offsets.length;<a name="line.311"></a>
 <span class="sourceLineNo">312</span>        int[] vp;<a name="line.312"></a>
 <span class="sourceLineNo">313</span>        for (int x = 0; x &lt; width; x++) {<a name="line.313"></a>
 <span class="sourceLineNo">314</span>            for (int y = 0; y &lt; height; y++) {<a name="line.314"></a>
 <span class="sourceLineNo">315</span>                int pushX = (int)(2.5 * (noise.getNoiseWithSeed(x, y, z, seed) + 1)) - 2,<a name="line.315"></a>
-<span class="sourceLineNo">316</span>                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, z, altSeed) + 1)) - 2;<a name="line.316"></a>
+<span class="sourceLineNo">316</span>                        pushY = (int)(2.5 * (noise.getNoiseWithSeed(x, y, z, DiverRNG.determine(seed)) + 1)) - 2;<a name="line.316"></a>
 <span class="sourceLineNo">317</span>                for (int p = 0; p &lt; pointSize; p++) {<a name="line.317"></a>
 <span class="sourceLineNo">318</span>                    vp = offsets[p];<a name="line.318"></a>
 <span class="sourceLineNo">319</span>                    int a = vp[x * height + y], px = a / height, py = a % height;<a name="line.319"></a>
@@ -371,7 +371,7 @@
 <span class="sourceLineNo">363</span>    /**<a name="line.363"></a>
 <span class="sourceLineNo">364</span>     * Computes the first part of a step, allowing other adjustments to be mixed in before finishing by calling<a name="line.364"></a>
 <span class="sourceLineNo">365</span>     * {@link #normalize(double[])}. A sample adjustment would be<a name="line.365"></a>
-<span class="sourceLineNo">366</span>     * {@link #addNoise(double[], int, int, double, Noise.Noise2D, int)}. This is probably not very useful yet.<a name="line.366"></a>
+<span class="sourceLineNo">366</span>     * {@link #addNoise(double[], int, int, double, Noise.Noise2D, long)}. This is probably not very useful yet.<a name="line.366"></a>
 <span class="sourceLineNo">367</span>     * @param substance as produced by initialize; will be modified!<a name="line.367"></a>
 <span class="sourceLineNo">368</span>     * @param activator as produced by an offsets method<a name="line.368"></a>
 <span class="sourceLineNo">369</span>     * @param activation the small double amount to use when the activator is dominant; should usually be positive<a name="line.369"></a>
@@ -404,7 +404,7 @@
 <span class="sourceLineNo">396</span>     * @param seed a seed for the Noise2D<a name="line.396"></a>
 <span class="sourceLineNo">397</span>     */<a name="line.397"></a>
 <span class="sourceLineNo">398</span>    public static void addNoise(final double[] substance, final int width, final int height,<a name="line.398"></a>
-<span class="sourceLineNo">399</span>                                final double multiplier, final Noise.Noise2D noise, final int seed)<a name="line.399"></a>
+<span class="sourceLineNo">399</span>                                final double multiplier, final Noise.Noise2D noise, final long seed)<a name="line.399"></a>
 <span class="sourceLineNo">400</span>    {<a name="line.400"></a>
 <span class="sourceLineNo">401</span>        int s = 0;<a name="line.401"></a>
 <span class="sourceLineNo">402</span>        for (int x = 0; x &lt; width; x++) {<a name="line.402"></a>
@@ -425,7 +425,7 @@
 <span class="sourceLineNo">417</span>     * @param seed a seed for the Noise3D<a name="line.417"></a>
 <span class="sourceLineNo">418</span>     */<a name="line.418"></a>
 <span class="sourceLineNo">419</span>    public static void addNoise(final double[] substance, final int width, final int height,<a name="line.419"></a>
-<span class="sourceLineNo">420</span>                                final double multiplier, final Noise.Noise3D noise, final double z, final int seed)<a name="line.420"></a>
+<span class="sourceLineNo">420</span>                                final double multiplier, final Noise.Noise3D noise, final double z, final long seed)<a name="line.420"></a>
 <span class="sourceLineNo">421</span>    {<a name="line.421"></a>
 <span class="sourceLineNo">422</span>        int s = 0;<a name="line.422"></a>
 <span class="sourceLineNo">423</span>        for (int x = 0; x &lt; width; x++) {<a name="line.423"></a>

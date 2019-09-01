@@ -227,13 +227,24 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Radius.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Radius.html#expand-int-int-int-java.lang.Iterable-">expand</a></span>(int&nbsp;distance,
+      int&nbsp;width,
+      int&nbsp;height,
+      <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>
+<div class="block">Given an Iterable of Coord (such as a List or Set), a distance to expand outward by (using this Radius), and the
+ bounding height and width of the map, gets a "thickened" group of Coord as a Set where each Coord in points has
+ been expanded out by an amount no greater than distance.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidgrid/SpatialMap.html" title="type parameter in SpatialMap">I</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/SpatialMap.html#identities--">identities</a></span>()</code>
 <div class="block">Get a Set of all identities used for values in this data structure, returning a OrderedSet (defensively
  copying the key set used internally) for its stable iteration order.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Radius.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Radius.html#perimeter-squidpony.squidmath.Coord-int-boolean-int-int-">perimeter</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
          int&nbsp;radiusLength,
@@ -241,7 +252,7 @@
          int&nbsp;width,
          int&nbsp;height)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/SpatialMap.html#positions--">positions</a></span>()</code>
 <div class="block">Get a Set of all positions used for values in this data structure, returning a OrderedSet (defensively copying

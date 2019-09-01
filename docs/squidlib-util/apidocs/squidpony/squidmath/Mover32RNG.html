@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.45">Mover32RNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.47">Mover32RNG</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></pre>
 <div class="block">One of Mark Overton's subcycle generators from <a href="http://www.drdobbs.com/tools/229625477">this article</a>,
@@ -124,15 +124,17 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
  This seems to do well in PractRand testing (32 TB passed), but this is not a generator Overton tested. "Chaotic"
  generators like this one tend to score well in PractRand, but it isn't clear if they will fail other tests (in
  particular, they can't generate all possible long values, and also can't generate 0 or possibly some other ints). As
- for desktop/server speed, this is faster than <a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a> (which is also high-quality) and is also faster than
- <a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath"><code>Starfish32RNG</code></a> (which is very fast but has quality issues) and <a href="../../squidpony/squidmath/ThrustAlt32RNG.html" title="class in squidpony.squidmath"><code>ThrustAlt32RNG</code></a> (which has a very small
- period and probably isn't very useful). However, this is slower than Lathe32RNG when using GWT and viewing in
- Firefox; for some reason <a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath"><code>Starfish32RNG</code></a> optimizes well on Firefox and less well on Chrome, but Mover does very
- well in older Chrome (faster than Lathe) and rather poorly on Firefox. It doesn't do amazingly well in current Chrome
- versions, however, and Lathe beats it most of the time there. On 64-bit desktop or server Java, you may want to
- prefer <a href="../../squidpony/squidmath/Mover64RNG.html" title="class in squidpony.squidmath"><code>Mover64RNG</code></a>, which is the same algorithm using larger words and constants. While each of the two parts
+ for desktop/server speed, this is faster than <a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath"><code>Starfish32RNG</code></a> (which is also high-quality) and is also faster
+ than <a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a> (which is very fast but has quality issues). However, this is slower than Lathe32RNG when
+ using GWT and viewing in Firefox; for some reason <a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath"><code>Starfish32RNG</code></a> optimizes well on Firefox and less well on
+ Chrome, but Mover does ver well in older Chrome (faster than Lathe) and rather poorly on Firefox. It doesn't do
+ amazingly well in current Chrome versions, however, and Lathe beats it most of the time there. On 64-bit desktop or
+ server Java, you may want to prefer <a href="../../squidpony/squidmath/Mover64RNG.html" title="class in squidpony.squidmath"><code>Mover64RNG</code></a>, which is the same algorithm using larger words and constants,
+ or <a href="../../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath"><code>MiniMover64RNG</code></a>, which is even faster but probably has a shorter period than this generator (millions of
+ seeds have been checked to ensure a minimum period of 2 to the 20 for it, though). While each of the two parts
  of a Mover32RNG can have their full period evaluated, making the total period possible to calculate, the same cannot
- be said for Mover64RNG (its period is high enough for most usage, but the actual total is still unknown).
+ be said for Mover64RNG or MiniMover64RNG (their maximum periods are high enough for most usage, but the actual totals
+ are still unknown).
  <br>
  Its period is 0xFFF1F6F18B2A1330 for the largest cycle, which it always initializes into if <a href="../../squidpony/squidmath/Mover32RNG.html#setState-int-"><code>setState(int)</code></a> is
  used. setState() only allows 2 to the 32 starting states, but less than 2 to the 64 states are in the largest cycle,
@@ -297,7 +299,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Mover32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.47">Mover32RNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.49">Mover32RNG</a>()</pre>
 </li>
 </ul>
 <a name="Mover32RNG-int-">
@@ -306,7 +308,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Mover32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.51">Mover32RNG</a>(int&nbsp;state)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.53">Mover32RNG</a>(int&nbsp;state)</pre>
 </li>
 </ul>
 <a name="Mover32RNG-int-int-">
@@ -315,7 +317,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Mover32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.62">Mover32RNG</a>(int&nbsp;stateA,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.64">Mover32RNG</a>(int&nbsp;stateA,
                   int&nbsp;stateB)</pre>
 <div class="block">Not advised for external use; prefer <a href="../../squidpony/squidmath/Mover32RNG.html#Mover32RNG-int-"><code>Mover32RNG(int)</code></a> because it guarantees a good subcycle. This
  constructor allows all subcycles to be produced, including ones with a shorter period.</div>
@@ -340,7 +342,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.104">setState</a>(int&nbsp;s)</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.106">setState</a>(int&nbsp;s)</pre>
 </li>
 </ul>
 <a name="nextInt--">
@@ -349,7 +351,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.117">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.119">nextInt</a>()</pre>
 </li>
 </ul>
 <a name="next-int-">
@@ -358,7 +360,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.125">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.127">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -378,7 +380,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.133">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.135">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -398,7 +400,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Mover32RNG.html" title="class in squidpony.squidmath">Mover32RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.153">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Mover32RNG.html" title="class in squidpony.squidmath">Mover32RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.155">copy</a>()</pre>
 <div class="block">Produces a copy of this Mover32RNG that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -416,7 +418,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateA</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.162">getStateA</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.164">getStateA</a>()</pre>
 <div class="block">Gets the "A" part of the state; if this generator was set with <a href="../../squidpony/squidmath/Mover32RNG.html#Mover32RNG--"><code>Mover32RNG()</code></a>, <a href="../../squidpony/squidmath/Mover32RNG.html#Mover32RNG-int-"><code>Mover32RNG(int)</code></a>,
  or <a href="../../squidpony/squidmath/Mover32RNG.html#setState-int-"><code>setState(int)</code></a>, then this will be on the optimal subcycle, otherwise it may not be.</div>
 <dl>
@@ -431,7 +433,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateB</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.172">getStateB</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.174">getStateB</a>()</pre>
 <div class="block">Gets the "B" part of the state; if this generator was set with <a href="../../squidpony/squidmath/Mover32RNG.html#Mover32RNG--"><code>Mover32RNG()</code></a>, <a href="../../squidpony/squidmath/Mover32RNG.html#Mover32RNG-int-"><code>Mover32RNG(int)</code></a>,
  or <a href="../../squidpony/squidmath/Mover32RNG.html#setState-int-"><code>setState(int)</code></a>, then this will be on the optimal subcycle, otherwise it may not be.</div>
 <dl>
@@ -446,7 +448,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateA</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.181">setStateA</a>(int&nbsp;stateA)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.183">setStateA</a>(int&nbsp;stateA)</pre>
 <div class="block">Sets the "A" part of the state to any int, which may put the generator in a low-period subcycle.
  Use <a href="../../squidpony/squidmath/Mover32RNG.html#setState-int-"><code>setState(int)</code></a> to guarantee a good subcycle.</div>
 <dl>
@@ -461,7 +463,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateB</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.191">setStateB</a>(int&nbsp;stateB)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.193">setStateB</a>(int&nbsp;stateB)</pre>
 <div class="block">Sets the "B" part of the state to any int, which may put the generator in a low-period subcycle.
  Use <a href="../../squidpony/squidmath/Mover32RNG.html#setState-int-"><code>setState(int)</code></a> to guarantee a good subcycle.</div>
 <dl>
@@ -476,7 +478,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.197">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.199">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -489,7 +491,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.202">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.204">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -502,7 +504,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.212">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Mover32RNG.html#line.214">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

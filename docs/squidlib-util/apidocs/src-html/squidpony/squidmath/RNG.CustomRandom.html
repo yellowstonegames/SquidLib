@@ -104,10 +104,10 @@
 <span class="sourceLineNo">096</span> * further than Lathe32RNG at an even distribution, and has better quality, but is<a name="line.96"></a>
 <span class="sourceLineNo">097</span> * slightly slower. While Lathe32RNG can produce all ints over the course of its period,<a name="line.97"></a>
 <span class="sourceLineNo">098</span> * it will produce some pairs of ints, or longs, more often than others and will never<a name="line.98"></a>
-<span class="sourceLineNo">099</span> * produce some longs. Starfish32RNG will produce all longs but one. {@link ThrustAlt32RNG},<a name="line.99"></a>
-<span class="sourceLineNo">100</span> * {@link XoshiroStarPhi32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators<a name="line.100"></a>
-<span class="sourceLineNo">101</span> * that were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,<a name="line.101"></a>
-<span class="sourceLineNo">102</span> * but should not be used on GWT: {@link PintRNG} and {@link FlapRNG}. All other generators<a name="line.102"></a>
+<span class="sourceLineNo">099</span> * produce some longs. Starfish32RNG will produce all longs but one. {@link Oriole32RNG}<a name="line.99"></a>
+<span class="sourceLineNo">100</span> * and {@link XoshiroStarPhi32RNG} are also GWT-safe, but other generators that were<a name="line.100"></a>
+<span class="sourceLineNo">101</span> * thought to be GWT-friendly are not. These GWT-unsafe generators have other uses, but<a name="line.101"></a>
+<span class="sourceLineNo">102</span> * should not be used on GWT: {@link PintRNG} and {@link FlapRNG}. All other generators<a name="line.102"></a>
 <span class="sourceLineNo">103</span> * use longs, and so will be slower than the recommended Starfish32RNG or Lathe32RNG on GWT,<a name="line.103"></a>
 <span class="sourceLineNo">104</span> * but much faster on 64-bit JREs.<a name="line.104"></a>
 <span class="sourceLineNo">105</span> * @author Eben Howard - http://squidpony.com - howard@squidpony.com<a name="line.105"></a>
