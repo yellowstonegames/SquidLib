@@ -46,7 +46,7 @@ public class WorldMapView {
 
     public WorldMapView(WorldMapGenerator worldMapGenerator)
     {
-        world = worldMapGenerator;
+        world = worldMapGenerator == null ? new WorldMapGenerator.LocalMap() : worldMapGenerator;
         width = world.width;
         height = world.height;
         colorMap = new float[width][height];
@@ -58,6 +58,7 @@ public class WorldMapView {
     {
         this(new WorldMapGenerator.LocalMap(seed, width, height));
     }
+    
     public static final int
             Desert                 = 0 ,
             Savanna                = 1 ,
@@ -153,14 +154,24 @@ public class WorldMapView {
         }
         BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
     }
-    
-    public float[][] generate()
-    {
-        long seed = (long) world.seedA << 32 | (world.seedB & 0xFFFFFFFFL);
-        world.generate(0.95 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.15,
-                DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.2 + 1.0, seed);
-        biomeMapper.makeBiomes(world);
 
+    public void generate()
+    {
+        generate(world.seedA, world.seedB, 0.9 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.15,
+                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.2 + 1.0);
+    }
+    public void generate(double landMod, double heatMod)
+    {
+        generate(world.seedA, world.seedB, landMod, heatMod);
+    }
+    
+    public void generate(int seedA, int seedB, double landMod, double heatMod) {
+        long seed = (long) seedB << 32 | (seedA & 0xFFFFFFFFL);
+        world.generate(landMod, heatMod, seed);
+        biomeMapper.makeBiomes(world);
+    }
+    public float[][] show()
+    {
         int hc, tc, bc;
         final int[][] heightCodeData = world.heightCodeData;
         double[][] heightData = world.heightData;
@@ -186,12 +197,12 @@ public class WorldMapView {
                         case 1:
                         case 2:
                         case 3:
-                            colorMap[x][y] = (SColor.floatToInt(SColor.lerpFloatColors(shallowColor, ice,
-                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)))));
+                            colorMap[x][y] = SColor.lerpFloatColors(shallowColor, ice,
+                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
                             continue PER_CELL;
                         case 4:
-                            colorMap[x][y] = (SColor.floatToInt(SColor.lerpFloatColors(lightIce, ice,
-                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)))));
+                            colorMap[x][y] = SColor.lerpFloatColors(lightIce, ice,
+                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));
                             continue PER_CELL;
                     }
                 }
@@ -200,13 +211,13 @@ public class WorldMapView {
                     case 1:
                     case 2:
                     case 3:
-                        colorMap[x][y] = (SColor.floatToInt(SColor.lerpFloatColors(
+                        colorMap[x][y] = SColor.lerpFloatColors(
                                 BIOME_COLOR_TABLE[56], coastalColor,
-                                (MathExtras.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)))));
+                                (MathExtras.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));
                         break;
                     default:
-                        colorMap[x][y] = (SColor.floatToInt(SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeMapper.extractPartB(bc)],
-                                BIOME_DARK_COLOR_TABLE[biomeMapper.extractPartA(bc)], biomeMapper.extractMixAmount(bc))));
+                        colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeMapper.extractPartB(bc)],
+                                BIOME_DARK_COLOR_TABLE[biomeMapper.extractPartA(bc)], biomeMapper.extractMixAmount(bc));
                 }
             }
         }

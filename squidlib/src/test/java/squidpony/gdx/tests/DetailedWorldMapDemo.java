@@ -48,9 +48,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 //    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
 //    private static final int width = 256, height = 256;
-//    private static final int width = 400, height = 400; // fast rotations
+    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
-    private static final int width = 1600, height = 800;
+//    private static final int width = 1600, height = 800;
 //    private static final int width = 900, height = 900;
 //    private static final int width = 700, height = 700;
 //    private static final int width = 512, height = 512;
@@ -394,9 +394,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.MimicMap(seed, FastNoise.instance, 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        //world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, FastNoise.instance, 0.7);
+        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, SeededNoise.instance, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, CosmicNumbering.instance, 0.7, 0.0625, 2.5);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, CosmicNumbering.instance, 0.7, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), FastNoise.instance, 0.9);
@@ -539,7 +539,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.nanoTime();
         world.setCenterLongitude((startTime & 0xFFFFFFFFFFFFL) * 0x1p-32);
         //world.setCenterLongitude(++counter * 0.02);
-        world.generate(world.landModifier, world.coolingModifier, seed);
+        world.generate(world.landModifier, world.heatModifier, seed);
         dbm.makeBiomes(world);
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
