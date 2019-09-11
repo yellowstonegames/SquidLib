@@ -76,46 +76,40 @@ public class WorldMapView {
             Ocean                  = 13,
             Empty                  = 14;
 
-    private static float baseIce = SColor.ALICE_BLUE.toFloatBits();
-    private static float ice = baseIce;
-    private static float lightIce = SColor.FLOAT_WHITE;
-    private static float desert = SColor.floatGetI(248, 229, 180);
-    private static float savanna = SColor.floatGetI(181, 200, 100);
-    private static float tropicalRainforest = SColor.floatGetI(66, 123, 25);
-    private static float tundra = SColor.floatGetI(151, 175, 159);
-    private static float temperateRainforest = SColor.floatGetI(54, 113, 60);
-    private static float grassland = SColor.floatGetI(169, 185, 105);
-    private static float seasonalForest = SColor.floatGetI(100, 158, 75);
-    private static float borealForest = SColor.floatGetI(75, 105, 45);
-    private static float woodland = SColor.floatGetI(122, 170, 90);
-    private static float rocky = SColor.floatGetI(171, 175, 145);
-    private static float beach = SColor.floatGetI(255, 235, 180);
-    private static float emptyColor = SColor.DB_INK.toFloatBits();
+    public static float iceColor = SColor.ALICE_BLUE.toFloatBits();
+    public static float lightIceColor = SColor.FLOAT_WHITE;
+    public static float desertColor = SColor.floatGetI(248, 229, 180);
+    public static float savannaColor = SColor.floatGetI(181, 200, 100);
+    public static float tropicalRainforestColor = SColor.floatGetI(66, 123, 25);
+    public static float tundraColor = SColor.floatGetI(151, 175, 159);
+    public static float temperateRainforestColor = SColor.floatGetI(54, 113, 60);
+    public static float grasslandColor = SColor.floatGetI(169, 185, 105);
+    public static float seasonalForestColor = SColor.floatGetI(100, 158, 75);
+    public static float borealForestColor = SColor.floatGetI(75, 105, 45);
+    public static float woodlandColor = SColor.floatGetI(122, 170, 90);
+    public static float rockyColor = SColor.floatGetI(171, 175, 145);
+    public static float beachColor = SColor.floatGetI(255, 235, 180);
+    public static float emptyColor = SColor.DB_INK.toFloatBits();
 
     // water colors
-    private static float baseDeepColor = SColor.floatGetI(0, 42, 88);
-    private static float baseShallowColor = SColor.floatGetI(0, 73, 137);
-    private static float baseCoastalColor = SColor.lightenFloat(baseShallowColor, 0.3f);
-    private static float baseFoamColor = SColor.floatGetI(61,  162, 215);
-
-    private static float deepColor = baseDeepColor;
-    private static float shallowColor = baseShallowColor;
-    private static float coastalColor = baseCoastalColor;
-    private static float foamColor = baseFoamColor;
+    public static float deepColor =    SColor.floatGetI(0, 42, 88);
+    public static float shallowColor = SColor.floatGetI(0, 73, 137);
+    public static float coastalColor = SColor.lightenFloat(shallowColor, 0.3f);
+    public static float foamColor =    SColor.floatGetI(61,  162, 215);
 
     private static float[] biomeColors = {
-            desert,
-            savanna,
-            tropicalRainforest,
-            grassland,
-            woodland,
-            seasonalForest,
-            temperateRainforest,
-            borealForest,
-            tundra,
-            ice,
-            beach,
-            rocky,
+            desertColor,
+            savannaColor,
+            tropicalRainforestColor,
+            grasslandColor,
+            woodlandColor,
+            seasonalForestColor,
+            temperateRainforestColor,
+            borealForestColor,
+            tundraColor,
+            iceColor,
+            beachColor,
+            rockyColor,
             foamColor,
             deepColor,
             emptyColor
@@ -197,11 +191,11 @@ public class WorldMapView {
                         case 1:
                         case 2:
                         case 3:
-                            colorMap[x][y] = SColor.lerpFloatColors(shallowColor, ice,
+                            colorMap[x][y] = SColor.lerpFloatColors(shallowColor, iceColor,
                                     (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
                             continue PER_CELL;
                         case 4:
-                            colorMap[x][y] = SColor.lerpFloatColors(lightIce, ice,
+                            colorMap[x][y] = SColor.lerpFloatColors(lightIceColor, iceColor,
                                     (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));
                             continue PER_CELL;
                     }
