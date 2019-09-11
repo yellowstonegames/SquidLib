@@ -24,10 +24,10 @@ import squidpony.squidmath.*;
 public class WorldMapViewDemo extends ApplicationAdapter {
 
     //private static final int width = 314 * 3, height = 300;
-//    private static final int width = 1024, height = 512;
+    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
 //    private static final int width = 256, height = 256;
-    private static final int width = 400, height = 400; // fast rotations
+//    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
 //    private static final int width = 900, height = 900;
@@ -40,7 +40,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private WorldMapGenerator.RotatingSpaceMap world;
+    private WorldMapGenerator world;
     private WorldMapView wmv;
 
     private int counter = 0;
@@ -48,21 +48,50 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     private boolean spinning = false;
 
     private long ttg = 0; // time to generate
-
+    
+    public int noiseCalls = 0, pixels = 0;
+    
+    public Noise.Noise3D noise;
+    
     @Override
     public void create() {
-        batch = new ImmediateModeRenderer20(200000, false, true, 0);
+        batch = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new StretchViewport(width, height);
         seed = 0x44B94C6A93EF3D54L;//0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
+        noise = new FastNoise(1337, 1f){
+            @Override
+            public float singleSimplex(int seed, float x, float y, float z) {
+                noiseCalls++;
+                return super.singleSimplex(seed, x, y, z);
+            }
+
+            @Override
+            public float singleSimplex(int seed, float x, float y) {
+                noiseCalls++;
+                return super.singleSimplex(seed, x, y);
+            }
+
+            @Override
+            public float singleSimplex(int seed, float x, float y, float z, float w) {
+                noiseCalls++;
+                return super.singleSimplex(seed, x, y, z, w);
+            }
+
+            @Override
+            public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
+                noiseCalls++;
+                return super.singleSimplex(seed, x, y, z, w, u, v);
+            }
+        };
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, new FastNoise(1337, 1f), 1.25);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.875);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.MimicMap(seed, new FastNoise(1337, 1f), 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, new FastNoise(1337, 1f), 0.6);
+//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 0.6);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new FastNoise(1337, 1f), 0.67, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 1.2, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, new FastNoise(1337, 1f), 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, new FastNoise(1337, 1f), 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), new FastNoise(1337, 1f), 0.9);
@@ -122,6 +151,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 
     public void zoomIn() {
         long startTime = System.nanoTime();
+        noiseCalls = 0;
         world.zoomIn();
         wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
         wmv.show();
@@ -130,6 +160,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     public void zoomIn(int zoomX, int zoomY)
     {
         long startTime = System.nanoTime();
+        noiseCalls = 0;
         world.zoomIn(1, zoomX<<1, zoomY<<1);
         wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
         wmv.show();
@@ -138,6 +169,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     public void zoomOut()
     {
         long startTime = System.nanoTime();
+        noiseCalls = 0;
         world.zoomOut();
         wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
         wmv.show();
@@ -146,6 +178,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     public void zoomOut(int zoomX, int zoomY)
     {
         long startTime = System.nanoTime();
+        noiseCalls = 0;
         world.zoomOut(1, zoomX<<1, zoomY<<1);
         wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
         wmv.show();
@@ -155,6 +188,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     {
         long startTime = System.nanoTime();
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
+        noiseCalls = 0;
         wmv.generate((int)(seed & 0xFFFFFFFFL), (int) (seed >>> 32), 0.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
                 DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.35 + 0.9);
         wmv.show();
@@ -173,13 +207,20 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     public void putMap() { 
         float[][] cm = wmv.getColorMap();
         batch.begin(view.getCamera().combined, GL20.GL_POINTS);
+        pixels = 0;
+        float c;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                batch.color(cm[x][y]);
+                c = cm[x][y];
+                if(c != WorldMapView.emptyColor)
+                    pixels++;
+                batch.color(c);
                 batch.vertex(x, y, 0f);
             }
         }
         batch.end();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) 
+            System.out.println((float) (noiseCalls) / pixels);
     }
     
     @Override
