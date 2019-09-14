@@ -348,15 +348,15 @@ public class DungeonBoneGen {
         int sidelen = ts.config.short_side_length;
         int xmax = (wide / sidelen) + 6;
         int ymax = (high / sidelen) + 6;
-        if (xmax > 1006) {
-            return null;
-        }
-        if (ymax > 1006) {
-            return null;
-        }
+//        if (xmax > 1006) {
+//            return null;
+//        }
+//        if (ymax > 1006) {
+//            return null;
+//        }
         if (ts.config.is_corner) {
             c_color = new int[ymax][xmax];
-            int i = 0, j = 0, ypos = -1 * sidelen;
+            int i = 0, j = 0, ypos = -sidelen;
             int[] cc = ts.config.num_colors;
 
             for (j = 0; j < ymax; ++j) {
@@ -371,12 +371,12 @@ public class DungeonBoneGen {
             for (j = 0; j < ymax - 3; ++j) {
                 for (i = 0; i < xmax - 3; ++i) {
                     int p = (i - j + 1) & 3; // corner type
-                    if (i + 3 >= 1006) {
-                        return null;
-                    }
-                    if (j + 3 >= 1006) {
-                        return null;
-                    }
+//                    if (i + 3 >= 1006) {
+//                        return null;
+//                    }
+//                    if (j + 3 >= 1006) {
+//                        return null;
+//                    }
                     if (matchingAdjacent(j, i) && matchingAdjacent(j + 1, i) && matchingAdjacent(j + 2, i)
                             && matchingAdjacent(j, i + 1) && matchingAdjacent(j + 1, i + 1) && matchingAdjacent(j + 2, i + 1)) {
                         p = ((i + 1) - (j + 1) + 1) & 3;
@@ -419,7 +419,16 @@ public class DungeonBoneGen {
                             return null;
 
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
+
+                        ////debug info in case fix on September 13, 2019 isn't complete
+//                        workingRegion.refill(t.data, t.width, t.height, wide, high);
+//                        System.out.println("\nhorizontal tile at i="+i+",j="+j);
+//                        System.out.println(workingRegion);
+//                        region.or(workingRegion.translate(xpos, ypos));
+//                        System.out.println("\nhorizontal tile translated at i="+i+",j="+j+",xPos="+xpos+",yPos="+ypos+",first="+workingRegion.first());
+//                        System.out.println(workingRegion);
                         region.or(workingRegion.refill(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+
                     }
                     xpos += sidelen * 2;
                     // now we're at the end of a previous vertical one
@@ -434,6 +443,15 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
+                        
+                        ////debug info in case fix on September 13, 2019 isn't complete
+//                        workingRegion.refill(t.data, t.width, t.height, wide, high);
+//                        System.out.println("\nvertical tile at i="+i+",j="+j);
+//                        System.out.println(workingRegion);
+//                        region.or(workingRegion.translate(xpos, ypos));
+//                        System.out.println("\nvertical tile translated at i="+i+",j="+j+",xPos="+xpos+",yPos="+ypos+",first="+workingRegion.first());
+//                        System.out.println(workingRegion);
+
                         region.or(workingRegion.refill(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                 }

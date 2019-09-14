@@ -83,9 +83,11 @@ public class DungeonGeneratorTest {
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(new DiverRNG(2252637788195L));
-        System.out.println("MixedGenerator");
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
+        DungeonGenerator dungeonGenerator;
         char[][] dungeon;
+
+        System.out.println("MixedGenerator");
+        dungeonGenerator = new DungeonGenerator(width, height, rng);
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(15);
         dungeonGenerator.addGrass(10);
@@ -371,7 +373,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("ConnectingMapGenerator\n");
         rng.setState(1L);
-        ConnectingMapGenerator cmg = new ConnectingMapGenerator(60, 32, 4, 4, rng);
+        ConnectingMapGenerator cmg = new ConnectingMapGenerator(90, 48, 6, 6, rng);
         sdg.clearEffects();
         //sdg.addGrass(DungeonUtility.CORRIDOR_FLOOR, 20);
         cmg.generate();
@@ -388,18 +390,15 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
         
-        
-        dungeonGenerator = new DungeonGenerator(200, 200, new StatefulRNG(new DiverRNG(1L)));
+        dungeonGenerator = new DungeonGenerator(500, 500, new StatefulRNG(2252637788195L));
         dungeon = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
-        dungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
-        dungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
         dungeonGenerator.setDungeon(
                 DungeonUtility.hashesToLines(dungeon, true));
         System.out.println(dungeonGenerator);
         System.out.println();
-//        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
-//        System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
         
