@@ -1421,7 +1421,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return this;
 
         int start = Math.max(0, x), len = Math.min(width, Math.min(other.width, other.width + x) - start),
-        oys = other.ySections, jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+        oys = other.ySections, jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
         originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
         long[] data2 = new long[other.width * ySections];
 
@@ -1673,7 +1673,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return this;
 
         int start = Math.max(0, x), len = Math.min(width, Math.min(other.width, other.width + x) - start),
-                oys = other.ySections, jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                oys = other.ySections, jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
                 originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
         long[] data2 = new long[other.width * ySections];
 
@@ -2428,7 +2428,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width < 1 || ySections <= 0 || (x == 0 && y == 0))
             return this;
         int start = Math.max(0, x), len = Math.min(width, width + x) - start,
-                jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
                 originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
         long[] data2 = new long[width * ySections];
 
@@ -2500,7 +2500,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(width < 1 || ySections <= 0 || (x == 0 && y == 0))
             return this;
         int start = Math.max(0, x), len = Math.min(width, width + x) - start,
-                jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
                 originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
         long[] data2 = new long[width * ySections];
         long prev, tmp;
@@ -2581,7 +2581,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 width2 = width + 1 >>> 1, ySections2 = ySections + 1 >>> 1,
                 start = Math.max(0, x), len = Math.min(width, width + x) - start,
                 //tall = (Math.min(height, height + y) - Math.max(0, y)) + 63 >> 6,
-                jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
                 originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump),
                 oddX = (x & 1), oddY = (y & 1);
         long[] data2 = new long[width * ySections];

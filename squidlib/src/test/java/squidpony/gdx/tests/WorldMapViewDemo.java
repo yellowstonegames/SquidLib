@@ -219,7 +219,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
             }
         }
         batch.end();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) // debug
             System.out.println((float) (noiseCalls) / pixels);
     }
     
