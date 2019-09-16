@@ -45,6 +45,39 @@ public class ShufflerTest {
                 System.out.println("\n");
         }
     }
+    
+    @Test
+    public void testGapShufflerPairing()
+    {
+        String[] zodiac = new String[12];
+        RNG shuffleRNG = new RNG(new XoshiroStarPhi32RNG(1234567890123456L));
+        for (int i = 0; i < zodiac.length; i++) {
+            zodiac[i] = FakeLanguageGen.ANCIENT_EGYPTIAN.word(shuffleRNG, true, shuffleRNG.maxIntOf(4, 3) + 1);
+        }
+        String[] phrases = new String[]{" is in retrograde", " ascends", " reaches toward the North", " leans Southward",
+                " stands against the West wind", " charges into the East", " resides in the Castle",
+                " feels pensive", " seizes the day", " looms mightily", " retreats into darkness"},
+                meanings = new String[]
+                        {". It is a dire omen for those under the sign of @.", ". This bodes ill for the house of @.",
+                                ". Mayhaps this is a significant portent for they with the sign of @...",
+                                "! Buy a lottery ticket if you're a @!",
+                                ". If you're a @, you're probably not gonna die!",
+                                ". You should avoid spicy foods if you are under the sign of @.",
+                                ". That's some bad juju for those poor fools under the sign of @.",
+                                ". This is going to be a bad one.",
+                                ". Oh yeah, this is gonna be good...",
+                                "! This is the dawning of the Age of Aquarius!"};
+        GapShuffler<String> zodiacShuffler = new GapShuffler<>(zodiac, shuffleRNG);
+        GapShuffler<String> phraseShuffler = new GapShuffler<>(phrases, shuffleRNG);
+        GapShuffler<String> meaningShuffler = new GapShuffler<>(meanings, shuffleRNG);
+
+        if(PRINTING) {
+            for (int i = 0; i < 24; i++) {
+//            System.out.println(zodiacShuffler.next() + " " + zodiacShuffler.next() + " " + zodiacShuffler.next() + " " + zodiacShuffler.next());
+                System.out.println(zodiacShuffler.next() + phraseShuffler.next() + meaningShuffler.next().replace("@", zodiacShuffler.next()));
+            }
+        }
+    }        
     @Test
     public void testLSSBounds()
     {
@@ -148,7 +181,7 @@ public class ShufflerTest {
     @Test
     public void testSNSIS()
     {
-        SNShuffledIntSequence sis = new SNShuffledIntSequence(10, 0xBEEF1E57);
+        SNShuffledIntSequence sis = new SNShuffledIntSequence(6, 0xBEEF1E57);
         for (int j = 0; j < 10; j++) {
             System.out.print(sis.next());
             for (int i = 1; i < 20; i++) {
