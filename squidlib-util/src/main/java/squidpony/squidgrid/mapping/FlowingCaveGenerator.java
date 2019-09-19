@@ -164,7 +164,8 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);
         ca.current.remake(gen.region.deteriorate(rng, 0.9));
         gen.region.or(ca.runBasicSmoothing());
-        gen.region = gen.region.removeEdges().largestPart();
+        ca.current.remake(gen.region.removeEdges().largestPart());
+        gen.region.remake(ca.runDiagonalGapCleanup());
         return gen.region.intoChars(gen.getDungeon(), '.', '#');
     }
 
@@ -197,7 +198,8 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         }
         gen.region.remake(gen.region.removeEdges());
         gen.region.insertSeveral(DungeonUtility.ensurePath(gen.region.intoChars(gen.getDungeon(), '.', '#'), rng, '.', '#'));
-        gen.region = gen.region.largestPart();
+        ca.current.remake(gen.region.largestPart());
+        gen.region.remake(ca.runDiagonalGapCleanup());
         return gen.region.intoChars(gen.getDungeon(), '.', '#');
     }
 

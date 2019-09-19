@@ -1429,7 +1429,7 @@
 <span class="sourceLineNo">1421</span>            return this;<a name="line.1421"></a>
 <span class="sourceLineNo">1422</span><a name="line.1422"></a>
 <span class="sourceLineNo">1423</span>        int start = Math.max(0, x), len = Math.min(width, Math.min(other.width, other.width + x) - start),<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>        oys = other.ySections, jump = (y == 0) ? 0 : (y &lt; 0) ? -(1-y &gt;&gt;&gt; 6) : (y-1 &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.1424"></a>
+<span class="sourceLineNo">1424</span>        oys = other.ySections, jump = (y == 0) ? 0 : (y &lt; 0) ? -(-y &gt;&gt;&gt; 6) : (y &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.1424"></a>
 <span class="sourceLineNo">1425</span>        originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);<a name="line.1425"></a>
 <span class="sourceLineNo">1426</span>        long[] data2 = new long[other.width * ySections];<a name="line.1426"></a>
 <span class="sourceLineNo">1427</span><a name="line.1427"></a>
@@ -1681,7 +1681,7 @@
 <span class="sourceLineNo">1673</span>            return this;<a name="line.1673"></a>
 <span class="sourceLineNo">1674</span><a name="line.1674"></a>
 <span class="sourceLineNo">1675</span>        int start = Math.max(0, x), len = Math.min(width, Math.min(other.width, other.width + x) - start),<a name="line.1675"></a>
-<span class="sourceLineNo">1676</span>                oys = other.ySections, jump = (y == 0) ? 0 : (y &lt; 0) ? -(1-y &gt;&gt;&gt; 6) : (y-1 &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.1676"></a>
+<span class="sourceLineNo">1676</span>                oys = other.ySections, jump = (y == 0) ? 0 : (y &lt; 0) ? -(-y &gt;&gt;&gt; 6) : (y-1 &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.1676"></a>
 <span class="sourceLineNo">1677</span>                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);<a name="line.1677"></a>
 <span class="sourceLineNo">1678</span>        long[] data2 = new long[other.width * ySections];<a name="line.1678"></a>
 <span class="sourceLineNo">1679</span><a name="line.1679"></a>
@@ -2436,7 +2436,7 @@
 <span class="sourceLineNo">2428</span>        if(width &lt; 1 || ySections &lt;= 0 || (x == 0 &amp;&amp; y == 0))<a name="line.2428"></a>
 <span class="sourceLineNo">2429</span>            return this;<a name="line.2429"></a>
 <span class="sourceLineNo">2430</span>        int start = Math.max(0, x), len = Math.min(width, width + x) - start,<a name="line.2430"></a>
-<span class="sourceLineNo">2431</span>                jump = (y == 0) ? 0 : (y &lt; 0) ? -(1-y &gt;&gt;&gt; 6) : (y-1 &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.2431"></a>
+<span class="sourceLineNo">2431</span>                jump = (y == 0) ? 0 : (y &lt; 0) ? -(-y &gt;&gt;&gt; 6) : (y &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.2431"></a>
 <span class="sourceLineNo">2432</span>                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);<a name="line.2432"></a>
 <span class="sourceLineNo">2433</span>        long[] data2 = new long[width * ySections];<a name="line.2433"></a>
 <span class="sourceLineNo">2434</span><a name="line.2434"></a>
@@ -2508,7 +2508,7 @@
 <span class="sourceLineNo">2500</span>        if(width &lt; 1 || ySections &lt;= 0 || (x == 0 &amp;&amp; y == 0))<a name="line.2500"></a>
 <span class="sourceLineNo">2501</span>            return this;<a name="line.2501"></a>
 <span class="sourceLineNo">2502</span>        int start = Math.max(0, x), len = Math.min(width, width + x) - start,<a name="line.2502"></a>
-<span class="sourceLineNo">2503</span>                jump = (y == 0) ? 0 : (y &lt; 0) ? -(1-y &gt;&gt;&gt; 6) : (y-1 &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.2503"></a>
+<span class="sourceLineNo">2503</span>                jump = (y == 0) ? 0 : (y &lt; 0) ? -(-y &gt;&gt;&gt; 6) : (y &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.2503"></a>
 <span class="sourceLineNo">2504</span>                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);<a name="line.2504"></a>
 <span class="sourceLineNo">2505</span>        long[] data2 = new long[width * ySections];<a name="line.2505"></a>
 <span class="sourceLineNo">2506</span>        long prev, tmp;<a name="line.2506"></a>
@@ -2589,7 +2589,7 @@
 <span class="sourceLineNo">2581</span>                width2 = width + 1 &gt;&gt;&gt; 1, ySections2 = ySections + 1 &gt;&gt;&gt; 1,<a name="line.2581"></a>
 <span class="sourceLineNo">2582</span>                start = Math.max(0, x), len = Math.min(width, width + x) - start,<a name="line.2582"></a>
 <span class="sourceLineNo">2583</span>                //tall = (Math.min(height, height + y) - Math.max(0, y)) + 63 &gt;&gt; 6,<a name="line.2583"></a>
-<span class="sourceLineNo">2584</span>                jump = (y == 0) ? 0 : (y &lt; 0) ? -(1-y &gt;&gt;&gt; 6) : (y-1 &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.2584"></a>
+<span class="sourceLineNo">2584</span>                jump = (y == 0) ? 0 : (y &lt; 0) ? -(-y &gt;&gt;&gt; 6) : (y &gt;&gt;&gt; 6), lily = (y &lt; 0) ? -(-y &amp; 63) : (y &amp; 63),<a name="line.2584"></a>
 <span class="sourceLineNo">2585</span>                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump),<a name="line.2585"></a>
 <span class="sourceLineNo">2586</span>                oddX = (x &amp; 1), oddY = (y &amp; 1);<a name="line.2586"></a>
 <span class="sourceLineNo">2587</span>        long[] data2 = new long[width * ySections];<a name="line.2587"></a>

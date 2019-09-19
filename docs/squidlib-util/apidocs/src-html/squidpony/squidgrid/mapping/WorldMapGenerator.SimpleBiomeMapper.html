@@ -51,7 +51,7 @@
 <span class="sourceLineNo">043</span>    public final double[][] heightData, heatData, moistureData;<a name="line.43"></a>
 <span class="sourceLineNo">044</span>    public final GreasedRegion landData;<a name="line.44"></a>
 <span class="sourceLineNo">045</span>    public final int[][] heightCodeData;<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    public double landModifier = -1.0, coolingModifier = 1.0,<a name="line.46"></a>
+<span class="sourceLineNo">046</span>    public double landModifier = -1.0, heatModifier = 1.0,<a name="line.46"></a>
 <span class="sourceLineNo">047</span>            minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,<a name="line.47"></a>
 <span class="sourceLineNo">048</span>            minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,<a name="line.48"></a>
 <span class="sourceLineNo">049</span>            minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,<a name="line.49"></a>
@@ -183,19 +183,19 @@
 <span class="sourceLineNo">175</span>    }<a name="line.175"></a>
 <span class="sourceLineNo">176</span><a name="line.176"></a>
 <span class="sourceLineNo">177</span>    /**<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect<a name="line.178"></a>
+<span class="sourceLineNo">178</span>     * Generates a world using the specified RNG state as a long, with specific land and heat modifiers that affect<a name="line.178"></a>
 <span class="sourceLineNo">179</span>     * the land-water ratio and the average temperature, respectively.<a name="line.179"></a>
 <span class="sourceLineNo">180</span>     * The worlds this produces will always have width and height as specified in the constructor (default 256x256).<a name="line.180"></a>
 <span class="sourceLineNo">181</span>     * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width<a name="line.181"></a>
 <span class="sourceLineNo">182</span>     * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.<a name="line.182"></a>
 <span class="sourceLineNo">183</span>     * @param landMod 1.0 is Earth-like, less than 1 is more-water, more than 1 is more-land; a random value will be used if this is negative<a name="line.183"></a>
-<span class="sourceLineNo">184</span>     * @param coolMod 1.125 is Earth-like, less than 1 is cooler, more than 1 is hotter; a random value will be used if this is negative<a name="line.184"></a>
+<span class="sourceLineNo">184</span>     * @param heatMod 1.125 is Earth-like, less than 1 is cooler, more than 1 is hotter; a random value will be used if this is negative<a name="line.184"></a>
 <span class="sourceLineNo">185</span>     * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data<a name="line.185"></a>
 <span class="sourceLineNo">186</span>     */<a name="line.186"></a>
-<span class="sourceLineNo">187</span>    public void generate(double landMod, double coolMod, long state)<a name="line.187"></a>
+<span class="sourceLineNo">187</span>    public void generate(double landMod, double heatMod, long state)<a name="line.187"></a>
 <span class="sourceLineNo">188</span>    {<a name="line.188"></a>
 <span class="sourceLineNo">189</span>        if(cacheA != (int) (state &amp; 0xFFFFFFFFL) || cacheB != (int) (state &gt;&gt;&gt; 32) ||<a name="line.189"></a>
-<span class="sourceLineNo">190</span>                landMod != landModifier || coolMod != coolingModifier)<a name="line.190"></a>
+<span class="sourceLineNo">190</span>                landMod != landModifier || heatMod != heatModifier)<a name="line.190"></a>
 <span class="sourceLineNo">191</span>        {<a name="line.191"></a>
 <span class="sourceLineNo">192</span>            seedA = (int) (state &amp; 0xFFFFFFFFL);<a name="line.192"></a>
 <span class="sourceLineNo">193</span>            seedB = (int) (state &gt;&gt;&gt; 32);<a name="line.193"></a>
@@ -212,7 +212,7 @@
 <span class="sourceLineNo">204</span><a name="line.204"></a>
 <span class="sourceLineNo">205</span>        regenerate(startX = (zoomStartX &gt;&gt; zoom) - (width &gt;&gt; 1 + zoom), startY = (zoomStartY &gt;&gt; zoom) - (height &gt;&gt; 1 + zoom),<a name="line.205"></a>
 <span class="sourceLineNo">206</span>                //startCacheX.peek(), startCacheY.peek(),<a name="line.206"></a>
-<span class="sourceLineNo">207</span>                usedWidth = (width &gt;&gt; zoom), usedHeight = (height &gt;&gt; zoom), landMod, coolMod, seedA, seedB);<a name="line.207"></a>
+<span class="sourceLineNo">207</span>                usedWidth = (width &gt;&gt; zoom), usedHeight = (height &gt;&gt; zoom), landMod, heatMod, seedA, seedB);<a name="line.207"></a>
 <span class="sourceLineNo">208</span>    }<a name="line.208"></a>
 <span class="sourceLineNo">209</span><a name="line.209"></a>
 <span class="sourceLineNo">210</span>    /**<a name="line.210"></a>
@@ -270,7 +270,7 @@
 <span class="sourceLineNo">262</span>            regenerate(startX = (zoomStartX &gt;&gt; zoom) - (width &gt;&gt; zoom + 1), startY = (zoomStartY &gt;&gt; zoom) - (height &gt;&gt; zoom + 1),<a name="line.262"></a>
 <span class="sourceLineNo">263</span>                    //startCacheX.peek(), startCacheY.peek(),<a name="line.263"></a>
 <span class="sourceLineNo">264</span>                    usedWidth = width &gt;&gt; zoom,  usedHeight = height &gt;&gt; zoom,<a name="line.264"></a>
-<span class="sourceLineNo">265</span>                    landModifier, coolingModifier, cacheA, cacheB);<a name="line.265"></a>
+<span class="sourceLineNo">265</span>                    landModifier, heatModifier, cacheA, cacheB);<a name="line.265"></a>
 <span class="sourceLineNo">266</span>            rng.setState(cacheA, cacheB);<a name="line.266"></a>
 <span class="sourceLineNo">267</span>        }<a name="line.267"></a>
 <span class="sourceLineNo">268</span><a name="line.268"></a>
@@ -335,12 +335,12 @@
 <span class="sourceLineNo">327</span>        regenerate(startX = (zoomStartX &gt;&gt; zoom) - (width &gt;&gt; 1 + zoom), startY = (zoomStartY &gt;&gt; zoom) - (height &gt;&gt; 1 + zoom),<a name="line.327"></a>
 <span class="sourceLineNo">328</span>                //startCacheX.peek(), startCacheY.peek(),<a name="line.328"></a>
 <span class="sourceLineNo">329</span>                usedWidth = width &gt;&gt; zoom, usedHeight = height &gt;&gt; zoom,<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                landModifier, coolingModifier, cacheA, cacheB);<a name="line.330"></a>
+<span class="sourceLineNo">330</span>                landModifier, heatModifier, cacheA, cacheB);<a name="line.330"></a>
 <span class="sourceLineNo">331</span>        rng.setState(cacheA, cacheB);<a name="line.331"></a>
 <span class="sourceLineNo">332</span>    }<a name="line.332"></a>
 <span class="sourceLineNo">333</span><a name="line.333"></a>
 <span class="sourceLineNo">334</span>    protected abstract void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.334"></a>
-<span class="sourceLineNo">335</span>                                       double landMod, double coolMod, int stateA, int stateB);<a name="line.335"></a>
+<span class="sourceLineNo">335</span>                                       double landMod, double heatMod, int stateA, int stateB);<a name="line.335"></a>
 <span class="sourceLineNo">336</span>    /**<a name="line.336"></a>
 <span class="sourceLineNo">337</span>     * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the<a name="line.337"></a>
 <span class="sourceLineNo">338</span>     * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this<a name="line.338"></a>
@@ -1283,10 +1283,10 @@
 <span class="sourceLineNo">1275</span>        }<a name="line.1275"></a>
 <span class="sourceLineNo">1276</span><a name="line.1276"></a>
 <span class="sourceLineNo">1277</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.1277"></a>
-<span class="sourceLineNo">1278</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.1278"></a>
+<span class="sourceLineNo">1278</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.1278"></a>
 <span class="sourceLineNo">1279</span>        {<a name="line.1279"></a>
 <span class="sourceLineNo">1280</span>            boolean fresh = false;<a name="line.1280"></a>
-<span class="sourceLineNo">1281</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.1281"></a>
+<span class="sourceLineNo">1281</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.1281"></a>
 <span class="sourceLineNo">1282</span>            {<a name="line.1282"></a>
 <span class="sourceLineNo">1283</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.1283"></a>
 <span class="sourceLineNo">1284</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.1284"></a>
@@ -1309,7 +1309,7 @@
 <span class="sourceLineNo">1301</span>            int t;<a name="line.1301"></a>
 <span class="sourceLineNo">1302</span><a name="line.1302"></a>
 <span class="sourceLineNo">1303</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.1875) + 0.99 : landMod;<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1304"></a>
+<span class="sourceLineNo">1304</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.1304"></a>
 <span class="sourceLineNo">1305</span><a name="line.1305"></a>
 <span class="sourceLineNo">1306</span>            double p, q,<a name="line.1306"></a>
 <span class="sourceLineNo">1307</span>                    ps, pc,<a name="line.1307"></a>
@@ -1411,7 +1411,7 @@
 <span class="sourceLineNo">1403</span>                minHeat1 = ps;<a name="line.1403"></a>
 <span class="sourceLineNo">1404</span>                maxHeat1 = pc;<a name="line.1404"></a>
 <span class="sourceLineNo">1405</span>            }<a name="line.1405"></a>
-<span class="sourceLineNo">1406</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.1406"></a>
+<span class="sourceLineNo">1406</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.1406"></a>
 <span class="sourceLineNo">1407</span>            qs = Double.POSITIVE_INFINITY;<a name="line.1407"></a>
 <span class="sourceLineNo">1408</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.1408"></a>
 <span class="sourceLineNo">1409</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1409"></a>
@@ -1642,10 +1642,10 @@
 <span class="sourceLineNo">1634</span>        }<a name="line.1634"></a>
 <span class="sourceLineNo">1635</span><a name="line.1635"></a>
 <span class="sourceLineNo">1636</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.1636"></a>
-<span class="sourceLineNo">1637</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.1637"></a>
+<span class="sourceLineNo">1637</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.1637"></a>
 <span class="sourceLineNo">1638</span>        {<a name="line.1638"></a>
 <span class="sourceLineNo">1639</span>            boolean fresh = false;<a name="line.1639"></a>
-<span class="sourceLineNo">1640</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.1640"></a>
+<span class="sourceLineNo">1640</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.1640"></a>
 <span class="sourceLineNo">1641</span>            {<a name="line.1641"></a>
 <span class="sourceLineNo">1642</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.1642"></a>
 <span class="sourceLineNo">1643</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.1643"></a>
@@ -1668,7 +1668,7 @@
 <span class="sourceLineNo">1660</span>            int t;<a name="line.1660"></a>
 <span class="sourceLineNo">1661</span><a name="line.1661"></a>
 <span class="sourceLineNo">1662</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.1662"></a>
-<span class="sourceLineNo">1663</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1663"></a>
+<span class="sourceLineNo">1663</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.1663"></a>
 <span class="sourceLineNo">1664</span><a name="line.1664"></a>
 <span class="sourceLineNo">1665</span>            double p,<a name="line.1665"></a>
 <span class="sourceLineNo">1666</span>                    ps, pc,<a name="line.1666"></a>
@@ -1771,7 +1771,7 @@
 <span class="sourceLineNo">1763</span>                minHeat1 = ps;<a name="line.1763"></a>
 <span class="sourceLineNo">1764</span>                maxHeat1 = pc;<a name="line.1764"></a>
 <span class="sourceLineNo">1765</span>            }<a name="line.1765"></a>
-<span class="sourceLineNo">1766</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.1766"></a>
+<span class="sourceLineNo">1766</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.1766"></a>
 <span class="sourceLineNo">1767</span>            qs = Double.POSITIVE_INFINITY;<a name="line.1767"></a>
 <span class="sourceLineNo">1768</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.1768"></a>
 <span class="sourceLineNo">1769</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1769"></a>
@@ -1992,10 +1992,10 @@
 <span class="sourceLineNo">1984</span>        }<a name="line.1984"></a>
 <span class="sourceLineNo">1985</span><a name="line.1985"></a>
 <span class="sourceLineNo">1986</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.1986"></a>
-<span class="sourceLineNo">1987</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.1987"></a>
+<span class="sourceLineNo">1987</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.1987"></a>
 <span class="sourceLineNo">1988</span>        {<a name="line.1988"></a>
 <span class="sourceLineNo">1989</span>            boolean fresh = false;<a name="line.1989"></a>
-<span class="sourceLineNo">1990</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.1990"></a>
+<span class="sourceLineNo">1990</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.1990"></a>
 <span class="sourceLineNo">1991</span>            {<a name="line.1991"></a>
 <span class="sourceLineNo">1992</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.1992"></a>
 <span class="sourceLineNo">1993</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.1993"></a>
@@ -2018,7 +2018,7 @@
 <span class="sourceLineNo">2010</span>            int t;<a name="line.2010"></a>
 <span class="sourceLineNo">2011</span><a name="line.2011"></a>
 <span class="sourceLineNo">2012</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;<a name="line.2012"></a>
-<span class="sourceLineNo">2013</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.2013"></a>
+<span class="sourceLineNo">2013</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.2013"></a>
 <span class="sourceLineNo">2014</span><a name="line.2014"></a>
 <span class="sourceLineNo">2015</span>            double p,<a name="line.2015"></a>
 <span class="sourceLineNo">2016</span>                    ps, pc,<a name="line.2016"></a>
@@ -2140,7 +2140,7 @@
 <span class="sourceLineNo">2132</span>                minHeat1 = ps;<a name="line.2132"></a>
 <span class="sourceLineNo">2133</span>                maxHeat1 = pc;<a name="line.2133"></a>
 <span class="sourceLineNo">2134</span>            }<a name="line.2134"></a>
-<span class="sourceLineNo">2135</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.2135"></a>
+<span class="sourceLineNo">2135</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.2135"></a>
 <span class="sourceLineNo">2136</span>            qs = Double.POSITIVE_INFINITY;<a name="line.2136"></a>
 <span class="sourceLineNo">2137</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.2137"></a>
 <span class="sourceLineNo">2138</span>            ps = Double.POSITIVE_INFINITY;<a name="line.2138"></a>
@@ -2350,10 +2350,10 @@
 <span class="sourceLineNo">2342</span>        }<a name="line.2342"></a>
 <span class="sourceLineNo">2343</span><a name="line.2343"></a>
 <span class="sourceLineNo">2344</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.2344"></a>
-<span class="sourceLineNo">2345</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.2345"></a>
+<span class="sourceLineNo">2345</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.2345"></a>
 <span class="sourceLineNo">2346</span>        {<a name="line.2346"></a>
 <span class="sourceLineNo">2347</span>            boolean fresh = false;<a name="line.2347"></a>
-<span class="sourceLineNo">2348</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.2348"></a>
+<span class="sourceLineNo">2348</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.2348"></a>
 <span class="sourceLineNo">2349</span>            {<a name="line.2349"></a>
 <span class="sourceLineNo">2350</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.2350"></a>
 <span class="sourceLineNo">2351</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.2351"></a>
@@ -2376,7 +2376,7 @@
 <span class="sourceLineNo">2368</span>            int t;<a name="line.2368"></a>
 <span class="sourceLineNo">2369</span><a name="line.2369"></a>
 <span class="sourceLineNo">2370</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.2370"></a>
-<span class="sourceLineNo">2371</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.2371"></a>
+<span class="sourceLineNo">2371</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.2371"></a>
 <span class="sourceLineNo">2372</span><a name="line.2372"></a>
 <span class="sourceLineNo">2373</span>            earth.remake(earthOriginal);<a name="line.2373"></a>
 <span class="sourceLineNo">2374</span><a name="line.2374"></a>
@@ -2538,7 +2538,7 @@
 <span class="sourceLineNo">2530</span>                minHeat1 = ps;<a name="line.2530"></a>
 <span class="sourceLineNo">2531</span>                maxHeat1 = pc;<a name="line.2531"></a>
 <span class="sourceLineNo">2532</span>            }<a name="line.2532"></a>
-<span class="sourceLineNo">2533</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.2533"></a>
+<span class="sourceLineNo">2533</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.2533"></a>
 <span class="sourceLineNo">2534</span>            qs = Double.POSITIVE_INFINITY;<a name="line.2534"></a>
 <span class="sourceLineNo">2535</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.2535"></a>
 <span class="sourceLineNo">2536</span>            ps = Double.POSITIVE_INFINITY;<a name="line.2536"></a>
@@ -2716,10 +2716,10 @@
 <span class="sourceLineNo">2708</span>        //private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;<a name="line.2708"></a>
 <span class="sourceLineNo">2709</span><a name="line.2709"></a>
 <span class="sourceLineNo">2710</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.2710"></a>
-<span class="sourceLineNo">2711</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.2711"></a>
+<span class="sourceLineNo">2711</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.2711"></a>
 <span class="sourceLineNo">2712</span>        {<a name="line.2712"></a>
 <span class="sourceLineNo">2713</span>            boolean fresh = false;<a name="line.2713"></a>
-<span class="sourceLineNo">2714</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.2714"></a>
+<span class="sourceLineNo">2714</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.2714"></a>
 <span class="sourceLineNo">2715</span>            {<a name="line.2715"></a>
 <span class="sourceLineNo">2716</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.2716"></a>
 <span class="sourceLineNo">2717</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.2717"></a>
@@ -2744,7 +2744,7 @@
 <span class="sourceLineNo">2736</span>            int t;<a name="line.2736"></a>
 <span class="sourceLineNo">2737</span><a name="line.2737"></a>
 <span class="sourceLineNo">2738</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;<a name="line.2738"></a>
-<span class="sourceLineNo">2739</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.2739"></a>
+<span class="sourceLineNo">2739</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.2739"></a>
 <span class="sourceLineNo">2740</span><a name="line.2740"></a>
 <span class="sourceLineNo">2741</span>            double p,<a name="line.2741"></a>
 <span class="sourceLineNo">2742</span>                    ps, pc,<a name="line.2742"></a>
@@ -2872,7 +2872,7 @@
 <span class="sourceLineNo">2864</span>                minHeat1 = ps;<a name="line.2864"></a>
 <span class="sourceLineNo">2865</span>                maxHeat1 = pc;<a name="line.2865"></a>
 <span class="sourceLineNo">2866</span>            }<a name="line.2866"></a>
-<span class="sourceLineNo">2867</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.2867"></a>
+<span class="sourceLineNo">2867</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.2867"></a>
 <span class="sourceLineNo">2868</span>            qs = Double.POSITIVE_INFINITY;<a name="line.2868"></a>
 <span class="sourceLineNo">2869</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.2869"></a>
 <span class="sourceLineNo">2870</span>            ps = Double.POSITIVE_INFINITY;<a name="line.2870"></a>
@@ -3055,10 +3055,10 @@
 <span class="sourceLineNo">3047</span>        }<a name="line.3047"></a>
 <span class="sourceLineNo">3048</span><a name="line.3048"></a>
 <span class="sourceLineNo">3049</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.3049"></a>
-<span class="sourceLineNo">3050</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.3050"></a>
+<span class="sourceLineNo">3050</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.3050"></a>
 <span class="sourceLineNo">3051</span>        {<a name="line.3051"></a>
 <span class="sourceLineNo">3052</span>            boolean fresh = false;<a name="line.3052"></a>
-<span class="sourceLineNo">3053</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.3053"></a>
+<span class="sourceLineNo">3053</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.3053"></a>
 <span class="sourceLineNo">3054</span>            {<a name="line.3054"></a>
 <span class="sourceLineNo">3055</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.3055"></a>
 <span class="sourceLineNo">3056</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.3056"></a>
@@ -3083,7 +3083,7 @@
 <span class="sourceLineNo">3075</span>            int t;<a name="line.3075"></a>
 <span class="sourceLineNo">3076</span><a name="line.3076"></a>
 <span class="sourceLineNo">3077</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;<a name="line.3077"></a>
-<span class="sourceLineNo">3078</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.3078"></a>
+<span class="sourceLineNo">3078</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.3078"></a>
 <span class="sourceLineNo">3079</span><a name="line.3079"></a>
 <span class="sourceLineNo">3080</span>            double p,<a name="line.3080"></a>
 <span class="sourceLineNo">3081</span>                    ps, pc,<a name="line.3081"></a>
@@ -3207,7 +3207,7 @@
 <span class="sourceLineNo">3199</span>                minHeat1 = ps;<a name="line.3199"></a>
 <span class="sourceLineNo">3200</span>                maxHeat1 = pc;<a name="line.3200"></a>
 <span class="sourceLineNo">3201</span>            }<a name="line.3201"></a>
-<span class="sourceLineNo">3202</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.3202"></a>
+<span class="sourceLineNo">3202</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.3202"></a>
 <span class="sourceLineNo">3203</span>            qs = Double.POSITIVE_INFINITY;<a name="line.3203"></a>
 <span class="sourceLineNo">3204</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.3204"></a>
 <span class="sourceLineNo">3205</span>            ps = Double.POSITIVE_INFINITY;<a name="line.3205"></a>
@@ -3451,10 +3451,10 @@
 <span class="sourceLineNo">3443</span>        }<a name="line.3443"></a>
 <span class="sourceLineNo">3444</span><a name="line.3444"></a>
 <span class="sourceLineNo">3445</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.3445"></a>
-<span class="sourceLineNo">3446</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.3446"></a>
+<span class="sourceLineNo">3446</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.3446"></a>
 <span class="sourceLineNo">3447</span>        {<a name="line.3447"></a>
 <span class="sourceLineNo">3448</span>            boolean fresh = false;<a name="line.3448"></a>
-<span class="sourceLineNo">3449</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.3449"></a>
+<span class="sourceLineNo">3449</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.3449"></a>
 <span class="sourceLineNo">3450</span>            {<a name="line.3450"></a>
 <span class="sourceLineNo">3451</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.3451"></a>
 <span class="sourceLineNo">3452</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.3452"></a>
@@ -3479,7 +3479,7 @@
 <span class="sourceLineNo">3471</span>            int t;<a name="line.3471"></a>
 <span class="sourceLineNo">3472</span><a name="line.3472"></a>
 <span class="sourceLineNo">3473</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;<a name="line.3473"></a>
-<span class="sourceLineNo">3474</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.3474"></a>
+<span class="sourceLineNo">3474</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.3474"></a>
 <span class="sourceLineNo">3475</span><a name="line.3475"></a>
 <span class="sourceLineNo">3476</span>            double p,<a name="line.3476"></a>
 <span class="sourceLineNo">3477</span>                    ps, pc,<a name="line.3477"></a>
@@ -3609,7 +3609,7 @@
 <span class="sourceLineNo">3601</span>                minHeat1 = ps;<a name="line.3601"></a>
 <span class="sourceLineNo">3602</span>                maxHeat1 = pc;<a name="line.3602"></a>
 <span class="sourceLineNo">3603</span>            }<a name="line.3603"></a>
-<span class="sourceLineNo">3604</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.3604"></a>
+<span class="sourceLineNo">3604</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.3604"></a>
 <span class="sourceLineNo">3605</span>            qs = Double.POSITIVE_INFINITY;<a name="line.3605"></a>
 <span class="sourceLineNo">3606</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.3606"></a>
 <span class="sourceLineNo">3607</span>            ps = Double.POSITIVE_INFINITY;<a name="line.3607"></a>
@@ -3805,10 +3805,10 @@
 <span class="sourceLineNo">3797</span>        }<a name="line.3797"></a>
 <span class="sourceLineNo">3798</span><a name="line.3798"></a>
 <span class="sourceLineNo">3799</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.3799"></a>
-<span class="sourceLineNo">3800</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.3800"></a>
+<span class="sourceLineNo">3800</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.3800"></a>
 <span class="sourceLineNo">3801</span>        {<a name="line.3801"></a>
 <span class="sourceLineNo">3802</span>            boolean fresh = false;<a name="line.3802"></a>
-<span class="sourceLineNo">3803</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.3803"></a>
+<span class="sourceLineNo">3803</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.3803"></a>
 <span class="sourceLineNo">3804</span>            {<a name="line.3804"></a>
 <span class="sourceLineNo">3805</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.3805"></a>
 <span class="sourceLineNo">3806</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.3806"></a>
@@ -3833,7 +3833,7 @@
 <span class="sourceLineNo">3825</span>            int t;<a name="line.3825"></a>
 <span class="sourceLineNo">3826</span><a name="line.3826"></a>
 <span class="sourceLineNo">3827</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;<a name="line.3827"></a>
-<span class="sourceLineNo">3828</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.3828"></a>
+<span class="sourceLineNo">3828</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.3828"></a>
 <span class="sourceLineNo">3829</span><a name="line.3829"></a>
 <span class="sourceLineNo">3830</span>            double p,<a name="line.3830"></a>
 <span class="sourceLineNo">3831</span>                    ps, pc,<a name="line.3831"></a>
@@ -3955,7 +3955,7 @@
 <span class="sourceLineNo">3947</span>                minHeat1 = ps;<a name="line.3947"></a>
 <span class="sourceLineNo">3948</span>                maxHeat1 = pc;<a name="line.3948"></a>
 <span class="sourceLineNo">3949</span>            }<a name="line.3949"></a>
-<span class="sourceLineNo">3950</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.3950"></a>
+<span class="sourceLineNo">3950</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.3950"></a>
 <span class="sourceLineNo">3951</span>            qs = Double.POSITIVE_INFINITY;<a name="line.3951"></a>
 <span class="sourceLineNo">3952</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.3952"></a>
 <span class="sourceLineNo">3953</span>            ps = Double.POSITIVE_INFINITY;<a name="line.3953"></a>
@@ -4232,11 +4232,11 @@
 <span class="sourceLineNo">4224</span>        }<a name="line.4224"></a>
 <span class="sourceLineNo">4225</span><a name="line.4225"></a>
 <span class="sourceLineNo">4226</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.4226"></a>
-<span class="sourceLineNo">4227</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.4227"></a>
+<span class="sourceLineNo">4227</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.4227"></a>
 <span class="sourceLineNo">4228</span>        {<a name="line.4228"></a>
 <span class="sourceLineNo">4229</span>            if(cacheA != stateA || cacheB != stateB)// || landMod != storedMap.landModifier || coolMod != storedMap.coolingModifier)<a name="line.4229"></a>
 <span class="sourceLineNo">4230</span>            {<a name="line.4230"></a>
-<span class="sourceLineNo">4231</span>                storedMap.regenerate(0, 0, width &lt;&lt; 1, height, landMod, coolMod, stateA, stateB);<a name="line.4231"></a>
+<span class="sourceLineNo">4231</span>                storedMap.regenerate(0, 0, width &lt;&lt; 1, height, landMod, heatMod, stateA, stateB);<a name="line.4231"></a>
 <span class="sourceLineNo">4232</span>                minHeightActual = Double.POSITIVE_INFINITY;<a name="line.4232"></a>
 <span class="sourceLineNo">4233</span>                maxHeightActual = Double.NEGATIVE_INFINITY;<a name="line.4233"></a>
 <span class="sourceLineNo">4234</span><a name="line.4234"></a>
@@ -4406,10 +4406,10 @@
 <span class="sourceLineNo">4398</span>        }<a name="line.4398"></a>
 <span class="sourceLineNo">4399</span>        <a name="line.4399"></a>
 <span class="sourceLineNo">4400</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.4400"></a>
-<span class="sourceLineNo">4401</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.4401"></a>
+<span class="sourceLineNo">4401</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.4401"></a>
 <span class="sourceLineNo">4402</span>        {<a name="line.4402"></a>
 <span class="sourceLineNo">4403</span>            boolean fresh = false;<a name="line.4403"></a>
-<span class="sourceLineNo">4404</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.4404"></a>
+<span class="sourceLineNo">4404</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.4404"></a>
 <span class="sourceLineNo">4405</span>            {<a name="line.4405"></a>
 <span class="sourceLineNo">4406</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.4406"></a>
 <span class="sourceLineNo">4407</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.4407"></a>
@@ -4432,7 +4432,7 @@
 <span class="sourceLineNo">4424</span>            int t;<a name="line.4424"></a>
 <span class="sourceLineNo">4425</span><a name="line.4425"></a>
 <span class="sourceLineNo">4426</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.4426"></a>
-<span class="sourceLineNo">4427</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.4427"></a>
+<span class="sourceLineNo">4427</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.4427"></a>
 <span class="sourceLineNo">4428</span><a name="line.4428"></a>
 <span class="sourceLineNo">4429</span>            double p,<a name="line.4429"></a>
 <span class="sourceLineNo">4430</span>                    ps, pc,<a name="line.4430"></a>
@@ -4516,7 +4516,7 @@
 <span class="sourceLineNo">4508</span>                minHeat1 = ps;<a name="line.4508"></a>
 <span class="sourceLineNo">4509</span>                maxHeat1 = pc;<a name="line.4509"></a>
 <span class="sourceLineNo">4510</span>            }<a name="line.4510"></a>
-<span class="sourceLineNo">4511</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.4511"></a>
+<span class="sourceLineNo">4511</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.4511"></a>
 <span class="sourceLineNo">4512</span>            qs = Double.POSITIVE_INFINITY;<a name="line.4512"></a>
 <span class="sourceLineNo">4513</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.4513"></a>
 <span class="sourceLineNo">4514</span>            ps = Double.POSITIVE_INFINITY;<a name="line.4514"></a>
@@ -4677,10 +4677,10 @@
 <span class="sourceLineNo">4669</span>        }<a name="line.4669"></a>
 <span class="sourceLineNo">4670</span>        <a name="line.4670"></a>
 <span class="sourceLineNo">4671</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.4671"></a>
-<span class="sourceLineNo">4672</span>                                  double landMod, double coolMod, int stateA, int stateB)<a name="line.4672"></a>
+<span class="sourceLineNo">4672</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.4672"></a>
 <span class="sourceLineNo">4673</span>        {<a name="line.4673"></a>
 <span class="sourceLineNo">4674</span>            boolean fresh = false;<a name="line.4674"></a>
-<span class="sourceLineNo">4675</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)<a name="line.4675"></a>
+<span class="sourceLineNo">4675</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.4675"></a>
 <span class="sourceLineNo">4676</span>            {<a name="line.4676"></a>
 <span class="sourceLineNo">4677</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.4677"></a>
 <span class="sourceLineNo">4678</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.4678"></a>
@@ -4703,7 +4703,7 @@
 <span class="sourceLineNo">4695</span>            int t;<a name="line.4695"></a>
 <span class="sourceLineNo">4696</span><a name="line.4696"></a>
 <span class="sourceLineNo">4697</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.4697"></a>
-<span class="sourceLineNo">4698</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.4698"></a>
+<span class="sourceLineNo">4698</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.4698"></a>
 <span class="sourceLineNo">4699</span><a name="line.4699"></a>
 <span class="sourceLineNo">4700</span>            earth.remake(earthOriginal);<a name="line.4700"></a>
 <span class="sourceLineNo">4701</span><a name="line.4701"></a>
@@ -4824,7 +4824,7 @@
 <span class="sourceLineNo">4816</span>                minHeat1 = ps;<a name="line.4816"></a>
 <span class="sourceLineNo">4817</span>                maxHeat1 = pc;<a name="line.4817"></a>
 <span class="sourceLineNo">4818</span>            }<a name="line.4818"></a>
-<span class="sourceLineNo">4819</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.4819"></a>
+<span class="sourceLineNo">4819</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.4819"></a>
 <span class="sourceLineNo">4820</span>            qs = Double.POSITIVE_INFINITY;<a name="line.4820"></a>
 <span class="sourceLineNo">4821</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.4821"></a>
 <span class="sourceLineNo">4822</span>            ps = Double.POSITIVE_INFINITY;<a name="line.4822"></a>

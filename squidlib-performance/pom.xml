@@ -38,7 +38,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
     <!--</parent>-->
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-performance</artifactId>
-    <version>3.0.0-b10</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>squidlib-performance</name>
@@ -83,7 +83,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
             <groupId>com.squidpony</groupId>
             <!--<groupId>com.github.SquidPony.SquidLib</groupId>-->
             <artifactId>squidlib</artifactId>
-            <version>3.0.0-b10</version>
+            <version>3.0.0-SNAPSHOT</version>
             <!--<version>af61f301b1</version>-->
         </dependency>
         <dependency>

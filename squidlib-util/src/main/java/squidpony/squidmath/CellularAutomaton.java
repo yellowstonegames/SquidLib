@@ -121,4 +121,50 @@ public class CellularAutomaton {
         GreasedRegion.sumInto(sums, neighbors);
         return current.refill(sums,3).or(neighbors[0].refill(sums, 4).and(neighbors[8]));
     }
+
+    /**
+     * This takes the {@link #current} GreasedRegion and removes any cells that have a diagonal neighbor if that
+     * neighbor cannot be accessed from shared orthogonal neighbors. That is, if a 2x2 area contains two "off" cells
+     * that are diagonally adjacent and contains two "on" cells that are diagonally adjacent, this sets that whole 2x2
+     * area to "off."
+     * @return {@link #current} after orthogonally-inaccessible pairs of diagonal "on" cells are removed
+     */
+    public GreasedRegion runDiagonalGapCleanup()
+    {
+        neighbors[0].remake(current.not()).neighborUp();
+        neighbors[1].remake(current).neighborDown();
+        neighbors[2].remake(current).neighborLeft();
+        neighbors[3].remake(current).neighborRight();
+        neighbors[4].remake(current.not()).neighborUpLeft();
+        neighbors[5].remake(current).neighborUpRight();
+        neighbors[6].remake(current).neighborDownLeft();
+        neighbors[7].remake(current).neighborDownRight();
+//        neighbors[8].remake(current);
+        current.andNot(neighbors[4].and(neighbors[0]).and(neighbors[2]));
+        current.andNot(neighbors[5].and(neighbors[0]).and(neighbors[3]));
+        current.andNot(neighbors[6].and(neighbors[1]).and(neighbors[2]));
+        current.andNot(neighbors[7].and(neighbors[1]).and(neighbors[3]));
+        return current;
+    }
+    
+//    public static void main(String[] args)
+//    {
+//        GWTRNG rng = new GWTRNG(-3005655405530708008L);
+//        final int bigWidth = 80, bigHeight = 48;
+//        DungeonGenerator dungeonGen = new DungeonGenerator(bigWidth, bigHeight, rng);
+//        dungeonGen.addWater(15);
+//        dungeonGen.addGrass(10);
+//        DungeonBoneGen gen = new DungeonBoneGen(rng);
+//        CellularAutomaton ca = new CellularAutomaton(bigWidth, bigHeight);
+//        gen.generate(TilesetType.DEFAULT_DUNGEON, bigWidth, bigHeight);
+//        ca.remake(gen.region);
+//        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);
+//        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);
+//        ca.current.remake(gen.region.deteriorate(rng, 0.9));
+//        gen.region.or(ca.runBasicSmoothing());
+//        gen.region.remake(gen.region.removeEdges().largestPart());
+//        ca.current.remake(gen.region);
+//        gen.region.remake(ca.runDiagonalGapCleanup());
+//        DungeonUtility.debugPrint(DungeonUtility.hashesToLines(dungeonGen.generate(gen.region.intoChars(gen.getDungeon(), '.', '#'))));
+//    }
 }
