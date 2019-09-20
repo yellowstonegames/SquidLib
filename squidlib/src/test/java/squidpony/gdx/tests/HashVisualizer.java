@@ -67,9 +67,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 16, noiseMode = 104, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 16, noiseMode = 108, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -1170,6 +1170,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     @Override
     public void create() {
+        CoordPacker.init();
         batch = new FilterBatch();
         tcf = new TextCellFactory().includedFont().width(1).height(1).initBySize();
         //display = new SparseLayers(width, height, cellWidth, cellHeight, new TextCellFactory().includedFont());
@@ -4403,16 +4404,42 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
 //                        break;
                     case 109:
-                        Gdx.graphics.setTitle("Merlin Rivers 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 32);
-                                iBright ^= iBright - 0x8000000;
-                                iBright = (iBright >> 8) >>> 24;
-                                back[x][y] = floatGetI(iBright, iBright, iBright);
+                        Gdx.graphics.setTitle("Hilbert Curve on swayRandomizedTight(), at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < 256; x++) {
+                            for (int y = 0; y < 256; y++) {
+                                bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * ((CoordPacker.hilbertDistances[x | y << 8] & 0xFFFF)));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        for (int x = 0; x < 256; x++) {
+                            for (int y = 0; y < 256; y++) {
+                                bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x10000 + (CoordPacker.hilbertDistances[y | x << 8] & 0xFFFF)));
+                                back[x][y+256] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        for (int x = 0; x < 256; x++) {
+                            for (int y = 0; y < 256; y++) {
+                                bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x20000 + (CoordPacker.hilbertDistances[y | x << 8] & 0xFFFF)));
+                                back[x+256][y+256] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        for (int x = 0; x < 256; x++) {
+                            for (int y = 0; y < 256; y++) {
+                                bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x30000 + (CoordPacker.hilbertDistances[255-x | 255-y << 8] & 0xFFFF)));
+                                back[x+256][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
+//                        Gdx.graphics.setTitle("Merlin Rivers 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 32);
+//                                iBright ^= iBright - 0x8000000;
+//                                iBright = (iBright >> 8) >>> 24;
+//                                back[x][y] = floatGetI(iBright, iBright, iBright);
+//                            }
+//                        }
+//                        break;
                     case 110:
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
