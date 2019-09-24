@@ -57,9 +57,9 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     public void create() {
         batch = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new StretchViewport(width, height);
-        seed = 0x44B94C6A93EF3D54L;//0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
+        seed = 42;//0x44B94C6A93EF3D54L;//0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
-        noise = new FastNoise(1337, 1.618f, FastNoise.PERLIN_FRACTAL, 2, 0.8f, 1.25f);
+        noise = new FastNoise(1337, 1f, FastNoise.SIMPLEX_FRACTAL, 3);//, 1.25f, 0.8f);
 //        {
 //            @Override
 //            public float singleSimplex(int seed, float x, float y, float z) {
@@ -94,7 +94,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.MimicMap(seed, new FastNoise(1337, 1f), 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 0.9);
+        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 1.2, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, new FastNoise(1337, 1f), 0.6);
@@ -102,10 +102,10 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), new FastNoise(1337, 1f), 0.9);
         
         wmv = new WorldMapView(world);
-        wmv.initialize(SColor.CW_FADED_RED, SColor.AURORA_BRICK, SColor.DEEP_SCARLET, SColor.DARK_CORAL,
-                SColor.LONG_SPRING, SColor.WATER_PERSIMMON, SColor.AURORA_HOT_SAUCE, SColor.PALE_CARMINE,
-                SColor.AURORA_LIGHT_SKIN_3, SColor.AURORA_PINK_SKIN_2,
-                SColor.AURORA_PUTTY, SColor.AURORA_PUTTY, SColor.ORANGUTAN, SColor.SILVERED_RED, null);
+//        wmv.initialize(SColor.CW_FADED_RED, SColor.AURORA_BRICK, SColor.DEEP_SCARLET, SColor.DARK_CORAL,
+//                SColor.LONG_SPRING, SColor.WATER_PERSIMMON, SColor.AURORA_HOT_SAUCE, SColor.PALE_CARMINE,
+//                SColor.AURORA_LIGHT_SKIN_3, SColor.AURORA_PINK_SKIN_2,
+//                SColor.AURORA_PUTTY, SColor.AURORA_PUTTY, SColor.ORANGUTAN, SColor.SILVERED_RED, null);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -198,9 +198,9 @@ public class WorldMapViewDemo extends ApplicationAdapter {
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
 //        noiseCalls = 0;
         wmv.generate((int)(seed & 0xFFFFFFFFL), (int) (seed >>> 32),
-                2.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
-//                0.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
-                DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.35 + 0.9);
+//                2.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
+                0.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
+                DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.55 + 0.9);
         wmv.show();
         ttg = System.nanoTime() - startTime >> 20;
     }
