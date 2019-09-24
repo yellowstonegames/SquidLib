@@ -1,5 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.graphics.Color;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.MathExtras;
@@ -119,7 +120,7 @@ public class WorldMapView {
             //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
             Ice+0.7f,   Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
             Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER
-            Ice+0.5f,   Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,           Desert+0.6f,              //DRY
+            Ice+0.5f,   Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,            Desert+0.6f,             //DRY
             Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.6f,            Savanna+0.4f,            //WET
             Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER
             Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST
@@ -147,6 +148,88 @@ public class WorldMapView {
             BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
         }
         BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
+    }
+
+    /**
+     * Initializes the colors to use for each biome (these are almost always mixed with other biome colors in practice).
+     * Each parameter may be null to use the default for an Earth-like world; otherwise it should be a libGDX
+     * {@link Color} or some subclass, like {@link SColor}. All non-null parameters should probably be fully opaque,
+     * except {@code emptyColor}, which is only used for world maps that show empty space (like a globe, as produced by
+     * {@link WorldMapGenerator.RotatingSpaceMap}).
+     * @param desertColor hot, dry, barren land; may be sandy, but many real-world deserts don't have much sand
+     * @param savannaColor hot, mostly-dry land with some parched vegetation; also called scrub or chaparral
+     * @param tropicalRainforestColor hot, extremely wet forests with dense rich vegetation
+     * @param grasslandColor prairies that are dry and usually wind-swept, but not especially hot or cold
+     * @param woodlandColor part-way between a prairie and a forest; not especially hot or cold
+     * @param seasonalForestColor forest that becomes barren in winter (deciduous trees); not especially hot or cold
+     * @param temperateRainforestColor forest that tends to be slightly warm but very wet
+     * @param borealForestColor forest that tends to be cold and very wet
+     * @param tundraColor very cold plains that still have some low-lying vegetation; also called taiga 
+     * @param iceColor cold barren land covered in permafrost; also used for rivers and lakes that are frozen
+     * @param beachColor sandy or otherwise light-colored shorelines; here, these are more common in warmer places
+     * @param rockyColor rocky or otherwise rugged shorelines; here, these are more common in colder places
+     * @param foamColor the color of very shallow water; will be mixed with {@code deepColor} to get most ocean colors
+     * @param deepColor the color of very deep water; will be mixed with {@code foamColor} to get most ocean colors
+     * @param emptyColor the color used for empty space off the edge of the world map; may be transparent
+     */
+    public void initialize(
+            Color desertColor,
+            Color savannaColor,
+            Color tropicalRainforestColor,
+            Color grasslandColor,
+            Color woodlandColor,
+            Color seasonalForestColor,
+            Color temperateRainforestColor,
+            Color borealForestColor,
+            Color tundraColor,
+            Color iceColor,
+            Color beachColor,
+            Color rockyColor,
+            Color foamColor,
+            Color deepColor,
+            Color emptyColor
+            )
+    {
+        biomeColors[ 0] = desertColor == null ? WorldMapView.desertColor : desertColor.toFloatBits();
+        biomeColors[ 1] = savannaColor == null ? WorldMapView.savannaColor : savannaColor.toFloatBits();
+        biomeColors[ 2] = tropicalRainforestColor == null ? WorldMapView.tropicalRainforestColor : tropicalRainforestColor.toFloatBits();
+        biomeColors[ 3] = grasslandColor == null ? WorldMapView.grasslandColor : grasslandColor.toFloatBits();
+        biomeColors[ 4] = woodlandColor == null ? WorldMapView.woodlandColor : woodlandColor.toFloatBits();
+        biomeColors[ 5] = seasonalForestColor == null ? WorldMapView.seasonalForestColor : seasonalForestColor.toFloatBits();
+        biomeColors[ 6] = temperateRainforestColor == null ? WorldMapView.temperateRainforestColor : temperateRainforestColor.toFloatBits();
+        biomeColors[ 7] = borealForestColor == null ? WorldMapView.borealForestColor : borealForestColor.toFloatBits();
+        biomeColors[ 8] = tundraColor == null ? WorldMapView.tundraColor : tundraColor.toFloatBits();
+        biomeColors[ 9] = iceColor == null ? WorldMapView.iceColor : iceColor.toFloatBits();
+        biomeColors[10] = beachColor == null ? WorldMapView.beachColor : beachColor.toFloatBits();
+        biomeColors[11] = rockyColor == null ? WorldMapView.rockyColor : rockyColor.toFloatBits();
+        biomeColors[12] = foamColor == null ? WorldMapView.foamColor : foamColor.toFloatBits();
+        biomeColors[13] = deepColor == null ? WorldMapView.deepColor : deepColor.toFloatBits();
+        biomeColors[14] = emptyColor == null ? WorldMapView.emptyColor : emptyColor.toFloatBits();
+        float b, diff;
+        for (int i = 0; i < 60; i++) {
+            b = BIOME_TABLE[i];
+            diff = ((b % 1.0f) - 0.48f) * 0.27f;
+            BIOME_COLOR_TABLE[i] = b = (diff >= 0)
+                    ? SColor.lightenFloat(biomeColors[(int)b], diff)
+                    : SColor.darkenFloat(biomeColors[(int)b], -diff);
+            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
+        }
+        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];
+        biomeColors[ 0] = WorldMapView.desertColor;
+        biomeColors[ 1] = WorldMapView.savannaColor;
+        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;
+        biomeColors[ 3] = WorldMapView.grasslandColor;
+        biomeColors[ 4] = WorldMapView.woodlandColor;
+        biomeColors[ 5] = WorldMapView.seasonalForestColor;
+        biomeColors[ 6] = WorldMapView.temperateRainforestColor;
+        biomeColors[ 7] = WorldMapView.borealForestColor;
+        biomeColors[ 8] = WorldMapView.tundraColor;
+        biomeColors[ 9] = WorldMapView.iceColor;
+        biomeColors[10] = WorldMapView.beachColor;
+        biomeColors[11] = WorldMapView.rockyColor;
+        biomeColors[12] = WorldMapView.foamColor;
+        biomeColors[13] = WorldMapView.deepColor;
+        biomeColors[14] = WorldMapView.emptyColor;
     }
 
     public void generate()
