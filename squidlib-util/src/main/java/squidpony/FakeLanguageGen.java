@@ -46,7 +46,7 @@ public class FakeLanguageGen implements Serializable {
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
      * and Cyrillic; for use when a String will be interpreted as a regex (as in {@link FakeLanguageGen.Alteration}).
      */
-    public static final String anyVowel = "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]",
+    public static final String anyVowel = "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]",
     /**
      * A pattern String that will match one or more of any vowels FakeLanguageGen can produce out-of-the-box, including
      * Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex (as in 
@@ -58,7 +58,7 @@ public class FakeLanguageGen implements Serializable {
      * Greek, and Cyrillic; for use when a String will be interpreted as a regex (as in
      * {@link FakeLanguageGen.Alteration}).
      */
-    anyConsonant = "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]",
+    anyConsonant = "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]",
     /**
      * A pattern String that will match one or more of any consonants FakeLanguageGen can produce out-of-the-box,
      * including Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex (as in
@@ -69,7 +69,7 @@ public class FakeLanguageGen implements Serializable {
             vowelClusters = Pattern.compile(anyVowelCluster, REFlags.IGNORE_CASE | REFlags.UNICODE),
             consonantClusters = Pattern.compile(anyConsonantCluster, REFlags.IGNORE_CASE | REFlags.UNICODE);
     //latin
-    //àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳybcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥ
+    //àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳybcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżž
     //ÀÁÂÃÄÅÆĀĂĄǺǼAÈÉÊËĒĔĖĘĚEÌÍÎÏĨĪĬĮIIÒÓÔÕÖØŌŎŐŒǾOÙÚÛÜŨŪŬŮŰŲUÝŸŶỲYBCÇĆĈĊČDÞÐĎĐFGĜĞĠĢHĤĦJĴȷKĶLĹĻĽĿŁMNÑŃŅŇŊPQRŔŖŘSŚŜŞŠȘTŢŤȚVWŴẀẂẄXYÝŸŶỲZŹŻŽṚṜḶḸḌṬṄṆṢṂḤ
     //greek
     //αοειυρσζτκχνθμπψβλγφξς
@@ -175,17 +175,16 @@ public class FakeLanguageGen implements Serializable {
                     Pattern.compile("Ё").replacer("Е"),
                     Pattern.compile("Й").replacer("И"),
                     Pattern.compile("[çćĉċč]").replacer("c"),
-                    Pattern.compile("[þðďđḍ]").replacer("d"),
+                    Pattern.compile("[þðďđ]").replacer("d"),
                     Pattern.compile("[ĝğġģ]").replacer("g"),
-                    Pattern.compile("[ĥħḥ]").replacer("h"),
+                    Pattern.compile("[ĥħ]").replacer("h"),
                     Pattern.compile("[ĵȷ]").replacer("j"),
                     Pattern.compile("ķ").replacer("k"),
-                    Pattern.compile("[ĺļľŀłḷḹļ]").replacer("l"),
-                    Pattern.compile("ṃ").replacer("m"),
-                    Pattern.compile("[ñńņňŋṅṇ]").replacer("n"),
-                    Pattern.compile("[ŕŗřṛṝŗŕ]").replacer("r"),
-                    Pattern.compile("[śŝşšșṣ]").replacer("s"),
-                    Pattern.compile("[ţťŧțṭ]").replacer("t"),
+                    Pattern.compile("[ĺļľŀłļ]").replacer("l"),
+                    Pattern.compile("[ñńņňŋ]").replacer("n"),
+                    Pattern.compile("[ŕŗřŗŕ]").replacer("r"),
+                    Pattern.compile("[śŝşšș]").replacer("s"),
+                    Pattern.compile("[ţťŧț]").replacer("t"),
                     Pattern.compile("[ŵẁẃẅ]").replacer("w"),
                     Pattern.compile("[ýÿŷỳ]").replacer("y"),
                     Pattern.compile("[źżž]").replacer("z"),
@@ -535,7 +534,7 @@ public class FakeLanguageGen implements Serializable {
                         "anes", "eros", "or", "or", "ophon", "on", "on", "ikon", "otron", "ik",},
                 new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.2, null, true);
     }
-
+    
     /**
      * Imitation ancient Greek, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
      * <br>
@@ -4800,7 +4799,7 @@ public class FakeLanguageGen implements Serializable {
         /**
          * For a character who always pronounces 's', 'ss', and 'sh' as 'th'.
          */
-        public static final Modifier LISP = new Modifier("[tţťțṭ]?[sśŝşšș]+h?", "th");
+        public static final Modifier LISP = new Modifier("[tţťț]?[sśŝşšș]+h?", "th");
 
         /**
          * For a character who always lengthens 's' and 'z' sounds not starting a word.
@@ -4811,8 +4810,8 @@ public class FakeLanguageGen implements Serializable {
          * For a character who has a 20% chance to repeat a starting consonant or vowel.
          */
         public static final Modifier STUTTER = new Modifier(
-                new Alteration("^([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу]+)", "$1-$1", 0.2),
-                new Alteration("^([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųαοειυаеёийъыэюяоу]+)", "$1-$1", 0.2));
+                new Alteration("^([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυωаеёийъыэюяоу]+)", "$1-$1", 0.2),
+                new Alteration("^([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųαοειυωаеёийъыэюяоу]+)", "$1-$1", 0.2));
 
         /**
          * For a language that has a 40% chance to repeat a single Latin vowel (a, e, o, or a variant on one of them
@@ -4827,9 +4826,9 @@ public class FakeLanguageGen implements Serializable {
         /**
          * For a language that has a 50% chance to repeat a single consonant.
          */
-        public static final Modifier DOUBLE_CONSONANTS = new Modifier("([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу])" +
-                "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоуqwhjx])" +
-                "([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу]|$)", "$1$2$2$3", 0.5);
+        public static final Modifier DOUBLE_CONSONANTS = new Modifier("([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυωаеёийъыэюяоу])" +
+                "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυωаеёийъыэюяоуqwhjx])" +
+                "([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυωаеёийъыэюяоу]|$)", "$1$2$2$3", 0.5);
 
         /**
          * For a language that never repeats the same letter twice in a row.
@@ -4860,7 +4859,7 @@ public class FakeLanguageGen implements Serializable {
         /**
          * Simple changes to merge "ae" into "æ", "oe" into "œ", and any of "aé", "áe", or "áé" into "ǽ".
          */
-        public static final Modifier LIGATURES = replacementTable("ae", "æ", "oe", "œ", "[aá][eé]", "ǽ");
+        public static final Modifier LIGATURES = replacementTable("ae", "æ", "oe", "œ", "áe", "ǽ", "aé", "ǽ", "áé", "ǽ");
         /**
          * Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
          * for fixing a word that isn't pronounceable.
@@ -4877,7 +4876,7 @@ public class FakeLanguageGen implements Serializable {
                 "qq", "q");
 
         //àáâãäåāăąǻæǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳy
-        //bcçćĉċčdþðďđḍfgĝğġģhĥħḥjĵȷkķlĺļľŀłḷḹmṃnñńņňŋṅṇpqrŕŗřṛṝsśŝşšșṣtţťțṭvwŵẁẃẅxyýÿŷỳzźżž
+        //bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżž
 
         /**
          * Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and
@@ -4985,7 +4984,7 @@ public class FakeLanguageGen implements Serializable {
          */
         public static Modifier insertOpeningVowel(String insertion, double chance)
         {
-            return new Modifier("\\b[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+", insertion, chance);
+            return new Modifier("\\b[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]+", insertion, chance);
         }
 
         /**
@@ -5000,7 +4999,7 @@ public class FakeLanguageGen implements Serializable {
          */
         public static Modifier insertOpeningConsonant(String insertion, double chance)
         {
-            return new Modifier("\\b[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+", insertion, chance);
+            return new Modifier("\\b[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+", insertion, chance);
         }
 
         /**
@@ -5015,7 +5014,7 @@ public class FakeLanguageGen implements Serializable {
          */
         public static Modifier insertClosingVowel(String insertion, double chance)
         {
-            return new Modifier("[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+\\b", insertion, chance);
+            return new Modifier("[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυωаеёийоуъыэюя]+\\b", insertion, chance);
         }
 
         /**
@@ -5030,7 +5029,7 @@ public class FakeLanguageGen implements Serializable {
          */
         public static Modifier insertClosingConsonant(String insertion, double chance)
         {
-            return new Modifier("[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+\\b", insertion, chance);
+            return new Modifier("[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+\\b", insertion, chance);
         }
 
         /**
@@ -5057,6 +5056,31 @@ public class FakeLanguageGen implements Serializable {
                 new Alteration("ā", "aa"),
                 new Alteration("ū", "uu"),
                 new Alteration("ī", "ii")*/);
+        /**
+         * Replaces any characters this can produce that aren't in ASCII or Latin-1 with Latin-script stand-ins; this
+         * will often use accented characters, but will only use those present in Latin-1 (which many fonts support).
+         * <br>
+         * The rationale for this Modifier is to allow users of FakeLanguageGen who don't display with the wide-ranging
+         * fonts in the display module to still be able to display something reasonable for generated text.
+         */
+        public static final Modifier REDUCE_ACCENTS = replacementTable("ā", "â", "ă", "ä", "ą", "ã", "ǻ", "å", "ǽ", "áe",
+                "ē", "ê", "ĕ", "ë", "ė", "ë", "ę", "è", "ě", "é", "ĩ", "í", "ī", "î", "į", "ì", "ĭ", "ï", "ı", "iy", "ō", "ô",
+                "ŏ", "ö", "ő", "ó", "œ", "oe", "ǿ", "ø", "ũ", "ú", "ŭ", "ü", "ů", "ùo", "ű", "ú", "ų", "ù", "ŷ", "ý", "ỳ", "ÿ",
+                // done with latin vowels...
+                "ć", "ç", "ĉ", "ç", "ċ", "ç", "č", "ç", "ď", "dh", "đ", "dh", "ĝ", "gh", "ğ", "gh", "ġ", "gh", "ģ", "gh",
+                "ĥ", "hh", "ħ", "hh", "ĵ", "jh", "ȷ", "jj", "ķ", "kc", "ĺ", "lh", "ļ", "ll", "ľ", "ly", "ŀł", "yl", "ł", "wl",
+                "ń", "nn", "ņ", "wn", "ň", "nh", "ŋ", "ng", "ŕ", "rh", "ŗ", "wr", "ř", "rr", "ś", "ss", "ŝ", "hs",
+                "ş", "sy", "š", "ws", "ș", "sw", "ţ", "wt", "ť", "tt", "ț", "ty", "ŵ", "ww", "ẁ", "hw", "ẃ", "wh", "ẅ", "uw",
+                "ź", "hz", "ż", "zy", "ž", "zz",
+                // greek
+                "α", "a", "ο", "o", "ε", "e", "ι", "i", "υ", "y", "ω", "au",
+                "κρ", "kr", "γγ", "ng", "γκ", "nk", "γξ", "nx", "γχ", "nch", "ρστ", "rst", "ρτ", "rt",
+                "ρ", "rh", "σ", "s", "ζ", "z", "τ", "t", "κ", "k", "χ", "ch", "ν", "n", "ξ", "x",
+                "θ", "th", "μ", "m", "π", "p", "ψ", "ps", "β", "b", "λ", "l", "γ", "g", "δ", "d", "φ", "ph", "ς", "s",
+                // cyrillic
+                "а", "a", "е", "e", "ё", "ë", "и", "i", "й", "î", "о", "o", "у", "u", "ъ", "ie", "ы", "y", "э", "e", "ю", "iu", "я", "ia",
+                "б", "b", "в", "v", "г", "g", "д", "d", "к", "k", "л", "l", "п", "p", "р", "r", "с", "s", "т", "t",
+                "ф", "f", "х", "kh", "ц", "ts", "ч", "ch", "ж", "zh", "м", "m", "н", "n", "з", "z", "ш", "sh", "щ", "shch");
 
         @Override
         public boolean equals(Object o) {
@@ -5112,7 +5136,7 @@ public class FakeLanguageGen implements Serializable {
         public double chance;
 
         public Alteration() {
-            this("[tţťțṭ]?[sśŝşšș]+h?", "th");
+            this("[tţťț]?[sśŝşšș]+h?", "th");
         }
 
         public Alteration(String pattern, String replacement) {
