@@ -276,8 +276,8 @@ public class Dice implements Serializable {
      * This is the main way of using the Dice class. This effectively allows rolling one or more dice and performing
      * certain operations on the dice and their result. One of the more frequent uses is rolling some amount of dice and
      * summing their values, which can be done with e.g. "4d10" to roll four ten-sided dice and add up their results.
-     * You can choose to sum only some of the dice, either the "n highest" or "n lowest" values in a group, with "3>4d6"
-     * to sum the three greatest-value dice in four rolls of six-sided dice, or "2<3d8" to sum the two lowest-value dice
+     * You can choose to sum only some of the dice, either the "n highest" or "n lowest" values in a group, with "3&gt;4d6"
+     * to sum the three greatest-value dice in four rolls of six-sided dice, or "2&lt;3d8" to sum the two lowest-value dice
      * in three rolls of eight-sided dice. You can apply modifiers to these results, such as "1d20+7" to roll one
      * twenty-sided die and add 7 to its result. These modifiers can be other dice, such as "1d10-1d6", and while
      * multiplication and division are supported, order of operations isn't, so it just rolls dice from left to right

@@ -40,7 +40,7 @@ import java.io.Serializable;
  * random-seeming, non-zero subset of Part B where the LSB is always set, the final result can't have a lower
  * period than Part B).
  * <br>
- * The tool used for testing this RNG is PractRand, http://pracrand.sourceforge.net/ > The binaries it provides
+ * The tool used for testing this RNG is PractRand, http://pracrand.sourceforge.net/ . The binaries it provides
  * don't seem to work as intended on Windows, so I built from source, generated 64MB files of random 64-bit
  * output with various generators as "Thunder.dat", "Light.dat" and so on, then ran the executables I had
  * built with the MS compilers, with the command line {@code RNG_test.exe stdin64 < Thunder.dat} . For most of

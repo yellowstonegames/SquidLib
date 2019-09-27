@@ -1171,7 +1171,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
     /**
      * A concrete implementation of {@link WorldMapGenerator} that tiles both east-to-west and north-to-south. It tends
-     * to not appear distorted like {@link WorldMapGenerator.SphereMap} does in some areas, even though this is inaccurate for a
+     * to not appear distorted like {@link SphereMap} does in some areas, even though this is inaccurate for a
      * rectangular projection of a spherical world (that inaccuracy is likely what players expect in a map, though).
      * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapRiverDemo.png" >Example map</a>.
      */
@@ -1472,8 +1472,8 @@ public abstract class WorldMapGenerator implements Serializable {
      * choosing a {@link Noise3D}, which is used for most of the generation. This is ideal for projecting onto a 3D
      * sphere, which could squash the poles to counteract the stretch this does. You might also want to produce an oval
      * map that more-accurately represents the changes in the diameter of a latitude line on a spherical world; you
-     * should use {@link WorldMapGenerator.EllipticalMap} or {@link WorldMapGenerator.EllipticalHammerMap} for this.
-     * {@link WorldMapGenerator.HyperellipticalMap} is also a nice option because it can project onto a shape between a
+     * should use {@link EllipticalMap} or {@link EllipticalHammerMap} for this.
+     * {@link HyperellipticalMap} is also a nice option because it can project onto a shape between a
      * rectangle (like this class) and an ellipse (like EllipticalMap), with all-round sides.
      * <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
      */
@@ -3635,7 +3635,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto an ellipse that should be
      * twice as wide as it is tall (although you can stretch it by width and height that don't have that ratio).
      * This uses the <a href="https://en.wikipedia.org/wiki/Hammer_projection">Hammer projection</a>, so the latitude
-     * lines are curved instead of flat. The Mollweide projection that {@link WorldMapGenerator.EllipticalMap} uses has flat lines, but
+     * lines are curved instead of flat. The Mollweide projection that {@link EllipticalMap} uses has flat lines, but
      * the two projection are otherwise very similar, and are both equal-area (Hammer tends to have less significant
      * distortion around the edges, but the curvature of the latitude lines can be hard to visualize).
      * <a href="https://i.imgur.com/nmN6lMK.gifv">Preview image link of a world rotating</a>.
@@ -3988,7 +3988,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * {@link #generate()} in those classes, since it doesn't remake the map data at a slightly different rotation and
      * instead keeps a single map in use the whole time, using sections of it. This uses an
      * <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
-     * the latitude always at the equator; the internal map is stored as a {@link WorldMapGenerator.SphereMap}, which uses a
+     * the latitude always at the equator; the internal map is stored as a {@link SphereMap}, which uses a
      * <a href="https://en.wikipedia.org/wiki/Cylindrical_equal-area_projection#Discussion">cylindrical equal-area
      * projection</a>, specifically the Smyth equal-surface projection.
      * <br>

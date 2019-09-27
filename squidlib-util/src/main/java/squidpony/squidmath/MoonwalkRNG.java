@@ -18,7 +18,7 @@ import java.io.Serializable;
  *     <li>starting at the end of the sequence, apply the reverse change to the items with numbers generated
  *     <b>backwards</b> by MoonwalkRNG with {@link #previousInt()} (such as a XOR if the number was originally modified
  *     with a XOR or an addition if it was originally modified with a subtraction),</li>
- *     <li>when the full sequence has been reversed, you now have the original sequence again./li>
+ *     <li>when the full sequence has been reversed, you now have the original sequence again.</li>
  * </ol>
  * This is also possible with determine() methods in various RandomnessSource implementations, but those require some
  * extra work to allow them to use sequential inputs instead of inputs that have a large difference between generations.

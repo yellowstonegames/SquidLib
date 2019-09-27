@@ -56,7 +56,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.version>3.8.0</maven.compiler.version>
-        <maven.javadoc.version>3.0.1</maven.javadoc.version>
+        <maven.javadoc.version>3.1.1</maven.javadoc.version>
         <maven.resources.version>3.1.0</maven.resources.version>
         <maven.source.version>3.0.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
@@ -201,17 +201,16 @@
                     <javadocVersion>${jdk.version}</javadocVersion>
                     <links>
                         <!--<link>http://docs.oracle.com/javase/8/docs/api/</link>-->
-                        <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                        <link>http://docs.oracle.com/javase/6/docs/api/</link>
-                        <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
+                        <link>https://docs.oracle.com/en/java/javase/13/docs/api/</link>
                         <link>https://squidpony.github.io/SquidLib/squidlib-util/</link>
                         <link>https://squidpony.github.io/SquidLib/squidlib/</link>
                         <link>https://squidpony.github.io/SquidLib/squidlib-extra/</link>
                     </links>
                     <linksource>true</linksource>
                     <detectLinks>true</detectLinks>
+                    <detectJavaApiLink>false</detectJavaApiLink>
                     <detectOfflineLinks>true</detectOfflineLinks>
-                    <excludePackageNames>*emu*</excludePackageNames>
+                    <excludePackageNames>emu.squidpony;emu.squidpony.squidmath</excludePackageNames>
                 </configuration>
             </plugin>
         </plugins>
