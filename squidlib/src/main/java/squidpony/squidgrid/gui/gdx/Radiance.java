@@ -256,12 +256,12 @@ public class Radiance implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = (range != +0.0f ? NumberTools.floatToIntBits(range) : 0);
-        result = 31 * result + (color != +0.0f ? NumberTools.floatToIntBits(color) : 0) | 0;
-        result = 31 * result + (flicker != +0.0f ? NumberTools.floatToIntBits(flicker) : 0) | 0;
-        result = 31 * result + (strobe != +0.0f ? NumberTools.floatToIntBits(strobe) : 0) | 0;
-        result = 31 * result + (delay != +0.0f ? NumberTools.floatToIntBits(delay) : 0) | 0;
-        result = 31 * result + (flare != +0.0f ? NumberTools.floatToIntBits(flare) : 0) | 0;
+        int result = NumberTools.floatToIntBits(range);
+        result ^= (result << 11 | result >>> 21) + (result << 19 | result >>> 13) + NumberTools.floatToIntBits(color);
+        result ^= (result << 11 | result >>> 21) + (result << 19 | result >>> 13) + NumberTools.floatToIntBits(flicker);
+        result ^= (result << 11 | result >>> 21) + (result << 19 | result >>> 13) + NumberTools.floatToIntBits(strobe);
+        result ^= (result << 11 | result >>> 21) + (result << 19 | result >>> 13) + NumberTools.floatToIntBits(delay);
+        result ^= (result << 11 | result >>> 21) + (result << 19 | result >>> 13) + NumberTools.floatToIntBits(flare);
         return result;
     }
 
