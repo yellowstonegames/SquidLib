@@ -29,6 +29,7 @@ public class Elias implements Serializable {
     private double threshold = 0.0;
 
     public Elias() {
+        path = new ArrayList<>();
     }
 
     public double[][] lightMap(double startx, double starty, double endx, double endy) {
@@ -46,7 +47,7 @@ public class Elias implements Serializable {
      * @return
      */
     public ArrayList<Coord> line(double startx, double starty, double endx, double endy) {
-        path = new ArrayList<>();
+        path.clear();
         width = (int) (Math.max(startx, endx) + 1);
         height = (int) (Math.max(starty, endy) + 1);
         lightMap = new double[width][height];
@@ -66,7 +67,7 @@ public class Elias implements Serializable {
     public ArrayList<Coord> line(double startx, double starty, double endx, double endy,
                                                 double brightnessThreshold) {
         threshold = brightnessThreshold;
-        path = new ArrayList<>();
+        path.clear();
         width = (int) (Math.max(startx, endx) + 1);
         height = (int) (Math.max(starty, endy) + 1);
         lightMap = new double[width][height];
@@ -101,11 +102,12 @@ public class Elias implements Serializable {
     }
 
     private double trunc(double x) {
-        if (x < 0) {
-            return Math.ceil(x);
-        } else {
-            return Math.floor(x);
-        }
+        return (int)x;
+//        if (x < 0) {
+//            return Math.ceil(x);
+//        } else {
+//            return Math.floor(x);
+//        }
     }
 
     private double frac(double x) {
