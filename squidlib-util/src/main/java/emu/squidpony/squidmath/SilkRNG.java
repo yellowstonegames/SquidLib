@@ -5,13 +5,13 @@ import squidpony.StringKit;
 import java.io.Serializable;
 
 public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializable {
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4L;
 
     public int stateA, stateB;
     
     public SilkRNG()
     {
-        setState((int)((Math.random() * 2.0 - 1.0) * 0x80000000), (int)((Math.random() * 2.0 - 1.0) * 0x80000000));
+        setState((int)((Math.random() - 0.5) * 0x1p32), (int)((Math.random() - 0.5) * 0x1p32));
     }
     
     public SilkRNG(final int seed) {
@@ -33,55 +33,55 @@ public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializ
     @Override
     public final int next(int bits) {
         final int s = (stateA = stateA + 0xC1C64E6D | 0);
-        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         return (x ^ x >>> 15) >>> (32 - bits);
     }
 
     @Override
     public final int nextInt() {
         final int s = (stateA = stateA + 0xC1C64E6D | 0);
-        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         return (x ^ x >>> 15);
     }
     
     @Override
     public final int nextInt(final int bound) {
         final int s = (stateA = stateA + 0xC1C64E6D | 0);
-        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         return (int) ((bound * ((x ^ x >>> 15) & 0xFFFFFFFFL)) >>> 32) & ~(bound >> 31);
     }
 
     @Override
     public final long nextLong() {
         int s = (stateA + 0xC1C64E6D | 0);
-        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         final long high = (x ^ x >>> 15);
         s = (stateA = stateA + 0x838C9CDA | 0);
-        x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         return (high << 32) | ((x ^ x >>> 15) & 0xFFFFFFFFL);
     }
 
     @Override
     public final boolean nextBoolean() {
         final int s = (stateA = stateA + 0xC1C64E6D | 0);
-        final int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        return ((x ^ x >>> 16) * 0xAC4C1B51 & 0x80000000) == 0;
+        final int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        return ((x ^ x >>> 16) * 0xAC451 & 0x80000000) == 0;
     }
 
     @Override
     public final double nextDouble() {
         int s = (stateA + 0xC1C64E6D | 0);
-        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         final long high = (x ^ x >>> 15);
         s = (stateA = stateA + 0x838C9CDA | 0);
-        x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         return  (((high << 32) | ((x ^ x >>> 15) & 0xFFFFFFFFL))
                 & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
@@ -89,8 +89,8 @@ public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializ
     @Override
     public final float nextFloat() {
         final int s = (stateA = stateA + 0xC1C64E6D | 0);
-        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) | 1);
-        x = (x ^ x >>> 16) * 0xAC4C1B51;
+        int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
+        x = (x ^ x >>> 16) * 0xAC451;
         return ((x ^ x >>> 15) & 0xffffff) * 0x1p-24f;
     }
     
