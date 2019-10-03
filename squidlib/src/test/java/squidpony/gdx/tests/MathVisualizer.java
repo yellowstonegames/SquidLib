@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 14;
+    private int mode = 23;
     private int modes = 31;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -334,8 +334,8 @@ public class MathVisualizer extends ApplicationAdapter {
         xs128 = new RandomXS128();
         xsp = new XSP();
         batch = new SpriteBatch();
-        stage = new Stage(new StretchViewport(512, 520), batch);
-        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
+        stage = new Stage(new StretchViewport(520, 520), batch);
+        layers = new SparseLayers(520, 520, 1, 1, new TextCellFactory().includedFont());
         layers.setDefaultForeground(SColor.WHITE);
         input = new InputAdapter(){
             @Override
@@ -1060,36 +1060,58 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
 
             case 23: {
-                //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
-                final long size = 128;
-                Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
-                //int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
-                //int lfsr = 7;
-                // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
-                int x, y;
-                Coord c;
-                for (int i = 0; i < size; i++) {
-//                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
-//                    x = a >>> 7 & 0x1ff;
-//                    y = a >>> 23 & 0x1ff;
-                    c = VanDerCorputQRNG.haltoid(777, 510, 510, 1, 1, i);
-                    x = c.x;
-                    y = c.y;
-//                    x = a >>> 9 & 0x7f;
-//                    y = a >>> 25 & 0x7f;
-//                    if(layers.backgrounds[x][y] != 0f)
-//                    {
-//                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
-//                        System.out.println("Overlap on index " + i);
-//                    }
-//                    else
-                    final float color = SColor.floatGetHSV(i * 0x1p-7f, 1f - i * 0x0.3p-7f, 0.7f, 1f);
-                    layers.backgrounds[x][y] = color;
-                    layers.backgrounds[x + 1][y] = color;
-                    layers.backgrounds[x - 1][y] = color;
-                    layers.backgrounds[x][y + 1] = color;
-                    layers.backgrounds[x][y - 1] = color;
+                Gdx.graphics.setTitle("Sine frequencies");
+                float p = MathUtils.PI;
+                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI) % 360f) {        // good case, modulo
+//                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI)) {             // bad case, high inputs
+                    amounts[MathUtils.round(MathUtils.sinDeg(p) * 255f + 256f)]++;           // libGDX's LUT way
+//                    amounts[MathUtils.round(NumberTools.sinDegrees(p) * 255f + 256f)]++;   // SquidLib's no-LUT way
                 }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 1000)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) { 
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+
+//                //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+//                final long size = 128;
+//                Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
+//                //int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
+//                //int lfsr = 7;
+//                // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
+//                int x, y;
+//                Coord c;
+//                for (int i = 0; i < size; i++) {
+////                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
+////                    x = a >>> 7 & 0x1ff;
+////                    y = a >>> 23 & 0x1ff;
+//                    c = VanDerCorputQRNG.haltoid(777, 510, 510, 1, 1, i);
+//                    x = c.x;
+//                    y = c.y;
+////                    x = a >>> 9 & 0x7f;
+////                    y = a >>> 25 & 0x7f;
+////                    if(layers.backgrounds[x][y] != 0f)
+////                    {
+////                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
+////                        System.out.println("Overlap on index " + i);
+////                    }
+////                    else
+//                    final float color = SColor.floatGetHSV(i * 0x1p-7f, 1f - i * 0x0.3p-7f, 0.7f, 1f);
+//                    layers.backgrounds[x][y] = color;
+//                    layers.backgrounds[x + 1][y] = color;
+//                    layers.backgrounds[x - 1][y] = color;
+//                    layers.backgrounds[x][y + 1] = color;
+//                    layers.backgrounds[x][y - 1] = color;
+//                }
+
             }
             break;
             case 24: {
@@ -1308,7 +1330,7 @@ public class MathVisualizer extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Visualizer for Math Testing/Checking";
-        config.width = 512;
+        config.width = 520;
         config.height = 520;
         config.foregroundFPS = 0;
         config.vSyncEnabled = false;
