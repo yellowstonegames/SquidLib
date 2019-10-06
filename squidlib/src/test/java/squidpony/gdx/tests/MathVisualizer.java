@@ -22,8 +22,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 23;
-    private int modes = 31;
+    private int mode = 32;
+    private int modes = 38;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -1060,57 +1060,36 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
 
             case 23: {
-                Gdx.graphics.setTitle("Sine frequencies");
-                float p = MathUtils.PI;
-                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI) % 360f) {        // good case, modulo
-//                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI)) {             // bad case, high inputs
-                    amounts[MathUtils.round(MathUtils.sinDeg(p) * 255f + 256f)]++;           // libGDX's LUT way
-//                    amounts[MathUtils.round(NumberTools.sinDegrees(p) * 255f + 256f)]++;   // SquidLib's no-LUT way
+                //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                final long size = 128;
+                Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
+                //int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
+                //int lfsr = 7;
+                // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
+                int x, y;
+                Coord c;
+                for (int i = 0; i < size; i++) {
+//                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
+//                    x = a >>> 7 & 0x1ff;
+//                    y = a >>> 23 & 0x1ff;
+                    c = VanDerCorputQRNG.haltoid(777, 510, 510, 1, 1, i);
+                    x = c.x;
+                    y = c.y;
+//                    x = a >>> 9 & 0x7f;
+//                    y = a >>> 25 & 0x7f;
+//                    if(layers.backgrounds[x][y] != 0f)
+//                    {
+//                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
+//                        System.out.println("Overlap on index " + i);
+//                    }
+//                    else
+                    final float color = SColor.floatGetHSV(i * 0x1p-7f, 1f - i * 0x0.3p-7f, 0.7f, 1f);
+                    layers.backgrounds[x][y] = color;
+                    layers.backgrounds[x + 1][y] = color;
+                    layers.backgrounds[x - 1][y] = color;
+                    layers.backgrounds[x][y + 1] = color;
+                    layers.backgrounds[x][y - 1] = color;
                 }
-                for (int i = 0; i < 512; i++) {
-                    float color = (i & 63) == 0
-                            ? -0x1.c98066p126F // CW Azure
-                            : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 1000)); j < 520; j++) {
-                        layers.backgrounds[i+8][j] = color;
-                    }
-                }
-                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) { 
-                    for (int i = 0; i < jj + 2; i++) {
-                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
-                    }
-                }
-
-//                //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
-//                final long size = 128;
-//                Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
-//                //int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
-//                //int lfsr = 7;
-//                // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
-//                int x, y;
-//                Coord c;
-//                for (int i = 0; i < size; i++) {
-////                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
-////                    x = a >>> 7 & 0x1ff;
-////                    y = a >>> 23 & 0x1ff;
-//                    c = VanDerCorputQRNG.haltoid(777, 510, 510, 1, 1, i);
-//                    x = c.x;
-//                    y = c.y;
-////                    x = a >>> 9 & 0x7f;
-////                    y = a >>> 25 & 0x7f;
-////                    if(layers.backgrounds[x][y] != 0f)
-////                    {
-////                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
-////                        System.out.println("Overlap on index " + i);
-////                    }
-////                    else
-//                    final float color = SColor.floatGetHSV(i * 0x1p-7f, 1f - i * 0x0.3p-7f, 0.7f, 1f);
-//                    layers.backgrounds[x][y] = color;
-//                    layers.backgrounds[x + 1][y] = color;
-//                    layers.backgrounds[x - 1][y] = color;
-//                    layers.backgrounds[x][y + 1] = color;
-//                    layers.backgrounds[x][y - 1] = color;
-//                }
 
             }
             break;
@@ -1294,9 +1273,250 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
+            case 31: {
+                Gdx.graphics.setTitle("Sine frequencies");
+                float p = MathUtils.PI;
+                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI) % 360f) {        // good case, modulo
+//                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI)) {             // bad case, high inputs
+                    amounts[MathUtils.round(MathUtils.sinDeg(p) * 255f + 256f)]++;           // libGDX's LUT way
+//                    amounts[MathUtils.round(NumberTools.sinDegrees(p) * 255f + 256f)]++;   // SquidLib's no-LUT way
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 1000)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 32: {
+                Gdx.graphics.setTitle("atan2_ random, uniform points");
+                for (int i = 1; i <= 0x200000; i++) {
+                    amounts[(int)(NumberTools.atan2_(DiverRNG.randomizeFloat(i) - 0.5f,
+                            DiverRNG.randomizeFloat(i ^ 0x94D049BB133111EBL) - 0.5f) * 512f)]++;   // SquidLib's no-LUT way
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 33: {
+                Gdx.graphics.setTitle("atan2_ random, triangular points");
+                for (int i = 1; i <= 0x200000; i++) {
+                    long r = DiverRNG.randomize(i);
+                    amounts[(int)(NumberTools.atan2_((r & 0xFFFF) - (r >>> 16 & 0xFFFF),
+                            (r >>> 32 & 0xFFFF) - (r >>> 48 & 0xFFFF)) * 512f)]++;   // SquidLib's no-LUT way
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 34: {
+                Gdx.graphics.setTitle("atan2_ random, less-biased, inverted triangular points");
+                for (int i = 1; i <= 0x200000; i++) {
+                    long r = DiverRNG.randomize(i);
+                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
+                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13;
+                    amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
+                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+//                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
+//                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 35: {
+                Gdx.graphics.setTitle("atan2_ random, biased-toward-center, inverted triangular points");
+                for (int i = 1; i <= 0x200000; i++) {
+                    long r = DiverRNG.randomize(i);
+                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
+                            b = (((r >>> 24 & 0xFFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0xBFF.8p0) * 0x1p-13;
+                    amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
+                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+//                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
+//                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 36: {
+                Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x200000; i++) {
+                    long r = DiverRNG.randomize(i);
+                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
+                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
+                    amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
+                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+//                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
+//                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 37: {
+                Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme, Gudermannian at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x200000; i++) {
+                    long r = DiverRNG.randomize(i);
+//                    long a = ((0x1000 + (r & 0xFFF) - (r >>> 12 & 0xFFF) & 0xFFF) - 0x800),
+//                            b = ((0x1000 + (r >>> 24 & 0xFFF) - (r >>> 36 & 0xFFF) & 0xFFF) - 0x400);
+//                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
+//                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
+                    double a = Math.expm1((((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-16),
+                            b = Math.expm1((((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-16);
+                    amounts[(int)(NumberTools.atan2_(Math.asin(a / (a + 2.0)),
+                            NumberTools.asin(b / (b + 2.0))) * 385.0 + (r >>> 48 & 0x7F))]++;
+//                    amounts[(int)(NumberTools.atan2_(icbrt(a),
+//                            icbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+//                    amounts[(int)(NumberTools.atan2_(a*0.6042181313 + 0.4531635984,
+//                            b*0.6042181313 + 0.4531635984) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+//                    amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
+//                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+//                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
+//                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+//                Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme, inverted triangular points, Gudermannian");
+//                for (int i = 1; i <= 0x200000; i++) {
+//                    long r = DiverRNG.randomize(i);
+//                    double a = Math.expm1((((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13),
+//                            b = Math.expm1((((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13);
+//                    amounts[(int)(NumberTools.atan2_(NumberTools.asin(a / (a + 2.0)),
+//                            NumberTools.asin(b / (b + 2.0))) * 385.0 + (r >>> 48 & 0x7F))]++;
+////                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
+////                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+//                        layers.backgrounds[i+8][j] = color;
+//                    }
+//                }
+//                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+//                    for (int i = 0; i < jj + 2; i++) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+            }
+            break;
+
         }
     }
-
+    
+    private double acbrt(double r)
+    {
+        double a = 1.4774329094 - 0.8414323527/(r+0.7387320679),
+        //a = 0.6042181313 * r + 0.4531635984,
+                a3 = a * a * a, a3r = a3 + r;
+        //a *= ((a3r + r) / (a3 + a3r));
+        return a * ((a3r + r) / (a3 + a3r));
+    }
+    
+    private double isqrt(long x)
+    {
+        final long sign = x >> 63;
+        x = x + sign ^ sign;
+        return Math.sqrt(x) * (sign | 1L);
+        
+//        final int bits_x = 64 - Long.numberOfLeadingZeros(x);
+//        if(bits_x == 0) return 0;
+//        final int exp_r = (bits_x + 2) / 3;
+//        
+//        long r = 1L << exp_r;
+////        for (int i = 0; i < 3; i++) {
+//        r = (2L * r + x / (r * r)) / 3L;
+//        r = (2L * r + x / (r * r)) / 3L;
+// //       }
+//
+//        /* initial estimate: 2 ^ ceil(b / 3) */
+////        long est_r = 1L << exp_r, r;
+////
+////        do /* quadratic convergence (?) */
+////        {
+////            r = est_r;
+////            est_r = (2 * r + x / (r * r)) / 3;
+////        }
+////        while (est_r < r);
+//        
+//        return r + sign ^ sign;
+    }
     private int hyperCurve(DiverRNG random, int bound) {
         long a = random.nextLong(), mask;
         int lz = Integer.numberOfLeadingZeros(bound), res = 0, ctr = 0;
