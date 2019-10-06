@@ -1418,22 +1418,30 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 37: {
-                Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme, Gudermannian at " + Gdx.graphics.getFramesPerSecond());
+                Gdx.graphics.setTitle("atan2_ random, 4th-biased-toward-extreme, at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x200000; i++) {
                     long r = DiverRNG.randomize(i);
-//                    long a = ((0x1000 + (r & 0xFFF) - (r >>> 12 & 0xFFF) & 0xFFF) - 0x800),
-//                            b = ((0x1000 + (r >>> 24 & 0xFFF) - (r >>> 36 & 0xFFF) & 0xFFF) - 0x400);
 //                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
 //                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
-                    double a = Math.expm1((((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-16),
-                            b = Math.expm1((((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-16);
-                    amounts[(int)(NumberTools.atan2_(Math.asin(a / (a + 2.0)),
-                            NumberTools.asin(b / (b + 2.0))) * 385.0 + (r >>> 48 & 0x7F))]++;
-//                    amounts[(int)(NumberTools.atan2_(icbrt(a),
-//                            icbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
-//                    amounts[(int)(NumberTools.atan2_(a*0.6042181313 + 0.4531635984,
-//                            b*0.6042181313 + 0.4531635984) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
-//                    amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
+                    long a = ((((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)))),
+                            b = ((((r >>> 32 & 0xFF) - (r >>> 40 & 0xFF)) * ((r >>> 48 & 0xFF) - (r >>> 56 & 0xFF))) - 0x1000);
+//                    amounts[(int) (NumberTools.atan2_(a,
+//                            b) * 511.0 + 0.5)]++;
+//                    amounts[(int) (NumberTools.atan2_((a),
+//                            (b)) * 384.0 + (DiverRNG.determine(r) & 127)+ 0.5)]++;
+                    amounts[(int) (NumberTools.atan2_((a),
+                            (b)) * 384.0 +
+                            ((DiverRNG.determine(r & 0xFFFFFFFFL) & 127) +
+                                    (DiverRNG.determine(r >>> 32) & 127)
+                                    & 127) + 0.5)]++;
+//                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
+//                            Math.cbrt(b)) * 384.0 + 
+//                            ((DiverRNG.determine(r & 0xFFFFFFFFL) & 127) +
+//                                    (DiverRNG.determine(r >>> 32) & 127)
+//                                    & 127) + 0.5)]++;
+//                    amounts[(int) (NumberTools.atan2_(a,
+//                            b) * 448.0 + (DiverRNG.determine(r) & 63) + 0.5)]++;
+//                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
 //                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
@@ -1443,7 +1451,7 @@ public class MathVisualizer extends ApplicationAdapter {
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
                     for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
-                        layers.backgrounds[i+8][j] = color;
+                        layers.backgrounds[i + 8][j] = color;
                     }
                 }
                 for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
@@ -1451,6 +1459,42 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+            }
+        break;
+//                Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme, Gudermannian at " + Gdx.graphics.getFramesPerSecond());
+//                for (int i = 1; i <= 0x200000; i++) {
+//                    long r = DiverRNG.randomize(i);
+////                    long a = ((0x1000 + (r & 0xFFF) - (r >>> 12 & 0xFFF) & 0xFFF) - 0x800),
+////                            b = ((0x1000 + (r >>> 24 & 0xFFF) - (r >>> 36 & 0xFFF) & 0xFFF) - 0x400);
+////                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
+////                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
+//                    double a = Math.expm1((((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-16),
+//                            b = Math.expm1((((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-16);
+//                    amounts[(int)(NumberTools.atan2_(Math.asin(a / (a + 2.0)),
+//                            NumberTools.asin(b / (b + 2.0))) * 385.0 + (r >>> 48 & 0x7F))]++;
+////                    amounts[(int)(NumberTools.atan2_(icbrt(a),
+////                            icbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+////                    amounts[(int)(NumberTools.atan2_(a*0.6042181313 + 0.4531635984,
+////                            b*0.6042181313 + 0.4531635984) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+////                    amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
+////                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+////                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
+////                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+//                        layers.backgrounds[i+8][j] = color;
+//                    }
+//                }
+//                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+//                    for (int i = 0; i < jj + 2; i++) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+//            }
 //                Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme, inverted triangular points, Gudermannian");
 //                for (int i = 1; i <= 0x200000; i++) {
 //                    long r = DiverRNG.randomize(i);
@@ -1474,10 +1518,10 @@ public class MathVisualizer extends ApplicationAdapter {
 //                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
 //                    }
 //                }
-            }
-            break;
+//            }
+//        break;
 
-        }
+    }
     }
     
     private double acbrt(double r)
