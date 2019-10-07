@@ -23,7 +23,7 @@ import java.util.Arrays;
  */
 public class MathVisualizer extends ApplicationAdapter {
     private int mode = 37;
-    private int modes = 38;
+    private int modes = 39;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -36,6 +36,7 @@ public class MathVisualizer extends ApplicationAdapter {
     private RandomXS128 xs128;
     private XSP xsp;
     private EditRNG edit;
+    private TweakRNG tweak;
     private long seed = 1L;
     private long startTime = 0L;
     private double[] circleCoord = new double[2];
@@ -333,6 +334,7 @@ public class MathVisualizer extends ApplicationAdapter {
         edit = new EditRNG();
         xs128 = new RandomXS128();
         xsp = new XSP();
+        tweak = new TweakRNG();
         batch = new SpriteBatch();
         stage = new Stage(new StretchViewport(520, 520), batch);
         layers = new SparseLayers(520, 520, 1, 1, new TextCellFactory().includedFont());
@@ -1322,7 +1324,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 1; i <= 0x200000; i++) {
                     long r = DiverRNG.randomize(i);
                     amounts[(int)(NumberTools.atan2_((r & 0xFFFF) - (r >>> 16 & 0xFFFF),
-                            (r >>> 32 & 0xFFFF) - (r >>> 48 & 0xFFFF)) * 512f)]++;   // SquidLib's no-LUT way
+                            (r >>> 32 & 0xFFFF) - (r >>> 48 & 0xFFFF)) * 512f)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -1346,7 +1348,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13;
                     amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+                            Math.cbrt(b)) * 385.0 + (DiverRNG.determine(r) & 0x7F))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1372,7 +1374,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0xBFF.8p0) * 0x1p-13;
                     amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+                            Math.cbrt(b)) * 385.0 + (DiverRNG.determine(r) & 0x7F))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1398,7 +1400,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
                     amounts[(int)(NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+                            Math.cbrt(b)) * 385.0 + (DiverRNG.determine(r) & 0x7F))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1424,19 +1426,19 @@ public class MathVisualizer extends ApplicationAdapter {
                     long r = DiverRNG.randomize(i), d = DiverRNG.determine(r);
 //                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
 //                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
-                    long a = ((((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)))),
+                    long a = ((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)),
                             b = ((((r >>> 32 & 0xFF) - (r >>> 40 & 0xFF)) * ((r >>> 48 & 0xFF) - (r >>> 56 & 0xFF))) + tm);
 //                    amounts[(int) (NumberTools.atan2_(a,
 //                            b) * 511.0 + 0.5)]++;
 //                    amounts[(int) (NumberTools.atan2_((a),
 //                            (b)) * 384.0 + (DiverRNG.determine(r) & 127)+ 0.5)]++;
                     amounts[(int) (NumberTools.atan2_((a),
-                            (b)) * 384.0
+                            (b)) * 385.0
                             +
-                            (
-                                    (d & 63) + (d >>> 6 & 63) +
-                                            (d >>> 12 & 63) + (d >>> 18 & 63)
-                                    & 127) + 0.5)]++;
+                            (d
+                                    //        (d & 63) + (d >>> 6 & 63) +
+                                    //                (d >>> 12 & 63) + (d >>> 18 & 63)
+                                    & 127))]++;
 //                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
 //                            Math.cbrt(b)) * 384.0 + 
 //                            ((DiverRNG.determine(r & 0xFFFFFFFFL) & 127) +
@@ -1463,7 +1465,29 @@ public class MathVisualizer extends ApplicationAdapter {
                     }
                 }
             }
-        break;
+            break;
+            case 38: {
+                long tm = (TimeUtils.timeSinceMillis(startTime) * 17 & 0x1FFFF) - 0x10000;
+                tweak.setCentrality(tm);
+                Gdx.graphics.setTitle("TweakRNG, centrality " + tm + ", at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x100000; i++) {
+                    amounts[tweak.nextSignedInt(512)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
+                        layers.backgrounds[i + 8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
 //                Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme, Gudermannian at " + Gdx.graphics.getFramesPerSecond());
 //                for (int i = 1; i <= 0x200000; i++) {
 //                    long r = DiverRNG.randomize(i);
