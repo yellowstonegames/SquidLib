@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 32;
+    private int mode = 37;
     private int modes = 38;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -1418,21 +1418,24 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 37: {
-                Gdx.graphics.setTitle("atan2_ random, 4th-biased-toward-extreme, at " + Gdx.graphics.getFramesPerSecond());
-                for (int i = 1; i <= 0x200000; i++) {
-                    long r = DiverRNG.randomize(i);
+                long tm = (TimeUtils.timeSinceMillis(startTime) * 7 & 0xFFFF) - 0x8000;
+                Gdx.graphics.setTitle("atan2_ random, bias value " + tm + ", at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x100000; i++) {
+                    long r = DiverRNG.randomize(i), d = DiverRNG.determine(r);
 //                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
 //                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
                     long a = ((((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)))),
-                            b = ((((r >>> 32 & 0xFF) - (r >>> 40 & 0xFF)) * ((r >>> 48 & 0xFF) - (r >>> 56 & 0xFF))) - 0x1000);
+                            b = ((((r >>> 32 & 0xFF) - (r >>> 40 & 0xFF)) * ((r >>> 48 & 0xFF) - (r >>> 56 & 0xFF))) + tm);
 //                    amounts[(int) (NumberTools.atan2_(a,
 //                            b) * 511.0 + 0.5)]++;
 //                    amounts[(int) (NumberTools.atan2_((a),
 //                            (b)) * 384.0 + (DiverRNG.determine(r) & 127)+ 0.5)]++;
                     amounts[(int) (NumberTools.atan2_((a),
-                            (b)) * 384.0 +
-                            ((DiverRNG.determine(r & 0xFFFFFFFFL) & 127) +
-                                    (DiverRNG.determine(r >>> 32) & 127)
+                            (b)) * 384.0
+                            +
+                            (
+                                    (d & 63) + (d >>> 6 & 63) +
+                                            (d >>> 12 & 63) + (d >>> 18 & 63)
                                     & 127) + 0.5)]++;
 //                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
 //                            Math.cbrt(b)) * 384.0 + 
@@ -1450,7 +1453,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
                         layers.backgrounds[i + 8][j] = color;
                     }
                 }
