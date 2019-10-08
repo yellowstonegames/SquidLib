@@ -49,6 +49,8 @@ public abstract class WorldMapGenerator implements Serializable {
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
     protected double centerLongitude = 0.0;
+    
+    public static final FastNoise DEFAULT_NOISE = new FastNoise(0x1337CAFE, 1f, FastNoise.SIMPLEX, 1);
 
     /**
      * Gets the longitude line the map is centered on, which should usually be between 0 and 2 * PI.
@@ -1190,10 +1192,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * as north-to-south. Always makes a 256x256 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, WorldMapGenerator.DEFAULT_NOISE, 1.0}.
          */
         public TilingMap() {
-            this(0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 256, 256, WorldMapGenerator.DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -1208,7 +1210,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public TilingMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -1224,7 +1226,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public TilingMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -1498,10 +1500,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 256x128 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, DEFAULT_NOISE, 1.0}.
          */
         public SphereMap() {
-            this(0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 256, 128, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -1517,7 +1519,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public SphereMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -1534,7 +1536,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public SphereMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -1552,7 +1554,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public SphereMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -1862,10 +1864,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 200x100 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link EllipticalMap#EllipticalMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0}.
          */
         public EllipticalMap() {
-            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -1880,7 +1882,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -1896,7 +1898,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -1913,7 +1915,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public EllipticalMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -2180,11 +2182,11 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 512x256 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link MimicMap#MimicMap(long, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, DEFAULT_NOISE, 1.0}.
          */
         public MimicMap() {
             this(0x1337BABE1337D00DL
-                    , FastNoise.instance, 1.0);
+                    , DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -2197,7 +2199,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          */
         public MimicMap(GreasedRegion toMimic) {
-            this(0x1337BABE1337D00DL, toMimic,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, toMimic,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -2212,7 +2214,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          */
         public MimicMap(long initialSeed, GreasedRegion toMimic) {
-            this(initialSeed, toMimic, FastNoise.instance, 1.0);
+            this(initialSeed, toMimic, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -2229,7 +2231,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public MimicMap(long initialSeed, GreasedRegion toMimic, double octaveMultiplier) {
-            this(initialSeed, toMimic, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, toMimic, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -2587,10 +2589,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 100x100 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link SpaceViewMap#SpaceViewMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, DEFAULT_NOISE, 1.0}.
          */
         public SpaceViewMap() {
-            this(0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 100, 100, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -2605,7 +2607,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public SpaceViewMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -2621,7 +2623,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public SpaceViewMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -2638,7 +2640,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public SpaceViewMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -2923,10 +2925,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 200x100 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link RoundSideMap#RoundSideMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0}.
          */
         public RoundSideMap() {
-            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -2941,7 +2943,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public RoundSideMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -2957,7 +2959,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -2974,7 +2976,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -3259,10 +3261,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 200x100 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link HyperellipticalMap#HyperellipticalMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0}.
          */
         public HyperellipticalMap() {
-            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -3277,7 +3279,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public HyperellipticalMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -3293,7 +3295,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -3310,7 +3312,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -3663,10 +3665,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 200x100 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link EllipticalHammerMap#EllipticalHammerMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0}.
          */
         public EllipticalHammerMap() {
-            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -3683,7 +3685,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalHammerMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -3701,7 +3703,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalHammerMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -3720,7 +3722,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public EllipticalHammerMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -4012,10 +4014,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 100x100 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link RotatingSpaceMap#RotatingSpaceMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, DEFAULT_NOISE, 1.0}.
          */
         public RotatingSpaceMap() {
-            this(0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 100, 100, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -4030,7 +4032,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public RotatingSpaceMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -4046,7 +4048,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public RotatingSpaceMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -4063,7 +4065,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public RotatingSpaceMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -4283,10 +4285,10 @@ public abstract class WorldMapGenerator implements Serializable {
          * Always makes a 256x128 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link LocalMap#LocalMap(long, int, int, Noise2D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, DEFAULT_NOISE, 1.0}.
          */
         public LocalMap() {
-            this(0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 256, 128, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -4302,7 +4304,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public LocalMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -4319,7 +4321,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public LocalMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -4337,7 +4339,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public LocalMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**
@@ -4553,11 +4555,11 @@ public abstract class WorldMapGenerator implements Serializable {
          * land positions or changing heat by latitude. Always makes a 256x256 map.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link LocalMimicMap#LocalMimicMap(long, Noise2D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, FastNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, DEFAULT_NOISE, 1.0}.
          */
         public LocalMimicMap() {
             this(0x1337BABE1337D00DL
-                    , FastNoise.instance, 1.0);
+                    , DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -4570,7 +4572,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          */
         public LocalMimicMap(GreasedRegion toMimic) {
-            this(0x1337BABE1337D00DL, toMimic,  FastNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, toMimic,  DEFAULT_NOISE,1.0);
         }
 
         /**
@@ -4585,7 +4587,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          */
         public LocalMimicMap(long initialSeed, GreasedRegion toMimic) {
-            this(initialSeed, toMimic, FastNoise.instance, 1.0);
+            this(initialSeed, toMimic, DEFAULT_NOISE, 1.0);
         }
 
         /**
@@ -4602,7 +4604,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public LocalMimicMap(long initialSeed, GreasedRegion toMimic, double octaveMultiplier) {
-            this(initialSeed, toMimic, FastNoise.instance, octaveMultiplier);
+            this(initialSeed, toMimic, DEFAULT_NOISE, octaveMultiplier);
         }
 
         /**

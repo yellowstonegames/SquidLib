@@ -256,9 +256,11 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.7, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
+        FastNoise noise = new FastNoise(1, 2f, FastNoise.SIMPLEX_FRACTAL, 2, 3.2f, 0.3125f);
         for (int x = 0; x < 4; x++) {
             for (int y = 0; y < 4; y++) {
-                world[x][y] = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.7);
+//                world[x][y] = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.7);
+                world[x][y] = new WorldMapGenerator.LocalMap(seed, 256, 256, noise, 0.5);
                 dbm[x][y] = new WorldMapGenerator.DetailedBiomeMapper();
                 world[x][y].generate(
                         1.0 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
