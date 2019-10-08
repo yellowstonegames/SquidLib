@@ -42,23 +42,26 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     private long seed;
     private WorldMapGenerator world;
     private WorldMapView wmv;
-
-    private int counter = 0;
-
+    
     private boolean spinning = false;
 
     private long ttg = 0; // time to generate
     
-//    public int noiseCalls = 0, pixels = 0;
+//    public int noiseCalls = 0, pixels = 0;  // debug
     
     public Noise.Noise3D noise;
     
     @Override
     public void create() {
+        
+        //// you will probably want to change batch to use whatever rendering system is appropriate
+        //// for your game; here it always renders pixels
         batch = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new StretchViewport(width, height);
-        seed = 42;//0x44B94C6A93EF3D54L;//0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
+        seed = 42;
         rng = new StatefulRNG(seed);
+        //// NOTE: this FastNoise has a different frequency (1f) than the default (1/32f), and that
+        //// makes a huge difference on world map quality. It also uses extra octaves.
         noise = new FastNoise(1337, 1f, FastNoise.SIMPLEX_FRACTAL, 3);//, 1.25f, 0.8f);
 //        {
 //            @Override
@@ -196,9 +199,13 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     {
         long startTime = System.nanoTime();
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
-//        noiseCalls = 0;
+//        noiseCalls = 0; // debug
+        //// parameters to generate() are seedA, seedB, landModifier, heatModifier.
+        //// seeds can be anything (if both 0, they'll be changed so seedA is 1, otherwise used as-is).
+        //// higher landModifier means more land, lower means more water; the middle is 1.0.
+        //// higher heatModifier means hotter average temperature, lower means colder; the middle is 1.0.
+        //// heatModifier defaults to being higher than 1.0 on average here so polar ice caps are smaller.
         wmv.generate((int)(seed & 0xFFFFFFFFL), (int) (seed >>> 32),
-//                2.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
                 0.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
                 DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.55 + 0.9);
         wmv.show();
@@ -216,14 +223,15 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 
     public void putMap() { 
         float[][] cm = wmv.getColorMap();
+        //// everything after this part of putMap() should be customized to your rendering setup
         batch.begin(view.getCamera().combined, GL20.GL_POINTS);
-//        pixels = 0;
+//        pixels = 0;                              // for debugging how many pixels are drawn
         float c;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 c = cm[x][y];
-//                if(c != WorldMapView.emptyColor)
-//                    pixels++;
+//                if(c != WorldMapView.emptyColor) // more debug
+//                    pixels++;                    // more debug
                 batch.color(c);
                 batch.vertex(x, y, 0f);
             }
@@ -243,7 +251,6 @@ public class WorldMapViewDemo extends ApplicationAdapter {
             rotate();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        ++counter;
         Gdx.graphics.setTitle("Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.
