@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
@@ -26,8 +27,8 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     //private static final int width = 314 * 3, height = 300;
 //    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
-//    private static final int width = 256, height = 256;
-    private static final int width = 400, height = 400; // fast rotations
+    private static final int width = 256, height = 256;
+//    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
 //    private static final int width = 900, height = 900;
@@ -50,7 +51,32 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //    public int noiseCalls = 0, pixels = 0;  // debug
     
     public Noise.Noise3D noise;
-    
+    static private String createVertexShader(float pointSize) {
+        String shader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
+                + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n";
+
+        shader += "uniform mat4 u_projModelView;\n";
+        shader += "varying vec4 v_col;\n";
+
+        shader += "void main() {\n" + "   gl_Position = u_projModelView * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
+                + "   v_col = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n";
+
+        shader += "   gl_PointSize = " + pointSize + ";\n";
+        shader += "}\n";
+        return shader;
+    }
+
+    static private String createFragmentShader () {
+        String shader = "#ifdef GL_ES\n" + "precision mediump float;\n" + "#endif\n";
+
+        shader += "varying vec4 v_col;\n";
+
+        shader += "void main() {\n" 
+                + "   gl_FragColor = v_col";
+
+        shader += ";\n}";
+        return shader;
+    }
     @Override
     public void create() {
         
@@ -232,8 +258,10 @@ public class WorldMapViewDemo extends ApplicationAdapter {
                 c = cm[x][y];
 //                if(c != WorldMapView.emptyColor) // more debug
 //                    pixels++;                    // more debug
-                batch.color(c);
-                batch.vertex(x, y, 0f);
+//                if(c != WorldMapView.emptyColor) {
+                    batch.color(c);
+                    batch.vertex(x, y, 0f);
+//                }
             }
         }
         batch.end();
