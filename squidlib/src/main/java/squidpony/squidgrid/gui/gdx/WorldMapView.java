@@ -73,7 +73,7 @@ public class WorldMapView {
             Ice                    = 9 ,
             Beach                  = 10,
             Rocky                  = 11,
-            River                  = 12,
+            Shallow                = 12,
             Ocean                  = 13,
             Empty                  = 14;
 
@@ -94,7 +94,7 @@ public class WorldMapView {
 
     // water colors
     public static float deepColor =    SColor.floatGetI(0, 42, 88);
-    public static float shallowColor = SColor.floatGetI(0, 73, 137);
+    public static float shallowColor = SColor.floatGetI(20, 145, 197);
     public static float coastalColor = SColor.lightenFloat(shallowColor, 0.3f);
     public static float foamColor =    SColor.floatGetI(61,  162, 215);
 
@@ -111,7 +111,7 @@ public class WorldMapView {
             iceColor,
             beachColor,
             rockyColor,
-            foamColor,
+            shallowColor,
             deepColor,
             emptyColor
     };
@@ -125,8 +125,8 @@ public class WorldMapView {
             Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER
             Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST
             Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS
-            Ice+0.3f,   River+0.8f,   River+0.7f,          River+0.6f,               River+0.5f,              River+0.4f,              //RIVERS
-            Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
+            Ice+0.3f,   Shallow+0.9f, Shallow+0.75f,       Shallow+0.6f,             Shallow+0.5f,            Shallow+0.4f,            //RIVERS
+            Ice+0.2f,   Shallow+0.9f, Shallow+0.65f,       Shallow+0.5f,             Shallow+0.4f,            Shallow+0.3f,            //LAKES
             Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
             Empty                                                                                                                      //SPACE
     }, BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
@@ -168,8 +168,8 @@ public class WorldMapView {
      * @param iceColor cold barren land covered in permafrost; also used for rivers and lakes that are frozen
      * @param beachColor sandy or otherwise light-colored shorelines; here, these are more common in warmer places
      * @param rockyColor rocky or otherwise rugged shorelines; here, these are more common in colder places
-     * @param foamColor the color of very shallow water; will be mixed with {@code deepColor} to get most ocean colors
-     * @param deepColor the color of very deep water; will be mixed with {@code foamColor} to get most ocean colors
+     * @param shallowColor the color of very shallow water; will be mixed with {@code deepColor} to get most ocean colors
+     * @param deepColor the color of very deep water; will be mixed with {@code shallowColor} to get most ocean colors
      * @param emptyColor the color used for empty space off the edge of the world map; may be transparent
      */
     public void initialize(
@@ -185,10 +185,10 @@ public class WorldMapView {
             Color iceColor,
             Color beachColor,
             Color rockyColor,
-            Color foamColor,
+            Color shallowColor,
             Color deepColor,
             Color emptyColor
-            )
+    )
     {
         biomeColors[ 0] = desertColor == null ? WorldMapView.desertColor : desertColor.toFloatBits();
         biomeColors[ 1] = savannaColor == null ? WorldMapView.savannaColor : savannaColor.toFloatBits();
@@ -202,7 +202,7 @@ public class WorldMapView {
         biomeColors[ 9] = iceColor == null ? WorldMapView.iceColor : iceColor.toFloatBits();
         biomeColors[10] = beachColor == null ? WorldMapView.beachColor : beachColor.toFloatBits();
         biomeColors[11] = rockyColor == null ? WorldMapView.rockyColor : rockyColor.toFloatBits();
-        biomeColors[12] = foamColor == null ? WorldMapView.foamColor : foamColor.toFloatBits();
+        biomeColors[12] = shallowColor == null ? WorldMapView.shallowColor : shallowColor.toFloatBits();
         biomeColors[13] = deepColor == null ? WorldMapView.deepColor : deepColor.toFloatBits();
         biomeColors[14] = emptyColor == null ? WorldMapView.emptyColor : emptyColor.toFloatBits();
         float b, diff;
@@ -227,7 +227,47 @@ public class WorldMapView {
         biomeColors[ 9] = WorldMapView.iceColor;
         biomeColors[10] = WorldMapView.beachColor;
         biomeColors[11] = WorldMapView.rockyColor;
-        biomeColors[12] = WorldMapView.foamColor;
+        biomeColors[12] = WorldMapView.shallowColor;
+        biomeColors[13] = WorldMapView.deepColor;
+        biomeColors[14] = WorldMapView.emptyColor;
+    }
+
+    /**
+     * Initializes the colors to use in some combination for all biomes, without regard for what the biome really is.
+     * There should be at least one packed float color given in similarColors, but there can be many of them.
+     * @param similarColors an array or vararg of packed float colors with at least one element
+     */
+    public void match(
+            float... similarColors
+    )
+    {
+        for (int i = 0; i < 14; i++) {
+            biomeColors[i] = SColor.lerpFloatColors(similarColors[i % similarColors.length], similarColors[(i * 5 + 3) % similarColors.length], 0.5f);
+        }
+        biomeColors[14] = WorldMapView.emptyColor;
+        float b, diff;
+        for (int i = 0; i < 60; i++) {
+            b = BIOME_TABLE[i];
+            diff = ((b % 1.0f) - 0.48f) * 0.27f;
+            BIOME_COLOR_TABLE[i] = b = (diff >= 0)
+                    ? SColor.lightenFloat(biomeColors[(int)b], diff)
+                    : SColor.darkenFloat(biomeColors[(int)b], -diff);
+            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
+        }
+        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = biomeColors[14];
+        biomeColors[ 0] = WorldMapView.desertColor;
+        biomeColors[ 1] = WorldMapView.savannaColor;
+        biomeColors[ 2] = WorldMapView.tropicalRainforestColor;
+        biomeColors[ 3] = WorldMapView.grasslandColor;
+        biomeColors[ 4] = WorldMapView.woodlandColor;
+        biomeColors[ 5] = WorldMapView.seasonalForestColor;
+        biomeColors[ 6] = WorldMapView.temperateRainforestColor;
+        biomeColors[ 7] = WorldMapView.borealForestColor;
+        biomeColors[ 8] = WorldMapView.tundraColor;
+        biomeColors[ 9] = WorldMapView.iceColor;
+        biomeColors[10] = WorldMapView.beachColor;
+        biomeColors[11] = WorldMapView.rockyColor;
+        biomeColors[12] = WorldMapView.shallowColor;
         biomeColors[13] = WorldMapView.deepColor;
         biomeColors[14] = WorldMapView.emptyColor;
     }
@@ -274,11 +314,11 @@ public class WorldMapView {
                         case 1:
                         case 2:
                         case 3:
-                            colorMap[x][y] = SColor.lerpFloatColors(shallowColor, iceColor,
+                            colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[50], BIOME_COLOR_TABLE[12],
                                     (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
                             continue PER_CELL;
                         case 4:
-                            colorMap[x][y] = SColor.lerpFloatColors(lightIceColor, iceColor,
+                            colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[0], BIOME_COLOR_TABLE[12],
                                     (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));
                             continue PER_CELL;
                     }
@@ -289,7 +329,7 @@ public class WorldMapView {
                     case 2:
                     case 3:
                         colorMap[x][y] = SColor.lerpFloatColors(
-                                BIOME_COLOR_TABLE[56], coastalColor,
+                                BIOME_COLOR_TABLE[56], BIOME_COLOR_TABLE[43],
                                 (MathExtras.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));
                         break;
                     default:
