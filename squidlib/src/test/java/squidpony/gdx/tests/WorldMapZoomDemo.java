@@ -10,15 +10,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidMouse;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.FastNoise;
@@ -65,7 +61,7 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
 
     private static final int bigWidth = width << 2, bigHeight = height << 2;
     
-    private SpriteBatch batch;
+    private FilterBatch batch;
 //    private SquidPanel display;//, overlay;
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
@@ -237,7 +233,7 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
     
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         view = new StretchViewport(bigWidth*cellWidth, bigHeight*cellHeight);
         font = DefaultResources.getLargeSmoothFont();
         font.setColor(CERISE);

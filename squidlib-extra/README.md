@@ -20,7 +20,10 @@ and libGDX; [it can be seen here](https://tommyettinger.github.io/SquidLib-Demos
 
 [![Join the slow-paced chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib)
 
-There's a [SquidLib IRC channel on Freenode](http://webchat.freenode.net/?channels=%23squidlib&uio=MT1mYWxzZSY5PXRydWUmMTE9MjU242); it is usually more active than Gitter.
+There's a fairly-active [Discord server for SquidLib](https://discord.gg/EmxUBsS); many questions for SquidLib
+also apply to libGDX, so if you're on Discord I'd recommend also joining the [libGDX Discord server](https://discord.gg/7c6Wg8H).
+There's also a [SquidLib IRC channel on Freenode](http://webchat.freenode.net/?channels=%23squidlib&uio=MT1mYWxzZSY5PXRydWUmMTE9MjU242);
+it is usually more active than Gitter and less active than Discord.
 
 Documentation:
 ---

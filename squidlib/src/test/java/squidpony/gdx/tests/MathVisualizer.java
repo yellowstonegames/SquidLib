@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 37;
+    private int mode = 19;
     private int modes = 39;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -916,16 +916,16 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < size; i++) {
                     //a = determinePositive16(a);
                     a++;
-                    x = (int) (VanDerCorputQRNG.determine2(a) * 512);
-                    y = (int) (VanDerCorputQRNG.determine(3, a) * 512);
+                    x = (int) (VanDerCorputQRNG.determine2(a) * 510) + 1;
+                    y = (int) (VanDerCorputQRNG.determine(3, a) * 510) + 1;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.backgrounds[x][y] = -0x1.7677e8p125F;
                         System.out.println("Overlap on index " + i);
                     } else
                         layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
-                x = (int) (VanDerCorputQRNG.determine2(a) * 512);
-                y = (int) (VanDerCorputQRNG.determine(3, a) * 512);
+                x = (int) (VanDerCorputQRNG.determine2(a) * 510) + 1;
+                y = (int) (VanDerCorputQRNG.determine(3, a) * 510) + 1;
                 layers.backgrounds[x+1][y] = -0x1.794bfep125F;
                 layers.backgrounds[x][y+1] = -0x1.794bfep125F;
                 layers.backgrounds[x-1][y] = -0x1.794bfep125F;
@@ -940,16 +940,16 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int i = 0; i < size; i++) {
 //                    a = determinePositive16(a);
                     a++;
-                    x = (int) (VanDerCorputQRNG.determine2(a) * 512);
-                    y = (int) (VanDerCorputQRNG.determine(39, a) * 512);
+                    x = (int) (VanDerCorputQRNG.determine2(a) * 510) + 1;
+                    y = (int) (VanDerCorputQRNG.determine(39, a) * 510) + 1;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.backgrounds[x][y] = -0x1.7677e8p125F;
                         System.out.println("Overlap on index " + i);
                     } else
                         layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
-                x = (int) (VanDerCorputQRNG.determine2(a) * 512);
-                y = (int) (VanDerCorputQRNG.determine(39, a) * 512);
+                x = (int) (VanDerCorputQRNG.determine2(a) * 510) + 1;
+                y = (int) (VanDerCorputQRNG.determine(39, a) * 510) + 1;
                 layers.backgrounds[x+1][y] = -0x1.794bfep125F;
                 layers.backgrounds[x][y+1] = -0x1.794bfep125F;
                 layers.backgrounds[x-1][y] = -0x1.794bfep125F;
@@ -1060,41 +1060,64 @@ public class MathVisualizer extends ApplicationAdapter {
 
             }
             break;
-
             case 23: {
-                //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
-                final long size = 128;
-                Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
-                //int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
-                //int lfsr = 7;
-                // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
-                int x, y;
-                Coord c;
+                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+//                final long size = 128;
+                Gdx.graphics.setTitle("Halton[Striding 1](ROOT2,ROOT3) sequence, first " + size + " points");
+                int x, y, a = 421;
+                double ROOT2 = Math.sqrt(2), ROOT3 = Math.sqrt(3);
                 for (int i = 0; i < size; i++) {
-//                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
-//                    x = a >>> 7 & 0x1ff;
-//                    y = a >>> 23 & 0x1ff;
-                    c = VanDerCorputQRNG.haltoid(777, 510, 510, 1, 1, i);
-                    x = c.x;
-                    y = c.y;
-//                    x = a >>> 9 & 0x7f;
-//                    y = a >>> 25 & 0x7f;
-//                    if(layers.backgrounds[x][y] != 0f)
-//                    {
-//                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
-//                        System.out.println("Overlap on index " + i);
-//                    }
-//                    else
-                    final float color = SColor.floatGetHSV(i * 0x1p-7f, 1f - i * 0x0.3p-7f, 0.7f, 1f);
-                    layers.backgrounds[x][y] = color;
-                    layers.backgrounds[x + 1][y] = color;
-                    layers.backgrounds[x - 1][y] = color;
-                    layers.backgrounds[x][y + 1] = color;
-                    layers.backgrounds[x][y - 1] = color;
+                    a++;
+                    x = (int) (vdc(ROOT2, a) * 510)+1;
+                    y = (int) (vdc(ROOT3, a) * 510)+1;
+                    if (layers.backgrounds[x][y] != 0f) {
+                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
+                        System.out.println("Overlap on index " + i);
+                    } else
+                        layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
-
+                x = (int) (vdc(ROOT2, a) * 510)+1;
+                y = (int) (vdc(ROOT3, a) * 510)+1;
+                layers.backgrounds[x+1][y] = -0x1.794bfep125F;
+                layers.backgrounds[x][y+1] = -0x1.794bfep125F;
+                layers.backgrounds[x-1][y] = -0x1.794bfep125F;
+                layers.backgrounds[x][y-1] = -0x1.794bfep125F;
             }
             break;
+
+//            case 23: {
+//                //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+//                final long size = 128;
+//                Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
+//                //int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
+//                //int lfsr = 7;
+//                // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
+//                int x, y;
+//                Coord c;
+//                for (int i = 0; i < size; i++) {
+////                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
+////                    x = a >>> 7 & 0x1ff;
+////                    y = a >>> 23 & 0x1ff;
+//                    c = VanDerCorputQRNG.haltoid(777, 510, 510, 1, 1, i);
+//                    x = c.x;
+//                    y = c.y;
+////                    x = a >>> 9 & 0x7f;
+////                    y = a >>> 25 & 0x7f;
+////                    if(layers.backgrounds[x][y] != 0f)
+////                    {
+////                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
+////                        System.out.println("Overlap on index " + i);
+////                    }
+////                    else
+//                    final float color = SColor.floatGetHSV(i * 0x1p-7f, 1f - i * 0x0.3p-7f, 0.7f, 1f);
+//                    layers.backgrounds[x][y] = color;
+//                    layers.backgrounds[x + 1][y] = color;
+//                    layers.backgrounds[x - 1][y] = color;
+//                    layers.backgrounds[x][y + 1] = color;
+//                    layers.backgrounds[x][y - 1] = color;
+//                }
+//            }
+//            break;
             case 24: {
                 Arrays.fill(amounts, 0);
                 long ctr = (System.nanoTime() >>> 24), xx, yy;
@@ -1607,6 +1630,30 @@ public class MathVisualizer extends ApplicationAdapter {
             lz = Integer.numberOfLeadingZeros(bound);
         }
         return res;
+    }
+    public static double vdc(double base, int index)
+    {
+        //0.7548776662466927, 0.5698402909980532
+        double n = (index+1 & 0x7fffffff);
+        base += 0.6180339887498949;
+        base *= 0.6180339887498949;
+        base -= (int)base;
+        double res = 0.0;
+        while (n >= 1) {
+            res += (n *= base);
+            base += 0.6180339887498949;
+            base *= 0.6180339887498949;
+            base -= (int) base;
+        }
+//        double denominator = base;
+//        int n = (index+1 & 0x7fffffff);
+//        while (n > 0.0)
+//        {
+//            res += (n % base) / denominator;
+//            n /= base;
+//            denominator *= base;
+//        }
+        return res - (int)res;
     }
 
     @Override
