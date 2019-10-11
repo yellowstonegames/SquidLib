@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
@@ -41,7 +40,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private WorldMapGenerator world;
+    private WorldMapGenerator world, inner;
     private WorldMapView wmv;
     
     private boolean spinning = false;
@@ -51,32 +50,6 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //    public int noiseCalls = 0, pixels = 0;  // debug
     
     public Noise.Noise3D noise;
-    static private String createVertexShader(float pointSize) {
-        String shader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
-                + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n";
-
-        shader += "uniform mat4 u_projModelView;\n";
-        shader += "varying vec4 v_col;\n";
-
-        shader += "void main() {\n" + "   gl_Position = u_projModelView * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
-                + "   v_col = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n";
-
-        shader += "   gl_PointSize = " + pointSize + ";\n";
-        shader += "}\n";
-        return shader;
-    }
-
-    static private String createFragmentShader () {
-        String shader = "#ifdef GL_ES\n" + "precision mediump float;\n" + "#endif\n";
-
-        shader += "varying vec4 v_col;\n";
-
-        shader += "void main() {\n" 
-                + "   gl_FragColor = v_col";
-
-        shader += ";\n}";
-        return shader;
-    }
     @Override
     public void create() {
         
@@ -88,7 +61,8 @@ public class WorldMapViewDemo extends ApplicationAdapter {
         rng = new StatefulRNG(seed);
         //// NOTE: this FastNoise has a different frequency (1f) than the default (1/32f), and that
         //// makes a huge difference on world map quality. It also uses extra octaves.
-        noise = new FastNoise(1337, 1f, FastNoise.SIMPLEX_FRACTAL, 3);//, 1.25f, 0.8f);
+        WorldMapGenerator.DEFAULT_NOISE.setFractalType(FastNoise.SIMPLEX_FRACTAL);
+        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(3);
 //        {
 //            @Override
 //            public float singleSimplex(int seed, float x, float y, float z) {
@@ -118,18 +92,18 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //                return super.getSimplexFractal(x, y, z, w, u, v);
 //            }
 //        };
-//        world = new WorldMapGenerator.TilingMap(seed, width, height, new FastNoise(1337, 1f), 1.25);
-//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.875);
-        //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
-//        world = new WorldMapGenerator.MimicMap(seed, new FastNoise(1337, 1f), 0.7);
-//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, noise, 0.7);
-        //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 1.2, 0.0625, 2.5);
-//        world = new WorldMapGenerator.SphereMap(seed, width, height, new FastNoise(1337, 1f), 0.6);
-//        world = new WorldMapGenerator.LocalMimicMap(seed, new FastNoise(1337, 1f), 0.6);
-//        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), new FastNoise(1337, 1f), 0.9);
-        
+//        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.25);
+//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.875);
+        //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.75);
+//        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.7);
+//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
+//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
+        //world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0625, 2.5);
+//        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.6);
+        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.65);
+//        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), WorldMapGenerator.DEFAULT_NOISE, 0.9);
+        inner = new WorldMapGenerator.LocalMap(seed, 256, 256, WorldMapGenerator.DEFAULT_NOISE, 0.8);
         wmv = new WorldMapView(world);
 //        wmv.initialize(SColor.CW_FADED_RED, SColor.AURORA_BRICK, SColor.DEEP_SCARLET, SColor.DARK_CORAL,
 //                SColor.LONG_SPRING, SColor.WATER_PERSIMMON, SColor.AURORA_HOT_SAUCE, SColor.PALE_CARMINE,
@@ -198,8 +172,19 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     {
         long startTime = System.nanoTime();
 //        noiseCalls = 0;
-        world.zoomIn(1, zoomX<<1, zoomY<<1);
-        wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
+//        world.zoomIn(1, zoomX, zoomY);
+        inner.rng.setState(Noise.HastyPointHash.hashAll(zoomX, zoomY, world.rng.getState()));
+        float[][] colors = wmv.getColorMap();
+        wmv.match(colors[zoomX][zoomY],
+                colors[(zoomX + 2) % colors.length][zoomY],
+                colors[zoomX][(zoomY + 2) % colors[0].length],
+                colors[(zoomX + colors.length - 2) % colors.length][zoomY],
+                colors[zoomX][(zoomY + colors[0].length - 2) % colors[0].length]
+        );
+        wmv.setWorld(inner);
+        wmv.generate(inner.rng.stateA, inner.rng.stateB, world.heightCodeData[zoomX][zoomY] < 4 ? 0.0 : 4.0 +
+                        world.heightData[zoomX][zoomY],
+                world.heatData[zoomX][zoomY] + 0.5);
         wmv.show();
         ttg = System.nanoTime() - startTime >> 20;
     }
@@ -216,7 +201,9 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     {
         long startTime = System.nanoTime();
 //        noiseCalls = 0;
-        world.zoomOut(1, zoomX<<1, zoomY<<1);
+//        world.zoomOut(1, zoomX, zoomY);
+        wmv.initialize();
+        wmv.setWorld(world);
         wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
         wmv.show();
         ttg = System.nanoTime() - startTime >> 20;
@@ -260,7 +247,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //                    pixels++;                    // more debug
 //                if(c != WorldMapView.emptyColor) {
                     batch.color(c);
-                    batch.vertex(x, y, 0f);
+                    batch.vertex(x, height - 1 - y, 0f);
 //                }
             }
         }
