@@ -62,5 +62,15 @@ public class ThesaurusTest {
         };
         String oz = StringKit.join("", ozzes);
         System.out.println(Thesaurus.ORK.process(oz));
+        System.out.println();
+        thesaurus.addKnownCategories();
+        for (int i = 0; i < 10; i++) {
+            System.out.println((thesaurus.makePlantName())                    );
+            System.out.println((thesaurus.makePlantName())                    );
+            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())                    );
+            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.JAPANESE_ROMANIZED.removeAccents()));
+            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.ELF.removeAccents())               );
+            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.SIMPLISH)                          );
+        }
     }
 }

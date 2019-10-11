@@ -567,6 +567,56 @@ public class Thesaurus implements Serializable{
     }
 
     /**
+     * Generates a random possible name for a plant or tree, such as "Ikesheha's maple" or "sugarleaf birch".
+     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
+     * to String if needed. Shortly after calling this method, but before
+     * calling it again, you can retrieve the generated random languages, if any were used while making names, by
+     * getting the FakeLanguageGen elements of this class' {@link #randomLanguages} field. Using one of these
+     * FakeLanguageGen objects, you can produce many more words with a similar style to the person or place name, like
+     * "Drayo" in "The Last Drayo Commonwealth". Calling this method replaces the current contents of
+     * randomLanguages, so if you want to use those languages, get them while you can.
+     *
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makePlantName()
+    {
+        String working = process(rng.getRandomElement(plantTerms));
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(rng.getRandomElement(plantTerms));
+        randomLanguages.clear();
+        RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+    /**
+     * Generates a random possible name for a plant or tree, such as "Ikesheha's maple" or "sugarleaf birch",
+     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
+     * calling {@link FakeLanguageGen#removeAccents()} on the FakeLanguageGen you would give this.
+     *
+     * @param language a FakeLanguageGen that will be used to construct any non-English names
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makePlantName(FakeLanguageGen language)
+    {
+        String working = process(rng.getRandomElement(plantTerms));
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(rng.getRandomElement(plantTerms));
+        randomLanguages.clear();
+        KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+
+    /**
      * Gets an English word for a given number, if this knows it. These words are known from 0 ("zero") to 20
      * ("twenty"), as well as some higher numbers. If a word isn't known for a number, this returns the number as a
      * String, such as "537" or "-1".
@@ -696,6 +746,31 @@ public class Thesaurus implements Serializable{
             "Union`adj` Duchy`nouns` of @",  "The @ Duchy`noun`", "The Fancy`adj` @ Duchy`noun`", "The Sole`adj` @ Empire`noun`",
             "@ Empire`noun`", "@ Empire`noun`", "@ Empire`noun`", "@-@ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Holy`adj` @ Empire`noun`",};
 
+    private static final String[] plantTerms = new String[]{
+            "@'s color`adj`\tleaf`noun`",
+            "@'s tree`noun`",
+            "leaf`noun` of @",
+            "@'s ground`noun`\tleaf`noun`",
+            "ground`noun`\tleaf`noun` of @",
+            "ground`noun`\tleaf`noun`",
+            "flavor`noun`\tleaf`noun` tree`noun`",
+            "flavor`adj` fruit`noun` tree`noun`",
+            "flavor`adj` nut`noun` tree`noun`",
+            "color`adj` fruit`noun` tree`noun`",
+            "color`adj` nut`noun` tree`noun`",
+    };
+    private static final String[] fruitTerms = new String[]{
+            "@'s flavor`adj` fruit`noun`",
+            "@'s color`adj` fruit`noun`",
+            "flavor`adj` fruit`noun`-fruit`noun`",
+            "color`adj` fruit`noun`-fruit`noun`",
+    };
+    private static final String[] nutTerms = new String[]{
+            "@'s flavor`adj` nut`noun`",
+            "@'s color`adj` nut`noun`",
+            "flavor`adj` nut`noun`",
+            "color`adj` nut`noun`",
+    };
     public static final OrderedMap<String, ArrayList<String>> categories = makeOM(
             "calm`adj`",
             makeList("harmonious", "peaceful", "pleasant", "serene", "placid", "tranquil", "calm"),
@@ -758,7 +833,7 @@ public class Thesaurus implements Serializable{
             "forest`adj`",
             makeList("natural", "primal", "verdant", "lush", "fertile", "bountiful"),
             "forest`noun`",
-            makeList("nature", "forest", "greenery", "jungle", "woodland", "grove", "copse"),
+            makeList("nature", "forest", "greenery", "jungle", "woodland", "grove", "copse", "glen"),
             "shaman`noun`",
             makeList("shaman", "druid", "warden", "animist"),
             "shaman`nouns`",
@@ -839,6 +914,31 @@ public class Thesaurus implements Serializable{
             makeList("lightning", "thunder", "thunderbolt", "storm", "spark", "shock"),
             "lightning`nouns`",
             makeList("lightning", "thunder", "thunderbolts", "storms", "sparks", "shocks"),
+            "ground`noun`",
+            makeList("earth", "sand", "soil", "loam", "dirt", "clay", "mud", "peat"),
+            "lake`noun`",
+            makeList("puddle", "pond", "lake", "sea", "swamp", "bog", "fen", "glade"),
+            "leaf`noun`",
+            makeList("leaf", "bark", "root", "thorn", "seed", "branch", "twig", "wort", "cress", "flower", "wood", "vine"),
+            "fruit`noun`",
+            makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig"),
+            "nut`noun`",
+            makeList("nut", "almond", "peanut", "pecan", "walnut", "cashew"),
+            "tree`noun`",
+            makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar"),
+            "flavor`noun`",
+            makeList("sugar", "spice", "acid", "herb", "salt", "grease", "smoke"),
+            "flavor`adj`",
+            makeList("sweet", "spicy", "sour", "bitter", "salty", "savory", "smoky"),
+            "color`adj`",
+            makeList("black", "white", "red", "orange", "yellow", "green", "blue", "violet"),
+            //"flavor`noun`\tleaf`noun` tree`noun`"
+            //"flavor`adj` fruit`noun` tree`noun`"
+            //"flavor`adj` nut`noun` tree`noun`"
+            //"color`adj` fruit`noun` tree`noun`"
+            //"color`adj` nut`noun` tree`noun`"
+            //"flavor`adj` fruit`noun`-fruit`noun`"
+            //"color`adj` fruit`noun`-fruit`noun`"
             "smart`adj`",
             makeList("brilliant", "smart", "genius", "wise", "clever", "cunning", "mindful", "aware"),
             "smart`noun`",
@@ -1110,7 +1210,7 @@ public class Thesaurus implements Serializable{
 
     /**
      * Thesaurus preset that changes all text to sound like this speaker: "Desaurus preset dat changez all text to sound
-     * like dis speakah." You may be familiar with a certain sci-fi game that has orks that sound like this.
+     * like dis speakah." You may be familiar with a certain sci-fi game that has orks who sound like this.
      */
     public static Thesaurus ORK = new Thesaurus("WAAAAAGH!");
     static {
