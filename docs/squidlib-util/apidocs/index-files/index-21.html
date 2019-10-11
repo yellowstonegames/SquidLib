@@ -113,8 +113,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">TangleRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
-<div class="block">A variant on <a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that gives up some speed, but allows choosing any of 2 to the 63 odd-number streams
- that change the set of possible outputs this can produce (amending the main flaw of ThrustAltRNG).</div>
+<div class="block">A very fast generator on 64-bit systems that allows choosing any of 2 to the 63 odd-number streams.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#%3Cinit%3E()">TangleRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>
@@ -424,6 +423,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
  as north-to-south.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#%3Cinit%3E(squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap)">TilingMap(WorldMapGenerator.TilingMap)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dt>
+<dd>
+<div class="block">Copies the TilingMap <code>other</code> to construct a new one that is exactly the same.</div>
+</dd>
 <dt><a href="../squidpony/squidmath/TimSort.html" title="class in squidpony.squidmath"><span class="typeNameLink">TimSort</span></a>&lt;<a href="../squidpony/squidmath/TimSort.html" title="type parameter in TimSort">T</a>&gt; - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">A stable, adaptive, iterative mergesort that requires far fewer than n lg(n) comparisons when running on partially sorted
@@ -580,10 +583,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns this RNG in a way that can be deserialized even if only <a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a>'s methods can be called.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#toSerializable()">toSerializable()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
+<dd>
+<div class="block">Gets a view of this IRNG in a way that implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>Serializable</code></a>, which is simply this IRNG.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/StatefulRNG.html#toSerializable()">toSerializable()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></dt>
 <dd>
 <div class="block">Returns this StatefulRNG in a way that can be deserialized even if only <a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a>'s methods can be called.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TweakRNG.html#toSerializable()">toSerializable()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Alteration.html#toString()">toString()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#toString()">toString()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></dt>
@@ -737,6 +746,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#toString()">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#toString()">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#toString()">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SobolQRNG.html#toString()">toString()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
 <dd>&nbsp;</dd>
@@ -1067,6 +1078,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">A technique for producing organic-seeming patterns via iterative processing of random values (reaction-diffusion).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#%3Cinit%3E()">TuringPattern()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">TweakRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">Highly experimental RNG that can be configured to smoothly transition between producing mostly values in the center
+ of its range, to producing more values at or near the extremes.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TweakRNG.html#%3Cinit%3E()">TweakRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TweakRNG.html#%3Cinit%3E(long)">TweakRNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TweakRNG.html#%3Cinit%3E(long,long,long)">TweakRNG(long, long, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#twoStepRule">twoStepRule</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>

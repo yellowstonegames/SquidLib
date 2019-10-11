@@ -107,7 +107,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.1178">WorldMapGenerator.TilingMap</a>
+<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.1224">WorldMapGenerator.TilingMap</a>
 extends <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></pre>
 <div class="block">A concrete implementation of <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that tiles both east-to-west and north-to-south. It tends
  to not appear distorted like <a href="WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.SphereMap</code></a> does in some areas, even though this is inaccurate for a
@@ -207,7 +207,7 @@ extends <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.map
 <h3>Fields inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></h3>
 <a id="fields.inherited.from.class.squidpony.squidgrid.mapping.WorldMapGenerator">
 <!--   -->
-</a><code><a href="WorldMapGenerator.html#cacheA">cacheA</a>, <a href="WorldMapGenerator.html#cacheB">cacheB</a>, <a href="WorldMapGenerator.html#centerLongitude">centerLongitude</a>, <a href="WorldMapGenerator.html#coastalWaterLower">coastalWaterLower</a>, <a href="WorldMapGenerator.html#coastalWaterUpper">coastalWaterUpper</a>, <a href="WorldMapGenerator.html#deepWaterLower">deepWaterLower</a>, <a href="WorldMapGenerator.html#deepWaterUpper">deepWaterUpper</a>, <a href="WorldMapGenerator.html#forestLower">forestLower</a>, <a href="WorldMapGenerator.html#forestUpper">forestUpper</a>, <a href="WorldMapGenerator.html#grassLower">grassLower</a>, <a href="WorldMapGenerator.html#grassUpper">grassUpper</a>, <a href="WorldMapGenerator.html#heatData">heatData</a>, <a href="WorldMapGenerator.html#heatModifier">heatModifier</a>, <a href="WorldMapGenerator.html#height">height</a>, <a href="WorldMapGenerator.html#heightCodeData">heightCodeData</a>, <a href="WorldMapGenerator.html#heightData">heightData</a>, <a href="WorldMapGenerator.html#landData">landData</a>, <a href="WorldMapGenerator.html#landModifier">landModifier</a>, <a href="WorldMapGenerator.html#maxHeat">maxHeat</a>, <a href="WorldMapGenerator.html#maxHeight">maxHeight</a>, <a href="WorldMapGenerator.html#maxHeightActual">maxHeightActual</a>, <a href="WorldMapGenerator.html#maxWet">maxWet</a>, <a href="WorldMapGenerator.html#mediumWaterLower">mediumWaterLower</a>, <a href="WorldMapGenerator.html#mediumWaterUpper">mediumWaterUpper</a>, <a href="WorldMapGenerator.html#minHeat">minHeat</a>, <a href="WorldMapGenerator.html#minHeight">minHeight</a>, <a href="WorldMapGenerator.html#minHeightActual">minHeightActual</a>, <a href="WorldMapGenerator.html#minWet">minWet</a>, <a href="WorldMapGenerator.html#moistureData">moistureData</a>, <a href="WorldMapGenerator.html#rng">rng</a>, <a href="WorldMapGenerator.html#rockLower">rockLower</a>, <a href="WorldMapGenerator.html#rockUpper">rockUpper</a>, <a href="WorldMapGenerator.html#sandLower">sandLower</a>, <a href="WorldMapGenerator.html#sandUpper">sandUpper</a>, <a href="WorldMapGenerator.html#seedA">seedA</a>, <a href="WorldMapGenerator.html#seedB">seedB</a>, <a href="WorldMapGenerator.html#shallowWaterLower">shallowWaterLower</a>, <a href="WorldMapGenerator.html#shallowWaterUpper">shallowWaterUpper</a>, <a href="WorldMapGenerator.html#snowLower">snowLower</a>, <a href="WorldMapGenerator.html#snowUpper">snowUpper</a>, <a href="WorldMapGenerator.html#startCacheX">startCacheX</a>, <a href="WorldMapGenerator.html#startCacheY">startCacheY</a>, <a href="WorldMapGenerator.html#startX">startX</a>, <a href="WorldMapGenerator.html#startY">startY</a>, <a href="WorldMapGenerator.html#usedHeight">usedHeight</a>, <a href="WorldMapGenerator.html#usedWidth">usedWidth</a>, <a href="WorldMapGenerator.html#width">width</a>, <a href="WorldMapGenerator.html#zoom">zoom</a>, <a href="WorldMapGenerator.html#zoomStartX">zoomStartX</a>, <a href="WorldMapGenerator.html#zoomStartY">zoomStartY</a></code></div>
+</a><code><a href="WorldMapGenerator.html#cacheA">cacheA</a>, <a href="WorldMapGenerator.html#cacheB">cacheB</a>, <a href="WorldMapGenerator.html#centerLongitude">centerLongitude</a>, <a href="WorldMapGenerator.html#coastalWaterLower">coastalWaterLower</a>, <a href="WorldMapGenerator.html#coastalWaterUpper">coastalWaterUpper</a>, <a href="WorldMapGenerator.html#deepWaterLower">deepWaterLower</a>, <a href="WorldMapGenerator.html#deepWaterUpper">deepWaterUpper</a>, <a href="WorldMapGenerator.html#DEFAULT_NOISE">DEFAULT_NOISE</a>, <a href="WorldMapGenerator.html#forestLower">forestLower</a>, <a href="WorldMapGenerator.html#forestUpper">forestUpper</a>, <a href="WorldMapGenerator.html#grassLower">grassLower</a>, <a href="WorldMapGenerator.html#grassUpper">grassUpper</a>, <a href="WorldMapGenerator.html#heatData">heatData</a>, <a href="WorldMapGenerator.html#heatModifier">heatModifier</a>, <a href="WorldMapGenerator.html#height">height</a>, <a href="WorldMapGenerator.html#heightCodeData">heightCodeData</a>, <a href="WorldMapGenerator.html#heightData">heightData</a>, <a href="WorldMapGenerator.html#landData">landData</a>, <a href="WorldMapGenerator.html#landModifier">landModifier</a>, <a href="WorldMapGenerator.html#maxHeat">maxHeat</a>, <a href="WorldMapGenerator.html#maxHeight">maxHeight</a>, <a href="WorldMapGenerator.html#maxHeightActual">maxHeightActual</a>, <a href="WorldMapGenerator.html#maxWet">maxWet</a>, <a href="WorldMapGenerator.html#mediumWaterLower">mediumWaterLower</a>, <a href="WorldMapGenerator.html#mediumWaterUpper">mediumWaterUpper</a>, <a href="WorldMapGenerator.html#minHeat">minHeat</a>, <a href="WorldMapGenerator.html#minHeight">minHeight</a>, <a href="WorldMapGenerator.html#minHeightActual">minHeightActual</a>, <a href="WorldMapGenerator.html#minWet">minWet</a>, <a href="WorldMapGenerator.html#moistureData">moistureData</a>, <a href="WorldMapGenerator.html#rng">rng</a>, <a href="WorldMapGenerator.html#rockLower">rockLower</a>, <a href="WorldMapGenerator.html#rockUpper">rockUpper</a>, <a href="WorldMapGenerator.html#sandLower">sandLower</a>, <a href="WorldMapGenerator.html#sandUpper">sandUpper</a>, <a href="WorldMapGenerator.html#seedA">seedA</a>, <a href="WorldMapGenerator.html#seedB">seedB</a>, <a href="WorldMapGenerator.html#shallowWaterLower">shallowWaterLower</a>, <a href="WorldMapGenerator.html#shallowWaterUpper">shallowWaterUpper</a>, <a href="WorldMapGenerator.html#snowLower">snowLower</a>, <a href="WorldMapGenerator.html#snowUpper">snowUpper</a>, <a href="WorldMapGenerator.html#startCacheX">startCacheX</a>, <a href="WorldMapGenerator.html#startCacheY">startCacheY</a>, <a href="WorldMapGenerator.html#startX">startX</a>, <a href="WorldMapGenerator.html#startY">startY</a>, <a href="WorldMapGenerator.html#usedHeight">usedHeight</a>, <a href="WorldMapGenerator.html#usedWidth">usedWidth</a>, <a href="WorldMapGenerator.html#width">width</a>, <a href="WorldMapGenerator.html#zoom">zoom</a>, <a href="WorldMapGenerator.html#zoomStartX">zoomStartX</a>, <a href="WorldMapGenerator.html#zoomStartY">zoomStartY</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -269,6 +269,12 @@ double&nbsp;octaveMultiplier)</code></th>
 <td class="colLast">
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
  as north-to-south.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap)">TilingMap</a></span>&#8203;(<a href="WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a>&nbsp;other)</code></th>
+<td class="colLast">
+<div class="block">Copies the TilingMap <code>other</code> to construct a new one that is exactly the same.</div>
 </td>
 </tr>
 </tbody>
@@ -336,7 +342,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainFreq">terrainFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1181">terrainFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1227">terrainFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap.terrainFreq">Constant Field Values</a></dd>
@@ -346,7 +352,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainRidgedFreq">terrainRidgedFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1181">terrainRidgedFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1227">terrainRidgedFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap.terrainRidgedFreq">Constant Field Values</a></dd>
@@ -356,7 +362,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heatFreq">heatFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1181">heatFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1227">heatFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap.heatFreq">Constant Field Values</a></dd>
@@ -366,7 +372,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="moistureFreq">moistureFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1181">moistureFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1227">moistureFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap.moistureFreq">Constant Field Values</a></dd>
@@ -376,7 +382,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="otherFreq">otherFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1181">otherFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1227">otherFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap.otherFreq">Constant Field Values</a></dd>
@@ -386,31 +392,31 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrain">terrain</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1186">terrain</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1232">terrain</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainRidged">terrainRidged</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1186">terrainRidged</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1232">terrainRidged</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heat">heat</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1186">heat</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1232">heat</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="moisture">moisture</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1186">moisture</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1232">moisture</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="otherRidged">otherRidged</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1186">otherRidged</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1232">otherRidged</a></span></div>
 </section>
 </li>
 </ul>
@@ -426,18 +432,18 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">TilingMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1195">TilingMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1241">TilingMap</a></span>()</div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
  as north-to-south. Always makes a 256x256 map.
  Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
  If you were using <a href="#%3Cinit%3E(long,int,int,squidpony.squidmath.Noise.Noise4D,double)"><code>TilingMap(long, int, int, Noise4D, double)</code></a>, then this would be the
- same as passing the parameters <code>0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0</code>.</div>
+ same as passing the parameters <code>0x1337BABE1337D00DL, 256, 256, WorldMapGenerator.DEFAULT_NOISE, 1.0</code>.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">TilingMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1210">TilingMap</a></span>&#8203;(<span class="arguments">int&nbsp;mapWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1256">TilingMap</a></span>&#8203;(<span class="arguments">int&nbsp;mapWidth,
 int&nbsp;mapHeight)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
  as north-to-south.
@@ -455,7 +461,7 @@ int&nbsp;mapHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int)">TilingMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1226">TilingMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1272">TilingMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
@@ -475,7 +481,7 @@ int&nbsp;mapHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,squidpony.squidmath.Noise.Noise4D)">TilingMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1246">TilingMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1292">TilingMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 <a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;noiseGenerator)</span></div>
@@ -500,7 +506,7 @@ int&nbsp;mapHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,squidpony.squidmath.Noise.Noise4D,double)">TilingMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1268">TilingMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1314">TilingMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 <a href="../../squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;noiseGenerator,
@@ -526,6 +532,18 @@ double&nbsp;octaveMultiplier)</span></div>
 </dl>
 </section>
 </li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap)">TilingMap</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1328">TilingMap</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a>&nbsp;other)</span></div>
+<div class="block">Copies the TilingMap <code>other</code> to construct a new one that is exactly the same. References will only be
+ shared to Noise classes.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - a TilingMap to copy</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -539,7 +557,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="regenerate(int,int,int,int,double,double,int,int)">regenerate</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1277">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html#line.1344">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
 int&nbsp;startY,
 int&nbsp;usedWidth,
 int&nbsp;usedHeight,

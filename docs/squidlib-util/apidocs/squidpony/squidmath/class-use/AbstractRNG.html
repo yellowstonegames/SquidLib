@@ -124,6 +124,23 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  and distance checks between two generated numbers with the static <a href="../MoonwalkRNG.html#distance(long,long)"><code>MoonwalkRNG.distance(long, long)</code></a> method.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></span></code></th>
+<td class="colLast">
+<div class="block">An IStatefulRNG implementation that is meant to provide random numbers very quickly when targeting GWT but also to
+ produce the same numbers when used on desktop, Android, or other platforms, and that can have its state read as a
+ StatefulRandomness; it is thus like <a href="../GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> but should perform better on recent desktop JVMs.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></span></code></th>
+<td class="colLast">
+<div class="block">Highly experimental RNG that can be configured to smoothly transition between producing mostly values in the center
+ of its range, to producing more values at or near the extremes.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>

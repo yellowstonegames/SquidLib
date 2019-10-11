@@ -108,7 +108,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.3240">WorldMapGenerator.HyperellipticalMap</a>
+public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.3422">WorldMapGenerator.HyperellipticalMap</a>
 extends <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></pre>
 <div class="block">A concrete implementation of <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that projects the world map onto a shape that resembles a
  mix part-way between an ellipse and a rectangle. This is an equal-area projection, like EllipticalMap, so effects that fill
@@ -261,7 +261,7 @@ extends <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.map
 <h3>Fields inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></h3>
 <a id="fields.inherited.from.class.squidpony.squidgrid.mapping.WorldMapGenerator">
 <!--   -->
-</a><code><a href="WorldMapGenerator.html#cacheA">cacheA</a>, <a href="WorldMapGenerator.html#cacheB">cacheB</a>, <a href="WorldMapGenerator.html#centerLongitude">centerLongitude</a>, <a href="WorldMapGenerator.html#coastalWaterLower">coastalWaterLower</a>, <a href="WorldMapGenerator.html#coastalWaterUpper">coastalWaterUpper</a>, <a href="WorldMapGenerator.html#deepWaterLower">deepWaterLower</a>, <a href="WorldMapGenerator.html#deepWaterUpper">deepWaterUpper</a>, <a href="WorldMapGenerator.html#forestLower">forestLower</a>, <a href="WorldMapGenerator.html#forestUpper">forestUpper</a>, <a href="WorldMapGenerator.html#grassLower">grassLower</a>, <a href="WorldMapGenerator.html#grassUpper">grassUpper</a>, <a href="WorldMapGenerator.html#heatData">heatData</a>, <a href="WorldMapGenerator.html#heatModifier">heatModifier</a>, <a href="WorldMapGenerator.html#height">height</a>, <a href="WorldMapGenerator.html#heightCodeData">heightCodeData</a>, <a href="WorldMapGenerator.html#heightData">heightData</a>, <a href="WorldMapGenerator.html#landData">landData</a>, <a href="WorldMapGenerator.html#landModifier">landModifier</a>, <a href="WorldMapGenerator.html#maxHeat">maxHeat</a>, <a href="WorldMapGenerator.html#maxHeight">maxHeight</a>, <a href="WorldMapGenerator.html#maxHeightActual">maxHeightActual</a>, <a href="WorldMapGenerator.html#maxWet">maxWet</a>, <a href="WorldMapGenerator.html#mediumWaterLower">mediumWaterLower</a>, <a href="WorldMapGenerator.html#mediumWaterUpper">mediumWaterUpper</a>, <a href="WorldMapGenerator.html#minHeat">minHeat</a>, <a href="WorldMapGenerator.html#minHeight">minHeight</a>, <a href="WorldMapGenerator.html#minHeightActual">minHeightActual</a>, <a href="WorldMapGenerator.html#minWet">minWet</a>, <a href="WorldMapGenerator.html#moistureData">moistureData</a>, <a href="WorldMapGenerator.html#rng">rng</a>, <a href="WorldMapGenerator.html#rockLower">rockLower</a>, <a href="WorldMapGenerator.html#rockUpper">rockUpper</a>, <a href="WorldMapGenerator.html#sandLower">sandLower</a>, <a href="WorldMapGenerator.html#sandUpper">sandUpper</a>, <a href="WorldMapGenerator.html#seedA">seedA</a>, <a href="WorldMapGenerator.html#seedB">seedB</a>, <a href="WorldMapGenerator.html#shallowWaterLower">shallowWaterLower</a>, <a href="WorldMapGenerator.html#shallowWaterUpper">shallowWaterUpper</a>, <a href="WorldMapGenerator.html#snowLower">snowLower</a>, <a href="WorldMapGenerator.html#snowUpper">snowUpper</a>, <a href="WorldMapGenerator.html#startCacheX">startCacheX</a>, <a href="WorldMapGenerator.html#startCacheY">startCacheY</a>, <a href="WorldMapGenerator.html#startX">startX</a>, <a href="WorldMapGenerator.html#startY">startY</a>, <a href="WorldMapGenerator.html#usedHeight">usedHeight</a>, <a href="WorldMapGenerator.html#usedWidth">usedWidth</a>, <a href="WorldMapGenerator.html#width">width</a>, <a href="WorldMapGenerator.html#zoom">zoom</a>, <a href="WorldMapGenerator.html#zoomStartX">zoomStartX</a>, <a href="WorldMapGenerator.html#zoomStartY">zoomStartY</a></code></div>
+</a><code><a href="WorldMapGenerator.html#cacheA">cacheA</a>, <a href="WorldMapGenerator.html#cacheB">cacheB</a>, <a href="WorldMapGenerator.html#centerLongitude">centerLongitude</a>, <a href="WorldMapGenerator.html#coastalWaterLower">coastalWaterLower</a>, <a href="WorldMapGenerator.html#coastalWaterUpper">coastalWaterUpper</a>, <a href="WorldMapGenerator.html#deepWaterLower">deepWaterLower</a>, <a href="WorldMapGenerator.html#deepWaterUpper">deepWaterUpper</a>, <a href="WorldMapGenerator.html#DEFAULT_NOISE">DEFAULT_NOISE</a>, <a href="WorldMapGenerator.html#forestLower">forestLower</a>, <a href="WorldMapGenerator.html#forestUpper">forestUpper</a>, <a href="WorldMapGenerator.html#grassLower">grassLower</a>, <a href="WorldMapGenerator.html#grassUpper">grassUpper</a>, <a href="WorldMapGenerator.html#heatData">heatData</a>, <a href="WorldMapGenerator.html#heatModifier">heatModifier</a>, <a href="WorldMapGenerator.html#height">height</a>, <a href="WorldMapGenerator.html#heightCodeData">heightCodeData</a>, <a href="WorldMapGenerator.html#heightData">heightData</a>, <a href="WorldMapGenerator.html#landData">landData</a>, <a href="WorldMapGenerator.html#landModifier">landModifier</a>, <a href="WorldMapGenerator.html#maxHeat">maxHeat</a>, <a href="WorldMapGenerator.html#maxHeight">maxHeight</a>, <a href="WorldMapGenerator.html#maxHeightActual">maxHeightActual</a>, <a href="WorldMapGenerator.html#maxWet">maxWet</a>, <a href="WorldMapGenerator.html#mediumWaterLower">mediumWaterLower</a>, <a href="WorldMapGenerator.html#mediumWaterUpper">mediumWaterUpper</a>, <a href="WorldMapGenerator.html#minHeat">minHeat</a>, <a href="WorldMapGenerator.html#minHeight">minHeight</a>, <a href="WorldMapGenerator.html#minHeightActual">minHeightActual</a>, <a href="WorldMapGenerator.html#minWet">minWet</a>, <a href="WorldMapGenerator.html#moistureData">moistureData</a>, <a href="WorldMapGenerator.html#rng">rng</a>, <a href="WorldMapGenerator.html#rockLower">rockLower</a>, <a href="WorldMapGenerator.html#rockUpper">rockUpper</a>, <a href="WorldMapGenerator.html#sandLower">sandLower</a>, <a href="WorldMapGenerator.html#sandUpper">sandUpper</a>, <a href="WorldMapGenerator.html#seedA">seedA</a>, <a href="WorldMapGenerator.html#seedB">seedB</a>, <a href="WorldMapGenerator.html#shallowWaterLower">shallowWaterLower</a>, <a href="WorldMapGenerator.html#shallowWaterUpper">shallowWaterUpper</a>, <a href="WorldMapGenerator.html#snowLower">snowLower</a>, <a href="WorldMapGenerator.html#snowUpper">snowUpper</a>, <a href="WorldMapGenerator.html#startCacheX">startCacheX</a>, <a href="WorldMapGenerator.html#startCacheY">startCacheY</a>, <a href="WorldMapGenerator.html#startX">startX</a>, <a href="WorldMapGenerator.html#startY">startY</a>, <a href="WorldMapGenerator.html#usedHeight">usedHeight</a>, <a href="WorldMapGenerator.html#usedWidth">usedWidth</a>, <a href="WorldMapGenerator.html#width">width</a>, <a href="WorldMapGenerator.html#zoom">zoom</a>, <a href="WorldMapGenerator.html#zoomStartX">zoomStartX</a>, <a href="WorldMapGenerator.html#zoomStartY">zoomStartY</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -346,6 +346,12 @@ double&nbsp;kappa)</code></th>
 <td class="colLast">
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
  ellipse without distortion of the sizes of features but with significant distortion of shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap)">HyperellipticalMap</a></span>&#8203;(<a href="WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a>&nbsp;other)</code></th>
+<td class="colLast">
+<div class="block">Copies the HyperellipticalMap <code>other</code> to construct a new one that is exactly the same.</div>
 </td>
 </tr>
 </tbody>
@@ -434,7 +440,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainFreq">terrainFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3242">terrainFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3424">terrainFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap.terrainFreq">Constant Field Values</a></dd>
@@ -444,7 +450,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainRidgedFreq">terrainRidgedFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3242">terrainRidgedFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3424">terrainRidgedFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap.terrainRidgedFreq">Constant Field Values</a></dd>
@@ -454,7 +460,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heatFreq">heatFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3242">heatFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3424">heatFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap.heatFreq">Constant Field Values</a></dd>
@@ -464,7 +470,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="moistureFreq">moistureFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3242">moistureFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3424">moistureFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap.moistureFreq">Constant Field Values</a></dd>
@@ -474,7 +480,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="otherFreq">otherFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3242">otherFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3424">otherFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap.otherFreq">Constant Field Values</a></dd>
@@ -484,91 +490,91 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minHeat0">minHeat0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3243">minHeat0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3425">minHeat0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxHeat0">maxHeat0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3243">maxHeat0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3425">maxHeat0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minHeat1">minHeat1</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3243">minHeat1</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3425">minHeat1</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxHeat1">maxHeat1</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3243">maxHeat1</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3425">maxHeat1</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minWet0">minWet0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3243">minWet0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3425">minWet0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxWet0">maxWet0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3243">maxWet0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3425">maxWet0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrain">terrain</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3247">terrain</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3429">terrain</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heat">heat</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3247">heat</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3429">heat</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="moisture">moisture</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3247">moisture</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3429">moisture</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="otherRidged">otherRidged</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3247">otherRidged</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3429">otherRidged</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainLayered">terrainLayered</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3247">terrainLayered</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3429">terrainLayered</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="xPositions">xPositions</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3248">xPositions</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3430">xPositions</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="yPositions">yPositions</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3248">yPositions</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3430">yPositions</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="zPositions">zPositions</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3248">zPositions</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3430">zPositions</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="edges">edges</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3251">edges</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3433">edges</a></span></div>
 </section>
 </li>
 </ul>
@@ -584,19 +590,19 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">HyperellipticalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3264">HyperellipticalMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3446">HyperellipticalMap</a></span>()</div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
  ellipse without distortion of the sizes of features but with significant distortion of shape.
  Always makes a 200x100 map.
  Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
  If you were using <a href="#%3Cinit%3E(long,int,int,squidpony.squidmath.Noise.Noise3D,double)"><code>HyperellipticalMap(long, int, int, Noise3D, double)</code></a>, then this would be the
- same as passing the parameters <code>0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0</code>.</div>
+ same as passing the parameters <code>0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0</code>.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">HyperellipticalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3279">HyperellipticalMap</a></span>&#8203;(<span class="arguments">int&nbsp;mapWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3461">HyperellipticalMap</a></span>&#8203;(<span class="arguments">int&nbsp;mapWidth,
 int&nbsp;mapHeight)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
  ellipse without distortion of the sizes of features but with significant distortion of shape.
@@ -614,7 +620,7 @@ int&nbsp;mapHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int)">HyperellipticalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3295">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3477">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
@@ -634,7 +640,7 @@ int&nbsp;mapHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,double)">HyperellipticalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3312">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3494">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 double&nbsp;octaveMultiplier)</span></div>
@@ -656,7 +662,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,squidpony.squidmath.Noise.Noise3D)">HyperellipticalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3330">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3512">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 <a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator)</span></div>
@@ -679,7 +685,7 @@ int&nbsp;mapHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,squidpony.squidmath.Noise.Noise3D,double)">HyperellipticalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3355">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3537">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 <a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
@@ -711,7 +717,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,squidpony.squidmath.Noise.Noise3D,double,double,double)">HyperellipticalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3382">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3564">HyperellipticalMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 <a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
@@ -744,6 +750,18 @@ double&nbsp;kappa)</span></div>
 </dl>
 </section>
 </li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap)">HyperellipticalMap</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3587">HyperellipticalMap</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a>&nbsp;other)</span></div>
+<div class="block">Copies the HyperellipticalMap <code>other</code> to construct a new one that is exactly the same. References will only
+ be shared to Noise classes.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - a HyperellipticalMap to copy</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -757,7 +775,7 @@ double&nbsp;kappa)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wrapX(int,int)">wrapX</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3401">wrapX</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3612">wrapX</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -768,7 +786,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wrapY(int,int)">wrapY</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3411">wrapY</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3622">wrapY</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -779,7 +797,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="project(double,double)">project</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3429">project</a></span>&#8203;(<span class="arguments">double&nbsp;latitude,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3640">project</a></span>&#8203;(<span class="arguments">double&nbsp;latitude,
 double&nbsp;longitude)</span></div>
 <div class="block">Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
  (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
@@ -802,7 +820,7 @@ double&nbsp;longitude)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="regenerate(int,int,int,int,double,double,int,int)">regenerate</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3445">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#line.3656">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
 int&nbsp;startY,
 int&nbsp;usedWidth,
 int&nbsp;usedHeight,

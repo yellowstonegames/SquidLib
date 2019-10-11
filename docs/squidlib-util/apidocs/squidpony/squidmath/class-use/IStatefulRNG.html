@@ -362,6 +362,15 @@ int&nbsp;consonantLimit,
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></span></code></th>
+<td class="colLast">
+<div class="block">An IStatefulRNG implementation that is meant to provide random numbers very quickly when targeting GWT but also to
+ produce the same numbers when used on desktop, Android, or other platforms, and that can have its state read as a
+ StatefulRandomness; it is thus like <a href="../GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> but should perform better on recent desktop JVMs.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></span></code></th>
 <td class="colLast">
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state

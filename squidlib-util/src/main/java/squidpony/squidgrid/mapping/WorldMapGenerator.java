@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.ArrayTools;
 import squidpony.LZSPlus;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
@@ -49,8 +50,52 @@ public abstract class WorldMapGenerator implements Serializable {
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
     protected double centerLongitude = 0.0;
+
+    public int zoom = 0, startX = 0, startY = 0, usedWidth, usedHeight;
+    protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
+    protected int zoomStartX = 0, zoomStartY = 0;
     
     public static final FastNoise DEFAULT_NOISE = new FastNoise(0x1337CAFE, 1f, FastNoise.SIMPLEX, 1);
+
+    /**
+     * Used to implement most of the copy constructor for subclasses; this cannot copy Noise implementations and leaves
+     * that up to the subclass, but will copy all non-static fields defined in WorldMapGenerator from other.
+     * @param other a WorldMapGenerator (subclass) to copy fields from
+     */
+    protected WorldMapGenerator(WorldMapGenerator other) {
+        width = other.width;
+        height = other.height;
+        usedWidth = other.usedWidth;
+        usedHeight = other.usedHeight;
+        landModifier = other.landModifier;
+        heatModifier = other.heatModifier;
+        minHeat = other.minHeat;
+        maxHeat = other.maxHeat;
+        minHeight = other.minHeight;
+        maxHeight = other.maxHeight;
+        minHeightActual = other.minHeightActual;
+        maxHeightActual = other.maxHeightActual;
+        minWet = other.minWet;
+        maxWet = other.maxWet;
+        centerLongitude = other.centerLongitude;
+        zoom = other.zoom;
+        startX = other.startX;
+        startY = other.startY;
+        startCacheX.addAll(other.startCacheX);
+        startCacheY.addAll(other.startCacheY);
+        zoomStartX = other.zoomStartX;
+        zoomStartY = other.zoomStartY;
+        seedA = other.seedA;
+        seedB = other.seedB;
+        cacheA = other.cacheA;
+        cacheB = other.cacheB;
+        rng = other.rng.copy();
+        heightData = ArrayTools.copy(other.heightData);
+        heatData = ArrayTools.copy(other.heatData);
+        moistureData = ArrayTools.copy(other.moistureData);
+        landData = other.landData.copy();
+        heightCodeData = ArrayTools.copy(other.heightCodeData);
+    }
 
     /**
      * Gets the longitude line the map is centered on, which should usually be between 0 and 2 * PI.
@@ -69,9 +114,6 @@ public abstract class WorldMapGenerator implements Serializable {
         this.centerLongitude = centerLongitude % 6.283185307179586;
     }
 
-    public int zoom = 0, startX = 0, startY = 0, usedWidth, usedHeight;
-    protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
-    protected int zoomStartX = 0, zoomStartY = 0;
     public static final double
             deepWaterLower = -1.0, deepWaterUpper = -0.7,        // 0
             mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // 1
@@ -145,12 +187,13 @@ public abstract class WorldMapGenerator implements Serializable {
         heatData = new double[width][height];
         moistureData = new double[width][height];
         landData = new GreasedRegion(width, height);
+        heightCodeData = new int[width][height];
+
 //        riverData = new GreasedRegion(width, height);
 //        lakeData = new GreasedRegion(width, height);
 //        partialRiverData = new GreasedRegion(width, height);
 //        partialLakeData = new GreasedRegion(width, height);
 //        workingData = new GreasedRegion(width, height);
-        heightCodeData = new int[width][height];
     }
 
     /**
@@ -386,6 +429,7 @@ public abstract class WorldMapGenerator implements Serializable {
     public int wrapY(final int x, final int y)  {
         return (y + height) % height;
     }
+    
 //    private static final Direction[] reuse = new Direction[6];
 //    private void appendDirToShuffle(RNG rng) {
 //        rng.randomPortion(Direction.CARDINALS, reuse);
@@ -1276,6 +1320,27 @@ public abstract class WorldMapGenerator implements Serializable {
             otherRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
+        /**
+         * Copies the TilingMap {@code other} to construct a new one that is exactly the same. References will only be
+         * shared to Noise classes.
+         * @param other a TilingMap to copy
+         */
+        public TilingMap(TilingMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainRidged = other.terrainRidged;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+        }
+
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -1635,6 +1700,30 @@ public abstract class WorldMapGenerator implements Serializable {
                     wrapY(x, y));
         }
 
+        /**
+         * Copies the SphereMap {@code other} to construct a new one that is exactly the same. References will only be
+         * shared to Noise classes.
+         * @param other a SphereMap to copy
+         */
+        public SphereMap(SphereMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainLayered = other.terrainLayered;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+        }
+
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {
@@ -1970,6 +2059,31 @@ public abstract class WorldMapGenerator implements Serializable {
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
+        /**
+         * Copies the EllipticalMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other an EllipticalMap to copy
+         */
+        public EllipticalMap(EllipticalMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainLayered = other.terrainLayered;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+            edges = Arrays.copyOf(other.edges, other.edges.length);
+        }
+
         @Override
         public int wrapX(final int x, int y) {
             y = Math.max(0, Math.min(y, height - 1));
@@ -2296,6 +2410,22 @@ public abstract class WorldMapGenerator implements Serializable {
                     )),
                     noiseGenerator, octaveMultiplier);
         }
+
+        /**
+         * Copies the MimicMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other a MimicMap to copy
+         */
+        public MimicMap(MimicMap other)
+        {
+            super(other);
+            earth = other.earth.copy();
+            earthOriginal = other.earthOriginal.copy();
+            coast   = other.coast.copy();
+            shallow = other.shallow.copy();
+        }
+
+
 
         /**
          * Meant for making maps conform to the Mollweide (elliptical) projection that MimicMap uses.
@@ -2696,6 +2826,31 @@ public abstract class WorldMapGenerator implements Serializable {
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
+        /**
+         * Copies the SpaceViewMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other a SpaceViewMap to copy
+         */
+        public SpaceViewMap(SpaceViewMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainLayered = other.terrainLayered;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+            edges = Arrays.copyOf(other.edges, other.edges.length);
+        }
+        
         @Override
         public int wrapX(int x, int y) {
             y = Math.max(0, Math.min(y, height - 1));
@@ -3031,6 +3186,31 @@ public abstract class WorldMapGenerator implements Serializable {
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+        }
+
+        /**
+         * Copies the RoundSideMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other a RoundSideMap to copy
+         */
+        public RoundSideMap(RoundSideMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainLayered = other.terrainLayered;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+            edges = Arrays.copyOf(other.edges, other.edges.length);
         }
 
         @Override
@@ -3399,6 +3579,35 @@ public abstract class WorldMapGenerator implements Serializable {
             this.epsilon = ProjectionTools.simpsonIntegrateHyperellipse(0.0, 1.0, 0.25 / height, kappa);
             ProjectionTools.simpsonODESolveHyperellipse(1, this.Z, 0.25 / height, alpha, kappa, epsilon);
         }
+        /**
+         * Copies the HyperellipticalMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other a HyperellipticalMap to copy
+         */
+        public HyperellipticalMap(HyperellipticalMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainLayered = other.terrainLayered;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+            edges = Arrays.copyOf(other.edges, other.edges.length);
+            alpha = other.alpha;
+            kappa = other.kappa;
+            epsilon = other.epsilon;
+            Z = Arrays.copyOf(other.Z, other.Z.length);
+        }
+
 
         @Override
         public int wrapX(final int x, int y) {
@@ -3783,6 +3992,31 @@ public abstract class WorldMapGenerator implements Serializable {
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
 
+        /**
+         * Copies the EllipticalHammerMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other an EllipticalHammerMap to copy
+         */
+        public EllipticalHammerMap(EllipticalHammerMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainLayered = other.terrainLayered;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+            edges = Arrays.copyOf(other.edges, other.edges.length);
+        }
+
         @Override
         public int wrapX(final int x, int y) {
             y = Math.max(0, Math.min(y, height - 1));
@@ -4115,6 +4349,28 @@ public abstract class WorldMapGenerator implements Serializable {
             storedMap = new SphereMap(initialSeed, mapWidth << 1, mapHeight, noiseGenerator, octaveMultiplier);
         }
 
+        /**
+         * Copies the RotatingSpaceMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other a RotatingSpaceMap to copy
+         */
+        public RotatingSpaceMap(RotatingSpaceMap other)
+        {
+            super(other);
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+            edges = Arrays.copyOf(other.edges, other.edges.length);
+            storedMap = new SphereMap(other.storedMap);
+        }
+
+
         @Override
         public int wrapX(int x, int y) {
             y = Math.max(0, Math.min(y, height - 1));
@@ -4394,6 +4650,31 @@ public abstract class WorldMapGenerator implements Serializable {
             moisture = new Noise.InverseLayered2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
         }
+
+        /**
+         * Copies the LocalMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other a LocalMap to copy
+         */
+        public LocalMap(LocalMap other)
+        {
+            super(other);
+            terrain = other.terrain;
+            terrainLayered = other.terrainLayered;
+            heat = other.heat;
+            moisture = other.moisture;
+            otherRidged = other.otherRidged;
+            minHeat0 = other.minHeat0;
+            maxHeat0 = other.maxHeat0;
+            minHeat1 = other.minHeat1;
+            maxHeat1 = other.maxHeat1;
+            minWet0 = other.minWet0;
+            maxWet0 = other.maxWet0;
+            xPositions = ArrayTools.copy(other.xPositions);
+            yPositions = ArrayTools.copy(other.yPositions);
+            zPositions = ArrayTools.copy(other.zPositions);
+        }
+
         @Override
         public int wrapY(final int x, final int y)  {
             return Math.max(0, Math.min(y, height - 1));
@@ -4669,7 +4950,23 @@ public abstract class WorldMapGenerator implements Serializable {
                     )),
                     noiseGenerator, octaveMultiplier);
         }
-        
+
+        /**
+         * Copies the LocalMimicMap {@code other} to construct a new one that is exactly the same. References will only
+         * be shared to Noise classes.
+         * @param other a LocalMimicMap to copy
+         */
+        public LocalMimicMap(LocalMimicMap other)
+        {
+            super(other);
+            earth = other.earth.copy();
+            earthOriginal = other.earthOriginal.copy();
+            coast   = other.coast.copy();
+            shallow = other.shallow.copy();
+        }
+
+
+
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double heatMod, int stateA, int stateB)
         {

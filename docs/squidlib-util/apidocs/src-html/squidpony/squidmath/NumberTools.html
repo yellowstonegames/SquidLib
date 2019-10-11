@@ -404,8 +404,8 @@
 <span class="sourceLineNo">392</span><a id="line.392">    {</a>
 <span class="sourceLineNo">393</span><a id="line.393">        final int floor = value &gt;= 0f ? (int) value : (int) value - 1;</a>
 <span class="sourceLineNo">394</span><a id="line.394">        int z = seed + floor;</a>
-<span class="sourceLineNo">395</span><a id="line.395">        final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z &lt;&lt; 11 | z &gt;&gt;&gt; 21) ^ (z &lt;&lt; 21 | z &gt;&gt;&gt; 11)) * ((z ^ z &gt;&gt;&gt; 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f,</a>
-<span class="sourceLineNo">396</span><a id="line.396">                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z &lt;&lt; 11 | z &gt;&gt;&gt; 21) ^ (z &lt;&lt; 21 | z &gt;&gt;&gt; 11)) * ((z ^ z &gt;&gt;&gt; 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f;</a>
+<span class="sourceLineNo">395</span><a id="line.395">        final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z &lt;&lt; 11 | z &gt;&gt;&gt; 21) ^ (z &lt;&lt; 19 | z &gt;&gt;&gt; 13)) * ((z ^ z &gt;&gt;&gt; 15) | 0xFFE00001) ^ z) * 0x0.ffffffp-31f,</a>
+<span class="sourceLineNo">396</span><a id="line.396">                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z &lt;&lt; 11 | z &gt;&gt;&gt; 21) ^ (z &lt;&lt; 19 | z &gt;&gt;&gt; 13)) * ((z ^ z &gt;&gt;&gt; 15) | 0xFFE00001) ^ z) * 0x0.ffffffp-31f;</a>
 <span class="sourceLineNo">397</span><a id="line.397">        value -= floor;</a>
 <span class="sourceLineNo">398</span><a id="line.398">        value *= value * (3 - 2 * value);</a>
 <span class="sourceLineNo">399</span><a id="line.399">        return (1 - value) * start + value * end;</a>

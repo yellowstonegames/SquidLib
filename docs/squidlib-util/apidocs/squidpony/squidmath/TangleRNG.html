@@ -19,8 +19,8 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -101,19 +101,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code>, <code><a href="SkippingRandomness.html" title="interface in squidpony.squidmath">SkippingRandomness</a></code></dd>
 </dl>
 <hr>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.45">TangleRNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.40">TangleRNG</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="SkippingRandomness.html" title="interface in squidpony.squidmath">SkippingRandomness</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
-<div class="block">A variant on <a href="ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that gives up some speed, but allows choosing any of 2 to the 63 odd-number streams
- that change the set of possible outputs this can produce (amending the main flaw of ThrustAltRNG). This does well in
- PractRand quality tests, passing at least 8TB and probably more (it shares a lot of structure with ThrustAltRNG,
- which does very well in PractRand's testing as well as TestU01's BigCrush). It also outperforms LinnormRNG and comes
- close to ThrustAltRNG in JMH benchmarks, making it arguably the fastest random number generator algorithm here that
- can produce all long values (it just needs multiple generator objects to do so, all seeded differently). If you
- expect to have many individual RandomnessSources all seeded differently, this should be a good pick; if you only have
- one RandomnessSource in use, you should prefer <a href="DiverRNG.html" title="class in squidpony.squidmath"><code>DiverRNG</code></a> if you don't mind that it can't produce duplicates,
- <a href="OrbitRNG.html" title="class in squidpony.squidmath"><code>OrbitRNG</code></a> if you want something similar to this generator that allows all state pairs, or <a href="GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> if
- you expect to use GWT to target HTML.
+<div class="block">A very fast generator on 64-bit systems that allows choosing any of 2 to the 63 odd-number streams. Each stream
+ changes the set of possible outputs this can produce (amending the main flaw of ThrustAltRNG). This does well in
+ PractRand quality tests, passing 32TB with one minor anomaly (it shares a lot of structure with ThrustAltRNG,
+ which does very well in PractRand's testing as well as TestU01's BigCrush). It also outperforms just about everything
+ in BumbleBench benchmarks, making it arguably the fastest random number generator algorithm here that
+ can produce all long values (it just needs multiple generator objects to do so, all seeded differently).
  <br>
  Because this can produce multiple occurrences of any number in its sequence (except 0, which it should always produce
  once over its period of 2 to the 64), it can be considered as passing the "birthday problem" test; after running
@@ -121,7 +117,7 @@ implements <a href="RandomnessSource.html" title="interface in squidpony.squidma
  it correctly has 9 repeats compared to an expected 10, using the Skipping adapter to check one out of every 65536
  outputs for duplicates. A generator that failed that test would have 0 repeats or more than 20, so Tangle passes.
  ThrustAltRNG probably also passes (or its structure allows it to potentially do so), but LightRNG, LinnormRNG,
- and many others will fail it by never repeating an output. Truncating the output bits of any of these
+ MizuchiRNG, and even ThrustRNG will fail it by never repeating an output. Truncating the output bits of any of these
  generators will allow them to pass this test, at the cost of reducing the size of the output to an int instead of a
  long (less than ideal). Notably, an individual Tangle generator tends to be able to produce about 2/3 of all possible
  long outputs, with roughly 1/3 of all outputs not possible to produce and another 1/3 produced exactly once. These
@@ -136,8 +132,7 @@ implements <a href="RandomnessSource.html" title="interface in squidpony.squidma
  <br>
  See also <a href="OrbitRNG.html" title="class in squidpony.squidmath"><code>OrbitRNG</code></a>, which gives up more speed but moves through all 2 to the 64 long values as streams over
  its full period, which is 2 to the 128 (with one stream) instead of the 2 to the 64 (with 2 to the 63 streams) here.
- Orbit hasn't been evaluated for quality as fully as Tangle, but reduced-word-size variants show it should have a full
- period of 2 to the 128.
+ There's also <a href="SilkRNG.html" title="class in squidpony.squidmath"><code>SilkRNG</code></a>, which is like OrbitRNG but uses 32-bit math and is GWT-optimized.
  <br>
  Created by Tommy Ettinger on 7/9/2018.</div>
 <dl>
@@ -190,7 +185,7 @@ long&nbsp;seedB)</code></th>
 </a>
 <h2>Method Summary</h2>
 <div class="memberSummary">
-<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t1" class="tableTab" onclick="show(1);">Static Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button></div>
+<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button></div>
 <div id="memberSummary_tabpanel" role="tabpanel">
 <table aria-labelledby="t0">
 <thead>
@@ -210,76 +205,30 @@ long&nbsp;seedB)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i1">
-<td class="colFirst"><code>static long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determine(long)">determine</a></span>&#8203;(long&nbsp;state)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor" id="i2">
-<td class="colFirst"><code>static long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determine(long,long)">determine</a></span>&#8203;(long&nbsp;stateA,
-long&nbsp;stateB)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor" id="i3">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determineBounded(long,int)">determineBounded</a></span>&#8203;(long&nbsp;state,
-int&nbsp;bound)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor" id="i4">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determineBounded(long,long,int)">determineBounded</a></span>&#8203;(long&nbsp;stateA,
-long&nbsp;stateB,
-int&nbsp;bound)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor" id="i5">
-<td class="colFirst"><code>static double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determineDouble(long)">determineDouble</a></span>&#8203;(long&nbsp;state)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor" id="i6">
-<td class="colFirst"><code>static double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determineDouble(long,long)">determineDouble</a></span>&#8203;(long&nbsp;stateA,
-long&nbsp;stateB)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor" id="i7">
-<td class="colFirst"><code>static float</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determineFloat(long)">determineFloat</a></span>&#8203;(long&nbsp;state)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor" id="i8">
-<td class="colFirst"><code>static float</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determineFloat(long,long)">determineFloat</a></span>&#8203;(long&nbsp;stateA,
-long&nbsp;stateB)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor" id="i9">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i10">
+<tr class="altColor" id="i2">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateA()">getStateA</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the "A" part of the internal state as a long.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i11">
+<tr class="rowColor" id="i3">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateB()">getStateB</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the "B" part of the internal state as a long.</div>
 </td>
 </tr>
-<tr class="altColor" id="i12">
+<tr class="altColor" id="i4">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i13">
+<tr class="rowColor" id="i5">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(int)">next</a></span>&#8203;(int&nbsp;bits)</code></th>
 <td class="colLast">
@@ -287,7 +236,7 @@ long&nbsp;stateB)</code></th>
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr class="altColor" id="i14">
+<tr class="altColor" id="i6">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nextLong()">nextLong</a></span>()</code></th>
 <td class="colLast">
@@ -295,28 +244,28 @@ long&nbsp;stateB)</code></th>
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i15">
+<tr class="rowColor" id="i7">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStateA(long)">setStateA</a></span>&#8203;(long&nbsp;stateA)</code></th>
 <td class="colLast">
 <div class="block">Set the "A" part of the internal state with a long.</div>
 </td>
 </tr>
-<tr class="altColor" id="i16">
+<tr class="altColor" id="i8">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStateB(long)">setStateB</a></span>&#8203;(long&nbsp;stateB)</code></th>
 <td class="colLast">
 <div class="block">Set the "B" part of the internal state with a long; the least significant bit is ignored (will always be odd).</div>
 </td>
 </tr>
-<tr class="rowColor" id="i17">
+<tr class="rowColor" id="i9">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#skip(long)">skip</a></span>&#8203;(long&nbsp;advance)</code></th>
 <td class="colLast">
 <div class="block">Advances or rolls back the SkippingRandomness' state without actually generating each number.</div>
 </td>
 </tr>
-<tr class="altColor" id="i18">
+<tr class="altColor" id="i10">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -346,20 +295,20 @@ long&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">TangleRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.60">TangleRNG</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.55">TangleRNG</a></span>()</div>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">TangleRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.67">TangleRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.62">TangleRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,long)">TangleRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.72">TangleRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seedA,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.67">TangleRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seedA,
 long&nbsp;seedB)</span></div>
 </section>
 </li>
@@ -376,7 +325,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getStateA()">getStateA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.82">getStateA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.77">getStateA</a></span>()</div>
 <div class="block">Get the "A" part of the internal state as a long.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -387,7 +336,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setStateA(long)">setStateA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.91">setStateA</a></span>&#8203;(<span class="arguments">long&nbsp;stateA)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.86">setStateA</a></span>&#8203;(<span class="arguments">long&nbsp;stateA)</span></div>
 <div class="block">Set the "A" part of the internal state with a long.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -398,7 +347,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getStateB()">getStateB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.100">getStateB</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.95">getStateB</a></span>()</div>
 <div class="block">Get the "B" part of the internal state as a long.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -409,7 +358,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setStateB(long)">setStateB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.109">setStateB</a></span>&#8203;(<span class="arguments">long&nbsp;stateB)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.104">setStateB</a></span>&#8203;(<span class="arguments">long&nbsp;stateB)</span></div>
 <div class="block">Set the "B" part of the internal state with a long; the least significant bit is ignored (will always be odd).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -420,7 +369,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="next(int)">next</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.120">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.115">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -436,7 +385,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong()">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.134">nextLong</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.129">nextLong</a></span>()</div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  <p>
@@ -452,7 +401,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.148">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.143">copy</a></span>()</div>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -467,7 +416,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.152">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.147">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -477,7 +426,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.157">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.152">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -487,7 +436,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.167">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.162">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -497,7 +446,7 @@ long&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="skip(long)">skip</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.181">skip</a></span>&#8203;(<span class="arguments">long&nbsp;advance)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.176">skip</a></span>&#8203;(<span class="arguments">long&nbsp;advance)</span></div>
 <div class="block">Advances or rolls back the SkippingRandomness' state without actually generating each number. Skips forward
  or backward a number of steps specified by advance, where a step is equal to one call to <a href="#nextLong()"><code>nextLong()</code></a>,
  and returns the random number produced at that step. Negative numbers can be used to step backward, or 0 can be
@@ -510,60 +459,6 @@ long&nbsp;seedB)</span></div>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the random long generated after skipping forward or backwards by <code>advance</code> numbers</dd>
 </dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determine(long)">determine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.188">determine</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determineBounded(long,int)">determineBounded</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.194">determineBounded</a></span>&#8203;(<span class="arguments">long&nbsp;state,
-int&nbsp;bound)</span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determineFloat(long)">determineFloat</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.200">determineFloat</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determineDouble(long)">determineDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.206">determineDouble</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determine(long,long)">determine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.213">determine</a></span>&#8203;(<span class="arguments">long&nbsp;stateA,
-long&nbsp;stateB)</span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determineBounded(long,long,int)">determineBounded</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.217">determineBounded</a></span>&#8203;(<span class="arguments">long&nbsp;stateA,
-long&nbsp;stateB,
-int&nbsp;bound)</span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determineFloat(long,long)">determineFloat</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.223">determineFloat</a></span>&#8203;(<span class="arguments">long&nbsp;stateA,
-long&nbsp;stateB)</span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="determineDouble(long,long)">determineDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.229">determineDouble</a></span>&#8203;(<span class="arguments">long&nbsp;stateA,
-long&nbsp;stateB)</span></div>
 </section>
 </li>
 </ul>

@@ -352,6 +352,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">The default load factor of a hash table.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#DEFAULT_NOISE">DEFAULT_NOISE</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="../squidpony/tileset/DefaultDungeon.html" title="class in squidpony.tileset"><span class="typeNameLink">DefaultDungeon</span></a> - Class in <a href="../squidpony/tileset/package-summary.html">squidpony.tileset</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/tileset/DefaultDungeon.html#%3Cinit%3E()">DefaultDungeon()</a></span> - Constructor for class squidpony.tileset.<a href="../squidpony/tileset/DefaultDungeon.html" title="class in squidpony.tileset">DefaultDungeon</a></dt>
@@ -591,6 +593,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets a pseudo-random int that is a permutation of <code>state</code>, which is an int.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#determine(int)">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
+<dd>
+<div class="block">A deterministic random long generator that, given one int <code>state</code> as input, returns an 
+ almost-always-different long as a result.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlapRNG.html#determine(int,int)">determine(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></dt>
 <dd>
 <div class="block">A simple "output stage" applied to a two-part state like what FlapRNG uses normally; this method does not update
@@ -641,8 +648,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determine(long)">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determine(long)">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
@@ -651,8 +656,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine(long)">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#determine(long,long)">determine(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determine(long,long)">determine(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine(long,long)">determine(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
@@ -686,6 +689,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determineBounded(int,int)">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#determineBounded(int,int)">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
+<dd>
+<div class="block">A deterministic random int generator that, given one int <code>state</code> and an outer int <code>bound</code> as input,
+ returns an int between 0 (inclusive) and <code>bound</code> (exclusive) as a result, which should have no noticeable
+ correlation between <code>state</code> and the result.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlapRNG.html#determineBounded(int,int,int)">determineBounded(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></dt>
 <dd>
 <div class="block">Like <a href="../squidpony/squidmath/FlapRNG.html#determine(int,int)"><code>FlapRNG.determine(int, int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive).</div>
@@ -724,8 +733,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)
  and bound (exclusive); state is expected to change between calls to this.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineBounded(long,int)">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineBounded(long,int)">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
@@ -734,8 +741,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded(long,int)">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#determineBounded(long,long,int)">determineBounded(long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineBounded(long,long,int)">determineBounded(long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded(long,long,int)">determineBounded(long, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
@@ -753,6 +758,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was <code>state</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determineDouble(int)">determineDouble(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>
+<div class="block">A deterministic random double generator that, given one int <code>state</code> as input, returns an 
+ almost-always-different double between 0.0 and 1.0 as a result.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#determineDouble(int)">determineDouble(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>
 <div class="block">A deterministic random double generator that, given one int <code>state</code> as input, returns an 
  almost-always-different double between 0.0 and 1.0 as a result.</div>
@@ -777,16 +787,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
  will return the same float.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineDouble(long)">determineDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineDouble(long)">determineDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
  will return the same float.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineDouble(long,long)">determineDouble(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determineFloat(int)">determineFloat(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>
+<div class="block">A deterministic random float generator that, given one int <code>state</code> as input, returns an 
+ almost-always-different float between 0.0f and 1.0f as a result.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#determineFloat(int)">determineFloat(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>
 <div class="block">A deterministic random float generator that, given one int <code>state</code> as input, returns an 
  almost-always-different float between 0.0f and 1.0f as a result.</div>
@@ -811,15 +822,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineFloat(long)">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineFloat(long)">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#determineFloat(long,long)">determineFloat(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineFloatFromInt(int)">determineFloatFromInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>
 <div class="block">Returns a random float that is deterministic based on an int state; if state is the same on two calls to this,
@@ -833,6 +840,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineInt(int)">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>
 <div class="block">Gets the next number that a different kind of 32-bit LFSR would produce if its state was <code>state</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#determineInt(int)">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
+<dd>
+<div class="block">A deterministic random int generator that, given one int <code>state</code> as input, irreversibly returns an 
+ almost-always-different int as a result.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineInt(int)">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
 <dd>

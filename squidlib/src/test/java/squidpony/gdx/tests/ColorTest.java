@@ -1049,48 +1049,49 @@ public class ColorTest extends ApplicationAdapter {
 //        }
 //        System.out.println();
 
-        // This block, when uncommented, will read in color names and values from ColorData.txt and produce a formatted
-        // block of partial Java source as ColorOutput.txt , to be put in SColor.java .
-//        String templateFull = "/**\n" +
-//            "* This color constant \"Name\" has RGB code {@code 0xFEDCBA}, red `RED, green `GREEN, blue `BLUE, alpha 1, hue `HUE, saturation `SAT, and value `VAL.\n" +
-//            "* It can be represented as a packed float with the constant {@code `PACKEDF}.\n" +
-//            "* <pre>\n" +
-//            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
-//            "* </pre>\n" +
-////            "* <br>\n" +
-////            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>\n" +
-////            "* <font style='background-color: #ff0000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #FEDCBA'>&nbsp;@&nbsp;</font>\n" +
-////            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>\n" +
-//            "*/\n" +
-//        "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
-//        String data = Gdx.files.classpath("special/ColorData.txt").readString();
-//        String[] lines = StringKit.split(data, "\n"), rec = new String[3];
-//        Color c = new Color();
-//        StringBuilder sb = new StringBuilder(100000);
-//        for (int i = 0; i < lines.length; i++) {
-//            tabSplit(rec, lines[i]);
-//            Color.argb8888ToColor(c, Integer.parseInt(rec[1], 16) | 0xFF000000);
-//            sb.append(templateFull.replace("Name", rec[2])
-//                    .replace("NAME", rec[0])
-//                    .replace("FEDCBA", rec[1].toUpperCase())
-//                    .replace("`RED", Float.toString(c.r))
-//                    .replace("`GREEN", Float.toString(c.g))
-//                    .replace("`BLUE", Float.toString(c.b))
-//                    .replace("`HUE", Float.toString(SColor.hue(c)))
-//                    .replace("`SAT", Float.toString(SColor.saturation(c)))
-//                    .replace("`VAL", Float.toString(SColor.value(c)))
-//                    .replace("`PACKED", Float.toHexString(c.toFloatBits()))
-//            );
-//            //System.out.println("Processed " + i);
-//        }
-//        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
+        //// This block, when uncommented, will read in color names and values from ColorData.txt and produce a formatted
+        //// block of partial Java source as ColorOutput.txt , to be put in SColor.java .
+        String templateFull = "/**\n" +
+            "* This color constant \"Name\" has RGB code {@code 0xFEDCBA}, red `RED, green `GREEN, blue `BLUE, alpha 1, hue `HUE, saturation `SAT, and value `VAL.\n" +
+            "* It can be represented as a packed float with the constant {@code `PACKEDF}.\n" +
+            "* <pre>\n" +
+            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
+            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
+            "* <font style='background-color: #FEDCBA;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
+            "* </pre>\n" +
+//            "* <br>\n" +
+//            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>\n" +
+//            "* <font style='background-color: #ff0000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #FEDCBA'>&nbsp;@&nbsp;</font>\n" +
+//            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>\n" +
+            "*/\n" +
+        "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
+        String data = Gdx.files.classpath("special/ColorData.txt").readString();
+        String[] lines = StringKit.split(data, "\n"), rec = new String[3];
+        SColor c = new SColor();
+        StringBuilder sb = new StringBuilder(100000);
+        for (int i = 0; i < lines.length; i++) {
+            tabSplit(rec, lines[i]);
+            Color.argb8888ToColor(c, Integer.parseInt(rec[1], 16) | 0xFF000000);
+            sb.append(templateFull.replace("Name", rec[2])
+                    .replace("NAME", rec[0])
+                    .replace("FEDCBA", rec[1].toUpperCase())
+                    .replace("`RED", Float.toString(c.r))
+                    .replace("`GREEN", Float.toString(c.g))
+                    .replace("`BLUE", Float.toString(c.b))
+                    .replace("`HUE", Float.toString(SColor.hue(c)))
+                    .replace("`SAT", Float.toString(SColor.saturation(c)))
+                    .replace("`VAL", Float.toString(SColor.value(c)))
+                    .replace("`PACKED", Float.toHexString(c.toFloatBits()))
+            );
+            //System.out.println("Processed " + i);
+        }
+        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
 
         String templateTable = "<tr>\n<td style='background-color: #FEDCBA;'></td>\n<td>Name</td>\n<td>0xFEDCBAFF</td>\n<td>`HUE</td>\n<td>`SAT</td>\n<td>`VAL</td>\n<td>`LUMA</td>\n<td>`WARM</td>\n<td>`MILD</td>\n<td>`TWEA</td>\n</tr>\n";
         final OrderedSet<SColor> PAL = new OrderedSet<>(SColor.FULL_PALETTE);
-        SColor c;
-        StringBuilder sb = new StringBuilder(100000);
+//        SColor c;
+//        StringBuilder sb = new StringBuilder(100000);
+        sb.setLength(0);
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Preview Section</th>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n</tr>\n");
         for (int i = 0; i < PAL.size(); i++) {
             c = PAL.getAt(i);
