@@ -22,7 +22,8 @@ public class Thesaurus implements Serializable{
             similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
     public OrderedMap<CharSequence, GapShuffler<String>> mappings;
     public ArrayList<FakeLanguageGen.Alteration> alterations = new ArrayList<>(4);
-    protected GWTRNG rng;
+    public SilkRNG rng;
+    public GapShuffler<String> plantTermShuffler;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
     public transient String latestGenerated = "Nationia";
     /**
@@ -31,7 +32,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus()
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        rng = new GWTRNG();
+        rng = new SilkRNG();
     }
 
     /**
@@ -41,7 +42,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus(IRNG rng)
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        this.rng = new GWTRNG(rng.nextLong());
+        this.rng = new SilkRNG(rng.nextLong());
     }
 
     /**
@@ -51,7 +52,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus(long shuffleSeed)
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        this.rng = new GWTRNG(shuffleSeed);
+        this.rng = new SilkRNG(shuffleSeed);
     }
 
 
@@ -62,7 +63,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus(String shuffleSeed)
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        this.rng = new GWTRNG(CrossHash.hash64(shuffleSeed));
+        this.rng = new SilkRNG(CrossHash.hash64(shuffleSeed));
     }
 
     /**
@@ -198,6 +199,7 @@ public class Thesaurus implements Serializable{
         {
             addCategory(kv.getKey(), kv.getValue());
         }
+        plantTermShuffler = new GapShuffler<>(plantTerms, rng);
         return this;
     }
 
@@ -583,10 +585,18 @@ public class Thesaurus implements Serializable{
      */
     public String makePlantName()
     {
-        String working = process(rng.getRandomElement(plantTerms));
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(plantTermShuffler == null)
+        {
+            plantTermShuffler = new GapShuffler<>(plantTerms, rng);
+        }
+        String working = process(plantTermShuffler.next());
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
-            working = process(rng.getRandomElement(plantTerms));
+            working = process(plantTermShuffler.next());
         randomLanguages.clear();
         RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
         Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
@@ -606,10 +616,18 @@ public class Thesaurus implements Serializable{
      */
     public String makePlantName(FakeLanguageGen language)
     {
-        String working = process(rng.getRandomElement(plantTerms));
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(plantTermShuffler == null)
+        {
+            plantTermShuffler = new GapShuffler<>(plantTerms, rng);
+        }
+        String working = process(plantTermShuffler.next());
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
-            working = process(rng.getRandomElement(plantTerms));
+            working = process(plantTermShuffler.next());
         randomLanguages.clear();
         KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
         Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
@@ -752,12 +770,18 @@ public class Thesaurus implements Serializable{
             "leaf`noun` of @",
             "@'s ground`noun`\tleaf`noun`",
             "ground`noun`\tleaf`noun` of @",
+            "sensory`adj` tree`noun` of @",
+            "@'s sensory`adj`-leaf`noun`",
             "ground`noun`\tleaf`noun`",
             "flavor`noun`\tleaf`noun` tree`noun`",
             "flavor`adj` fruit`noun` tree`noun`",
             "flavor`adj` nut`noun` tree`noun`",
             "color`adj` fruit`noun` tree`noun`",
             "color`adj` nut`noun` tree`noun`",
+            "shape`adj`-fruit`noun` tree`noun`",
+            "shape`adj`-leaf`noun` tree`noun`",
+            "sensory`adj` tree`noun`-tree`noun`",
+            "sensory`adj`-leaf`noun` tree`noun`",
     };
     private static final String[] fruitTerms = new String[]{
             "@'s flavor`adj` fruit`noun`",
@@ -919,19 +943,23 @@ public class Thesaurus implements Serializable{
             "lake`noun`",
             makeList("puddle", "pond", "lake", "sea", "swamp", "bog", "fen", "glade"),
             "leaf`noun`",
-            makeList("leaf", "bark", "root", "thorn", "seed", "branch", "twig", "wort", "cress", "flower", "wood", "vine"),
+            makeList("leaf", "bark", "root", "thorn", "seed", "branch", "twig", "wort", "cress", "flower", "wood", "vine", "sap"),
             "fruit`noun`",
-            makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig"),
+            makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig", "date", "mango", "banana"),
             "nut`noun`",
             makeList("nut", "almond", "peanut", "pecan", "walnut", "cashew"),
             "tree`noun`",
-            makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar"),
+            makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar", "palm", "magnolia", "hazel", "cactus", "mangrove"),
             "flavor`noun`",
             makeList("sugar", "spice", "acid", "herb", "salt", "grease", "smoke"),
             "flavor`adj`",
             makeList("sweet", "spicy", "sour", "bitter", "salty", "savory", "smoky"),
             "color`adj`",
             makeList("black", "white", "red", "orange", "yellow", "green", "blue", "violet"),
+            "shape`adj`",
+            makeList("hollow", "tufted", "drooping", "fibrous", "giant", "miniature", "delicate", "hardy", "spiny"),
+            "sensory`adj`",
+            makeList("fragrant", "pungent", "rustling", "fuzzy", "glossy", "weeping", "rough", "smooth"),
             //"flavor`noun`\tleaf`noun` tree`noun`"
             //"flavor`adj` fruit`noun` tree`noun`"
             //"flavor`adj` nut`noun` tree`noun`"
@@ -939,6 +967,11 @@ public class Thesaurus implements Serializable{
             //"color`adj` nut`noun` tree`noun`"
             //"flavor`adj` fruit`noun`-fruit`noun`"
             //"color`adj` fruit`noun`-fruit`noun`"
+
+            //"shape`adj`-fruit`noun` tree`noun`",
+            //"shape`adj`-leaf`noun` tree`noun`",
+            //"sensory`adj` tree`noun`-tree`noun`",
+            //"sensory`adj`-leaf`noun` tree`noun`",
             "smart`adj`",
             makeList("brilliant", "smart", "genius", "wise", "clever", "cunning", "mindful", "aware"),
             "smart`noun`",
