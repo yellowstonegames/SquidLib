@@ -63,14 +63,23 @@ public class ThesaurusTest {
         String oz = StringKit.join("", ozzes);
         System.out.println(Thesaurus.ORK.process(oz));
         System.out.println();
-        thesaurus.addKnownCategories();
+
+        StringBuilder text = new StringBuilder("The elixir you desire is no simple matter to brew. I would require many ingredients, most rare or exotic, to even begin to craft this tonic. If you remain undaunted... I require ");
         for (int i = 0; i < 10; i++) {
-            System.out.println((thesaurus.makePlantName())                    );
-            System.out.println((thesaurus.makePlantName())                    );
-            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())                    );
-            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.JAPANESE_ROMANIZED.removeAccents()));
-            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.ELF.removeAccents())               );
-            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.SIMPLISH)                          );
+            text.append(thesaurus2.lookup("leaf`noun`")).append(" of ").append(thesaurus2.makePlantName(FakeLanguageGen.GREEK_ROMANIZED)).append(", ");
         }
+        text.append("and ").append(thesaurus2.lookup("leaf`noun`")).append(" of ").append(thesaurus2.makePlantName(FakeLanguageGen.GREEK_ROMANIZED)).append(". Bring me this before the winter equinox and you shall have your potion.");
+        for(String s : StringKit.wrap(text, 80))
+        {
+            System.out.println(s);
+        }
+//        for (int i = 0; i < 10; i++) {
+//            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );
+//            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );
+//            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );
+//            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.JAPANESE_ROMANIZED));
+//            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.MALAY)             );
+//            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.SIMPLISH)          );
+//        }
     }
 }
