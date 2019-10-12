@@ -67,6 +67,32 @@ public class Thesaurus implements Serializable{
     }
 
     /**
+     * Changes the sequences for all groups of synonyms this can produce, effectively turning this Thesaurus into a
+     * different version that knows all the same synonyms and categories but will produce different results.
+     * @param state any long; will be given to {@link SilkRNG#setState(long)}
+     */
+    public void refresh(long state)
+    {
+        refresh((int)(state & 0xFFFFFFFFL), (int)(state >>> 32));
+    }
+
+    /**
+     * Changes the sequences for all groups of synonyms this can produce, effectively turning this Thesaurus into a
+     * different version that knows all the same synonyms and categories but will produce different results.
+     * @param stateA any int; the first part of the state of a {@link SilkRNG}
+     * @param stateB any int; the second part of the state of a {@link SilkRNG}
+     */
+    public void refresh(int stateA, int stateB)
+    {
+        this.rng.setState(stateA, stateB);
+        final int sz = mappings.size();
+        for (int i = 0; i < sz; i++) {
+            mappings.getAt(i).setRNG(rng, true);
+        }
+        plantTermShuffler.setRNG(rng, true);
+    }
+    
+    /**
      * Allows this Thesaurus to find the exact words in synonyms and, when requested, replace each occurrence with a
      * different word from the same Collection. Each word in synonyms should have the same part of speech, so "demon"
      * and "devils" should not be in the same list of synonyms (singular noun and plural noun), but "demon" and "devil"
@@ -83,20 +109,20 @@ public class Thesaurus implements Serializable{
     {
         if(synonyms.isEmpty())
             return this;
-        long prevState = rng.getState();
-        rng.setState(CrossHash.hash64(synonyms));
-        GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
+        //long prevState = rng.getState();
+        //rng.setState(prevState ^ CrossHash.hash64(synonyms));
+        GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng, true);
         for(String syn : synonyms)
         {
             mappings.put(syn, shuffler);
         }
-        rng.setState(prevState);
+        //rng.setState(prevState);
         return this;
     }
 
     public Thesaurus addReplacement(CharSequence before, String after)
     {
-        mappings.put(before, new GapShuffler<String>(after));
+        mappings.put(before, new GapShuffler<>(after));
         return this;
     }
 
@@ -113,11 +139,11 @@ public class Thesaurus implements Serializable{
     {
         if(synonyms.isEmpty())
             return this;
-        long prevState = rng.getState();
-        rng.setState(CrossHash.hash64(synonyms));
-        GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
+        //long prevState = rng.getState();
+        //rng.setState(prevState ^ CrossHash.hash64(synonyms));
+        GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng, true);
         mappings.put(keyword, shuffler);
-        rng.setState(prevState);
+        //rng.setState(prevState);
         return this;
     }
 
@@ -199,7 +225,7 @@ public class Thesaurus implements Serializable{
         {
             addCategory(kv.getKey(), kv.getValue());
         }
-        plantTermShuffler = new GapShuffler<>(plantTerms, rng);
+        plantTermShuffler = new GapShuffler<>(plantTerms, rng, true);
         return this;
     }
 
@@ -259,7 +285,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus addFakeWords()
     {
-        long state = rng.getState();
+        //long state = rng.getState();
         for(Map.Entry<CharSequence, FakeLanguageGen> kv : languages.entrySet())
         {
             ArrayList<String> words = new ArrayList<>(16);
@@ -268,7 +294,7 @@ public class Thesaurus implements Serializable{
             }
             addCategory(StringKit.replace(kv.getKey(), "gen", "pre"), words);
         }
-        rng.setState(state);
+        //rng.setState(state);
         return this;
     }
 
@@ -591,7 +617,7 @@ public class Thesaurus implements Serializable{
         }
         if(plantTermShuffler == null)
         {
-            plantTermShuffler = new GapShuffler<>(plantTerms, rng);
+            plantTermShuffler = new GapShuffler<>(plantTerms, rng, true);
         }
         String working = process(plantTermShuffler.next());
         int frustration = 0;
@@ -622,7 +648,7 @@ public class Thesaurus implements Serializable{
         }
         if(plantTermShuffler == null)
         {
-            plantTermShuffler = new GapShuffler<>(plantTerms, rng);
+            plantTermShuffler = new GapShuffler<>(plantTerms, rng, true);
         }
         String working = process(plantTermShuffler.next());
         int frustration = 0;

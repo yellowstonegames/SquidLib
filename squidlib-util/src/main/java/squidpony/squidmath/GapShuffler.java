@@ -71,7 +71,31 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
     public GapShuffler(Collection<T> items, IRNG rng)
     {
         this.rng = rng.copy();
-        elements = rng.shuffle(items);
+        elements = this.rng.shuffle(items);
+        index = 0;
+    }
+
+    /**
+     * Constructor that takes any Collection of T, shuffles it with the given RNG, and can then iterate infinitely
+     * through mostly-random shuffles of the given collection. These shuffles are spaced so that a single element should
+     * always have a large amount of "gap" in order between one appearance and the next. It helps to keep the appearance
+     * of a gap if every item in items is unique, but that is not necessary and does not affect how this works. The
+     * rng parameter will be copied if {@code shareRNG} is true, otherwise the reference will be shared (which could
+     * make the results of this GapShuffler depend on outside code, though it will always maintain a gap between
+     * identical elements if the elements are unique). I suggest that the IRNG should use {@link LongPeriodRNG} as its
+     * RandomnessSource, since it is in general a good choice for shuffling, or {@link XoshiroStarPhi32RNG} for GWT or
+     * other 32-bit platforms, but the choice is unlikely to matter in practice. Any {@link IStatefulRNG} should work in
+     * most cases, like {@link GWTRNG}, {@link StatefulRNG}, or {@link SilkRNG}. If you encounter unusually-low-quality
+     * shuffles, try a different starting seed, and if that doesn't work, try SilkRNG (it has a different internal
+     * structure than the other types; it could yield better results at the very start).
+     * @param items a Collection of T that will not be modified
+     * @param rng an IRNG that can be pre-seeded; will be copied and not used directly
+     * @param shareRNG if false, {@code rng} will be copied and no reference will be kept; if true, {@code rng} will be shared with the outside code
+     */
+    public GapShuffler(Collection<T> items, IRNG rng, boolean shareRNG)
+    {
+        this.rng = shareRNG ? rng : rng.copy();
+        elements = this.rng.shuffle(items);
         index = 0;
     }
 
@@ -115,7 +139,32 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
     {
         this.rng = rng.copy();
         elements = Maker.makeList(items);
-        rng.shuffleInPlace(elements);
+        this.rng.shuffleInPlace(elements);
+        index = 0;
+    }
+
+    /**
+     * Constructor that takes any Collection of T, shuffles it with the given RNG, and can then iterate infinitely
+     * through mostly-random shuffles of the given collection. These shuffles are spaced so that a single element should
+     * always have at least one "gap" element between one appearance and the next. It helps to keep the appearance
+     * of a gap if every item in items is unique, but that is not necessary and does not affect how this works. The
+     * rng parameter will be copied if {@code shareRNG} is false, otherwise the reference will be shared (which could
+     * make the results of this GapShuffler depend on outside code, though it will always maintain a gap between
+     * identical elements if the elements are unique). I suggest that the IRNG should use {@link LongPeriodRNG} as its
+     * RandomnessSource, since it is in general a good choice for shuffling, or {@link XoshiroStarPhi32RNG} for GWT or
+     * other 32-bit platforms, but the choice is unlikely to matter in practice. Any {@link IStatefulRNG} should work in
+     * most cases, like {@link GWTRNG}, {@link StatefulRNG}, or {@link SilkRNG}. If you encounter unusually-low-quality
+     * shuffles, try a different starting seed, and if that doesn't work, try SilkRNG (it has a different internal
+     * structure than the other types; it could yield better results at the very start).
+     * @param items a Collection of T that will not be modified
+     * @param rng an IRNG that can be pre-seeded; will be copied and not used directly
+     * @param shareRNG if false, {@code rng} will be copied and no reference will be kept; if true, {@code rng} will be shared with the outside code
+     */
+    public GapShuffler(T[] items, IRNG rng, boolean shareRNG)
+    {
+        this.rng = shareRNG ? rng : rng.copy();
+        elements = Maker.makeList(items);
+        this.rng.shuffleInPlace(elements);
         index = 0;
     }
 
@@ -171,5 +220,32 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
     @Override
     public Iterator<T> iterator() {
         return this;
+    }
+
+    public IRNG getRNG() {
+        return rng;
+    }
+
+
+    /**
+     * Sets the IRNG this uses to shuffle the order of elements, always copying the given IRNG before using it. Always
+     * reshuffles the order, which may eliminate a gap that should have been present, so treat the sequence before and
+     * after like separate GapShuffler objects.
+     * @param rng an IRNG, such as {@link RNG}, {@link GWTRNG}, {@link StatefulRNG}, and so on; always copied
+     */
+    public void setRNG(IRNG rng) {
+        setRNG(rng, false);
+    }
+
+    /**
+     * Sets the IRNG this uses to shuffle the order of elements, optionally sharing a reference between outside code and
+     * the internal rng (when {@code shareRNG} is true). Always reshuffles the order, which may eliminate a gap that
+     * should have been present, so treat the sequence before and after like separate GapShuffler objects.
+     * @param rng an IRNG, such as {@link RNG}, {@link GWTRNG}, {@link StatefulRNG}, and so on
+     * @param shareRNG if false, {@code rng} will be copied and no reference will be kept; if true, {@code rng} will be shared with the outside code
+     */
+    public void setRNG(IRNG rng, boolean shareRNG) {
+        this.rng = shareRNG ? rng : rng.copy();
+        this.rng.shuffleInPlace(elements);
     }
 }
