@@ -975,7 +975,7 @@ public class Thesaurus implements Serializable{
             "nut`noun`",
             makeList("nut", "almond", "peanut", "pecan", "walnut", "cashew"),
             "tree`noun`",
-            makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar", "palm", "magnolia", "hazel", "cactus", "mangrove"),
+            makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar", "palm", "magnolia", "hazel", "cactus", "mangrove", "elm"),
             "flavor`noun`",
             makeList("sugar", "spice", "acid", "herb", "salt", "grease", "smoke"),
             "flavor`adj`",

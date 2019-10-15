@@ -22,13 +22,14 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 19;
-    private int modes = 39;
+    private int mode = 39;
+    private int modes = 47;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
     private Stage stage;
     private int[] amounts = new int[512];
+    private double[] dAmounts = new double[512];
     private DiverRNG diver;
     private boolean hasGauss = false;
     private double followingGauss = 0.0;
@@ -360,6 +361,7 @@ public class MathVisualizer extends ApplicationAdapter {
     public void update()
     {
         Arrays.fill(amounts, 0);
+        Arrays.fill(dAmounts, 0.0);
         ArrayTools.fill(layers.backgrounds, 0f);
         switch (mode) {
             case 0: {
@@ -1570,6 +1572,172 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
 //            }
 //        break;
+            case 39: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, asin() absolute error");
+
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += Math.abs(Math.asin((i - 25600) / 25600.0) - NumberTools.asin((i - 25600) / 25600f));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 40: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, acos() absolute error");
+
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += Math.abs(Math.acos((i - 25600) / 25600.0) - NumberTools.acos((i - 25600) / 25600f));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 41: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, sin() absolute error");
+
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += Math.abs(Math.sin(((i - 25600) / 12800.0) * Math.PI) - MathUtils.sin(((i - 25600) / 12800f) * MathUtils.PI));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 42: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, cos() absolute error");
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += Math.abs(Math.cos(((i - 25600) / 12800.0) * Math.PI) - MathUtils.cos(((i - 25600) / 12800f) * MathUtils.PI));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 43: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, asin() relative error");
+
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += (Math.asin((i - 25600) / 25600.0) - NumberTools.asin((i - 25600) / 25600f));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 44: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, acos() relative error");
+
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += (Math.acos((i - 25600) / 25600.0) - NumberTools.acos((i - 25600) / 25600f));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * 100.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 45: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, sin() relative error");
+
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += (Math.sin(((i - 25600) / 12800.0) * Math.PI) - MathUtils.sin(((i - 25600) / 12800f) * MathUtils.PI));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
+            case 46: {
+                Gdx.graphics.setTitle("Math vs. MathUtils, cos() relative error");
+                for (int i = 0; i < 51200; i++) {
+                    dAmounts[i / 100] += (Math.cos(((i - 25600) / 12800.0) * Math.PI) - MathUtils.cos(((i - 25600) / 12800f) * MathUtils.PI));
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = Math.max(0, 520 - (int)Math.round(dAmounts[i] * Math.PI * 200.0)); j < 520; j++) {
+                        layers.backgrounds[i+8][j] = color;
+                    }
+                }
+                for (int j = 510, jj = 0; j >= 0; j -= 10, jj = (jj + 1) % 5) {
+                    for (int i = 0; i < jj + 2; i++) {
+                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+                    }
+                }
+            }
+            break;
 
     }
     }
