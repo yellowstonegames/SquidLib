@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -15,8 +14,8 @@ import squidpony.Maker;
 import squidpony.panel.IColoredString;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.LineKit;
-import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.GreasedRegion;
 
 import java.util.ArrayList;
 
@@ -45,7 +44,7 @@ public class FontTest extends ApplicationAdapter {
     private static int totalWidth = 1346, totalHeight = 700;
 
     private Stage stage;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private Viewport viewport;
     private Viewport[] viewports;
     private TextCellFactory tcf;
@@ -76,7 +75,7 @@ public class FontTest extends ApplicationAdapter {
 //        Gdx.files.local("SevenTwelveContents.txt").writeString(sb.toString(), false, "UTF8");
 
 
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
         widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105, 100, 100, 100};

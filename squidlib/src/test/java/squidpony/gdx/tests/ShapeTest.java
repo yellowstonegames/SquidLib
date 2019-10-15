@@ -6,15 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SparseLayers;
-import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.GapShuffler;
 import squidpony.squidmath.MaskedShapeGenerator;
 import squidpony.squidmath.ThrustAltRNG;
@@ -23,7 +19,7 @@ import squidpony.squidmath.ThrustAltRNG;
  * Created by Tommy Ettinger on 10/12/2017.
  */
 public class ShapeTest extends ApplicationAdapter {
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private SparseLayers display;//, overlay;
     private static final int width = 96, height = 96;
     private static final int cellWidth = 6, cellHeight = 6;
@@ -38,7 +34,7 @@ public class ShapeTest extends ApplicationAdapter {
     @Override
     public void create() {
         gen = new MaskedShapeGenerator();
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         counter = System.currentTimeMillis();
         shuffler = SColor.randomHueSequence();
         data = new int[width][height];

@@ -7,7 +7,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -17,7 +16,10 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
 
@@ -31,7 +33,7 @@ public class IconsTest extends ApplicationAdapter{
     Color[][] fgColors, bgColors;
     StatefulRNG rng;
     Stage stage;
-    SpriteBatch batch;
+    FilterBatch batch;
     ArrayList<Color> colors;
     double[][] resMap;
     long ctr = 0L, lastUpdate = 0L;
@@ -81,7 +83,7 @@ public class IconsTest extends ApplicationAdapter{
             things.put(points[i], ent);
             ent.actor.setUserObject(i);
         }
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(layers);
     }

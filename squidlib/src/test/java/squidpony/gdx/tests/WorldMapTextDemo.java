@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -96,7 +95,7 @@ public static final char[]  terrainChars = {
     //private static final int bigWidth = 400, bigHeight = 400;
     private static final int cellWidth = 16, cellHeight = 16;
     private static final int shownWidth = 96, shownHeight = 48;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private SparseLayers display;//, overlay;
     private SquidInput input;
     private Stage stage;
@@ -208,7 +207,7 @@ public static final char[]  terrainChars = {
     
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispLeanFont());
         //display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);

@@ -954,6 +954,16 @@ public abstract class WorldMapGenerator implements Serializable {
          */
         biomeCodeData;
 
+
+        /**
+         * Gets the biome code for the dominant biome at a given x,y position. This is equivalent to getting the raw
+         * biome code from {@link #biomeCodeData}, calling {@link #extractMixAmount(int)} on that raw biome code, and
+         * chooosing whether to call {@link #extractPartA(int)} or {@link #extractPartB(int)} based on whether the mix
+         * amount is lower than 0.5 (yielding part A) or higher (yielding part B).
+         * @param x the x-coordinate on the map
+         * @param y the y-coordinate on the map
+         * @return the biome code for the dominant biome part at the given location
+         */
         @Override
         public int getBiomeCode(int x, int y) {
             int code = biomeCodeData[x][y];

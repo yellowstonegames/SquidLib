@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -64,7 +63,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         }
     }
 
-    SpriteBatch batch;
+    private FilterBatch batch;
 
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
@@ -135,7 +134,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         monsterMarkColors = fgCenter.rainbow(0.75f, 0.65f, 64);
         //playerMarkColors = fgCenter.loopingGradient(SColor.HAN_PURPLE, SColor.PSYCHEDELIC_PURPLE, 64);
         //monsterMarkColors = fgCenter.loopingGradient(SColor.CRIMSON, SColor.ORANGE_RED, 64);
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
 
         // getStretchableFont loads a font from the assets, Inconsolata-LGC-Custom (a distance field font as mentioned
         // earlier). We set the smoothing multiplier on it only if we are using internal zoom to increase sharpness
