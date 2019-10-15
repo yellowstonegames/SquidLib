@@ -49,7 +49,6 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     
 //    public int noiseCalls = 0, pixels = 0;  // debug
     
-    public Noise.Noise3D noise;
     @Override
     public void create() {
         
