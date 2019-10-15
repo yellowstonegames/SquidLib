@@ -274,8 +274,10 @@ public class WorldMapView {
 
     public void generate()
     {
-        generate(world.seedA, world.seedB, 0.9 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.15,
-                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.2 + 1.0);
+//        generate(world.seedA, world.seedB, 0.9 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.15,
+//                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.2 + 1.0);
+        generate(world.seedA, world.seedB, 1.0 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.25,
+                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.25 + 1.0);
     }
     public void generate(double landMod, double heatMod)
     {
