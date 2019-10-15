@@ -6,15 +6,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.PNG8;
-import squidpony.squidgrid.gui.gdx.PaletteReducer;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidmath.*;
+import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedSet;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -35,7 +34,7 @@ import static squidpony.squidgrid.gui.gdx.SColor.*;
  */
 public class QuantizeDemo extends ApplicationAdapter {
     private static final int width = 574, width1 = width, width2 = 404, height = 600, height1 = 480;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private SquidInput input;
     private Viewport view;
     private int mode = 17, maxModes = 27;
@@ -98,7 +97,7 @@ public class QuantizeDemo extends ApplicationAdapter {
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         view = new StretchViewport(width, height);
         bivaOriginal = new Pixmap(Gdx.files.internal("special/Painting_by_Henri_Biva.jpg"));
         bivaOriginal.setBlending(Pixmap.Blending.None);

@@ -8,7 +8,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -39,7 +38,7 @@ public class FAIconsTest extends ApplicationAdapter{
     private Color[][] fgColors, bgColors;
     private StatefulRNG rng;
     private Stage stage;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private ArrayList<Color> colors;
     private TextCellFactory atlas;
     private OrderedMap<Coord, AnimatedEntity> things;
@@ -85,7 +84,7 @@ public class FAIconsTest extends ApplicationAdapter{
             things.put(points[i], ent);
             ent.actor.setUserObject(i);
         }
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(layers);
     }

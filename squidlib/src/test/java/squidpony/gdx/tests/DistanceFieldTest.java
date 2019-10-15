@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,10 +15,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SparseLayers;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 
 import java.util.List;
 
@@ -44,7 +40,7 @@ public class DistanceFieldTest extends ApplicationAdapter {
     private static int totalWidth = 1100, totalHeight = 550;
 
     private Stage stage;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private Viewport viewport;
     private Vector3 startPosition, targetPosition;
     private float worldWidth, worldHeight;
@@ -55,7 +51,7 @@ public class DistanceFieldTest extends ApplicationAdapter {
     private int index = 0;
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispLeanFont().width(32).height(64).initBySize(),//.setSmoothingMultiplier(1f),
                 DefaultResources.getStretchableLeanFont().width(32).height(64).initBySize(),

@@ -7,7 +7,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import squidpony.panel.IColoredString;
 import squidpony.squidgrid.gui.gdx.*;
 
@@ -15,13 +14,13 @@ import squidpony.squidgrid.gui.gdx.*;
  * Created by Tommy Ettinger on 7/24/2017.
  */
 public class TinyTest extends ApplicationAdapter {
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private SquidLayers layers;
     private SquidMessageBox smb;
     private TextCellFactory font;
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         font = DefaultResources.getCrispSlabFamily().width(10).height(21).initBySize();
         layers = new SquidLayers(40, 25);
         smb = new SquidMessageBox(40, 25, font);

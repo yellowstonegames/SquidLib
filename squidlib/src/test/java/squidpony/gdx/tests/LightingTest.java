@@ -7,7 +7,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
@@ -38,7 +37,7 @@ public class LightingTest extends ApplicationAdapter{
     private Color[][] fgColors, bgColors;
     private StatefulRNG rng;
     private Stage stage;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private ArrayList<Color> colors, mColors;
     private int colorIndex = 0;
     private Coord[] points;
@@ -102,7 +101,7 @@ public class LightingTest extends ApplicationAdapter{
         }
 
         lighting.updateAll();
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(layers);
     }

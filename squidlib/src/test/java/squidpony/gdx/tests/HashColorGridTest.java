@@ -8,19 +8,19 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import squidpony.StringKit;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
 
 /**
  * Created by Tommy Ettinger on 7/24/2017.
  */
 public class HashColorGridTest extends ApplicationAdapter {
     private Texture texture, badTexture;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         String hashes = Gdx.files.internal("special/WordHashes.txt").readString("UTF8");
         int length = hashes.length() / 8;
         int sideLength = (int) Math.ceil(Math.sqrt(length));

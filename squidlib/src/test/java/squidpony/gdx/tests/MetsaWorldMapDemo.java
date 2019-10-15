@@ -7,14 +7,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidColorCenter;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.MetsaMapFactory;
 import squidpony.squidmath.Coord;
 
@@ -23,7 +19,7 @@ import java.util.List;
 public class MetsaWorldMapDemo extends ApplicationAdapter {
     private MetsaMapFactory mapFactory;
 
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private SquidColorCenter colorFactory;
     private SquidPanel display;
     private int width, height;
@@ -70,7 +66,7 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
     }
     @Override
     public void create () {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         width = 240;
         height = 120;
         cellWidth = 5;

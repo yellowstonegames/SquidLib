@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.mapping.SpillWorldMap;
@@ -31,7 +31,7 @@ public class WorldSpillTest extends ApplicationAdapter{
     SpillWorldMap swm;
     StatefulRNG rng;
     Stage stage;
-    SpriteBatch batch;
+    private FilterBatch batch;
     float landColor, oceanColor, lightestColor;
     @Override
     public void create() {
@@ -48,7 +48,7 @@ public class WorldSpillTest extends ApplicationAdapter{
         display = new SquidPanel(gridWidth, gridHeight,
                 DefaultResources.getStretchableDejaVuFont().width(cellWidth).height(cellHeight).initBySize());
         display.setLightingColor(SColor.WHITE);
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(display);
         stage.addListener(new InputListener(){

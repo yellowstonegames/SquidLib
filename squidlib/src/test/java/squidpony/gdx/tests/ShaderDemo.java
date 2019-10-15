@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -31,7 +30,7 @@ import java.util.List;
  * This is a small test/demo that shows an outline effect around all text.
  */
 public class ShaderDemo extends ApplicationAdapter {
-    SpriteBatch batch;
+    FilterBatch batch;
 
     private RNG rng;
     private SparseLayers display, languageDisplay;
@@ -135,7 +134,7 @@ public class ShaderDemo extends ApplicationAdapter {
         rng = new RNG("SquidLib!");
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
