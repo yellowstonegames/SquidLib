@@ -1229,7 +1229,8 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that tiles both east-to-west and north-to-south. It tends
      * to not appear distorted like {@link SphereMap} does in some areas, even though this is inaccurate for a
      * rectangular projection of a spherical world (that inaccuracy is likely what players expect in a map, though).
-     * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapRiverDemo.png" >Example map</a>.
+     * You may want {@link LocalMap} instead, for non-world maps that don't tile.
+     * <a href="http://squidpony.github.io/SquidLib/TilingMap.png" >Example map</a>.
      */
     public static class TilingMap extends WorldMapGenerator {
         //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
@@ -1552,8 +1553,9 @@ public abstract class WorldMapGenerator implements Serializable {
      * should use {@link EllipticalMap} or {@link EllipticalHammerMap} for this.
      * {@link HyperellipticalMap} is also a nice option because it can project onto a shape between a
      * rectangle (like this class) and an ellipse (like EllipticalMap), with all-round sides.
-     * <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
+     * <a href="http://squidpony.github.io/SquidLib/SphereWorld.png" >Example map</a>.
      */
+//     * <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
     @Beta
     public static class SphereMap extends WorldMapGenerator {
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
@@ -1940,9 +1942,10 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto an ellipse that should be
      * twice as wide as it is tall (although you can stretch it by width and height that don't have that ratio).
      * This uses the <a href="https://en.wikipedia.org/wiki/Mollweide_projection">Mollweide projection</a>.
-     * <a href="https://i.imgur.com/BBKrKjI.png" >Example map, showing ellipse shape</a>
+     * <a href="http://squidpony.github.io/SquidLib/EllipseWorld.png" >Example map</a>.
      */
-    @Beta
+//     * <a href="https://i.imgur.com/BBKrKjI.png" >Example map, showing ellipse shape</a>
+     @Beta
     public static class EllipticalMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
@@ -2707,8 +2710,11 @@ public abstract class WorldMapGenerator implements Serializable {
      * world, showing only one hemisphere, that should be as wide as it is tall (its outline is a circle). This uses an
      * <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
      * the latitude always at the equator.
-     * <a href="https://tommyettinger.github.io/DorpBorx/worlds7/index.html">Example views of 50 planets</a>.
+     * <a href="http://squidpony.github.io/SquidLib/SpaceViewMap.png" >Example map, showing circular shape as if viewed
+     * from afar</a>
      */
+//         * <a href="https://tommyettinger.github.io/DorpBorx/worlds7/index.html">Example views of 50 planets</a>.
+
     @Beta
     public static class SpaceViewMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
@@ -3452,6 +3458,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link HyperellipticalMap#HyperellipticalMap(long, int, int, Noise3D, double)}, then this would be the
          * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0}.
+         * <a href="http://squidpony.github.io/SquidLib/HyperellipseWorld.png" >Example map, showing special shape</a>
          */
         public HyperellipticalMap() {
             this(0x1337BABE1337D00DL, 200, 100, DEFAULT_NOISE, 1.0);
@@ -4529,6 +4536,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that does no projection of the map, as if the area were
      * completely flat or small enough that curvature is impossible to see. This also does not change heat levels at the
      * far north and south regions of the map, since it is meant for areas that are all about the same heat level.
+     * <a href="http://squidpony.github.io/SquidLib/LocalMap.png" >Example map, showing lack of polar ice</a>
      */
     public static class LocalMap extends WorldMapGenerator {
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
@@ -4834,6 +4842,7 @@ public abstract class WorldMapGenerator implements Serializable {
     /**
      * An unusual map generator that imitates an existing local map (such as a map of Australia, which it can do by
      * default), without applying any projection or changing heat levels in the polar regions or equator.
+     * <a href="http://squidpony.github.io/SquidLib/LocalMimicMap.png" >Example map, showing a variant on Australia</a>
      */
     public static class LocalMimicMap extends LocalMap
     {

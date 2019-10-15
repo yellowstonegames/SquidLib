@@ -4,6 +4,7 @@ import squidpony.LZSPlus;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.mapping.PoliticalMapper;
 import squidpony.squidgrid.mapping.ProjectionTools;
+import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.*;
 import squidpony.squidmath.Noise.Noise3D;
 import squidpony.squidmath.Noise.Noise4D;
@@ -1185,10 +1186,11 @@ public abstract class WMG implements Serializable {
     }
 
     /**
-     * A concrete implementation of {@link WMG} that tiles both east-to-west and north-to-south. It tends
-     * to not appear distorted like {@link WMG.SphereMap} does in some areas, even though this is inaccurate for a
+     * A concrete implementation of {@link WorldMapGenerator} that tiles both east-to-west and north-to-south. It tends
+     * to not appear distorted like {@link WorldMapGenerator.SphereMap} does in some areas, even though this is inaccurate for a
      * rectangular projection of a spherical world (that inaccuracy is likely what players expect in a map, though).
-     * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapRiverDemo.png" >Example map</a>.
+     * You may want {@link WorldMapGenerator.LocalMap} instead, for non-world maps that don't tile.
+     * <a href="http://squidpony.github.io/SquidLib/TilingMap.png" >Example map</a>.
      */
     public static class TilingMap extends WMG {
         //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;

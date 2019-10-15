@@ -27,8 +27,8 @@ import java.util.Date;
  * and height maps can all be requested from it).
  */
 public class DetailedWorldMapWriter extends ApplicationAdapter {
-    private static final int width = 1920, height = 1080;
-//    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
+//    private static final int width = 1920, height = 1080;
+    private static final int width = 256, height = 256; // localMimic
 //    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
     private static final int LIMIT = 6;
@@ -86,7 +86,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         view = new StretchViewport(width * cellWidth, height * cellHeight);
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
-        path = "out/worlds/" + date + "/Sphere/";
+//        path = "out/worlds/" + date + "/Sphere/";
 //        path = "out/worlds/" + date + "/Ellipse/";
 //        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
@@ -94,7 +94,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worlds/" + date + "/Hyperellipse/";
 //        path = "out/worlds/" + date + "/Tiling/";
 //        path = "out/worlds/" + date + "/RoundSide/";
-        //path = "out/worlds/RoundSide " + date + "/";
+//        path = "out/worlds/" + date + "/Local/";
+        path = "out/worlds/" + date + "/LocalMimic/";
 //        path = "out/worlds/EllipseHammer " + date + "/";
 //        path = "out/worlds/SpaceCompare " + date + "/";
 //        path = "out/worlds/HyperCompare " + date + "/";
@@ -135,7 +136,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
         
-        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
@@ -143,7 +144,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
         wmv = new WorldMapView(world);
 
         //generate(seed);
