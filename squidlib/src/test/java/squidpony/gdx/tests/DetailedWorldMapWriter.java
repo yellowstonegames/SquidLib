@@ -29,9 +29,9 @@ import java.util.Date;
 public class DetailedWorldMapWriter extends ApplicationAdapter {
     private static final int width = 1920, height = 1080;
 //    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
-    //private static final int width = 512, height = 256; // mimic, elliptical
+//    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
-    private static final int LIMIT = 10;
+    private static final int LIMIT = 6;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -86,15 +86,15 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         view = new StretchViewport(width * cellWidth, height * cellHeight);
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
-        //path = "out/worlds/Sphere " + date + "/";
-        path = "out/worlds/" + date + "/Tiling/";
-        //path = "out/worlds/AltSphere " + date + "/";
-        //path = "out/worlds/Ellipse " + date + "/";
-        //path = "out/worlds/Mimic " + date + "/";
-        //path = "out/worlds/Dump " + date + "/";
-//        path = "out/worlds/SpaceView " + date + "/";
-        //path = "out/worlds/RoundSide " + date + "/";
+        path = "out/worlds/" + date + "/Sphere/";
+//        path = "out/worlds/" + date + "/Ellipse/";
+//        path = "out/worlds/" + date + "/Mimic/";
+//        path = "out/worlds/" + date + "/SpaceView/";
+//        path = "out/worlds/" + date + "/Sphere_Classic/";
 //        path = "out/worlds/" + date + "/Hyperellipse/";
+//        path = "out/worlds/" + date + "/Tiling/";
+//        path = "out/worlds/" + date + "/RoundSide/";
+        //path = "out/worlds/RoundSide " + date + "/";
 //        path = "out/worlds/EllipseHammer " + date + "/";
 //        path = "out/worlds/SpaceCompare " + date + "/";
 //        path = "out/worlds/HyperCompare " + date + "/";
@@ -125,18 +125,22 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             noun.addAll(Thesaurus.noun.getAt(i));
         }
 
-        WorldMapGenerator.DEFAULT_NOISE.setFractalType(FastNoise.SIMPLEX_FRACTAL);
-        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(4);
-        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
-        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
+        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
+//        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.5f);
+        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(3);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(2f);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(0.5f);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.2f);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(5f);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.8f);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(1.25f);
         
-        ///world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        //world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        //world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        //world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        //world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
@@ -161,10 +165,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         world.rng.setState(seed);
         world.seedA = world.rng.stateA;
         world.seedB = world.rng.stateB;
-        //wmv.generate();
-        //// use the next one for TilingMap or any generators that use 4D noise
-        wmv.generate(1.05 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.35,
-                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.25 + 0.95);
+        wmv.generate();
+//        wmv.generate(1.0 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.25,
+//                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.25 + 1.0);
         ttg = System.currentTimeMillis() - startTime;
     }
 
@@ -196,7 +199,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
         batch.begin();
         pt.draw(pm, 0, 0);
-        batch.draw(pt, 0, 0);
+        batch.draw(pt, 0, 0, width >> 1, height >> 1);
         batch.end();
 
         //        PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
@@ -335,8 +338,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Demo: Detailed World Map";
-        config.width = width * cellWidth;
-        config.height = height * cellHeight;
+        config.width = width * cellWidth >> 1;
+        config.height = height * cellHeight >> 1;
         //config.fullscreen = true;
         config.foregroundFPS = 0;
         //config.fullscreen = true;
