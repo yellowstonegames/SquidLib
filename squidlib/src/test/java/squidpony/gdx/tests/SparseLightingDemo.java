@@ -294,7 +294,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
         // don't seed the RNG, any valid cell should be possible.
         player = floors.singleRandom(rng);
         
-        Coord[] lightPositions = floors.separatedPortion(0.075);
+        Coord[] lightPositions = floors.mixedRandomSeparated(0.075);
         for (int i = 0; i < lightPositions.length; i++) {
             lighting.addLight(lightPositions[i], new Radiance(rng.nextFloat(3f) + 2f, rng.getRandomElement(SColor.COLOR_WHEEL_PALETTE_BRIGHT), 0.5f, 0f));
         }
