@@ -5738,6 +5738,101 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return empty().insertSeveral(vl);
     }
 
+    /**
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it uses blue noise to sharply limit the likelihood of nearby points being
+     * chosen when fraction is small. If you request too many cells (too high of a value for fraction), it will start to
+     * have nearby cells, however. Does not restrict the size of the returned array other than only using up to
+     * {@code fraction * size()} cells.
+     * <br>
+     * Also take a look at {@link #separatedZCurve(double, int)}, {@link #quasiRandomSeparated(double, int)},
+     * {@link #mixedRandomSeparated(double, int, long)}, and {@link #separatedRegionBlue(double, int)}. Internally, this
+     * is a thin wrapper around {@link #separatedRegionBlue(double, int)}, and won't be more efficient than that method.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @return a freshly-allocated Coord array containing the quasi-random cells
+     */
+    public Coord[] separatedBlue(double fraction)
+    {
+        return separatedBlue(fraction, -1);
+    }
+
+    /**
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it uses blue noise to sharply limit the likelihood of nearby points being
+     * chosen when fraction is small. If you request too many cells (too high of a value for fraction), it will start to
+     * have nearby cells, however. Restricts the total size of the returned array to a maximum of {@code limit} (minimum
+     * is 0 if no cells are "on"). If limit is negative, this will not restrict the size.
+     * <br>
+     * Also take a look at {@link #separatedZCurve(double, int)}, {@link #quasiRandomSeparated(double, int)},
+     * {@link #mixedRandomSeparated(double, int, long)}, and {@link #separatedRegionBlue(double, int)}. Internally, this
+     * is a thin wrapper around {@link #separatedRegionBlue(double, int)}, and won't be more efficient than that method.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum size of the array to return; may return less
+     * @return a freshly-allocated Coord array containing the quasi-random cells
+     */
+    public Coord[] separatedBlue(double fraction, int limit)
+    {
+        if(fraction <= 0)
+            return new Coord[0];
+        if(fraction > 0xFFp-8)
+            fraction = 0xFFp-8;
+        int ct = size();
+        if(limit >= ct)
+            return asCoords();
+        return copy().separatedRegionBlue(fraction, limit).asCoords();
+    }
+    /**
+     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
+     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it uses blue noise to sharply limit the likelihood of nearby points being
+     * chosen when fraction is small. If you request too many cells (too high of a value for fraction), it will start to
+     * have nearby cells, however. Does not restrict the size of the returned GreasedRegion other than only using up to
+     * {@code fraction * size()} cells.
+     * <br>
+     * Also take a look at {@link #separatedRegionZCurve(double, int)}, {@link #quasiRandomRegion(double, int)},
+     * {@link #mixedRandomRegion(double, int, long)}, and {@link #separatedBlue(double, int)}.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion separatedRegionBlue(double fraction)
+    {
+        return separatedRegionBlue(fraction, -1);
+    }
+
+    /**
+     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
+     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it uses blue noise to sharply limit the likelihood of nearby points being
+     * chosen when fraction is small. If you request too many cells (too high of a value for fraction), it will start to
+     * have nearby cells, however. Restricts the total size of the returned GreasedRegion to a maximum of {@code limit}
+     * (minimum is 0 if no cells are "on"). If limit is negative, this will not restrict the size.
+     * <br>
+     * Also take a look at {@link #separatedRegionZCurve(double, int)}, {@link #quasiRandomRegion(double, int)},
+     * {@link #mixedRandomRegion(double, int, long)}, and {@link #separatedBlue(double, int)}.
+     * @param fraction the fraction of "on" cells to quasi-randomly select, between 0.0 and 1.0
+     * @param limit the maximum size of the array to return; may return less
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion separatedRegionBlue(double fraction, int limit)
+    {
+        if(fraction <= 0)
+            return empty();
+        if(fraction > 0xFFp-8)
+            fraction = 0xFFp-8;
+        int ct = size();
+        if(limit >= ct)
+            return this;
+        ct *= fraction;
+        if(limit >= 0 && limit < ct)
+            ct = limit;
+        for (int i = 255; i >= 0; i--) {
+            if(ct >= andWrapping64(BlueNoise.LEVELS[i]).size())
+                return this;
+        }
+        return this;
+    }
 
     public Coord[] randomPortion(IRNG rng, int size)
     {

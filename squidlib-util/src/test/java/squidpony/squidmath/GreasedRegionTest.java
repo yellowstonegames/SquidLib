@@ -89,6 +89,9 @@ public class GreasedRegionTest {
             System.out.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.mixedRandomSeparated(0.05)));
             System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
+            System.out.println("\nBLUE:");
+            printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.separatedBlue(0.05)));
+            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
             System.out.println();
             printRegion(dataDungeon);
             System.out.println("\nWith fraction 0.05:");
@@ -104,6 +107,9 @@ public class GreasedRegionTest {
             System.out.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.05)));
             System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+            System.out.println("\nBLUE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.05)));
+            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
 
             System.out.println("\nWith fraction 0.15:");
             System.out.println("\nSOBOL:");
@@ -117,6 +123,9 @@ public class GreasedRegionTest {
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
             System.out.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.15)));
+            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+            System.out.println("\nBLUE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.15)));
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
 
             System.out.println("\nWith fraction 0.25:");
@@ -132,6 +141,9 @@ public class GreasedRegionTest {
             System.out.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.25)));
             System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+            System.out.println("\nBLUE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.25)));
+            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
 
             System.out.println("\nWith fraction 0.4:");
             System.out.println("\nSOBOL:");
@@ -145,6 +157,9 @@ public class GreasedRegionTest {
             System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
             System.out.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.4)));
+            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+            System.out.println("\nBLUE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.4)));
             System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
 
             gr = dataDungeon.copy();
