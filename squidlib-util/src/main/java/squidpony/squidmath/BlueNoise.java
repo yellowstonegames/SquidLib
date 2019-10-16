@@ -18,8 +18,9 @@ public class BlueNoise {
      * The raw data this class uses, as a 1D byte array. You probably don't want to use this field, but you might, so it
      * is public... but don't write to it. It's static, which is probably OK even on Android as long as no one changes
      * it, and uses {@link StandardCharsets} to decode itself from a String, which only works on GWT 2.8.2 and newer.
+     * This can be considered [x][y] indexed or [y][x] indexed; the original image was [y][x] indexed. 
      */
-    public static final byte[] blueNoise = ("ÁwK1¶\025à\007ú¾íNY\030çzÎúdÓi ­rì¨ýÝI£g;~O\023×\006vE1`»Ü\004)±7\fº%LÓD\0377ÜE*\fÿí\177£RÏA2\r(Å\0026\023¯?*Â;ÌE!Â\022,è\006ºá6h\"ó¢Én\"<sZÅAt×\022\002x,aèkZõ"+
+    public static final byte[] RAW_NOISE = ("ÁwK1¶\025à\007ú¾íNY\030çzÎúdÓi ­rì¨ýÝI£g;~O\023×\006vE1`»Ü\004)±7\fº%LÓD\0377ÜE*\fÿí\177£RÏA2\r(Å\0026\023¯?*Â;ÌE!Â\022,è\006ºá6h\"ó¢Én\"<sZÅAt×\022\002x,aèkZõ"+
             "l±×\033dÅ&k°Ö÷nCÚ]%é\177ø\022S\001Øl´uÉ\036þ«À>Zß\000O®ñ\021Õæe÷¨ê^Â±\030þ®\021¹?èUªE6è\023_|¼¢!­t½P\005ÙG¥¸u.\030ò>Tÿ3nXCvíp*³\033ìÑyC¼/\031P1;òSÝÈ2KÒ\""+
             "È3r Óø·V\000\034ä4\bVê\020õgÇ\0331êÞ`¯ÅeãÓ­ò×\rÈ\034KÏ\013h5\tÃ\037T\002~Í´ kÐq@~ïc\003x\023ó»\005OxÛÃJÎeIÒ7´p]\013#J\006 $`F¿¡*³`åôS½F¤bùÝl¦Há\rû¡æ\013%º\005\035à©"+
             "G[âc\020§=,mñµ=þÃ-\034å\ròM¿?Ïöq9¹\017xæ\032eù2¦\026:~Ùå-:¶ð'Ww¿KcªÕ\\¢OÀ-Ð³:¥+Éî!\\Ñ\f$qß}¦WB*«Õýz¨\025ìPÌ\0027|ÞRq\001Ä¬%ÿr¯\030Ò\016_Ç3Ö=\0260úè8\roø"+
@@ -54,6 +55,28 @@ public class BlueNoise {
     ).getBytes(StandardCharsets.ISO_8859_1);
 
     /**
+     * Stores the same values as {@link #RAW_NOISE} if considered [x][y] indexed; available for convenient usage by
+     * GreasedRegion and other classes that can use 2D byte arrays.
+     */
+    public static final byte[][] RAW_2D = new byte[64][64];
+
+    /**
+     * A 256-element array of {@link GreasedRegion}s, each 64x64, where the first GreasedRegion has an impossibly strict
+     * threshold on what points to include (it is empty), but the second has some points far apart, the third has more,
+     * and so on until the last element includes almost all points.
+     */
+    public static final GreasedRegion[] LEVELS = new GreasedRegion[256];
+    static {
+        for (int x = 0; x < 64; x++) {
+            System.arraycopy(RAW_NOISE, x << 6, RAW_2D[x], 0, 64);
+        }
+        LEVELS[0] = new GreasedRegion(64, 64);
+        for (int i = -127; i < 128; i++) {
+            LEVELS[i+128] = new GreasedRegion(RAW_2D, -128, i);
+        }
+    }
+    
+    /**
      * Gets a byte from the raw data this stores, treating it as an infinite 2D plane of tiling 64x64 regions. You can
      * interpret the blue noise in many ways, but it is meant to be used with a threshold to select mostly widely-spaced
      * points when the threshold requires values greater than 100 or less than -100, or irregularly-shaped patterns of
@@ -64,6 +87,6 @@ public class BlueNoise {
      */
     public static byte get(int x, int y)
     {
-        return blueNoise[(y << 6 & 0xFC0) | (x & 0x3F)];
+        return RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)];
     }
 }

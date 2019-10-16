@@ -973,7 +973,7 @@ public class Thesaurus implements Serializable{
             "fruit`noun`",
             makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig", "date", "mango", "banana"),
             "nut`noun`",
-            makeList("nut", "almond", "peanut", "pecan", "walnut", "cashew"),
+            makeList("nut", "bean", "almond", "peanut", "pecan", "walnut", "cashew", "pea"),
             "tree`noun`",
             makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar", "palm", "magnolia", "hazel", "cactus", "mangrove", "elm"),
             "flavor`noun`",

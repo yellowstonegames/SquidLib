@@ -393,6 +393,73 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
+     * Constructs this GreasedRegion using a byte[][], treating cells as on if they are greater than or equal to lower
+     * and less than upper, or off otherwise.
+     * @param map a byte[][] that should have some bytes between lower and upper
+     * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
+     * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
+     */
+    public GreasedRegion(final byte[][] map, final int lower, final int upper)
+    {
+        width = map.length;
+        height = map[0].length;
+        ySections = (height + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        byte[] column;
+        for (int x = 0; x < width; x++) {
+            column = map[x];
+            for (int y = 0; y < height; y++) {
+                if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            }
+        }
+        counts = new int[width * ySections];
+        tallied = false;
+    }
+
+    /**
+     * Reassigns this GreasedRegion with the given rectangular byte array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then cells are treated as on if they are greater than or equal to lower and less than
+     * upper, or off otherwise.
+     * @param map a rectangular 2D byte array that should have some values between lower and upper
+     * @param lower lower bound, inclusive; all on cells will have values in map that are at least equal to lower
+     * @param upper upper bound, exclusive; all on cells will have values in map that are less than upper
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final byte[][] map, final int lower, final int upper) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
+            byte[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    data[x * ySections + (y >> 6)] |= ((column[y] >= lower && column[y] < upper) ? 1L : 0L) << (y & 63);
+                }
+            }
+            tallied = false;
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            byte[] column;
+            for (int x = 0; x < width; x++) {
+                column = map[x];
+                for (int y = 0; y < height; y++) {
+                    if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                }
+            }
+            counts = new int[width * ySections];
+            tallied = false;
+            return this;
+        }
+    }
+
+
+    /**
      * Constructs this GreasedRegion using a short[][], treating cells as on if they are greater than or equal to lower
      * and less than upper, or off otherwise.
      * @param map a short[][] that should have some shorts between lower and upper
@@ -2331,6 +2398,25 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
                 data[x * ySections + y] &= other.data[x * ySections + y];
+            }
+        }
+        tallied = false;
+        return this;
+    }
+
+    /**
+     * Intersection of two GreasedRegions, assigning the result into this GreasedRegion, with the special requirement
+     * that other must be a 64x64 area, and the special property that other will be considered tiled to cover all of the
+     * area of this GreasedRegion. Any cell that is "on" in both GreasedRegions (treating other as tiling) will be kept
+     * "on" in this GreasedRegion, but all other cells will be made "off."
+     * @param other another GreasedRegion that will not be modified but must be 64x64 in size; will act as if it tiles
+     * @return this, after modification, for chaining
+     */
+    public GreasedRegion andWrapping64(GreasedRegion other)
+    {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < ySections; y++) {
+                data[x * ySections + y] &= other.data[x & 63];
             }
         }
         tallied = false;
