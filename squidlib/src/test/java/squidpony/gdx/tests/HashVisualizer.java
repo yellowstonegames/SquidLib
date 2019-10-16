@@ -68,8 +68,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 16, noiseMode = 108, otherMode = 1;//74;//118;//82;
+    private static final int NOISE_LIMIT = 132;
+    private int hashMode = 0, rngMode = 16, noiseMode = 129, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -4685,6 +4685,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 234.5, 7654321L)) * 0.45f,
                                         ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 678.9, 9999999L)) * 0.45f,
                                         1f);
+                            }
+                        }
+                        break;
+                    case 130:
+                        Gdx.graphics.setTitle("Blue Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = (BlueNoise.get(xx, yy) + 128) / 255f;
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        break;
+                    case 131:
+                        Gdx.graphics.setTitle("Blue Noise with tile adjust" + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                iBright = Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 1234567);
+                                bright = ((BlueNoise.get(xx, yy) + 128 ^ iBright ^ (xx + yy >> 2 & 0x3F) ^ (xx - yy >> 2 & 0x3F)) & 255) / 255f;
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
