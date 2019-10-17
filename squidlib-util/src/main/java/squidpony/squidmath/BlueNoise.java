@@ -3,9 +3,13 @@ package squidpony.squidmath;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Provides access to a precalculated, tiling region of 2D blue noise, that is, noise without high-frequency components.
+ * Provides access to a precalculated, tiling plane of 2D blue noise, that is, noise without high-frequency components,
+ * as well as seeded modifications to that tiling blue noise plane that make it have even fewer patterns.
  * Not actually a noise class like {@link FastNoise}. The blue-noise distribution has the practical effect that a value
- * only appears next to a similar value very rarely.
+ * only appears next to a similar value very rarely. For a quick introduction, see
+ * <a href="https://blog.demofox.org/2018/01/30/what-the-heck-is-blue-noise/">Alan Wolfe's blog</a>, which has many more
+ * useful posts and links that often relate to blue noise and its relatives, like low-discrepancy sequences (which
+ * SquidLib calls quasi-random sequences, like {@link VanDerCorputQRNG}).
  * <br>
  * This uses 64x64 grayscale texture 0 from <a href="http://momentsingraphics.de/BlueNoise.html">Christoph Peters'
  * invaluable blue noise resource</a>. It may use more of the textures from that site in the future.
@@ -81,12 +85,28 @@ public class BlueNoise {
      * interpret the blue noise in many ways, but it is meant to be used with a threshold to select mostly widely-spaced
      * points when the threshold requires values greater than 100 or less than -100, or irregularly-shaped patterns of
      * points when the threshold is in the middle, like for values less than 0.
-     * @param x x position, can be any int; will repeat every 64 cells
-     * @param y y position, can be any int; will repeat every 64 cells
+     * @param x x position, can be any int; results will repeat every 64 cells
+     * @param y y position, can be any int; results will repeat every 64 cells
      * @return a byte that obeys a blue-noise distribution, so a value is only next to a similar value very rarely
      */
-    public static byte get(int x, int y)
+    public static byte get(final int x, final int y)
     {
         return RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)];
+    }
+
+    /**
+     * Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
+     * patterns are much less noticeable. Unlike {@link #get(int, int)}, this won't repeat every 64 cells on x or y, but
+     * it isn't as correct at matching blue-noise frequencies.
+     * @param x x position, can be any int; results will not repeat for a very long time
+     * @param y y position, can be any int; results will not repeat for a very long time
+     * @param seed seed value, can be any int; should be the same for all calls that should be from the same 2D plane
+     * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
+     */
+    public static byte getSeeded(final int x, final int y, int seed){
+        seed ^= (x >>> 6) * 0x1827F5 ^ (y >>> 6) * 0x123C21;
+        return (byte) (RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] ^
+                ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26)
+                ^ (x + y >> 2 & 0x3F) ^ (x - y >> 2 & 0x3F));
     }
 }

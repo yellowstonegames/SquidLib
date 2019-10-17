@@ -4700,13 +4700,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 131:
-                        Gdx.graphics.setTitle("Blue Noise with tile adjust" + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Blue Noise with regional adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                iBright = Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 1234567);
-                                bright = ((BlueNoise.get(xx, yy) + 128 ^ iBright ^ (xx + yy >> 2 & 0x3F) ^ (xx - yy >> 2 & 0x3F)) & 255) / 255f;
+                                bright = ((BlueNoise.get(xx, yy) ^ 128 ^ Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 1234567)
+                                        ^ (xx + yy >> 2 & 0x3F) ^ (xx - yy >> 2 & 0x3F)) & 255) / 255f;
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
