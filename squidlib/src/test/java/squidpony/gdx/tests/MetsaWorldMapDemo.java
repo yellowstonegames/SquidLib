@@ -10,9 +10,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.MetsaMapFactory;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.List;
 
@@ -56,7 +58,9 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
     private List<Coord> cities;
     private void remake()
     {
-        mapFactory = new MetsaMapFactory(width, height);
+        StatefulRNG srng = new StatefulRNG();
+        System.out.println("Seed used: 0x" + StringKit.hex(srng.getState()) + "L");
+        mapFactory = new MetsaMapFactory(width, height, srng);
         map = mapFactory.getHeightMap();
         biomeMap = mapFactory.makeBiomeMap();
         mapFactory.makeWeightedMap();
@@ -146,27 +150,27 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
 
 //                use alpha to blend
                 if (n > 0) {
-                    color = colorFactory.lerp(color, SColor.ALICE_BLUE, (float)Math.pow(n / highn, 2) / 2f);//high stuff gets lighter
-                    color = colorFactory.lerp(color, SColor.DARK_BLUE_DYE, (float)(0.2 - n * n));//low stuff gets darker
+                    color = colorFactory.lerp(color, SColor.ALICE_BLUE, (float)Math.pow(n / highn, 2) * 0.5f);//high stuff gets lighter
+                    color = colorFactory.lerp(color, SColor.DARK_BLUE_DYE, Math.max(0f, (float)(0.2 - n * n)));//low stuff gets darker
 
                     int shadow = mapFactory.getShadow(x, y, map);
                     if (n > MetsaMapFactory.SNOW_LEVEL && (biomeMap[x][y] == 1 || biomeMap[x][y] == 3)) {//SNOWAREA VOLCANO CASE
                         if (shadow == -1) {//shadow side INVERSE
 //                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
-                            color = colorFactory.lerp(color, SColor.DENIM, (float)(0.2 * n / 2));
+                            color = colorFactory.lerp(color, SColor.DENIM, (float)(0.1 * n));
                         }
                         if (shadow == 1) {//sun side INVERSE
 //                            color = SColorFactory.blend(color, new SColor(255, 255, 0), 0.1);
-                            color = colorFactory.lerp(color, SColor.BRASS, (float)(0.1 * n / 2));
+                            color = colorFactory.lerp(color, SColor.BRASS, (float)(0.05 * n));
                         }
                     } else {
                         if (shadow == 1) { //shadow side
 //                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
-                            color = colorFactory.lerp(color, SColor.ONANDO, (float)(0.2 * n / 2));
+                            color = colorFactory.lerp(color, SColor.ONANDO, (float)(0.1 * n));
                         }
                         if (shadow == -1) {//sun side
 //                            color = SColorFactory.blend(color, new SColor(220, 220, 100), 0.2);
-                            color = colorFactory.lerp(color, SColor.YELLOW, (float)(0.2 * n / 2));
+                            color = colorFactory.lerp(color, SColor.YELLOW, (float)(0.1 * n));
                         }
                     }
                 }

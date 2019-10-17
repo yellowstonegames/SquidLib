@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
+import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.PerlinNoise;
 
 /**
@@ -10,16 +11,17 @@ import squidpony.squidmath.PerlinNoise;
  */
 @Beta
 public class HeightMapFactory {
+    private static final int[] perlinDivisors = {1, 1, 2, 4, 8, 16, 64};
+
     /**
      * Returns a randomly generated map of doubles. Commonly referred to as a
      * Height Map. Uses {@link PerlinNoise} in layers to generate coherent heights.
      *
-     * @param width in cells
+     * @param width  in cells
      * @param height in cells
      * @param offset a double that changes the sampling process; often randomly generated
      * @return the created map as a 2D double array
      */
-    private static final int[] perlinDivisors = {1, 1, 2, 4, 8, 16, 64};
     public static double[][] heightMap(int width, int height, double offset) {
         double[][] heightMap = new double[width][height];
 
@@ -45,5 +47,25 @@ public class HeightMapFactory {
             }
         }
         return heightMap;
+    }
+    private static final FastNoise noise = new FastNoise(1, 0x1p-5f, FastNoise.SIMPLEX_FRACTAL, 7);
+    /**
+     * Returns a randomly generated map of floats. Commonly referred to as a
+     * Height Map. Uses {@link FastNoise} (producing) FBM Simplex noise) to generate coherent heights.
+     *
+     * @param width  in cells
+     * @param height in cells
+     * @param seed   an int that significantly changes the generation process (more than an offset does)
+     * @return the created map as a 2D float array
+     */
+    public static float[][] heightMapSeeded(int width, int height, int seed) {
+        noise.setSeed(seed);
+        float[][] heights = new float[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                heights[x][y] = noise.getConfiguredNoise(x, y);
+            }
+        }
+        return heights;
     }
 }
