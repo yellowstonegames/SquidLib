@@ -2,6 +2,8 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
+import squidpony.squidmath.BlueNoise;
+import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.SilkRNG;
 
 import java.util.ArrayList;
@@ -59,4 +61,36 @@ public abstract class WildMap<T> {
     }
     
     public abstract void generate();
+    
+    public static class IceMap<T> extends WildMap<T>{
+        public IceMap(){
+            this(128,128);
+        }
+        public IceMap(int width, int height)
+        {
+            this(width, height, new SilkRNG());
+        }
+        public IceMap(int width, int height, int seedA, int seedB)
+        {
+            this(width, height, new SilkRNG(seedA, seedB));
+        }
+        public IceMap(int width, int height, SilkRNG rng) {
+            super(width, height, rng);
+            floorTypes = new String[]{"snowy ground", "snowy ground", "icy ground", };
+        }
+        @Override
+        public void generate() {
+            ArrayTools.fill(content, -1);
+            final int seed = rng.nextInt(), otherSeed = rng.nextInt();
+            final int limit = contentTypes.size(), floorLimit = floorTypes.length;
+            int b;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if((b = BlueNoise.getSeeded(x, y, seed) + 128) < limit)
+                        content[x][y] = b;
+                    floors[x][y] = (int)((FastNoise.instance.layered2D(x,  y, otherSeed, 2, 0x1p-5f) * 0.4999f + 0.5f) * floorLimit);
+                }
+            }
+        }
+    }
 }

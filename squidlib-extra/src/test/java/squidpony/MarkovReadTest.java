@@ -8,7 +8,7 @@ import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import java.util.List;
 
 /**
- * Reads in a compressed MarkovTextLimited object from a file and generates/prints text with it.
+ * Reads in a compressed MarkovText object from a file and generates/prints text with it.
  * <br>
  * Created by Tommy Ettinger on 7/17/2018.
  */
