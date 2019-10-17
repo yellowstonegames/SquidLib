@@ -16,7 +16,7 @@ import squidpony.annotation.Beta;
  * <li>
  * There is a libgdx-{@code Group} based implementation that offers more
  * features and that you should likely use if you're a new user (in
- * squidlib-gdx).
+ * squidlib's display module).
  * </li>
  * </ul>
  * 
