@@ -141,9 +141,6 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
      *
      * Only includes rooms ('.' for floor and '#' for walls), corridors (using the same chars as rooms) and doors ('+'
      * for closed doors, does not generate open doors).
-     * <br>
-     * There is also a create method that produces a 2D array of Terrain objects, which could (maybe) be what you want.
-     * More methods in SquidLib expect char 2D arrays than Terrain anything, particularly in DungeonUtility.
      * @return a 2D char array version of the map
      */
     public char[][] generate()
@@ -464,7 +461,8 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         for (int x = 0; x < horizontalRooms; x++) {
             for (int y = 0; y < verticalRooms; y++) {
                 ClassicRogueRoom room = rooms[x][y];
-                for (ClassicRogueRoom otherRoom : room.connections) {
+                for (int r = 0; r < room.connections.size(); r++) {
+                    ClassicRogueRoom otherRoom = room.connections.getAt(r);
                     Direction dir = Direction.getCardinalDirection(otherRoom.cellx - room.cellx, otherRoom.celly - room.celly);
                     digPath(randomWallPosition(room, dir), randomWallPosition(otherRoom, dir.opposite()));
                 }
