@@ -98,7 +98,7 @@ public class WorldMapView {
     public static float coastalColor = SColor.lightenFloat(shallowColor, 0.3f);
     public static float foamColor =    SColor.floatGetI(61,  162, 215);
 
-    private static float[] biomeColors = {
+    protected float[] biomeColors = {
             desertColor,
             savannaColor,
             tropicalRainforestColor,
@@ -116,7 +116,7 @@ public class WorldMapView {
             emptyColor
     };
 
-    protected final static float[] BIOME_TABLE = {
+    public final static float[] BIOME_TABLE = {
             //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
             Ice+0.7f,   Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
             Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER
@@ -129,7 +129,8 @@ public class WorldMapView {
             Ice+0.2f,   Shallow+0.9f, Shallow+0.65f,       Shallow+0.5f,             Shallow+0.4f,            Shallow+0.3f,            //LAKES
             Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
             Empty                                                                                                                      //SPACE
-    }, BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
+    };
+    protected final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
     
     public void initialize()
     {
