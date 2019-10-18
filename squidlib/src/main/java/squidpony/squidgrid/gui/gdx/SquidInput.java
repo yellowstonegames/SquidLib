@@ -3,6 +3,8 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.badlogic.gdx.utils.TimeUtils;
+import squidpony.squidmath.IntIntOrderedMap;
 import squidpony.squidmath.IntVLA;
 
 /**
@@ -69,9 +71,9 @@ public class SquidInput extends InputAdapter {
     protected SquidMouse mouse;
     protected final IntVLA queue = new IntVLA();
     protected long lastKeyTime = -1000000L;
-    protected int lastKeyCode = -1;
+    protected IntIntOrderedMap heldCodes = new IntIntOrderedMap(64, 0.25f);
     protected long repeatGapMillis = 220L;
-    public final IntIntMap mapping = new IntIntMap(128);
+    public final IntIntMap mapping = new IntIntMap(128, 0.25f);
     /**
      * Constructs a new SquidInput that does not respond to keyboard or mouse input. These can be set later by calling
      * setKeyHandler() to allow keyboard handling or setMouse() to allow mouse handling on a grid.
@@ -479,18 +481,19 @@ public class SquidInput extends InputAdapter {
      */
     public boolean hasNext()
     {
-        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
+        if( 
+                Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
                 && !Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
                 && !Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)
                 && !Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
                 && !Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)
                 && !Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)
                 && !Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT)
-                && lastKeyCode >= 0
-                && System.currentTimeMillis() - lastKeyTime > repeatGapMillis // defaults to 220 ms
+                && !heldCodes.isEmpty()
+                && TimeUtils.timeSinceMillis(lastKeyTime) > repeatGapMillis // defaults to 220 ms
                 )
         {
-            keyDown(lastKeyCode);
+            keyDown(heldCodes.lastKey());
         }
         return queue.size > 0;
     }
@@ -508,9 +511,16 @@ public class SquidInput extends InputAdapter {
         if (qu.isEmpty()) {
             return;
         }
+//        
+//        for (int i = 0; i < qu.size; i++) {
+//            System.out.print((char)qu.get(i));
+//        }
+//        System.out.println();
+//        
         int t = qu.removeIndex(0);
         t = mapping.get(t, t);
         keyAction.handle((char)t, (t & 0x10000) != 0, (t & 0x20000) != 0, (t & 0x40000) != 0);
+        
     }
 
     /**
@@ -522,12 +532,11 @@ public class SquidInput extends InputAdapter {
     }
 
     @Override
-	public boolean keyDown (int keycode) {
+    public boolean keyDown (int keycode) {
         if (ignoreInput || keyAction == null) {
             return false;
         }
-        lastKeyTime = System.currentTimeMillis();
-        lastKeyCode = keycode;
+        heldCodes.put(keycode, (int)(lastKeyTime = TimeUtils.millis()));
         boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         int c = fromCode(keycode, shift);
         if(c != '\0') {
@@ -537,15 +546,18 @@ public class SquidInput extends InputAdapter {
                     ? 0x20000 : 0;
             c |= (shift)
                     ? 0x40000 : 0;
+            //if(queue.isEmpty()) 
             queue.add(c);
+            //else 
+            //    queue.set(0, c);
         }
         return false;
     }
-
     @Override
 	public boolean keyUp (int keycode) {
-//        queue.add(KEY_UP);
-//        queue.add(keycode);
+        heldCodes.remove(keycode);
+        if(heldCodes.isEmpty())
+            queue.clear();
         return false;
     }
 
