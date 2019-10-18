@@ -2195,12 +2195,18 @@ public class TextCellFactory implements Disposable {
      * TextCellFactory, and can't be constructed without a TextCellFactory being involved; usually you instantiate
      * Glyphs with {@link #glyph(char, Color, float, float)} or an overload of that method on TextCellFactory.
      */
-    public class Glyph extends Actor
+    public class Glyph extends Actor implements ICellVisible
     {
         /**
          * The char that will be shown for this Glyph.
          */
         public char shown;
+        
+        @Override
+        public char getSymbol()
+        {
+            return shown;
+        }
 
         /**
          * Makes an orange '@' Glyph at 0,0 in world coordinates.
@@ -2242,6 +2248,7 @@ public class TextCellFactory implements Disposable {
          * Gets the color of this Glyph as a packed float color; does not allocate any objects.
          * @return the color of this Glyph as a packed float
          */
+        @Override
         public float getPackedColor() {
             return getColor().toFloatBits();
         }
