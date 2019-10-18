@@ -269,6 +269,17 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
+     * Puts the ICellVisible cell at the position x,y; does not change the background. If {@code cell.getPackedColor()}
+     * is 0f, then this does not change the foreground contents either. Does not filter the given colors.
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param cell an ICellVisible, which is often implemented outside of SquidLib; this uses its char and color.
+     */
+    public void put(int x, int y, ICellVisible cell) {
+        put(x, y, cell.getSymbol(), cell.getPackedColor(), 0f);
+    }
+
+    /**
      * Puts the given string horizontally with the first character at the given
      * offset. Uses the given color for the text and does not change the background
      * color at all.
@@ -760,6 +771,20 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     {
         put(x, y, c, foreground == null ? 0f : scc.filter(foreground).toFloatBits(),
                 background == null ? 0f : scc.filter(background).toFloatBits());
+    }
+    /**
+     * Puts the ICellVisible cell at the position x,y with the given background color as an encoded float, such as
+     * those produced by {@link Color#toFloatBits()}. If {@code cell.getPackedColor()} is 0f, then this does not
+     * change the foreground contents. If background is 0f, this does not change the background. Does not filter the
+     * given colors.
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param cell an ICellVisible, which is often implemented outside of SquidLib; this uses its char and color.
+     * @param background the color to use for the cell; if null or fully transparent, nothing will change in the background
+     */
+    public void put(int x, int y, ICellVisible cell, float background)
+    {
+        put(x, y, cell.getSymbol(), cell.getPackedColor(), background);
     }
     /**
      * Puts the char c at the position x,y with the given foreground and background colors as encoded floats, such as
