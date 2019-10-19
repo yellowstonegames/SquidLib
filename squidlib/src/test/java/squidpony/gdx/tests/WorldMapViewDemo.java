@@ -28,9 +28,9 @@ public class WorldMapViewDemo extends ApplicationAdapter {
 //    private static final int width = 512, height = 256;
 //    private static final int width = 256, height = 256;
 //    private static final int width = 400, height = 400; // fast rotations
-//    private static final int width = 300, height = 300;
+    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
-    private static final int width = 900, height = 900;
+//    private static final int width = 900, height = 900;
 //    private static final int width = 700, height = 700;
 //    private static final int width = 512, height = 512;
 //    private static final int width = 128, height = 128;
@@ -96,10 +96,10 @@ public class WorldMapViewDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
-//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
+        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0625, 2.5);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0, 2.0);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.2, 0.0, 2.0);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.65);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), WorldMapGenerator.DEFAULT_NOISE, 0.9);
