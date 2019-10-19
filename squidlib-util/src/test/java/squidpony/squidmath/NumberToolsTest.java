@@ -88,8 +88,8 @@ public class NumberToolsTest {
     Assert.assertEquals(-0x1.6a61f2p-1f, NumberTools.cos(-0x1.f6a936p+1f), 0.0f);
     Assert.assertEquals(0x1.fff1139353f1cp-1, NumberTools.cos(0x1.f03bda2455007p-7), 0.0);
     for (float f = 0f; f <= 6.283185307179586f; f += 0.001f) {
-      Assert.assertEquals("Bad result at " + f, Math.round(Math.sin(f) * 256), Math.round(NumberTools.sin(f) * 256));
-      Assert.assertEquals("Bad result at " + f, Math.round(Math.cos(f) * 256), Math.round(NumberTools.cos(f) * 256));
+      Assert.assertTrue("Bad result at " + f, Math.abs(Math.sin(f) - NumberTools.sin(f)) < 0.002);
+      Assert.assertTrue("Bad result at " + f, Math.abs(Math.cos(f) - NumberTools.cos(f)) < 0.002);
     }
 
   }
@@ -111,30 +111,30 @@ public class NumberToolsTest {
   }
   @Test
   public void testInverseTrig() {
-    System.out.println(" 1.000: Should be " + Math.asin(1.0) + ", approx is " + NumberTools.asin(1.0));
-    System.out.println("-1.000: Should be " + Math.asin(-1.0) + ", approx is " + NumberTools.asin(-1.0));
-    System.out.println("-0.998: Should be " + Math.asin(-0.998) + ", approx is " + NumberTools.asin(-0.998));
-    System.out.println(" 0.998: Should be " + Math.asin(0.998) + ", approx is " + NumberTools.asin(0.998));
+//    System.out.println(" 1.000: Should be " + Math.asin(1.0) + ", approx is " + NumberTools.asin(1.0));
+//    System.out.println("-1.000: Should be " + Math.asin(-1.0) + ", approx is " + NumberTools.asin(-1.0));
+//    System.out.println("-0.998: Should be " + Math.asin(-0.998) + ", approx is " + NumberTools.asin(-0.998));
+//    System.out.println(" 0.998: Should be " + Math.asin(0.998) + ", approx is " + NumberTools.asin(0.998));
     for (double f = -1f; f <= 1f; f += 0.001) {
-      Assert.assertTrue("Bad asin_ result at " + f, Math.abs(Math.asin(f) - NumberTools.asin(f)) < 0.02);
-      Assert.assertTrue("Bad acos_ result at " + f, Math.abs(Math.acos(f) - NumberTools.acos(f)) < 0.02);
+      Assert.assertTrue("Bad asin result at " + f, Math.abs(Math.asin(f) - NumberTools.asin(f)) < 0.025);
+      Assert.assertTrue("Bad acos result at " + f, Math.abs(Math.acos(f) - NumberTools.acos(f)) < 0.025);
     }
   }
   @Test
   public void testInverseTrigTurns() {
-    System.out.println("asin:");
-    System.out.println(" 1.000: Should be " + ((Math.asin(1.0) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(1.0));
-    System.out.println("-1.000: Should be " + ((Math.asin(-1.0) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(-1.0));
-    System.out.println("-0.998: Should be " + ((Math.asin(-0.998) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(-0.998));
-    System.out.println(" 0.998: Should be " + ((Math.asin(0.998) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(0.998));
-    System.out.println("acos:");
-    System.out.println(" 1.000: Should be " + ((Math.acos(1.0) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(1.0));
-    System.out.println("-1.000: Should be " + ((Math.acos(-1.0) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(-1.0));
-    System.out.println("-0.998: Should be " + ((Math.acos(-0.998) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(-0.998));
-    System.out.println(" 0.998: Should be " + ((Math.acos(0.998) / (2.0 * Math.PI) + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(0.998));
+//    System.out.println("asin:");
+//    System.out.println(" 1.000: Should be " + ((Math.asin(1.0) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(1.0));
+//    System.out.println("-1.000: Should be " + ((Math.asin(-1.0) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(-1.0));
+//    System.out.println("-0.998: Should be " + ((Math.asin(-0.998) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(-0.998));
+//    System.out.println(" 0.998: Should be " + ((Math.asin(0.998) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.asin_(0.998));
+//    System.out.println("acos:");
+//    System.out.println(" 1.000: Should be " + ((Math.acos(1.0) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(1.0));
+//    System.out.println("-1.000: Should be " + ((Math.acos(-1.0) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(-1.0));
+//    System.out.println("-0.998: Should be " + ((Math.acos(-0.998) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(-0.998));
+//    System.out.println(" 0.998: Should be " + ((Math.acos(0.998) * 0.15915494309189535 + 1.0) % 1.0) + ", approx is " + NumberTools.acos_(0.998));
     for (float f = -1f; f <= 1f; f += 0.001f) {
-      Assert.assertTrue("Bad asin_ result at " + f, Math.abs(((Math.asin(f) / (2.0 * Math.PI) + 1.0) % 1.0) - NumberTools.asin_(f)) < 0.025);
-      Assert.assertTrue("Bad acos_ result at " + f, Math.abs(((Math.acos(f) / (2.0 * Math.PI) + 1.0) % 1.0) - NumberTools.acos_(f)) < 0.025);
+      Assert.assertTrue("Bad asin_ result at " + f, Math.abs(((Math.asin(f) * 0.15915494309189535 + 1.0) % 1.0) - NumberTools.asin_(f)) < 0.001);
+      Assert.assertTrue("Bad acos_ result at " + f, Math.abs(((Math.acos(f) * 0.15915494309189535 + 1.0) % 1.0) - NumberTools.acos_(f)) < 0.001);
     }
   }
 
