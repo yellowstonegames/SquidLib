@@ -1,6 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import squidpony.ArrayTools;
 import squidpony.Maker;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
@@ -15,7 +16,7 @@ import static squidpony.squidgrid.gui.gdx.WorldMapView.*;
 public class WildMapView {
     protected int width, height;
     protected float[][] colorMap;
-    public WildMap<ICellVisible> wildMap;
+    public WildMap<? extends ICellVisible> wildMap;
 
     public int getWidth() {
         return width;
@@ -29,11 +30,11 @@ public class WildMapView {
         return colorMap;
     }
     
-    public WildMap<ICellVisible> getWildMap() {
+    public WildMap<? extends ICellVisible> getWildMap() {
         return wildMap;
     }
 
-    public void setWildMap(WildMap<ICellVisible> wildMap) {
+    public void setWildMap(WildMap<? extends ICellVisible> wildMap) {
         this.wildMap = wildMap;
         if(this.width != wildMap.width || this.height != wildMap.height)
         {
@@ -43,12 +44,16 @@ public class WildMapView {
         }
     }
 
-    public WildMapView(WildMap<ICellVisible> wildMap)
+    public WildMapView()
+    {
+        this(null);
+    }
+    public WildMapView(WildMap<? extends ICellVisible> wildMap)
     {
         this.wildMap = wildMap == null 
-                ? new WildMap<ICellVisible>(128, 128, 0, new SilkRNG(),
+                ? new WildMap<>(128, 128, 0, new SilkRNG(),
                 Maker.makeList("snow", "snow", "ice"),
-                Maker.<ICellVisible>makeList(new ICellVisible.Impl('.', iceColor)))
+                Maker.makeList(new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.05f), "snow mound")))
                 : wildMap;
         width = this.wildMap.width;
         height = this.wildMap.height;
@@ -61,11 +66,6 @@ public class WildMapView {
         this(new WildMap<ICellVisible>(width, height, biome));
     }
     
-    public void generate()
-    {
-        wildMap.generate();
-    }
-
     protected float[] biomeColors = {
             desertColor,
             savannaColor,
@@ -187,14 +187,14 @@ public class WildMapView {
     }
 
 
-    public float[][] show()
+    public void generate()
     {
+        wildMap.generate();
         float baseColor = BIOME_COLOR_TABLE[wildMap.biome & 1023];
         long change = 0x632BE59BD9B4E019L, h; // some big number with well-distributed bits; can be changed
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 change += (h = CrossHash.hash64(wildMap.floorTypes.get(wildMap.floors[x][y])));
-                
                 colorMap[x][y] = SColor.toEditedFloat(baseColor,
                         0x1p-19f * ((h & 0xFFFF) - 0xA000 + (change >>> 16 & 0x3FFF)),
                         0x1p-18f * ((h >>> 16 & 0xFFFF) - 0xA000 + (change >>> 32 & 0x3FFF)),
@@ -202,7 +202,17 @@ public class WildMapView {
                         0f);
             }
         }
-        
-        return colorMap;
+    }
+    
+    public void show(SparseLayers layers)
+    {
+        ArrayTools.insert(colorMap, layers.backgrounds, 0, 0);
+        int c;
+        for (int x = 0; x < width && x < layers.gridWidth; x++) {
+            for (int y = 0; y < height && y < layers.gridHeight; y++) {
+                if((c = wildMap.content[x][y]) >= 0)
+                    layers.put(x, y, wildMap.contentTypes.get(c));
+            }
+        }
     }
 }
