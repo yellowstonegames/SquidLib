@@ -4420,7 +4420,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 boolean inSpace = true;
                 xPos = startX - rx;
                 ixPos = xPos / rx;
-                lat = NumberTools.asin_(iyPos) * 6.283185307179586;
+                lat = NumberTools.asin(iyPos);
                 for (int x = 0; x < width; x++, xPos += i_uw, ixPos += irx) {
                     rho = (ixPos * ixPos + iyPos * iyPos);
                     if(rho > 1.0) {
@@ -4435,7 +4435,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-                    th = NumberTools.asin_(rho) * 6.283185307179586; // c
+                    th = NumberTools.asin(rho); // c
                     lon = removeExcess((centerLongitude + (NumberTools.atan2(ixPos * rho, rho * NumberTools.cos(th)))) * 0.5);
 
                     qs = lat * 0.6366197723675814;
