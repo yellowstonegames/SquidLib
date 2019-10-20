@@ -230,7 +230,10 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     {
         long startTime = System.nanoTime();
         world.setCenterLongitude((startTime & 0xFFFFFFFFFFFFL) * 0x1p-32);
-        wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
+        //// maybe comment in next line if using something other than RotatingSpaceView
+        //wmv.generate(world.seedA, world.seedB, world.landModifier, world.heatModifier);
+        //// comment out next line if using something other than RotatingSpaceView
+        wmv.getBiomeMapper().makeBiomes(world);
         wmv.show();
         ttg = System.nanoTime() - startTime >> 20;
     }
