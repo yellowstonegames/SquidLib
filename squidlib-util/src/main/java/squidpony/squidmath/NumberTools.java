@@ -1362,60 +1362,156 @@ if y < 0 then r := -r
         }
     }
 
+//    /**
+//     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.
+//     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+//     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
+//     * than {@link Math#asin(double)}.
+//     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+//     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
+//     */
+//    public static double asin(double a) {
+//        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
+//                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+//    }
+//    /**
+//     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(float)}.
+//     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+//     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
+//     * than {@link Math#asin(double)}, and takes and returns a float.
+//     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+//     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
+//     */
+//    public static float asin(float a) {
+//        return (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
+//                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+//    }
     /**
-     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.
-     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
-     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
-     * than {@link Math#asin(double)}.
-     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
-     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
+     * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.
+     * This method is usually much faster than {@link Math#asin(double)}, but on some versions of OpenJ9 it is slower
+     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
+     * performance regression, but not likely that Math.asin() will speed up by 30x (Math.sin() has sped up, though).
+     * @param n an input to the inverse sine function, from -1 to 1 inclusive
+     * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.
      */
-    public static double asin(double a) {
-        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
-                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+    public static float asin(final float n)
+    {
+        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
+            return (n < 0f) ? -r : r;
+        }
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
+            return (n < 0f) ? -r : r;
+        }
+    }
+
+//    /**
+//     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(double)}.
+//     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+//     * Kjaer Christensen's unfinished math work on arc sine approximation</a>, with a basic change to go from arc sine
+//     * to arc cosine. This method is faster than {@link Math#acos(double)}.
+//     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+//     * @return an output from the inverse cosine function, from 0 to PI inclusive.
+//     */
+//    public static double acos(double a) {
+//        return 1.5707963267948966 - (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
+//                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+//    }
+
+    /**
+     * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.
+     * This method is usually much faster than {@link Math#asin(double)}, but on some versions of OpenJ9 it is slower
+     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
+     * performance regression, but not likely that Math.asin() will speed up by 30x (Math.sin() has sped up, though).
+     * @param n an input to the inverse sine function, from -1 to 1 inclusive
+     * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.
+     */
+    public static double asin(final double n)
+    {
+        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
+            return (n < 0.0) ? -r : r;
+        }
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
+            return (n < 0.0) ? -r : r;
+        }
     }
     /**
-     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(float)}.
-     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
-     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
-     * than {@link Math#asin(double)}, and takes and returns a float.
-     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
-     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
-     */
-    public static float asin(float a) {
-        return (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
-                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
-    }
-    /**
-     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(double)}.
-     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
-     * Kjaer Christensen's unfinished math work on arc sine approximation</a>, with a basic change to go from arc sine
-     * to arc cosine. This method is faster than {@link Math#acos(double)}.
-     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+     * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.
+     * This method is usually much faster than {@link Math#acos(double)}, but on some versions of OpenJ9 it is slower
+     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
+     * performance regression, but not likely that Math.acos() will speed up by 30x (Math.sin() has sped up, though).
+     * @param n an input to the inverse cosine function, from -1 to 1 inclusive
      * @return an output from the inverse cosine function, from 0 to PI inclusive.
      */
-    public static double acos(double a) {
-        return 1.5707963267948966 - (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
-                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
+    public static double acos(final double n)
+    {
+        final double ax = Math.abs(n), ay = Math.sqrt(1.0 - n * n);
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
+            return (n < 0.0) ? Math.PI - r : r;
+        }
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
+            return (n < 0.0) ? Math.PI - r : r;
+        }
     }
+//
+//    /**
+//     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(float)}.
+//     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+//     * Kjaer Christensen's unfinished math work on arc sine approximation</a>, with a basic change to go from arc sine
+//     * to arc cosine. This method is faster than {@link Math#acos(double)}, and takes and returns a float.
+//     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+//     * @return an output from the inverse cosine function, from 0 to PI inclusive.
+//     */
+//    public static float acos(float a) {
+//        return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
+//                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+//    }
+//
     /**
-     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(float)}.
-     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
-     * Kjaer Christensen's unfinished math work on arc sine approximation</a>, with a basic change to go from arc sine
-     * to arc cosine. This method is faster than {@link Math#acos(double)}, and takes and returns a float.
-     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+     * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.
+     * This method is usually much faster than {@link Math#acos(double)}, but on some versions of OpenJ9 it is slower
+     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
+     * performance regression, but not likely that Math.acos() will speed up by 30x (Math.sin() has sped up, though).
+     * @param n an input to the inverse cosine function, from -1 to 1 inclusive
      * @return an output from the inverse cosine function, from 0 to PI inclusive.
      */
-    public static float acos(float a) {
-        return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
-                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+    public static float acos(final float n)
+    {
+        final float ax = Math.abs(n), ay = (float) Math.sqrt(1f - n * n);
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
+            return (n < 0f) ? 3.14159265358979323846f - r : r;
+        }
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
+            return (n < 0.0) ? 3.14159265358979323846f - r : r;
+        }
     }
 
     /**
      * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
      * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).
      * <br>
-     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * This method is extremely similar to the non-turn approximation.
      * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
      * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}
      */
@@ -1439,7 +1535,7 @@ if y < 0 then r := -r
      * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
      * range from 0.0 (inclusive) to 0.5 (inclusive).
      * <br>
-     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * This method is extremely similar to the non-turn approximation.
      * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
      * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(double)}
      */
@@ -1465,7 +1561,7 @@ if y < 0 then r := -r
      * range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f
      * (inclusive).
      * <br>
-     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * This method is extremely similar to the non-turn approximation.
      * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
      * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}
      */
@@ -1489,7 +1585,7 @@ if y < 0 then r := -r
      * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
      * range from 0.0f (inclusive) to 0.5f (inclusive).
      * <br>
-     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * This method is extremely similar to the non-turn approximation.
      * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
      * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(float)}
      */
