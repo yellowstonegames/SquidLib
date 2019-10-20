@@ -155,6 +155,26 @@ public class ArrayTools {
         return target;
     }
 
+
+    /**
+     * Gets a copy of the 2D float array, source, that has the same data but shares no references with source.
+     *
+     * @param source a 2D float array
+     * @return a copy of source, or null if source is null
+     */
+    public static float[][] copy(float[][] source) {
+        if (source == null)
+            return null;
+        if (source.length < 1)
+            return new float[0][0];
+        float[][] target = new float[source.length][];
+        for (int i = 0; i < source.length; i++) {
+            target[i] = new float[source[i].length];
+            System.arraycopy(source[i], 0, target[i], 0, source[i].length);
+        }
+        return target;
+    }
+
     /**
      * Gets a copy of the 2D int array, source, that has the same data but shares no references with source.
      *
@@ -227,6 +247,28 @@ public class ArrayTools {
      * @return target, modified, with source inserted into it at the given position
      */
     public static double[][] insert(double[][] source, double[][] target, int x, int y) {
+        if (source == null || target == null)
+            return target;
+        if (source.length < 1 || source[0].length < 1)
+            return copy(target);
+        for (int i = 0; i < source.length && x + i < target.length; i++) {
+            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[x + i].length - y));
+        }
+        return target;
+    }
+
+    /**
+     * Inserts as much of source into target at the given x,y position as target can hold or source can supply.
+     * Modifies target in-place and also returns target for chaining.
+     * Used primarily to place a smaller array into a different position in a larger array, often freshly allocated.
+     *
+     * @param source a 2D float array that will be copied and inserted into target
+     * @param target a 2D float array that will be modified by receiving as much of source as it can hold
+     * @param x      the x position in target to receive the items from the first cell in source
+     * @param y      the y position in target to receive the items from the first cell in source
+     * @return target, modified, with source inserted into it at the given position
+     */
+    public static float[][] insert(float[][] source, float[][] target, int x, int y) {
         if (source == null || target == null)
             return target;
         if (source.length < 1 || source[0].length < 1)
