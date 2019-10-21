@@ -220,9 +220,18 @@ public class WorldMapViewDemo extends ApplicationAdapter {
         //// higher landModifier means more land, lower means more water; the middle is 1.0.
         //// higher heatModifier means hotter average temperature, lower means colder; the middle is 1.0.
         //// heatModifier defaults to being higher than 1.0 on average here so polar ice caps are smaller.
-        wmv.generate((int)(seed & 0xFFFFFFFFL), (int) (seed >>> 32),
-                0.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
-                DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.55 + 0.9);
+        world.seedA = (int)(seed & 0xFFFFFFFFL);
+        world.seedB = (int) (seed >>> 32);
+        wmv.generate();
+        // earlier settings
+//        wmv.generate((int)(seed & 0xFFFFFFFFL), (int) (seed >>> 32),
+//                0.9 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
+//                DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.55 + 0.9);
+        // implementation used in WorldMapView.generate() with no args
+//        wmv.generate(world.seedA, world.seedB,
+//                1.0 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.25,
+//                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.25 + 1.0);
+
         wmv.show();
         ttg = System.nanoTime() - startTime >> 20;
     }

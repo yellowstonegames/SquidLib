@@ -25,7 +25,6 @@ import squidpony.squidmath.*;
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
  * It seems to mostly work now, though it only generates one view of the map that it renders (but biome, moisture, heat,
  * and height maps can all be requested from it).
- * Currently, clouds are in progress, and look like <a href="http://i.imgur.com/Uq7Whzp.gifv">this preview</a>.
  */
 public class WorldMapTextDemo extends ApplicationAdapter {
     public static final int
@@ -45,48 +44,46 @@ public class WorldMapTextDemo extends ApplicationAdapter {
             Ocean                  = 13,
             Empty                  = 14;
     
-//    public static final char[]  terrainChars = {
-//            '¿', //sand
-//            '„', //lush grass
-//            '♣', //jungle
-//            '‚', //barren grass
-//            '¥', //forest
-//            '¥', //forest
-//            '♣', //jungle
-//            '¥', //forest
-//            '‚', //barren grass
-//            '¤', //ice
-//            '.', //sand
-//            '∆', //rocky
-//            '~', //shallow
-//            '≈', //ocean
-//            ' ', //empty space
-//            //'■', //active city
-//            '□', //empty city
-//            
-//            
-//    };
-public static final char[]  terrainChars = {
-        '.', //sand
-        '"', //lush grass
-        '?', //jungle
-        '\'', //barren grass
-        '$', //forest
-        '$', //forest
-        '?', //jungle
-        '$', //forest
-        '‚', //barren grass
-        '*', //ice
-        '.', //sand
-        '^', //rocky
-        '~', //shallow
-        '~', //ocean
-        ' ', //empty space
-        //'■', //active city
-        '#', //empty city
+    public static final char[]  terrainChars = {
+            '¿', //sand
+            '„', //lush grass
+            '♣', //jungle
+            '‚', //barren grass
+            '¥', //forest
+            '¥', //forest
+            '♣', //jungle
+            '¥', //forest
+            '‚', //barren grass
+            '¤', //ice
+            '.', //sand
+            '∆', //rocky
+            '~', //shallow
+            '≈', //ocean
+            ' ', //empty space
+            //'■', //active city
+            '□', //empty city
 
 
-};
+    };
+//public static final char[]  terrainChars = {
+//        '.', //sand
+//        '"', //lush grass
+//        '?', //jungle
+//        '\'', //barren grass
+//        '$', //forest
+//        '$', //forest
+//        '?', //jungle
+//        '$', //forest
+//        '‚', //barren grass
+//        '*', //ice
+//        '.', //sand
+//        '^', //rocky
+//        '~', //shallow
+//        '~', //ocean
+//        ' ', //empty space
+//        //'■', //active city
+//        '#', //empty city
+//};
     //private static final int bigWidth = 314 * 3, bigHeight = 300;
 //    private static final int bigWidth = 256, bigHeight = 256;
 //    private static final int bigWidth = 1024, bigHeight = 512;
@@ -104,6 +101,7 @@ public static final char[]  terrainChars = {
     private long seed;
     private Vector3 position, previousPosition, nextPosition;
     private WorldMapGenerator.MimicMap world;
+    private WorldMapView wmv;
     private PoliticalMapper pm;
     private OrderedMap<Character, FakeLanguageGen> atlas;
     private OrderedMap<Coord, String> cities;
@@ -113,8 +111,6 @@ public static final char[]  terrainChars = {
     //private float nation = 0f;
     private long ttg = 0; // time to generate
     private float moveAmount = 0f;
-    private WorldMapGenerator.DetailedBiomeMapper dbm;
-    private char[][] political;
     private static float black = SColor.FLOAT_BLACK,
             white = SColor.FLOAT_WHITE;
     // Biome map colors
@@ -216,10 +212,11 @@ public static final char[]  terrainChars = {
         rng = new StatefulRNG(seed);
 //// you can use whatever map you have instead of fantasy_map.png, where white means land and black means water
 //        Pixmap pix = new Pixmap(Gdx.files.internal("special/fantasy_map.png"));
+//        final int bigWidth = pix.getWidth() / 4, bigHeight = pix.getHeight() / 4;
 //        GreasedRegion basis = new GreasedRegion(bigWidth, bigHeight);
 //        for (int x = 0; x < bigWidth; x++) {
 //            for (int y = 0; y < bigHeight; y++) {
-//                if(pix.getPixel(x << 2, y << 2) < 0)
+//                if(pix.getPixel(x * 4, y * 4) < 0) // only counts every fourth row and every fourth column
 //                    basis.insert(x, y);
 //            }
 //        }
@@ -232,11 +229,12 @@ public static final char[]  terrainChars = {
 //        world = new WorldMapGenerator.LocalMimicMap(seed, basis, FastNoise.instance, 0.8);
 //        pix.dispose();
 
-        world = new WorldMapGenerator.MimicMap(seed, FastNoise.instance, 0.8); // uses a map of Australia for land
+        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
-        dbm = new WorldMapGenerator.DetailedBiomeMapper();
+        wmv = new WorldMapView(world);
         pm = new PoliticalMapper(FakeLanguageGen.SIMPLISH.word(rng, true));
         cities = new OrderedMap<>(96);
+        atlas = new OrderedMap<>(80);
         position = new Vector3(bigWidth * cellWidth * 0.5f, bigHeight * cellHeight * 0.5f, 0);
         previousPosition = position.cpy();
         nextPosition = position.cpy();
@@ -267,7 +265,6 @@ public static final char[]  terrainChars = {
                         Gdx.app.exit();
                     }
                 }
-                Gdx.graphics.requestRendering();
             }
         }, new SquidMouse(1, 1, bigWidth * cellWidth, bigHeight * cellHeight, 0, 0, new InputAdapter()
         {
@@ -289,43 +286,49 @@ public static final char[]  terrainChars = {
         stage.addActor(display);
     }
 
-    public void zoomIn() {
-        zoomIn(bigWidth >> 1, bigHeight >> 1);
-    }
-    public void zoomIn(int zoomX, int zoomY)
-    {
-        long startTime = System.currentTimeMillis();
-        world.zoomIn(1, zoomX, zoomY);
-        dbm.makeBiomes(world);
-        //counter = 0L;
-        ttg = System.currentTimeMillis() - startTime;
-    }
-    public void zoomOut()
-    {
-        zoomOut(bigWidth >>1, bigHeight >>1);
-    }
-    public void zoomOut(int zoomX, int zoomY)
-    {
-        long startTime = System.currentTimeMillis();
-        world.zoomOut(1, zoomX, zoomY);
-        dbm.makeBiomes(world);
-        //counter = 0L;
-        ttg = System.currentTimeMillis() - startTime;
-    }
+//    public void zoomIn() {
+//        zoomIn(bigWidth >> 1, bigHeight >> 1);
+//    }
+//    public void zoomIn(int zoomX, int zoomY)
+//    {
+//        long startTime = System.currentTimeMillis();
+//        world.zoomIn(1, zoomX, zoomY);
+//        dbm.makeBiomes(world);
+//        //counter = 0L;
+//        ttg = System.currentTimeMillis() - startTime;
+//    }
+//    public void zoomOut()
+//    {
+//        zoomOut(bigWidth >>1, bigHeight >>1);
+//    }
+//    public void zoomOut(int zoomX, int zoomY)
+//    {
+//        long startTime = System.currentTimeMillis();
+//        world.zoomOut(1, zoomX, zoomY);
+//        dbm.makeBiomes(world);
+//        //counter = 0L;
+//        ttg = System.currentTimeMillis() - startTime;
+//    }
     public void generate(final long seed)
     {
         long startTime = System.currentTimeMillis();
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
-        world.generate(0.975 + NumberTools.formCurvedDouble(seed) * 0.075, 1.125, seed);
-        dbm.makeBiomes(world);
-        atlas = new OrderedMap<>(80);
+        world.seedA = (int)(seed & 0xFFFFFFFFL);
+        world.seedB = (int) (seed >>> 32);
+        wmv.generate();
+        wmv.show();
         atlas.clear();
         for (int i = 0; i < 64; i++) {
-            atlas.put(ArrayTools.letterAt(i), FakeLanguageGen.randomLanguage(rng).removeAccents());
+            atlas.put(ArrayTools.letterAt(i),
+                    rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages).mix(rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages), rng.nextFloat()).removeAccents());
         }
-        political = pm.generate(world, atlas, 1.0);
+        final char[][] political = pm.generate(world, atlas, 1.0);
         cities.clear();
-        Coord[] points = world.earth.copy().disperse8way().removeEdges().mixedRandomSeparated(0.05, 96, rng.nextLong());
+        Coord[] points = world.earth
+                .copy() // don't want to edit the actual earth map
+                .removeEdges() // don't want cities on the edge of the map
+                .separatedRegionBlue(0.1, 500) // get 500 points in a regularly-tiling but unpredictable, sparse pattern
+                .randomPortion(rng,112); // randomly select less than 1/4 of those points, breaking the pattern
         for (int i = 0; i < points.length; i++) {
             char p = political[points[i].x][points[i].y];
             if(p == '~' || p == '%')
@@ -343,11 +346,12 @@ public static final char[]  terrainChars = {
     public void putMap() {
         // uncomment next line to generate maps as quickly as possible
         //generate(rng.nextLong());
-        ArrayTools.fill(display.backgrounds, -0x1.0p125F);
+//        ArrayTools.fill(display.backgrounds, -0x1.0p125F);
+        ArrayTools.insert(wmv.getColorMap(), display.backgrounds, 0, 0);
+        WorldMapGenerator.DetailedBiomeMapper dbm = wmv.getBiomeMapper();
         int hc, tc, codeA, codeB;
-        float shown, mix;
+        float mix;
         int[][] heightCodeData = world.heightCodeData;
-        double[][] heightData = world.heightData;
         //double xp, yp, zp;
         for (int y = 0; y < bigHeight; y++) {
             PER_CELL:
@@ -363,20 +367,13 @@ public static final char[]  terrainChars = {
                         case 0:
                         case 1:
                         case 2:
+                            display.put(x, y, '≈', SColor.darkenFloat(ice, 0.45f));
+                            continue PER_CELL;
                         case 3:
-                            shown = SColor.lerpFloatColors(shallowColor, ice,
-                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
-//                            if(cloud > 0.0)
-//                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                            display.put(x, y, '~', SColor.darkenFloat(ice, 0.35f), shown);
+                            display.put(x, y, '~', SColor.darkenFloat(ice, 0.35f));
                             continue PER_CELL;
                         case 4:
-                            shown = SColor.lerpFloatColors(lightIce, ice,
-                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));
-//                            if(cloud > 0.0)
-//                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                            //display.put(x, y, '¤', SColor.darkenFloat(ice, 0.25f), shown);
-                            display.put(x, y, '*', SColor.darkenFloat(ice, 0.25f), shown);
+                            display.put(x, y, '¤', SColor.darkenFloat(ice, 0.25f));
                             continue PER_CELL;
                     }
                 }
@@ -384,45 +381,29 @@ public static final char[]  terrainChars = {
                     case 0:
                     case 1:
                     case 2:
-                        shown = SColor.lerpFloatColors(deepColor, coastalColor,
-                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
-                        //display.put(x, y, '≈', SColor.lightenFloat(foamColor, 0.3f), shown);
-                        display.put(x, y, '~', SColor.lightenFloat(foamColor, 0.3f), shown);
+                        display.put(x, y, '≈', SColor.lightenFloat(foamColor, 0.3f));
                         break;
                     case 3:
-                        shown = SColor.lerpFloatColors(deepColor, coastalColor,
-                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
-                        display.put(x, y, '~', SColor.lightenFloat(foamColor, 0.3f), shown);
+                        display.put(x, y, '~', SColor.lightenFloat(foamColor, 0.3f));
                         break;
-                    default:
-                        /*
-                        if(partialLakeData.contains(x, y))
-                            System.out.println("LAKE  x=" + x + ",y=" + y + ':' + (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 19
-                                    + shadingData[x][y] * 13) * 0.03125f);
-                        else if(partialRiverData.contains(x, y))
-                            System.out.println("RIVER x=" + x + ",y=" + y + ':' + (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 19
-                                    + shadingData[x][y] * 13) * 0.03125f);
-                        */
+                    default: 
                         int bc = dbm.biomeCodeData[x][y];
-                        shown = SColor.lerpFloatColors(BIOME_COLOR_TABLE[codeB = dbm.extractPartB(bc)],
-                                BIOME_DARK_COLOR_TABLE[codeA = dbm.extractPartA(bc)], mix = dbm.extractMixAmount(bc));
-//                        if(cloud > 0.0)
-//                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                        if(mix >= 0.5) 
-                            display.put(x, y, BIOME_CHARS[codeA], SColor.darkenFloat(BIOME_COLOR_TABLE[codeB], 0.3f), shown);
+                        codeB = dbm.extractPartB(bc);
+                        codeA = dbm.extractPartA(bc);
+                        mix = dbm.extractMixAmount(bc);
+                        if(mix <= 0.5) 
+                            display.put(x, y, BIOME_CHARS[codeA], BIOME_DARK_COLOR_TABLE[codeB]);
                         else
-                            display.put(x, y, BIOME_CHARS[codeB], SColor.darkenFloat(BIOME_COLOR_TABLE[codeA], 0.3f), shown);
-
-                        //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
+                            display.put(x, y, BIOME_CHARS[codeB], BIOME_DARK_COLOR_TABLE[codeA]);
                 }
             }
         }
         for (int i = 0; i < cities.size(); i++) {
             Coord ct = cities.keyAt(i);
             String cname = cities.getAt(i);
-            //display.put(ct.x, ct.y, '□', SColor.SOOTY_WILLOW_BAMBOO);
-            display.put(ct.x, ct.y, '#', SColor.SOOTY_WILLOW_BAMBOO);
-            display.put(ct.x - (cname.length() >> 1), ct.y - 1, cname, SColor.WHITE, SColor.SOOTY_WILLOW_BAMBOO);
+            display.put(ct.x, ct.y, '□', SColor.SOOTY_WILLOW_BAMBOO);
+//            display.put(ct.x, ct.y, '#', SColor.SOOTY_WILLOW_BAMBOO);
+            display.put(ct.x - (cname.length() >> 1), ct.y - 1, cname, SColor.CW_FADED_YELLOW, SColor.SOOTY_WILLOW_BAMBOO);
         }
     }
     @Override

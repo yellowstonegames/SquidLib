@@ -3,10 +3,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.ArrayTools;
 import squidpony.Maker;
 import squidpony.annotation.Beta;
-import squidpony.squidmath.BlueNoise;
-import squidpony.squidmath.FastNoise;
-import squidpony.squidmath.IRNG;
-import squidpony.squidmath.SilkRNG;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +32,7 @@ import java.util.ArrayList;
 public class WildMap<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     public final int width, height, biome;
-    public IRNG rng;
+    public IStatefulRNG rng;
     public ArrayList<? extends T> contentTypes;
     public ArrayList<String> floorTypes;
     public final int[][] content, floors;
@@ -51,11 +48,11 @@ public class WildMap<T> implements Serializable {
     {
         this(width, height, biome, new SilkRNG(seedA, seedB));
     }
-    public WildMap(int width, int height, int biome, IRNG rng)
+    public WildMap(int width, int height, int biome, IStatefulRNG rng)
     {
         this(width, height, biome, rng, Maker.makeList(".dirt", ".leaves", ".dirt", "\"grass", ".leaves"), new ArrayList<T>(4));
     }
-    public WildMap(int width, int height, int biome, IRNG rng, ArrayList<String> floorTypes, ArrayList<? extends T> contentTypes)
+    public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> floorTypes, ArrayList<? extends T> contentTypes)
     {
         this.width = width;
         this.height = height;
