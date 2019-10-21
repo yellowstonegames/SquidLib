@@ -5,7 +5,7 @@ import squidpony.ArrayTools;
 import squidpony.Maker;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.Noise;
 import squidpony.squidmath.SilkRNG;
 
 import static squidpony.squidgrid.gui.gdx.WorldMapView.*;
@@ -196,14 +196,15 @@ public class WildMapView {
     {
         wildMap.generate();
         float baseColor = BIOME_COLOR_TABLE[wildMap.biome & 1023];
-        long change = 0x632BE59BD9B4E019L, h; // some big number with well-distributed bits; can be changed
+        int h, change, seed = wildMap.rng.nextInt();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                change += (h = CrossHash.hash64(wildMap.floorTypes.get(wildMap.floors[x][y])));
+                change = Noise.IntPointHash.hashAll(x, y, 
+                        h = seed ^ (wildMap.floorTypes.get(wildMap.floors[x][y]).hashCode()));
                 colorMap[x][y] = SColor.toEditedFloat(baseColor,
-                        0x1p-19f * ((h & 0xFFFF) - 0xA000 + (change >>> 16 & 0x3FFF)),
-                        0x1p-18f * ((h >>> 16 & 0xFFFF) - 0xA000 + (change >>> 32 & 0x3FFF)),
-                        0x1p-18f * ((h >>> 32 & 0xFFFF) - 0xA000 + (change >>> 48 & 0x3FFF)), 
+                        0x1p-12f * ((h & 0xFF) - 0x9F + (change >>> 8 & 0x3F)),
+                        0x1p-11f * ((h >>> 8 & 0xFF) - 0x9F + (change >>> 16 & 0x3F)),
+                        0x1.3p-12f * ((h >>> 16 & 0xFF) - 0x90 + (change >>> 24 & 0x3F)), 
                         0f);
             }
         }
