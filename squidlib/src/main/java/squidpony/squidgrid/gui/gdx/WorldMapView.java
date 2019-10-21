@@ -31,6 +31,10 @@ public class WorldMapView {
         return biomeMapper;
     }
 
+    public void setBiomeMapper(WorldMapGenerator.DetailedBiomeMapper biomeMapper) {
+        this.biomeMapper = biomeMapper;
+    }
+
     public WorldMapGenerator getWorld() {
         return world;
     }
@@ -78,7 +82,6 @@ public class WorldMapView {
             Empty                  = 14;
 
     public static float iceColor = SColor.ALICE_BLUE.toFloatBits();
-    public static float lightIceColor = SColor.FLOAT_WHITE;
     public static float desertColor = SColor.floatGetI(248, 229, 180);
     public static float savannaColor = SColor.floatGetI(181, 200, 100);
     public static float tropicalRainforestColor = SColor.floatGetI(66, 123, 25);
@@ -95,7 +98,6 @@ public class WorldMapView {
     // water colors
     public static float deepColor =    SColor.floatGetI(0, 42, 88);
     public static float shallowColor = SColor.floatGetI(20, 145, 197);
-    public static float coastalColor = SColor.lightenFloat(shallowColor, 0.3f);
     public static float foamColor =    SColor.floatGetI(61,  162, 215);
 
     protected float[] biomeColors = {
@@ -130,7 +132,7 @@ public class WorldMapView {
             Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
             Empty                                                                                                                      //SPACE
     };
-    protected final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
+    public final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
     
     public void initialize()
     {
