@@ -53,7 +53,7 @@ public class WildMap<T> implements Serializable {
     }
     public WildMap(int width, int height, int biome, IRNG rng)
     {
-        this(width, height, biome, rng, Maker.makeList("dirt", "leaves", "dirt", "grass", "leaves"), new ArrayList<T>(4));
+        this(width, height, biome, rng, Maker.makeList(".dirt", ".leaves", ".dirt", "\"grass", ".leaves"), new ArrayList<T>(4));
     }
     public WildMap(int width, int height, int biome, IRNG rng, ArrayList<String> floorTypes, ArrayList<? extends T> contentTypes)
     {

@@ -12727,6 +12727,38 @@ public class SColor extends Color implements Serializable {
                 (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
                 (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f);
     }
+
+    /**
+     * Given a packed float color {@code encoded}, gets another packed float color with a contrasting luma in YCbCr
+     * space but the same Cb, Cr, and opacity (Cb and Cr are likely to be clamped if the result gets close to white or
+     * black). This won't ever produce black or other very dark colors, and also has a gap in the range it produces
+     * for luma values between 0.425 and 0.7. That allows most of the colors this method produces to contrast well as a
+     * background with a foreground of {@code encoded}, or vice versa.
+     * @param encoded a packed float color, as produced by {@link #toFloatBits()}
+     * @return a different, contrasting packed float color
+     */
+    public static float contrastLuma(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded),
+                r = (bits & 0x000000ff), 
+                g = (bits & 0x0000ff00),
+                b = (bits & 0x00ff0000),
+                a = (bits >>> 24);
+        final float luma =
+                r * (0x1.010102p-8f  * 0.299f) +
+                g * (0x1.010102p-16f * 0.587f) +
+                b * (0x1.010102p-24f * 0.114f),
+                cb = 
+                        r * (0x1.010102p-8f  * -0.168736f) + 
+                        g * (0x1.010102p-16f * -0.331264f) + 
+                        b * (0x1.010102p-24f * 0.5f),
+                cr = 
+                        r * (0x1.010102p-8f  * 0.5f) + 
+                        g * (0x1.010102p-16f * -0.418688f) + 
+                        b * (0x1.010102p-24f * -0.081312f);
+        return floatGetYCbCr(luma >= 0.7f ? 1.125f - luma : 1f - luma * 0.3f, cb, cr, 0x1.010102p-8f * a);
+    }
+
     /**
      * The "Chroma B," or Cb, of the given libGDX Color in YCbCr format; ranges from -0.5f to 0.5f .
      * This is related to Chroma R; when Chroma B is high and Chroma R is low, the color is more blue; when Chroma R is

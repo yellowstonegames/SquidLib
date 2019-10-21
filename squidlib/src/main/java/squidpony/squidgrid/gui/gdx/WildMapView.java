@@ -50,11 +50,16 @@ public class WildMapView {
     }
     public WildMapView(WildMap<? extends ICellVisible> wildMap)
     {
-        this.wildMap = wildMap == null 
-                ? new WildMap<>(128, 128, 0, new SilkRNG(),
-                Maker.makeList("snow", "snow", "ice"),
-                Maker.makeList(new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.05f), "snow mound")))
-                : wildMap;
+        if(wildMap == null) {
+            final ICellVisible.Named mound = new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.15f), "snow mound");
+            final ICellVisible.Named divot = new ICellVisible.Named('˛', SColor.darkenFloat(iceColor, 0.3f), "icy divot");
+            final ICellVisible.Named fluff = new ICellVisible.Named('…', SColor.darkenFloat(iceColor, 0.1f), "fluffy powder snow");
+            this.wildMap = new WildMap<>(128, 128, 0, new SilkRNG(),
+                    Maker.makeList(".snow", ".snow", "_ice"),
+                    Maker.makeList(mound, mound, divot, fluff, mound, fluff, divot, fluff, mound, mound, fluff, fluff));
+        }
+        else
+            this.wildMap = wildMap;
         width = this.wildMap.width;
         height = this.wildMap.height;
         colorMap = new float[width][height];
@@ -212,6 +217,8 @@ public class WildMapView {
             for (int y = 0; y < height && y < layers.gridHeight; y++) {
                 if((c = wildMap.content[x][y]) >= 0)
                     layers.put(x, y, wildMap.contentTypes.get(c));
+                else
+                    layers.put(x, y, wildMap.floorTypes.get(wildMap.floors[x][y]).charAt(0), SColor.contrastLuma(colorMap[x][y]));
             }
         }
     }
