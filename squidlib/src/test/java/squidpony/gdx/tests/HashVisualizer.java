@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 132;
+    private static final int NOISE_LIMIT = 133;
     private int hashMode = 0, rngMode = 16, noiseMode = 129, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
@@ -4711,7 +4711,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-
+                    case 132:
+                        Gdx.graphics.setTitle("Blue Noise via Metropolis algorithm " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = (x + ctr) * 0x89A7;
+                            for (int y = 0; y < height; y++) {
+                                yy = (y + ctr) * 0xBCFD;
+                                bright = (BlueNoise.getMetropolis(xx, yy) + 128) / 255f;
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        break;
                 }
             }
             break;

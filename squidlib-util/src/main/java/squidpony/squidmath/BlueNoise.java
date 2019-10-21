@@ -109,4 +109,59 @@ public class BlueNoise {
                 ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26)
                 ^ (x + y >> 2 & 0x3F) ^ (x - y >> 2 & 0x3F));
     }
+    
+    public static byte getMetropolis(int seedA, int seedB)
+    {
+        int choice, prob, a, b, x = seedA, cx = x, y = seedB, cy = y, choiceTicks = 0, probTicks = 0,
+                curr = RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] + 128, chosen;
+        seedA = seedA + 0xC1C64E6D | 0;
+        choice = (seedA ^ seedA >>> 17) * ((seedB = seedB + 0x9E3779BB | 0) >>> 12 | 1);
+        choice ^= choice >>> 15;
+        
+        a = seedB ^ choice;
+        b = seedA ^ choice;
+        
+        a = a + 0x9E3779D | 0;
+        prob = (a ^ a >>> 17) * ((b = b + 0xC1C64E6B | 0) >>> 12 | 1);
+        prob ^= prob >>> 15;
+
+        for (int i = 0; i < 512; i++) {
+            cx += -(choice & 1) | 1;
+            cy += -(choice & 2) | 1;
+            choice >>>= 2;
+            if(++choiceTicks == 16)
+            {
+                seedA = seedA + 0xC1C64E6D | 0;
+                choice = (seedA ^ seedA >>> 17) * ((seedB = seedB + 0x9E3779BB | 0) >>> 12 | 1);
+                choice ^= choice >>> 15;
+                choiceTicks = 0;
+            }
+            if((chosen = RAW_NOISE[(cy << 6 & 0xFC0) | (cx & 0x3F)] + 128) < curr) {
+                if (((curr * (prob & 0xFF)) >>> 8) > chosen) {
+                    cx = x;
+                    cy = y;
+                }
+                else 
+                {
+                    x = cx;
+                    y = cy;
+                    curr = chosen;
+                }
+                prob >>>= 8;
+                if(++probTicks == 4)
+                {
+                    a = a + 0x9E3779D | 0;
+                    prob = (a ^ a >>> 17) * ((b = b + 0xC1C64E6B | 0) >>> 12 | 1);
+                    prob ^= prob >>> 15;
+                    probTicks = 0;
+                }
+            }
+            else {
+                x = cx;
+                y = cy;
+                curr = chosen;
+            }
+        }
+        return (byte)(curr - 128);
+    }
 }
