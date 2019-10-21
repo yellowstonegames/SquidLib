@@ -27,23 +27,6 @@ import squidpony.squidmath.*;
  * and height maps can all be requested from it).
  */
 public class WorldMapTextDemo extends ApplicationAdapter {
-    public static final int
-            Desert                 = 0 ,
-            Savanna                = 1 ,
-            TropicalRainforest     = 2 ,
-            Grassland              = 3 ,
-            Woodland               = 4 ,
-            SeasonalForest         = 5 ,
-            TemperateRainforest    = 6 ,
-            BorealForest           = 7 ,
-            Tundra                 = 8 ,
-            Ice                    = 9 ,
-            Beach                  = 10,
-            Rocky                  = 11,
-            River                  = 12,
-            Ocean                  = 13,
-            Empty                  = 14;
-    
     public static final char[]  terrainChars = {
             '¿', //sand
             '„', //lush grass
@@ -100,7 +83,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     private StatefulRNG rng;
     private long seed;
     private Vector3 position, previousPosition, nextPosition;
-    private WorldMapGenerator.MimicMap world;
+//    private WorldMapGenerator.MimicMap world;
+    private WorldMapGenerator.HyperellipticalMap world;
     private WorldMapView wmv;
     private PoliticalMapper pm;
     private OrderedMap<Character, FakeLanguageGen> atlas;
@@ -149,55 +133,10 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     private static float coastalColor = SColor.lightenFloat(shallowColor, 0.3f);
     private static float foamColor = SColor.floatGetI(61,  162, 215);
 
-    private static float[] biomeColors = {
-            desert,
-            savanna,
-            tropicalRainforest,
-            grassland,
-            woodland,
-            seasonalForest,
-            temperateRainforest,
-            borealForest,
-            tundra,
-            ice,
-            beach,
-            rocky,
-            foamColor,
-            deepColor,
-            emptyColor
-    };
-
-    protected final static float[] BIOME_TABLE = {
-            //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
-            Ice+0.7f,   Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
-            Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER
-            Ice+0.5f,   Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,           Desert+0.6f,              //DRY
-            Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.6f,            Savanna+0.4f,            //WET
-            Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER
-            Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST
-            Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS
-            Ice+0.3f,   River+0.8f,   River+0.7f,          River+0.6f,               River+0.5f,              River+0.4f,              //RIVERS
-            Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
-            Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
-            Empty                                                                                                                      //SPACE
-    }, BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
     private static final char[] BIOME_CHARS = new char[61];
-    private static final float[] NATION_COLORS = new float[144];
     static {
-        float b, diff;
-        for (int i = 0; i < 60; i++) {
-            b = BIOME_TABLE[i];
-            BIOME_CHARS[i] = terrainChars[(int)b];
-            diff = ((b % 1.0f) - 0.48f) * 0.27f;
-            BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
-                    ? SColor.lightenFloat(biomeColors[(int)b], diff)
-                    : SColor.darkenFloat(biomeColors[(int)b], -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
-        }
-        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
-        BIOME_CHARS[60] = ' ';
-        for (int i = 0; i < 144; i++) {
-            NATION_COLORS[i] =  SColor.COLOR_WHEEL_PALETTE_REDUCED[((i + 1234567) * 13 & 0x7FFFFFFF) % 144].toFloatBits();
+        for (int i = 0; i < 61; i++) {
+            BIOME_CHARS[i] = terrainChars[(int)WorldMapView.BIOME_TABLE[i]];
         }
     }
     
@@ -229,7 +168,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.LocalMimicMap(seed, basis, FastNoise.instance, 0.8);
 //        pix.dispose();
 
-        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
+//        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
+        world = new WorldMapGenerator.HyperellipticalMap(seed, bigWidth, bigHeight, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
         wmv = new WorldMapView(world);
         pm = new PoliticalMapper(FakeLanguageGen.SIMPLISH.word(rng, true));
@@ -324,8 +264,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
         }
         final char[][] political = pm.generate(world, atlas, 1.0);
         cities.clear();
-        Coord[] points = world.earth
-                .copy() // don't want to edit the actual earth map
+        Coord[] points = world.landData
+                .copy() // don't want to edit the actual land map
                 .removeEdges() // don't want cities on the edge of the map
                 .separatedRegionBlue(0.1, 500) // get 500 points in a regularly-tiling but unpredictable, sparse pattern
                 .randomPortion(rng,112); // randomly select less than 1/4 of those points, breaking the pattern
@@ -367,13 +307,13 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                         case 0:
                         case 1:
                         case 2:
-                            display.put(x, y, '≈', SColor.darkenFloat(ice, 0.45f));
+                            display.put(x, y, '≈', wmv.BIOME_DARK_COLOR_TABLE[30]);//SColor.darkenFloat(ice, 0.45f));
                             continue PER_CELL;
                         case 3:
-                            display.put(x, y, '~', SColor.darkenFloat(ice, 0.35f));
+                            display.put(x, y, '~', wmv.BIOME_DARK_COLOR_TABLE[24]);//SColor.darkenFloat(ice, 0.35f));
                             continue PER_CELL;
                         case 4:
-                            display.put(x, y, '¤', SColor.darkenFloat(ice, 0.25f));
+                            display.put(x, y, '¤', wmv.BIOME_DARK_COLOR_TABLE[42]);//SColor.darkenFloat(ice, 0.25f));
                             continue PER_CELL;
                     }
                 }
@@ -381,10 +321,10 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                     case 0:
                     case 1:
                     case 2:
-                        display.put(x, y, '≈', SColor.lightenFloat(foamColor, 0.3f));
+                        display.put(x, y, '≈', wmv.BIOME_COLOR_TABLE[44]);// SColor.lightenFloat(WorldMapView.foamColor, 0.3f));
                         break;
                     case 3:
-                        display.put(x, y, '~', SColor.lightenFloat(foamColor, 0.3f));
+                        display.put(x, y, '~', wmv.BIOME_COLOR_TABLE[43]);// SColor.lightenFloat(WorldMapView.foamColor, 0.3f));
                         break;
                     default: 
                         int bc = dbm.biomeCodeData[x][y];
@@ -392,9 +332,9 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                         codeA = dbm.extractPartA(bc);
                         mix = dbm.extractMixAmount(bc);
                         if(mix <= 0.5) 
-                            display.put(x, y, BIOME_CHARS[codeA], BIOME_DARK_COLOR_TABLE[codeB]);
+                            display.put(x, y, BIOME_CHARS[codeA], wmv.BIOME_DARK_COLOR_TABLE[codeB]);
                         else
-                            display.put(x, y, BIOME_CHARS[codeB], BIOME_DARK_COLOR_TABLE[codeA]);
+                            display.put(x, y, BIOME_CHARS[codeB], wmv.BIOME_DARK_COLOR_TABLE[codeA]);
                 }
             }
         }

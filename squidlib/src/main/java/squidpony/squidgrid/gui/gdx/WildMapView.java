@@ -88,7 +88,7 @@ public class WildMapView {
             deepColor,
             emptyColor
     };
-    protected final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
+    public final float[] BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
 
     public void initialize()
     {
