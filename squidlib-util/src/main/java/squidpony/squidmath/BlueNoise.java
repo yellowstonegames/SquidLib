@@ -110,58 +110,87 @@ public class BlueNoise {
                 ^ (x + y >> 2 & 0x3F) ^ (x - y >> 2 & 0x3F));
     }
     
-    public static byte getMetropolis(int seedA, int seedB)
+    public static byte[][] generateMetropolis(int seedA, int seedB)
     {
-        int choice, prob, a, b, x = seedA, cx = x, y = seedB, cy = y, choiceTicks = 0, probTicks = 0,
-                curr = RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] + 128, chosen;
-        seedA = seedA + 0xC1C64E6D | 0;
-        choice = (seedA ^ seedA >>> 17) * ((seedB = seedB + 0x9E3779BB | 0) >>> 12 | 1);
-        choice ^= choice >>> 15;
-        
-        a = seedB ^ choice;
-        b = seedA ^ choice;
-        
-        a = a + 0x9E3779D | 0;
-        prob = (a ^ a >>> 17) * ((b = b + 0xC1C64E6B | 0) >>> 12 | 1);
-        prob ^= prob >>> 15;
+        final int[][] early = new int[64][64];
+        final byte[][] done = new byte[64][64];
+        int min = 0x40000000, max = 0;
+        int choice, prob, stateA = seedA, stateB = seedB, a, b;
+        stateA = stateA + 0xC1C64E6D | 0;
+        a = (stateA ^ stateA >>> 17) * ((stateB = stateB + 0x9E3779BB | 0) >>> 12 | 1);
+        a = (a ^ a >>> 16) * 0xAC451;
+        a ^= a >>> 15;
+        b = (stateA ^ stateA >>> 17) * ((stateB = stateB + 0x9E3779BB | 0) >>> 12 | 1);
+        b = (b ^ b >>> 16) * 0xAC451;
+        b ^= b >>> 15;
 
-        for (int i = 0; i < 512; i++) {
-            cx += -(choice & 1) | 1;
-            cy += -(choice & 2) | 1;
-            choice >>>= 2;
-            if(++choiceTicks == 16)
-            {
-                seedA = seedA + 0xC1C64E6D | 0;
-                choice = (seedA ^ seedA >>> 17) * ((seedB = seedB + 0x9E3779BB | 0) >>> 12 | 1);
-                choice ^= choice >>> 15;
-                choiceTicks = 0;
-            }
-            if((chosen = RAW_NOISE[(cy << 6 & 0xFC0) | (cx & 0x3F)] + 128) < curr) {
-                if (((curr * (prob & 0xFF)) >>> 8) > chosen) {
-                    cx = x;
-                    cy = y;
+        for (int n = 0; n < 0x7F800; n++) {
+            int x = n & 0x3F, y = (n >>> 6 & 0x3F),
+//            int x = stateA + n & 63, y = stateB - n & 63,
+                    cx = x, cy = y, choiceTicks = 0, probTicks = 0,
+                    curr = RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] + 128, chosen;
+            stateA = stateA + 0xC1C64E6D | 0;
+            choice = (stateA ^ stateA >>> 17) * ((stateB = stateB + 0x9E3779BB | 0) >>> 12 | 1);
+            choice = (choice ^ choice >>> 16) * 0xAC451;
+            choice ^= choice >>> 15;
+
+            a = a + 0x9E3779D | 0;
+            prob = (a ^ a >>> 17) * ((b = b + ((a | -a) >> 31 & 0xABC1236B) | 0) >>> 12 | 1);
+            prob = (prob ^ prob >>> 16) * 0xAC451;
+            prob ^= prob >>> 15;
+
+            for (int i = 0; i < 1024; i++) {
+                cx += -(choice & 1) | 1;
+                cy += 1 - (choice & 2);
+                choice >>>= 2;
+                if (++choiceTicks == 16) {
+                    stateA = stateA + 0xC1C64E6D | 0;
+                    choice = (stateA ^ stateA >>> 17) * ((stateB = stateB + 0x9E3779BB | 0) >>> 12 | 1);
+                    choice = (choice ^ choice >>> 16) * 0xAC451;
+                    choice ^= choice >>> 15;
+                    choiceTicks = 0;
                 }
-                else 
-                {
+                if ((chosen = RAW_NOISE[(cy << 6 & 0xFC0) | (cx & 0x3F)] + 128) < curr) {
+                    if (((curr * (prob & 0xFF)) >>> 8) > chosen) {
+                        cx = x;
+                        cy = y;
+                    } else {
+                        x = cx;
+                        y = cy;
+                        curr = chosen;
+                    }
+                    prob >>>= 8;
+                    if (++probTicks == 4) {
+                        a = a + 0x9E3779D | 0;
+                        prob = (a ^ a >>> 17) * ((b = b + ((a | -a) >> 31 & 0xABC1236B) | 0) >>> 12 | 1);
+                        prob = (prob ^ prob >>> 16) * 0xAC451;
+                        prob ^= prob >>> 15;
+                        probTicks = 0;
+                    }
+                } else {
                     x = cx;
                     y = cy;
                     curr = chosen;
                 }
-                prob >>>= 8;
-                if(++probTicks == 4)
-                {
-                    a = a + 0x9E3779D | 0;
-                    prob = (a ^ a >>> 17) * ((b = b + 0xC1C64E6B | 0) >>> 12 | 1);
-                    prob ^= prob >>> 15;
-                    probTicks = 0;
-                }
             }
-            else {
-                x = cx;
-                y = cy;
-                curr = chosen;
+            ++early[x & 63][y & 63];
+        }
+        for (int x = 0; x < 64; x++) {
+            for (int y = 0; y < 64; y++) {
+                final int e = early[x][y];
+                min = Math.min(min, e);
+                max = Math.max(max, e);
             }
         }
-        return (byte)(curr - 128);
+        System.out.println("original min="+min+", original max="+max);
+        if(max != min) {
+            for (int x = 0; x < 64; x++) {
+                for (int y = 0; y < 64; y++) {
+//                    done[x][y] = (byte) (early[x][y] * 255 / max - 128);
+                    done[x][y] = (byte) ((early[x][y] - min) * 255 / (max - min) - 128);
+                }
+            }
+        }
+        return done;
     }
 }
