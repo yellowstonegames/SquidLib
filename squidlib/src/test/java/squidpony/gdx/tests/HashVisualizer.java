@@ -4715,7 +4715,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 132:
                         Gdx.graphics.setTitle("Blue Noise via Metropolis algorithm " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         if(METROPOLIS_NOISE == null)
-                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr);
+                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr, 400);
                         for (int x = 0; x < width; x++) {
                             xx = (x + ctr);
                             for (int y = 0; y < height; y++) {
