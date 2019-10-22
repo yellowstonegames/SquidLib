@@ -110,7 +110,7 @@ public class BlueNoise {
                 ^ (x + y >> 2 & 0x3F) ^ (x - y >> 2 & 0x3F));
     }
     
-    public static byte[][] generateMetropolis(int seedA, int seedB)
+    public static byte[][] generateMetropolis(final int seedA, final int seedB, final int precision)
     {
         final int[][] early = new int[64][64];
         final byte[][] done = new byte[64][64];
@@ -124,24 +124,39 @@ public class BlueNoise {
         b = (b ^ b >>> 16) * 0xAC451;
         b ^= b >>> 15;
 
-        for (int n = 0; n < 0x7F800; n++) {
-            int x = n & 0x3F, y = (n >>> 6 & 0x3F),
-//            int x = stateA + n & 63, y = stateB - n & 63,
-                    cx = x, cy = y, choiceTicks = 0, probTicks = 0,
-                    curr = RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] + 128, chosen;
+        for (int n = 0; n < 0x7F8000; n++) {
             stateA = stateA + 0xC1C64E6D | 0;
             choice = (stateA ^ stateA >>> 17) * ((stateB = stateB + 0x9E3779BB | 0) >>> 12 | 1);
             choice = (choice ^ choice >>> 16) * 0xAC451;
             choice ^= choice >>> 15;
+
+            int x = n & 0x3F, y = n >>> 6 & 0x3F,
+                    cx = x, cy = y, choiceTicks = 0, probTicks = 0,
+                    curr = RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] + 128, chosen;
 
             a = a + 0x9E3779D | 0;
             prob = (a ^ a >>> 17) * ((b = b + ((a | -a) >> 31 & 0xABC1236B) | 0) >>> 12 | 1);
             prob = (prob ^ prob >>> 16) * 0xAC451;
             prob ^= prob >>> 15;
 
-            for (int i = 0; i < 1024; i++) {
-                cx += -(choice & 1) | 1;
-                cy += 1 - (choice & 2);
+            for (int i = 0; i < precision; i++) {
+                // chooses diagonals only; bishop move restricts space this can use
+//                cx += -(choice & 1) | 1;
+//                cy += 1 - (choice & 2);
+                switch (choice & 3)
+                {
+                    case 0:
+                        cx++;
+                        break;
+                    case 1:
+                        cx--;
+                        break;
+                    case 2:
+                        cy++;
+                        break;
+                    default:
+                        cy--;
+                }
                 choice >>>= 2;
                 if (++choiceTicks == 16) {
                     stateA = stateA + 0xC1C64E6D | 0;
@@ -175,22 +190,36 @@ public class BlueNoise {
             }
             ++early[x & 63][y & 63];
         }
+//        int sum = 0;
         for (int x = 0; x < 64; x++) {
             for (int y = 0; y < 64; y++) {
                 final int e = early[x][y];
                 min = Math.min(min, e);
                 max = Math.max(max, e);
+//                sum += e;
             }
         }
-        System.out.println("original min="+min+", original max="+max);
+//        System.out.println("Before: min="+min+",max="+max+",sum="+sum+",avg=" + (sum * 0x1p-12));
         if(max != min) {
             for (int x = 0; x < 64; x++) {
                 for (int y = 0; y < 64; y++) {
-//                    done[x][y] = (byte) (early[x][y] * 255 / max - 128);
                     done[x][y] = (byte) ((early[x][y] - min) * 255 / (max - min) - 128);
                 }
             }
         }
+//        sum = 0;
+//        min = 0x10000;
+//        max = 0;
+//        for (int x = 0; x < 64; x++) {
+//            for (int y = 0; y < 64; y++) {
+//                final int e = done[x][y] + 128;
+//                min = Math.min(min, e);
+//                max = Math.max(max, e);
+//                sum += e;
+//            }
+//        }
+//        System.out.println("After:  min="+min+",max="+max+",sum="+sum+",avg=" + (sum * 0x1p-12));
+
         return done;
     }
 }
