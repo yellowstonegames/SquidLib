@@ -61,7 +61,6 @@ import static squidpony.squidmath.NumberTools.swayTight;
  * Created by Tommy Ettinger on 8/20/2016.
  */
 public class HashVisualizer extends ApplicationAdapter {
-
     // 0 commonly used hashes
     // 1 variants on Mist and other hashes
     // 3 artistic visualizations of hash functions and misc. other
@@ -81,7 +80,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private SquidInput input;
     
     private Viewport view;
-    
+
+    private static byte[][] METROPOLIS_NOISE = null;// = BlueNoise.generateMetropolis(1234, 5678);
+
     private CrossHash.Mist Mist_, Mist_C;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private NLFSR nlfsr = new NLFSR(1);
@@ -4713,11 +4714,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 132:
                         Gdx.graphics.setTitle("Blue Noise via Metropolis algorithm " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        if(METROPOLIS_NOISE == null)
+                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr);
                         for (int x = 0; x < width; x++) {
-                            xx = (x + ctr) * 0x89A7;
+                            xx = (x + ctr);
                             for (int y = 0; y < height; y++) {
-                                yy = (y + ctr) * 0xBCFD;
-                                bright = (BlueNoise.getMetropolis(xx, yy) + 128) / 255f;
+                                yy = (y + ctr);
+                                bright = (128 + METROPOLIS_NOISE[xx & 0x3F][yy & 0x3F]) / 255f;
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
