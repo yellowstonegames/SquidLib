@@ -67,7 +67,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 133;
+    private static final int NOISE_LIMIT = 134;
     private int hashMode = 0, rngMode = 16, noiseMode = 129, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
@@ -81,7 +81,7 @@ public class HashVisualizer extends ApplicationAdapter {
     
     private Viewport view;
 
-    private static byte[][] METROPOLIS_NOISE = null;// = BlueNoise.generateMetropolis(1234, 5678);
+//    private static byte[][] METROPOLIS_NOISE = null;// = BlueNoise.generateMetropolis(1234, 5678);
 
     private CrossHash.Mist Mist_, Mist_C;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -4714,13 +4714,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 132:
                         Gdx.graphics.setTitle("Blue Noise via Metropolis algorithm " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        if(METROPOLIS_NOISE == null)
-                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr, 400);
+//                        if(METROPOLIS_NOISE == null)
+//                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr, 400);
                         for (int x = 0; x < width; x++) {
                             xx = (x + ctr);
                             for (int y = 0; y < height; y++) {
                                 yy = (y + ctr);
-                                bright = (128 + METROPOLIS_NOISE[xx & 0x3F][yy & 0x3F]) / 255f;
+                                bright = (128 + BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr & 3])) / 255f;
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        break;
+                    case 133:
+                        Gdx.graphics.setTitle("Blue Noise via Metropolis with adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = (x + ctr);
+                            for (int y = 0; y < height; y++) {
+                                yy = (y + ctr);
+                                bright = (128 + BlueNoise.getSeeded(xx, yy, 12345679, BlueNoise.ALT_NOISE[ctr >>> 3 & 3])) / 255f;
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
