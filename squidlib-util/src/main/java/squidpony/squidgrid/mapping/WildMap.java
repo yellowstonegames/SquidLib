@@ -1,7 +1,8 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
-import squidpony.Maker;
+import squidpony.FakeLanguageGen;
+import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
 
@@ -36,6 +37,54 @@ public class WildMap implements Serializable {
     public ArrayList<String> contentTypes;
     public ArrayList<String> floorTypes;
     public final int[][] content, floors;
+
+    /**
+     * Meant for generating large ArrayLists of Strings where an individual String may occur quite a few times.
+     * The rest parameter is a vararg (it may also be an Object array) of alternating String and Integer values, where
+     * an Integer is how many times to repeat the preceding String in the returned ArrayList.
+     * @param rest a vararg (or Object array) of alternating String and Integer values
+     * @return an ArrayList of Strings, probably with some or most of them repeated; you may want to shuffle this result
+     */
+    public static ArrayList<String> makeRepeats(Object... rest)
+    {
+        if(rest == null || rest.length < 2)
+        {
+            return new ArrayList<>(0);
+        }
+        ArrayList<String> al = new ArrayList<>(rest.length);
+
+        for (int i = 0; i < rest.length - 1; i+=2) {
+            try {
+                int count = (int)rest[i+1];
+                String v = (String) rest[i];
+                for (int j = 0; j < count; j++) {
+                    al.add(v);
+                }
+            }catch (ClassCastException ignored) {
+            }
+        }
+        return al;
+    }
+    public static ArrayList<String> makeShuffledRepeats(IRNG rng, Object... rest) 
+    {
+        ArrayList<String> al = makeRepeats(rest);
+        rng.shuffleInPlace(al);
+        return al;
+    }
+    public static ArrayList<String> makeVegetation(IRNG rng, int size, double monoculture, FakeLanguageGen naming)
+    {
+        Thesaurus t = new Thesaurus(rng);
+        ArrayList<String> al = new ArrayList<>(size);
+        String latest;
+        for (int i = size; i > 0; i--) {
+            al.add(latest = t.makePlantName(naming));
+            for (double j = rng.nextDouble(monoculture * 2.0 * size); j >= 1 && i > 0; j--, i--) {
+                al.add(latest);
+            }
+        }
+        rng.shuffleInPlace(al);
+        return al;
+    }
     public WildMap()
     {
         this(128, 128, 21);
@@ -50,7 +99,7 @@ public class WildMap implements Serializable {
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng)
     {
-        this(width, height, biome, rng, Maker.makeList("dirt", "leaves", "dirt", "grass", "leaves"), new ArrayList<String>(4));
+        this(width, height, biome, rng, makeShuffledRepeats(rng, "dirt", 6, "leaves", 4, "grass", 9), makeVegetation(rng, 70, 0.3, rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages)));
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> floorTypes, ArrayList<String> contentTypes)
     {
