@@ -64,7 +64,7 @@ public class WildMapDemo extends ApplicationAdapter {
     private static final int bigWidth = 128, bigHeight = 128;
 //    private static final int bigWidth = 2048, bigHeight = 1024;
     //private static final int bigWidth = 400, bigHeight = 400;
-    private static final int cellWidth = 16, cellHeight = 16;
+    private static final int cellWidth = 17, cellHeight = 17;
     private static final int shownWidth = 96, shownHeight = 48;
     private FilterBatch batch;
     private SparseLayers display;//, overlay;
@@ -75,7 +75,7 @@ public class WildMapDemo extends ApplicationAdapter {
     private long seed;
     private Vector3 position, previousPosition, nextPosition;
 //    private WorldMapGenerator.MimicMap world;
-    private WildMap<? extends ICellVisible> wild;
+    private WildMap wild;
     private WildMapView wmv;
     private long counter = 0;
     private long ttg = 0; // time to generate
@@ -84,7 +84,8 @@ public class WildMapDemo extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new FilterBatch();
-        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispLeanFont());
+        TextCellFactory tcf = DefaultResources.getCrispSlabFont();
+        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, tcf);
         //display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
         stage = new Stage(view, batch);

@@ -6,6 +6,7 @@ import squidpony.Maker;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.Noise;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.SilkRNG;
 
 import static squidpony.squidgrid.gui.gdx.WorldMapView.*;
@@ -16,8 +17,10 @@ import static squidpony.squidgrid.gui.gdx.WorldMapView.*;
 public class WildMapView {
     protected int width, height;
     protected float[][] colorMap;
-    public WildMap<? extends ICellVisible> wildMap;
-
+    public WildMap wildMap;
+    
+    public OrderedMap<String, ? extends ICellVisible> viewer;
+    
     public int getWidth() {
         return width;
     }
@@ -30,11 +33,11 @@ public class WildMapView {
         return colorMap;
     }
     
-    public WildMap<? extends ICellVisible> getWildMap() {
+    public WildMap getWildMap() {
         return wildMap;
     }
 
-    public void setWildMap(WildMap<? extends ICellVisible> wildMap) {
+    public void setWildMap(WildMap wildMap) {
         this.wildMap = wildMap;
         if(this.width != wildMap.width || this.height != wildMap.height)
         {
@@ -46,20 +49,26 @@ public class WildMapView {
 
     public WildMapView()
     {
-        this(null);
+        this(null, null);
     }
-    public WildMapView(WildMap<? extends ICellVisible> wildMap)
+    public WildMapView(WildMap wildMap, OrderedMap<String, ? extends ICellVisible> viewer)
     {
-        if(wildMap == null) {
-            final ICellVisible.Named mound = new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.15f), "snow mound");
-            final ICellVisible.Named divot = new ICellVisible.Named('˛', SColor.darkenFloat(iceColor, 0.3f), "icy divot");
-            final ICellVisible.Named fluff = new ICellVisible.Named('…', SColor.darkenFloat(iceColor, 0.1f), "fluffy powder snow");
-            this.wildMap = new WildMap<>(128, 128, 0, new SilkRNG(),
-                    Maker.makeList(".snow", ".snow", "_ice"),
-                    Maker.makeList(mound, mound, divot, fluff, mound, fluff, divot, fluff, mound, mound, fluff, fluff));
+        if(wildMap == null) { // default to ice map, biome 0; ignore given viewer, it may be null
+            this.viewer = OrderedMap.makeMap("snow", new ICellVisible.Named('.', iceColor, "snow"),
+                    "ice", new ICellVisible.Named('_', SColor.lightenFloat(SColor.PALE_CORNFLOWER_BLUE.toFloatBits(), 0.3f), "ice"),
+                    "mound", new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.15f), "snow mound"),
+                    "divot", new ICellVisible.Named('°', SColor.darkenFloat(iceColor, 0.3f), "icy divot"),
+                    "powder", new ICellVisible.Named('…', SColor.darkenFloat(iceColor, 0.1f), "fluffy powder snow")
+                    );
+            this.wildMap = new WildMap(128, 128, 0, new SilkRNG(),
+                    Maker.makeList("snow", "snow", "ice"),
+                    Maker.makeList("mound", "mound", "divot", "powder", "mound", "powder", "divot", "powder", "mound", "mound", "powder", "powder"));
         }
         else
+        {
             this.wildMap = wildMap;
+            this.viewer = viewer;
+        }
         width = this.wildMap.width;
         height = this.wildMap.height;
         colorMap = new float[width][height];
@@ -68,7 +77,7 @@ public class WildMapView {
     
     public WildMapView(long seed, int width, int height, int biome)
     {
-        this(new WildMap<ICellVisible>(width, height, biome));
+        this(new WildMap(width, height, biome), new OrderedMap<String, ICellVisible>(16, 0.25f));
     }
     
     protected float[] biomeColors = {
@@ -196,16 +205,19 @@ public class WildMapView {
     {
         wildMap.generate();
         float baseColor = BIOME_COLOR_TABLE[wildMap.biome & 1023];
-        int h, change, seed = wildMap.rng.nextInt();
+        int h = 1234567890, change, seed = wildMap.rng.nextInt();
+        ICellVisible icv;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                change = Noise.IntPointHash.hashAll(x, y, 
-                        h = seed ^ (wildMap.floorTypes.get(wildMap.floors[x][y]).hashCode()));
+                change = h += Noise.IntPointHash.hashAll(x, y, 
+                        seed);
                 colorMap[x][y] = SColor.toEditedFloat(baseColor,
                         0x1p-12f * ((h & 0xFF) - 0x9F + (change >>> 8 & 0x3F)),
                         0x1p-11f * ((h >>> 8 & 0xFF) - 0x9F + (change >>> 16 & 0x3F)),
                         0x1.3p-12f * ((h >>> 16 & 0xFF) - 0x90 + (change >>> 24 & 0x3F)), 
                         0f);
+                if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null)
+                    colorMap[x][y] = SColor.lerpFloatColors(colorMap[x][y], icv.getPackedColor(), 0.6f);
             }
         }
     }
@@ -214,12 +226,13 @@ public class WildMapView {
     {
         ArrayTools.insert(colorMap, layers.backgrounds, 0, 0);
         int c;
+        ICellVisible icv;
         for (int x = 0; x < width && x < layers.gridWidth; x++) {
             for (int y = 0; y < height && y < layers.gridHeight; y++) {
-                if((c = wildMap.content[x][y]) >= 0)
-                    layers.put(x, y, wildMap.contentTypes.get(c));
-                else
-                    layers.put(x, y, wildMap.floorTypes.get(wildMap.floors[x][y]).charAt(0), SColor.contrastLuma(colorMap[x][y]));
+                if((c = wildMap.content[x][y]) >= 0 && (icv = viewer.get(wildMap.contentTypes.get(c))) != null)
+                    layers.put(x, y, icv);
+                else if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null)
+                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(colorMap[x][y]));
             }
         }
     }
