@@ -194,8 +194,6 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         super.resize(width, height);
         view.update(width, height, true);
         view.apply(true);
-        //display = new SquidPanel(this.width, this.height, cellWidth, cellHeight);
-        //Gdx.graphics.requestRendering();
     }
 
     public static void main(String[] arg) {

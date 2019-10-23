@@ -4701,18 +4701,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 131:
-                        Gdx.graphics.setTitle("Blue Noise with regional adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
-                            for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
-                                bright = ((BlueNoise.get(xx, yy) ^ 128 ^ Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 1234567)
-                                        ^ (xx + yy >> 2 & 0x3F) ^ (xx - yy >> 2 & 0x3F)) & 255) / 255f;
-                                back[x][y] = floatGet(bright, bright, bright, 1f);
-                            }
-                        }
-                        break;
-                    case 132:
                         Gdx.graphics.setTitle("Blue Noise via Metropolis algorithm " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        if(METROPOLIS_NOISE == null)
 //                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr, 400);
@@ -4720,7 +4708,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = (x + ctr);
                             for (int y = 0; y < height; y++) {
                                 yy = (y + ctr);
-                                bright = (128 + BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr & 3])) / 255f;
+                                bright = (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr >>> 5 & 15]) + 128) / 255f;
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        break;
+                    case 132:
+                        Gdx.graphics.setTitle("Blue Noise with regional adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = (BlueNoise.getSeeded(xx, yy, 12345789) + 128) / 255f;
+//                                        ((BlueNoise.get(xx, yy) ^ 128 ^ Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 1234567)
+//                                        ^ (xx + yy >> 2 & 0x3F) ^ (xx - yy >> 2 & 0x3F)) & 255) / 255f;
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -4728,10 +4729,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 133:
                         Gdx.graphics.setTitle("Blue Noise via Metropolis with adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = (x + ctr);
+                            xx = x + (ctr >> 2);
                             for (int y = 0; y < height; y++) {
-                                yy = (y + ctr);
-                                bright = (128 + BlueNoise.getSeeded(xx, yy, 12345679, BlueNoise.ALT_NOISE[ctr >>> 3 & 3])) / 255f;
+                                yy = y + (ctr >> 2);
+                                bright = (128 + BlueNoise.getSeeded(xx, yy, 12345679, BlueNoise.ALT_NOISE[ctr >> 2 & 15])) / 255f;
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
