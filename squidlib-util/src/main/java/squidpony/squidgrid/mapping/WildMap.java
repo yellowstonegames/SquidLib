@@ -29,11 +29,11 @@ import java.util.ArrayList;
  * Created by Tommy Ettinger on 10/16/2019.
  */
 @Beta
-public class WildMap<T> implements Serializable {
+public class WildMap implements Serializable {
     private static final long serialVersionUID = 1L;
     public final int width, height, biome;
     public IStatefulRNG rng;
-    public ArrayList<? extends T> contentTypes;
+    public ArrayList<String> contentTypes;
     public ArrayList<String> floorTypes;
     public final int[][] content, floors;
     public WildMap()
@@ -50,9 +50,9 @@ public class WildMap<T> implements Serializable {
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng)
     {
-        this(width, height, biome, rng, Maker.makeList(".dirt", ".leaves", ".dirt", "\"grass", ".leaves"), new ArrayList<T>(4));
+        this(width, height, biome, rng, Maker.makeList("dirt", "leaves", "dirt", "grass", "leaves"), new ArrayList<String>(4));
     }
-    public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> floorTypes, ArrayList<? extends T> contentTypes)
+    public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> floorTypes, ArrayList<String> contentTypes)
     {
         this.width = width;
         this.height = height;
@@ -66,12 +66,12 @@ public class WildMap<T> implements Serializable {
 
     public void generate() {
         ArrayTools.fill(content, -1);
-        final int seed = rng.nextInt(), otherSeed = rng.nextInt();
+        final int seed = rng.nextInt(), otherSeed = rng.nextInt(), choice = seed + otherSeed & 15;
         final int limit = contentTypes.size(), floorLimit = floorTypes.size();
         int b;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if((b = BlueNoise.getSeeded(x, y, seed) + 128) < limit)
+                if((b = BlueNoise.getSeeded(x, y, seed, BlueNoise.ALT_NOISE[choice]) + 128) < limit)
                     content[x][y] = b;
                 floors[x][y] = (int)((FastNoise.instance.layered2D(x,  y, otherSeed, 2, 0x1p-5f) * 0.4999f + 0.5f) * floorLimit);
             }
