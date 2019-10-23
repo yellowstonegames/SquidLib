@@ -14,8 +14,12 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;
 import squidpony.squidgrid.mapping.WildMap;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.StatefulRNG;
+
+import static squidpony.squidgrid.gui.gdx.SColor.*;
 
 public class WildMapDemo extends ApplicationAdapter {
     public static final char[]  terrainChars = {
@@ -111,9 +115,17 @@ public class WildMapDemo extends ApplicationAdapter {
 //        pix.dispose();
 
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
-        wmv = new WildMapView();
+        wild = new WildMap();
+        OrderedMap<String, ICellVisible> viewer = new OrderedMap<>(3 + wild.contentTypes.size(), 0.25f);
+        viewer.putPairs("dirt", new Basic('.', CLOVE_BROWN), 
+                "leaves", new Basic('…', CHINESE_TEA_YELLOW),
+                "grass", new Basic('"', AURORA_DUSTY_GREEN.toEditedFloat(0f, 0.1f, -0.25f)));
+        for (int i = 0; i < wild.contentTypes.size(); i++) {
+            viewer.put(wild.contentTypes.get(i), new Basic('¥', AURORA_AVOCADO.toEditedFloat(wild.rng.nextFloat(0.35f) - 0.25f, wild.rng.nextFloat(0.4f) - 0.2f, wild.rng.nextFloat(0.3f) - 0.45f)));
+        }
+        wmv = new WildMapView(wild, viewer);
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
-        wild = wmv.wildMap;
+        //wild = wmv.wildMap;
         position = new Vector3(bigWidth * cellWidth * 0.5f, bigHeight * cellHeight * 0.5f, 0);
         previousPosition = position.cpy();
         nextPosition = position.cpy();
