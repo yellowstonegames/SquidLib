@@ -99,7 +99,7 @@ public class WildMap implements Serializable {
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng)
     {
-        this(width, height, biome, rng, makeShuffledRepeats(rng, "dirt", 6, "leaves", 4, "grass", 9), makeVegetation(rng, 70, 0.3, rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages)));
+        this(width, height, biome, rng, makeShuffledRepeats(rng, "dirt", 9, "leaves", 6, "grass", 14), makeVegetation(rng, 70, 0.3, rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages)));
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> floorTypes, ArrayList<String> contentTypes)
     {

@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
 
 import java.nio.charset.StandardCharsets;
@@ -668,10 +669,11 @@ public class BlueNoise {
         int t, rx, ry, ctr;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                toFill[x][y] = (getSeeded(x, y, seed0, c0) ^ getSeeded(x + xOffset, y + yOffset, seed1, c1)) + 128;
+                toFill[x][y] = (getSeeded(x, y, seed0, c0) + getSeeded(x + xOffset, y + yOffset, seed1, c1) + 256) >> 1;
             }
         }
         int[] ox = new int[width], oy = new int[height];
+        boolean anySuccesses = false;
         do {
             ctr = 0;
             rng.randomOrdering(width, ox);
@@ -687,10 +689,23 @@ public class BlueNoise {
                             toFill[rx + d.deltaX][ry + d.deltaY] = t;
                             ctr++;
                         }
+                        d = dirs[rng.next(2)];
+                        if (rx + d.deltaX >= 0 && rx + d.deltaX < width && ry + d.deltaY >= 0 && ry + d.deltaY < height &&
+                                toFill[rx + d.deltaX][ry + d.deltaY] >= spillerLimit) {
+                            toFill[rx + d.deltaX][ry + d.deltaY] = t;
+                            ctr++;
+                        }
                     }
 
                 }
             }
+            if(!anySuccesses && ctr == 0)
+            {
+                ArrayTools.fill(toFill, 0);
+                return toFill;
+            }
+            else 
+                anySuccesses = true;
         } while (ctr > 0);
         do {
             ctr = 0;
