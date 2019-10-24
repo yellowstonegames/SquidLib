@@ -682,7 +682,8 @@ public class BlueNoise {
                     ry = oy[y];
                     if ((t = toFill[rx][ry]) < spillerLimit) {
                         d = dirs[rng.next(2)];
-                        if (toFill[rx + d.deltaX][ry + d.deltaY] >= spillerLimit) {
+                        if (rx + d.deltaX >= 0 && rx + d.deltaX < width && ry + d.deltaY >= 0 && ry + d.deltaY < height &&
+                                toFill[rx + d.deltaX][ry + d.deltaY] >= spillerLimit) {
                             toFill[rx + d.deltaX][ry + d.deltaY] = t;
                             ctr++;
                         }
@@ -700,21 +701,13 @@ public class BlueNoise {
                 for (int y = 0; y < height; y++) {
                     ry = oy[y];
                     if ((t = toFill[rx][ry]) < spillerLimit) {
-                        if (toFill[rx + 1][ry] >= spillerLimit) {
-                            toFill[rx + 1][ry] = t;
-                            ctr++;
-                        }
-                        if (toFill[rx - 1][ry] >= spillerLimit) {
-                            toFill[rx - 1][ry] = t;
-                            ctr++;
-                        }
-                        if (toFill[rx][ry + 1] >= spillerLimit) {
-                            toFill[rx][ry + 1] = t;
-                            ctr++;
-                        }
-                        if (toFill[rx][ry - 1] >= spillerLimit) {
-                            toFill[rx][ry - 1] = t;
-                            ctr++;
+                        for (int i = 0; i < 4; i++) {
+                            d = dirs[i];
+                            if (rx + d.deltaX >= 0 && rx + d.deltaX < width && ry + d.deltaY >= 0 && ry + d.deltaY < height &&
+                                    toFill[rx + d.deltaX][ry + d.deltaY] >= spillerLimit) {
+                                toFill[rx + d.deltaX][ry + d.deltaY] = t;
+                                ctr++;
+                            }
                         }
                     }
 
