@@ -135,6 +135,8 @@ public class WildMapDemo extends ApplicationAdapter {
                 switch (key) {
                     case SquidInput.ENTER:
                         seed = rng.nextLong();
+                        wild.rng.shuffleInPlace(wild.floorTypes);
+                        wild.rng.shuffleInPlace(wild.contentTypes);
                         generate(seed);
                         rng.setState(seed);
                         break;

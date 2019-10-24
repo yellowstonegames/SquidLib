@@ -118,11 +118,12 @@ public class WildMap implements Serializable {
         final int seed = rng.nextInt(), otherSeed = rng.nextInt(), choice = seed + otherSeed & 15;
         final int limit = contentTypes.size(), floorLimit = floorTypes.size();
         int b;
+        
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if((b = BlueNoise.getSeeded(x, y, seed, BlueNoise.ALT_NOISE[choice]) + 128) < limit)
                     content[x][y] = b;
-                floors[x][y] = (int)((FastNoise.instance.layered2D(x,  y, otherSeed, 2, 0x1p-5f) * 0.4999f + 0.5f) * floorLimit);
+                floors[x][y] = (int)((FastNoise.instance.layered2D(x,  y, otherSeed, 2, 0x1p-5f) * 0.4999f + 0.5f) * (floorLimit - 1) + 0.25f + rng.nextFloat(0.5f));
             }
         }
     }
