@@ -2,6 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
+import squidpony.Maker;
 import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
@@ -85,6 +86,104 @@ public class WildMap implements Serializable {
         rng.shuffleInPlace(al);
         return al;
     }
+    
+    public static ArrayList<String> floorsByBiome(int biome, IRNG rng)
+    {
+        biome = (biome & 1023) % 61;
+        switch (biome)
+        {
+            case 0: //Ice
+            case 1:
+            case 6:
+            case 12:
+            case 18:
+            case 24: 
+            case 30:
+            case 42:
+            case 48:
+                return makeShuffledRepeats(rng, "snow", 3, "ice", 1);
+            case 7: //Tundra
+            case 13:
+            case 19:
+            case 25:
+                return makeShuffledRepeats(rng, "dirt", 6, "pebbles", 1, "snow", 9, "dry grass", 4);
+            case 26: //BorealForest
+            case 31:
+            case 32:
+                return makeShuffledRepeats(rng, "dirt", 3, "pebbles", 1, "snow", 11);
+            case 43: //River
+            case 44:
+            case 45:
+            case 46:
+            case 47:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+                return Maker.makeList("fresh water");
+            case 54: //Ocean
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+                return Maker.makeList("salt water");
+            case 3: //Desert
+            case 4:
+            case 5:
+            case 10:
+            case 11:
+            case 17:
+            case 38: //Beach
+            case 39:
+            case 40:
+            case 41: 
+                return Maker.makeList("sand");
+            case 2: //Grassland
+            case 8:
+            case 9:
+                return makeShuffledRepeats(rng, "dirt", 8, "dry grass", 13, "grass", 2);
+            case 14: //Woodland
+            case 15:
+                return makeShuffledRepeats(rng, "dirt", 11, "leaves", 3, "dry grass", 8);
+            case 16: //Savanna
+            case 22:
+            case 23:
+            case 29:
+                return makeShuffledRepeats(rng, "dirt", 4, "dry grass", 17);
+            case 20: //SeasonalForest
+            case 21:
+                return makeShuffledRepeats(rng, "dirt", 9, "leaves", 6, "grass", 14);
+            case 27: //TemperateRainforest
+            case 33:
+                return makeShuffledRepeats(rng, "mud", 3, "leaves", 8, "grass", 10, "moss", 5);
+            case 28: //TropicalRainforest
+            case 34:
+            case 35:
+                return makeShuffledRepeats(rng, "mud", 7, "leaves", 6, "grass", 4, "moss", 11);
+            case 36: // Rocky
+            case 37:
+                return makeShuffledRepeats(rng, "pebbles", 5, "rubble", 1);
+            default:
+                return Maker.makeList("empty space");
+
+        }
+//                //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST
+//                "Ice",    "Ice",          "Grassland",      "Desert",              "Desert",             "Desert",             //DRYEST
+//                "Ice",    "Tundra",       "Grassland",      "Grassland",           "Desert",             "Desert",             //DRYER
+//                "Ice",    "Tundra",       "Woodland",       "Woodland",            "Savanna",            "Desert",             //DRY
+//                "Ice",    "Tundra",       "SeasonalForest", "SeasonalForest",      "Savanna",            "Savanna",            //WET
+//                "Ice",    "Tundra",       "BorealForest",   "TemperateRainforest", "TropicalRainforest", "Savanna",            //WETTER
+//                "Ice",    "BorealForest", "BorealForest",   "TemperateRainforest", "TropicalRainforest", "TropicalRainforest", //WETTEST
+//                "Rocky",  "Rocky",        "Beach",          "Beach",               "Beach",              "Beach",              //COASTS
+//                "Ice",    "River",        "River",          "River",               "River",              "River",              //RIVERS
+//                "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES
+//                "Ocean",  "Ocean",        "Ocean",          "Ocean",               "Ocean",              "Ocean",              //OCEAN
+//                "Empty",                                                                                                       //SPACE
+
+    }
+    
     public WildMap()
     {
         this(128, 128, 21);
@@ -99,7 +198,7 @@ public class WildMap implements Serializable {
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng)
     {
-        this(width, height, biome, rng, makeShuffledRepeats(rng, "dirt", 9, "leaves", 6, "grass", 14), makeVegetation(rng, 70, 0.3, rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages)));
+        this(width, height, biome, rng, floorsByBiome(biome, rng), makeVegetation(rng, 70, 0.3, rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages)));
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> floorTypes, ArrayList<String> contentTypes)
     {
