@@ -6,8 +6,10 @@ import squidpony.Maker;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.Noise;
-import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.SilkRNG;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static squidpony.squidgrid.gui.gdx.WorldMapView.*;
 
@@ -19,7 +21,7 @@ public class WildMapView {
     protected float[][] colorMap;
     public WildMap wildMap;
     
-    public OrderedMap<String, ? extends ICellVisible> viewer;
+    public Map<String, ? extends ICellVisible> viewer;
     
     public int getWidth() {
         return width;
@@ -51,10 +53,10 @@ public class WildMapView {
     {
         this(null, null);
     }
-    public WildMapView(WildMap wildMap, OrderedMap<String, ? extends ICellVisible> viewer)
+    public WildMapView(WildMap wildMap, Map<String, ? extends ICellVisible> viewer)
     {
         if(wildMap == null) { // default to ice map, biome 0; ignore given viewer, it may be null
-            this.viewer = OrderedMap.makeMap("snow", new ICellVisible.Named('.', iceColor, "snow"),
+            this.viewer = Maker.makeHM("snow", new ICellVisible.Named('.', iceColor, "snow"),
                     "ice", new ICellVisible.Named('_', SColor.lightenFloat(SColor.PALE_CORNFLOWER_BLUE.toFloatBits(), 0.3f), "ice"),
                     "mound", new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.15f), "snow mound"),
                     "divot", new ICellVisible.Named('°', SColor.darkenFloat(iceColor, 0.3f), "icy divot"),
@@ -77,7 +79,7 @@ public class WildMapView {
     
     public WildMapView(long seed, int width, int height, int biome)
     {
-        this(new WildMap(width, height, biome), new OrderedMap<String, ICellVisible>(16, 0.25f));
+        this(new WildMap(width, height, biome, new SilkRNG(seed)), new HashMap<String, ICellVisible>(16, 0.25f));
     }
     
     protected float[] biomeColors = {
