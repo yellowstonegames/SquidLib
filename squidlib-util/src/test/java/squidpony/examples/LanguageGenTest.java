@@ -354,6 +354,7 @@ public class LanguageGenTest {
         System.out.println("\n\nGENERATED:\n");
         StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
+            System.out.println("\n" + lang.getName() + ":\n");
             NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 41041041L);
 //            System.out.println("princess   : " + cipher.lookup("princess"));
 //            System.out.println("princesses : " + cipher.lookup("princesses"));
