@@ -86,18 +86,16 @@ public class WildMap implements Serializable {
         rng.shuffleInPlace(al);
         return al;
     }
-    
-    public static ArrayList<String> floorsByBiome(int biome, IRNG rng)
-    {
+
+    public static ArrayList<String> floorsByBiome(int biome, IRNG rng) {
         biome = (biome & 1023) % 61;
-        switch (biome)
-        {
+        switch (biome) {
             case 0: //Ice
             case 1:
             case 6:
             case 12:
             case 18:
-            case 24: 
+            case 24:
             case 30:
             case 42:
             case 48:
@@ -138,7 +136,7 @@ public class WildMap implements Serializable {
             case 38: //Beach
             case 39:
             case 40:
-            case 41: 
+            case 41:
                 return Maker.makeList("sand");
             case 2: //Grassland
             case 8:
@@ -169,6 +167,88 @@ public class WildMap implements Serializable {
                 return Maker.makeList("empty space");
 
         }
+    }
+        public static ArrayList<String> contentByBiome(int biome, IRNG rng)
+        {
+            biome = (biome & 1023) % 61;
+            switch (biome) {
+                case 0: //Ice
+                case 1:
+                case 6:
+                case 12:
+                case 18:
+                case 24:
+                case 30:
+                case 42:
+                case 48:
+                    return makeShuffledRepeats(rng, "snow mound", 5, "icy divot", 2, "powder snowdrift", 5);
+                case 7: //Tundra
+                case 13:
+                case 19:
+                case 25:
+                    return makeShuffledRepeats(rng, "snow mound", 4, "hillock", 6, "animal burrow", 5, "small bush 1", 2);
+                case 26: //BorealForest
+                case 31:
+                case 32:
+                    return makeShuffledRepeats(rng, "snow mound", 3, "small bush 1", 5, "large bush 1", 3, "evergreen tree 1", 17, "evergreen tree 2", 12);
+//                case 43: //River
+//                case 44:
+//                case 45:
+//                case 46:
+//                case 47:
+//                case 49:
+//                case 50:
+//                case 51:
+//                case 52:
+//                case 53:
+//                case 54: //Ocean
+//                case 55:
+//                case 56:
+//                case 57:
+//                case 58:
+//                case 59:
+//                    return new ArrayList<>(0);
+                case 3: //Desert
+                case 4:
+                case 5:
+                case 10:
+                case 11:
+                case 17:
+                    return makeShuffledRepeats(rng, "small cactus 1", 2, "large cactus 1", 2, "succulent 1", 1, "animal burrow", 2);
+                case 38: //Beach
+                case 39:
+                case 40:
+                case 41:
+                    return makeShuffledRepeats(rng, "seashell 1", 3, "seashell 2", 3, "seashell 3", 3, "seashell 4", 3, "driftwood", 5, "boulder", 3);
+                case 2: //Grassland
+                case 8:
+                case 9:
+                    return makeShuffledRepeats(rng, "deciduous tree 1", 3, "small bush 1", 5, "small bush 2", 4, "large bush 1", 5, "animal burrow", 8, "hillock", 4);
+                case 14: //Woodland
+                case 15:
+                    return makeShuffledRepeats(rng, "deciduous tree 1", 12, "deciduous tree 2", 9, "deciduous tree 3", 6, "small bush 1", 4, "small bush 2", 3, "animal burrow", 3);
+                case 16: //Savanna
+                case 22:
+                case 23:
+                case 29:
+                    return makeShuffledRepeats(rng, "small bush 1", 8, "small bush 2", 5, "large bush 1", 2, "animal burrow", 3, "hillock", 6);
+                case 20: //SeasonalForest
+                case 21:
+                    return makeShuffledRepeats(rng, "deciduous tree 1", 15, "deciduous tree 2", 13, "deciduous tree 3", 12, "small bush 1", 3, "large bush 1", 5, "large bush 2", 4, "animal burrow", 3);
+                case 27: //TemperateRainforest
+                case 33:
+                    return makeShuffledRepeats(rng, "tropical tree 1", 6, "tropical tree 2", 5, "deciduous tree 1", 13, "deciduous tree 2", 12, "small bush 1", 8, "large bush 1", 7, "large bush 2", 7, "large bush 3", 3, "animal burrow", 3);
+                case 28: //TropicalRainforest
+                case 34:
+                case 35:
+                    return makeShuffledRepeats(rng, "tropical tree 1", 12, "tropical tree 2", 11, "tropical tree 3", 10, "tropical tree 4", 9, "small bush 1", 6, "small bush 2", 5, "large bush 1", 6, "large bush 2", 5, "large bush 3", 3, "animal burrow", 9, "boulder", 1);
+                case 36: // Rocky
+                case 37:
+                    return makeShuffledRepeats(rng, "seashell 1", 3, "seashell 2", 2, "seashell 3", 2, "driftwood", 6, "boulder", 9);
+                default:
+                    return new ArrayList<>(0);
+            }
+        }
 //                //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST
 //                "Ice",    "Ice",          "Grassland",      "Desert",              "Desert",             "Desert",             //DRYEST
 //                "Ice",    "Tundra",       "Grassland",      "Grassland",           "Desert",             "Desert",             //DRYER
@@ -181,8 +261,6 @@ public class WildMap implements Serializable {
 //                "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES
 //                "Ocean",  "Ocean",        "Ocean",          "Ocean",               "Ocean",              "Ocean",              //OCEAN
 //                "Empty",                                                                                                       //SPACE
-
-    }
     
     public WildMap()
     {
@@ -198,7 +276,15 @@ public class WildMap implements Serializable {
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng)
     {
-        this(width, height, biome, rng, floorsByBiome(biome, rng), makeVegetation(rng, 70, 0.3, rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages)));
+        this(width, height, biome, rng, floorsByBiome(biome, rng), contentByBiome(biome, rng));
+    }
+    public WildMap(int width, int height, int biome, IStatefulRNG rng, String... contentTypes)
+    {
+        this(width, height, biome, rng, floorsByBiome(biome, rng), Maker.makeList(contentTypes));
+    }
+    public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> contentTypes)
+    {
+        this(width, height, biome, rng, floorsByBiome(biome, rng), contentTypes);
     }
     public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> floorTypes, ArrayList<String> contentTypes)
     {

@@ -12,11 +12,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.SilkRNG;
 import squidpony.squidmath.StatefulRNG;
 
 import static squidpony.squidgrid.gui.gdx.SColor.*;
@@ -115,7 +117,7 @@ public class WildMapDemo extends ApplicationAdapter {
 //        pix.dispose();
 
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
-        wild = new WildMap();
+        wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"), WildMap.makeVegetation(rng, 70, 0.2, FakeLanguageGen.SIMPLISH));
         OrderedMap<String, ICellVisible> viewer = new OrderedMap<>(3 + wild.contentTypes.size(), 0.25f);
         viewer.putPairs("dirt", new Basic('.', CLOVE_BROWN), 
                 "leaves", new Basic('…', CHINESE_TEA_YELLOW),
