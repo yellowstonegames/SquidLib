@@ -277,40 +277,33 @@ public class LightingHandler implements Serializable {
                 if (losResult[x][y] > 0) {
                     if (resistances[x][y] >= 1) {
                         o0 = 0f;
-                        o1 = 0f;
                         if (y > 0) {
-                            if (losResult[x][y - 1] > 0 && resistances[x][y - 1] < 1) {
-                                if (o0 != (o0 = Math.max(o0, other[0][x][y - 1]))) o1 = other[1][x][y - 1];
-                            }
-                            if (x > 0 && losResult[x - 1][y - 1] > 0 && resistances[x - 1][y - 1] < 1) {
-                                if (o0 != (o0 = Math.max(o0, other[0][x - 1][y - 1]))) o1 = other[1][x - 1][y - 1];
-                            }
-                            if (x < width - 1 && losResult[x + 1][y - 1] > 0 && resistances[x + 1][y - 1] < 1) {
-                                if (o0 != (o0 = Math.max(o0, other[0][x + 1][y - 1]))) o1 = other[1][x + 1][y - 1];
+                            if ((losResult[x][y - 1] > 0 && other[0][x][y - 1] > 0 && resistances[x][y - 1] < 1)
+                                    || (x > 0 && losResult[x - 1][y - 1] > 0 && other[0][x - 1][y - 1] > 0 && resistances[x - 1][y - 1] < 1)
+                                    || (x < width - 1 && losResult[x + 1][y - 1] > 0 && other[0][x + 1][y - 1] > 0 && resistances[x + 1][y - 1] < 1)) {
+                                o0 = (float) other[0][x][y];
                             }
                         }
                         if (y < height - 1) {
-                            if (losResult[x][y + 1] > 0 && resistances[x][y + 1] < 1) {
-                                if (o0 != (o0 = Math.max(o0, other[0][x][y + 1]))) o1 = other[1][x][y + 1];
-                            }
-                            if (x > 0 && losResult[x - 1][y + 1] > 0 && resistances[x - 1][y + 1] < 1) {
-                                if (o0 != (o0 = Math.max(o0, other[0][x - 1][y + 1]))) o1 = other[1][x - 1][y + 1];
-                            }
-                            if (x < width - 1 && losResult[x + 1][y + 1] > 0 && resistances[x + 1][y + 1] < 1) {
-                                if (o0 != (o0 = Math.max(o0, other[0][x + 1][y + 1]))) o1 = other[1][x + 1][y + 1];
+                            if ((losResult[x][y + 1] > 0 && other[0][x][y + 1] > 0 && resistances[x][y + 1] < 1)
+                                    || (x > 0 && losResult[x - 1][y + 1] > 0 && other[0][x - 1][y + 1] > 0 && resistances[x - 1][y + 1] < 1)
+                                    || (x < width - 1 && losResult[x + 1][y + 1] > 0 && other[0][x + 1][y + 1] > 0 && resistances[x + 1][y + 1] < 1)) {
+                                o0 = (float) other[0][x][y];
                             }
                         }
-                        if (x > 0 && losResult[x - 1][y] > 0 && resistances[x - 1][y] < 1) {
-                            if (o0 != (o0 = Math.max(o0, other[0][x - 1][y]))) o1 = other[1][x - 1][y];
+                        if (x > 0 && losResult[x - 1][y] > 0 && other[0][x - 1][y] > 0 && resistances[x - 1][y] < 1) {
+                            o0 = (float) other[0][x][y];
                         }
-                        if (x < width - 1 && losResult[x + 1][y] > 0 && resistances[x + 1][y] < 1) {
-                            if (o0 != (o0 = Math.max(o0, other[0][x + 1][y]))) o1 = other[1][x + 1][y];
+                        if (x < width - 1 && losResult[x + 1][y] > 0 && other[0][x + 1][y] > 0 && resistances[x + 1][y] < 1) {
+                            o0 = other[0][x][y];
                         }
+                        if(o0 > 0f) o1 = other[1][x][y];
+                        else continue;
                     } else {
                         o0 = other[0][x][y];
                         o1 = other[1][x][y];
                     }
-                    if (o0 == 0f || o1 == 0f)
+                    if (o0 <= 0f || o1 == 0f)
                         continue;
                     b0 = basis[0][x][y];
                     b1 = basis[1][x][y];
@@ -340,7 +333,7 @@ public class LightingHandler implements Serializable {
 
     /**
      * Edits {@link #colorLighting} by adding in and mixing the given color where the light strength in {@link #tempFOV}
-     * is greater than 0, with that strengt boosted by flare (which can be any finite float greater than -1f, but is
+     * is greater than 0, with that strength boosted by flare (which can be any finite float greater than -1f, but is
      * usually from 0f to 1f when increasing strength).
      * Primarily used internally, but exposed so outside code can do the same things this class can.
      * @param flare boosts the effective strength of lighting in {@link #tempColorLighting}; usually from 0 to 1
@@ -357,34 +350,26 @@ public class LightingHandler implements Serializable {
                     if (resistances[x][y] >= 1) {
                         o0 = 0f;
                         if (y > 0) {
-                            if (losResult[x][y - 1] > 0 && resistances[x][y - 1] < 1) {
-                                o0 = Math.max(o0, (float) otherStrength[x][y - 1]);
-                            }
-                            if (x > 0 && losResult[x - 1][y - 1] > 0 && resistances[x - 1][y - 1] < 1) {
-                                o0 = Math.max(o0, (float) otherStrength[x - 1][y - 1]);
-                            }
-                            if (x < width - 1 && losResult[x + 1][y - 1] > 0 && resistances[x + 1][y - 1] < 1) {
-                                o0 = Math.max(o0, (float) otherStrength[x + 1][y - 1]);
+                            if ((losResult[x][y - 1] > 0 && otherStrength[x][y - 1] > 0 && resistances[x][y - 1] < 1)
+                            || (x > 0 && losResult[x - 1][y - 1] > 0 && otherStrength[x - 1][y - 1] > 0 && resistances[x - 1][y - 1] < 1)
+                            || (x < width - 1 && losResult[x + 1][y - 1] > 0 && otherStrength[x + 1][y - 1] > 0 && resistances[x + 1][y - 1] < 1)) {
+                                o0 = (float) otherStrength[x][y];
                             }
                         }
                         if (y < height - 1) {
-                            if (losResult[x][y + 1] > 0 && resistances[x][y + 1] < 1) {
-                                o0 = Math.max(o0, (float) otherStrength[x][y + 1]);
-                            }
-                            if (x > 0 && losResult[x - 1][y + 1] > 0 && resistances[x - 1][y + 1] < 1) {
-                                o0 = Math.max(o0, (float) otherStrength[x - 1][y + 1]);
-                            }
-                            if (x < width - 1 && losResult[x + 1][y + 1] > 0 && resistances[x + 1][y + 1] < 1) {
-                                o0 = Math.max(o0, (float) otherStrength[x + 1][y + 1]);
+                            if ((losResult[x][y + 1] > 0 && otherStrength[x][y + 1] > 0 && resistances[x][y + 1] < 1)
+                                    || (x > 0 && losResult[x - 1][y + 1] > 0 && otherStrength[x - 1][y + 1] > 0 && resistances[x - 1][y + 1] < 1)
+                                    || (x < width - 1 && losResult[x + 1][y + 1] > 0 && otherStrength[x + 1][y + 1] > 0 && resistances[x + 1][y + 1] < 1)) {
+                                o0 = (float) otherStrength[x][y];
                             }
                         }
-                        if (x > 0 && losResult[x - 1][y] > 0 && resistances[x - 1][y] < 1) {
-                            o0 = Math.max(o0, (float) otherStrength[x - 1][y]);
+                        if (x > 0 && losResult[x - 1][y] > 0 && otherStrength[x - 1][y] > 0 && resistances[x - 1][y] < 1) {
+                            o0 = (float) otherStrength[x][y];
                         }
-                        if (x < width - 1 && losResult[x + 1][y] > 0 && resistances[x + 1][y] < 1) {
-                            o0 = Math.max(o0, (float) otherStrength[x + 1][y]);
+                        if (x < width - 1 && losResult[x + 1][y] > 0 && otherStrength[x + 1][y] > 0 && resistances[x + 1][y] < 1) {
+                            o0 = (float) otherStrength[x][y];
                         }
-                        if(o0 != 0) o1 = color;
+                        if(o0 > 0f) o1 = color;
                         else continue;
                     } else {
                         if((o0 = (float) otherStrength[x][y]) != 0) o1 = color;
