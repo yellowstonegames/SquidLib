@@ -2,7 +2,6 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import squidpony.ArrayTools;
-import squidpony.Maker;
 import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
@@ -56,8 +55,8 @@ public class WildMapView {
     {
         HashMap<String, ICellVisible> viewer = new HashMap<>(128);
 
-        viewer.put("snow", new Basic('.', iceColor));
-        viewer.put("ice", new Basic('-', SColor.lightenFloat(SColor.PALE_CORNFLOWER_BLUE, 0.3f)));
+        viewer.put("snow", new Basic('.', ALICE_BLUE));
+        viewer.put("ice", new Basic('-', SColor.lightenFloat(PALE_CORNFLOWER_BLUE, 0.3f)));
         viewer.put("dirt", new Basic('.', CLOVE_BROWN.toEditedFloat(rng.nextFloat(0.1f) - 0.07f, 0.05f - rng.nextFloat(0.15f), rng.nextFloat(0.15f) - 0.08f)));
         viewer.put("pebbles", new Basic('…', AURORA_WET_STONE.toEditedFloat(rng.nextFloat(0.4f) - 0.2f, rng.nextFloat(0.1f) - 0.05f, rng.nextFloat(0.3f) - 0.15f)));
         viewer.put("dry grass", new Basic('\'', CW_FADED_BROWN.toEditedFloat(rng.nextFloat(0.3f), rng.nextFloat(0.2f) - 0.05f, rng.nextFloat(0.1f))));
@@ -68,36 +67,36 @@ public class WildMapView {
         viewer.put("grass", new Basic('"', AURORA_DUSTY_GREEN.toEditedFloat(rng.nextFloat(0.08f) - 0.04f, rng.nextFloat(0.25f) - 0.05f, rng.nextFloat(0.1f) - 0.3f)));
         viewer.put("mud", new Basic(',', DB_EARTH.toEditedFloat(rng.nextFloat(0.4f) - 0.05f, rng.nextFloat(0.3f) - 0.25f, rng.nextFloat(0.2f))));
         viewer.put("moss", new Basic('˝', AURORA_FERN_GREEN.toEditedFloat(0f, rng.nextFloat(0.1f) - 0.05f, rng.nextFloat(0.1f) - 0.05f)));
-        viewer.put("rubble", new Basic('¨', AURORA_CHIPPED_GRANITE.toEditedFloat(rng.nextFloat(0.4f) - 0.3f, rng.nextFloat(0.1f) - 0.05f, rng.nextFloat(0.3f) - 0.2f)));
+        viewer.put("rubble", new Basic('‰', AURORA_CHIPPED_GRANITE.toEditedFloat(rng.nextFloat(0.4f) - 0.3f, rng.nextFloat(0.1f) - 0.05f, rng.nextFloat(0.3f) - 0.2f)));
         viewer.put("empty space", new Basic('_', DB_INK));
-        viewer.put("snow mound", new Basic());
-        viewer.put("icy divot", new Basic());
-        viewer.put("powder snowdrift", new Basic());
-        viewer.put("hillock", new Basic());
-        viewer.put("animal burrow", new Basic());
-        viewer.put("small bush 1", new Basic());
-        viewer.put("large bush 1", new Basic());
-        viewer.put("evergreen tree 1", new Basic());
-        viewer.put("evergreen tree 2", new Basic());
-        viewer.put("small cactus 1", new Basic());
-        viewer.put("large cactus 1", new Basic());
-        viewer.put("succulent 1", new Basic());
-        viewer.put("seashell 1", new Basic());
-        viewer.put("seashell 2", new Basic());
-        viewer.put("seashell 3", new Basic());
-        viewer.put("seashell 4", new Basic());
-        viewer.put("driftwood", new Basic());
-        viewer.put("boulder", new Basic());
+        viewer.put("snow mound", new Basic('∆', ALICE_BLUE.toEditedFloat(0f, rng.nextFloat(0.1f), -rng.nextFloat(0.2f))));
+        viewer.put("icy divot", new Basic('°', ALICE_BLUE.toEditedFloat(0.05f, rng.nextFloat(0.15f), 0.18f - rng.nextFloat(0.24f))));
+        viewer.put("powder snowdrift", new Basic('¨', ALICE_BLUE.toEditedFloat(rng.nextFloat(0.6f) - 0.03f, rng.nextFloat(0.1f) - 0.05f, -rng.nextFloat(0.14f))));
+        viewer.put("hillock", new Basic('∆', CW_DRAB_BROWN.toEditedFloat(rng.nextFloat(0.35f), rng.nextFloat(0.2f) - 0.15f, rng.nextFloat(0.2f) + 0.15f)));
+        viewer.put("animal burrow", new Basic('¸', AURORA_ARMY_GREEN.toEditedFloat(rng.nextFloat(0.25f), rng.nextFloat(0.2f) - 0.1f, rng.nextFloat(0.2f) - 0.15f)));
+        viewer.put("small bush 1", new Basic('♣', AURORA_AVOCADO.toEditedFloat(rng.nextFloat(0.45f) - 0.28f, rng.nextFloat(0.35f) - 0.2f, rng.nextFloat(0.25f) - 0.35f)));
+        viewer.put("large bush 1", new Basic('♣', AURORA_FOREST_GLEN.toEditedFloat(rng.nextFloat(0.45f) - 0.28f, rng.nextFloat(0.35f) - 0.3f, rng.nextFloat(0.25f) - 0.35f)));
+        viewer.put("evergreen tree 1", new Basic('♠', PINE_GREEN.toEditedFloat(-0.08f - rng.nextFloat(0.1f), rng.nextFloat(0.1f) - 0.08f, -rng.nextFloat(0.1f))));
+        viewer.put("evergreen tree 2", new Basic('♠', AURORA_EUCALYPTUS.toEditedFloat(0.04f - rng.nextFloat(0.15f), rng.nextFloat(0.15f) - 0.12f, rng.nextFloat(0.1f) - 0.8f)));
+        viewer.put("small cactus 1", new Basic('‡', AURORA_FROG_GREEN.toEditedFloat(rng.nextFloat(0.2f) - 0.06f, rng.nextFloat(0.25f) - 0.06f, rng.nextFloat(0.2f) - 0.16f)));
+        viewer.put("large cactus 1", new Basic('‡', AURORA_MARSH.toEditedFloat(rng.nextFloat(0.24f) - 0.06f, rng.nextFloat(0.3f) - 0.04f, rng.nextFloat(0.3f) - 0.18f)));
+        viewer.put("succulent 1", new Basic('§', CW_FLUSH_JADE.toEditedFloat(rng.nextFloat(0.25f) - 0.2f, rng.nextFloat(0.2f) - 0.2f, rng.nextFloat(0.16f) - 0.08f)));
+        viewer.put("seashell 1", new Basic('ˋ', CW_LIGHT_APRICOT.toEditedFloat(rng.nextFloat(0.3f) - 0.15f, rng.nextFloat(0.25f) - 0.22f, rng.nextFloat(0.22f) - 0.04f)));
+        viewer.put("seashell 2", new Basic('ˋ', CW_PALE_RED.toEditedFloat(rng.nextFloat(0.3f) - 0.15f, rng.nextFloat(0.2f) - 0.3f, rng.nextFloat(0.28f) - 0.04f)));
+        viewer.put("seashell 3", new Basic('ˋ', CW_PALE_YELLOW.toEditedFloat(rng.nextFloat(0.3f) - 0.15f, rng.nextFloat(0.24f) - 0.1f, rng.nextFloat(0.18f) - 0.04f)));
+        viewer.put("seashell 4", new Basic('ˋ', CW_PALE_VIOLET.toEditedFloat(rng.nextFloat(0.3f) - 0.15f, rng.nextFloat(0.2f) - 0.18f, rng.nextFloat(0.34f) - 0.06f)));
+        viewer.put("driftwood", new Basic('§', AURORA_DRIFTWOOD.toEditedFloat(rng.nextFloat(0.1f) - 0.05f, rng.nextFloat(0.2f) - 0.35f, rng.nextFloat(0.28f) - 0.1f)));
+        viewer.put("boulder", new Basic('●', AURORA_SLOW_CREEK.toEditedFloat(rng.nextFloat(0.2f) - 0.1f, rng.nextFloat(0.1f) - 0.06f, rng.nextFloat(0.3f) - 0.15f)));
         viewer.put("deciduous tree 1", new Basic('¥', AURORA_AVOCADO.toEditedFloat(rng.nextFloat(0.4f) - 0.26f, rng.nextFloat(0.4f) - 0.2f, rng.nextFloat(0.3f) - 0.45f)));
-        viewer.put("small bush 2", new Basic());
+        viewer.put("small bush 2", new Basic('♣', AURORA_WOODLANDS.toEditedFloat(rng.nextFloat(0.15f) - 0.12f, rng.nextFloat(0.2f) - 0.15f, rng.nextFloat(0.35f) - 0.2f)));
         viewer.put("deciduous tree 2", new Basic('¥', AURORA_IVY_GREEN.toEditedFloat(rng.nextFloat(0.4f) - 0.22f, rng.nextFloat(0.3f) - 0.15f, rng.nextFloat(0.2f) - 0.1f)));
         viewer.put("deciduous tree 3", new Basic('¥', AURORA_ASPARAGUS.toEditedFloat(rng.nextFloat(0.3f) - 0.17f, rng.nextFloat(0.35f) - 0.12f, rng.nextFloat(0.3f) - 0.13f)));
-        viewer.put("large bush 2", new Basic());
-        viewer.put("tropical tree 1", new Basic());
-        viewer.put("tropical tree 2", new Basic());
-        viewer.put("large bush 3", new Basic());
-        viewer.put("tropical tree 3", new Basic());
-        viewer.put("tropical tree 4", new Basic());
+        viewer.put("large bush 2", new Basic('♣', AURORA_VIRIDIAN.toEditedFloat(rng.nextFloat(0.2f) - 0.18f, rng.nextFloat(0.3f) - 0.2f, rng.nextFloat(0.3f) - 0.12f)));
+        viewer.put("tropical tree 1", new Basic('¶', AURORA_FLORAL_FOAM.toEditedFloat(-rng.nextFloat(0.25f), rng.nextFloat(0.15f) - 0.05f, rng.nextFloat(0.15f))));
+        viewer.put("tropical tree 2", new Basic('¶', AURORA_MAIDENHAIR_FERN.toEditedFloat(rng.nextFloat(0.18f) - 0.12f, rng.nextFloat(0.2f) - 0.1f, rng.nextFloat(0.2f) - 0.08f)));
+        viewer.put("large bush 3", new Basic('♣', AURORA_KELLY_GREEN.toEditedFloat(rng.nextFloat(0.2f) - 0.1f, rng.nextFloat(0.25f) - 0.1f, rng.nextFloat(0.2f) - 0.08f)));
+        viewer.put("tropical tree 3", new Basic('¶', AURORA_SOFT_TEAL.toEditedFloat(-0.04f - rng.nextFloat(0.3f), rng.nextFloat(0.16f) - 0.12f, rng.nextFloat(0.14f) - 0.08f)));
+        viewer.put("tropical tree 4", new Basic('¶', AURORA_PRASE.toEditedFloat(rng.nextFloat(0.2f) - 0.12f, rng.nextFloat(0.22f) - 0.14f, rng.nextFloat(0.2f) - 0.12f)));
         return viewer;
     }
 
@@ -105,23 +104,29 @@ public class WildMapView {
     {
         this(null, null);
     }
-    public WildMapView(WildMap wildMap, Map<String, ? extends ICellVisible> viewer)
+    public WildMapView(WildMap wildMap)
     {
-        if(wildMap == null) { // default to ice map, biome 0; ignore given viewer, it may be null
-            this.viewer = Maker.makeHM("snow", new ICellVisible.Named('.', iceColor, "snow"),
-                    "ice", new ICellVisible.Named('-', SColor.lightenFloat(SColor.PALE_CORNFLOWER_BLUE.toFloatBits(), 0.3f), "ice"),
-                    "mound", new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.15f), "snow mound"),
-                    "divot", new ICellVisible.Named('°', SColor.darkenFloat(iceColor, 0.3f), "icy divot"),
-                    "powder", new ICellVisible.Named('…', SColor.darkenFloat(iceColor, 0.1f), "fluffy powder snow")
-                    );
-            this.wildMap = new WildMap(128, 128, 0, new SilkRNG(),
-                    Maker.makeList("snow", "snow", "ice"),
-                    Maker.makeList("mound", "mound", "divot", "powder", "mound", "powder", "divot", "powder", "mound", "mound", "powder", "powder"));
+        if(wildMap == null)
+        {
+            this.wildMap = new WildMap();
         }
         else
         {
             this.wildMap = wildMap;
-            this.viewer = viewer;
+        }
+        this.viewer = defaultViewer(this.wildMap.rng);
+
+    }
+    public WildMapView(WildMap wildMap, Map<String, ? extends ICellVisible> viewer)
+    {
+        if(wildMap == null) { // default to forest map, biome 21; ignore given viewer, it may be null
+            this.wildMap = new WildMap();
+            this.viewer = defaultViewer(this.wildMap.rng);
+        }
+        else
+        {
+            this.wildMap = wildMap;
+            this.viewer = viewer == null ? defaultViewer(this.wildMap.rng) : viewer;
         }
         width = this.wildMap.width;
         height = this.wildMap.height;
