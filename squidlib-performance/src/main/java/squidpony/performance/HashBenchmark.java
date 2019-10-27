@@ -284,54 +284,7 @@ public class HashBenchmark {
     {
         return CrossHash.Lightning.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
-    @Benchmark
-    public long doJolt64(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doJolt32(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doCharJolt64(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharJolt32(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doIntJolt64(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash64(state.ints[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doIntJolt32(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash(state.ints[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doLongJolt64(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doLongJolt32(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-    
+     
     @Benchmark
     public long doMist64(BenchmarkState state)
     {
@@ -427,53 +380,6 @@ public class HashBenchmark {
     public int doLongHive32(BenchmarkState state)
     {
         return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-    @Benchmark
-    public long doSirocco64(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doSirocco32(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doIntSirocco64(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash64(state.ints[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doIntSirocco32(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash(state.ints[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doCharSirocco64(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharSirocco32(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doLongSirocco64(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doLongSirocco32(BenchmarkState state)
-    {
-        return CrossHash.Sirocco.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
