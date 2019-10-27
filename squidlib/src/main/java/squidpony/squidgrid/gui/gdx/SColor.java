@@ -14337,6 +14337,22 @@ B = t - Co;
     }
 
     /**
+     * Interpolates from the libGDX Color start towards white by change, returning a packed float color. While change
+     * should be between 0f (return  start as-is) and 1f (return white), start should be a libGDX Color or SColor. This
+     * is a good way to reduce allocations of temporary Colors; this keeps the alpha of start as-is.
+     * @param start the starting color as a packed float
+     * @param change how much to go from start toward white, as a float between 0 and 1; higher means closer to end
+     * @return a packed float that represents a color between start and white
+     */
+    public static float lightenFloat(final Color start, final float change) {
+        return floatGet(
+                start.r + change * (1f - start.r),
+                start.g + change * (1f - start.g),
+                start.b + change * (1f - start.b),
+                start.a);
+    }
+
+    /**
      * Interpolates from the packed float color start towards black by change. While change should be between 0f (return
      * start as-is) and 1f (return black), start should be a packed color, as from {@link #toFloatBits()} or
      * {@link #floatGet(float, float, float, float)}. This is a good way to reduce allocations of temporary Colors, and
@@ -14355,7 +14371,23 @@ B = t - Co;
                 | (((int) (bs * change) & 0xFF) << 16)
                 | as);
     }
-
+    
+    /**
+     * Interpolates from the libGDX Color start towards black by change, returning a packed float color. While change
+     * should be between 0f (return  start as-is) and 1f (return black), start should be a libGDX Color or SColor. This
+     * is a good way to reduce allocations of temporary Colors; this keeps the alpha of start as-is.
+     * @param start the starting color as a packed float
+     * @param change how much to go from start toward black, as a float between 0 and 1; higher means closer to end
+     * @return a packed float that represents a color between start and black
+     */
+    public static float darkenFloat(final Color start, final float change) {
+        final float c = 1f - change;
+        return floatGet(
+                start.r * c,
+                start.g * c,
+                start.b * c,
+                start.a);
+    }
 
     /**
      * Similar to {@link #colorLighting(double[][], float)}, but meant for an initial state before you have FOV or color

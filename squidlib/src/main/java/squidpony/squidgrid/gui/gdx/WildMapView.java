@@ -3,14 +3,17 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import squidpony.ArrayTools;
 import squidpony.Maker;
+import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.Noise;
 import squidpony.squidmath.SilkRNG;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static squidpony.squidgrid.gui.gdx.SColor.*;
 import static squidpony.squidgrid.gui.gdx.WorldMapView.*;
 
 /**
@@ -48,6 +51,55 @@ public class WildMapView {
             colorMap = new float[width][height];
         }
     }
+    
+    public static HashMap<String, ? extends ICellVisible> defaultViewer(IRNG rng)
+    {
+        HashMap<String, ICellVisible> viewer = new HashMap<>(128);
+
+        viewer.put("snow", new Basic('.', iceColor));
+        viewer.put("ice", new Basic('-', SColor.lightenFloat(SColor.PALE_CORNFLOWER_BLUE, 0.3f)));
+        viewer.put("dirt", new Basic('.', CLOVE_BROWN.toEditedFloat(rng.nextFloat(0.1f) - 0.07f, 0.05f - rng.nextFloat(0.15f), rng.nextFloat(0.15f) - 0.08f)));
+        viewer.put("pebbles", new Basic());
+        viewer.put("dry grass", new Basic('\'', CW_FADED_BROWN.toEditedFloat(rng.nextFloat(0.3f), rng.nextFloat(0.2f) - 0.05f, rng.nextFloat(0.1f))));
+        viewer.put("fresh water", new Basic());
+        viewer.put("salt water", new Basic());
+        viewer.put("sand", new Basic());
+        viewer.put("leaves", new Basic('…', CHINESE_TEA_YELLOW.toEditedFloat(rng.nextFloat(0.2f) - 0.15f, rng.nextFloat(0.15f) - 0.1f, rng.nextFloat(0.2f) - 0.1f)));
+        viewer.put("grass", new Basic('"', AURORA_DUSTY_GREEN.toEditedFloat(rng.nextFloat(0.08f) - 0.04f, rng.nextFloat(0.25f) - 0.05f, rng.nextFloat(0.1f) - 0.3f)));
+        viewer.put("mud", new Basic());
+        viewer.put("moss", new Basic('˝', AURORA_FERN_GREEN.toEditedFloat(0f, rng.nextFloat(0.1f) - 0.05f, rng.nextFloat(0.1f) - 0.05f)));
+        viewer.put("rubble", new Basic());
+        viewer.put("empty space", new Basic('_', DB_INK));
+        viewer.put("snow mound", new Basic());
+        viewer.put("icy divot", new Basic());
+        viewer.put("powder snowdrift", new Basic());
+        viewer.put("hillock", new Basic());
+        viewer.put("animal burrow", new Basic());
+        viewer.put("small bush 1", new Basic());
+        viewer.put("large bush 1", new Basic());
+        viewer.put("evergreen tree 1", new Basic());
+        viewer.put("evergreen tree 2", new Basic());
+        viewer.put("small cactus 1", new Basic());
+        viewer.put("large cactus 1", new Basic());
+        viewer.put("succulent 1", new Basic());
+        viewer.put("seashell 1", new Basic());
+        viewer.put("seashell 2", new Basic());
+        viewer.put("seashell 3", new Basic());
+        viewer.put("seashell 4", new Basic());
+        viewer.put("driftwood", new Basic());
+        viewer.put("boulder", new Basic());
+        viewer.put("deciduous tree 1", new Basic('¥', AURORA_AVOCADO.toEditedFloat(rng.nextFloat(0.4f) - 0.26f, rng.nextFloat(0.4f) - 0.2f, rng.nextFloat(0.3f) - 0.45f)));
+        viewer.put("small bush 2", new Basic());
+        viewer.put("deciduous tree 2", new Basic('¥', AURORA_IVY_GREEN.toEditedFloat(rng.nextFloat(0.4f) - 0.22f, rng.nextFloat(0.3f) - 0.15f, rng.nextFloat(0.2f) - 0.1f)));
+        viewer.put("deciduous tree 3", new Basic('¥', AURORA_ASPARAGUS.toEditedFloat(rng.nextFloat(0.3f) - 0.17f, rng.nextFloat(0.35f) - 0.12f, rng.nextFloat(0.3f) - 0.13f)));
+        viewer.put("large bush 2", new Basic());
+        viewer.put("tropical tree 1", new Basic());
+        viewer.put("tropical tree 2", new Basic());
+        viewer.put("large bush 3", new Basic());
+        viewer.put("tropical tree 3", new Basic());
+        viewer.put("tropical tree 4", new Basic());
+        return viewer;
+    }
 
     public WildMapView()
     {
@@ -57,7 +109,7 @@ public class WildMapView {
     {
         if(wildMap == null) { // default to ice map, biome 0; ignore given viewer, it may be null
             this.viewer = Maker.makeHM("snow", new ICellVisible.Named('.', iceColor, "snow"),
-                    "ice", new ICellVisible.Named('_', SColor.lightenFloat(SColor.PALE_CORNFLOWER_BLUE.toFloatBits(), 0.3f), "ice"),
+                    "ice", new ICellVisible.Named('-', SColor.lightenFloat(SColor.PALE_CORNFLOWER_BLUE.toFloatBits(), 0.3f), "ice"),
                     "mound", new ICellVisible.Named('∆', SColor.darkenFloat(iceColor, 0.15f), "snow mound"),
                     "divot", new ICellVisible.Named('°', SColor.darkenFloat(iceColor, 0.3f), "icy divot"),
                     "powder", new ICellVisible.Named('…', SColor.darkenFloat(iceColor, 0.1f), "fluffy powder snow")
