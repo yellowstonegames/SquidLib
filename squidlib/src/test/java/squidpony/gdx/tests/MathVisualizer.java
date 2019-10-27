@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 26;
+    private int mode = 32;
     private int modes = 47;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -1335,16 +1335,16 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 32: {
-                Gdx.graphics.setTitle("atan2_ random, uniform points");
-                for (int i = 1; i <= 0x200000; i++) {
-                    amounts[(int) (NumberTools.atan2_(DiverRNG.randomizeFloat(i) - 0.5f,
+                Gdx.graphics.setTitle("atan2_ random, uniform points at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x100000; i++) {
+                    amounts[(int) (NumberTools.atan2_(DiverRNG.determineFloat(i) - 0.5f,
                             DiverRNG.randomizeFloat(i ^ 0x94D049BB133111EBL) - 0.5f) * 512f)]++;   // SquidLib's no-LUT way
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
                         layers.backgrounds[i + 8][j] = color;
                     }
                 }
@@ -1356,8 +1356,8 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 33: {
-                Gdx.graphics.setTitle("atan2_ random, triangular points");
-                for (int i = 1; i <= 0x200000; i++) {
+                Gdx.graphics.setTitle("atan2_ random, triangular points at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x100000; i++) {
                     long r = DiverRNG.randomize(i);
                     amounts[(int) (NumberTools.atan2_((r & 0xFFFF) - (r >>> 16 & 0xFFFF),
                             (r >>> 32 & 0xFFFF) - (r >>> 48 & 0xFFFF)) * 512f)]++;
@@ -1366,7 +1366,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
                         layers.backgrounds[i + 8][j] = color;
                     }
                 }
@@ -1378,8 +1378,8 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 34: {
-                Gdx.graphics.setTitle("atan2_ random, less-biased, inverted triangular points");
-                for (int i = 1; i <= 0x200000; i++) {
+                Gdx.graphics.setTitle("atan2_ random, less-biased, inverted triangular at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x100000; i++) {
                     long r = DiverRNG.randomize(i);
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13;
@@ -1392,7 +1392,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
                         layers.backgrounds[i + 8][j] = color;
                     }
                 }
@@ -1404,8 +1404,8 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 35: {
-                Gdx.graphics.setTitle("atan2_ random, biased-toward-center, inverted triangular points");
-                for (int i = 1; i <= 0x200000; i++) {
+                Gdx.graphics.setTitle("atan2_ random, biased-toward-center, inverted triangular at " + Gdx.graphics.getFramesPerSecond());
+                for (int i = 1; i <= 0x100000; i++) {
                     long r = DiverRNG.randomize(i);
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0xBFF.8p0) * 0x1p-13;
@@ -1418,7 +1418,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
                         layers.backgrounds[i + 8][j] = color;
                     }
                 }
@@ -1431,7 +1431,7 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 36: {
                 Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme at " + Gdx.graphics.getFramesPerSecond());
-                for (int i = 1; i <= 0x200000; i++) {
+                for (int i = 1; i <= 0x100000; i++) {
                     long r = DiverRNG.randomize(i);
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
@@ -1444,7 +1444,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 100)); j < 520; j++) {
+                    for (int j = Math.max(0, 520 - (amounts[i] / 50)); j < 520; j++) {
                         layers.backgrounds[i + 8][j] = color;
                     }
                 }
@@ -1507,7 +1507,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 tweak.setCentrality(tm);
                 Gdx.graphics.setTitle("TweakRNG, centrality " + tm + ", at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    amounts[tweak.nextSignedInt(512)]++;
+                    amounts[tweak.next(9)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
