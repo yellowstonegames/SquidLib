@@ -33,7 +33,8 @@ import java.util.ArrayList;
 @Beta
 public class WildMap implements Serializable {
     private static final long serialVersionUID = 1L;
-    public final int width, height, biome;
+    public final int width, height;
+    public int biome;
     public IStatefulRNG rng;
     public ArrayList<String> contentTypes;
     public ArrayList<String> floorTypes;
