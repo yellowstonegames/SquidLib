@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.WildMap;
+import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.SilkRNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -133,8 +134,10 @@ public class WildMapDemo extends ApplicationAdapter {
                 switch (key) {
                     case SquidInput.ENTER:
                         seed = rng.nextLong();
-                        wild.rng.shuffleInPlace(wild.floorTypes);
-                        wild.rng.shuffleInPlace(wild.contentTypes);
+                        wmv.viewer = WildMapView.defaultViewer(wild.rng);
+                        wild.biome = rng.nextSignedInt(42);
+                        wild.floorTypes = WildMap.floorsByBiome(wild.biome, wild.rng);
+                        wild.contentTypes = WildMap.contentByBiome(wild.biome, wild.rng);
                         generate(seed);
                         rng.setState(seed);
                         break;
@@ -235,7 +238,7 @@ public class WildMapDemo extends ApplicationAdapter {
         stage.getCamera().position.set(position);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        Gdx.graphics.setTitle("Wild! Took " + ttg + " ms to generate");
+        Gdx.graphics.setTitle(WorldMapGenerator.DetailedBiomeMapper.biomeTable[wild.biome] + " Map! Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.
         if (input.hasNext()) {
