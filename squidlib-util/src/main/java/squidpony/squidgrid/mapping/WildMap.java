@@ -278,10 +278,6 @@ public class WildMap implements Serializable {
     {
         this(width, height, biome, rng, floorsByBiome(biome, rng), contentByBiome(biome, rng));
     }
-    public WildMap(int width, int height, int biome, IStatefulRNG rng, String... contentTypes)
-    {
-        this(width, height, biome, rng, floorsByBiome(biome, rng), Maker.makeList(contentTypes));
-    }
     public WildMap(int width, int height, int biome, IStatefulRNG rng, ArrayList<String> contentTypes)
     {
         this(width, height, biome, rng, floorsByBiome(biome, rng), contentTypes);

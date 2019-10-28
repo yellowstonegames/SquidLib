@@ -102,7 +102,7 @@ public class WildMapView {
 
     public WildMapView()
     {
-        this(null, null);
+        this(null);
     }
     public WildMapView(WildMap wildMap)
     {
@@ -115,7 +115,10 @@ public class WildMapView {
             this.wildMap = wildMap;
         }
         this.viewer = defaultViewer(this.wildMap.rng);
-
+        width = this.wildMap.width;
+        height = this.wildMap.height;
+        colorMap = new float[width][height];
+        initialize();
     }
     public WildMapView(WildMap wildMap, Map<String, ? extends ICellVisible> viewer)
     {
@@ -136,7 +139,7 @@ public class WildMapView {
     
     public WildMapView(long seed, int width, int height, int biome)
     {
-        this(new WildMap(width, height, biome, new SilkRNG(seed)), new HashMap<String, ICellVisible>(16, 0.25f));
+        this(new WildMap(width, height, biome, new SilkRNG(seed)));
     }
     
     protected float[] biomeColors = {
@@ -270,13 +273,19 @@ public class WildMapView {
             for (int y = 0; y < height; y++) {
                 change = h += Noise.IntPointHash.hashAll(x, y, 
                         seed);
-                colorMap[x][y] = SColor.toEditedFloat(baseColor,
+                if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null) 
+                    colorMap[x][y] = SColor.toEditedFloat(icv.getPackedColor(),
                         0x1p-12f * ((h & 0xFF) - 0x9F + (change >>> 8 & 0x3F)),
-                        0x1p-11f * ((h >>> 8 & 0xFF) - 0x9F + (change >>> 16 & 0x3F)),
-                        0x1.3p-12f * ((h >>> 16 & 0xFF) - 0x90 + (change >>> 24 & 0x3F)), 
+                        0x1p-11f * ((h >>> 8 & 0xFF) - 0xB0 + (change >>> 16 & 0x3F)) - 0.0625f,
+                        0x1.3p-12f * ((h >>> 16 & 0xFF) - 0x90 + (change >>> 24 & 0x3F)),
                         0f);
-                if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null)
-                    colorMap[x][y] = SColor.lerpFloatColors(colorMap[x][y], icv.getPackedColor(), 0.6f);
+                else 
+                    colorMap[x][y] = SColor.toEditedFloat(baseColor,
+                        0x1p-12f * ((h & 0xFF) - 0x9F + (change >>> 8 & 0x3F)),
+                        0x1p-11f * ((h >>> 8 & 0xFF) - 0xB0 + (change >>> 16 & 0x3F)) - 0.0625f,
+                        0x1.3p-12f * ((h >>> 16 & 0xFF) - 0x90 + (change >>> 24 & 0x3F)),
+                        0f);
+
             }
         }
     }
