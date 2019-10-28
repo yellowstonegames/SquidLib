@@ -12,17 +12,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
-import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidmath.SilkRNG;
 import squidpony.squidmath.StatefulRNG;
-
-import java.util.HashMap;
-
-import static squidpony.squidgrid.gui.gdx.SColor.*;
 
 public class WildMapDemo extends ApplicationAdapter {
     public static final char[]  terrainChars = {
@@ -118,15 +112,16 @@ public class WildMapDemo extends ApplicationAdapter {
 //        pix.dispose();
 
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
-        wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"), WildMap.makeVegetation(rng, 70, 0.2, FakeLanguageGen.SIMPLISH));
-        HashMap<String, ICellVisible> viewer = new HashMap<>(3 + wild.contentTypes.size(), 0.25f);
-        viewer.put("dirt", new Basic('.', CLOVE_BROWN));
-        viewer.put("leaves", new Basic('…', CHINESE_TEA_YELLOW));
-        viewer.put("grass", new Basic('"', AURORA_DUSTY_GREEN.toEditedFloat(0f, 0.1f, -0.25f)));
-        for (int i = 0; i < wild.contentTypes.size(); i++) {
-            viewer.put(wild.contentTypes.get(i), new Basic('¥', AURORA_AVOCADO.toEditedFloat(wild.rng.nextFloat(0.35f) - 0.25f, wild.rng.nextFloat(0.4f) - 0.2f, wild.rng.nextFloat(0.3f) - 0.45f)));
-        }
-        wmv = new WildMapView(wild, viewer);
+        wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"));
+//        wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"), WildMap.makeVegetation(rng, 70, 0.2, FakeLanguageGen.SIMPLISH));
+//        HashMap<String, ICellVisible> viewer = new HashMap<>(3 + wild.contentTypes.size(), 0.25f);
+//        viewer.put("dirt", new Basic('.', CLOVE_BROWN));
+//        viewer.put("leaves", new Basic('…', CHINESE_TEA_YELLOW));
+//        viewer.put("grass", new Basic('"', AURORA_DUSTY_GREEN.toEditedFloat(0f, 0.1f, -0.25f)));
+//        for (int i = 0; i < wild.contentTypes.size(); i++) {
+//            viewer.put(wild.contentTypes.get(i), new Basic('¥', AURORA_AVOCADO.toEditedFloat(wild.rng.nextFloat(0.35f) - 0.25f, wild.rng.nextFloat(0.4f) - 0.2f, wild.rng.nextFloat(0.3f) - 0.45f)));
+//        }
+        wmv = new WildMapView(wild);
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
         //wild = wmv.wildMap;
         position = new Vector3(bigWidth * cellWidth * 0.5f, bigHeight * cellHeight * 0.5f, 0);
