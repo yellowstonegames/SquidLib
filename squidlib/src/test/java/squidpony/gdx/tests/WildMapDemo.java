@@ -16,6 +16,7 @@ import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
+import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.SilkRNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -77,7 +78,7 @@ public class WildMapDemo extends ApplicationAdapter {
     private long seed;
     private Vector3 position, previousPosition, nextPosition;
 //    private WorldMapGenerator.MimicMap world;
-    private WildMap wild;
+    private WildMap.MixedWildMap wild;
     private WildMapView wmv;
     private long counter = 0;
     private long ttg = 0; // time to generate
@@ -115,7 +116,7 @@ public class WildMapDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
         
         //wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"));
-        SilkRNG wrng = new SilkRNG("SquidLib!");
+        final SilkRNG wrng = new SilkRNG("SquidLib!");
         //21, 27, 26, 20
         wild = new WildMap.MixedWildMap(new WildMap(128, 128, 21, wrng), new WildMap(128, 128, 27, wrng),
                 new WildMap(128, 128, 28, wrng), new WildMap(128, 128, 22, wrng), wrng);
@@ -141,8 +142,13 @@ public class WildMapDemo extends ApplicationAdapter {
                         seed = rng.nextLong();
                         wmv.viewer = WildMapView.defaultViewer(wild.rng);
                         wild.biome = rng.nextSignedInt(42);
-                        wild.floorTypes = WildMap.floorsByBiome(wild.biome, wild.rng);
-                        wild.contentTypes = WildMap.contentByBiome(wild.biome, wild.rng);
+                        int wx = rng.nextSignedInt(6), wy = rng.nextSignedInt(7);
+                        wmv.wildMap = wild = new WildMap.MixedWildMap(
+                                new WildMap(wild.width, wild.height, wx + wy * 6, wrng),
+                                new WildMap(wild.width, wild.height, wx + MathExtras.clamp(wy + rng.next(1), 0, 5) * 6, wrng),
+                                new WildMap(wild.width, wild.height, wx + MathExtras.clamp(wy + rng.next(1), 0, 5) * 6, wrng),
+                                new WildMap(wild.width, wild.height, MathExtras.clamp(wx + rng.next(1), 0, 6) + wy * 6, wrng),
+                                wrng);
                         generate(seed);
                         rng.setState(seed);
                         break;
