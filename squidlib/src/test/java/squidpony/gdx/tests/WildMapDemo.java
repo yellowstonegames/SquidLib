@@ -113,7 +113,12 @@ public class WildMapDemo extends ApplicationAdapter {
 //        pix.dispose();
 
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 0.8); // uses a map of Australia for land
-        wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"));
+        
+        //wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"));
+        SilkRNG wrng = new SilkRNG("SquidLib!");
+        //21, 27, 26, 20
+        wild = new WildMap.MixedWildMap(new WildMap(128, 128, 21, wrng), new WildMap(128, 128, 27, wrng),
+                new WildMap(128, 128, 28, wrng), new WildMap(128, 128, 22, wrng), wrng);
 //        wild = new WildMap(128, 128, 21, new SilkRNG("SquidLib!"), WildMap.makeVegetation(rng, 70, 0.2, FakeLanguageGen.SIMPLISH));
 //        HashMap<String, ICellVisible> viewer = new HashMap<>(3 + wild.contentTypes.size(), 0.25f);
 //        viewer.put("dirt", new Basic('.', CLOVE_BROWN));

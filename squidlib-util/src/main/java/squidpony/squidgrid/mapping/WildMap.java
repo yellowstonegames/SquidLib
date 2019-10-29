@@ -5,7 +5,11 @@ import squidpony.FakeLanguageGen;
 import squidpony.Maker;
 import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
-import squidpony.squidmath.*;
+import squidpony.squidgrid.Direction;
+import squidpony.squidmath.BlueNoise;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IStatefulRNG;
+import squidpony.squidmath.SilkRNG;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -89,7 +93,7 @@ public class WildMap implements Serializable {
     }
 
     public static ArrayList<String> floorsByBiome(int biome, IRNG rng) {
-        biome = (biome & 1023) % 61;
+        biome &= 1023;
         switch (biome) {
             case 0: //Ice
             case 1:
@@ -171,7 +175,7 @@ public class WildMap implements Serializable {
     }
         public static ArrayList<String> contentByBiome(int biome, IRNG rng)
         {
-            biome = (biome & 1023) % 61;
+            biome &= 1023;
             switch (biome) {
                 case 0: //Ice
                 case 1:
@@ -306,6 +310,137 @@ public class WildMap implements Serializable {
                 if((b = BlueNoise.getSeeded(x, y, seed, BlueNoise.ALT_NOISE[choice]) + 128) < limit)
                     content[x][y] = b;
                 //floors[x][y] = (int)((FastNoise.instance.layered2D(x,  y, otherSeed, 2, 0x1p-5f) * 0.4999f + 0.5f) * (floorLimit - 1) + 0.25f + rng.nextFloat(0.5f));
+            }
+        }
+    }
+    
+    public static class MixedWildMap extends WildMap implements Serializable
+    {
+        private static final long serialVersionUID = 1L;
+        public final int[][] pieceMap;
+        public final WildMap[] pieces;
+        protected final int[] minFloors, maxFloors, minContents, maxContents;
+        
+        public MixedWildMap()
+        {
+            this(new WildMap(), new WildMap(), new WildMap(), new WildMap(), new SilkRNG());
+        }
+        
+        public MixedWildMap(WildMap northeast, WildMap southeast, WildMap southwest, WildMap northwest, IStatefulRNG rng)
+        {
+            super(northeast.width, northeast.height, northeast.biome, rng, new ArrayList<>(northeast.floorTypes), new ArrayList<>(northeast.contentTypes));
+            minFloors = new int[4];
+            maxFloors = new int[4];
+            minContents = new int[4];
+            maxContents = new int[4];
+            floorTypes.addAll(southeast.floorTypes);
+            floorTypes.addAll(southwest.floorTypes);
+            floorTypes.addAll(northwest.floorTypes);
+            contentTypes.addAll(southeast.contentTypes);
+            contentTypes.addAll(southwest.contentTypes);
+            contentTypes.addAll(northwest.contentTypes);
+            minFloors[1]   = maxFloors[0]   = northeast.floorTypes.size();
+            minContents[1] = maxContents[0] = northeast.contentTypes.size();
+            minFloors[2]   = maxFloors[1]   = maxFloors[0]    + southeast.floorTypes.size();
+            minContents[2] = maxContents[1] = maxContents[0]  + southeast.contentTypes.size();
+            minFloors[3]   = maxFloors[2]   = maxFloors[1]    + southwest.floorTypes.size();
+            minContents[3] = maxContents[2] = maxContents[1]  + southwest.contentTypes.size();
+            maxFloors[3]   = maxFloors[2]    + northwest.floorTypes.size();
+            maxContents[3] = maxContents[2]  + northwest.contentTypes.size();
+            pieces = new WildMap[]{northeast, southeast, southwest, northwest};
+            pieceMap = new int[width][height];
+        }
+        
+        protected void preparePieceMap()
+        {
+            ArrayTools.fill(pieceMap, 255);
+            pieceMap[0][0] = 3; //northwest
+            pieceMap[width - 1][0] = 0; // northeast
+            pieceMap[0][height - 1] = 1; // southeast
+            pieceMap[width - 1][height - 1] = 2; // southwest
+            final int spillerLimit = 4;
+            final Direction[] dirs = Direction.CARDINALS;
+            Direction d;
+            int t, rx, ry, ctr;
+            int[] ox = new int[width], oy = new int[height];
+            boolean anySuccesses = false;
+            do {
+                ctr = 0;
+                rng.randomOrdering(width, ox);
+                rng.randomOrdering(height, oy);
+                for (int x = 0; x < width; x++) {
+                    rx = ox[x];
+                    for (int y = 0; y < height; y++) {
+                        ry = oy[y];
+                        if ((t = pieceMap[rx][ry]) < spillerLimit) {
+                            d = dirs[rng.next(2)];
+                            if (rx + d.deltaX >= 0 && rx + d.deltaX < width && ry + d.deltaY >= 0 && ry + d.deltaY < height &&
+                                    pieceMap[rx + d.deltaX][ry + d.deltaY] >= spillerLimit) {
+                                pieceMap[rx + d.deltaX][ry + d.deltaY] = t;
+                                ctr++;
+                            }
+                            d = dirs[rng.next(2)];
+                            if (rx + d.deltaX >= 0 && rx + d.deltaX < width && ry + d.deltaY >= 0 && ry + d.deltaY < height &&
+                                    pieceMap[rx + d.deltaX][ry + d.deltaY] >= spillerLimit) {
+                                pieceMap[rx + d.deltaX][ry + d.deltaY] = t;
+                                ctr++;
+                            }
+                        }
+
+                    }
+                }
+                if(!anySuccesses && ctr == 0)
+                {
+                    ArrayTools.fill(pieceMap, 0);
+                    return;
+                }
+                else
+                    anySuccesses = true;
+            } while (ctr > 0);
+            do {
+                ctr = 0;
+                rng.randomOrdering(width, ox);
+                rng.randomOrdering(height, oy);
+                for (int x = 0; x < width; x++) {
+                    rx = ox[x];
+                    for (int y = 0; y < height; y++) {
+                        ry = oy[y];
+                        if ((t = pieceMap[rx][ry]) < spillerLimit) {
+                            for (int i = 0; i < 4; i++) {
+                                d = dirs[i];
+                                if (rx + d.deltaX >= 0 && rx + d.deltaX < width && ry + d.deltaY >= 0 && ry + d.deltaY < height &&
+                                        pieceMap[rx + d.deltaX][ry + d.deltaY] >= spillerLimit) {
+                                    pieceMap[rx + d.deltaX][ry + d.deltaY] = t;
+                                    ctr++;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            } while (ctr > 0);
+
+        }
+
+        @Override
+        public void generate() {
+            ArrayTools.fill(content, -1);
+            for (int i = 0; i < pieces.length; i++) {
+                pieces[i].generate();
+            }
+            preparePieceMap();
+            int p, c;
+            WildMap piece;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    p = pieceMap[x][y];
+                    piece = pieces[p];
+                    floors[x][y] = piece.floors[x][y] + minFloors[p];
+                    if((c = piece.content[x][y]) >= 0)
+                    {
+                        content[x][y] = c + minContents[p];
+                    }
+                }
             }
         }
     }
