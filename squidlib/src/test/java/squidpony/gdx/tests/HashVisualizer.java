@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 134;
-    private int hashMode = 0, rngMode = 16, noiseMode = 129, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 16, noiseMode = 119, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -160,14 +160,14 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Layered2D classic2_2D = new Noise.Layered2D(CosmicNumbering.instance, 2, 2f);
     private final Noise.Layered2D classic3_2D = new Noise.Layered2D(CosmicNumbering.instance, 3, 2f);
 
-    private final FastNoise fast2_2D = new FastNoise(1337, 2f, FastNoise.SIMPLEX_FRACTAL, 2);
-    private final FastNoise fast3_2D = new FastNoise(1337, 2f, FastNoise.SIMPLEX_FRACTAL, 3);
+    private final FastNoise fast2_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 2);
+    private final FastNoise fast3_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
 
     private final Noise.Layered2D classic2_lf_2D = new Noise.Layered2D(CosmicNumbering.instance, 2, 1.3f);
     private final Noise.Layered2D classic3_lf_2D = new Noise.Layered2D(CosmicNumbering.instance, 3, 1.3f);
 
-    private final FastNoise fast2_lf_2D = new FastNoise(1337, 1.3f, FastNoise.SIMPLEX_FRACTAL, 2);
-    private final FastNoise fast3_lf_2D = new FastNoise(1337, 1.3f, FastNoise.SIMPLEX_FRACTAL, 3);
+    private final FastNoise fast2_lf_2D = new FastNoise(1337, 0.01125f, FastNoise.SIMPLEX_FRACTAL, 2);
+    private final FastNoise fast3_lf_2D = new FastNoise(1337, 0.01125f, FastNoise.SIMPLEX_FRACTAL, 3);
 
 //    {
 //        fast2_2D.setFractalType(FastNoise.RIDGED_MULTI);
@@ -4353,9 +4353,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, 512);
                         Arrays.fill(back[511], FLOAT_WHITE);
-                        if((ctr & 3) == 0) {
+                        //if((ctr & 3) == 0) 
+                        {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
-                            iBright = (int) (swayRandomizedTight(9001L, ctr * 0.0125f) * 480f);
+                            iBright = (int) (swayRandomizedTight(9001L, ctr * 0x1p-8f) * 480f);
                             back[511][15 + iBright] =  bright;
                             back[511][16 + iBright] =  bright;
                             back[511][17 + iBright] =  bright;
@@ -4481,7 +4482,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("FastNoise 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         layeredFN.setSeed(123456);
                         layeredFN.setFractalOctaves(1);
-                        layeredFN.setFrequency(0.03125f);
+                        layeredFN.setFrequency(1f);
                         layeredFN.setFractalLacunarity(0.5f);
                         layeredFN.setFractalGain(2f);
                         c1 = ctr * 0.045f;
@@ -5658,7 +5659,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fast2_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
+                                bright = basicPrepare(fast2_2D.getConfiguredNoise(xx, yy));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5671,7 +5672,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fast2_lf_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
+                                bright = basicPrepare(fast2_lf_2D.getConfiguredNoise(xx, yy));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
