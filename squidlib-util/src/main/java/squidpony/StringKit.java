@@ -1645,6 +1645,11 @@ public class StringKit {
     private static final Matcher capitalizeMatcher = Pattern.compile("(?<!\\pL)(\\pL)(\\pL*)(\\PL*)").matcher();
     private static final StringBuilder sb = new StringBuilder(64);
 
+    /**
+     * Capitalizes Each Word In The Parameter {@code original}, Returning A New String.
+     * @param original a CharSequence, such as a StringBuilder or String, which could have CrAzY capitalization
+     * @return A String With Each Word Capitalized At The Start And The Rest In Lower Case 
+     */
     public static String capitalize(final CharSequence original) {
         if (original == null || original.length() <= 0) {
             return "";
@@ -1655,6 +1660,32 @@ public class StringKit {
             sb.append(capitalizeMatcher.group(1).toUpperCase());
             capitalizeMatcher.getGroup(2, sb, 1); // mode 1 is case-insensitive, which lower-cases result
             capitalizeMatcher.getGroup(3, sb);
+        }
+        return sb.toString();
+    }
+    private static final Matcher sentenceMatcher = Pattern.compile("(\\PL*)((\\pL)([^.?!]*)($|[.?!]+))(\\PL*)").matcher();
+    // group 1 before letters, group 2 whole sentence, group 3 first letter, group 4 rest of sentence, group 5 closing punctuation, group 6 remainder of non-letters 
+
+    /**
+     * Attempts to scan for sentences in {@code original}, capitalizes the first letter of each sentence, and otherwise
+     * leaves the CharSequence untouched as it returns it as a String. Sentences are detected with a crude heuristic of
+     * "does it have periods, exclamation marks, or question marks at the end, or does it reach the end of input? If
+     * yes, it's a sentence."
+     * @param original a CharSequence that is expected to contain sentence-like data that needs capitalization; existing upper-case letters will stay upper-case.
+     * @return a String where the first letter of each sentence (detected as best this can) is capitalized.
+     */
+    public static String sentenceCase(final CharSequence original) {
+        if (original == null || original.length() <= 0) {
+            return "";
+        }
+        sb.setLength(0);
+        sentenceMatcher.setTarget(original);
+        while (sentenceMatcher.find()) {
+            sentenceMatcher.getGroup(1, sb);
+            sb.append(sentenceMatcher.group(3).toUpperCase());
+            sentenceMatcher.getGroup(4, sb); // use getGroup(4, sb, 1) if this should lower-case the rest
+            sentenceMatcher.getGroup(5, sb);
+            sentenceMatcher.getGroup(6, sb);
         }
         return sb.toString();
     }

@@ -559,6 +559,16 @@ public class LanguageGenTest {
             sb.setLength(0);
         }
 
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            sb.append(markovChar.chain(++seed, 10 + i));
+            for (int j = 0; j < 20; j++) {
+                sb.append(' ').append(markovChar.chain(++seed, 10 + i));
+            }
+            System.out.println(StringKit.sentenceCase(sb));
+            sb.setLength(0);
+        }
+
     }
 
 }
