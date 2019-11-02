@@ -522,7 +522,7 @@ public class LanguageGenTest {
     public void testMarkovChar() {
         if (!PRINTING) return;
         long seed = 10040L;
-        MarkovChar markovObject = new MarkovChar();
+        MarkovChar markovChar = new MarkovChar();
         String[] ozzes = {"Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a " +
                 "farmer, and Aunt Em, who was the farmer's wife.",
                 "Their house was small, for the lumber to build it had to be carried by wagon many miles.",
@@ -540,13 +540,25 @@ public class LanguageGenTest {
                 "Once the house had been painted, but the sun blistered the paint and the rains washed it away, and now " +
                         "the house was as dull and gray as everything else."
         };         
-        markovObject.analyze(StringKit.join("", ozzes));
-        for (int i = 0; i < 40; i++) {
+        markovChar.analyze(StringKit.join("", ozzes));
+        for (int i = 0; i < 10; i++) {
+            System.out.print(StringKit.capitalize(markovChar.chain(++seed, 10 + i)));
             for (int j = 0; j < 20; j++) {
-                System.out.print(markovObject.chain(++seed, 10 + i).toLowerCase() + " ");
+                System.out.print(" " + markovChar.chain(++seed, 10 + i).toLowerCase());
             }
             System.out.println();
         }
+        System.out.println();
+        StringBuilder sb = new StringBuilder(200);
+        for (int i = 0; i < 10; i++) {
+            sb.append(markovChar.chain(++seed, 10 + i));
+            for (int j = 0; j < 20; j++) {
+                sb.append(' ').append(markovChar.chain(++seed, 10 + i));
+            }
+            System.out.println(StringKit.capitalize(sb));
+            sb.setLength(0);
+        }
+
     }
 
 }

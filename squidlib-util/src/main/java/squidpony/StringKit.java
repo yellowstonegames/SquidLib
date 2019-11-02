@@ -1642,5 +1642,21 @@ public class StringKit {
             return -1;
         return matcher.start();
     }
+    private static final Matcher capitalizeMatcher = Pattern.compile("(?<!\\pL)(\\pL)(\\pL*)(\\PL*)").matcher();
+    private static final StringBuilder sb = new StringBuilder(64);
+
+    public static String capitalize(final CharSequence original) {
+        if (original == null || original.length() <= 0) {
+            return "";
+        }
+        sb.setLength(0);
+        capitalizeMatcher.setTarget(original);
+        while (capitalizeMatcher.find()) {
+            sb.append(capitalizeMatcher.group(1).toUpperCase());
+            capitalizeMatcher.getGroup(2, sb, 1); // mode 1 is case-insensitive, which lower-cases result
+            capitalizeMatcher.getGroup(3, sb);
+        }
+        return sb.toString();
+    }
 
 }
