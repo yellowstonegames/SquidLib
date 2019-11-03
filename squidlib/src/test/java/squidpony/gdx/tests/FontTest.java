@@ -99,7 +99,7 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getCrispPrintFamily().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getCrispCarvedFont().initBySize(),
-                new TextCellFactory().fontMultiDistanceField("Roboto-Regular-msdf.fnt", "Roboto-Regular-msdf.png").width(3f).height(12).initBySize().setSmoothingMultiplier(2f),
+                DefaultResources.getCrispRobotoSansFont().initBySize(),
                 new TextCellFactory().fontMultiDistanceField("Roboto-Bold-msdf.fnt", "Roboto-Bold-msdf.png").width(3f).height(12).initBySize().setSmoothingMultiplier(2f)
                 //DefaultResources.getStretchableCleanFont().initBySize(),
         };

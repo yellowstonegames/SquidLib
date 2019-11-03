@@ -77,7 +77,7 @@ public class DefaultResources implements LifecycleListener {
             distanceSlab = null, distanceSlabLight = null,
             distanceLean = null, distanceLeanLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
-            msdfDejaVu = null, msdfCurvySquare = null, msdfCarved = null,
+            msdfDejaVu = null, msdfCurvySquare = null, msdfCarved = null, msdfRoboto = null,
             msdfIcons = null;
     private TextFamily familyLean = null, familySlab = null, familyGo = null,
             familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
@@ -141,7 +141,9 @@ public class DefaultResources implements LifecycleListener {
             crispCarved = "bloccus-msdf.fnt",
             crispCarvedTexture = "bloccus-msdf.png",
             crispCurvySquare = "square-msdf.fnt",
-            crispCurvySquareTexture = "square-msdf.png",
+            crispCurvySquareTexture = "square-msdf.png", 
+        crispRobotoSans = "Roboto-Regular-msdf.fnt", 
+        crispRobotoSansTexture = "Roboto-Regular-msdf.png",
             crispIcons = "awesome-solid-msdf.fnt",
             crispIconsTexture = "awesome-solid-msdf.png"
                     ;
@@ -1935,6 +1937,45 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.msdfCarved != null)
             return instance.msdfCarved.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a variable-width sans-serif font with good Unicode support
+     * and a no-nonsense look, that should scale cleanly to even very large or small sizes (using an MSDF technique).
+     * Caches the result for later calls. The font used is <a href="https://fonts.google.com/specimen/Roboto">Roboto
+     * Regular by Christian Robertson</a>. It supports a lot of glyphs, including most Latin, Greek, and Cyrillic,
+     * but not box drawing characters because this is variable-width. This uses the Multi-channel Signed Distance
+     * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
+     * sharper edges and precise corners instead of rounded tips on strokes.
+     * <br>
+     * Preview: <a href="https://i.imgur.com/ASjdjc6.png">Image link when scaled to a small size</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Roboto-Regular-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Roboto-Regular-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Roboto-License.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Roboto-Regular.ttf
+     */
+    public static TextCellFactory getCrispRobotoSansFont()
+    {
+        initialize();
+        if(instance.msdfRoboto == null)
+        {
+            try {
+                instance.msdfRoboto = new TextCellFactory()
+                        .fontMultiDistanceField(crispRobotoSans, crispRobotoSansTexture)
+                        .width(7f).height(30f).setSmoothingMultiplier(2f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfRoboto != null)
+            return instance.msdfRoboto.copy();
         return null;
     }
 
