@@ -82,10 +82,10 @@ char id=102 x=482 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=12 page
 char id=103 x=542 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=15 page=0 chnl=15
 char id=104 x=602 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=14 page=0 chnl=15
 char id=105 x=662 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=7 page=0 chnl=15
-char id=106 x=722 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=9 page=0 chnl=15
+char id=106 x=722 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=7 page=0 chnl=15
 char id=107 x=782 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=15 page=0 chnl=15
 char id=108 x=842 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=7 page=0 chnl=15
-char id=109 x=902 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=22 page=0 chnl=15
+char id=109 x=902 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=24 page=0 chnl=15
 char id=110 x=962 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=14 page=0 chnl=15
 char id=111 x=1022 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=16 page=0 chnl=15
 char id=112 x=1082 y=138 width=58 height=64 xoffset=0 yOffset=-1 xadvance=15 page=0 chnl=15
