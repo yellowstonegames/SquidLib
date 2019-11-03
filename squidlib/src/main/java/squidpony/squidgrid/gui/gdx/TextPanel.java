@@ -307,24 +307,25 @@ public class TextPanel<T extends Color> {
 		GlyphLayout layout = cache.setText(sb, 0, 0, w, Align.left, true);			
 		lines += layout.height / capHeight;
 		
-		for (int m = 0, textSize = text.size(); m < textSize; m++) {
-			IColoredString<T> line = text.get(m);
-			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
-			for (int i = 0; i < frags.size(); i++) {
-				final IColoredString.Bucket<T> b = frags.get(i);
-				Color c = b.getColor();
-				if(c != null) 
-					cache.setColors(c, ci, (ci += b.length()));
-				else
-					ci += b.length();
-			}
-
-//			if(m + 1 < textSize)
-//			{
-				//cache.addText("\n", pos, (-lines) * totalTextHeight, w, Align.left, true);
-				//lines++;
+		////TODO: BitmapFontCache.setColors(float, int, int) is broken in libGDX 1.9.10; find some workaround
+//		for (int m = 0, textSize = text.size(); m < textSize; m++) {
+//			IColoredString<T> line = text.get(m);
+//			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
+//			for (int i = 0; i < frags.size(); i++) {
+//				final IColoredString.Bucket<T> b = frags.get(i);
+////				Color c = b.getColor();
+////				if(c != null) 
+////					cache.setColors(c, ci, (ci += b.length()));
+////				else
+//					ci += b.length();
 //			}
-		}
+//
+////			if(m + 1 < textSize)
+////			{
+//				//cache.addText("\n", pos, (-lines) * totalTextHeight, w, Align.left, true);
+//				//lines++;
+////			}
+//		}
 		lineHeight *= lines;
 		if(lineHeight < 0)
 			lineHeight = 0;

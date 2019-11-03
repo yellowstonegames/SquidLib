@@ -69,8 +69,8 @@ public class FontTest extends ApplicationAdapter {
         batch = new FilterBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105, 100, 100, 100, 150, 150};
-        heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25,  27,  27};
+        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105, 100, 100, 100, 250, 250};
+        heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25,  20,  20};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabFamily().width(ZOOM * 14).height(28).initBySize(),
@@ -99,10 +99,12 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getCrispPrintFamily().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getCrispCarvedFont().initBySize(),
-                new TextCellFactory().fontMultiDistanceField("Roboto-Regular-msdf.fnt", "Roboto-Regular-msdf.png").width(10).height(18).initBySize().setSmoothingMultiplier(2f),
-                new TextCellFactory().fontMultiDistanceField("Roboto-Bold-msdf.fnt", "Roboto-Bold-msdf.png").width(10).height(18).initBySize().setSmoothingMultiplier(2f)
+                new TextCellFactory().fontMultiDistanceField("Roboto-Regular-msdf.fnt", "Roboto-Regular-msdf.png").width(3f).height(12).initBySize().setSmoothingMultiplier(2f),
+                new TextCellFactory().fontMultiDistanceField("Roboto-Bold-msdf.fnt", "Roboto-Bold-msdf.png").width(3f).height(12).initBySize().setSmoothingMultiplier(2f)
                 //DefaultResources.getStretchableCleanFont().initBySize(),
         };
+        for(TextCellFactory tc : factories)
+            tc.bmpFont.setUseIntegerPositions(false);
         viewports = new Viewport[]{
                 new StretchViewport(factories[0].width() * widths[0], factories[0].height() * heights[0]),
                 new StretchViewport(factories[1].width() * widths[1], factories[1].height() * heights[1]),
@@ -164,15 +166,15 @@ public class FontTest extends ApplicationAdapter {
         };
         final GDXMarkup markup = GDXMarkup.instance;
         final ArrayList<? extends IColoredString<Color>> samples = Maker.makeList(
-//                markup.colorString("The quick brown fox jumps over the lazy dog.")
-//                , markup.colorString("HAMBURGEVONS")
-//                , markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!")
-//                , markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!")
-//                , 
+                markup.colorString("The quick brown fox jumps over the lazy dog.")
+                , markup.colorString("HAMBURGEVONS")
+                , markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!")
+                , markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!")
+                , 
                 //// Currently the next line is all it takes to break libGDX's text coloring via BitmapFontCache.setColors(float, int, int)
                 markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.")
-//                , markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.")
-//                , markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting.")
+                , markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.")
+                , markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting.")
         );
         texts = new ArrayList<>(5);
         for (int i = 0; i < 5; i++) {
