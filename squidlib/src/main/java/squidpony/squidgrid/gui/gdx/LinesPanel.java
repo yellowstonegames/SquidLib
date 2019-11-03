@@ -15,7 +15,6 @@ import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -293,12 +292,13 @@ public class LinesPanel<T extends Color> extends Actor {
 				break;
 			final int nbLines = MathUtils.ceil(glyph.height / lineHeight);
 			/* Actually draw */
-			int ci = 0;
-			ArrayList<IColoredString.Bucket<T>> frags = ics.getFragments();
-			for (int i = 0; i < frags.size(); i++) {
-				final IColoredString.Bucket<T> b = frags.get(i);
-				cache.setColors(b.getColor(), ci, ci += b.length());
-			}
+			////TODO: BitmapFontCache.setColors(float, int, int) is broken in libGDX 1.9.10; find some workaround 
+//			int ci = 0;
+//			ArrayList<IColoredString.Bucket<T>> frags = ics.getFragments();
+//			for (int i = 0; i < frags.size(); i++) {
+//				final IColoredString.Bucket<T> b = frags.get(i);
+//				cache.setColors(b.getColor(), ci, ci += b.length());
+//			}
 			cache.setPosition(x, y);
 			cache.draw(batch);
 			y -= nbLines * lineHeight;
