@@ -32,15 +32,6 @@ public class FontTest extends ApplicationAdapter {
      */
     private static int[] heights;
 
-    /**
-     * The pixel width of a cell
-     */
-    private static float cellWidth = 13;
-    /**
-     * The pixel height of a cell
-     */
-    private static float cellHeight = 30;
-
     private static int totalWidth = 1346, totalHeight = 700;
 
     private Stage stage;
@@ -78,8 +69,8 @@ public class FontTest extends ApplicationAdapter {
         batch = new FilterBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105, 100, 100, 100};
-        heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25};
+        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105, 100, 100, 100, 150, 150};
+        heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25,  27,  27};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabFamily().width(ZOOM * 14).height(28).initBySize(),
@@ -104,10 +95,12 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getCrispCurvySquareFont().width(ZOOM * 19).height(19).initBySize(),
                 DefaultResources.getCrispLeanFont().width(ZOOM * 19).height(19).initBySize(),
                 DefaultResources.getCrispSlabFont().width(ZOOM * 19).height(19).initBySize(),
-                DefaultResources.getGoFamily().width(ZOOM * 14).height(25).initBySize(),
+                DefaultResources.getGoFamily().width(ZOOM * 7).height(18).initBySize(),
                 DefaultResources.getCrispPrintFamily().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
-                DefaultResources.getCrispCarvedFont().initBySize()
+                DefaultResources.getCrispCarvedFont().initBySize(),
+                new TextCellFactory().fontMultiDistanceField("Roboto-Regular-msdf.fnt", "Roboto-Regular-msdf.png").width(10).height(18).initBySize().setSmoothingMultiplier(2f),
+                new TextCellFactory().fontMultiDistanceField("Roboto-Bold-msdf.fnt", "Roboto-Bold-msdf.png").width(10).height(18).initBySize().setSmoothingMultiplier(2f)
                 //DefaultResources.getStretchableCleanFont().initBySize(),
         };
         viewports = new Viewport[]{
@@ -132,6 +125,8 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[18].width() * widths[18], factories[18].height() * heights[18]),
                 new StretchViewport(factories[19].width() * widths[19], factories[19].height() * heights[19]),
 
+                new ScreenViewport(),
+                new ScreenViewport(),
                 new ScreenViewport(),
                 new ScreenViewport(),
                 new ScreenViewport(),
@@ -164,26 +159,27 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[20], heights[20], factories[20]).setTextSize(factories[20].width() + 1f * ZOOM, factories[20].height() + 2f * ZOOM),
                 new SquidPanel(widths[21], heights[21], factories[21]).setTextSize(factories[21].width() + 1f * ZOOM, factories[21].height() + 2f * ZOOM),
                 new SquidPanel(widths[22], heights[22], factories[22]).setTextSize(factories[22].width() + 1f * ZOOM, factories[22].height() + 2f * ZOOM),
+                new SquidPanel(widths[23], heights[23], factories[23]).setTextSize(factories[23].width() + 0f * ZOOM, factories[23].height() + 0f * ZOOM),
+                new SquidPanel(widths[24], heights[24], factories[24]).setTextSize(factories[24].width() + 0f * ZOOM, factories[24].height() + 0f * ZOOM),
         };
         final GDXMarkup markup = GDXMarkup.instance;
-        final ArrayList<? extends IColoredString<Color>> samples = Maker.makeList(markup.colorString("The quick brown fox jumps over the lazy dog."),
-                markup.colorString("HAMBURGEVONS"),
-                markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!"),
-                markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!"),
-                markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good."),
-                markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them."),
-                markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting.")
+        final ArrayList<? extends IColoredString<Color>> samples = Maker.makeList(
+//                markup.colorString("The quick brown fox jumps over the lazy dog.")
+//                , markup.colorString("HAMBURGEVONS")
+//                , markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!")
+//                , markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!")
+//                , 
+                //// Currently the next line is all it takes to break libGDX's text coloring via BitmapFontCache.setColors(float, int, int)
+                markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.")
+//                , markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.")
+//                , markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting.")
         );
-        texts = new ArrayList<>(3);
-        text = new TextPanel<Color>(null, factories[factories.length - 3]);
-        text.init(totalWidth, totalHeight, samples);
-        texts.add(text);
-        text = new TextPanel<Color>(null, factories[factories.length - 2]);
-        text.init(totalWidth, totalHeight, samples);
-        texts.add(text);
-        text = new TextPanel<Color>(null, factories[factories.length - 1]);
-        text.init(totalWidth, totalHeight, samples);
-        texts.add(text);
+        texts = new ArrayList<>(5);
+        for (int i = 0; i < 5; i++) {
+            text = new TextPanel<Color>(null, factories[factories.length - 5 + i]);
+            text.init(totalWidth, totalHeight, samples);
+            texts.add(text);
+        }
         for (int i = 0; i < factories.length; i++) {
             tcf = factories[i];
             display = displays[i];
@@ -225,8 +221,6 @@ public class FontTest extends ApplicationAdapter {
         tcf = factories[index];
         display = displays[index];
         viewport = viewports[index];
-        cellWidth = tcf.width();
-        cellHeight = tcf.height();
         stage = new Stage(viewport, batch);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -311,24 +305,24 @@ public class FontTest extends ApplicationAdapter {
                 else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
                     index = ((index + 1) % factories.length);
                     viewport = viewports[index];
-                    if (index < factories.length - 3) {
+                    if (index < factories.length - texts.size()) {
                         tcf = factories[index];
                         display = displays[index];
                         stage.clear();
                         stage.setViewport(viewport);
                         stage.addActor(display);
                     } else {
-                        text = texts.get(index - factories.length + 3);
+                        text = texts.get(index - factories.length + texts.size());
                         stage.clear();
                         stage.setViewport(viewport);
                         stage.addActor(text.getScrollPane());
                     }
                 }
-                Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + viewports.length + " (press any key)");
+                Gdx.graphics.setTitle("SquidLib Demo: Fonts, previewing font #" + (index) + ": " + factories[index].bmpFont + " (press any key)");
                 return true;
             }
         });
-        Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + viewports.length + " (press any key)");
+        Gdx.graphics.setTitle("SquidLib Demo: Fonts, previewing font #" + (index) + ": " + factories[index].bmpFont + " (press any key)");
 
         stage.addActor(display);
     }
@@ -352,7 +346,7 @@ public class FontTest extends ApplicationAdapter {
     }
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Fonts, preview 1/22 (press any key)";
+        config.title = "SquidLib Demo: Fonts, preview 1/25 (press any key)";
 //        config.width = totalWidth = LwjglApplicationConfiguration.getDesktopDisplayMode().width - 10;
 //        config.height = totalHeight = LwjglApplicationConfiguration.getDesktopDisplayMode().height - 128;
         config.width = totalWidth = 1000;

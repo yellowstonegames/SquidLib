@@ -314,7 +314,7 @@ public class TextPanel<T extends Color> {
 				final IColoredString.Bucket<T> b = frags.get(i);
 				Color c = b.getColor();
 				if(c != null) 
-					cache.setColors(c, ci, ci += b.length());
+					cache.setColors(c, ci, (ci += b.length()));
 				else
 					ci += b.length();
 			}
