@@ -1146,7 +1146,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     heightCode = heightCodeData[x][y];
                     if(heightCode == 1000) {
-                        biomeCodeData[x][y] = 61;
+                        biomeCodeData[x][y] = 60;
                         continue;
                     }
                     hot = heatData[x][y];
