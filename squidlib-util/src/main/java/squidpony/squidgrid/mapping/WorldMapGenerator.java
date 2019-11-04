@@ -54,7 +54,15 @@ public abstract class WorldMapGenerator implements Serializable {
     public int zoom = 0, startX = 0, startY = 0, usedWidth, usedHeight;
     protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
     protected int zoomStartX = 0, zoomStartY = 0;
-    
+
+    /**
+     * A FastNoise that has a higher frequency than that class defaults to, which is useful for maps here. With the
+     * default FastNoise frequency of 1f/32f, the maps this produces are giant blurs.
+     * <br>
+     * Even though this is a FastNoise and so technically can be edited, that seems to have issues when there's more
+     * than one WorldMapGenerator that uses this field. So you can feel free to use this as a Noise2D or Noise3D when
+     * generators need one, but don't change it too much, if at all.
+     */
     public static final FastNoise DEFAULT_NOISE = new FastNoise(0x1337CAFE, 1f, FastNoise.SIMPLEX, 1);
 
     /**
