@@ -4987,7 +4987,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 27:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = tangle.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = tangle.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
@@ -4996,7 +4996,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 28:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = xoRo.nextLong() << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                code = xoRo.nextLong() << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -5005,7 +5005,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 29:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int) (xoRo.nextLong() & 255);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = (int) (xoRo.nextLong() & 255);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
@@ -5014,7 +5014,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 30:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = ta.nextLong() << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                code = ta.nextLong() << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -5023,7 +5023,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 31:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int) (ta.nextLong() & 255);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = (int) (ta.nextLong() & 255);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }

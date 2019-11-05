@@ -20,7 +20,7 @@ import java.io.Serializable;
  * though its period is shorter, it would still take years to exhaust on one core generating only random numbers.
  * <br>
  * {@link LightRNG} is also very fast, but relative to XoRoRNG it has a significantly shorter period (the amount of
- * random numbers it will go through before repeating), at {@code pow(2, 64)} as opposed to XorRNG and XoRoRNG's
+ * random numbers it will go through before repeating), at {@code pow(2, 64)} as opposed to XoRoRNG's
  * {@code pow(2, 128) - 1}, but LightRNG also allows the current RNG state to be retrieved and altered with
  * {@code getState()} and {@code setState()}. For most cases, you should decide between DiverRNG, LightRNG, XoRoRNG,
  * and other RandomnessSource implementations based on your needs for period length and state manipulation (DiverRNG
