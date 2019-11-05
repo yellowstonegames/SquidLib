@@ -66,9 +66,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 134;
-    private int hashMode = 0, rngMode = 16, noiseMode = 119, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 119, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -80,10 +80,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private SquidInput input;
     
     private Viewport view;
-
-//    private static byte[][] METROPOLIS_NOISE = null;// = BlueNoise.generateMetropolis(1234, 5678);
-
-    private CrossHash.Mist Mist_, Mist_C;
+    
+    private CrossHash.Yolk yolkA, yolkA_;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private NLFSR nlfsr = new NLFSR(1);
     private IsaacRNG isaac = new IsaacRNG(1L);
@@ -92,16 +90,16 @@ public class HashVisualizer extends ApplicationAdapter {
     private LongPeriodRNG longPeriod = new LongPeriodRNG(1L);
     private PermutedRNG permuted = new PermutedRNG(1L);
     private DiverRNG diver = new DiverRNG(1L);
-    private JabRNG jab = new JabRNG(1L);
-    private ThunderRNG thunder = new ThunderRNG(1L);
+    private XoshiroStarPhi32RNG xosh = new XoshiroStarPhi32RNG(1L);
+    private MiniMover64RNG mm64 = new MiniMover64RNG(1L);
     private XoRoRNG xoRo = new XoRoRNG(1L);
-    private XorRNG xor = new XorRNG(1L);
+    private SilkRNG silk = new SilkRNG(1, 1);
     private BasicRandom64 basic64 = new BasicRandom64(1L);
     private LinnormRNG linnorm = new LinnormRNG(1L);
     private ThrustAltRNG ta = new ThrustAltRNG(1L);
     private Starfish32RNG starfish = new Starfish32RNG(1L);
     
-    private LapRNG lap = new LapRNG(1);
+    private TangleRNG tangle = new TangleRNG(1);
 
 
     private final int[] coordinates = new int[2];
@@ -1185,8 +1183,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
 //                filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
 //                filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
-        Mist_ = CrossHash.Mist.omicron_.randomize();
-        Mist_C = CrossHash.Mist.chi_;
+        yolkA = CrossHash.Yolk.andromalius;
+        yolkA_ = CrossHash.Yolk.andromalius_;
         mist = new CrossHash.Mist();
         mistA = CrossHash.Mist.alpha;
         mistB = CrossHash.Mist.beta;
@@ -1628,7 +1626,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Mist_C.hash64(coordinates) << 8 | 255L;
+                                code = yolkA_.hash64(coordinates) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -1648,7 +1646,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Mist_C.hash64(coordinate) << 8 | 255L;
+                                code = yolkA_.hash64(coordinate) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -1772,7 +1770,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Mist_C.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = yolkA_.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -1809,7 +1807,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Mist_C.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = yolkA_.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2319,7 +2317,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Mist_.hash(coordinates) << 8 | 255L;
+                                code = yolkA.hash(coordinates) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2360,7 +2358,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Mist_.hash(coordinate) << 8 | 255L;
+                                code = yolkA.hash(coordinate) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2392,7 +2390,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Mist_.hash64(coordinates) << 8 | 255L;
+                                code = yolkA.hash64(coordinates) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2423,7 +2421,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Mist_.hash64(coordinate) << 8 | 255L;
+                                code = yolkA.hash64(coordinate) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2466,7 +2464,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Mist_.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = yolkA.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2507,7 +2505,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Mist_.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = yolkA.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2539,7 +2537,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = Mist_.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = yolkA.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2570,7 +2568,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = Mist_.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = yolkA.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -4702,7 +4700,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 131:
-                        Gdx.graphics.setTitle("Blue Noise via Metropolis algorithm " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Blue Noise with choice " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        if(METROPOLIS_NOISE == null)
 //                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr, 400);
                         for (int x = 0; x < width; x++) {
@@ -4728,7 +4726,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 133:
-                        Gdx.graphics.setTitle("Blue Noise via Metropolis with adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Blue Noise with choice with adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + (ctr >> 2);
                             for (int y = 0; y < height; y++) {
@@ -4744,7 +4742,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             case 5: { //RNG mode
                 switch (rngMode) {
                     case 0:
-                        jreRandom.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = jreRandom.nextInt() | 255L;
@@ -4754,17 +4751,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 1:
-                        thunder.reseed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = thunder.nextLong() | 255L;
+                                code = mm64.nextLong() | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("MiniMover64RNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 2:
-                        light.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = light.nextLong() | 255L;
@@ -4774,17 +4769,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 3:
-                        xor.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = xor.nextLong() | 255L;
+                                code = silk.nextLong() | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("SilkRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 4:
-                        xoRo.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = xoRo.nextLong() | 255L;
@@ -4794,7 +4787,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 5:
-                        permuted.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = permuted.nextLong() | 255L;
@@ -4804,7 +4796,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 6:
-                        longPeriod.reseed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = longPeriod.nextLong() | 255L;
@@ -4814,7 +4805,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 7:
-                        isaac.regen();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = isaac.nextLong() | 255L;
@@ -4824,7 +4814,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 8:
-                        gdxRandom.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = gdxRandom.nextLong() | 255L;
@@ -4834,7 +4823,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 9:
-                        jreRandom.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = jreRandom.nextInt() >>> 24;
@@ -4844,17 +4832,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 10:
-                        thunder.reseed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = thunder.next(8);
+                                iBright = mm64.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("MiniMover64RNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 11:
-                        light.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = light.next(8);
@@ -4864,17 +4850,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 12:
-                        xor.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = xor.next(8);
+                                iBright = silk.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("SilkRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 13:
-                        xoRo.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = xoRo.next(8);
@@ -4884,7 +4868,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 14:
-                        permuted.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = permuted.next(8);
@@ -4894,7 +4877,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 15:
-                        longPeriod.reseed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = longPeriod.next(8);
@@ -4904,7 +4886,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 16:
-                        isaac.regen();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = isaac.next(8);
@@ -4914,7 +4895,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 17:
-                        gdxRandom.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = -(gdxRandom.nextLong() & 1L) | 255L;
@@ -4924,7 +4904,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 18:
-                        diver.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = -(diver.nextLong() & 1L) | 255L;
@@ -4934,7 +4913,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("DiverRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 19:
-                        diver.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = diver.next(8);
@@ -4944,8 +4922,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("DiverRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 20:
-                        orbit.setStateA(System.nanoTime());
-                        orbit.setStateB(~System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = -(orbit.nextLong() & 1L) | 255L;
@@ -4955,9 +4931,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("OrbitRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 21:
-                        orbit.setStateA(System.nanoTime());
-                        orbit.setStateB(~System.nanoTime());
-//                        orbit.setState1(~System.nanoTime()); //(System.nanoTime() ^ 0xDB4F0B9175AE2165L) * 0x369DEA0F31A53F85L)
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = orbit.next(8);
@@ -4975,15 +4948,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
-//                        flap.setState(System.nanoTime());
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                code = flap.nextInt() | 255L;
-//                                back[x][y] = floatGet(code);
-//                            }
-//                        }
-//                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        break;
                     case 23:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -4993,15 +4957,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
-//                        flap.setState(System.nanoTime());
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                iBright = flap.next(8);
-//                                back[x][y] = floatGetI(iBright, iBright, iBright);
-//                            }
-//                        }
-//                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        break;
                     case 24:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -5021,29 +4976,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("BasicRandom32 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 26:
-                        lap.setState0(System.nanoTime());
-                        lap.setState1(lap.getState0());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = -(lap.nextLong() & 1L) | 255L;
+                                code = -(tangle.nextLong() & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("LapRNG (seriously flawed) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("TangleRNG (LSB only) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 27:
-                        lap.setState0(System.nanoTime());
-                        lap.setState1(lap.getState0());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = lap.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = tangle.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("LapRNG (seriously flawed) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("TangleRNG (8 bits via next()) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 28:
-                        xoRo.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = xoRo.nextLong() << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
@@ -5053,7 +5003,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("XoRoRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 29:
-                        xoRo.setSeed(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (int) (xoRo.nextLong() & 255);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
@@ -5063,7 +5012,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("XoRoRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 30:
-                        ta.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = ta.nextLong() << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
@@ -5073,7 +5021,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ThrustAltRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 31:
-                        ta.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (int) (ta.nextLong() & 255);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
@@ -5083,7 +5030,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ThrustAltRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 32:
-                        basic64.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = basic64.nextLong() | 255L;
@@ -5093,7 +5039,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 33:
-                        basic64.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = basic64.next(8);
@@ -5103,27 +5048,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 34:
-                        jab.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = jab.nextLong() << 8 | 255L;
+                                code = xosh.nextLong() << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("JabRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("XoshiroStarPhi32RNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 35:
-                        jab.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int) (jab.nextLong() & 255);
+                                iBright = (int) (xosh.nextLong() & 255);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("JabRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("XoshiroStarPhi32RNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 36:
-                        nlfsr.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = -(nlfsr.nextInt() & 1L) | 255L;
@@ -5133,7 +5075,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("NLFSR at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 37:
-                        nlfsr.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = nlfsr.nextInt() & 255;
@@ -5143,7 +5084,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("NLFSR at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 38:
-                        linnorm.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = floatGet(-(linnorm.nextLong() & 1L) | 255L);
@@ -5152,7 +5092,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("LinnormRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 39:
-                        linnorm.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = linnorm.next(8);
@@ -5183,7 +5122,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("LinnormRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 42:
-                        ta.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = floatGet(-(ta.nextLong() & 1L) | 255L);
@@ -5192,7 +5130,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ThrustAltRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 43:
-                        ta.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = ta.next(8);
@@ -5242,7 +5179,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("PointHash gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 48:
-                        starfish.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = starfish.nextInt() | 255;
@@ -5252,7 +5188,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Starfish32RNG using higher bits at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 49:
-                        starfish.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = starfish.next(8);
@@ -5294,7 +5229,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = Mist_.hash(coordinates) & 7L;
+                                code = yolkA.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 back[x][y] = floatGet(code);
                             }
@@ -5338,7 +5273,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = Mist_.hash(coordinate) & 7L;
+                                code = yolkA.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 back[x][y] = floatGet(code);
                             }
@@ -5373,7 +5308,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = Mist_.hash64(coordinates) & 7L;
+                                code = yolkA.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 back[x][y] = floatGet(code);
                             }
@@ -5407,7 +5342,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = Mist_.hash64(coordinate) & 7L;
+                                code = yolkA.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 back[x][y] = floatGet(code);
                             }
@@ -5454,7 +5389,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = Mist_.hash(coordinates) & 1792L;
+                                code = yolkA.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 back[x][y] = floatGet(code);
                             }
@@ -5499,7 +5434,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = Mist_.hash(coordinate) & 1792L;
+                                code = yolkA.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 back[x][y] = floatGet(code);
                             }
@@ -5534,7 +5469,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = Mist_.hash64(coordinates) & 1792L;
+                                code = yolkA.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 back[x][y] = floatGet(code);
                             }
@@ -5567,7 +5502,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = Mist_.hash64(coordinate) & 1792L;
+                                code = yolkA.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 back[x][y] = floatGet(code);
                             }
