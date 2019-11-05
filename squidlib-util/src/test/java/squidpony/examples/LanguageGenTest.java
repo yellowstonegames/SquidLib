@@ -568,7 +568,15 @@ public class LanguageGenTest {
             System.out.println(StringKit.sentenceCase(sb));
             sb.setLength(0);
         }
-
     }
-
+    
+    @Test
+    public void testRandomLanguage()
+    {
+        FakeLanguageGen lang1 = FakeLanguageGen.randomLanguage(0xABCDEF1234567890L).mix(0.375, FakeLanguageGen.ELF, 0.25);
+        FakeLanguageGen lang2 = FakeLanguageGen.randomLanguage(0xABCDEF1234567890L).mix(0.375, FakeLanguageGen.ELF, 0.25);
+        System.out.println(lang1.equals(lang2));
+        System.out.println(lang1.sentence(123, 5, 9));
+        System.out.println(lang2.sentence(123, 5, 9));
+    }
 }

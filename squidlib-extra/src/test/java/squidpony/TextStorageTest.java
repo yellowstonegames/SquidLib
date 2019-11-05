@@ -6,10 +6,7 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.SpillWorldMap;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.ProbabilityTable;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.ThunderRNG;
+import squidpony.squidmath.*;
 import squidpony.store.text.BonusConverters;
 import squidpony.store.text.TextStorage;
 
@@ -33,7 +30,7 @@ public class TextStorageTest extends ApplicationAdapter {
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3), lang2;
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
+            GreasedRegion grease = new GreasedRegion(new MiniMover64RNG(75L), 75, 75), g2;
             store.put("rng", srng, BonusConverters.convertStatefulRNG);
             store.put("language", randomLanguage, Converters.convertFakeLanguageGen);
             store.put("world", world, BonusConverters.convertSpillWorldMap);
@@ -80,7 +77,7 @@ public class TextStorageTest extends ApplicationAdapter {
 
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75);
+            GreasedRegion grease = new GreasedRegion(new MiniMover64RNG(75L), 75, 75);
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
             ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
             table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);
