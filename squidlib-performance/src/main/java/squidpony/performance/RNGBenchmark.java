@@ -430,53 +430,6 @@ public class RNGBenchmark {
         return LightR.nextInt();
     }
     
-    private FlapRNG Flap = new FlapRNG(9999L);
-    private RNG FlapR = new RNG(Flap);
-    @Benchmark
-    public long measureFlap()
-    {
-        return Flap.nextLong();
-    }
-    @Benchmark
-    public int measureFlapInt()
-    {
-        return Flap.next(32);
-    }
-    @Benchmark
-    public long measureFlapR()
-    {
-        return FlapR.nextLong();
-    }
-    @Benchmark
-    public int measureFlapIntR()
-    {
-        return FlapR.nextInt();
-    }
-
-    private LapRNG Lap = new LapRNG(9999L);
-    private RNG LapR = new RNG(Lap);
-    @Benchmark
-    public long measureLap()
-    {
-        return Lap.nextLong();
-    }
-    @Benchmark
-    public int measureLapInt()
-    {
-        return Lap.next(32);
-    }
-    @Benchmark
-    public long measureLapR()
-    {
-        return LapR.nextLong();
-    }
-    @Benchmark
-    public int measureLapIntR()
-    {
-        return LapR.nextInt();
-    }
-
-
 //    private ThrustRNG Thrust = new ThrustRNG(9999L);
 //    private RNG ThrustR = new RNG(Thrust);
 //    @Benchmark

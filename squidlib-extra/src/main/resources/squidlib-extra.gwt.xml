@@ -18,11 +18,14 @@
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.FakeLanguageGen" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntVLA" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Coord" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.FastNoise" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.RNG" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.StatefulRNG" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.GWTRNG" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.LinnormRNG" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.DiverRNG" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.SilkRNG" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.MiniMover64RNG" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.GreasedRegion" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedMap" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.EnumOrderedMap" />

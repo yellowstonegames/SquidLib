@@ -76,8 +76,7 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * but because they are unable to generate some outputs, that may make them a poor choice
  * for some usage (ThrustAltRNG also has some bias toward specific numbers and produces
  * them more frequently, but not frequently enough to make it fail statistical tests, and
- * ThrustAltRNG can skip around in its output sequence like LightRNG). {@link JabRNG} is
- * a mediocre choice for quality but is tied for the fastest with MiniMover64RNG.
+ * ThrustAltRNG can skip around in its output sequence like LightRNG).
  * <br>
  * There are many more RandomnessSource implementations! You might want significantly less
  * predictable random results, which  {@link IsaacRNG} can provide, along with a
@@ -90,18 +89,21 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * Android won't act the same as that same 32-bit int on GWT. Since GWT is stuck with
  * JavaScript's implementation of ints with doubles, overflow (which is needed for an
  * RNG) doesn't work with ints as expected, but does with GWT's implementation of longs.
- * If targeting GWT, {@link Lathe32RNG} is significantly faster at producing int values
- * than any long-based generator, and will produce the same results on GWT as on desktop
- * or Android (not all 32-bit generators do this). {@link Starfish32RNG} goes one step
- * further than Lathe32RNG at an even distribution, and has better quality, but is
- * slightly slower. While Lathe32RNG can produce all ints over the course of its period,
- * it will produce some pairs of ints, or longs, more often than others and will never
- * produce some longs. Starfish32RNG will produce all longs but one. {@link Oriole32RNG}
- * and {@link XoshiroStarPhi32RNG} are also GWT-safe, but other generators that were
- * thought to be GWT-friendly are not. These GWT-unsafe generators have other uses, but
- * should not be used on GWT: {@link PintRNG} and {@link FlapRNG}. All other generators
- * use longs, and so will be slower than the recommended Starfish32RNG or Lathe32RNG on GWT,
- * but much faster on 64-bit JREs.
+ * If targeting GWT, you should probably consider {@link GWTRNG} or {@link SilkRNG},
+ * which would be used in place of this class and have a similar API. You can instead
+ * choose a RandomnessSource that is efficient on GWT; {@link Lathe32RNG} is
+ * significantly faster at producing int values on GWT than any long-based generator,
+ * and will produce the same results on GWT as on desktop or Android (not all 32-bit
+ * generators do this). {@link Starfish32RNG} goes one step further than Lathe32RNG at
+ * an even distribution, and has better quality, but is slightly slower; it is also used
+ * internally by GWTRNG. While Lathe32RNG can produce all ints over the course of its
+ * period, it will produce some pairs of ints, or longs, more often than others and will
+ * never produce some longs. Starfish32RNG will produce all longs but one.
+ * {@link Oriole32RNG} and {@link XoshiroStarPhi32RNG} are also GWT-safe, but other
+ * generators that were thought to be GWT-friendly are not. {@link PintRNG} is a
+ * GWT-unsafe generators with other uses, but should not be used on GWT. All other
+ * RandomnessSources use longs, and so will be slower than the recommended Starfish32RNG
+ * or Lathe32RNG on GWT, but probably are much faster on 64-bit JREs.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  * @author smelC
