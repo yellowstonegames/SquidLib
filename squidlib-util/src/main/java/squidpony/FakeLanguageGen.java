@@ -3386,7 +3386,7 @@ public class FakeLanguageGen implements Serializable {
         for (int i = 0; i < vulgarChecks.length; i++) {
             if (vulgarChecks[i].matcher(fixed).find())
             {
-                System.out.println(vulgarChecks[i]);
+//                System.out.println(vulgarChecks[i]);
                 return true;
             }
         }
@@ -4603,7 +4603,7 @@ public class FakeLanguageGen implements Serializable {
         if (!Arrays.equals(vowelSplitters, that.vowelSplitters)) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(closingSyllables, that.closingSyllables)) return false;
-        if (!syllableFrequencies.equals(that.syllableFrequencies)) return false;
+        if (!Arrays.equals(syllableFrequencies, that.syllableFrequencies)) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(sanityChecks, that.sanityChecks)) return false;
         return modifiers != null ? modifiers.equals(that.modifiers) : that.modifiers == null;
@@ -4622,7 +4622,7 @@ public class FakeLanguageGen implements Serializable {
                 31 * CrossHash.hash(closingSyllables) ^
                 (clean ? 1 : 0);
         result = 31 * 31 * 31 * 31 * result +
-                31 * 31 * 31 * syllableFrequencies.hashCode() +
+                31 * 31 * 31 * CrossHash.hash(syllableFrequencies) +
                 31 * 31 * NumberTools.doubleToMixedIntBits(totalSyllableFrequency) +
                 31 * NumberTools.doubleToMixedIntBits(vowelStartFrequency) +
                 NumberTools.doubleToMixedIntBits(vowelEndFrequency) | 0;
