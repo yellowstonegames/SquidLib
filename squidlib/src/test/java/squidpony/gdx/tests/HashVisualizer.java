@@ -66,9 +66,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 134;
-    private int hashMode = 0, rngMode = 0, noiseMode = 119, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 100, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -145,6 +145,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Layered3D layeredSeeded = new Noise.Layered3D(SeededNoise.instance,1);
     private final FastNoise layeredFN = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL);
     private final GlitchNoise glitch = GlitchNoise.instance;
+    private final MitchellNoise band = new MitchellNoise(0x1337BEEF, 10); 
 
     private final Noise.Basic1D basic1D = new Noise.Basic1D();
     private final Noise.Layered1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
@@ -4185,24 +4186,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 103:
-//                        Gdx.graphics.setTitle("Mummy 7D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr))) * 0.50f + 0.50f;
-//                                back[x][y] = floatGet(bright, bright, bright, 1f);
-//                            }
-//                        }
-                        Gdx.graphics.setTitle("Sway 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Mitchell 5D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] =
-                                        floatGet(
-                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30.12345, seedX0) * 0.50f) + 0.50f,
-                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10.23456, seedX1) * 0.50f) + 0.50f,
-                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 10, y * 0.11125f + ctr * 0.11125f + 20.34567, seedX2) * 0.50f) + 0.50f,
-                                                1.0f);
+                                bright = basicPrepare(band.arbitraryNoise(0x1337L, alter5D(x, y, ctr)));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
+//                        Gdx.graphics.setTitle("Sway 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                back[x][y] =
+//                                        floatGet(
+//                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30.12345, seedX0) * 0.50f) + 0.50f,
+//                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10.23456, seedX1) * 0.50f) + 0.50f,
+//                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 10, y * 0.11125f + ctr * 0.11125f + 20.34567, seedX2) * 0.50f) + 0.50f,
+//                                                1.0f);
+//                            }
+//                        }
                         break;
                     case 104:
                         Gdx.graphics.setTitle("Basic 1D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4701,8 +4702,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 131:
                         Gdx.graphics.setTitle("Blue Noise with choice " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        if(METROPOLIS_NOISE == null)
-//                            METROPOLIS_NOISE = BlueNoise.generateMetropolis(ctr * 9999, 123456789 - ctr, 400);
                         for (int x = 0; x < width; x++) {
                             xx = (x + ctr);
                             for (int y = 0; y < height; y++) {
@@ -4718,7 +4717,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = (BlueNoise.getSeeded(xx, yy, 12345789) + 128) / 255f;
+                                //iBright = 12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21;
+                                bright = (((BlueNoise.get(xx, yy) & 0xE0) ^ (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[((12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21) >>> 16 & 15)]) & 0x1F)
+                                   //((iBright ^ (iBright << 19 | iBright >>> 13) ^ (iBright << 5 | iBright >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 20 & 0x3F)
+                                   //^ (xx + xx + yy >> 2 & 0x3F) ^ (xx - yy - yy >> 2 & 0x3F)
+                                ) + 128) / 255f;
+
+//                                bright = //(BlueNoise.getSeeded(xx, yy, 12345789) + 128) / 255f;
 //                                        ((BlueNoise.get(xx, yy) ^ 128 ^ Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 1234567)
 //                                        ^ (xx + yy >> 2 & 0x3F) ^ (xx - yy >> 2 & 0x3F)) & 255) / 255f;
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
