@@ -299,6 +299,15 @@ public class WildMap implements Serializable {
         this.contentTypes = contentTypes;
     }
 
+    /**
+     * Produces a map by filling the {@link #floors} 2D array with indices into {@link #floorTypes}, and similarly
+     * filling the {@link #content} 2D array with indices into {@link #contentTypes}. You only need to call this method
+     * when you first generate a map with the specific parameters you want, such as biome, and later if you want another
+     * map with the same parameters.
+     * <br>
+     * Virtually all of this method is a wrapper around functionality provided by {@link BlueNoise}, adjusted to fit
+     * wilderness maps slightly.
+     */
     public void generate() {
         ArrayTools.fill(content, -1);
         final int seed = rng.nextInt(), otherSeed = rng.nextInt(), choice = seed + otherSeed & 15;
