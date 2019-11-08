@@ -192,7 +192,14 @@ public class WorldWildMapDemo extends ApplicationAdapter {
                     position.set(cellWidth * 0.5f * shownWidth, cellHeight * (bigHeight - 0.5f * shownHeight), position.z);
                     zoomed = true;
                     final int hash = Noise.IntPointHash.hashAll(screenX, screenY, 0x13579BDF);
-                    wildView.setWildMap(new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth), (int) (bigHeight - nextPosition.y / cellHeight)), hash, ~hash));
+//                    wildView.setWildMap(new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth), (int) (bigHeight - nextPosition.y / cellHeight)), hash, ~hash));
+                    wildView.setWildMap(new WildMap.MixedWildMap(
+                            new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth)+1, (int) (bigHeight - nextPosition.y / cellHeight)-1), hash, ~hash),
+                            new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth)+1, (int) (bigHeight - nextPosition.y / cellHeight)), hash, ~hash),
+                            new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth), (int) (bigHeight - nextPosition.y / cellHeight)), hash, ~hash),
+                            new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth), (int) (bigHeight - nextPosition.y / cellHeight)-1), hash, ~hash),
+                            rng
+                    ));
                     wildView.generate();
                     nextPosition.set(previousPosition);
                 }
