@@ -41,7 +41,7 @@ import java.io.Serializable;
  */
 public final class Oriole32RNG implements RandomnessSource, Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private int stateA, stateB, stateC;
 
@@ -119,7 +119,7 @@ public final class Oriole32RNG implements RandomnessSource, Serializable {
         s1 ^= s00;
         stateA = (s00 << 13 | s00 >>> 19) ^ s1 ^ (s1 << 5); // a, b
         stateB = (s1 << 28 | s1 >>> 4); // c
-        return (long)((high << 29 | high >>> 3) + (stateC + 0x632BE5AB)) << 32 ^ ((low << 29 | low >>> 3) + (stateC += 0xC657CB56));
+        return ((high << 29 | high >>> 3) + (stateC + 0x632BE5ABL)) << 32 | ((low << 29 | low >>> 3) + (stateC += 0xC657CB56) & 0xFFFFFFFFL);
     }
 
     /**

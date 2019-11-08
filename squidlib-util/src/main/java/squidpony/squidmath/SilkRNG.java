@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author Tommy Ettinger
  */
 public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializable {
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 5L;
 
     public int stateA, stateB;
 
@@ -145,7 +145,7 @@ public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializ
     public final boolean nextBoolean() {
         final int s = (stateA += 0xC1C64E6D);
         final int x = (s ^ s >>> 17) * ((stateB += (s | -s) >> 31 & 0x9E3779BB) >>> 12 | 1);
-        return ((x ^ x >>> 16) * 0xAC451 & 0x80000000) == 0;
+        return ((x ^ x >>> 16) & 1) == 0;
     }
 
     /**
