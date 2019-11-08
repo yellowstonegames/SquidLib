@@ -119,15 +119,15 @@ public final class Oriole32RNG implements RandomnessSource, Serializable {
     public final long nextLong() {
         final int s0 = stateA;
         int s1 = stateB;
-        final int high = s0 + s1 | 0;
+        final int high = s0 + s1;
         s1 ^= s0;
         final int s00 = (s0 << 13 | s0 >>> 19) ^ s1 ^ (s1 << 5); // a, b
         s1 = (s1 << 28 | s1 >>> 4); // c
-        final int low = s00 + s1 | 0;
+        final int low = s00 + s1;
         s1 ^= s00;
         stateA = (s00 << 13 | s00 >>> 19) ^ s1 ^ (s1 << 5); // a, b
         stateB = (s1 << 28 | s1 >>> 4); // c
-        return (long)((high << 29 | high >>> 3) + (stateC + 0x632BE5AB | 0) | 0) << 32 ^ ((low << 29 | low >>> 3) + (stateC = stateC + 0xC657CB56 | 0) | 0);
+        return ((high << 29 | high >>> 3) + (stateC + 0x632BE5ABL | 0)) << 32 | ((low << 29 | low >>> 3) + (stateC = stateC + 0xC657CB56 | 0) & 0xFFFFFFFFL);
     }
 
     /**

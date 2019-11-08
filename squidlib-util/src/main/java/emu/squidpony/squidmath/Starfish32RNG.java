@@ -122,8 +122,7 @@ public final class Starfish32RNG implements StatefulRandomness, Serializable {
         final int low = s0 * 31;
         stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
         stateB = (s1 << 13 | s1 >>> 19);
-        final long result = ((high << 28 | high >>> 4) + 0x9E3779BD);
-        return result << 32 ^ ((low << 28 | low >>> 4) + 0x9E3779BD);
+        return ((high << 28 | high >>> 4) + 0x9E3779BDL) << 32 | ((low << 28 | low >>> 4) + 0x9E3779BD & 0xFFFFFFFFL);
     }
 
     /**

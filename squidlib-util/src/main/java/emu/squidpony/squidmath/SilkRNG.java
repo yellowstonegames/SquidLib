@@ -5,7 +5,7 @@ import squidpony.StringKit;
 import java.io.Serializable;
 
 public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializable {
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 5L;
 
     public int stateA, stateB;
     
@@ -70,7 +70,7 @@ public final class SilkRNG extends AbstractRNG implements IStatefulRNG, Serializ
     public final boolean nextBoolean() {
         final int s = (stateA = stateA + 0xC1C64E6D | 0);
         final int x = (s ^ s >>> 17) * ((stateB = stateB + ((s | -s) >> 31 & 0x9E3779BB) | 0) >>> 12 | 1);
-        return ((x ^ x >>> 16) * 0xAC451 & 0x80000000) == 0;
+        return ((x ^ x >>> 16) & 1) == 0;
     }
 
     @Override

@@ -133,7 +133,7 @@ public final class Lathe32RNG implements StatefulRandomness, Serializable {
         s1 ^= s00;
         stateA = (s00 << 13 | s00 >>> 19) ^ s1 ^ (s1 << 5); // a, b
         stateB = (s1 << 28 | s1 >>> 4); // c
-        return (long)((high << 10 | high >>> 22) + s0 | 0) << 32 ^ ((low << 10 | low >>> 22) + s00 | 0);
+        return ((high << 10 | high >>> 22) + s0 | 0L) << 32 | ((low << 10 | low >>> 22) + s00 & 0xFFFFFFFFL);
     }
 
     /**
