@@ -363,10 +363,10 @@ public class WildMap implements Serializable {
         protected void preparePieceMap()
         {
             ArrayTools.fill(pieceMap, 255);
-            pieceMap[0][0] = 3; //northwest
             pieceMap[width - 1][0] = 0; // northeast
-            pieceMap[0][height - 1] = 1; // southeast
-            pieceMap[width - 1][height - 1] = 2; // southwest
+            pieceMap[width - 1][height - 1] = 1; // southeast
+            pieceMap[0][height - 1] = 2; // southwest
+            pieceMap[0][0] = 3; //northwest
             final int spillerLimit = 4;
             final Direction[] dirs = Direction.CARDINALS;
             Direction d;
