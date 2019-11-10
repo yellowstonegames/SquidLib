@@ -4748,10 +4748,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                iBright = ((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) + 128 >>> 2 >= (yy & 63)) ? Math.min(a, b) : Math.max(a, b)) + 128;
 //                                iBright = (a + b + 256) >>> 1;
 //                                iBright = (((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) < 0) ? Math.min(a, b) : Math.max(a, b))) + 128;
-                                iBright = (((Math.abs(ad - 63) <= 5) 
-                                        //? (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) + 128) 
-                                        ? (a >>> Math.max(0, ad - 63)) ^ (b >>> Math.max(0, 63 - ad))
-                                        : ad < 63 ? a : b));
+                                iBright = ((ad + 2 >>> 2 == 16//(Math.abs(ad - 63) <= 1) 
+                                        //? (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[32]) + 128) 
+                                        ? (a + b + 1) >>> 1//((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) < 0) ? Math.min(a, b) : Math.max(a, b))
+//                                        ? (a * (79 - ad)) + (b * (ad - 47)) >>> 5// ^ (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) & 0xF)
+                                        : ad <= 63 ? a : b));
 
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
