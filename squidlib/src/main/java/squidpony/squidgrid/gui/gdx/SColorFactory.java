@@ -14,15 +14,23 @@ import java.util.Queue;
 /**
  * Provides utilities for working with colors as well as caching operations for
  * color creation.
- *
+ * <br>
  * All returned SColor objects are cached so multiple requests for the same
- * SColor will not create duplicate long term objects.
- *
+ * SColor will not create duplicate long term objects. Really, the right way to do
+ * this is to not use objects at all; Color and SColor have a {@link Color#toFloatBits()}
+ * method that gets a primitive float to represent the color exactly, without
+ * hassling the garbage collector. Most color-related operations are implemented
+ * for both Colors and floats that represent colors in SColor.
+ * <br>
  * @see SquidColorCenter another technique for caching colors that allows filters.
+ * @see FilterBatch an alternative to SpriteBatch that allows filtering colors
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - responsible for mutilating this class to work on libGDX
+ * 
+ * @deprecated You should use {@link SquidColorCenter} or pure SColor methods on floats instead.
  */
+@Deprecated
 public class SColorFactory {
 
     private final IntMap<SColor> valueLookup;
