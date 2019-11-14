@@ -4712,14 +4712,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 132:
-                        Gdx.graphics.setTitle("Blue Noise with regional adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Blue Noise with scratchy adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 //iBright = 12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21;
-                                iBright = (((BlueNoise.get(xx, yy) & 0xE0) 
-                                        ^ (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[((12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21) >>> 16 & 62)]) >>> 3 & 0x1F)
+//                                iBright = (((BlueNoise.get(xx, yy) & 0xE0) 
+//                                        ^ (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[((12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21) >>> 16 & 62)]) >>> 3 & 0x1F)
+                                iBright = ((BlueNoise.getSeededScratchy(xx, yy,  12345789)
                                    //((iBright ^ (iBright << 19 | iBright >>> 13) ^ (iBright << 5 | iBright >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 20 & 0x3F)
                                    //^ (xx + xx + yy >> 2 & 0x3F) ^ (xx - yy - yy >> 2 & 0x3F)
                                 ) + 128);
@@ -4732,28 +4733,28 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 133:
-                        Gdx.graphics.setTitle("Blue Noise with choice with adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Blue Noise with seamless adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         int a, b;
                         int ad;
                         for (int x = 0; x < width; x++) {
                             xx = x + (ctr >> 2);
                             for (int y = 0; y < height; y++) {
                                 yy = y + (ctr >> 2);
-                                a = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[Noise.IntPointHash.hash32(xx >>> 6, yy >>> 6, 1122334455) & 15]) + 128;
-                                b = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[(Noise.IntPointHash.hash32(xx - 32 >>> 6, yy - 32 >>> 6, 1122334455) & 15) | 16]) + 128;
-                                ad = Math.abs((xx << 1 & 126) - 63) + Math.abs((yy << 1 & 126) - 63);
-//                                ad = Math.sqrt(ad * ad + bd * bd) * 0.031746031746031744;
-                                //bd = Math.max(0.0, ad - 1.0);
-//                                bright = (128 + BlueNoise.getSeeded(xx, yy, 12345679, BlueNoise.ALT_NOISE[ctr >> 2 & 15])) / 255f;
-//                                iBright = ((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) + 128 >>> 2 >= (yy & 63)) ? Math.min(a, b) : Math.max(a, b)) + 128;
-//                                iBright = (a + b + 256) >>> 1;
-//                                iBright = (((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) < 0) ? Math.min(a, b) : Math.max(a, b))) + 128;
-                                iBright = ((ad + 2 >>> 2 == 16//(Math.abs(ad - 63) <= 1) 
-                                        //? (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[32]) + 128) 
-                                        ? (a + b + 1) >>> 1//((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) < 0) ? Math.min(a, b) : Math.max(a, b))
-//                                        ? (a * (79 - ad)) + (b * (ad - 47)) >>> 5// ^ (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) & 0xF)
-                                        : ad <= 63 ? a : b));
-
+                                iBright = (BlueNoise.getSeeded(xx, yy, 12345789) + 128);
+//                                a = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[Noise.IntPointHash.hash32(xx >>> 6, yy >>> 6, 1122334455) & 15]) + 128;
+//                                b = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[(Noise.IntPointHash.hash32(xx - 32 >>> 6, yy - 32 >>> 6, 1122334455) & 15) | 16]) + 128;
+//                                ad = Math.abs((xx << 1 & 126) - 63) + Math.abs((yy << 1 & 126) - 63);
+////                                ad = Math.sqrt(ad * ad + bd * bd) * 0.031746031746031744;
+//                                //bd = Math.max(0.0, ad - 1.0);
+////                                bright = (128 + BlueNoise.getSeeded(xx, yy, 12345679, BlueNoise.ALT_NOISE[ctr >> 2 & 15])) / 255f;
+////                                iBright = ((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) + 128 >>> 2 >= (yy & 63)) ? Math.min(a, b) : Math.max(a, b)) + 128;
+////                                iBright = (a + b + 256) >>> 1;
+////                                iBright = (((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) < 0) ? Math.min(a, b) : Math.max(a, b))) + 128;
+//                                iBright = ((ad + 2 >>> 2 == 16//(Math.abs(ad - 63) <= 1) 
+//                                        //? (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[32]) + 128) 
+//                                        ? (a + b + 1) >>> 1//((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) < 0) ? Math.min(a, b) : Math.max(a, b))
+////                                        ? (a * (79 - ad)) + (b * (ad - 47)) >>> 5// ^ (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) & 0xF)
+//                                        : ad <= 63 ? a : b));
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
