@@ -183,7 +183,7 @@ public class BlueNoise {
      * @param seed seed value, can be any int; should be the same for all calls that should be from the same 2D plane
      * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
      */
-    public static byte getSeededScratchy(final int x, final int y, int seed) {
+    public static byte getSeeded(final int x, final int y, int seed) {
         seed ^= (x >>> 5) * 0x1827F5 ^ (y >>> 5) * 0x123C21;
         return (byte) (RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] ^
                 ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26)
@@ -209,7 +209,15 @@ public class BlueNoise {
                 ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26)
                 ^ (x + x + y >> 2 & 0x3F) ^ (x - y - y >> 2 & 0x3F));
     }
-    public static byte getSeeded(int x, int y, int seed) {
+
+    /**
+     * Doesn't work currently; this has large, noticeable seams. A work in progress.
+     * @param x         x position, can be any int; results will not repeat for a very long time
+     * @param y         y position, can be any int; results will not repeat for a very long time
+     * @param seed      seed value, can be any int; should be the same for all calls that should be from the same 2D plane
+     * @return a byte that should obey a blue-noise distribution, but currently doesn't
+     */
+    public static byte getSeededSeamless(int x, int y, int seed) {
         seed = (seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493;
         seed ^= seed >>> 13;
         final int sx = seed >>> 15 | 1, sy = ~(seed << 1 & 0x1FFFE);
