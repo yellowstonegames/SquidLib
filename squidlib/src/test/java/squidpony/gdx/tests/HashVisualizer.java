@@ -4740,7 +4740,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + (ctr >> 2);
                             for (int y = 0; y < height; y++) {
                                 yy = y + (ctr >> 2);
-                                iBright = (BlueNoise.getSeeded(xx, yy, 12345789) + 128);
+                                iBright = (BlueNoise.getSeededSeamless(xx, yy, 12345789) + 128);
 //                                a = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[Noise.IntPointHash.hash32(xx >>> 6, yy >>> 6, 1122334455) & 15]) + 128;
 //                                b = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[(Noise.IntPointHash.hash32(xx - 32 >>> 6, yy - 32 >>> 6, 1122334455) & 15) | 16]) + 128;
 //                                ad = Math.abs((xx << 1 & 126) - 63) + Math.abs((yy << 1 & 126) - 63);
