@@ -298,9 +298,9 @@ public class WildMapView {
         for (int x = 0; x < width && x < layers.gridWidth; x++) {
             for (int y = 0; y < height && y < layers.gridHeight; y++) {
                 if((c = wildMap.content[x][y]) >= 0 && (icv = viewer.get(wildMap.contentTypes.get(c))) != null)
-                    layers.put(x, y, icv);
+                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(icv.getPackedColor(), colorMap[x][y]));
                 else if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null)
-                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(colorMap[x][y]));
+                    layers.put(x, y, icv.getSymbol(), SColor.contrastLuma(icv.getPackedColor(), colorMap[x][y]));
             }
         }
     }

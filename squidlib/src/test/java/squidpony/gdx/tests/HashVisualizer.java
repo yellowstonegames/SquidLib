@@ -4720,7 +4720,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 //iBright = 12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21;
 //                                iBright = (((BlueNoise.get(xx, yy) & 0xE0) 
 //                                        ^ (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[((12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21) >>> 16 & 62)]) >>> 3 & 0x1F)
-                                iBright = ((BlueNoise.getSeeded(xx, yy,  12345789)
+                                iBright = ((BlueNoise.getSeededScratchy(xx, yy,  12345789)
                                    //((iBright ^ (iBright << 19 | iBright >>> 13) ^ (iBright << 5 | iBright >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 20 & 0x3F)
                                    //^ (xx + xx + yy >> 2 & 0x3F) ^ (xx - yy - yy >> 2 & 0x3F)
                                 ) + 128);

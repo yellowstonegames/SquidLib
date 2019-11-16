@@ -12737,26 +12737,43 @@ public class SColor extends Color implements Serializable {
      * @param encoded a packed float color, as produced by {@link #toFloatBits()}
      * @return a different, contrasting packed float color
      */
-    public static float contrastLuma(final float encoded)
+    public static float contrastLuma(final float encoded, final float contrastingColor)
     {
         final int bits = NumberTools.floatToIntBits(encoded),
+                contrastBits = NumberTools.floatToIntBits(contrastingColor),
                 r = (bits & 0x000000ff), 
                 g = (bits & 0x0000ff00),
                 b = (bits & 0x00ff0000),
+                ctr = (contrastBits & 0x000000ff),
+                ctg = (contrastBits & 0x0000ff00),
+                ctb = (contrastBits & 0x00ff0000),
                 a = (bits >>> 24);
-        final float luma =
-                r * (0x1.010102p-8f  * 0.299f) +
-                g * (0x1.010102p-16f * 0.587f) +
-                b * (0x1.010102p-24f * 0.114f),
-                cb = 
+        final float cb = 
                         r * (0x1.010102p-8f  * -0.168736f) + 
                         g * (0x1.010102p-16f * -0.331264f) + 
                         b * (0x1.010102p-24f * 0.5f),
                 cr = 
                         r * (0x1.010102p-8f  * 0.5f) + 
                         g * (0x1.010102p-16f * -0.418688f) + 
-                        b * (0x1.010102p-24f * -0.081312f);
-        return floatGetYCbCr(luma < 0.5f ? luma * 0.4f + 0.5f : 0.5f - luma * 0.4f, cb, cr, 0x1.010102p-8f * a);
+                        b * (0x1.010102p-24f * -0.081312f),
+                ctcb = 
+                        ctr * (0x1.010102p-8f  * -0.168736f) + 
+                        ctg * (0x1.010102p-16f * -0.331264f) + 
+                        ctb * (0x1.010102p-24f * 0.5f),
+                ctcr = 
+                        ctr * (0x1.010102p-8f  * 0.5f) + 
+                        ctg * (0x1.010102p-16f * -0.418688f) + 
+                        ctb * (0x1.010102p-24f * -0.081312f);
+        if((cb - ctcb) * (cb - ctcb) + (cr - ctcr) * (cr - ctcr) >= 0.1875f)
+            return encoded;
+        final float luma =
+                r * (0x1.010102p-8f  * 0.299f) +
+                        g * (0x1.010102p-16f * 0.587f) +
+                        b * (0x1.010102p-24f * 0.114f),
+                contrastLuma =  ctr * (0x1.010102p-8f  * 0.299f) +
+                        ctg * (0x1.010102p-16f * 0.587f) +
+                        ctb * (0x1.010102p-24f * 0.114f);
+        return floatGetYCbCr(contrastLuma < 0.5f ? luma * 0.45f + 0.55f : 0.5f - luma * 0.45f, cb, cr, 0x1.010102p-8f * a);
     }
 
     /**
