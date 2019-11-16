@@ -94,6 +94,21 @@
     </repositories>
     <profiles>
         <profile>
+            <id>jshell</id>
+            <activation>
+                <jdk>[9,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.johnpoth</groupId>
+                        <artifactId>jshell-maven-plugin</artifactId>
+                        <version>1.2</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>doclint-java8-disable</id>
             <activation>
                 <jdk>[1.8,)</jdk>
