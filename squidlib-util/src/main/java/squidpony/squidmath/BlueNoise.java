@@ -25,7 +25,7 @@ public class BlueNoise {
 
     /**
      * Raw data this class uses, as 64 1D byte arrays. Any of the 1D arrays this holds can be passed to
-     * {@link #get(int, int, byte[])} or {@link #getSeeded(int, int, int, byte[])} as their noiseData parameter. This
+     * {@link #get(int, int, byte[])} or {@link #getSeededScratchy(int, int, int, byte[])} as their noiseData parameter. This
      * group of byte arrays is static, which is probably OK even on Android as long as no one writes to it, and uses
      * {@link StandardCharsets} to decode itself from a String, which only works on GWT 2.8.2 and newer.
      * Each byte array can be considered [x][y] indexed or [y][x] indexed; the original images were [y][x] indexed.
@@ -176,14 +176,14 @@ public class BlueNoise {
     /**
      * Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
      * patterns are much less noticeable. Unlike {@link #get(int, int)}, this won't repeat every 64 cells on x or y, but
-     * it isn't as correct at matching blue-noise frequencies.
+     * it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in places, like TV static.
      *
      * @param x    x position, can be any int; results will not repeat for a very long time
      * @param y    y position, can be any int; results will not repeat for a very long time
      * @param seed seed value, can be any int; should be the same for all calls that should be from the same 2D plane
      * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
      */
-    public static byte getSeeded(final int x, final int y, int seed) {
+    public static byte getSeededScratchy(final int x, final int y, int seed) {
         seed ^= (x >>> 5) * 0x1827F5 ^ (y >>> 5) * 0x123C21;
         return (byte) (RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] ^
                 ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26)
@@ -193,8 +193,8 @@ public class BlueNoise {
     /**
      * Gets a modified byte from some raw noise data in an array of at least 4096 bytes, using seed to adjust repeated
      * sections of noise so patterns are much less noticeable. Unlike {@link #get(int, int)}, this won't repeat every 64
-     * cells on x or y, but it isn't as correct at matching blue-noise frequencies. You probably want to get the
-     * noiseData from an element of {@link #ALT_NOISE}.
+     * cells on x or y, but it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in
+     * places, like TV static. You probably want to get the noiseData from an element of {@link #ALT_NOISE}.
      *
      * @param x         x position, can be any int; results will not repeat for a very long time
      * @param y         y position, can be any int; results will not repeat for a very long time
@@ -202,7 +202,7 @@ public class BlueNoise {
      * @param noiseData a byte array with minimum length 4096; probably from {@link #ALT_NOISE}
      * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
      */
-    public static byte getSeeded(final int x, final int y, int seed, final byte[] noiseData) {
+    public static byte getSeededScratchy(final int x, final int y, int seed, final byte[] noiseData) {
         seed ^= (x >>> 5) * 0x1827F5 ^ (y >>> 5) * 0x123C21;
         return (byte) (noiseData[(y << 6 & 0xFC0) | (x & 0x3F)] ^
 //                (noiseData[(y * seed + x << 6 & 0xFC0) | (x * ~seed + y & 0x3F)] + 128 & 0x3F));
@@ -277,15 +277,15 @@ public class BlueNoise {
      */
     public static int[][] blueSpill(int[][] toFill, int spillerLimit, IRNG rng) {
         final int width = toFill.length, height = toFill[0].length,
-                xOffset = rng.next(6), yOffset = rng.next(6),
-                seed0 = rng.nextInt(), seed1 = rng.nextInt(), noiseChoice = rng.next(6);
-        final byte[] c0 = ALT_NOISE[noiseChoice], c1 = ALT_NOISE[noiseChoice ^ (rng.next(6)|1)];
+                xOffset = rng.next(5) + rng.next(5) + 1, yOffset = rng.next(5) + rng.next(5) + 1,
+                seed0 = rng.nextInt(), seed1 = rng.nextInt();//, noiseChoice = rng.next(6);
+//        final byte[] c0 = ALT_NOISE[noiseChoice], c1 = ALT_NOISE[noiseChoice ^ (rng.next(6)|1)];
         final Direction[] dirs = Direction.CARDINALS;
         Direction d;
         int t, rx, ry, ctr;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                toFill[x][y] = (getSeeded(x, y, seed0, c0) + getSeeded(x + xOffset, y + yOffset, seed1, c1) + 256) >> 1;
+                toFill[x][y] = (getSeededSeamless(x + xOffset, y, seed0) + getSeededSeamless(x, y + yOffset, seed1) + 256) >> 1;
             }
         }
         int[] ox = new int[width], oy = new int[height];
