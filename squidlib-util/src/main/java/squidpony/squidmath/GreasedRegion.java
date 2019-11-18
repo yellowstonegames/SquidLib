@@ -9,6 +9,8 @@ import squidpony.squidgrid.zone.Zone;
 import java.io.Serializable;
 import java.util.*;
 
+import static squidpony.squidmath.CrossHash.Water.*;
+
 /**
  * Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).
  * This can handle any size of 2D data, and is not strictly limited to 256x256 as CoordPacker is. It stores several long
@@ -6230,36 +6232,73 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     @Override
     public int hashCode() {
-        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-        final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-            result = (result << 54 | result >>> 10);
-        }
-        result ^= (z += (height ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        result = (result << 54 | result >>> 10);
-        result ^= (z += (width ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        result = (result << 54 | result >>> 10);
-
-        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-        return (int)((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
+        return CrossHash.hash(data) ^ GWTRNG.determineInt(GWTRNG.determineInt(height) + width);
+//        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+//        final int len = data.length;
+//        for (int i = 0; i < len; i++) {
+//            result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//            result = (result << 54 | result >>> 10);
+//        }
+//        result ^= (z += (height ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        result = (result << 54 | result >>> 10);
+//        result ^= (z += (width ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        result = (result << 54 | result >>> 10);
+//
+//        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+//        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+//        return (int)((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
     }
     public long hash64() {
-        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+        return CrossHash.hash64(data) ^ DiverRNG.randomize(DiverRNG.randomize(height) + width);
+//
+//        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+//        final int len = data.length;
+//        for (int i = 0; i < len; i++) {
+//            result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//            result = (result << 54 | result >>> 10);
+//        }
+//        result ^= (z += (height ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        result = (result << 54 | result >>> 10);
+//        result ^= (z += (width ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+//        result = (result << 54 | result >>> 10);
+//        
+//        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+//        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+//        return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
+    }
+
+    /**
+     * Computes a 64-bit hash code of this GreasedRegion given a 64-bit seed; even if given two very similar seeds,
+     * this should produce very different hash codes for the same GreasedRegion.
+     * <br>
+     * Meant for potential use in Bloom filters. Uses {@link CrossHash.Yolk}'s algorithm(s).
+     * @param seed a seed that will determine how the hashing algorithm works; all 64 bits are used.
+     * @return a 64-bit hash code for this GreasedRegion
+     */
+    public long hash64(long seed)
+    {
+        seed += b1;
+        seed ^= seed >>> 23 ^ seed >>> 48 ^ seed << 7 ^ seed << 53;
+        long a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
+                c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
         final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-            result = (result << 54 | result >>> 10);
+        for (int i = 3; i < len; i+=4) {
+            a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
+            b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
+            c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35) * b5;
+            d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+            seed += a + b + c + d;
         }
-        result ^= (z += (height ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        result = (result << 54 | result >>> 10);
-        result ^= (z += (width ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-        result = (result << 54 | result >>> 10);
-        
-        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
-        return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
+        seed += b5;
+        switch (len & 3) {
+            case 1: seed = wow(seed, b1 ^ data[len-1]); break;
+            case 2: seed = wow(seed + data[len-2], b2 + data[len-1]); break;
+            case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + data[len-1], seed ^ b3); break;
+        }
+        seed = wow(seed + height, b4 + width);
+        seed = (seed ^ seed << 16) * (len ^ b0 ^ seed >>> 32);
+        return seed - (seed >>> 31) + (seed << 33);
+
     }
 
     public String serializeToString()
