@@ -6279,14 +6279,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         seed += b1;
         seed ^= seed >>> 23 ^ seed >>> 48 ^ seed << 7 ^ seed << 53;
-        long a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
-                c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+        long a = seed + b4, b = seed + b3, c = seed + b2, d = seed + b1;
         final int len = data.length;
         for (int i = 3; i < len; i+=4) {
-            a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
-            b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
-            c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35) * b5;
-            d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+            a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+            b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+            c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+            d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
             seed += a + b + c + d;
         }
         seed += b5;
