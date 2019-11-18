@@ -3450,11 +3450,11 @@ public class CrossHash {
         public static long hash64(final long[] data) {
             if (data == null) return 0;
 //          long seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
-//                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
-//                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+//                    a = seed + b4, b = seed + b3,
+//                    c = seed + b2, d = seed + b1;
             long seed = 0x1E98AE18CA351B28L,
-                    a = 0x316E03F0E480967L, b = 0x4A8F1A6436771F2L,
-                    c = 0xEBA6E76493C491EFL, d = 0x6A97719DF7B84DC1L;
+                    a = 0x3C26FC408EB22D77L, b = 0x773213E53F6C67EBL,
+                    c = 0xAD55190966BDE20BL, d = 0x59C2CEA6AE94403L;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
@@ -3853,18 +3853,18 @@ public class CrossHash {
 
         public static int hash(final long[] data) {
             if (data == null) return 0;
-            long seed = 0x1E98AE18CA351B28L,// seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
+            //long seed = 0x1E98AE18CA351B28L,// seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
 //                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
 //                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
-            a = 0x316E03F0E480967L, b = 0x4A8F1A6436771F2L,
-                    c = 0xEBA6E76493C491EFL, d = 0x6A97719DF7B84DC1L;
-
+            //a = 0x316E03F0E480967L, b = 0x4A8F1A6436771F2L,
+            //        c = 0xEBA6E76493C491EFL, d = 0x6A97719DF7B84DC1L;
+            long seed = 0x1E98AE18CA351B28L, a = 0x3C26FC408EB22D77L, b = 0x773213E53F6C67EBL, c = 0xAD55190966BDE20BL, d = 0x59C2CEA6AE94403L;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
-                b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
-                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35) * b5;
-                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
                 seed += a + b + c + d;
             }
             seed += b5;
@@ -4362,15 +4362,13 @@ public class CrossHash {
 
         public long hash64(final long[] data) {
             if (data == null) return 0;
-            long seed = this.seed,// seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
-                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
-                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+            long seed = this.seed, a = this.seed + b4, b = this.seed + b3, c = this.seed + b2, d = this.seed + b1;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
-                b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
-                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35) * b5;
-                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
                 seed += a + b + c + d;
             }
             seed += b5;
@@ -4763,15 +4761,13 @@ public class CrossHash {
 
         public int hash(final long[] data) {
             if (data == null) return 0;
-            long seed = this.seed,// seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
-                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
-                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+            long seed = this.seed, a = this.seed + b4, b = this.seed + b3, c = this.seed + b2, d = this.seed + b1;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
-                b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
-                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35) * b5;
-                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
                 seed += a + b + c + d;
             }
             seed += b5;
