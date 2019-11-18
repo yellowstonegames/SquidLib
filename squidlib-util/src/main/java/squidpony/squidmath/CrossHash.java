@@ -3449,9 +3449,12 @@ public class CrossHash {
 
         public static long hash64(final long[] data) {
             if (data == null) return 0;
-            long seed = 0x1E98AE18CA351B28L,// seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
-                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
-                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+//          long seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
+//                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
+//                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+            long seed = 0x1E98AE18CA351B28L,
+                    a = 0x316E03F0E480967L, b = 0x4A8F1A6436771F2L,
+                    c = 0xEBA6E76493C491EFL, d = 0x6A97719DF7B84DC1L;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
@@ -3851,8 +3854,11 @@ public class CrossHash {
         public static int hash(final long[] data) {
             if (data == null) return 0;
             long seed = 0x1E98AE18CA351B28L,// seed = b0 ^ b0 >>> 23 ^ b0 >>> 48 ^ b0 << 7 ^ b0 << 53, 
-                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
-                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+//                    a = seed ^ b4, b = (seed << 17 | seed >>> 47) ^ b3,
+//                    c = (seed << 31 | seed >>> 33) ^ b2, d = (seed << 47 | seed >>> 17) ^ b1;
+            a = 0x316E03F0E480967L, b = 0x4A8F1A6436771F2L,
+                    c = 0xEBA6E76493C491EFL, d = 0x6A97719DF7B84DC1L;
+
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
