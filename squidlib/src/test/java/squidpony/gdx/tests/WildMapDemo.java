@@ -21,53 +21,13 @@ import squidpony.squidmath.SilkRNG;
 import squidpony.squidmath.StatefulRNG;
 
 public class WildMapDemo extends ApplicationAdapter {
-    public static final char[]  terrainChars = {
-            '¿', //sand
-            '„', //lush grass
-            '♣', //jungle
-            '‚', //barren grass
-            '¥', //forest
-            '¥', //forest
-            '♣', //jungle
-            '¥', //forest
-            '‚', //barren grass
-            '¤', //ice
-            '.', //sand
-            '∆', //rocky
-            '~', //shallow
-            '≈', //ocean
-            ' ', //empty space
-            //'■', //active city
-            '□', //empty city
-
-
-    };
-//public static final char[]  terrainChars = {
-//        '.', //sand
-//        '"', //lush grass
-//        '?', //jungle
-//        '\'', //barren grass
-//        '$', //forest
-//        '$', //forest
-//        '?', //jungle
-//        '$', //forest
-//        '‚', //barren grass
-//        '*', //ice
-//        '.', //sand
-//        '^', //rocky
-//        '~', //shallow
-//        '~', //ocean
-//        ' ', //empty space
-//        //'■', //active city
-//        '#', //empty city
-//};
     //private static final int bigWidth = 314 * 3, bigHeight = 300;
 //    private static final int bigWidth = 256, bigHeight = 256;
 //    private static final int bigWidth = 1024, bigHeight = 512;
     private static final int bigWidth = 128, bigHeight = 128;
 //    private static final int bigWidth = 2048, bigHeight = 1024;
     //private static final int bigWidth = 400, bigHeight = 400;
-    private static final int cellWidth = 17, cellHeight = 17;
+    private static final int cellWidth = 8, cellHeight = 16;
     private static final int shownWidth = 96, shownHeight = 48;
     private FilterBatch batch;
     private SparseLayers display;//, overlay;
@@ -87,7 +47,7 @@ public class WildMapDemo extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new FilterBatch();
-        TextCellFactory tcf = DefaultResources.getCrispSlabFont();
+        TextCellFactory tcf = DefaultResources.getStretchableSlabFont();
         display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, tcf);
         //display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
@@ -140,7 +100,7 @@ public class WildMapDemo extends ApplicationAdapter {
                 switch (key) {
                     case SquidInput.ENTER:
                         seed = rng.nextLong();
-                        wmv.viewer = WildMapView.defaultViewer(wild.rng);
+                        wmv.viewer = WildMapView.defaultViewer();
                         wild.biome = rng.nextSignedInt(42);
                         int wx = rng.nextSignedInt(6), wy = rng.nextSignedInt(7);
                         wmv.wildMap = wild = new WildMap.MixedWildMap(

@@ -456,7 +456,7 @@ public class DijkstraDemo extends ApplicationAdapter {
     @Override
     public void render () {
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 //        stage.getCamera().position.x = pg.getX();
