@@ -41,6 +41,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import squidpony.performance.alternate.DijkstraMapPQ;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Adjacency;
@@ -134,7 +135,28 @@ import static squidpony.squidgrid.Measurement.CHEBYSHEV;
  * DijkstraBenchmark.doTinyPathDijkstra        avgt    3    14.740 ±  1.510  ms/op
  * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3     3.892 ±  0.447  ms/op
  * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    3    17.411 ±  3.890  ms/op
- *
+ * 
+ * And on November 19, 2019, testing whether a priority queue would work well in DijkstraPQ:
+ * Map size: 64x64, 2328 paths
+ * <pre>
+ * Benchmark                                   Mode  Cnt     Score     Error  Units
+ * DijkstraBenchmark.doPathCustomDijkstra      avgt    3   524.351 ±  34.333  ms/op
+ * DijkstraBenchmark.doPathDijkstra            avgt    3   296.256 ±   5.660  ms/op
+ * DijkstraBenchmark.doPathDijkstraPQ          avgt    3   618.922 ±  11.230  ms/op
+ * DijkstraBenchmark.doPathGDXAStar            avgt    3   143.497 ±  35.298  ms/op
+ * DijkstraBenchmark.doPathOtherDijkstra       avgt    3   338.742 ±  34.707  ms/op
+ * DijkstraBenchmark.doScanCustomDijkstra      avgt    3   827.388 ± 362.668  ms/op
+ * DijkstraBenchmark.doScanDijkstra            avgt    3   595.408 ±  20.643  ms/op
+ * DijkstraBenchmark.doScanDijkstraPQ          avgt    3  1233.676 ±  30.090  ms/op
+ * DijkstraBenchmark.doScanOtherDijkstra       avgt    3   680.902 ±  92.995  ms/op
+ * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    3    23.916 ±   0.865  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstra        avgt    3    14.893 ±   1.728  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstraPQ      avgt    3    19.324 ±   2.084  ms/op
+ * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3     4.244 ±   0.164  ms/op
+ * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    3    21.053 ±  32.397  ms/op
+ * </pre>
+ * The tests with DijkstraMapPQ did not do well at all, and were generally much slower than the equivalent current
+ * DijkstraMap class. DijkstraMapPQ uses the JDK's PriorityQueue implementation but its Comparator may be... bad.
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -158,6 +180,7 @@ public class DijkstraBenchmark {
         public Adjacency adj;
         public DijkstraMap dijkstra;
         public squidpony.performance.alternate.other.DijkstraMap otherDijkstra;
+        public DijkstraMapPQ dijkstraPQ;
         public CustomDijkstraMap customDijkstra;
         public StatefulRNG srng;
         public GridGraph gg;
@@ -192,14 +215,14 @@ public class DijkstraBenchmark {
                     customNearbyMap[adj.composite(i, j, 0, 0)] = adj.composite(c.x, c.y, 0, 0);
                 }
             }
-            dijkstra = new DijkstraMap(
+            dijkstra = new DijkstraMap(map, CHEBYSHEV, new StatefulRNG(0x1337BEEF));
+            dijkstraPQ = new DijkstraMapPQ(map, CHEBYSHEV, new StatefulRNG(0x1337BEEF));
+            otherDijkstra = new squidpony.performance.alternate.other.DijkstraMap(
                     map, CHEBYSHEV, new StatefulRNG(0x1337BEEF));
-            otherDijkstra = new squidpony.performance.alternate.other.DijkstraMap(map, 
-                    squidpony.performance.alternate.other.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
             dijkstra.setBlockingRequirement(0);
+            dijkstraPQ.setBlockingRequirement(0);
             otherDijkstra.setBlockingRequirement(0);
-            customDijkstra = new CustomDijkstraMap(
-                    map, adj, new StatefulRNG(0x1337BEEF));
+            customDijkstra = new CustomDijkstraMap(map, adj, new StatefulRNG(0x1337BEEF));
             gg = new GridGraph(floors, map);
             astar = new IndexedAStarPathFinder<>(gg);
             dgp = new DefaultGraphPath<>(DIMENSION << 2);
@@ -213,6 +236,25 @@ public class DijkstraBenchmark {
     {
         long scanned = 0;
         final DijkstraMap dijkstra = state.dijkstra;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                dijkstra.setGoal(x, y);
+                dijkstra.scan(null, null);
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    public long doScanDijkstraPQ(BenchmarkState state)
+    {
+        long scanned = 0;
+        final DijkstraMapPQ dijkstra = state.dijkstraPQ;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
                 if (state.map[x][y] == '#')
@@ -308,6 +350,32 @@ public class DijkstraBenchmark {
         return scanned;
     }
     @Benchmark
+    public long doPathDijkstraPQ(BenchmarkState state)
+    {
+        Coord r;
+        final Coord[] tgts = new Coord[1];
+        long scanned = 0;
+        final DijkstraMapPQ dijkstra = state.dijkstraPQ;
+        final int PATH_LENGTH = state.DIMENSION * state.DIMENSION;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
+                r = state.srng.getRandomElement(state.floorArray);
+                tgts[0] = Coord.get(x, y);
+                state.path.clear();
+                dijkstra.findPath(state.path, PATH_LENGTH, -1, null, null, r, tgts);
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned += state.path.size();
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
     public long doPathOtherDijkstra(BenchmarkState state)
     {
         Coord r;
@@ -341,6 +409,34 @@ public class DijkstraBenchmark {
         long scanned = 0;
         final Coord[] tgts = new Coord[1];
         final DijkstraMap dijkstra = state.dijkstra;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                //state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
+                r = state.nearbyMap[x][y];
+                tgts[0] = Coord.get(x, y);
+                //dijkstra.partialScan(r,9, null);
+                state.path.clear();
+                dijkstra.findPath(state.path, 9, 9, null, null, r, tgts);
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned += state.path.size();
+            }
+        }
+        return scanned;
+    }
+
+
+    @Benchmark
+    public long doTinyPathDijkstraPQ(BenchmarkState state)
+    {
+        Coord r;
+        long scanned = 0;
+        final Coord[] tgts = new Coord[1];
+        final DijkstraMapPQ dijkstra = state.dijkstraPQ;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
                 if (state.map[x][y] == '#')
