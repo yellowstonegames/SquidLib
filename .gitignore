@@ -6,6 +6,7 @@ out/
 *.iml
 .idea/
 .settings/
+.attach_pid*
 
 # Gradle temporary files
 .gradle/
@@ -16,10 +17,20 @@ out/
 *#*.*#
 /bin/
 
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac junk
+.DS_Store
+
 # Asset bundles, large and better distributed via SquidSetup
 assets.tar.gz
 assets.zip
-
 ColorOutput\.txt
-
-.attach_pid*

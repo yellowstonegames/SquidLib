@@ -1,6 +1,7 @@
 package squidpony.performance.alternate;
 
 import squidpony.ArrayTools;
+import squidpony.Maker;
 import squidpony.squidai.Technique;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
@@ -40,9 +41,9 @@ import java.util.*;
  * If you can't remember how to spell this, just remember: Does It Just Know Stuff? That's Really Awesome!
  * Created by Tommy Ettinger on 4/4/2015.
  */
-public class NextDijkstraMap implements Serializable {
+public class DijkstraMapPQ implements Serializable {
     private static final long serialVersionUID = -2456306898212944441L;
-    
+
     /**
      * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
      * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. EUCLIDEAN does not affect
@@ -75,6 +76,8 @@ public class NextDijkstraMap implements Serializable {
      * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .
      */
     public double[][] costMap = null;
+
+    public boolean standardCosts = true;
     /**
      * Height of the map. Exciting stuff. Don't change this, instead call initialize().
      */
@@ -88,8 +91,10 @@ public class NextDijkstraMap implements Serializable {
      * cell; only steps that require movement will be included, and so if the path has not been found or a valid
      * path toward a goal is impossible, this ArrayList will be empty.
      */
-    public ArrayList<Coord> path = new ArrayList<>();
+    public ArrayList<Coord> path;
 
+    private HashSet<Coord> impassable2, friends, tempSet;
+    
     public boolean cutShort = false;
 
     /**
@@ -113,16 +118,24 @@ public class NextDijkstraMap implements Serializable {
      * Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
      * constant in this class.
      */
-    protected IntVLA goals = new IntVLA(256), fresh = new IntVLA(256);
+    protected IntVLA goals = new IntVLA(256);
+    protected Comparator<Coord> gradientComparator = new Comparator<Coord>() {
+        @Override
+        public int compare(Coord c1, Coord c2) {
+            return Double.compare(gradientMap[c1.x][c1.y], gradientMap[c2.x][c2.y]);
+        }
+    };
+    protected PriorityQueue<Coord> fresh = new PriorityQueue<>(256, gradientComparator);
 
     /**
-     * The RNG used to decide which one of multiple equally-short paths to take.
+     * The IRNG used to decide which one of multiple equally-short paths to take. You may want to give this a
+     * {@link GWTRNG} if you may target web browsers with GWT, or a {@link RNG} or {@link StatefulRNG} otherwise.
      */
-    public RNG rng;
+    public IRNG rng;
     private int frustration = 0;
     public Coord[][] targetMap;
 
-    private Direction[] reuse = new Direction[9];
+    private Direction[] dirs = new Direction[9];
 
     private boolean initialized = false;
 
@@ -134,17 +147,17 @@ public class NextDijkstraMap implements Serializable {
      * Construct a DijkstraMap without a level to actually scan. If you use this constructor, you must call an
      * initialize() method before using this class.
      */
-    public NextDijkstraMap() {
-        rng = new RNG();
+    public DijkstraMapPQ() {
+        rng = new GWTRNG();
         path = new ArrayList<>();
     }
 
     /**
-     * Construct a DijkstraMap without a level to actually scan. This constructor allows you to specify an RNG before
-     * it is ever used in this class. If you use this constructor, you must call an initialize() method before using
-     * any other methods in the class.
+     * Construct a DijkstraMap without a level to actually scan. This constructor allows you to specify an IRNG, such as
+     * an {@link RNG}, before it is ever used in this class. If you use this constructor, you must call an initialize()
+     * method before using any other methods in the class.
      */
-    public NextDijkstraMap(RNG random) {
+    public DijkstraMapPQ(IRNG random) {
         rng = random;
         path = new ArrayList<>();
     }
@@ -154,7 +167,7 @@ public class NextDijkstraMap implements Serializable {
      *
      * @param level
      */
-    public NextDijkstraMap(final double[][] level) {
+    public DijkstraMapPQ(final double[][] level) {
         this(level, Measurement.MANHATTAN);
     }
 
@@ -164,8 +177,8 @@ public class NextDijkstraMap implements Serializable {
      * @param level
      * @param measurement
      */
-    public NextDijkstraMap(final double[][] level, Measurement measurement) {
-        rng = new RNG();
+    public DijkstraMapPQ(final double[][] level, Measurement measurement) {
+        rng = new GWTRNG();
         this.measurement = measurement;
         path = new ArrayList<>();
         initialize(level);
@@ -179,21 +192,21 @@ public class NextDijkstraMap implements Serializable {
      *
      * @param level
      */
-    public NextDijkstraMap(final char[][] level) {
-        this(level, Measurement.MANHATTAN, new RNG());
+    public DijkstraMapPQ(final char[][] level) {
+        this(level, Measurement.MANHATTAN, new GWTRNG());
     }
 
     /**
      * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
-     * map that can be used here. Also takes an RNG that ensures predictable path choices given
-     * otherwise identical inputs and circumstances.
+     * map that can be used here. Also takes an IRNG, such as an {@link RNG}, that ensures
+     * predictable path choices given otherwise identical inputs and circumstances.
      *
      * @param level
      * @param rng   The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
      */
-    public NextDijkstraMap(final char[][] level, RNG rng) {
+    public DijkstraMapPQ(final char[][] level, IRNG rng) {
         this(level, Measurement.MANHATTAN, rng);
     }
 
@@ -205,8 +218,8 @@ public class NextDijkstraMap implements Serializable {
      *
      * @param level
      */
-    public NextDijkstraMap(final char[][] level, char alternateWall) {
-        rng = new RNG();
+    public DijkstraMapPQ(final char[][] level, char alternateWall) {
+        rng = new GWTRNG();
         path = new ArrayList<>();
 
         initialize(level, alternateWall);
@@ -221,8 +234,8 @@ public class NextDijkstraMap implements Serializable {
      * @param level
      * @param measurement
      */
-    public NextDijkstraMap(final char[][] level, Measurement measurement) {
-        this(level, measurement, new RNG());
+    public DijkstraMapPQ(final char[][] level, Measurement measurement) {
+        this(level, measurement, new GWTRNG());
     }
 
     /**
@@ -235,7 +248,7 @@ public class NextDijkstraMap implements Serializable {
      * @param level
      * @param rng   The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
      */
-    public NextDijkstraMap(final char[][] level, Measurement measurement, RNG rng) {
+    public DijkstraMapPQ(final char[][] level, Measurement measurement, IRNG rng) {
         this.rng = rng;
         path = new ArrayList<>();
         this.measurement = measurement;
@@ -244,14 +257,14 @@ public class NextDijkstraMap implements Serializable {
     }
 
     /**
-     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * Used to initialize or re-initialize a DijkstraMap that needs a new physicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
      *
-     * @param level
-     * @return
+     * @param level a 2D double array that should be used as the physicalMap for this DijkstraMap
+     * @return this for chaining
      */
-    public NextDijkstraMap initialize(final double[][] level) {
+    public DijkstraMapPQ initialize(final double[][] level) {
         width = level.length;
         height = level[0].length;
         gradientMap = new double[width][height];
@@ -263,19 +276,23 @@ public class NextDijkstraMap implements Serializable {
             System.arraycopy(level[x], 0, physicalMap[x], 0, height);
             Arrays.fill(costMap[x], 1.0);
         }
+        standardCosts = true;
+        impassable2 = new HashSet<>(32, 0.375f);
+        friends = new HashSet<>(32, 0.375f);
+        tempSet = new HashSet<>(32, 0.375f);
         initialized = true;
         return this;
     }
 
     /**
-     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * Used to initialize or re-initialize a DijkstraMap that needs a new physicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
      *
-     * @param level
-     * @return
+     * @param level a 2D char array that this will use to establish which cells are walls ('#' as wall, others as floor)
+     * @return this for chaining
      */
-    public NextDijkstraMap initialize(final char[][] level) {
+    public DijkstraMapPQ initialize(final char[][] level) {
         width = level.length;
         height = level[0].length;
         gradientMap = new double[width][height];
@@ -290,6 +307,10 @@ public class NextDijkstraMap implements Serializable {
                 physicalMap[x][y] = t;
             }
         }
+        standardCosts = true;
+        impassable2 = new HashSet<>(32, 0.375f);
+        friends = new HashSet<>(32, 0.375f);
+        tempSet = new HashSet<>(32, 0.375f);
         initialized = true;
         return this;
     }
@@ -300,11 +321,11 @@ public class NextDijkstraMap implements Serializable {
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ). This
      * initialize() method allows you to specify an alternate wall char other than the default character, '#' .
      *
-     * @param level
-     * @param alternateWall
-     * @return
+     * @param level a 2D char array that this will use to establish which cells are walls (alternateWall defines the wall char, everything else is floor)
+     * @param alternateWall the char to consider a wall when it appears in level
+     * @return this for chaining
      */
-    public NextDijkstraMap initialize(final char[][] level, char alternateWall) {
+    public DijkstraMapPQ initialize(final char[][] level, char alternateWall) {
         width = level.length;
         height = level[0].length;
         gradientMap = new double[width][height];
@@ -319,6 +340,10 @@ public class NextDijkstraMap implements Serializable {
                 physicalMap[x][y] = t;
             }
         }
+        standardCosts = true;
+        impassable2 = new HashSet<>(32, 0.375f);
+        friends = new HashSet<>(32, 0.375f);
+        tempSet = new HashSet<>(32, 0.375f);
         initialized = true;
         return this;
     }
@@ -333,13 +358,10 @@ public class NextDijkstraMap implements Serializable {
      * @param level a 2D char array that uses '#' for walls
      * @return this DijkstraMap for chaining.
      */
-    public NextDijkstraMap initializeCost(final char[][] level) {
+    public DijkstraMapPQ initializeCost(final char[][] level) {
         if (!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                costMap[x][y] = (level[x][y] == '#') ? WALL : 1.0;
-            }
-        }
+        ArrayTools.fill(costMap, 1.0);
+        standardCosts = true;
         return this;
     }
 
@@ -356,13 +378,10 @@ public class NextDijkstraMap implements Serializable {
      * @param alternateWall a char to use to represent walls.
      * @return this DijkstraMap for chaining.
      */
-    public NextDijkstraMap initializeCost(final char[][] level, char alternateWall) {
+    public DijkstraMapPQ initializeCost(final char[][] level, char alternateWall) {
         if (!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                costMap[x][y] = (level[x][y] == alternateWall) ? WALL : 1.0;
-            }
-        }
+        ArrayTools.fill(costMap, 1.0);
+        standardCosts = true;
         return this;
     }
 
@@ -372,40 +391,43 @@ public class NextDijkstraMap implements Serializable {
      * DijkstraMap, using the exact values given in costs as the values to enter cells, even if they aren't what this
      * class would assign normally -- walls and other impassable values should be given WALL as a value, however.
      * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
-     * throw an exception), or by calling setCost().
+     * throw an exception), or by calling setCost(). Causes findPath() to always explore the full map instead of
+     * stopping as soon as it finds any path, since unequal costs could make some paths cost less but be discovered
+     * later in the pathfinding process.
      * <p/>
      * This method should be slightly more efficient than the other initializeCost methods.
      *
      * @param costs a 2D double array that already has the desired cost values
      * @return this DijkstraMap for chaining.
      */
-    public NextDijkstraMap initializeCost(final double[][] costs) {
+    public DijkstraMapPQ initializeCost(final double[][] costs) {
         if (!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
         costMap = new double[width][height];
         for (int x = 0; x < width; x++) {
             System.arraycopy(costs[x], 0, costMap[x], 0, height);
         }
+        standardCosts = false;
         return this;
     }
 
     /**
-     * Internally, NextDijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
-     * this NextDijkstraMap's width and height. This method converts from a Coord to an encoded int that stores the same
+     * Internally, DijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
+     * this DijkstraMap's width and height. This method converts from a Coord to an encoded int that stores the same
      * information, but is specific to this width and height and is somewhat more efficient to work with.
      * @param point a Coord to find an encoded int for
-     * @return an int that encodes the given Coord for this NextDijkstraMap's width and height
+     * @return an int that encodes the given Coord for this DijkstraMap's width and height
      */
     public int encode(final Coord point)
     {
         return width * point.y + point.x;
     }
     /**
-     * Internally, NextDijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
-     * this NextDijkstraMap's width and height. This method converts from an x,y point to an encoded int that stores the
+     * Internally, DijkstraMap uses int primitives instead of Coord objects, but the specific encoding depends on
+     * this DijkstraMap's width and height. This method converts from an x,y point to an encoded int that stores the
      * same information, but is specific to this width and height and is somewhat more efficient to work with.
      * @param x the x component of the point to find an encoded int for
      * @param y the y component of the point to find an encoded int for
-     * @return an int that encodes the given x,y point for this NextDijkstraMap's width and height
+     * @return an int that encodes the given x,y point for this DijkstraMap's width and height
      */
     public int encode(final int x, final int y)
     {
@@ -416,7 +438,7 @@ public class NextDijkstraMap implements Serializable {
      * If you for some reason have one of the internally-used ints produced by {@link #encode(Coord)}, this will convert
      * it back to a Coord if you need it as such. You may prefer using {@link #decodeX(int)} and  {@link #decodeY(int)}
      * to get the x and y components independently and without involving objects.
-     * @param encoded an encoded int specific to this NextDijkstraMap's height and width; see {@link #encode(Coord)}
+     * @param encoded an encoded int specific to this DijkstraMap's height and width; see {@link #encode(Coord)}
      * @return the Coord that represents the same x,y position that the given encoded int stores
      */
     public Coord decode(final int encoded)
@@ -429,7 +451,7 @@ public class NextDijkstraMap implements Serializable {
      * the x component of the point encoded in that int. This is an extremely simple method that is equivalent to the
      * code {@code encoded % width}, where width is a public field in this class. You probably would use this method in
      * conjunction with {@link #decodeY(int)}, or would instead use {@link #decode(int)} to get a Coord.
-     * @param encoded an encoded int specific to this NextDijkstraMap's height and width; see {@link #encode(Coord)}
+     * @param encoded an encoded int specific to this DijkstraMap's height and width; see {@link #encode(Coord)}
      * @return the x component of the position that the given encoded int stores
      */
     public int decodeX(final int encoded)
@@ -442,7 +464,7 @@ public class NextDijkstraMap implements Serializable {
      * the y component of the point encoded in that int. This is an extremely simple method that is equivalent to the
      * code {@code encoded / width}, where width is a public field in this class. You probably would use this method in
      * conjunction with {@link #decodeX(int)}, or would instead use {@link #decode(int)} to get a Coord.
-     * @param encoded an encoded int specific to this NextDijkstraMap's height and width; see {@link #encode(Coord)}
+     * @param encoded an encoded int specific to this DijkstraMap's height and width; see {@link #encode(Coord)}
      * @return the y component of the position that the given encoded int stores
      */
     public int decodeY(final int encoded)
@@ -458,20 +480,26 @@ public class NextDijkstraMap implements Serializable {
      * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
      */
     public static Measurement findMeasurement(Radius radius) {
-        if (radius.equals2D(Radius.SQUARE))
-            return Measurement.CHEBYSHEV;
-        else if (radius.equals2D(Radius.DIAMOND))
-            return Measurement.MANHATTAN;
-        else
-            return Measurement.EUCLIDEAN;
+        switch (radius)
+        {
+            case CUBE:
+            case SQUARE:
+                return Measurement.CHEBYSHEV;
+            case DIAMOND:
+            case OCTAHEDRON:
+                return Measurement.MANHATTAN;
+            default:
+                return Measurement.EUCLIDEAN;
+        }
     }
 
     /**
      * Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
      * Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.
-     *
+     * <br>
+     * See also {@link Measurement#matchingRadius()} as a method on Measurement.
      * @param measurement the Measurement to find the corresponding Radius for
-     * @return a DijkstraMap.Measurement that matches radius; CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, etc.
+     * @return a Radius that matches measurement; CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, etc.
      */
     public static Radius findRadius(Measurement measurement) {
         switch (measurement) {
@@ -490,9 +518,7 @@ public class NextDijkstraMap implements Serializable {
     public void resetMap() {
         if (!initialized) return;
         for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                gradientMap[x][y] = physicalMap[x][y];
-            }
+            System.arraycopy(physicalMap[x], 0, gradientMap[x], 0, height);
         }
     }
 
@@ -562,7 +588,6 @@ public class NextDijkstraMap implements Serializable {
      */
     public void setGoals(GreasedRegion pts) {
         if (!initialized || pts.width > width || pts.height > height) return;
-        int[] enc = new GreasedRegion(physicalMap, FLOOR).and(pts).asTightEncoded();
         for(Coord c : pts)
         {
             if(physicalMap[c.x][c.y] <= FLOOR) {
@@ -588,7 +613,6 @@ public class NextDijkstraMap implements Serializable {
     /**
      * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Simply loops through
      * pts and calls {@link #setGoal(Coord)} on each Coord in pts.
-     * If you have a GreasedRegion, you should use it with {@link #setGoals(GreasedRegion)}, which is faster.
      * @param pts an array of Coord to mark as goals
      */
     public void setGoals(Coord[] pts) {
@@ -609,9 +633,11 @@ public class NextDijkstraMap implements Serializable {
     public void setCost(Coord pt, double cost) {
         if (!initialized || !pt.isWithin(width, height)) return;
         if (physicalMap[pt.x][pt.y] > FLOOR) {
-            costMap[pt.x][pt.y] = WALL;
+            costMap[pt.x][pt.y] = 1.0;
             return;
         }
+        if(cost != 1.0)
+            standardCosts = false;
         costMap[pt.x][pt.y] = cost;
     }
 
@@ -626,9 +652,11 @@ public class NextDijkstraMap implements Serializable {
     public void setCost(int x, int y, double cost) {
         if (!initialized || x < 0 || x >= width || y < 0 || y >= height) return;
         if (physicalMap[x][y] > FLOOR) {
-            costMap[x][y] = WALL;
+            costMap[x][y] = 1.0;
             return;
         }
+        if(cost != 1.0)
+            standardCosts = false;
         costMap[x][y] = cost;
     }
 
@@ -676,18 +704,33 @@ public class NextDijkstraMap implements Serializable {
         }
     }
 
-    protected void setFresh(final int x, final int y, double counter) {
-        if (!initialized || x < 0 || x >= width || y < 0 || y >= height || gradientMap[x][y] < counter)
+    private void setFresh(final int x, final int y, double counter) {
+        if (x < 0 || x >= width || y < 0 || y >= height || gradientMap[x][y] < counter)
             return;
         gradientMap[x][y] = counter;
-        fresh.add(encode(x, y));
+        fresh.add(Coord.get(x, y));
     }
 
-    protected void setFresh(final Coord pt, double counter) {
-        if (!initialized || !pt.isWithin(width, height) || gradientMap[pt.x][pt.y] < counter)
+    private void setFresh(final Coord pt, double counter) {
+        if (!pt.isWithin(width, height) || gradientMap[pt.x][pt.y] < counter)
             return;
         gradientMap[pt.x][pt.y] = counter;
-        fresh.add(encode(pt));
+        fresh.add(pt);
+    }
+
+    /**
+     * Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] scan() {
+        return scan(null);
     }
 
     /**
@@ -703,53 +746,125 @@ public class NextDijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Collection<Coord> impassable) {
-        if (!initialized) return null;
+    public double[][] scan(final Collection<Coord> impassable) {
+        scan(null, impassable);
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
+        }
+
+        return gradientClone;
+    }
+
+    /**
+     * Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field, and nothing is returned.
+     * If you want the data returned, you can use {@link #scan(Collection)} (which calls this method with
+     * null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of scan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
+     *
+     * @param start a Coord representing the location of the pathfinder; may be null, which has this scan the whole map
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     */
+    public void scan(final Coord start, final Collection<Coord> impassable) {
+        scan(start, impassable, false);
+    }
+
+    /**
+     * Recalculate the Dijkstra map and return it. Cells in {@link #gradientMap} that had the lowest value
+     * will be treated as goals if {@code nonZeroOptimum} is true; otherwise, only cells marked as goals with
+     * {@link #setGoal(Coord)} will be considered goals and some overhead will be saved. The cells adjacent
+     * to goals will have a value of 1, and cells progressively further from goals will have a value equal to
+     * the distance from the nearest goal. The exceptions are walls, which will have a value defined by the
+     * {@link #WALL} constant in this class, and areas that the scan was unable to reach, which will have a
+     * value defined by the {@link #DARK} constant in this class (typically, these areas should not be used to
+     * place NPCs or items and should be filled with walls). This uses the current {@link #measurement}. The
+     * result is stored in the {@link #gradientMap} field, and nothing is returned. If you want the data
+     * returned, you can use {@link #scan(Collection)} (which calls this method with null for the start
+     * parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of scan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
+     *
+     * @param start a Coord representing the location of the pathfinder; may be null, which has this scan the whole map
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param nonZeroOptimum if the cell to pathfind toward should have a value of {@link #GOAL} (0.0), this should be
+     *                       false; if it should have a different value or if you don't know, it should be true 
+     */
+    public void scan(final Coord start, final Collection<Coord> impassable, final boolean nonZeroOptimum) {
+
+        if (!initialized) return;
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = WALL;
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
             }
         }
-        int dec, adjX, adjY, cen, cenX, cenY;
-
+        int dec, adjX, adjY, cenX, cenY;
+        Coord cen;
+        fresh.clear();
         for (int i = 0; i < goals.size; i++) {
             dec = goals.get(i);
-            gradientMap[decodeX(dec)][decodeY(dec)] = GOAL;
+            gradientMap[adjX = decodeX(dec)][adjY = decodeY(dec)] = GOAL;
+            fresh.add(Coord.get(adjX, adjY));
         }
-        double currentLowest = 999000, cs, dist;
-        fresh.clear();
-        for (int y = 0; y < height; y++) {
+        double cs, dist;
+        if(nonZeroOptimum) {
+            double currentLowest = 999000.0;
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] <= FLOOR) {
-                    if (gradientMap[x][y] < currentLowest) {
-                        currentLowest = gradientMap[x][y];
-                        fresh.clear();
-                        fresh.add(encode(x, y));
-                    } else if (gradientMap[x][y] == currentLowest) {
-                        fresh.add(encode(x, y));
+                for (int y = 0; y < height; y++) {
+                    if (gradientMap[x][y] <= FLOOR) {
+                        if (gradientMap[x][y] < currentLowest) {
+                            currentLowest = gradientMap[x][y];
+                            fresh.clear();
+                            fresh.add(Coord.get(x, y));
+                        } else if (gradientMap[x][y] == currentLowest) {
+                            fresh.add(Coord.get(x, y));
+                        }
                     }
                 }
             }
         }
-        int fsz, numAssigned = fresh.size;
+        int numAssigned = fresh.size();
         mappedCount = goals.size;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            fsz = fresh.size;
-            for (int ci = fsz-1; ci >= 0; ci--) {
-                cen = fresh.removeIndex(ci);
-                cenX = decodeX(cen);
-                cenY = decodeY(cen);
+            while (!fresh.isEmpty()) {
+                cen = fresh.poll();
+                cenX = cen.x;
+                cenY = cen.y;
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
-                    	continue;
+                        /* Outside the map */
+                        continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
                         if((gradientMap[adjX][cenY] > FLOOR ? 1 : 0)
@@ -759,21 +874,66 @@ public class NextDijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    if(pt != null && pt.isWithin(width, height))
+                                        gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                }
+                            }
+                            return;
+                        }
                     }
                 }
             }
         }
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
             }
         }
+    }
+
+    /**
+     * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] partialScan(final int limit) {
+        return partialScan(limit, null);
+    }
+
+    /**
+     * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] partialScan(final int limit, final Collection<Coord> impassable) {
+        partialScan(null, limit, impassable);
         double[][] gradientClone = new double[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -791,66 +951,126 @@ public class NextDijkstraMap implements Serializable {
      * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
      * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
      * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
-     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
-     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
-     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
-     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     * reach than the given limit, or if it was otherwise unreachable, it will have a value of {@link #FLOOR} or greater
+     * if it was passable instead of the distance. The exceptions are walls, which will have a value defined by the
+     * {@link #WALL} constant in this class. This uses the current {@link #measurement}. The result is stored in the
+     * {@link #gradientMap} field, and nothing is returned.If you want the data returned, you can use
+     * {@link #partialScan(int, Collection)} (which calls this method with null for the start parameter, then modifies
+     * the gradientMap field and returns a copy), or you can just retrieve the gradientMap (maybe copying it;
+     * {@link ArrayTools#copy(double[][])} is a convenient option for copying a 2D double array).
+     * <br>
+     * If start is non-null, which is usually used when finding a single path, then cells that didn't need to be
+     * explored (because they were further than the path needed to go from start to goal) will have the value
+     * {@link #FLOOR}. You may wish to assign a different value to these cells in some cases (especially if start is
+     * null, which means any cells that are still FLOOR could not be reached from any goal), and the overloads of
+     * partialScan that return 2D double arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to
+     * {@link #WALL}.
      *
+     * @param start a Coord representing the location of the pathfinder; may be null to have this scan more of the map
      * @param limit      The maximum number of steps to scan outward from a goal.
      * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] partialScan(final int limit, Collection<Coord> impassable) {
-        if (!initialized) return null;
+    public void partialScan(final Coord start, final int limit, final Collection<Coord> impassable) {
+        partialScan(start, limit, impassable, false);
+    }
+
+    /**
+     * Recalculate the Dijkstra map up to a limit and return it. Cells in {@link #gradientMap} that had the lowest value
+     * will be treated as goals if {@code nonZeroOptimum} is true; otherwise, only cells marked as goals with
+     * {@link #setGoal(Coord)} will be considered goals and some overhead will be saved. If a cell would take more steps
+     * to reach than the given limit, or if it was otherwise unreachable, it will have a value of {@link #FLOOR} or
+     * greater if it was passable instead of the distance. The exceptions are walls, which will have a value defined by
+     * the {@link #WALL} constant in this class. This uses the current {@link #measurement}. The result is stored in the
+     * {@link #gradientMap} field, and nothing is returned.If you want the data returned, you can use
+     * {@link #partialScan(int, Collection)} (which calls this method with null for the start parameter, then modifies
+     * the gradientMap field and returns a copy), or you can just retrieve the gradientMap (maybe copying it;
+     * {@link ArrayTools#copy(double[][])} is a convenient option for copying a 2D double array).
+     * <br>
+     * If start is non-null, which is usually used when finding a single path, then cells that didn't need to be
+     * explored (because they were further than the path needed to go from start to goal) will have the value
+     * {@link #FLOOR}. You may wish to assign a different value to these cells in some cases (especially if start is
+     * null, which means any cells that are still FLOOR could not be reached from any goal), and the overloads of
+     * partialScan that return 2D double arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to
+     * {@link #WALL}.
+     *
+     * @param start a Coord representing the location of the pathfinder; may be null to have this scan more of the map
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param nonZeroOptimum if the cell to pathfind toward should have a value of {@link #GOAL} (0.0), this should be
+     *                       false; if it should have a different value or if you don't know, it should be true
+     */
+    public void partialScan(final Coord start, final int limit, final Collection<Coord> impassable, final boolean nonZeroOptimum) {
+
+        if (!initialized || limit <= 0) return;
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = WALL;
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
             }
         }
-        int dec, adjX, adjY, cen, cenX, cenY;
-
-        for (int i = 0; i < goals.size; i++) {
-            //if (closed.containsKey(entry.getIntKey()))
-            //    continue;
-            //    closed.remove(entry.getIntKey());
-            dec = goals.get(i);
-            gradientMap[decodeX(dec)][decodeY(dec)] = GOAL;
-        }
-        double currentLowest = 999000, cs, dist;
+        int dec, adjX, adjY, cenX, cenY;
+        Coord cen;
         fresh.clear();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] <= FLOOR) {
-                    if (gradientMap[x][y] < currentLowest) {
-                        currentLowest = gradientMap[x][y];
-                        fresh.clear();
-                        fresh.add(encode(x, y));
-                    } else if (gradientMap[x][y] == currentLowest) {
-                        fresh.add(encode(x, y));
+        for (int i = 0; i < goals.size; i++) {
+            dec = goals.get(i);
+            gradientMap[adjX = decodeX(dec)][adjY = decodeY(dec)] = GOAL;
+            fresh.add(Coord.get(adjX, adjY));
+        }
+        double cs, dist;
+        if(nonZeroOptimum) {
+            double currentLowest = 999000;
+            if (start == null) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        if (gradientMap[x][y] <= FLOOR) {
+                            if (gradientMap[x][y] < currentLowest) {
+                                currentLowest = gradientMap[x][y];
+                                fresh.clear();
+                                fresh.add(Coord.get(x, y));
+                            } else if (gradientMap[x][y] == currentLowest) {
+                                fresh.add(Coord.get(x, y));
+                            }
+                        }
+                    }
+                }
+            } else {
+                final int x0 = Math.max(0, start.x - limit), x1 = Math.min(start.x + limit + 1, width),
+                        y0 = Math.max(0, start.y - limit), y1 = Math.min(start.y + limit + 1, height);
+                for (int x = x0; x < x1; x++) {
+                    for (int y = y0; y < y1; y++) {
+                        if (gradientMap[x][y] <= FLOOR) {
+                            if (gradientMap[x][y] < currentLowest) {
+                                currentLowest = gradientMap[x][y];
+                                fresh.clear();
+                                fresh.add(Coord.get(x, y));
+                            } else if (gradientMap[x][y] == currentLowest) {
+                                fresh.add(Coord.get(x, y));
+                            }
+                        }
                     }
                 }
             }
         }
-        int fsz, numAssigned = fresh.size;
+        int numAssigned = fresh.size();
         mappedCount = goals.size;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         int iter = 0;
         while (numAssigned > 0 && iter++ < limit) {
             numAssigned = 0;
-            fsz = fresh.size;
-            for (int ci = fsz-1; ci >= 0; ci--) {
-                cen = fresh.removeIndex(ci);
-                cenX = decodeX(cen);
-                cenY = decodeY(cen);
+            while (!fresh.isEmpty()) {
+                cen = fresh.remove();
+                cenX = cen.x;
+                cenY = cen.y;
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -861,32 +1081,32 @@ public class NextDijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    if(pt != null && pt.isWithin(width, height))
+                                        gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                                }
+                            }
+                            return;
+                        }
                     }
                 }
             }
         }
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
             }
         }
-        double[][] gradientClone = new double[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (gradientMap[x][y] == FLOOR) {
-                    gradientMap[x][y] = DARK;
-                }
-            }
-            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
-        }
-
-        return gradientClone;
     }
 
     /**
@@ -911,29 +1131,28 @@ public class NextDijkstraMap implements Serializable {
                     Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
         }
         gradientMap[start2.x][start2.y] = 0.0;
-        int adjX, adjY, cen, cenX, cenY;
+        int adjX, adjY, cenX, cenY;
         double cs, dist;
-        Coord adj;
+        Coord adj, cen;
         fresh.clear();
-        fresh.add(encode(start2));
+        fresh.add(start2);
         int fsz, numAssigned = 1;
         mappedCount = 1;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            fsz = fresh.size;
-            for (int ci = fsz-1; ci >= 0; ci--) {
-                cen = fresh.removeIndex(ci);
-                cenX = decodeX(cen);
-                cenY = decodeY(cen);
+            while (!fresh.isEmpty()){
+                cen = fresh.poll();
+                cenX = cen.x;
+                cenY = cen.y;
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -944,9 +1163,9 @@ public class NextDijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         ++mappedCount;
                         if (targets.contains(adj = Coord.get(adjX, adjY))) {
                             fresh.clear();
@@ -958,7 +1177,7 @@ public class NextDijkstraMap implements Serializable {
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -971,7 +1190,7 @@ public class NextDijkstraMap implements Serializable {
      * @return the Coord that it found first.
      */
     public Coord findNearest(Coord start, Coord... targets) {
-        return findNearest(start, new OrderedSet<>(targets));
+        return findNearest(start, Maker.makeHS(targets));
     }
 
     /**
@@ -996,8 +1215,8 @@ public class NextDijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d < measurement.directionCount() + 1; d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1054,29 +1273,28 @@ public class NextDijkstraMap implements Serializable {
                     Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
         }
         gradientMap[start2.x][start2.y] = 0.0;
-        int adjX, adjY, cen, cenX, cenY;
+        int adjX, adjY, cenX, cenY;
         double cs, dist;
-        Coord adj;
+        Coord adj, cen;
         fresh.clear();
-        fresh.add(encode(start2));
-        int fsz, numAssigned = 1;
+        fresh.add(start2);
+        int numAssigned = 1;
         mappedCount = 1;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            fsz = fresh.size;
-            for (int ci = fsz-1; ci >= 0; ci--) {
-                cen = fresh.removeIndex(ci);
-                cenX = decodeX(cen);
-                cenY = decodeY(cen);
+            while (!fresh.isEmpty()){
+                cen = fresh.poll();
+                cenX = cen.x;
+                cenY = cen.y;
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -1087,10 +1305,10 @@ public class NextDijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
-                        ++mappedCount;                         
+                    if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
+                        ++mappedCount;
                         if (targets.contains(adj = Coord.get(adjX, adjY))) {
                             found.add(adj);
                             if (found.size() >= limit) {
@@ -1127,12 +1345,57 @@ public class NextDijkstraMap implements Serializable {
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Collection<Coord> impassable, int size) {
-        if (!initialized) return null;
+    public double[][] scan(final Collection<Coord> impassable, final int size) {
+        scan(null, impassable, size);
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
+        }
+        return gradientClone;
+
+    }
+
+    /**
+     * Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
+     * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
+     * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
+     * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.  The result is stored in the {@link #gradientMap} field, and nothing is returned.
+     * If you want the data returned, you can use {@link #scan(Collection, int)} (which calls this method with
+     * null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of scan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
+     *
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
+     *                   creature. Non-square creatures are not supported because turning is really hard.
+     */
+    public void scan(final Coord start, final Collection<Coord> impassable, final int size) {
+
+        if (!initialized) return;
         double[][] gradientClone = ArrayTools.copy(gradientMap);
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                gradientMap[pt.x][pt.y] = WALL;
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
             }
         }
         for (int xx = size; xx < width; xx++) {
@@ -1146,8 +1409,8 @@ public class NextDijkstraMap implements Serializable {
                 }
             }
         }
-        int dec, adjX, adjY, cen, cenX, cenY;
-
+        int dec, adjX, adjY, cenX, cenY;
+        Coord cen;
         PER_GOAL:
         for (int i = 0; i < goals.size; i++) {
             dec = goals.get(i);
@@ -1156,42 +1419,41 @@ public class NextDijkstraMap implements Serializable {
                     if(physicalMap[xs][ys] > FLOOR)
                         continue PER_GOAL;
                     gradientClone[xs][ys] = GOAL;
-                }                
+                }
             }
         }
         double currentLowest = 999000, cs, dist;
         fresh.clear();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (gradientClone[x][y] <= FLOOR) {
                     if (gradientClone[x][y] < currentLowest) {
                         currentLowest = gradientClone[x][y];
                         fresh.clear();
-                        fresh.add(encode(x, y));
+                        fresh.add(Coord.get(x, y));
                     } else if (gradientClone[x][y] == currentLowest) {
-                        fresh.add(encode(x, y));
+                        fresh.add(Coord.get(x, y));
                     }
                 }
             }
         }
-        int fsz, numAssigned = fresh.size;
+        int numAssigned = fresh.size();
         mappedCount = goals.size;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            fsz = fresh.size;
-            for (int ci = fsz-1; ci >= 0; ci--) {
-                cen = fresh.removeIndex(ci);
-                cenX = decodeX(cen);
-                cenY = decodeY(cen);
+            while (!fresh.isEmpty()){
+                cen = fresh.poll();
+                cenX = cen.x;
+                cenY = cen.y;
                 dist = gradientClone[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -1202,35 +1464,225 @@ public class NextDijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
-                    if (physicalMap[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
+                    if (gradientClone[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
                         ++numAssigned;
                         ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    if(pt != null && pt.isWithin(width, height)) {
+                                        for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                                            for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                                                gradientClone[xs][ys] = physicalMap[xs][ys];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            gradientMap = gradientClone;
+                            return;
+                        }
                     }
                 }
             }
         }
         if (impassable != null && !impassable.isEmpty()) {
             for (Coord pt : impassable) {
-                for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
-                    for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
-                        gradientClone[xs][ys] = physicalMap[xs][ys];
+                if(pt != null && pt.isWithin(width, height)) {
+                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                        }
                     }
                 }
             }
         }
+        gradientMap = gradientClone;
+    }
+
+
+    /**
+     * Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
+     * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
+     * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
+     * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.  The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
+     *                   creature. Non-square creatures are not supported because turning is really hard.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] partialScan(final int limit, final Collection<Coord> impassable, final int size) {
+        partialScan(limit,null, impassable, size);
+        double[][] gradientClone = new double[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if (gradientClone[x][y] == FLOOR) {
-                    gradientClone[x][y] = DARK;
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
                 }
             }
-            System.arraycopy(gradientClone[x], 0, gradientMap[x],0, height);
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
         }
-
         return gradientClone;
+
+    }
+
+    /**
+     * Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
+     * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
+     * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
+     * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement.  The result is stored in the {@link #gradientMap} field, and nothing is returned.
+     * If you want the data returned, you can use {@link #partialScan(int, Collection, int)} (which calls this method
+     * with null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of partialScan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
+     *
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param size       The length of one side of a square creature using this to find a path, i.e. 2 for a 2x2 cell
+     *                   creature. Non-square creatures are not supported because turning is really hard.
+     */
+    public void partialScan(final int limit, final Coord start, final Collection<Coord> impassable, final int size) {
+
+        if (!initialized || limit <= 0) return;
+        double[][] gradientClone = ArrayTools.copy(gradientMap);
+        if (impassable != null && !impassable.isEmpty()) {
+            for (Coord pt : impassable) {
+                if(pt != null && pt.isWithin(width, height))
+                    gradientMap[pt.x][pt.y] = WALL;
+            }
+        }
+        for (int xx = size; xx < width; xx++) {
+            for (int yy = size; yy < height; yy++) {
+                if(gradientMap[xx][yy] > FLOOR) {
+                    for (int xs = xx, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                        for (int ys = yy, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                            gradientClone[xs][ys] = WALL;
+                        }
+                    }
+                }
+            }
+        }
+        int dec, adjX, adjY, cenX, cenY;
+        Coord cen;
+        PER_GOAL:
+        for (int i = 0; i < goals.size; i++) {
+            dec = goals.get(i);
+            for (int xs = decodeX(dec), xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                for (int ys = decodeY(dec), yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                    if(physicalMap[xs][ys] > FLOOR)
+                        continue PER_GOAL;
+                    gradientClone[xs][ys] = GOAL;
+                }
+            }
+        }
+        double currentLowest = 999000, cs, dist;
+        fresh.clear();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientClone[x][y] <= FLOOR) {
+                    if (gradientClone[x][y] < currentLowest) {
+                        currentLowest = gradientClone[x][y];
+                        fresh.clear();
+                        fresh.add(Coord.get(x, y));
+                    } else if (gradientClone[x][y] == currentLowest) {
+                        fresh.add(Coord.get(x, y));
+                    }
+                }
+            }
+        }
+        int numAssigned = fresh.size();
+        mappedCount = goals.size;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+
+        int iter = 0;
+        while (numAssigned > 0 && iter++ < limit) {
+            numAssigned = 0;
+            while (!fresh.isEmpty()){
+                cen = fresh.poll();
+                cenX = cen.x;
+                cenY = cen.y;
+                dist = gradientClone[cenX][cenY];
+
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
+                    if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
+                        /* Outside the map */
+                        continue;
+                    if(d >= 4 && blockingRequirement > 0) // diagonal
+                    {
+                        if((gradientClone[adjX][cenY] > FLOOR ? 1 : 0)
+                                + (gradientClone[cenX][adjY] > FLOOR ? 1 : 0)
+                                >= blockingRequirement)
+                        {
+                            continue;
+                        }
+                    }
+                    double h = measurement.heuristic(moveDirs[d]);
+                    cs = dist + h * costMap[adjX][adjY];
+                    if (gradientClone[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
+                        setFresh(adjX, adjY, cs);
+                        ++numAssigned;
+                        ++mappedCount;
+                        if(start != null && start.x == adjX && start.y == adjY && standardCosts)
+                        {
+                            if (impassable != null && !impassable.isEmpty()) {
+                                for (Coord pt : impassable) {
+                                    if(pt != null && pt.isWithin(width, height)) {
+                                        for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                                            for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                                                gradientClone[xs][ys] = physicalMap[xs][ys];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            gradientMap = gradientClone;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        if (impassable != null && !impassable.isEmpty()) {
+            for (Coord pt : impassable) {
+                if(pt != null && pt.isWithin(width, height)) {
+                    for (int xs = pt.x, xi = 0; xi < size && xs >= 0; xs--, xi++) {
+                        for (int ys = pt.y, yi = 0; yi < size && ys >= 0; ys--, yi++) {
+                            gradientClone[xs][ys] = physicalMap[xs][ys];
+                        }
+                    }
+                }
+            }
+        }
+        gradientMap = gradientClone;
     }
 
     /**
@@ -1275,6 +1727,7 @@ public class NextDijkstraMap implements Serializable {
      * <br>
      * This caches its result in a member field, path, which can be fetched after finding a path and will change with
      * each call to a pathfinding method.
+     *
      * @param length       the length of the path to calculate
      * @param scanLimit    how many cells away from a goal to actually process; negative to process whole map
      * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
@@ -1285,36 +1738,75 @@ public class NextDijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findPath(int length, int scanLimit, Collection<Coord> impassable,
                                      Collection<Coord> onlyPassable, Coord start, Coord... targets) {
-        if (!initialized) return null;
+        return findPath(null, length, scanLimit, impassable, onlyPassable, start, targets);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+     * point, and returns a list of Coord positions (using the current measurement) needed to get closer
+     * to the closest reachable goal. The maximum length of the returned list is given by length, which represents
+     * movement in a system where a single move can be multiple cells if length is greater than 1 and should usually
+     * be 1 in standard roguelikes; if moving the full length of the list would place the mover in a position shared
+     * by one of the positions in onlyPassable (which is typically filled with friendly units that can be passed
+     * through in multi-cell-movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * The full map will only be scanned if scanLimit is 0 or less; for positive scanLimit values this will scan only
+     * that distance out from each goal, which can save processing time on maps where only a small part matters.
+     * Generally, scanLimit should be significantly greater than length.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer       an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param length       the length of the path to calculate
+     * @param scanLimit    how many cells away from a goal to actually process; negative to process whole map
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
+     */
+    public ArrayList<Coord> findPath(ArrayList<Coord> buffer, int length, int scanLimit, Collection<Coord> impassable,
+                                     Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         path.clear();
-        if(length <= 0)
-            return path;
-        Collection<Coord> impassable2;
-        if (impassable == null)
-            impassable2 = new GreasedRegion(width, height);
-        else
-            impassable2 = new GreasedRegion(width, height, impassable);
-        if (onlyPassable == null)
-            onlyPassable = new GreasedRegion(width, height);
-        if(length == 1)
+        if (!initialized || length <= 0)
         {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
+        if (impassable == null)
+            impassable2.clear();
+        else
+        {
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if (onlyPassable != null && length == 1) 
             impassable2.addAll(onlyPassable);
-        }
+        
         resetMap();
-        for (Coord goal : targets) {
-            setGoal(goal.x, goal.y);
-        }
+        setGoals(targets);
         if (goals.isEmpty())
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
-        if(length < 0)
-            length = 0;
         if(scanLimit <= 0 || scanLimit < length)
-            scan(impassable2);
+            scan(start, impassable2);
         else
-            partialScan(scanLimit, impassable2);
+            partialScan(start, scanLimit, impassable2);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -1323,8 +1815,8 @@ public class NextDijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1341,16 +1833,24 @@ public class NextDijkstraMap implements Serializable {
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
             paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
             if (paidLength > length - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findPath(buffer, length, scanLimit, tempSet, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -1360,7 +1860,13 @@ public class NextDijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
     /**
@@ -1420,7 +1926,53 @@ public class NextDijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
                                            Collection<Coord> impassable, Collection<Coord> onlyPassable, Coord start, Coord... targets) {
-        if (!initialized) return null;
+        return findAttackPath(null, moveLength, minPreferredRange, maxPreferredRange, los, impassable, onlyPassable, start, targets);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
+     * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
+     * which may go further from a goal if the minPreferredRange has not been met at the current distance.
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell. In most roguelikes where
+     * movement happens one cell at a time, moveLength should be 1; if it is higher then the path will prefer getting
+     * further away from the target (using up most or all of moveLength) while minPreferredRange and maxPreferredRange
+     * can be satisfied. This does ensure a pathfinder with a ranged weapon stays far from melee range, but it may not
+     * be the expected behavior because it will try to find the best path rather than the shortest it can attack from.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer            an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param moveLength        the length of the path to calculate; almost always, the pathfinder will try to use this length in full to obtain the best range
+     * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
+     * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target
+     * @param los               a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS
+     *                          should be disregarded.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets           a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
+     */
+    public ArrayList<Coord> findAttackPath(ArrayList<Coord> buffer, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
+                                           Collection<Coord> impassable, Collection<Coord> onlyPassable, Coord start, Coord... targets) {
+        if (!initialized || moveLength <= 0)
+        {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
         double[][] resMap = new double[width][height];
@@ -1432,13 +1984,15 @@ public class NextDijkstraMap implements Serializable {
             }
         }
         path.clear();
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
+        {
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if (onlyPassable != null && moveLength == 1)
+            impassable2.addAll(onlyPassable);
 
         resetMap();
         for (Coord goal : targets) {
@@ -1447,14 +2001,26 @@ public class NextDijkstraMap implements Serializable {
         if (goals.isEmpty())
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
             measurement = Measurement.CHEBYSHEV;
         }
-        scan(impassable2);
+        scan(null, impassable2);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
         goals.clear();
 
         for (int x = 0; x < width; x++) {
@@ -1477,8 +2043,28 @@ public class NextDijkstraMap implements Serializable {
             }
         }
         measurement = mess;
-        scan(impassable2);
+        scan(null, impassable2);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
+        if(gradientMap[start.x][start.y] <= 0.0)
+        {
+            cutShort = false;
+            frustration = 0;
+            goals.clear();
+            if(buffer == null)
+                return new ArrayList<>(path);
+            else
+            {
+                buffer.addAll(path);
+                return buffer;
+            }
 
+        }
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -1487,8 +2073,8 @@ public class NextDijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1505,7 +2091,13 @@ public class NextDijkstraMap implements Serializable {
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(Coord.get(currentPos.x, currentPos.y));
@@ -1513,9 +2105,11 @@ public class NextDijkstraMap implements Serializable {
             frustration++;
             if (paidLength > moveLength - 1.0) {
 
-                if (onlyPassable.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findAttackPath(buffer, moveLength, minPreferredRange, maxPreferredRange, los, tempSet,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -1526,7 +2120,13 @@ public class NextDijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
     /**
@@ -1574,16 +2174,72 @@ public class NextDijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
                                               Collection<Coord> impassable, Collection<Coord> allies, Coord start, Collection<Coord> targets) {
-        if (!initialized) return null;
+        return findTechniquePath(null, moveLength, tech, dungeon, los, impassable, allies, start, targets);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to a goal, where goals are
+     * considered valid if they are at a valid range for the given Technique to hit at least one target
+     * and ideal if that Technique can affect as many targets as possible from a cell that can be moved
+     * to with at most movelength steps.
+     * <br>
+     * The return value of this method is the path to get to a location to attack, but on its own it
+     * does not tell the user how to perform the attack.  It does set the targetMap 2D Coord array field
+     * so that if your position at the end of the returned path is non-null in targetMap, it will be
+     * a Coord that can be used as a target position for Technique.apply() . If your position at the end
+     * of the returned path is null, then an ideal attack position was not reachable by the path.
+     * <br>
+     * This needs a char[][] dungeon as an argument because DijkstraMap does not always have a char[][]
+     * version of the map available to it, and certain AOE implementations that a Technique uses may
+     * need a char[][] specifically to determine what they affect.
+     * <br>
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in allies
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios, and is also used considered an undesirable thing to affect for the Technique),
+     * it will recalculate a move so that it does not pass into that cell.
+     * <br>
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a target overlapping one.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer     an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param moveLength the maximum distance to try to pathfind out to; if a spot to use a Technique can be found
+     *                   while moving no more than this distance, then the targetMap field in this object will have a
+     *                   target Coord that is ideal for the given Technique at the x, y indices corresponding to the
+     *                   last Coord in the returned path.
+     * @param tech       a Technique that we will try to find an ideal place to use, and/or a path toward that place.
+     * @param dungeon    a char 2D array with '#' for walls.
+     * @param los        a squidgrid.LOS object if the preferred range should try to stay in line of sight, or null if LoS
+     *                   should be disregarded.
+     * @param impassable locations of enemies or mobile hazards/obstacles that aren't in the map as walls
+     * @param allies     called onlyPassable in other methods, here it also represents allies for Technique things
+     * @param start      the Coord the pathfinder starts at.
+     * @param targets    a Set of Coord, not an array of Coord or variable argument list as in other methods.
+     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.
+     */
+    public ArrayList<Coord> findTechniquePath(ArrayList<Coord> buffer, int moveLength, Technique tech, char[][] dungeon, LOS los,
+                                              Collection<Coord> impassable, Collection<Coord> allies, Coord start, Collection<Coord> targets) {
+        if (!initialized || moveLength <= 0)
+        {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         tech.setMap(dungeon);
         double[][] resMap = new double[width][height];
         double[][] worthMap = new double[width][height];
         double[][] userDistanceMap;
         double paidLength = 0.0;
-
-        OrderedSet<Coord> friends;
-
-
+        
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
@@ -1595,18 +2251,24 @@ public class NextDijkstraMap implements Serializable {
         if (targets == null || targets.size() == 0)
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
-        else
-            impassable2 = new GreasedRegion(width, height, impassable);
-
-        if (allies == null)
-            friends = new OrderedSet<>();
+            impassable2.clear();
         else {
-            friends = new OrderedSet<>(allies);
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if (allies == null)
+            friends.clear();
+        else {
+            friends.clear();
+            friends.addAll(allies);
             friends.remove(start);
         }
 
@@ -1621,7 +2283,12 @@ public class NextDijkstraMap implements Serializable {
         if (goals.isEmpty())
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
 
         Measurement mess = measurement;
@@ -1631,10 +2298,18 @@ public class NextDijkstraMap implements Serializable {
             measurement = Measurement.CHEBYSHEV;
         }
         */
-        scan(impassable2);
+        scan(null, impassable2);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
+
         clearGoals();
 
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         OrderedMap<Coord, ArrayList<Coord>> ideal;
         // generate an array of the single best location to attack when you are in a given cell.
         for (int x = 0; x < width; x++) {
@@ -1651,7 +2326,6 @@ public class NextDijkstraMap implements Serializable {
                                 targetMap[x][y] = ideal.keyAt(0);
                                 worthMap[x][y] = ideal.getAt(0).size();
                                 setGoal(x, y);
-                                gradientMap[x][y] = 0;
                             }
                             continue CELL;
                         }
@@ -1661,7 +2335,7 @@ public class NextDijkstraMap implements Serializable {
                     gradientMap[x][y] = FLOOR;
             }
         }
-        scan(impassable2);
+        scan(null,impassable2);
 
         double currentDistance = gradientMap[start.x][start.y];
         if (currentDistance <= moveLength) {
@@ -1669,7 +2343,7 @@ public class NextDijkstraMap implements Serializable {
 
             goals.clear();
             setGoal(start);
-            scan(impassable2);
+            scan(null, impassable2, false);
             gradientMap[start.x][start.y] = moveLength;
             int decX, decY;
             double bestWorth = 0.0;
@@ -1705,8 +2379,8 @@ public class NextDijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1721,8 +2395,10 @@ public class NextDijkstraMap implements Serializable {
             }
             if (best >= gradientMap[currentPos.x][currentPos.y]) {
                 if (friends.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, tempSet,
                             friends, start, targets);
                 }
                 break;
@@ -1730,7 +2406,13 @@ public class NextDijkstraMap implements Serializable {
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -1738,8 +2420,10 @@ public class NextDijkstraMap implements Serializable {
             frustration++;
             if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, tempSet,
                             friends, start, targets);
                 }
                 break;
@@ -1750,12 +2434,18 @@ public class NextDijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
 
     private double cachedLongerPaths = 1.2;
-    private Collection<Coord> cachedImpassable = new OrderedSet<>();
+    private HashSet<Coord> cachedImpassable = new HashSet<>(32, 0.25f);
     private Coord[] cachedFearSources;
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
@@ -1788,7 +2478,7 @@ public class NextDijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Collection<Coord> impassable,
                                          Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
-        return findFleePath(length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+        return findFleePath(null, length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
     }
 
     /**
@@ -1825,27 +2515,82 @@ public class NextDijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findFleePath(int length, int scanLimit, double preferLongerPaths, Collection<Coord> impassable,
                                          Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
-        if (!initialized) return null;
+        return findFleePath(null, length, scanLimit, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+     * point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+     * the closest fearSources, meant for running away. The maximum length of the returned list is given by length,
+     * which represents movement in a system where a single move can be multiple cells if length is greater than 1 and
+     * should usually be 1 in standard roguelikes; if moving the full length of the list would place the mover in a
+     * position shared by one of the positions in onlyPassable (which is typically filled with friendly units that can
+     * be passed through in multi-cell-movement scenarios), it will recalculate a move so that it does not pass into
+     * that cell. The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans. However, scanLimit is not cached; if you use scanLimit then it is assumed you are using some
+     * value for it that shouldn't change relative to the other parameters (like twice the length).
+     * The full map will only be scanned if scanLimit is 0 or less; for positive scanLimit values this will scan only
+     * that distance out from each goal, which can save processing time on maps where only a small part matters.
+     * Generally, scanLimit should be significantly greater than length.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer            an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param length            the length of the path to calculate
+     * @param scanLimit         how many steps away from a fear source to calculate; negative scans the whole map
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param fearSources       a vararg or array of Coord positions to run away from
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
+     */
+    public ArrayList<Coord> findFleePath(ArrayList<Coord> buffer, int length, int scanLimit, double preferLongerPaths, Collection<Coord> impassable,
+                                         Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
+        if (!initialized || length <= 0)
+        {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         path.clear();
-        Collection<Coord> impassable2;
-        if (impassable == null)
-            impassable2 = Collections.emptySet();
-        else
-            impassable2 = new GreasedRegion(width, height, impassable);
-
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
         if (fearSources == null || fearSources.length < 1) {
             cutShort = true;
-            path.clear();
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
+
+        if (impassable == null)
+            impassable2.clear();
+        else
+        {
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if(onlyPassable != null && length == 1)
+            impassable2.addAll(onlyPassable);
         if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable) &&
                 Arrays.equals(fearSources, cachedFearSources)) {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new OrderedSet<>(impassable2);
+            cachedImpassable.clear();
+            cachedImpassable.addAll(impassable2);
             cachedFearSources = new Coord[fearSources.length];
             System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);
             cachedSize = 1;
@@ -1854,7 +2599,12 @@ public class NextDijkstraMap implements Serializable {
             if (goals.isEmpty())
             {
                 cutShort = true;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>();
+                else
+                {
+                    return buffer;
+                }
             }
 
             if(length < 0) length = 0;
@@ -1871,7 +2621,17 @@ public class NextDijkstraMap implements Serializable {
             }
 
             if(scanLimit <= 0 || scanLimit < length)
-                cachedFleeMap = scan(impassable2);
+            {
+                scan(null, impassable2, true);
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        if (gradientMap[x][y] == FLOOR) {
+                            gradientMap[x][y] = DARK;
+                        }
+                    }
+                    System.arraycopy(gradientMap[x], 0, cachedFleeMap[x], 0, height);
+                }
+            }
             else
                 cachedFleeMap = partialScan(scanLimit, impassable2);
         }
@@ -1883,8 +2643,8 @@ public class NextDijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1900,7 +2660,13 @@ public class NextDijkstraMap implements Serializable {
             if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             if (path.size() > 0) {
@@ -1912,9 +2678,11 @@ public class NextDijkstraMap implements Serializable {
             frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findFleePath(length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findFleePath(buffer, length, scanLimit, preferLongerPaths, tempSet, onlyPassable, start, fearSources);
                 }
                 break;
             }
@@ -1922,11 +2690,18 @@ public class NextDijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null) 
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals
+     * and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1950,18 +2725,24 @@ public class NextDijkstraMap implements Serializable {
      * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
 
-    public ArrayList<Coord> findPathLarge(int size, int length, Collection<Coord> impassable,
+    public ArrayList<Coord> findPathLarge(final int size, int length, Collection<Coord> impassable,
                                           Collection<Coord> onlyPassable, Coord start, Coord... targets) {
+        return findPathLarge(size, length, -1, impassable, onlyPassable, start, targets);
+    }
+    public ArrayList<Coord> findPathLarge(final int size, int length, final int scanLimit, Collection<Coord> impassable,
+                                          Collection<Coord> onlyPassable, Coord start, Coord... targets) {
+
         if (!initialized) return null;
         path.clear();
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
-
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
+        {
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if(onlyPassable != null && length == 1)
+            impassable2.addAll(onlyPassable);
 
         resetMap();
         for (Coord goal : targets) {
@@ -1973,7 +2754,13 @@ public class NextDijkstraMap implements Serializable {
             return new ArrayList<>(path);
         }
 
-        scan(impassable2, size);
+        if(length < 0)
+            length = 0;
+        if(scanLimit <= 0 || scanLimit < length)
+            scan(start, impassable2, size);
+        else
+            partialScan(scanLimit, start, impassable2, size);
+
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -1982,8 +2769,8 @@ public class NextDijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2008,9 +2795,11 @@ public class NextDijkstraMap implements Serializable {
             paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
             if (paidLength > length - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findPathLarge(size, length, impassable2, onlyPassable, start, targets);
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findPathLarge(size, length, tempSet, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -2024,7 +2813,8 @@ public class NextDijkstraMap implements Serializable {
     }
 
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals
+     * and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -2064,14 +2854,15 @@ public class NextDijkstraMap implements Serializable {
             }
         }
         path.clear();
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
-
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
+        {
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if(onlyPassable != null && moveLength == 1)
+            impassable2.addAll(onlyPassable);
 
         resetMap();
         for (Coord goal : targets) {
@@ -2123,8 +2914,8 @@ public class NextDijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2148,9 +2939,11 @@ public class NextDijkstraMap implements Serializable {
             frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > moveLength - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findAttackPathLarge(size, moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findAttackPathLarge(size, moveLength, preferredRange, los, tempSet, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -2207,14 +3000,15 @@ public class NextDijkstraMap implements Serializable {
             }
         }
         path.clear();
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
-
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
+        {
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if(onlyPassable != null && moveLength == 1)
+            impassable2.addAll(onlyPassable);
 
         resetMap();
         for (Coord goal : targets) {
@@ -2267,8 +3061,8 @@ public class NextDijkstraMap implements Serializable {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2292,9 +3086,11 @@ public class NextDijkstraMap implements Serializable {
             frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > moveLength - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, tempSet,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -2342,14 +3138,14 @@ public class NextDijkstraMap implements Serializable {
                                               Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
-        else
-            impassable2 = new GreasedRegion(width, height, impassable);
-
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
+            impassable2.clear();
+        else {
+            impassable2.clear();
+            impassable2.addAll(impassable);
+        }
+        if(onlyPassable != null && length == 1)
+            impassable2.addAll(onlyPassable);
         if (fearSources == null || fearSources.length < 1) {
             cutShort = true;
             path.clear();
@@ -2360,7 +3156,8 @@ public class NextDijkstraMap implements Serializable {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new OrderedSet<>(impassable2);
+            cachedImpassable.clear();
+            cachedImpassable.addAll(impassable2);
             cachedFearSources = new Coord[fearSources.length];
             System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);
             cachedSize = size;
@@ -2390,8 +3187,8 @@ public class NextDijkstraMap implements Serializable {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2420,9 +3217,11 @@ public class NextDijkstraMap implements Serializable {
             frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
-                    impassable2.add(currentPos);
-                    return findFleePathLarge(size, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
+                    tempSet.clear();
+                    tempSet.addAll(impassable2);
+                    tempSet.add(currentPos);
+                    return findFleePathLarge(size, length, preferLongerPaths, tempSet, onlyPassable, start, fearSources);
                 }
                 break;
             }
@@ -2435,7 +3234,9 @@ public class NextDijkstraMap implements Serializable {
 
 
     /**
-     * Intended primarily for internal use. Needs scan() to already be called and at least one goal to already be set,
+     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths
+     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work
+     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,
      * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.
      * <br>
      * This caches its result in a member field, path, which can be fetched after finding a path and will change with
@@ -2445,22 +3246,55 @@ public class NextDijkstraMap implements Serializable {
      * @return an ArrayList of Coord that make up the best path. Copy of path.
      */
     public ArrayList<Coord> findPathPreScanned(Coord target) {
+        return findPathPreScanned(null, target);
+    }
+    /**
+     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths
+     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work
+     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,
+     * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param target the target cell
+     * @return an ArrayList of Coord that make up the best path, appended to buffer (if non-null)
+     */
+    public ArrayList<Coord> findPathPreScanned(ArrayList<Coord> buffer, Coord target) {
         path.clear();
-        if (!initialized || goals == null || goals.isEmpty()) return path;
+        if (!initialized || goals == null || goals.isEmpty())
+        {
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         Coord currentPos = target;
         if(gradientMap[currentPos.x][currentPos.y] <= FLOOR)
             path.add(currentPos);
         else
-            return path;
-        RNG rng2 = new StatefulRNG(0xf00d);
+        {
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+
+        }
         while (true) {
             if (frustration > 2000) {
                 path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng2);
-            int choice = rng2.nextInt(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2477,7 +3311,13 @@ public class NextDijkstraMap implements Serializable {
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(0, currentPos);
@@ -2487,7 +3327,15 @@ public class NextDijkstraMap implements Serializable {
                 break;
         }
         cutShort = false;
-        frustration = 0; return new ArrayList<>(path);
+        frustration = 0;
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
+
     }
 
     /**
@@ -2499,7 +3347,7 @@ public class NextDijkstraMap implements Serializable {
      * @param starts a vararg group of Points to step outward from; this often will only need to be one Coord.
      * @return A OrderedMap of Coord keys to Double values; the starts are included in this with the value 0.0.
      */
-    public Map<Coord, Double> floodFill(int radius, Coord... starts) {
+    public OrderedMap<Coord, Double> floodFill(int radius, Coord... starts) {
         if (!initialized) return null;
         OrderedMap<Coord, Double> fill = new OrderedMap<>();
 
@@ -2531,7 +3379,8 @@ public class NextDijkstraMap implements Serializable {
     /**
      * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
      * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
-     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
+     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set
+     * this yet, then the default is 2.
      * <br>
      * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.
      * <br>
@@ -2539,9 +3388,9 @@ public class NextDijkstraMap implements Serializable {
      * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard
      * corner" rule used in some games.
      * <br>
-     * If this is 2, having two orthogonal obstacles adjacent to both the current cell and the cell the pathfinder is
-     * trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the north and a wall
-     * to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
+     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the
+     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the
+     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
      * @return the current level of blocking required to stop a diagonal move
      */
     public int getBlockingRequirement() {
@@ -2551,7 +3400,8 @@ public class NextDijkstraMap implements Serializable {
     /**
      * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
      * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
-     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
+     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set
+     * this yet, then the default is 2.
      * <br>
      * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.
      * <br>
@@ -2559,27 +3409,26 @@ public class NextDijkstraMap implements Serializable {
      * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard
      * corner" rule used in some games.
      * <br>
-     * If this is 2, having two orthogonal obstacles adjacent to both the current cell and the cell the pathfinder is
-     * trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the north and a wall
-     * to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
+     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the
+     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the
+     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
      * @param blockingRequirement the desired level of blocking required to stop a diagonal move
      */
     public void setBlockingRequirement(int blockingRequirement) {
         this.blockingRequirement = blockingRequirement > 2 ? 2 : blockingRequirement < 0 ? 0 : blockingRequirement;
     }
 
-    /* For Gwt compatibility */
-    private Direction[] shuffleDirs(RNG rng) {
-    	final Direction[] src = measurement == Measurement.MANHATTAN
-    			? Direction.CARDINALS : Direction.OUTWARDS;
-    	return rng.randomPortion(src, reuse);
+    private void appendDirToShuffle(IRNG rng) {
+        final Direction[] src = measurement == Measurement.MANHATTAN
+                ? Direction.CARDINALS : Direction.OUTWARDS;
+        final int n = measurement.directionCount();
+        System.arraycopy(src, 0, dirs, 0, n);
+        for (int i = n - 1; i > 0; i--) {
+            final int r = rng.nextInt(i+1);
+            Direction t = dirs[r];
+            dirs[r] = dirs[i];
+            dirs[i] = t;
+        }
+        dirs[n] = Direction.NONE;
     }
-
-    /* For Gwt compatibility */
-    private Direction[] appendDirToShuffle(RNG rng) {
-        //appendDir(shuffleDirs(rng),  Direction.NONE)
-        shuffleDirs(rng);
-        reuse[measurement.directionCount()] = Direction.NONE;
-        return reuse;
-	}
 }
