@@ -360,6 +360,197 @@ public class GDXMarkup implements IMarkup<Color>{
         return (char) (styled & '\u3fff');
     }
 
+
+    /**
+     * Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
+     * produces a StringBuilder with the color markup tags in {@code markupString} all changed to libGDX-usable color
+     * markup, and any style markup tags used to mark sections of text as bold or italic for a TextFamily to
+     * render (normal TextCellFactory rendering may show bold/italic text as gibberish). This needs markup to be enabled
+     * on any BitmapFont that renders it, by setting
+     * {@link com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData#markupEnabled} to true.
+     * @param markupString a String or other CharSequence containing color and/or style markup tags
+     * @return a new StringBuilder with all the markup applied; only libGDX-usable markup will remain
+     */
+    public StringBuilder colorStringMarkup(final CharSequence markupString)
+    {
+        markupMatcher.setTarget(markupString);
+        StringBuilder cs = new StringBuilder(markupString.length());
+        char mod = REGULAR;
+        int casing = 0;
+        while (markupMatcher.find())
+        {
+            if(markupMatcher.getGroup("p", sb))
+            {
+                switch (casing) {
+                    case -1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toLowerCase((char) (sb.charAt(i) | mod)));
+                        }
+                        break;
+                    case 1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toUpperCase((char) (sb.charAt(i) | mod)));
+                        }
+                        break;
+                    default:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, (char) (sb.charAt(i) | mod));
+                        }
+                        break;
+                }
+                cs.append(sb);
+            }
+            else if(markupMatcher.isCaptured("e"))
+            {
+                if(mod == 0)
+                    cs.append("[[");
+                else
+                    cs.append((char) ('[' | mod));
+            }
+            else if(markupMatcher.isCaptured("r"))
+            {
+                cs.append("[]");
+                mod = REGULAR;
+                casing = 0;
+            }
+            else if(markupMatcher.isCaptured("u"))
+            {
+                mod = REGULAR;
+                casing = 0;
+            }
+            else if(markupMatcher.getGroup("h", sb))
+            {
+                if(sb.length() == 6)
+                    cs.append("[#").append(sb).append("FF]");
+                else if(sb.length() == 8)
+                    cs.append("[#").append(sb).append(']');
+            }
+            else if(markupMatcher.getGroup("n", sb))
+            {
+                cs.append('[').append(sb).append(']');
+            }
+            else if(markupMatcher.isCaptured("q"))
+            {
+                cs.append("[#");
+                StringKit.appendHex(cs, markupMatcher.isCaptured("qo")
+                        ? SColor.intGetHSV(
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")),
+                        Float.parseFloat(markupMatcher.group("qo")))
+                        : SColor.intGetHSV(
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")), 1f));
+                cs.append(']');
+            }
+            else if(markupMatcher.isCaptured("b"))
+            {
+                mod ^= BOLD;
+            }
+            else if(markupMatcher.isCaptured("i"))
+            {
+                mod ^= ITALIC;
+            }
+            else if(markupMatcher.isCaptured("U"))
+            {
+                casing = casing == 1 ? 0 : 1;
+            }
+            else if(markupMatcher.isCaptured("L"))
+            {
+                casing = casing == -1 ? 0 : -1;
+            }
+            sb.setLength(0);
+        }
+        return cs;
+    }
+    /**
+     * Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
+     * produces a StringBuilder with the color markup tags in {@code markupString} all changed to libGDX-usable color
+     * markup, but with both bold and italic style markup tags ignored (so normal TextCellFactory objects can
+     * render the text correctly). Case markup is still used as in other methods here, and all markup tags that libGDX
+     * can't use, including those for bold and italic styles, will be removed (so you don't need to manually remove
+     * styles that can't be shown by a TextCellFactory). This needs markup to be enabled on any BitmapFont that renders
+     * it, by setting {@link com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData#markupEnabled} to true.
+     * @param markupString a String or other CharSequence containing color and/or case markup tags (style markup will be removed)
+     * @return a new StringBuilder with all the color and case markup applied; only libGDX-usable markup will remain
+     */
+    public StringBuilder colorStringOnlyMarkup(final CharSequence markupString)
+    {
+        markupMatcher.setTarget(markupString);
+        StringBuilder cs = new StringBuilder(markupString.length());
+        int casing = 0;
+        while (markupMatcher.find())
+        {
+            if(markupMatcher.getGroup("p", sb))
+            {
+                switch (casing) {
+                    case -1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toLowerCase(sb.charAt(i)));
+                        }
+                        break;
+                    case 1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toUpperCase(sb.charAt(i)));
+                        }
+                        break;
+                }
+                cs.append(sb);
+            }
+            else if(markupMatcher.isCaptured("e"))
+            {
+                cs.append("[[");
+            }
+            else if(markupMatcher.isCaptured("r"))
+            {
+                cs.append("[]");
+                casing = 0;
+            }
+            else if(markupMatcher.isCaptured("u"))
+            {
+                casing = 0;
+            }
+            else if(markupMatcher.getGroup("h", sb))
+            {
+                if(sb.length() == 6)
+                    cs.append("[#").append(sb).append("FF]");
+                else if(sb.length() == 8)
+                    cs.append("[#").append(sb).append(']');
+            }
+            else if(markupMatcher.getGroup("n", sb))
+            {
+                cs.append('[').append(sb).append(']');
+            }
+            else if(markupMatcher.isCaptured("q"))
+            {
+                cs.append("[#");
+                StringKit.appendHex(cs, markupMatcher.isCaptured("qo")
+                        ? SColor.intGetHSV(
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")),
+                        Float.parseFloat(markupMatcher.group("qo")))
+                        : SColor.intGetHSV(
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")), 1f));
+                cs.append(']');
+            }
+            else if(markupMatcher.isCaptured("U"))
+            {
+                casing = casing == 1 ? 0 : 1;
+            }
+            else if(markupMatcher.isCaptured("L"))
+            {
+                casing = casing == -1 ? 0 : -1;
+            }
+            sb.setLength(0);
+        }
+        return cs;
+    }
+
+
     /*
     @Override
     public String escape(String initialText)
