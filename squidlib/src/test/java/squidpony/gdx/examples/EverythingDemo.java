@@ -133,7 +133,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private Camera camera;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
     private Vector2 screenPosition;
-    private TextPanel<Color> tp;
+    private TextPanel tp;
     @Override
     public void create() {
         // gotta have a random number generator. We give a seed to StatefulRNG, which will ensure the dungeon is the
@@ -334,7 +334,7 @@ public class EverythingDemo extends ApplicationAdapter {
         messages.appendWrappingMessage(text);
 
 
-        tp = new TextPanel<>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont());
+        tp = new TextPanel(DefaultResources.getStretchablePrintFont());
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-9 to use different filters, or press 'f' in play.

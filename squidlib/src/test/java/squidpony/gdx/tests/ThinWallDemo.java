@@ -604,7 +604,7 @@ public class ThinWallDemo extends ApplicationAdapter {
 			 * justifying, without having to worry about sizes since TextPanel lays
 			 * itself out.
 			 */
-        final TextPanel<Color> tp = new TextPanel<Color>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont());
+        final TextPanel tp = new TextPanel(DefaultResources.getStretchablePrintFont());
         tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
         final List<IColoredString<Color>> text = new ArrayList<>();

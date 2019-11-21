@@ -13,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.Align;
 import squidpony.panel.IColoredString;
-import squidpony.panel.IMarkup;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A panel to display some text using libgdx directly (i.e. without using
@@ -67,31 +67,29 @@ import java.util.Collection;
  * @see ScrollPane A libGDX widget for general scrolling through only the visible part of a large widget
  * @see LinesPanel An alternative for displaying lines of text in a variable-width font
  */
-public class TextPanel<T extends Color> {
+public class TextPanel {
 
 	/**
 	 * The color to use to paint the background (outside buttons) using
 	 * {@link ShapeRenderer}. Or {@code null} to disable background coloring.
 	 */
-	public /* @Nullable */ T backgroundColor;
+	public /* @Nullable */ Color backgroundColor;
 
 	/**
 	 * The color of the border around this panel, if any. If set, it'll be
 	 * rendered using {@link ShapeRenderer} and {@link #borderStyle}.
 	 */
-	public /* @Nullable */ T borderColor;
+	public /* @Nullable */ Color borderColor;
 
 	/** The size of the border, if any */
 	public float borderSize;
 
 	public CornerStyle borderStyle = CornerStyle.ROUNDED;
-
-	protected /* @Nullable */ IMarkup<T> markup;
-
+	
 	protected BitmapFont font;
 	protected TextCellFactory tcf;
 	/** The text to display */
-	public ArrayList<IColoredString<T>> text;
+	public ArrayList<CharSequence> text;
 
 	protected final ScrollPane scrollPane;
 
@@ -108,13 +106,12 @@ public class TextPanel<T extends Color> {
 	 * The text to display MUST be set later on with
 	 * {@link #init(float, float, Collection)}.
 	 *
-	 * @param markup ignored.
 	 * @param font
 	 *            The font to use. It can be set later using
 	 *            {@link #setFont(BitmapFont)}, but it MUST be set before
 	 *            drawing this panel.
 	 */
-	public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ BitmapFont font) {
+	public TextPanel(/* @Nullable */ BitmapFont font) {
 		if (font != null)
 			setFont(font);
 		textActor = new TextActor();
@@ -126,18 +123,17 @@ public class TextPanel<T extends Color> {
 	 * The text to display MUST be set later on with {@link #init(float, float, Collection)} (which can't be updated) or
 	 * {@link #initShared(float, float, ArrayList)} (which reflects changes in the given ArrayList).
 	 *
-	 * @param markup
-	 *            An optional way to compute markup.
 	 * @param font
 	 *            A TextCellFactory, typically holding a distance field font ("stretchable" or "crisp" in
 	 *            DefaultResources). This won't force glyphs into same-size cells, despite the name.
 	 */
-	public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ TextCellFactory font) {
+	public TextPanel(/* @Nullable */ TextCellFactory font) {
 		if (font != null)
 		{
 			tcf = font;
 			tcf.initBySize();
 			this.font = tcf.font();
+			this.font.getData().markupEnabled = true;
 		}
 		textActor = new TextActor();
 		scrollPane = new ScrollPane(textActor);
@@ -150,6 +146,7 @@ public class TextPanel<T extends Color> {
 	 * @param font The font to use as a BitmapFont.
 	 */
 	public void setFont(BitmapFont font) {
+		font.getData().markupEnabled = true;
 		this.font = font;
 		tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))
 				.width(MathUtils.round(font.getSpaceXadvance()));
@@ -167,6 +164,7 @@ public class TextPanel<T extends Color> {
 			tcf = font;
 			tcf.initBySize();
 			this.font = tcf.font();
+			this.font.getData().markupEnabled = true;
 		}
 	}
 
@@ -179,23 +177,21 @@ public class TextPanel<T extends Color> {
 	 *            smaller than the height of the text actor).
 	 * @param width
 	 *            The width of the scrollpane and the text actor.
-	 * @param text
+	 * @param coloredText any Collection of IColoredString that use Color or a subclass as their color type
 	 */
-	public void init(float width, float maxHeight, Collection<? extends IColoredString<T>> text) {
-		this.text = new ArrayList<>(text);
-
-		scrollPane.setWidth(width);
-		textActor.setWidth(width);
-
+	public void init(float width, float maxHeight, Collection<? extends IColoredString<Color>> coloredText) {
 		if (tcf == null)
 			throw new NullPointerException(
 					"The font should be set before calling TextPanel.init()");
-
-		//prepareText();
-//		final boolean yscroll = maxHeight < textActor.getHeight();
+		
+		this.text = new ArrayList<>(coloredText.size());
+		for (IColoredString<Color> ics : coloredText)
+			text.add(ics.presentWithMarkup(GDXMarkup.instance));
+		scrollPane.setWidth(width);
+		textActor.setWidth(width);
+		
 		scrollPane.setHeight(maxHeight);
 		scrollPane.setActor(textActor);
-		//yScrollingCallback(yscroll);
 		scrollPane.layout();
 	}
 
@@ -209,10 +205,10 @@ public class TextPanel<T extends Color> {
 	 *            smaller than the height of the text actor).
 	 * @param width
 	 *            The width of the scrollpane and the text actor.
-	 * @param text an ArrayList of IColoredString that will be used directly by this TextPanel (changes
+	 * @param text an ArrayList of CharSequence that will be used directly by this TextPanel (changes
 	 *             to the ArrayList will show up in the TextPanel)
 	 */
-	public void initShared(float width, float maxHeight, ArrayList<IColoredString<T>> text) {
+	public void initShared(float width, float maxHeight, ArrayList<CharSequence> text) {
 		this.text = text;
 
 		scrollPane.setWidth(width);
@@ -230,14 +226,20 @@ public class TextPanel<T extends Color> {
 		scrollPane.layout();
 	}
 
-	public void init(float width, float maxHeight, T color, String... text)
+	public void init(float width, float maxHeight, Color color, String... text)
 	{
-		ArrayList<IColoredString.Impl<T>> coll = new ArrayList<>(text.length);
-		for(String t : text)
-		{
-			coll.add(new IColoredString.Impl<>(t, color));
-		}
-		init(width, maxHeight, coll);
+		if (tcf == null)
+			throw new NullPointerException(
+					"The font should be set before calling TextPanel.init()");
+
+		this.text = new ArrayList<>(text.length);
+		Collections.addAll(this.text, text);
+		scrollPane.setWidth(width);
+		textActor.setWidth(width);
+
+		scrollPane.setHeight(maxHeight);
+		scrollPane.setActor(textActor);
+		scrollPane.layout();
 	}
 
 	/**
@@ -276,8 +278,8 @@ public class TextPanel<T extends Color> {
 		if (text == null)
 			return null;
 		final ArrayList<String> result = new ArrayList<>();
-		for (IColoredString<T> line : text) {
-			result.add(line.present());
+		for (CharSequence line : text) {
+			result.add(GDXMarkup.instance.removeMarkup(line).toString());
 		}
 		return result;
 	}
@@ -294,25 +296,29 @@ public class TextPanel<T extends Color> {
 		//cache.clear();
 		final float w = scrollPane.getWidth();
 		float lineHeight = -font.getData().down, capHeight = font.getCapHeight();
-		int lines = 1, ci = 0;
+		int lines = 1;//, ci = 0;
 		StringBuilder sb = new StringBuilder(256);
-		for (int m = 0, textSize = text.size(); m < textSize; m++) {
-			IColoredString<T> line = text.get(m);
-			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
-			for (int i = 0; i < frags.size(); i++) {
-				sb.append(frags.get(i).getText());
+		if(tcf.supportedStyles() <= 1) {
+			for (int m = 0, textSize = text.size(); m < textSize; m++) {
+				sb.append(GDXMarkup.instance.colorStringOnlyMarkup(text.get(m))).append('\n');
 			}
-			sb.append('\n');
 		}
+		else
+		{
+			for (int m = 0, textSize = text.size(); m < textSize; m++) {
+				sb.append(GDXMarkup.instance.colorStringMarkup(text.get(m))).append('\n');
+			}
+		}
+
 		GlyphLayout layout = cache.setText(sb, 0, 0, w, Align.left, true);			
 		lines += layout.height / capHeight;
 		
 		////TODO: BitmapFontCache.setColors(float, int, int) is broken in libGDX 1.9.10; find some workaround
 //		for (int m = 0, textSize = text.size(); m < textSize; m++) {
-//			IColoredString<T> line = text.get(m);
-//			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
+//			IColoredString<Color> line = text.get(m);
+//			ArrayList<IColoredString.Bucket<Color>> frags = line.getFragments();
 //			for (int i = 0; i < frags.size(); i++) {
-//				final IColoredString.Bucket<T> b = frags.get(i);
+//				final IColoredString.Bucket<Color> b = frags.get(i);
 ////				Color c = b.getColor();
 ////				if(c != null) 
 ////					cache.setColors(c, ci, (ci += b.length()));
@@ -396,17 +402,6 @@ public class TextPanel<T extends Color> {
 			scrollPane.setFadeScrollBars(false);
 			scrollPane.setForceScroll(false, true);
 		}
-	}
-
-	/**
-	 * @param ics
-	 *            Text set when building {@code this}
-	 * @return The text to display to screen. If you wanna
-	 *         {@link squidpony.IColorCenter#filter(IColoredString) filter} your
-	 *         text , do it here.
-	 */
-	protected IColoredString<T> present(IColoredString<T> ics) {
-		return ics;
 	}
 
 	/**
