@@ -33,7 +33,7 @@ import squidpony.squidmath.StatefulRNG;
  * more geometric sans-serif accessible with {@link #getStretchableFont()}, or (well-suited for square glyphs)
  * {@link #getStretchableSquareFont()} (it does not have a crisp variety). Another is Computer Modern, accessible by
  * {@link #getStretchableTypewriterFont()}, which has a chunky, ornamented style. For variable-width fonts
- * that can be used in TextPanel and LinesPanel, among others, you can use the recommended crisp font family Noto Serif
+ * that can be used in TextPanel, among others, you can use the recommended crisp font family Noto Serif
  * with {@link #getCrispPrintFamily()}, or for stretchable fonts there's the serif font Gentium with
  * {@link #getStretchablePrintFont()} or Noto Sans with {@link #getStretchableCleanFont()} (Noto Sans currently has
  * problems that Noto Serif does not have). All of the fonts so far support the Latin, Greek, and Cyrillic alphabets.
@@ -46,7 +46,7 @@ import squidpony.squidmath.StatefulRNG;
  * The most Latin script support for a monospaced font is in the font Mandrill, accessible by getDefaultUnicodeFont()
  * and getLargeUnicodeFont() in two different sizes, and the latter should be suitable for everything from Spanish and
  * French, to Polish to Vietnamese. You can use Gentium for even better language support with a variable-width font in
- * LinesPanel or the like; it is accessible with getStretchablePrintFont(). Google's Noto font also supports many glyphs
+ * TextPanel or the like; it is accessible with getStretchablePrintFont(). Google's Noto font also supports many glyphs
  * in a variable-width format; it is accessible with getStretchableCleanFont() but may have some issues with baseline
  * level changing and character-to-character alignment seeming too high or low.
  * <br>

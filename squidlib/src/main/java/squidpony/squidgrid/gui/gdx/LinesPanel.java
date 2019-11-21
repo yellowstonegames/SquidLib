@@ -18,16 +18,16 @@ import java.util.ArrayDeque;
 import java.util.Iterator;
 
 /**
- * An actor capable of drawing {@link IColoredString}s. It is lines-oriented:
- * putting a line may erase a line put before. It is designed to write text with
- * a variable-width font (as opposed to {@link SquidPanel}). It performs line wrapping by
- * default. It can write from top to bottom or from bottom to top (the default).
+ * An actor capable of drawing {@link IColoredString}s; it has been superseded by the newer
+ * {@link TextPanel} and does not draw colors currently due to a libGDX bug. It is
+ * lines-oriented: putting a line may erase a line put before. It is designed to write text
+ * with a variable-width font (as opposed to {@link SquidPanel}). It performs line wrapping
+ * by default. It can write from top to bottom or from bottom to top (the default).
  * 
  * <p>
- * This
- * <a href="https://twitter.com/hgamesdev/status/736091292132724736">tweet</a>
- * shows an example. The panel at the top of the screenshot is implemented using
- * this class (with {@link #drawBottomUp} being {@code true}).
+ * The libGDX bug that affects IColoredString drawing here does not affect TextPanel, and
+ * has been fixed in nightly builds but is not working in a stable release. It is expected
+ * to be fixed in the release after 1.9.10, barring some sort of regression.
  * </p>
  * 
  * <p>
@@ -49,10 +49,13 @@ import java.util.Iterator;
  * 
  * @author smelC
  * @param <T>
- * 
+ *
+ * @see TextPanel A preferred, newer alternative that also can show variable-width fonts.
  * @see SquidMessageBox An alternative, doing similar lines-drawing business,
- *      but being backed up by {@link SquidPanel}.
+ *      but being backed up by {@link SquidPanel} and so limited to fixed-width fonts.
+ * @deprecated You should prefer {@link TextPanel} for new code.
  */
+@Deprecated
 public class LinesPanel<T extends Color> extends Actor {
 
 	/** The markup used to typeset {@link #content}. */

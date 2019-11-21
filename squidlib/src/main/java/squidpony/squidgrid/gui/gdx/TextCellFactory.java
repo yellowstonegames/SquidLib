@@ -1970,7 +1970,7 @@ public class TextCellFactory implements Disposable {
      * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you
      * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.
      * <br>
-     * SquidLayers, SparseLayers, SubcellLayers, SquidPanel, TextPanel, LinesPanel, and ImageSquidPanel already call
+     * SquidLayers, SparseLayers, SubcellLayers, SquidPanel, TextPanel, and ImageSquidPanel already call
      * this method in their draw overrides, so you don't need to call this manually if you use any of those. None of
      * those classes change the shader after they set it for their uses, so you may need to set the shader on your Batch
      * to null to revert to the default shader if you need to draw full-color art.
