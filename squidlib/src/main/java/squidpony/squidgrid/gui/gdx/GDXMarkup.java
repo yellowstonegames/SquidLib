@@ -73,6 +73,26 @@ public class GDXMarkup implements IMarkup<Color>{
     private final StringBuilder sb = new StringBuilder(128);
 
     /**
+     * Removes all SquidLib and libGDX markup from the given {@code markupString} except for {@code [[} to escape a left
+     * bracket, returning the result as a new StringBuilder.
+     * @param markupString a String or other CharSequence containing color and/or style markup tags
+     * @return markupString without color, case, or style markup tags, only keeping text and escapes for left brackets.
+     */
+    public StringBuilder removeMarkup(final CharSequence markupString)
+    {
+        StringBuilder cs = new StringBuilder(markupString.length());
+        markupMatcher.setTarget(markupString);
+        while (markupMatcher.find())
+        {
+            if(!markupMatcher.getGroup("p", cs) && markupMatcher.isCaptured("e")) 
+            { 
+                cs.append("[["); 
+            }
+        }
+        return cs;
+    }
+    
+    /**
      * Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
      * produces an IColoredString (of Color) with the color markup tags used to mark text in colors in the resulting
      * IColoredString, and any style markup tags used to mark sections of text as bold or italic for a TextFamily to

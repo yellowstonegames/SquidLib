@@ -51,7 +51,9 @@ public class TextCellFactory implements Disposable {
     /**
      * How many styles are supported by this TextCellFactory; always 1 unless changed in a subclass.
      */
-    public static int STYLES = 1;
+    public int supportedStyles() {
+        return 1;
+    }
     /**
      * The commonly used symbols in roguelike games.
      */
