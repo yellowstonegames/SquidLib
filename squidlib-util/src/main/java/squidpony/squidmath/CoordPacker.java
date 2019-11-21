@@ -1194,13 +1194,13 @@ public class CoordPacker {
     public static boolean[][] unpack(short[] packed, int width, int height)
     {
         if(packed == null)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-null array");
+            throw new NullPointerException("CoordPacker.unpack() must be given a non-null array");
         boolean[][] unpacked = new boolean[width][height];
         if(packed.length == 0)
             return unpacked;
         boolean on = false;
         int idx = 0;
-        short x =0, y = 0;
+        short x, y;
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
@@ -1234,7 +1234,7 @@ public class CoordPacker {
     public static double[][] unpackDouble(short[] packed, int width, int height)
     {
         if(packed == null)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-null array");
+            throw new NullPointerException("CoordPacker.unpack() must be given a non-null array");
         double[][] unpacked = new double[width][height];
         if(packed.length == 0)
             return unpacked;
@@ -1275,7 +1275,7 @@ public class CoordPacker {
                                                  double angle, double span)
     {
         if(packed == null)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-null array");
+            throw new NullPointerException("CoordPacker.unpack() must be given a non-null array");
         double[][] unpacked = new double[width][height];
         if(packed.length == 0)
             return unpacked;
@@ -1611,7 +1611,7 @@ public class CoordPacker {
     }
 
     /**
-     * Simple utility method that constructs a GreasedRegion (a faster but more-memory-hungry way to encode regions)
+     * Utility method that constructs a GreasedRegion (a faster but more-memory-hungry way to encode regions)
      * from a short array of packed data.
      * @param packed a packed short array, as produced by pack()
      * @param width the desired GreasedRegion's width
@@ -1620,7 +1620,58 @@ public class CoordPacker {
      */
     public static GreasedRegion unpackGreasedRegion(short[] packed, int width, int height)
     {
-        return new GreasedRegion(unpack(packed, width, height));
+        if(packed == null)
+            throw new NullPointerException("CoordPacker.unpackGreasedRegion() must be given a non-null array");
+        GreasedRegion unpacked = new GreasedRegion(width, height);
+        if(packed.length == 0)
+            return unpacked;
+        boolean on = false;
+        int idx = 0;
+        short x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                    x = hilbertX[idx];
+                    y = hilbertY[idx];
+                    unpacked.insert(x, y);
+                }
+            } else {
+                idx += packed[p] & 0xffff;
+            }
+        }
+        return unpacked;
+    }
+
+    /**
+     * Utility method that fills an existing GreasedRegion {@code target} with any "on" cells in the packed short array
+     * {@code packed}. This method doesn't allocate unless an argument is null (then it throws a new Exception).
+     * @param packed a packed short array, as produced by pack()
+     * @param target a GreasedRegion that will be modified in-place to include "on" cells from packed
+     * @return target, after modifications to include any and all "on" cells in packed
+     */
+    public static GreasedRegion unpackIntoGreasedRegion(short[] packed, GreasedRegion target)
+    {
+        if(packed == null)
+            throw new NullPointerException("CoordPacker.unpackIntoGreasedRegion() must be given a non-null array");
+        if(target == null)
+            throw new NullPointerException("CoordPacker.unpackIntoGreasedRegion() must be given a non-null GreasedRegion");
+        if(packed.length == 0)
+            return target;
+        boolean on = false;
+        int idx = 0;
+        short x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                    x = hilbertX[idx];
+                    y = hilbertY[idx];
+                    target.insert(x, y);
+                }
+            } else {
+                idx += packed[p] & 0xffff;
+            }
+        }
+        return target;
     }
 
     /**

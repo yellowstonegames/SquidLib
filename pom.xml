@@ -226,6 +226,7 @@
                     <detectJavaApiLink>false</detectJavaApiLink>
                     <detectOfflineLinks>true</detectOfflineLinks>
                     <excludePackageNames>emu.squidpony;emu.squidpony.squidmath</excludePackageNames>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                 </configuration>
             </plugin>
         </plugins>
