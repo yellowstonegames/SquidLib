@@ -42,8 +42,8 @@ public class FontTest extends ApplicationAdapter {
     private TextCellFactory[] factories;
     private SquidPanel display;
     private SquidPanel[] displays;
-    private TextPanel<Color> text;
-    private ArrayList<TextPanel<Color>> texts;
+    private TextPanel text;
+    private ArrayList<TextPanel> texts;
     private int index = 17;
     private static final int ZOOM = 1;
     @Override
@@ -100,7 +100,7 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getCrispCarvedFont().initBySize(),
                 DefaultResources.getCrispRobotoSansFont().initBySize(),
-                new TextCellFactory().fontMultiDistanceField("Roboto-Bold-msdf.fnt", "Roboto-Bold-msdf.png").width(3f).height(12).initBySize().setSmoothingMultiplier(2f)
+                new TextCellFactory().fontMultiDistanceField("Roboto-Bold-msdf.fnt", "Roboto-Bold-msdf.png").width(3f).height(14).initBySize().setSmoothingMultiplier(2f)
                 //DefaultResources.getStretchableCleanFont().initBySize(),
         };
         for(TextCellFactory tc : factories)
@@ -178,7 +178,7 @@ public class FontTest extends ApplicationAdapter {
         );
         texts = new ArrayList<>(5);
         for (int i = 0; i < 5; i++) {
-            text = new TextPanel<Color>(null, factories[factories.length - 5 + i]);
+            text = new TextPanel(factories[factories.length - 5 + i]);
             text.init(totalWidth, totalHeight, samples);
             texts.add(text);
         }

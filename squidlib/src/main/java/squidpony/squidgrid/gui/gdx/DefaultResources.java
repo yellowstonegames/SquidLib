@@ -1969,7 +1969,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.msdfRoboto = new TextCellFactory()
                         .fontMultiDistanceField(crispRobotoSans, crispRobotoSansTexture)
-                        .width(7f).height(30f).setSmoothingMultiplier(2f);
+                        .width(3f).height(14f).setSmoothingMultiplier(2f);
             } catch (Exception e) {
                 e.printStackTrace();
             }

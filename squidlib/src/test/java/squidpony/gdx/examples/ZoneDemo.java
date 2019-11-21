@@ -40,7 +40,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private static final Color bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
     private Stage stage;
     private SquidColorCenter colorCenter;
-    private TextPanel<Color> current;
+    private TextPanel current;
     private TextFamily crispVariableWidth;
     @Override
     public void create () {
@@ -258,7 +258,7 @@ public class ZoneDemo extends ApplicationAdapter {
     }
 
     private void buildCurrentTextPanel(int newWidth, int newHeight) {
-        current = new TextPanel<Color>(GDXMarkup.instance, //DefaultResources.getLargeFont());
+        current = new TextPanel( //DefaultResources.getLargeFont());
                 //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
                 //new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
                 //        .setSmoothingMultiplier(0.4f).height(30).width(7)

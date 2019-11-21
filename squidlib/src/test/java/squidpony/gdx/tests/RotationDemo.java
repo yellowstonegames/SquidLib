@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.ColoredStringList;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.CustomDijkstraMap;
@@ -66,8 +65,8 @@ public class RotationDemo extends ApplicationAdapter {
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
     private SquidLayers display;
-    private TextPanel<Color> messagePanel;
-    private ColoredStringList<Color> messages;
+    private TextPanel messagePanel;
+    private ArrayList<CharSequence> messages;
     /**
      * Non-{@code null} iff '?' was pressed before
      */
@@ -150,10 +149,10 @@ public class RotationDemo extends ApplicationAdapter {
 
         display.setAnimationDuration(0.1f);
         TextCellFactory font = DefaultResources.getCrispPrintFamily().initBySize();//.height(cellHeight).width(23)
-        messagePanel = new TextPanel<>(GDXMarkup.instance, font);
+        messagePanel = new TextPanel(font);
         viewport = new StretchViewport(width * cellWidth, (height + 4) * font.actualCellHeight);
         stage = new Stage(viewport, batch);
-        messages = new ColoredStringList<>(32);
+        messages = new ArrayList<>(32);
         messagePanel.initShared(cellWidth * width, font.actualCellHeight * 4, messages);
         //messagePanel.getScrollPane().setHeight(font.actualCellHeight * 4);
         messagePanel.getScrollPane().setStyle(new ScrollPane.ScrollPaneStyle());
@@ -161,7 +160,7 @@ public class RotationDemo extends ApplicationAdapter {
         //These need to have their positions set before adding any entities if there is an offset involved.
 //        messagePanel.setBounds(0, 0, cellWidth * width, cellHeight * 4);
         display.setPosition(0, cellHeight * 4);
-        messages.addTextOnNewLine(GDXMarkup.instance.colorString("You are the orange '[Cape Jasmine]@[]', and enemies are red '[Scarlet]Я[]'. Click a cell to turn and move. " +
+        messages.add(GDXMarkup.instance.colorStringMarkup("You are the orange '[Cape Jasmine]@[]', and enemies are red '[Scarlet]Я[]'. Click a cell to turn and move. " +
                 "The colorful [Aurora Heliotrope]^[] shows your facing direction; you rotate automatically to reach a goal. " +
                 "Rotation takes as much time as moving forward one square, but you can only move in the direction you face. " +
                 "Use ? for help, or q to quit."));
@@ -497,7 +496,7 @@ public class RotationDemo extends ApplicationAdapter {
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                     */
-                    messages.addTextOnNewLine(GDXMarkup.instance.colorString("The [Scarlet]AЯMED GUAЯD[] shouts at you, \"" +
+                    messages.add(GDXMarkup.instance.colorStringMarkup("The [Scarlet]AЯMED GUAЯD[] shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\""));
                     messagePanel.scrollToEdge(false);
@@ -586,7 +585,7 @@ public class RotationDemo extends ApplicationAdapter {
 			 * justifying, without having to worry about sizes since TextPanel lays
 			 * itself out.
 			 */
-        final TextPanel<Color> tp = new TextPanel<Color>(GDXMarkup.instance, DefaultResources.getCrispPrintFamily());
+        final TextPanel tp = new TextPanel(DefaultResources.getCrispPrintFamily());
         tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
         final List<IColoredString<Color>> text = new ArrayList<>();
