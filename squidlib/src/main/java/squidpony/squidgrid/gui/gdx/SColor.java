@@ -13530,6 +13530,52 @@ public class SColor extends Color implements Serializable {
             }
         }
     }
+
+    /**
+     * Gets a color as an RGBA8888 int given floats representing hue, saturation, value, and opacity.
+     * All parameters should normally be between 0 and 1 inclusive, though hue is tolerated if it is negative down to
+     * -6f at the lowest or positive up to any finite value, though precision loss may affect the color if the hue is
+     * too large. A hue of 0 is red, progressively higher hue values go to orange, yellow, green, blue, and purple
+     * before wrapping around to red as it approaches 1. A saturation of 0 is grayscale, a saturation of 1 is brightly
+     * colored, and values close to 1 will usually appear more distinct than values close to 0, especially if the
+     * hue is different (saturation below 0.0039f is treated specially here, and does less work to simply get a color
+     * between black and white with the given opacity). The value is similar to lightness; a value of 0.0039 or less is
+     * always black (also using a shortcut if this is the case, respecting opacity), while a value of 1 is as bright as
+     * the color gets with the given saturation and value. To get a value of white, you would need both a value of 1 and
+     * a saturation of 0.
+     *
+     * @param hue        0f to 1f, color wheel position
+     * @param saturation 0f to 1f, 0f is grayscale and 1f is brightly colored
+     * @param value      0f to 1f, 0f is black and 1f is bright or light
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return an int encoding a color with the given properties as RGBA8888
+     */
+    public static float intGetHSV(float hue, float saturation, float value, float opacity) {
+        if (value <= 0.0039f) {
+            return (int) (opacity * 255f + 0.5f);
+        } else if (saturation <= 0.0039f) {
+            final int v = (int)(value * 255f + 0.5f);
+            return v << 24 | v << 16 | v << 8 | (int)(opacity * 255f + 0.5f);
+        } else {
+            final float h = ((hue + 6f) % 1f) * 6f;
+            final int i = (int) h;
+            final int alpha = (int) (opacity * 255 + 0.5f);
+            final int v = MathUtils.clamp((int)(value * 255f + 0.5f), 0, 255);
+            saturation = MathUtils.clamp(saturation, 0f, 1f);
+            final int a = (int)(v * (1 - saturation) + 0.5f);
+            final int b = (int)(v * (1 - saturation * (h - i)) + 0.5f);
+            final int c = (int)(v * (1 - saturation * (1 - (h - i))) + 0.5f);
+
+            switch (i) {
+                case 0:  return (v << 24) | (c << 16) | (a << 8) | alpha;
+                case 1:  return (b << 24) | (v << 16) | (a << 8) | alpha;
+                case 2:  return (a << 24) | (v << 16) | (c << 8) | alpha;
+                case 3:  return (a << 24) | (b << 16) | (v << 8) | alpha;
+                case 4:  return (c << 24) | (a << 16) | (v << 8) | alpha;
+                default: return (v << 24) | (a << 16) | (b << 8) | alpha;
+            }
+        }
+    }
     /**
      * Gets a color as a packed float given floats representing luma (Y, akin to lightness), blue chroma (Cb, one of two
      * kinds of chroma used here), red chroma (Cr, the other kind of chroma), and opacity. Luma should be between 0 and
