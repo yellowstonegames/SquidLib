@@ -89,7 +89,7 @@ public class RotationDemo extends ApplicationAdapter {
     private static final int height = 25;
 
     /**
-     * Number of cells high for the LinesPanel.
+     * Number of cells high for the TextPanel.
      */
     private static final int bonusHeight = 4;
     /**

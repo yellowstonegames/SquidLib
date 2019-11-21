@@ -65,7 +65,6 @@ import java.util.Collections;
  * @author smelC
  *
  * @see ScrollPane A libGDX widget for general scrolling through only the visible part of a large widget
- * @see LinesPanel An alternative for displaying lines of text in a variable-width font
  */
 public class TextPanel {
 
