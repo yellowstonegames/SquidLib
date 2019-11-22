@@ -19,7 +19,9 @@ import static squidpony.examples.LanguageGenTest.PRINTING;
  * Created by Tommy Ettinger on 10/1/2015.
  */
 public class GreasedRegionTest {
-
+    static {
+        Coord.expandPoolTo(801, 801);
+    }
     public static GreasedRegion dataCross = new GreasedRegion(64, 64).insertRectangle(25, 2, 14, 60).insertRectangle(2, 25, 60, 14);
     public static GreasedRegion dataCross2 = new GreasedRegion(128, 128).insertRectangle(24+32, 2 + 32, 16, 60).insertRectangle(2 + 32, 24 + 32, 60, 16);
     public static GreasedRegion box = new GreasedRegion(64, 64).insertRectangle(24, 24, 16, 16);
@@ -29,12 +31,10 @@ public class GreasedRegionTest {
     public static RNG rng = new RNG(0xCAFEBEEFBABAD00CL);
     public static DungeonBoneGen dungeonGen = new DungeonBoneGen(srng);
     public static char[][] dungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON, 64, 64);
-    public static GreasedRegion dataDungeon = dungeonGen.region.removeEdges();
+    public static GreasedRegion dataDungeon = dungeonGen.region.copy().removeEdges();
+    public static char[][] giantDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON, 800, 800);
+    public static GreasedRegion giantDataDungeon = dungeonGen.region.copy().removeEdges();
     public static final char[] letters = ArrayTools.letterSpan(256);
-    static {
-        //printRegion(dataCross);
-        //printRegion(dataCross2);
-    }
     public static void print2D(int[][] data)
     {
         if(!PRINTING)
@@ -488,6 +488,35 @@ public class GreasedRegionTest {
         edit.flood(floors, floors.size());
         DungeonUtility.debugPrint(doors.inverseMask(walls.inverseMask(edit.toChars('%', '.'), '#'), '+'));
     }
-
+    @Test
+    public void testCompression()
+    {
+        String compressed;
+        GreasedRegion decompressed;
+        compressed = dataDungeon.toCompressedString();
+        decompressed = GreasedRegion.decompress(compressed);
+        assertEquals(dataDungeon, decompressed);
+//        System.out.println("\n\nORIGINAL\n\n");
+//        System.out.println(dataDungeon);
+//        System.out.println("\n\nDECOMPRESSED\n\n");
+//        System.out.println(decompressed);
+//        System.out.println("\n\nDIFF:\n\n");
+//        System.out.println(decompressed.xor(dataDungeon));
+//        System.out.println("giant stats: width=" + giantDataDungeon.width + ", height=" + giantDataDungeon.height
+//                + ", size=" + giantDataDungeon.size());
+        compressed = giantDataDungeon.toCompressedString();
+        decompressed = GreasedRegion.decompress(compressed);
+//        System.out.println("decom stats: width=" + decompressed.width + ", height=" + decompressed.height
+//                + ", size=" + decompressed.size());
+//        System.out.println(decompressed.copy().xor(giantDataDungeon).size());
+        assertEquals(giantDataDungeon, decompressed);
+//        System.out.println("\n\nORIGINAL\n\n");
+//        System.out.println(giantDataDungeon);
+//        System.out.println("\n\nDECOMPRESSED\n\n");
+//        System.out.println(decompressed);
+//        System.out.println("\n\nDIFF:\n\n");
+//        System.out.println(decompressed.xor(giantDataDungeon));
+        
+    }
 }
 
