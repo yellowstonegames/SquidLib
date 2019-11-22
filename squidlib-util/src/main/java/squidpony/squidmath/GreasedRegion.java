@@ -6334,11 +6334,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
     
     /**
-     * Just an experiment for now; uses CoordPacker's algorithm and data to compress this GreasedRegion in 256x128
-     * blocks, storing the CoordPacker-like data as chars with values from 256 to 33023, and using ASCII chars to
-     * separate them or store other info (just width and height, which are given first as hex numbers).
-     * @return a String that could be used to reconstruct this GreasedRegion from a compressed state (when decompression
-     * has been written)
+     * Compresses this GreasedRegion into a UTF-16 String and returns the String without modifying this GreasedRegion.
+     * Uses {@link CoordPacker}'s algorithm and data to compress this GreasedRegion in 256x128 blocks, storing the
+     * CoordPacker-like data as chars with values from 256 to 33023 (a concept also used in {@link squidpony.LZSPlus}),
+     * and using ASCII semicolons to separate them or store other info (just width and height, which are given first as
+     * 16 hex digits).
+     * @return a String that could be used to reconstruct this GreasedRegion using {@link #decompress(String)}
      */
     @Beta
     public String toCompressedString()
@@ -6410,7 +6411,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         final int width = StringKit.intFromHex(compressed), height = StringKit.intFromHex(compressed, 8, 16);
         target = new GreasedRegion(width, height);
         final int chunksX = width + 255 >> 8, chunksY = height + 127 >> 7;
-        int startPack = 16, endPack, idx, hy;
+        int startPack = 16, endPack, idx;//, hy;
         boolean on;
         for (int bigX = 0, baseX = 0; bigX < chunksX; bigX++, baseX += 256) {
             for (int bigY = 0, baseY = 0; bigY < chunksY; bigY++, baseY += 128) {
@@ -6422,17 +6423,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for(int p = startPack; p < endPack; p++, on = !on) {
                     if (on) {
                         for (int toSkip = idx + (compressed.charAt(p) - 256); idx < toSkip && idx < 0x8000; idx++) {
-                            //target.insert(CoordPacker.hilbertX[idx] + baseX, CoordPacker.hilbertY[idx] + baseY);
-                            hy = CoordPacker.hilbertY[idx] + baseY;
-                            target.data[(CoordPacker.hilbertX[idx] + baseX) * target.ySections + (hy >> 6)] |= 1L << (hy & 63);
+                            target.insert(CoordPacker.hilbertX[idx] + baseX, CoordPacker.hilbertY[idx] + baseY);
+                            //hy = CoordPacker.hilbertY[idx] + baseY;
+                            //target.data[(CoordPacker.hilbertX[idx] + baseX) * target.ySections + (hy >> 6)] |= 1L << (hy & 63);
                         }
                     } else {
                         idx += compressed.charAt(p) - 256;
                     }
                 }
+                startPack = endPack;
             }
         }
-        target.tallied = false;
+//        target.tallied = false;
         return target;
     }
 
