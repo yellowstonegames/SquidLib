@@ -6345,7 +6345,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         CoordPacker.init();
         StringBuilder packing = new StringBuilder(width * height >> 3);
-        StringKit.appendHex(packing, width).append('x');
+        StringKit.appendHex(packing, width);
         StringKit.appendHex(packing, height);
         final int chunksX = width + 255 >> 8, chunksY = height + 127 >> 7;
         for (int bigX = 0, baseX = 0; bigX < chunksX; bigX++, baseX += 256) {
@@ -6394,6 +6394,46 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         return packing.toString();
+    }
+
+    /**
+     * Decompresses a String returned by {@link #toCompressedString()}, returning a new GreasedRegion with identical
+     * width, height, and contents to the GreasedRegion before compression.
+     * @param compressed a String that was compressed by {@link #toCompressedString()}, without changes
+     * @return a new copy of the GreasedRegion that was previously compressed
+     */
+    @Beta
+    public static GreasedRegion decompress(String compressed)
+    {
+        CoordPacker.init();
+        GreasedRegion target;
+        final int width = StringKit.intFromHex(compressed), height = StringKit.intFromHex(compressed, 8, 16);
+        target = new GreasedRegion(width, height);
+        final int chunksX = width + 255 >> 8, chunksY = height + 127 >> 7;
+        int startPack = 16, endPack, idx, hy;
+        boolean on;
+        for (int bigX = 0, baseX = 0; bigX < chunksX; bigX++, baseX += 256) {
+            for (int bigY = 0, baseY = 0; bigY < chunksY; bigY++, baseY += 128) {
+                ++startPack;
+                endPack = compressed.indexOf(';', startPack);
+                if(endPack < 0) endPack = compressed.length();
+                on = false;
+                idx = 0;
+                for(int p = startPack; p < endPack; p++, on = !on) {
+                    if (on) {
+                        for (int toSkip = idx + (compressed.charAt(p) - 256); idx < toSkip && idx < 0x8000; idx++) {
+                            //target.insert(CoordPacker.hilbertX[idx] + baseX, CoordPacker.hilbertY[idx] + baseY);
+                            hy = CoordPacker.hilbertY[idx] + baseY;
+                            target.data[(CoordPacker.hilbertX[idx] + baseX) * target.ySections + (hy >> 6)] |= 1L << (hy & 63);
+                        }
+                    } else {
+                        idx += compressed.charAt(p) - 256;
+                    }
+                }
+            }
+        }
+        target.tallied = false;
+        return target;
     }
 
     @Override
