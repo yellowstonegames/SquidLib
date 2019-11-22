@@ -558,7 +558,8 @@ public class CoordPacker {
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, anyAdded = false, current;
-        int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
+        short skip = 0, hx, hy;
+        int limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
             if (xSize <= 128) {
@@ -579,27 +580,29 @@ public class CoordPacker {
         }
         for(int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip++)
         {
-            if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
+            hx = hilbertX[i];
+            hy = hilbertY[i];
+            if(hx >= xSize || hy >= ySize) {
                 if(on) {
                     on = false;
-                    packing.add((short) skip);
+                    packing.add(skip);
                     skip = 0;
                     anyAdded = true;
                 }
                 continue;
             }
             ml++;
-            current = map[hilbertX[i]][hilbertY[i]];
+            current = map[hx][hy];
             if(current != on)
             {
-                packing.add((short) skip);
+                packing.add(skip);
                 skip = 0;
                 on = current;
                 anyAdded = true;
             }
         }
         if(on)
-            packing.add((short)skip);
+            packing.add(skip);
         else if(!anyAdded)
             return ALL_WALL;
         return packing.toArray();
@@ -1644,12 +1647,28 @@ public class CoordPacker {
 
     /**
      * Utility method that fills an existing GreasedRegion {@code target} with any "on" cells in the packed short array
-     * {@code packed}. This method doesn't allocate unless an argument is null (then it throws a new Exception).
+     * {@code packed}. This method doesn't allocate unless an argument is null (then it throws a new Exception). It also
+     * won't insert any "on" cells in packed that are outside the width and height of target.
      * @param packed a packed short array, as produced by pack()
      * @param target a GreasedRegion that will be modified in-place to include "on" cells from packed
-     * @return target, after modifications to include any and all "on" cells in packed
+     * @return target, after modifications to try to include any and all "on" cells in packed
      */
     public static GreasedRegion unpackIntoGreasedRegion(short[] packed, GreasedRegion target)
+    {
+        return unpackIntoGreasedRegion(packed, target, 0, 0);
+    }
+    /**
+     * Utility method that fills an existing GreasedRegion {@code target} with any "on" cells in the packed short array
+     * {@code packed}, inserting cells from packed at an offset when they go into target. This method doesn't allocate
+     * unless an argument is null (then it throws a new Exception). It also won't insert any "on" cells in packed that
+     * are outside the width and height of target.
+     * @param packed a packed short array, as produced by pack()
+     * @param target a GreasedRegion that will be modified in-place to include "on" cells from packed
+     * @param offsetX how much to offset x positions in packed by when they are placed into target
+     * @param offsetY how much to offset y positions in packed by when they are placed into target
+     * @return target, after modifications to try to include any and all "on" cells in packed
+     */
+    public static GreasedRegion unpackIntoGreasedRegion(short[] packed, GreasedRegion target, int offsetX, int offsetY)
     {
         if(packed == null)
             throw new NullPointerException("CoordPacker.unpackIntoGreasedRegion() must be given a non-null array");
@@ -1659,13 +1678,10 @@ public class CoordPacker {
             return target;
         boolean on = false;
         int idx = 0;
-        short x, y;
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
-                    x = hilbertX[idx];
-                    y = hilbertY[idx];
-                    target.insert(x, y);
+                    target.insert(hilbertX[idx] + offsetX, hilbertY[idx] + offsetY);
                 }
             } else {
                 idx += packed[p] & 0xffff;

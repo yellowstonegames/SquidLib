@@ -6332,35 +6332,68 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         return new GreasedRegion(data, width, height);
     }
-
+    
+    /**
+     * Just an experiment for now; uses CoordPacker's algorithm and data to compress this GreasedRegion in 256x128
+     * blocks, storing the CoordPacker-like data as chars with values from 256 to 33023, and using ASCII chars to
+     * separate them or store other info (just width and height, which are given first as hex numbers).
+     * @return a String that could be used to reconstruct this GreasedRegion from a compressed state (when decompression
+     * has been written)
+     */
+    @Beta
     public String toCompressedString()
     {
-        if(height > 0x4000)
-            throw new UnsupportedOperationException("Height is too large to compress, aborting.");
-        StringBuilder sb = new StringBuilder(width * height >> 2);
-        boolean on = false;
-        int span = 0;
-        char adjust = (char) nextPowerOfTwo(Math.max(height, 32));
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if(((data[x * ySections + (y >> 6)] & (1L << (y & 63))) == 0) == on)
-                    span++;
-                else
-                {
-                    on = !on;
-                    sb.append((char)(adjust | span));
-                    span = 1;
+        CoordPacker.init();
+        StringBuilder packing = new StringBuilder(width * height >> 3);
+        StringKit.appendHex(packing, width).append('x');
+        StringKit.appendHex(packing, height);
+        final int chunksX = width + 255 >> 8, chunksY = height + 127 >> 7;
+        for (int bigX = 0, baseX = 0; bigX < chunksX; bigX++, baseX += 256) {
+            for (int bigY = 0, baseY = 0; bigY < chunksY; bigY++, baseY += 128) {
+                packing.append(';');
+                boolean on = false, current;
+                short skip = 0, hx, hy;
+                int xSize = Math.min(256, width - baseX), ySize = Math.min(128, height - baseY),
+                        limit = 0x8000, mapLimit = xSize * ySize;
+                if (xSize <= 128) {
+                    limit >>= 1;
+                    if (xSize <= 64) {
+                        limit >>= 1;
+                        if (ySize <= 64) {
+                            limit >>= 1;
+                            if (ySize <= 32) {
+                                limit >>= 1;
+                                if (xSize <= 32) {
+                                    limit >>= 1;
+                                }
+                            }
+                        }
+                    }
                 }
+                for (int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip++) {
+                    hx = CoordPacker.hilbertX[i];
+                    hy = CoordPacker.hilbertY[i];
+                    if (hx >= xSize || hy >= ySize) {
+                        if (on) {
+                            on = false;
+                            packing.append((char) (skip + 256));
+                            skip = 0;
+                        }
+                        continue;
+                    }
+                    ml++;
+                    current = ((data[(baseX + hx) * ySections + (baseY + hy >> 6)] & (1L << hy)) != 0);
+                    if (current != on) {
+                        packing.append((char) (skip + 256));
+                        skip = 0;
+                        on = current;
+                    }
+                }
+                if (on)
+                    packing.append((char) (skip + 256));
             }
-            if(on)
-            {
-                sb.append((char)(adjust | span));
-            }
-            sb.append('\n');
-            on = false;
-            span = 0;
         }
-        return sb.toString();
+        return packing.toString();
     }
 
     @Override
