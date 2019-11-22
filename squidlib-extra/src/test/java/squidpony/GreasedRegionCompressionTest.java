@@ -54,6 +54,12 @@ public class GreasedRegionCompressionTest extends ApplicationAdapter {
         Gdx.files.local("Earth_Comp.txt").writeString(me, false, "UTF-16");
         Gdx.files.local("Earth_LZS.txt").writeString(lz, false, "UTF-16");
         Gdx.files.local("Earth_Both.txt").writeString(both, false, "UTF-16");
+        System.out.println("Reading in written Earth files...");
+        System.out.println("LZ correct? " + (GreasedRegion.deserializeFromString(LZSEncoding.decompressFromUTF16(Gdx.files.local("Earth_LZS.txt").readString("UTF-16"))).equals(earth)));
+        System.out.println("Custom correct? " + (GreasedRegion.decompress(Gdx.files.local("Earth_Comp.txt").readString("UTF-16")).equals(earth)));
+        System.out.println("Both correct? " + (GreasedRegion.decompress(LZSEncoding.decompressFromUTF16(Gdx.files.local("Earth_Both.txt").readString("UTF-16"))).equals(earth)));
+        
+        System.out.println();
         
         GreasedRegion australia = new WorldMapGenerator.LocalMimicMap().earthOriginal.copy();
         baseString = australia.serializeToString();
@@ -72,6 +78,11 @@ public class GreasedRegionCompressionTest extends ApplicationAdapter {
         Gdx.files.local("Australia_Comp.txt").writeString(me, false, "UTF-16");
         Gdx.files.local("Australia_LZS.txt").writeString(lz, false, "UTF-16");
         Gdx.files.local("Australia_Both.txt").writeString(both, false, "UTF-16");
+        System.out.println("Reading in written Australia files...");
+        System.out.println("LZ correct? " + (GreasedRegion.deserializeFromString(LZSEncoding.decompressFromUTF16(Gdx.files.local("Australia_LZS.txt").readString("UTF-16"))).equals(australia)));
+        System.out.println("Custom correct? " + (GreasedRegion.decompress(Gdx.files.local("Australia_Comp.txt").readString("UTF-16")).equals(australia)));
+        System.out.println("Both correct? " + (GreasedRegion.decompress(LZSEncoding.decompressFromUTF16(Gdx.files.local("Australia_Both.txt").readString("UTF-16"))).equals(australia)));
+
         Gdx.app.exit();
     }
 

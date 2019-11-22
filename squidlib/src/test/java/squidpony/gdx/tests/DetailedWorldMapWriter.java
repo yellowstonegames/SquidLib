@@ -28,8 +28,8 @@ import java.util.Date;
  */
 public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1920, height = 1080;
-    private static final int width = 256, height = 256; // localMimic
-//    private static final int width = 512, height = 256; // mimic, elliptical
+//    private static final int width = 256, height = 256; // localMimic
+    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
     private static final int LIMIT = 6;
     //private static final int width = 256, height = 128;
@@ -139,13 +139,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
         wmv = new WorldMapView(world);
 
         //generate(seed);
