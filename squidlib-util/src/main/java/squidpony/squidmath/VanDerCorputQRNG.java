@@ -6,20 +6,19 @@ import java.io.Serializable;
 
 /**
  * A quasi-random number generator that goes through one of many sub-random sequences found by J.G. van der Corput.
- * More specifically, this offers both the normal van der Corput sequence, which only changes the state by incrementing
- * it (this works better in the normal usage as part of a 2D or 3D point generator) and a kind of scrambled van der
- * Corput sequence, where the state changes unpredictably (this works better when using this to generate 1D sequences,
- * or when the base may be larger than 7 or non-prime). In both cases, the state is internally stored in a 64-bit long
- * that is incremented once per generated number, but when scramble is true, the state is altered with something similar
- * to a Gray code before being used; more on this later if you want to read about it. The important things to know about
- * this class are: size of state affects speed (prefer smaller seeds, but quality is sometimes a bit poor at first if
- * you start at 0); the base (when given) should be prime (smaller bases tend to yield better quality, but oddly, larger
- * bases perform better); this doesn't generate very random numbers when scramble is false (which can be good
- * for making points that should not overlap), but it will seem much more random when scramble is true; this is a
- * StatefulRandomness with an additional method for generating quasi-random doubles, {@link #nextDouble()}; and there
- * are several static methods offered for convenient generation of points on the related Halton sequence (as well as
- * faster generation of doubles in the base-2 van der Corput sequence, and a special method that switches which base
- * it uses depending on the index to seem even less clearly-patterned).
+ * More specifically, this offers the standard family of van der Corput sequences, each defined by a (almost always
+ * prime) base number. Each sequence only changes the state by incrementing it (this works better in the normal usage as
+ * part of a 2D or 3D point generator). The state is internally stored in a 64-bit long that is incremented once per
+ * generated number. The important things to know about this class are: size of state affects speed (prefer smaller
+ * seeds, but quality is sometimes a bit poor at first if you start at 0); the base (when given) should be prime
+ * (smaller bases tend to yield better quality, but oddly, larger bases perform better); this doesn't generate very
+ * random numbers, and is classified as a quasi-random number generator (which can be good for making points that
+ * should not overlap); this is a StatefulRandomness with an additional method for generating quasi-random doubles,
+ * {@link #nextDouble()}; and there are several static methods offered for convenient generation of points on the
+ * related Halton sequence (as well as faster generation of doubles in the base-2 van der Corput sequence, and a special
+ * method that switches which base it uses depending on the index to seem even less clearly-patterned). There are also,
+ * for lack of a better place to put such small code, methods to generate points in the R2 sequence found by Martin
+ * Roberts, which is very similar in 2D to some Halton sequences but has better separation between points.
  * <br>
  * This generator allows a base (also called a radix) that changes the sequence significantly; a base should be prime,
  * and this performs better in terms of time used with larger primes, though quality is also improved by preferring
@@ -33,7 +32,7 @@ import java.io.Serializable;
  * and faster than, {@link SobolQRNG}). So what's it good for?
  * <br>
  * A VanDerCorputSequence can be a nice building block for more complicated quasi-randomness, especially for points in
- * 2D or 3D, when scramble is false. There's a simple way that should almost always "just work" as the static method
+ * 2D or 3D. There's a simple way that should almost always "just work" as the static method
  * {@link #halton(int, int, int, int[])} here. If it doesn't meet your needs, there's a little more complexity involved.
  * Using a VanDerCorputQRNG with base 3 for the x-axis and another VanDerCorputQRNG with base 5 for the y-axis,
  * requesting a double from each to make points between (0.0, 0.0) and (1.0, 1.0), has an interesting trait that can be
@@ -55,11 +54,6 @@ import java.io.Serializable;
  * in the [0,1) range is 0.001147395; a runner-up is a y base of 13, which has a minimum distance of 0.000871727 . The
  * (2,39) Halton sequence is used by {@link #halton(int, int, int)} and {@link #halton(int, int, int, int[])}.
  * <br>
- * Because just using the state in a simple incremental fashion puts some difficult requirements on the choice of base
- * and seed, we can scramble the long state {@code i} with code equivalent to
- * {@code (i ^ Long.rotateLeft(i, 7) ^ Long.rotateLeft(i, 17))}. This scramble is different from earlier versions and
- * unlike the earlier ones has a one-to-one mapping from input states to scrambled states.
- * <br>
  * Created by Tommy Ettinger on 11/18/2016. Uses code adapted from
  * <a href="https://blog.demofox.org/2017/05/29/when-random-numbers-are-too-random-low-discrepancy-sequences/">Alan Wolfe's blog</a>,
  * which turned out to be a lot faster than the previous way I had it implemented.
@@ -68,7 +62,6 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     private static final long serialVersionUID = 6;
     public long state;
     public final int base;
-    public final boolean scramble;
     /**
      * Constructs a new van der Corput sequence generator with base 7, starting point 37, and scrambling disabled.
      */
@@ -76,7 +69,6 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     {
         base = 7;
         state = 37;
-        scramble = false;
     }
 
     /**
@@ -89,7 +81,6 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     {
         base = 7;
         state = seed;
-        scramble = false;
     }
 
     /**
@@ -99,13 +90,11 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * and should generally be positive at construction time.
      * @param base the base or radix used for this VanDerCorputQRNG; for most uses this should be prime but small-ish
      * @param seed the seed as a long that will be used as the starting point in the sequence; ideally positive but low
-     * @param scramble if true, will produce more-random values that are better for 1D; if false, better for 2D or 3D
      */
-    public VanDerCorputQRNG(int base, long seed, boolean scramble)
+    public VanDerCorputQRNG(int base, long seed)
     {
-        this.base = base < 2 ? 2 : base;
+        this.base = Math.max(base, 2);
         state = seed;
-        this.scramble = scramble;
     }
 
     /**
@@ -117,8 +106,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     @Override
     public long nextLong() {
-        long n = (((scramble) ? (++state ^ (state << 7 | state >>> 57) ^ (state << 17 | state >>> 47)) : ++state)
-                & 0x7fffffffffffffffL);
+        long n = ++state & 0x7fffffffffffffffL;
         if(base <= 2) {
             return Long.reverse(n) >>> 1;
         }
@@ -141,13 +129,11 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * Gets the next quasi-random double from between 0.0 and 1.0 (normally both exclusive; only if state is negative or
      * has wrapped around to a negative value can 0.0 ever be produced). It should be nearly impossible for this to
      * return the same number twice unless floating-point precision has been exhausted or a very large amount of numbers
-     * have already been generated. Certain unusual bases may make this more likely, and similar numbers may be returned
-     * more frequently if scramble is true.
+     * have already been generated. Certain unusual bases may make this more likely.
      * @return a quasi-random double that will always be less than 1.0 and will be no lower than 0.0
      */
     public double nextDouble() {
-        long n = (((scramble) ? (++state ^ (state << 7 | state >>> 57) ^ (state << 17 | state >>> 47)) : ++state)
-                & 0x7fffffffffffffffL);
+        long n = ++state & 0x7fffffffffffffffL;
         if(base <= 2) {
             return (Long.reverse(n) >>> 11) * 0x1p-53;
         }
@@ -163,7 +149,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
 
     @Override
     public VanDerCorputQRNG copy() {
-        return new VanDerCorputQRNG(base, state, scramble);
+        return new VanDerCorputQRNG(base, state);
     }
 
     @Override
@@ -179,8 +165,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     @Override
     public String toString() {
         return "VanDerCorputQRNG with base " + base +
-                ", scrambling " + (scramble ? "on" : "off") +
-                ", and state 0x" + StringKit.hex(state) + "L";
+                " and state 0x" + StringKit.hex(state) + "L";
     }
 
     @Override
@@ -190,7 +175,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
 
         VanDerCorputQRNG that = (VanDerCorputQRNG) o;
 
-        return state == that.state && base == that.base && scramble == that.scramble;
+        return state == that.state && base == that.base;
 
     }
 
@@ -198,14 +183,14 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     public int hashCode() {
         int result = (int) (state ^ (state >>> 32));
         result = 31 * result + base | 0;
-        return 31 * result + (scramble ? 1 : 0) | 0;
+        return 31 * result | 0;
     }
 
     /**
      * Convenience method that gets a quasi-random 2D point between integer (0,0) inclusive and (width,height)
      * exclusive and fills it into point. This is roughly equivalent to creating two VanDerCorputQRNG generators, one
-     * with {@code new VanDerCorputQRNG(2, index, false)} and the other with
-     * {@code new VanDerCorputQRNG(39, index, false)}, then getting an x-coordinate from the first with
+     * with {@code new VanDerCorputQRNG(2, index)} and the other with
+     * {@code new VanDerCorputQRNG(39, index)}, then getting an x-coordinate from the first with
      * {@code (int)(nextDouble() * width)} and similarly for y with the other generator. The advantage here is you don't
      * actually create any objects using this static method, only assigning to point, if valid. You might find an
      * advantage in using values for index that start higher than 20 or so, but you can pass sequential values for index
@@ -237,8 +222,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     /**
      * Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive
      * and gets the corresponding Coord from the Coord pool. This is roughly equivalent to creating two VanDerCorputQRNG
-     * generators, one with {@code new VanDerCorputQRNG(2, index, false)} and the other with
-     * {@code new VanDerCorputQRNG(39, index, false)}, then getting an x-coordinate from the first with
+     * generators, one with {@code new VanDerCorputQRNG(2, index)} and the other with
+     * {@code new VanDerCorputQRNG(39, index)}, then getting an x-coordinate from the first with
      * {@code (int)(nextDouble() * width)} and similarly for y with the other generator. You might find an advantage in
      * using values for index that start higher than 20 or so, but you can pass sequential values for index and
      * generally get points that won't be near each other; this is not true for all parameters to Halton sequences, but
@@ -255,8 +240,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     /**
      * Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive
      * and gets the corresponding Coord from the Coord pool. This is roughly equivalent to creating two VanDerCorputQRNG
-     * generators, one with {@code new VanDerCorputQRNG(2, index, false)} and the other with
-     * {@code new VanDerCorputQRNG(39, index, false)}, then getting an x-coordinate from the first with
+     * generators, one with {@code new VanDerCorputQRNG(2, index)} and the other with
+     * {@code new VanDerCorputQRNG(39, index)}, then getting an x-coordinate from the first with
      * {@code (int)(nextDouble() * width)} and similarly for y with the other generator. You might find an advantage in
      * using values for index that start higher than 20 or so, but you can pass sequential values for index and
      * generally get points that won't be near each other; this is not true for all parameters to Halton sequences, but
@@ -284,8 +269,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     /**
      * Convenience method that gets a quasi-random 3D point between integer (0,0,0) inclusive and (width,height,depth)
      * exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with
-     * {@code new VanDerCorputQRNG(2, index, false)} another with {@code new VanDerCorputQRNG(3, index, false)},
-     * and another with {@code new VanDerCorputQRNG(5, index, false)}, then getting an x-coordinate from the first with
+     * {@code new VanDerCorputQRNG(2, index)} another with {@code new VanDerCorputQRNG(3, index)},
+     * and another with {@code new VanDerCorputQRNG(5, index)}, then getting an x-coordinate from the first with
      * {@code (int)(nextDouble() * width)} and similarly for y and z with the other generators. The advantage here is
      * you don't actually create any objects using this static method, only assigning to point, if valid. You might find
      * an advantage in using values for index that start higher than 20 or so, but you can pass sequential values for
@@ -329,8 +314,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     /**
      * Convenience method that gets a quasi-random Coord3D between integer (0,0,0) inclusive and (width,height,depth)
      * exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with
-     * {@code new VanDerCorputQRNG(2, index, false)} another with {@code new VanDerCorputQRNG(3, index, false)},
-     * and another with {@code new VanDerCorputQRNG(5, index, false)}, then getting an x-coordinate from the first with
+     * {@code new VanDerCorputQRNG(2, index)} another with {@code new VanDerCorputQRNG(3, index)},
+     * and another with {@code new VanDerCorputQRNG(5, index)}, then getting an x-coordinate from the first with
      * {@code (int)(nextDouble() * width)} and similarly for y and z with the other generators. This overload always
      * creates a new Coord3D object, so you might prefer {@link #halton(int, int, int, int, int[])}, which can reuse an
      * int array. You might find an advantage in using values for index that start higher than 20 or so, but you can
