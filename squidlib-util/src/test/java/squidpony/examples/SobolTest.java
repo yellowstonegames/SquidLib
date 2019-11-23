@@ -11,9 +11,9 @@ import squidpony.squidmath.VanDerCorputQRNG;
 public class SobolTest {
     public static void main(String[] args) {
         System.out.println("SOBOL:");
-        for(int d = 1; d <= 16; d++)
+        for(int d = 1; d <= 50; d++)
         {
-            SobolQRNG sq = new SobolQRNG(d);
+            SobolQRNG sq = new SobolQRNG(d, true);
             sq.skipTo(9000);
             long[] result;
             for(int c = 0; c < 10; c++)
@@ -43,7 +43,7 @@ public class SobolTest {
         System.out.println("\nVDC:");
         for(int d : new int[]{2, 3, 5, 7, 11, 13, 17, 19})
         {
-            VanDerCorputQRNG vdc = new VanDerCorputQRNG(d, 0L, false);
+            VanDerCorputQRNG vdc = new VanDerCorputQRNG(d, 0L);
             System.out.println("Base " + d);
             System.out.print(vdc.nextDouble());
             for (int i = 0; i < 32; i++) {
@@ -89,15 +89,15 @@ public class SobolTest {
         int[] primes = {2, 3, 5, 7, 11};
         for (int a = 0; a < primes.length; a++) {
             for (int b = a+1; b < primes.length; b++) {
-                VanDerCorputQRNG xAxis = new VanDerCorputQRNG(primes[a], 19, true),
-                        yAxis = new VanDerCorputQRNG(primes[b], 19, true);
+                VanDerCorputQRNG xAxis = new VanDerCorputQRNG(primes[a], 59),
+                        yAxis = new VanDerCorputQRNG(primes[b], 59);
                 ArrayTools.fill(map, ' ');
                 System.out.println("Prime for x axis: " + primes[a] + ", for y axis: " + primes[b]);
                 for (int i = 0; i < 64; i++) {
-                    x = (int)(80*xAxis.nextDouble());
+                    x = (int)(40*xAxis.nextDouble());
                     y = (int)(40*yAxis.nextDouble());
-                    if(map[x][y] == ' ')
-                        map[x][y] = letters[i];
+                    if(map[x<<1][y] == ' ')
+                        map[x<<1][y] = letters[i];
                     else
                         System.out.println("Oh no, overlap! primes are " + primes[a] + ", " + primes[b] + ", i is " + i +
                                 ", x is " + x + ", y is " + y);

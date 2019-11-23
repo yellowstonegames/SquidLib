@@ -185,7 +185,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
         setCentrality(centrality);
     }
     private double twist(double input) {
-        return (input = input * 0.5 + 1.0) - (int)input;
+        return (input += 1.0) - (int)input;
     }
 
     /**
@@ -196,7 +196,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
     public double nextDouble() {
         return offset + range * ((centralityCalculated > (random.nextLong() & 0xfffffffffffffL) ?
                 ((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
-                twist(((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-52)));
+                twist(((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-53)));
     }
 
     /**
