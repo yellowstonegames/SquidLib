@@ -676,7 +676,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " RNG.nextGaussian(), clamped [-4,4]");
                 for (int i = 0; i < 0x100000; i++) {
-                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0, 0x3.FCp0) * 63 + 256)]++;
+                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0, 0x3.FCp0) * 64 + 256)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -753,7 +753,7 @@ public class MathVisualizer extends ApplicationAdapter {
 //                            - ((b & 0x00000000000003FFL) + ((b & 0x000003FF00000000L) >>> 32)) >> 3)]++;
 
 
-                    amounts[Noise.fastFloor(MathUtils.clamp(SpikeDistribution.instance.nextDouble(rng), -0x3.FCp0, 0x3.FCp0) * 255 + 256)]++;
+                    amounts[Noise.fastFloor(MathUtils.clamp(GaussianDistribution.instance.nextDouble(rng), -0x3.FCp0, 0x3.FCp0) * 64 + 256)]++;
 //                    amounts[MathUtils.round(MathUtils.clamp(fastGaussian() * 64f + 256f, 0f, 511f))]++;
                 }
                 for (int i = 0; i < 512; i++) {
