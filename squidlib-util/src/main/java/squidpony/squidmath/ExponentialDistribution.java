@@ -7,9 +7,13 @@ package squidpony.squidmath;
  * Created by Tommy Ettinger on 11/23/2019.
  */
 public class ExponentialDistribution implements IDistribution {
-    private double i_lambda = 1.0;
+    public static final ExponentialDistribution instance = new ExponentialDistribution();
+    public static final ExponentialDistribution instance_0_5 = new ExponentialDistribution(0.5);
+    public static final ExponentialDistribution instance_1_5 = new ExponentialDistribution(1.5);
+    private double i_lambda;
     public ExponentialDistribution()
     {
+        i_lambda = 1.0;
     }
     public ExponentialDistribution(double lambda)
     {
