@@ -1,13 +1,13 @@
 package squidpony.squidmath;
 
 /**
- * An IDistribution that produces results between -1.0 inclusive and 1.0 exclusive, but is much more likely to produce
- * results near 0.0, and does not "round off" like a Gaussian curve around the midpoint.
+ * An IDistribution that produces results between 0.0 inclusive and 1.0 exclusive, but is much more likely to produce
+ * results near 0.0 or 1.0, further from 0.5.
  * <br>
  * Created by Tommy Ettinger on 11/23/2019.
  */
-public class SpikeDistribution implements IDistribution {
-    public static final SpikeDistribution instance = new SpikeDistribution();
+public class BathtubDistribution implements IDistribution {
+    public static final BathtubDistribution instance = new BathtubDistribution();
     /**
      * Gets a double between {@link #getLowerBound()} and {@link #getUpperBound()} that obeys this distribution.
      *
@@ -16,17 +16,18 @@ public class SpikeDistribution implements IDistribution {
      */
     @Override
     public double nextDouble(IRNG rng) {
-        final double d = (rng.nextDouble() - 0.5) * 2.0;
-        return d * d * d;
+        double d = (rng.nextDouble() - 0.5) * 2.0;
+        d = d * d * d + 1.0;
+        return d - (int)d;
     }
 
     /**
-     * Gets the lower bound of the distribution, which is -1, inclusive.
+     * Gets the lower bound of the distribution, which is 0, inclusive.
      * @return the lower bound of the distribution
      */
     @Override
     public double getLowerBound() {
-        return -1.0;
+        return 0.0;
     }
 
     /**

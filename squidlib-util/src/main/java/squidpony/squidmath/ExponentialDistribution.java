@@ -38,7 +38,7 @@ public class ExponentialDistribution implements IDistribution {
      */
     @Override
     public double getLowerBound() {
-        return i_lambda < 0 ? Double.NEGATIVE_INFINITY : 0;
+        return i_lambda < 0.0 ? Double.NEGATIVE_INFINITY : 0.0;
     }
 
     /**
@@ -47,6 +47,6 @@ public class ExponentialDistribution implements IDistribution {
      */
     @Override
     public double getUpperBound() {
-        return i_lambda < 0 ? 0 : Double.POSITIVE_INFINITY;
+        return i_lambda < 0.0 ? 0.0 : Double.POSITIVE_INFINITY;
     }
 }
