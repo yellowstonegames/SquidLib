@@ -76,7 +76,25 @@ public class GaussianDistribution implements IDistribution {
             }
         }
     }
-    
+
+    /**
+     * The lower inclusive bound is negative infinity.
+     * @return negative infinity
+     */
+    @Override
+    public double getLowerBound() {
+        return Double.NEGATIVE_INFINITY;
+    }
+
+    /**
+     * The upper inclusive bound is infinity.
+     * @return positive infinity
+     */
+    @Override
+    public double getUpperBound() {
+        return Double.POSITIVE_INFINITY;
+    }
+
     private static final int[] kn = new int[]{
             -0x76ad2212, -0x0, -0x600f1b53, -0x6ce447a6, -0x725b46a2,
             -0x7560051d, -0x774921eb, -0x789a25bd, -0x799045c3, -0x7a4bce5d,

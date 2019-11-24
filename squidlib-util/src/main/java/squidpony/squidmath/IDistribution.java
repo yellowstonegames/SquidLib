@@ -10,5 +10,23 @@ package squidpony.squidmath;
  * Created by Tommy Ettinger on 11/23/2019.
  */
 public interface IDistribution {
+    /**
+     * Gets a double between {@link #getLowerBound()} and {@link #getUpperBound()} that obeys this distribution.
+     * @param rng an IRNG, such as {@link RNG} or {@link GWTRNG}, that this will get one or more random numbers from
+     * @return a double within the range of {@link #getLowerBound()} and {@link #getUpperBound()}
+     */
     double nextDouble(IRNG rng);
+
+    /**
+     * Gets the lower bound of the distribution. The documentation should specify whether the bound is inclusive or
+     * exclusive; if unspecified, it can be assumed to be inclusive (like {@link IRNG#nextDouble()}).
+     * @return the lower bound of the distribution
+     */
+    double getLowerBound();
+    /**
+     * Gets the upper bound of the distribution. The documentation should specify whether the bound is inclusive or
+     * exclusive; if unspecified, it can be assumed to be exclusive (like {@link IRNG#nextDouble()}).
+     * @return the upper bound of the distribution
+     */
+    double getUpperBound();
 }
