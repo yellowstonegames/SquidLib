@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 32;
+    private int mode = 13;
     private int modes = 47;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -31,6 +31,7 @@ public class MathVisualizer extends ApplicationAdapter {
     private int[] amounts = new int[512];
     private double[] dAmounts = new double[512];
     private DiverRNG diver;
+    private SilkRNG rng;
     private boolean hasGauss = false;
     private double followingGauss = 0.0;
     private RandomBias bias;
@@ -99,8 +100,8 @@ public class MathVisualizer extends ApplicationAdapter {
         if (hasGauss = !hasGauss) {
             double v1, v2, s;
             do {
-                v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
-                v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+                v1 = 2 * rng.nextDouble() - 1; // between -1 and 1
+                v2 = 2 * rng.nextDouble() - 1; // between -1 and 1
                 s = v1 * v1 + v2 * v2;
             } while (s > 1 || s == 0);
             final double multiplier = Math.sqrt(-2 * Math.log(s) / s);
@@ -340,7 +341,8 @@ public class MathVisualizer extends ApplicationAdapter {
     public void create() {
         startTime = TimeUtils.millis();
         Coord.expandPoolTo(512, 512);
-        diver = new DiverRNG();
+        diver = new DiverRNG(1234567890L);
+        rng = new SilkRNG(1234567890);
         seed = DiverRNG.determine(12345L);
         bias = new RandomBias();
         edit = new EditRNG();
@@ -673,14 +675,14 @@ public class MathVisualizer extends ApplicationAdapter {
             case 14: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " RNG.nextGaussian(), clamped [-4,4]");
-                for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -4.0, 4.0) * 63 + 256)]++;
+                for (int i = 0; i < 0x100000; i++) {
+                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0, 0x3.FCp0) * 63 + 256)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+                    for (int j = 519 - (amounts[i] >> 5); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -731,8 +733,8 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 15: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " fastGaussian, clamped [-4,4]");
-                for (int i = 0; i < 0x1000000; i++) {
+                        " GaussianDistribution, clamped [-4,4]");
+                for (int i = 0; i < 0x100000; i++) {
 //                    long a = diver.nextLong();
 //                    a = (a & 0x007C1F07C1F07C1FL) +     ((a & 0x0F8370F8370F8370L) >>>  5);
 //                    a = (a & 0x00003F0003F0003FL) +     ((a & 0x00FC000FC000FC00L) >>>  10);
@@ -749,27 +751,30 @@ public class MathVisualizer extends ApplicationAdapter {
 //                            / (12f * 255.5f)) * 511)]++;
 //                    amounts[256 + (int) (((a & 0x00000000000003FFL) + ((a & 0x000003FF00000000L) >>> 32))
 //                            - ((b & 0x00000000000003FFL) + ((b & 0x000003FF00000000L) >>> 32)) >> 3)]++;
-                    amounts[MathUtils.round(MathUtils.clamp(fastGaussian() * 64f + 256f, 0f, 511f))]++;
+
+
+                    amounts[Noise.fastFloor(MathUtils.clamp(GaussianDistribution.instance.nextDouble(rng), -0x3.FCp0, 0x3.FCp0) * 63 + 256)]++;
+//                    amounts[MathUtils.round(MathUtils.clamp(fastGaussian() * 64f + 256f, 0f, 511f))]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 519 - (amounts[i] >> 9)); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 5)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
-                Arrays.fill(amounts, 0);
-                for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0f, 0x3.FCp0f) * 64 + 256)]++;
-                }
-                for (int i = 0; i < 512; i++) {
-                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
-                        layers.backgrounds[i][j] = SColor.lerpFloatColors(layers.backgrounds[i][j],
-                                -0x1.64b5eap125F, //SColor.AURORA_EMBERS
-                                0.3f);
-                    }
-                }
+//                Arrays.fill(amounts, 0);
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0f, 0x3.FCp0f) * 64 + 256)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+//                        layers.backgrounds[i][j] = SColor.lerpFloatColors(layers.backgrounds[i][j],
+//                                -0x1.64b5eap125F, //SColor.AURORA_EMBERS
+//                                0.3f);
+//                    }
+//                }
 
 
                 for (int i = 0; i < 10; i++) {
