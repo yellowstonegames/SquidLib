@@ -28,4 +28,21 @@ public class ExponentialDistribution implements IDistribution {
     public double nextDouble(IRNG rng) {
         return Math.log(1 - rng.nextDouble()) * i_lambda;
     }
+    /**
+     * The lower inclusive bound is 0 while lambda is positive; it is negative infinity if lambda is negative.
+     * @return zero, or negative infinity if lambda is negative.
+     */
+    @Override
+    public double getLowerBound() {
+        return i_lambda < 0 ? Double.NEGATIVE_INFINITY : 0;
+    }
+
+    /**
+     * The upper inclusive bound is infinity while lambda is positive; it is 0 if lambda is negative.
+     * @return positive infinity, or zero if lambda is negative.
+     */
+    @Override
+    public double getUpperBound() {
+        return i_lambda < 0 ? 0 : Double.POSITIVE_INFINITY;
+    }
 }
