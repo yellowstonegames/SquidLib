@@ -707,25 +707,26 @@ public class ColorTest extends ApplicationAdapter {
             }
         }
         
-        System.out.println("public static final byte[][] JUDGE_RAMPS = new byte[][]{");
-        for (int i = 0; i < COUNT; i++) {
-            System.out.println(
-                      "{ " + ramps[i][3]
-                    + ", " + ramps[i][2]
-                    + ", " + ramps[i][1]
-                    + ", " + ramps[i][0] + " },"
-            );
-        }
-        System.out.println("};");
-
-        System.out.println("public static final int[][] JUDGE_RAMP_VALUES = new int[][]{");
-        for (int i = 0; i < COUNT; i++) {
-            System.out.println("{ 0x" + StringKit.hex(palette[ramps[i][3] & 255])
-                    + ", 0x" + StringKit.hex(palette[ramps[i][2] & 255])
-                    + ", 0x" + StringKit.hex(palette[ramps[i][1] & 255])
-                    + ", 0x" + StringKit.hex(palette[ramps[i][0] & 255]) + " },"
-            );
-        }
+//        System.out.println("public static final byte[][] JUDGE_RAMPS = new byte[][]{");
+//        for (int i = 0; i < COUNT; i++) {
+//            System.out.println(
+//                      "{ " + ramps[i][3]
+//                    + ", " + ramps[i][2]
+//                    + ", " + ramps[i][1]
+//                    + ", " + ramps[i][0] + " },"
+//            );
+//        }
+//        System.out.println("};");
+//
+//        System.out.println("public static final int[][] JUDGE_RAMP_VALUES = new int[][]{");
+//        for (int i = 0; i < COUNT; i++) {
+//            System.out.println("{ 0x" + StringKit.hex(palette[ramps[i][3] & 255])
+//                    + ", 0x" + StringKit.hex(palette[ramps[i][2] & 255])
+//                    + ", 0x" + StringKit.hex(palette[ramps[i][1] & 255])
+//                    + ", 0x" + StringKit.hex(palette[ramps[i][0] & 255]) + " },"
+//            );
+//        }
+//        System.out.println("};");
 //        for (int i = 0; i < COUNT; i++) {
 //            System.out.println("{ 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][0] & 255]))
 //                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][1] & 255]))
@@ -733,7 +734,7 @@ public class ColorTest extends ApplicationAdapter {
 //                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][3] & 255])) + " },"
 //            );
 //        }
-        System.out.println("};");
+//        System.out.println("};");
         for (int i = 0; i < COUNT; i++) {
             col.set(palette[i & 255]).clamp();
             display.putString(i >>> 1 & 0xF0, i & 31, String.format("   %08X   ", palette[i]), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
@@ -1067,7 +1068,7 @@ public class ColorTest extends ApplicationAdapter {
         "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
         String data = Gdx.files.classpath("special/ColorData.txt").readString();
         String[] lines = StringKit.split(data, "\n"), rec = new String[3];
-        SColor c = new SColor();
+        Color c = new Color();
         StringBuilder sb = new StringBuilder(100000);
         for (int i = 0; i < lines.length; i++) {
             tabSplit(rec, lines[i]);
@@ -1089,24 +1090,24 @@ public class ColorTest extends ApplicationAdapter {
 
         String templateTable = "<tr>\n<td style='background-color: #FEDCBA;'></td>\n<td>Name</td>\n<td>0xFEDCBAFF</td>\n<td>`HUE</td>\n<td>`SAT</td>\n<td>`VAL</td>\n<td>`LUMA</td>\n<td>`WARM</td>\n<td>`MILD</td>\n<td>`TWEA</td>\n</tr>\n";
         final OrderedSet<SColor> PAL = new OrderedSet<>(SColor.FULL_PALETTE);
-//        SColor c;
+        SColor sc;
 //        StringBuilder sb = new StringBuilder(100000);
         sb.setLength(0);
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Preview Section</th>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n</tr>\n");
         for (int i = 0; i < PAL.size(); i++) {
-            c = PAL.getAt(i);
-            sb.append(templateTable.replace("Name", c.name)
-                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(c)).substring(0, 6))
+            sc = PAL.getAt(i);
+            sb.append(templateTable.replace("Name", sc.name)
+                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(sc)).substring(0, 6))
 //                    .replace("`RED", Float.toString(c.r))
 //                    .replace("`GREEN", Float.toString(c.g))
 //                    .replace("`BLUE", Float.toString(c.b))
-                    .replace("`HUE", Float.toString(SColor.hue(c)))
-                    .replace("`SAT", Float.toString(SColor.saturation(c)))
-                    .replace("`VAL", Float.toString(SColor.value(c)))
-                    .replace("`LUMA", Float.toString(SColor.lumaYCwCm(c)))
-                    .replace("`WARM", Float.toString(SColor.chromaWarm(c)))
-                    .replace("`MILD", Float.toString(SColor.chromaMild(c)))
-                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(c)))
+                    .replace("`HUE", Float.toString(SColor.hue(sc)))
+                    .replace("`SAT", Float.toString(SColor.saturation(sc)))
+                    .replace("`VAL", Float.toString(SColor.value(sc)))
+                    .replace("`LUMA", Float.toString(SColor.lumaYCwCm(sc)))
+                    .replace("`WARM", Float.toString(SColor.chromaWarm(sc)))
+                    .replace("`MILD", Float.toString(SColor.chromaMild(sc)))
+                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(sc)))
             );
             //System.out.println("Processed " + i);
         }
@@ -1131,16 +1132,16 @@ public class ColorTest extends ApplicationAdapter {
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Preview Section</th>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n</tr>\n");
 //        sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Preview Section</th>\n</tr>\n");
         for (int i = 0; i < PAL.size(); i++) {
-            c = PAL.getAt(i);
-            sb.append(templateTable.replace("Name", c.name)
-                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(c)).substring(0, 6))
-                    .replace("`HUE", Float.toString(SColor.hue(c)))
-                    .replace("`SAT", Float.toString(SColor.saturation(c)))
-                    .replace("`VAL", Float.toString(SColor.value(c)))
-                    .replace("`LUMA", Float.toString(SColor.lumaYCwCm(c)))
-                    .replace("`WARM", Float.toString(SColor.chromaWarm(c)))
-                    .replace("`MILD", Float.toString(SColor.chromaMild(c)))
-                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(c)))
+            sc = PAL.getAt(i);
+            sb.append(templateTable.replace("Name", sc.name)
+                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(sc)).substring(0, 6))
+                    .replace("`HUE", Float.toString(SColor.hue(sc)))
+                    .replace("`SAT", Float.toString(SColor.saturation(sc)))
+                    .replace("`VAL", Float.toString(SColor.value(sc)))
+                    .replace("`LUMA", Float.toString(SColor.lumaYCwCm(sc)))
+                    .replace("`WARM", Float.toString(SColor.chromaWarm(sc)))
+                    .replace("`MILD", Float.toString(SColor.chromaMild(sc)))
+                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(sc)))
             );
         }
         sb.append("</table>\n</body>\n</html>");
@@ -1177,22 +1178,21 @@ public class ColorTest extends ApplicationAdapter {
         });
         sb.append("<!doctype html>\n<html>\n<body>\n<table>\n<tr>\n<th>Preview Section</th>\n<th>Color Name</th>\n<th>Hex Code</th>\n<th>Hue</th>\n<th>Sat</th>\n<th>Val</th>\n<th>Luma</th>\n<th>Warm</th>\n<th>Mild</th>\n<th>Better Lightness</th>\n</tr>\n");
         for (int i = 0; i < PAL.size(); i++) {
-            c = PAL.getAt(i);
-            sb.append(templateTable.replace("Name", c.name)
-                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(c)).substring(0, 6))
-                    .replace("`HUE", Float.toString(SColor.hue(c)))
-                    .replace("`SAT", Float.toString(SColor.saturation(c)))
-                    .replace("`VAL", Float.toString(SColor.value(c)))
-                    .replace("`LUMA", Float.toString(SColor.lumaYCwCm(c)))
-                    .replace("`WARM", Float.toString(SColor.chromaWarm(c)))
-                    .replace("`MILD", Float.toString(SColor.chromaMild(c)))
-                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(c)))
+            sc = PAL.getAt(i);
+            sb.append(templateTable.replace("Name", sc.name)
+                    .replace("FEDCBA", StringKit.hex(Color.rgba8888(sc)).substring(0, 6))
+                    .replace("`HUE", Float.toString(SColor.hue(sc)))
+                    .replace("`SAT", Float.toString(SColor.saturation(sc)))
+                    .replace("`VAL", Float.toString(SColor.value(sc)))
+                    .replace("`LUMA", Float.toString(SColor.lumaYCwCm(sc)))
+                    .replace("`WARM", Float.toString(SColor.chromaWarm(sc)))
+                    .replace("`MILD", Float.toString(SColor.chromaMild(sc)))
+                    .replace("`TWEA", Float.toString((float) lightnessAltLAB(sc)))
             );
             //System.out.println("Processed " + i);
         }
         sb.append("</table>\n</body>\n</html>");
         Gdx.files.local("ColorTableValue.html").writeString(sb.toString(), false);
-
     }
 
     private static double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {

@@ -101,24 +101,23 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code>, <code><a href="StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.67">VanDerCorputQRNG</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.61">VanDerCorputQRNG</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A quasi-random number generator that goes through one of many sub-random sequences found by J.G. van der Corput.
- More specifically, this offers both the normal van der Corput sequence, which only changes the state by incrementing
- it (this works better in the normal usage as part of a 2D or 3D point generator) and a kind of scrambled van der
- Corput sequence, where the state changes unpredictably (this works better when using this to generate 1D sequences,
- or when the base may be larger than 7 or non-prime). In both cases, the state is internally stored in a 64-bit long
- that is incremented once per generated number, but when scramble is true, the state is altered with something similar
- to a Gray code before being used; more on this later if you want to read about it. The important things to know about
- this class are: size of state affects speed (prefer smaller seeds, but quality is sometimes a bit poor at first if
- you start at 0); the base (when given) should be prime (smaller bases tend to yield better quality, but oddly, larger
- bases perform better); this doesn't generate very random numbers when scramble is false (which can be good
- for making points that should not overlap), but it will seem much more random when scramble is true; this is a
- StatefulRandomness with an additional method for generating quasi-random doubles, <a href="#nextDouble()"><code>nextDouble()</code></a>; and there
- are several static methods offered for convenient generation of points on the related Halton sequence (as well as
- faster generation of doubles in the base-2 van der Corput sequence, and a special method that switches which base
- it uses depending on the index to seem even less clearly-patterned).
+ More specifically, this offers the standard family of van der Corput sequences, each defined by a (almost always
+ prime) base number. Each sequence only changes the state by incrementing it (this works better in the normal usage as
+ part of a 2D or 3D point generator). The state is internally stored in a 64-bit long that is incremented once per
+ generated number. The important things to know about this class are: size of state affects speed (prefer smaller
+ seeds, but quality is sometimes a bit poor at first if you start at 0); the base (when given) should be prime
+ (smaller bases tend to yield better quality, but oddly, larger bases perform better); this doesn't generate very
+ random numbers, and is classified as a quasi-random number generator (which can be good for making points that
+ should not overlap); this is a StatefulRandomness with an additional method for generating quasi-random doubles,
+ <a href="#nextDouble()"><code>nextDouble()</code></a>; and there are several static methods offered for convenient generation of points on the
+ related Halton sequence (as well as faster generation of doubles in the base-2 van der Corput sequence, and a special
+ method that switches which base it uses depending on the index to seem even less clearly-patterned). There are also,
+ for lack of a better place to put such small code, methods to generate points in the R2 sequence found by Martin
+ Roberts, which is very similar in 2D to some Halton sequences but has better separation between points.
  <br>
  This generator allows a base (also called a radix) that changes the sequence significantly; a base should be prime,
  and this performs better in terms of time used with larger primes, though quality is also improved by preferring
@@ -132,7 +131,7 @@ implements <a href="StatefulRandomness.html" title="interface in squidpony.squid
  and faster than, <a href="SobolQRNG.html" title="class in squidpony.squidmath"><code>SobolQRNG</code></a>). So what's it good for?
  <br>
  A VanDerCorputSequence can be a nice building block for more complicated quasi-randomness, especially for points in
- 2D or 3D, when scramble is false. There's a simple way that should almost always "just work" as the static method
+ 2D or 3D. There's a simple way that should almost always "just work" as the static method
  <a href="#halton(int,int,int,int%5B%5D)"><code>halton(int, int, int, int[])</code></a> here. If it doesn't meet your needs, there's a little more complexity involved.
  Using a VanDerCorputQRNG with base 3 for the x-axis and another VanDerCorputQRNG with base 5 for the y-axis,
  requesting a double from each to make points between (0.0, 0.0) and (1.0, 1.0), has an interesting trait that can be
@@ -153,11 +152,6 @@ implements <a href="StatefulRandomness.html" title="interface in squidpony.squid
  base-2 sequence (which is preferential for performance). There, the minimum distance between the first 65536 points
  in the [0,1) range is 0.001147395; a runner-up is a y base of 13, which has a minimum distance of 0.000871727 . The
  (2,39) Halton sequence is used by <a href="#halton(int,int,int)"><code>halton(int, int, int)</code></a> and <a href="#halton(int,int,int,int%5B%5D)"><code>halton(int, int, int, int[])</code></a>.
- <br>
- Because just using the state in a simple incremental fashion puts some difficult requirements on the choice of base
- and seed, we can scramble the long state <code>i</code> with code equivalent to
- <code>(i ^ Long.rotateLeft(i, 7) ^ Long.rotateLeft(i, 17))</code>. This scramble is different from earlier versions and
- unlike the earlier ones has a one-to-one mapping from input states to scrambled states.
  <br>
  Created by Tommy Ettinger on 11/18/2016. Uses code adapted from
  <a href="https://blog.demofox.org/2017/05/29/when-random-numbers-are-too-random-low-discrepancy-sequences/">Alan Wolfe's blog</a>,
@@ -192,11 +186,6 @@ implements <a href="StatefulRandomness.html" title="interface in squidpony.squid
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scramble">scramble</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#state">state</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -229,9 +218,8 @@ implements <a href="StatefulRandomness.html" title="interface in squidpony.squid
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,long,boolean)">VanDerCorputQRNG</a></span>&#8203;(int&nbsp;base,
-long&nbsp;seed,
-boolean&nbsp;scramble)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,long)">VanDerCorputQRNG</a></span>&#8203;(int&nbsp;base,
+long&nbsp;seed)</code></th>
 <td class="colLast">
 <div class="block">Constructs a new van der Corput sequence generator with the given base (a.k.a.</div>
 </td>
@@ -507,19 +495,13 @@ int&nbsp;index)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="state">state</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.69">state</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.63">state</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="base">base</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.70">base</a></span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="scramble">scramble</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.71">scramble</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.64">base</a></span></div>
 </section>
 </li>
 </ul>
@@ -535,14 +517,14 @@ int&nbsp;index)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">VanDerCorputQRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.75">VanDerCorputQRNG</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.68">VanDerCorputQRNG</a></span>()</div>
 <div class="block">Constructs a new van der Corput sequence generator with base 7, starting point 37, and scrambling disabled.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">VanDerCorputQRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.88">VanDerCorputQRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.80">VanDerCorputQRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Constructs a new van der Corput sequence generator with the given starting point in the sequence as a seed.
  Usually seed should be at least 20 with this constructor, but not drastically larger; 2000 is probably too much.
  This will use a base 7 van der Corput sequence and have scrambling disabled.</div>
@@ -554,10 +536,9 @@ int&nbsp;index)</code></th>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="&lt;init&gt;(int,long,boolean)">VanDerCorputQRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.104">VanDerCorputQRNG</a></span>&#8203;(<span class="arguments">int&nbsp;base,
-long&nbsp;seed,
-boolean&nbsp;scramble)</span></div>
+<h3><a id="&lt;init&gt;(int,long)">VanDerCorputQRNG</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.94">VanDerCorputQRNG</a></span>&#8203;(<span class="arguments">int&nbsp;base,
+long&nbsp;seed)</span></div>
 <div class="block">Constructs a new van der Corput sequence generator with the given base (a.k.a. radix; if given a base less than
  2, this will use base 2 instead) and starting point in the sequence as a seed. Good choices for base are between
  10 and 60 or so, and should usually be prime. Good choices for seed are larger than base but not by very much,
@@ -566,7 +547,6 @@ boolean&nbsp;scramble)</span></div>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>base</code> - the base or radix used for this VanDerCorputQRNG; for most uses this should be prime but small-ish</dd>
 <dd><code>seed</code> - the seed as a long that will be used as the starting point in the sequence; ideally positive but low</dd>
-<dd><code>scramble</code> - if true, will produce more-random values that are better for 1D; if false, better for 2D or 3D</dd>
 </dl>
 </section>
 </li>
@@ -583,7 +563,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong()">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.118">nextLong</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.107">nextLong</a></span>()</div>
 <div class="block">Gets the next quasi-random long as a fraction of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Long.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Long.MAX_VALUE</code></a>; this can never produce a negative value.
  It is extremely unlikely to produce two identical values unless the state is very high or is negative; state
  increases by exactly 1 each time this, <a href="#next(int)"><code>next(int)</code></a>, or <a href="#nextDouble()"><code>nextDouble()</code></a> is called and can potentially
@@ -599,7 +579,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="next(int)">next</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.135">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.123">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="RandomnessSource.html#next(int)">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -616,12 +596,11 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextDouble()">nextDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.148">nextDouble</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.135">nextDouble</a></span>()</div>
 <div class="block">Gets the next quasi-random double from between 0.0 and 1.0 (normally both exclusive; only if state is negative or
  has wrapped around to a negative value can 0.0 ever be produced). It should be nearly impossible for this to
  return the same number twice unless floating-point precision has been exhausted or a very large amount of numbers
- have already been generated. Certain unusual bases may make this more likely, and similar numbers may be returned
- more frequently if scramble is true.</div>
+ have already been generated. Certain unusual bases may make this more likely.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a quasi-random double that will always be less than 1.0 and will be no lower than 0.0</dd>
@@ -631,7 +610,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.164">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.150">copy</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="StatefulRandomness.html#copy()">StatefulRandomness</a></code></span></div>
 <div class="block">Produces a copy of this StatefulRandomness that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
@@ -649,7 +628,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getState()">getState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.169">getState</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.155">getState</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="StatefulRandomness.html#getState()">StatefulRandomness</a></code></span></div>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
@@ -663,7 +642,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setState(long)">setState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.174">setState</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.160">setState</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="StatefulRandomness.html#setState(long)">StatefulRandomness</a></code></span></div>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
@@ -677,7 +656,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.179">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.165">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -687,7 +666,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.186">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.171">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -697,7 +676,7 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.197">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.182">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -707,14 +686,14 @@ boolean&nbsp;scramble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="halton(int,int,int,int[])">halton</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.220">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.205">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;index,
 int[]&nbsp;point)</span></div>
 <div class="block">Convenience method that gets a quasi-random 2D point between integer (0,0) inclusive and (width,height)
  exclusive and fills it into point. This is roughly equivalent to creating two VanDerCorputQRNG generators, one
- with <code>new VanDerCorputQRNG(2, index, false)</code> and the other with
- <code>new VanDerCorputQRNG(39, index, false)</code>, then getting an x-coordinate from the first with
+ with <code>new VanDerCorputQRNG(2, index)</code> and the other with
+ <code>new VanDerCorputQRNG(39, index)</code>, then getting an x-coordinate from the first with
  <code>(int)(nextDouble() * width)</code> and similarly for y with the other generator. The advantage here is you don't
  actually create any objects using this static method, only assigning to point, if valid. You might find an
  advantage in using values for index that start higher than 20 or so, but you can pass sequential values for index
@@ -734,13 +713,13 @@ int[]&nbsp;point)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="halton(int,int,int)">halton</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.251">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.236">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;index)</span></div>
 <div class="block">Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive
  and gets the corresponding Coord from the Coord pool. This is roughly equivalent to creating two VanDerCorputQRNG
- generators, one with <code>new VanDerCorputQRNG(2, index, false)</code> and the other with
- <code>new VanDerCorputQRNG(39, index, false)</code>, then getting an x-coordinate from the first with
+ generators, one with <code>new VanDerCorputQRNG(2, index)</code> and the other with
+ <code>new VanDerCorputQRNG(39, index)</code>, then getting an x-coordinate from the first with
  <code>(int)(nextDouble() * width)</code> and similarly for y with the other generator. You might find an advantage in
  using values for index that start higher than 20 or so, but you can pass sequential values for index and
  generally get points that won't be near each other; this is not true for all parameters to Halton sequences, but
@@ -758,15 +737,15 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="halton(int,int,int,int,int)">halton</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.271">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.256">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;xOffset,
 int&nbsp;yOffset,
 int&nbsp;index)</span></div>
 <div class="block">Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive
  and gets the corresponding Coord from the Coord pool. This is roughly equivalent to creating two VanDerCorputQRNG
- generators, one with <code>new VanDerCorputQRNG(2, index, false)</code> and the other with
- <code>new VanDerCorputQRNG(39, index, false)</code>, then getting an x-coordinate from the first with
+ generators, one with <code>new VanDerCorputQRNG(2, index)</code> and the other with
+ <code>new VanDerCorputQRNG(39, index)</code>, then getting an x-coordinate from the first with
  <code>(int)(nextDouble() * width)</code> and similarly for y with the other generator. You might find an advantage in
  using values for index that start higher than 20 or so, but you can pass sequential values for index and
  generally get points that won't be near each other; this is not true for all parameters to Halton sequences, but
@@ -786,15 +765,15 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="halton(int,int,int,int,int[])">halton</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.301">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.286">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;depth,
 int&nbsp;index,
 int[]&nbsp;point)</span></div>
 <div class="block">Convenience method that gets a quasi-random 3D point between integer (0,0,0) inclusive and (width,height,depth)
  exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with
- <code>new VanDerCorputQRNG(2, index, false)</code> another with <code>new VanDerCorputQRNG(3, index, false)</code>,
- and another with <code>new VanDerCorputQRNG(5, index, false)</code>, then getting an x-coordinate from the first with
+ <code>new VanDerCorputQRNG(2, index)</code> another with <code>new VanDerCorputQRNG(3, index)</code>,
+ and another with <code>new VanDerCorputQRNG(5, index)</code>, then getting an x-coordinate from the first with
  <code>(int)(nextDouble() * width)</code> and similarly for y and z with the other generators. The advantage here is
  you don't actually create any objects using this static method, only assigning to point, if valid. You might find
  an advantage in using values for index that start higher than 20 or so, but you can pass sequential values for
@@ -815,14 +794,14 @@ int[]&nbsp;point)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="halton(int,int,int,int)">halton</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord3D.html" title="class in squidpony.squidmath">Coord3D</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.345">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord3D.html" title="class in squidpony.squidmath">Coord3D</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.330">halton</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;depth,
 int&nbsp;index)</span></div>
 <div class="block">Convenience method that gets a quasi-random Coord3D between integer (0,0,0) inclusive and (width,height,depth)
  exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with
- <code>new VanDerCorputQRNG(2, index, false)</code> another with <code>new VanDerCorputQRNG(3, index, false)</code>,
- and another with <code>new VanDerCorputQRNG(5, index, false)</code>, then getting an x-coordinate from the first with
+ <code>new VanDerCorputQRNG(2, index)</code> another with <code>new VanDerCorputQRNG(3, index)</code>,
+ and another with <code>new VanDerCorputQRNG(5, index)</code>, then getting an x-coordinate from the first with
  <code>(int)(nextDouble() * width)</code> and similarly for y and z with the other generators. This overload always
  creates a new Coord3D object, so you might prefer <a href="#halton(int,int,int,int,int%5B%5D)"><code>halton(int, int, int, int, int[])</code></a>, which can reuse an
  int array. You might find an advantage in using values for index that start higher than 20 or so, but you can
@@ -842,7 +821,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determine(int,int)">determine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.390">determine</a></span>&#8203;(<span class="arguments">int&nbsp;base,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.375">determine</a></span>&#8203;(<span class="arguments">int&nbsp;base,
 int&nbsp;index)</span></div>
 <div class="block">Convenience method to get a double from the van der Corput sequence with the given <code>base</code> at the requested
  <code>index</code> without needing to construct a VanDerCorputQRNG. You should use a prime number for base; 2, 3, 5,
@@ -872,7 +851,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determine2(int)">determine2</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.417">determine2</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.402">determine2</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Convenience method to get a double from the van der Corput sequence with the base 2 at the requested
  <code>index</code> without needing to construct a VanDerCorputQRNG. This does not perform any scrambling on index
  other than incrementing it and ensuring it is positive (by discarding the sign bit; for all positive index values
@@ -891,7 +870,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determine2_scrambled(int)">determine2_scrambled</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.434">determine2_scrambled</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.419">determine2_scrambled</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Method to get a double from the van der Corput sequence with the base 2 at a scrambling of the requested
  <code>index</code> without needing to construct a VanDerCorputQRNG. This performs different scrambling on index
  than the instance methods on this class perform, and it seems to do well enough while being a little simpler.
@@ -912,7 +891,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineMixed(int)">determineMixed</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.451">determineMixed</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.436">determineMixed</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Chooses one sequence from the van der Corput sequences with bases 2, 3, and 5, where 5 is used 1/8 of the time,
  3 is used 3/8 of the time, and 2 is used 1/2 of the time, and returns a double from the chosen sequence at the
  specified <code>index</code>. The exact setup used for the choice this makes is potentially fragile, but in certain
@@ -930,7 +909,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="weakDetermine(int)">weakDetermine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.469">weakDetermine</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.454">weakDetermine</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Given any int (0 is allowed), this gets a somewhat-sub-random float from 0.0 (inclusive) to 1.0 (exclusive)
  using the same implementation as <a href="NumberTools.html#randomFloat(long)"><code>NumberTools.randomFloat(long)</code></a> but with index alterations. Only "weak"
  because it lacks the stronger certainty of subsequent numbers being separated that the Van der Corput sequence
@@ -951,7 +930,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="weakSignedDetermine(int)">weakSignedDetermine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.486">weakSignedDetermine</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.471">weakSignedDetermine</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Like <a href="#weakDetermine(int)"><code>weakDetermine(int)</code></a>, but returns a float between -1.0f and 1.0f, exclusive on both. Uses
  <a href="NumberTools.html#randomSignedFloat(long)"><code>NumberTools.randomSignedFloat(long)</code></a> internally but alters the index parameter so calls with nearby values
  for index are less likely to have nearby results.</div>
@@ -966,7 +945,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="altDetermine(long,int)">altDetermine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.509">altDetermine</a></span>&#8203;(<span class="arguments">long&nbsp;base,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.494">altDetermine</a></span>&#8203;(<span class="arguments">long&nbsp;base,
 int&nbsp;index)</span></div>
 <div class="block">Similar to <a href="#determine(int,int)"><code>determine(int, int)</code></a>, but can take bases that aren't prime and can sometimes produce a
  Halton-like sequence with almost-as-good distance between points. The base is allowed to be any odd long, 
@@ -994,7 +973,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="planarDetermine(long,int)">planarDetermine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.539">planarDetermine</a></span>&#8203;(<span class="arguments">long&nbsp;base,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.524">planarDetermine</a></span>&#8203;(<span class="arguments">long&nbsp;base,
 int&nbsp;index)</span></div>
 <div class="block">A quasi-random number generator of doubles between 0.0 inclusive and 1.0 exclusive, but that has issues when it
  would be used like a Halton sequence. Only ideal in 1D, this produces well-separated points that are aligned to
@@ -1030,7 +1009,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="haltoid(int,int,int,int,int,int)">haltoid</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.559">haltoid</a></span>&#8203;(<span class="arguments">int&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.544">haltoid</a></span>&#8203;(<span class="arguments">int&nbsp;seed,
 int&nbsp;width,
 int&nbsp;height,
 int&nbsp;xOffset,
@@ -1061,7 +1040,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="roberts(int,int,int)">roberts</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.579">roberts</a></span>&#8203;(<span class="arguments">int&nbsp;span,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.564">roberts</a></span>&#8203;(<span class="arguments">int&nbsp;span,
 int&nbsp;offset,
 int&nbsp;index)</span></div>
 <div class="block">Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.
@@ -1086,7 +1065,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="roberts(int,int,int,int,int)">roberts</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.598">roberts</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.583">roberts</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;xOffset,
 int&nbsp;yOffset,

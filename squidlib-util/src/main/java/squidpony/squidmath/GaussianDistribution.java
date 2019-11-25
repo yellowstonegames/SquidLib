@@ -35,7 +35,7 @@ package squidpony.squidmath;
 /**
  * An IDistribution that produces double results with a Gaussian (normal) distribution. This means it has no limits in
  * any direction, but is much more likely to produce results close to 0. It uses the Ziggurat method, as published by
- * Marsaglia & Tsang, 2000, in "The Ziggurat Method for Generating Random Variables";
+ * Marsaglia and Tsang, 2000, in "The Ziggurat Method for Generating Random Variables";
  * <a href="http://www.jstatsoft.org/v05/i08/paper">pdf link</a>. The code here is a port from the random number section
  * of Go-Lang's experimental standard library.
  * <br>

@@ -197,7 +197,7 @@
 <span class="sourceLineNo">185</span><a id="line.185">        setCentrality(centrality);</a>
 <span class="sourceLineNo">186</span><a id="line.186">    }</a>
 <span class="sourceLineNo">187</span><a id="line.187">    private double twist(double input) {</a>
-<span class="sourceLineNo">188</span><a id="line.188">        return (input = input * 0.5 + 1.0) - (int)input;</a>
+<span class="sourceLineNo">188</span><a id="line.188">        return (input += 1.0) - (int)input;</a>
 <span class="sourceLineNo">189</span><a id="line.189">    }</a>
 <span class="sourceLineNo">190</span><a id="line.190"></a>
 <span class="sourceLineNo">191</span><a id="line.191">    /**</a>
@@ -208,7 +208,7 @@
 <span class="sourceLineNo">196</span><a id="line.196">    public double nextDouble() {</a>
 <span class="sourceLineNo">197</span><a id="line.197">        return offset + range * ((centralityCalculated &gt; (random.nextLong() &amp; 0xfffffffffffffL) ?</a>
 <span class="sourceLineNo">198</span><a id="line.198">                ((random.nextLong() &amp; 0xfffffffffffffL) - (random.nextLong() &amp; 0xfffffffffffffL)) * 0x1p-53 + 0.5 :</a>
-<span class="sourceLineNo">199</span><a id="line.199">                twist(((random.nextLong() &amp; 0xfffffffffffffL) - (random.nextLong() &amp; 0xfffffffffffffL)) * 0x1p-52)));</a>
+<span class="sourceLineNo">199</span><a id="line.199">                twist(((random.nextLong() &amp; 0xfffffffffffffL) - (random.nextLong() &amp; 0xfffffffffffffL)) * 0x1p-53)));</a>
 <span class="sourceLineNo">200</span><a id="line.200">    }</a>
 <span class="sourceLineNo">201</span><a id="line.201"></a>
 <span class="sourceLineNo">202</span><a id="line.202">    /**</a>

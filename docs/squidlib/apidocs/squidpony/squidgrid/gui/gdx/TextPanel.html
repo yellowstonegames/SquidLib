@@ -119,15 +119,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
  <p>
  A typical usage of this class is as follows:
 
- <pre>
- final TextPanel<Color> tp = new TextPanel<>(new GDXMarkup(), font);
- tp.init(screenWidth, screenHeight, text); <- first 2 params: for fullscreen
+ <pre><code>
+ final TextPanel&lt;Color&gt; tp = new TextPanel&lt;&gt;(new GDXMarkup(), font);
+ tp.init(screenWidth, screenHeight, text); &lt;- first 2 params: for fullscreen
  final ScrollPane sp = tp.getScrollPane();
- sp.setScrollPaneStyle(new ScrollPaneStyle(...)); <- set textures
+ sp.setScrollPaneStyle(new ScrollPaneStyle(...)); &lt;- set textures
  stage.addActor(sp);
  stage.setScrollFocus(sp);
  stage.draw();
- </pre>
+ </code></pre>
  </p>
 
  <p>

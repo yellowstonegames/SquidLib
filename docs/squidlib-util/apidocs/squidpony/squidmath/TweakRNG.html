@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -108,8 +108,8 @@ public class <a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.16">
 extends <a href="AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">Highly experimental RNG that can be configured to smoothly transition between producing mostly values in the center
- of its range, to producing more values at or near the extremes. The probability distribution is... unusual, with
- lumps that rise or fall based on centrality.
+ of its range, to producing more values at or near the extremes, as well as favoring high or low results. The
+ probability distribution is... unusual, with lumps that rise or fall based on centrality.
  <br>
  <a href="https://i.imgur.com/VCvtlSc.gifv">Here's an animation of the distribution graph changing.</a>
  <br>
@@ -151,6 +151,13 @@ long&nbsp;seedB,
 long&nbsp;centrality)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(long,long,long,long)">TweakRNG</a></span>&#8203;(long&nbsp;seedA,
+long&nbsp;seedB,
+long&nbsp;centrality,
+long&nbsp;favor)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -189,15 +196,20 @@ long&nbsp;centrality)</code></th>
 </tr>
 <tr class="altColor" id="i2">
 <td class="colFirst"><code>long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateA()">getStateA</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFavor()">getFavor</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i3">
 <td class="colFirst"><code>long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateB()">getStateB</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateA()">getStateA</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i4">
+<td class="colFirst"><code>long</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStateB()">getStateB</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i5">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next(int)">next</a></span>&#8203;(int&nbsp;bits)</code></th>
 <td class="colLast">
@@ -205,42 +217,42 @@ long&nbsp;centrality)</code></th>
  will not require more than <code>bits</code> bits to represent.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i5">
+<tr class="altColor" id="i6">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nextBoolean()">nextBoolean</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.</div>
 </td>
 </tr>
-<tr class="altColor" id="i6">
+<tr class="rowColor" id="i7">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nextDouble()">nextDouble</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i7">
+<tr class="altColor" id="i8">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nextFloat()">nextFloat</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.</div>
 </td>
 </tr>
-<tr class="altColor" id="i8">
+<tr class="rowColor" id="i9">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nextInt()">nextInt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 </td>
 </tr>
-<tr class="rowColor" id="i9">
+<tr class="altColor" id="i10">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nextLong()">nextLong</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
 </td>
 </tr>
-<tr class="altColor" id="i10">
+<tr class="rowColor" id="i11">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCentrality(long)">setCentrality</a></span>&#8203;(long&nbsp;centrality)</code></th>
 <td class="colLast">
@@ -248,17 +260,25 @@ long&nbsp;centrality)</code></th>
  but also often to negative numbers (which bias toward extreme values, though still within the range).</div>
 </td>
 </tr>
-<tr class="rowColor" id="i11">
+<tr class="altColor" id="i12">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFavor(long)">setFavor</a></span>&#8203;(long&nbsp;favor)</code></th>
+<td class="colLast">
+<div class="block">Adjusts the value bias of this TweakRNG, often to positive numbers (which bias toward higher results), but also
+ often to negative numbers (which bias toward lower results).</div>
+</td>
+</tr>
+<tr class="rowColor" id="i13">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStateA(long)">setStateA</a></span>&#8203;(long&nbsp;stateA)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i12">
+<tr class="altColor" id="i14">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStateB(long)">setStateB</a></span>&#8203;(long&nbsp;stateB)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i13">
+<tr class="rowColor" id="i15">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toSerializable()">toSerializable</a></span>()</code></th>
 <td class="colLast">
@@ -313,6 +333,15 @@ long&nbsp;seedB,
 long&nbsp;centrality)</span></div>
 </section>
 </li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="&lt;init&gt;(long,long,long,long)">TweakRNG</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.43">TweakRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seedA,
+long&nbsp;seedB,
+long&nbsp;centrality,
+long&nbsp;favor)</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -326,7 +355,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="next(int)">next</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.42">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.50">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#next(int)">AbstractRNG</a></code></span></div>
 <div class="block">Get up to 32 bits (inclusive) of random output; the int this produces
  will not require more than <code>bits</code> bits to represent.</div>
@@ -347,7 +376,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextInt()">nextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.47">nextInt</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.55">nextInt</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextInt()">AbstractRNG</a></code></span></div>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 <dl>
@@ -363,7 +392,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong()">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.52">nextLong</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.60">nextLong</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextLong()">AbstractRNG</a></code></span></div>
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
 <dl>
@@ -381,7 +410,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextBoolean()">nextBoolean</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.60">nextBoolean</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.68">nextBoolean</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextBoolean()">AbstractRNG</a></code></span></div>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
  <br>
@@ -404,7 +433,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextDouble()">nextDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.65">nextDouble</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.73">nextDouble</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextDouble()">AbstractRNG</a></code></span></div>
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.
  This returns a maximum of 0.9999999999999999 because that is the largest double value that is less than 1.0 .
@@ -425,7 +454,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextFloat()">nextFloat</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.73">nextFloat</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.81">nextFloat</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#nextFloat()">AbstractRNG</a></code></span></div>
 <div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.
  This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .
@@ -448,7 +477,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.78">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.89">copy</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#copy()">AbstractRNG</a></code></span></div>
 <div class="block">Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
  IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not
@@ -471,7 +500,7 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toSerializable()">toSerializable</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.83">toSerializable</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.94">toSerializable</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="AbstractRNG.html#toSerializable()">AbstractRNG</a></code></span></div>
 <div class="block">Gets a view of this IRNG in a way that implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>Serializable</code></a>, which may simply be this IRNG if it
  implements Serializable as well as IRNG.
@@ -493,42 +522,63 @@ long&nbsp;centrality)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getStateA()">getStateA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.88">getStateA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.99">getStateA</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setStateA(long)">setStateA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.92">setStateA</a></span>&#8203;(<span class="arguments">long&nbsp;stateA)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.103">setStateA</a></span>&#8203;(<span class="arguments">long&nbsp;stateA)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getStateB()">getStateB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.96">getStateB</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.107">getStateB</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setStateB(long)">setStateB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.100">setStateB</a></span>&#8203;(<span class="arguments">long&nbsp;stateB)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.111">setStateB</a></span>&#8203;(<span class="arguments">long&nbsp;stateB)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getCentrality()">getCentrality</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.104">getCentrality</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.115">getCentrality</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setCentrality(long)">setCentrality</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.113">setCentrality</a></span>&#8203;(<span class="arguments">long&nbsp;centrality)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.124">setCentrality</a></span>&#8203;(<span class="arguments">long&nbsp;centrality)</span></div>
 <div class="block">Adjusts the central bias of this TweakRNG, often to positive numbers (which bias toward the center of the range),
  but also often to negative numbers (which bias toward extreme values, though still within the range).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>centrality</code> - should be between -65535 and 65535; positive values bias toward the center of the range</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="getFavor()">getFavor</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.129">getFavor</a></span>()</div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="setFavor(long)">setFavor</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/TweakRNG.html#line.141">setFavor</a></span>&#8203;(<span class="arguments">long&nbsp;favor)</span></div>
+<div class="block">Adjusts the value bias of this TweakRNG, often to positive numbers (which bias toward higher results), but also
+ often to negative numbers (which bias toward lower results). All results will still be in their normal range, but
+ will change how often high or low values occur. Unusual results will occur if favor is non-zero and you get a
+ long with <a href="#nextLong()"><code>nextLong()</code></a>; in that case, the values are treated as higher when unsigned, so positive favor
+ makes both high positive values and all negative values more common. Doubles and floats will behave normally.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>favor</code> - should be between -65535 and 65535; positive values bias toward higher (unsigned for longs) results</dd>
 </dl>
 </section>
 </li>
