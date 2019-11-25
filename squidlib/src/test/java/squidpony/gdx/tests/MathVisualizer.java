@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 13;
+    private int mode = 31;
     private int modes = 47;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -1361,11 +1361,13 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 33: {
-                Gdx.graphics.setTitle("atan2_ random, triangular points at " + Gdx.graphics.getFramesPerSecond());
+                Gdx.graphics.setTitle("atan2_ random, first quadrant points at " + Gdx.graphics.getFramesPerSecond());
+//                Gdx.graphics.setTitle("atan2_ random, triangular points at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = DiverRNG.randomize(i);
-                    amounts[(int) (NumberTools.atan2_((r & 0xFFFF) - (r >>> 16 & 0xFFFF),
-                            (r >>> 32 & 0xFFFF) - (r >>> 48 & 0xFFFF)) * 512f)]++;
+                    amounts[(int) (NumberTools.atan2_(diver.nextFloat() * 0.5f, diver.nextFloat() * 0.5f) * 2047.99f)]++;
+//                    long r = DiverRNG.randomize(i);
+//                    amounts[(int) (NumberTools.atan2_((r & 0xFFFF) - (r >>> 16 & 0xFFFF),
+//                            (r >>> 32 & 0xFFFF) - (r >>> 48 & 0xFFFF)) * 512f)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -1474,7 +1476,7 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    amounts[(int) (NumberTools.atan2_((a),
 //                            (b)) * 384.0 + (DiverRNG.determine(r) & 127)+ 0.5)]++;
                     amounts[(int) (NumberTools.atan2_((a),
-                            (b)) * 385.0
+                            (b)) * 384.0
                             +
                             (d
                                     //        (d & 63) + (d >>> 6 & 63) +
