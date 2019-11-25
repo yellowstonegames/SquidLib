@@ -41,7 +41,7 @@ import java.util.Collections;
  * <p>
  * A typical usage of this class is as follows:
  *
- * <pre>
+ * <pre>{@code
  * final TextPanel<Color> tp = new TextPanel<>(new GDXMarkup(), font);
  * tp.init(screenWidth, screenHeight, text); <- first 2 params: for fullscreen
  * final ScrollPane sp = tp.getScrollPane();
@@ -49,7 +49,7 @@ import java.util.Collections;
  * stage.addActor(sp);
  * stage.setScrollFocus(sp);
  * stage.draw();
- * </pre>
+ * }</pre>
  * </p>
  *
  * <p>
