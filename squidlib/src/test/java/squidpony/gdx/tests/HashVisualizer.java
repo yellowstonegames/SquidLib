@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 134;
-    private int hashMode = 0, rngMode = 0, noiseMode = 130, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 133, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
