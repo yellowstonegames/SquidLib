@@ -2900,7 +2900,7 @@ public class FakeLanguageGen implements Serializable {
                         "r", "r", "r",
                 },
                 new String[]{},
-                new String[]{}, new int[]{1, 2, 3}, new double[]{14, 3, 1}, 0.175, 0.35, 0.0, 0.0, genericSanityChecks, true);
+                new String[]{}, new int[]{1, 2, 3}, new double[]{14, 3, 1}, 0.175, 0.55, 0.0, 0.0, genericSanityChecks, true);
     }
 
     /**
@@ -2908,7 +2908,7 @@ public class FakeLanguageGen implements Serializable {
      * since the 1980s. This makes some slight changes so the vulgarity filters this uses can understand how some
      * letters sound; Pinyin's letter c becomes ts, and this replaces the u with umlaut, ü, in all cases with yu.
      * <br>
-     * Sheng jong zhīn chǒangòanèchǐ dáǒ atukiúng, xō nílān mung!
+     * Tuàn tiāzhǎn dér, ǔngínbǔng xōr shàū kán nu tsīn.
      */
     public static final FakeLanguageGen CHINESE_ROMANIZED = chinese().register("Chinese Romanized");
 
