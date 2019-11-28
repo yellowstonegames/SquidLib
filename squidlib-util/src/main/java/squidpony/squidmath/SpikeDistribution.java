@@ -38,4 +38,23 @@ public class SpikeDistribution implements IDistribution {
     public double getUpperBound() {
         return 1.0;
     }
+
+    /**
+     * A variant on SpikeDistribution that has its range shrunk and moved from {@code [-1,1)} to {@code [0,1)}. It is a
+     * {@link squidpony.squidmath.IDistribution.SimpleDistribution}, and the spike is centered on 0.5.
+     */
+    public static class SimpleSpikeDistribution extends SimpleDistribution implements IDistribution
+    {
+        /**
+         * Gets a double between {@link #getLowerBound()} and {@link #getUpperBound()} that obeys this distribution.
+         *
+         * @param rng an IRNG, such as {@link RNG} or {@link GWTRNG}, that this will get one or more random numbers from
+         * @return a double within the range of {@link #getLowerBound()} and {@link #getUpperBound()}
+         */
+        @Override
+        public double nextDouble(IRNG rng) {
+            final double d = (rng.nextDouble() - 0.5) * 2.0;
+            return d * d * d * 0.5 + 0.5;
+        }
+    }
 }
