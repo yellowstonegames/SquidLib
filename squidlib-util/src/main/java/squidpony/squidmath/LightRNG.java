@@ -31,15 +31,6 @@ import java.io.Serializable;
  */
 public final class LightRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable
 {
-	/** 2 raised to the 53, - 1. */
-    private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
-    /** 2 raised to the -53. */
-    private static final double NORM_53 = 1. / ( 1L << 53 );
-    /** 2 raised to the 24, -1. */
-    private static final long FLOAT_MASK = ( 1L << 24 ) - 1;
-    /** 2 raised to the -24. */
-    private static final float NORM_24 = 1f / (1 << 24);
-
 	private static final long serialVersionUID = -374415589203474497L;
 
     public long state; /* The state can be seeded with any value. */
