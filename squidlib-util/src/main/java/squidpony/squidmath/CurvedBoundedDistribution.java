@@ -39,6 +39,6 @@ public class CurvedBoundedDistribution extends IDistribution.SimpleDistribution 
         for (int i = 0; i < degree; i++) {
             sum += rng.nextDouble();
         }
-        return sum  * i_degree;
+        return sum * i_degree;
     }
 }
