@@ -6,7 +6,7 @@ package squidpony.squidmath;
  * <br>
  * Created by Tommy Ettinger on 11/23/2019.
  */
-public class BathtubDistribution implements IDistribution {
+public class BathtubDistribution extends IDistribution.SimpleDistribution implements IDistribution {
     public static final BathtubDistribution instance = new BathtubDistribution();
     /**
      * Gets a double between {@link #getLowerBound()} and {@link #getUpperBound()} that obeys this distribution.
@@ -19,24 +19,5 @@ public class BathtubDistribution implements IDistribution {
         double d = (rng.nextDouble() - 0.5) * 2.0;
         d = d * d * d + 1.0;
         return d - (int)d;
-    }
-
-    /**
-     * Gets the lower bound of the distribution, which is 0, inclusive.
-     * @return the lower bound of the distribution
-     */
-    @Override
-    public double getLowerBound() {
-        return 0.0;
-    }
-
-    /**
-     * Gets the upper bound of the distribution, which is 1, exclusive.
-     *
-     * @return the upper bound of the distribution
-     */
-    @Override
-    public double getUpperBound() {
-        return 1.0;
     }
 }
