@@ -29,4 +29,38 @@ public interface IDistribution {
      * @return the upper bound of the distribution
      */
     double getUpperBound();
+    
+    abstract class SimpleDistribution implements IDistribution {
+        
+        public static SimpleDistribution fractionalDistribution(final IDistribution otherDistribution)
+        {
+            return new SimpleDistribution() {
+                @Override
+                public double nextDouble(IRNG rng) {
+                    final double v = otherDistribution.nextDouble(rng);
+                    return v - (v >= 0.0 ? (int) v : (int)v - 1);
+                }
+            };
+        }
+        
+        /**
+         * Gets the lower inclusive bound, which is 0.0.
+         *
+         * @return the lower inclusive bound of the distribution, 0.0
+         */
+        @Override
+        public double getLowerBound() {
+            return 0.0;
+        }
+
+        /**
+         * Gets the upper exclusive bound of the distribution, which is 1.0.
+         *
+         * @return the upper exclusive bound of the distribution, 1.0
+         */
+        @Override
+        public double getUpperBound() {
+            return 1.0;
+        }
+    }
 }

@@ -8,7 +8,7 @@ package squidpony.squidmath;
  * <br>
  * Created by Tommy Ettinger on 11/27/2019.
  */
-public class CurvedBoundedDistribution implements IDistribution {
+public class CurvedBoundedDistribution extends IDistribution.SimpleDistribution implements IDistribution {
     public static final CurvedBoundedDistribution instance = new CurvedBoundedDistribution(3);
     public static final CurvedBoundedDistribution instanceTriangular = new CurvedBoundedDistribution(2);
     public static final CurvedBoundedDistribution instanceGaussianLike = new CurvedBoundedDistribution(6);
@@ -40,22 +40,5 @@ public class CurvedBoundedDistribution implements IDistribution {
             sum += rng.nextDouble();
         }
         return sum  * i_degree;
-    }
-    /**
-     * The lower inclusive bound is 0.0.
-     * @return zero.
-     */
-    @Override
-    public double getLowerBound() {
-        return 0.0;
-    }
-
-    /**
-     * The upper exclusive bound is 1.0.
-     * @return 1.0.
-     */
-    @Override
-    public double getUpperBound() {
-        return 1.0;
     }
 }
