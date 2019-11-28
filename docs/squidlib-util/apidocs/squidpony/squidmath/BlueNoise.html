@@ -305,7 +305,7 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="RAW_NOISE">RAW_NOISE</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">byte[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.124">RAW_NOISE</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">byte[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.210">RAW_NOISE</a></span></div>
 <div class="block">The raw data this class uses, as a 1D byte array. You probably don't want to use this field, but you might, so it
  is public... but don't write to it. It's static, which is probably OK even on Android as long as no one changes
  it, and uses <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/nio/charset/StandardCharsets.html?is-external=true" title="class or interface in java.nio.charset" class="externalLink"><code>StandardCharsets</code></a> to decode itself from a String, which only works on GWT 2.8.2 and newer.
@@ -315,7 +315,7 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="RAW_2D">RAW_2D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">byte[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.130">RAW_2D</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">byte[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.216">RAW_2D</a></span></div>
 <div class="block">Stores the same values as <a href="#RAW_NOISE"><code>RAW_NOISE</code></a> if considered [x][y] indexed; available for convenient usage by
  GreasedRegion and other classes that can use 2D byte arrays.</div>
 </section>
@@ -323,7 +323,7 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="LEVELS">LEVELS</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.137">LEVELS</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.223">LEVELS</a></span></div>
 <div class="block">A 256-element array of <a href="GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a>s, each 64x64, where the first GreasedRegion has an impossibly strict
  threshold on what points to include (it is empty), but the second has some points far apart, the third has more,
  and so on until the last element includes almost all points.</div>
@@ -342,7 +342,7 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="get(int,int)">get</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.159">get</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.245">get</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Gets a byte from the raw data this stores, treating it as an infinite 2D plane of tiling 64x64 regions. You can
  interpret the blue noise in many ways, but it is meant to be used with a threshold to select mostly widely-spaced
@@ -360,7 +360,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="get(int,int,byte[])">get</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.172">get</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.258">get</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 byte[]&nbsp;noiseData)</span></div>
 <div class="block">Gets a byte from some raw data at least 4096 bytes in length, treating it as an infinite 2D plane
@@ -378,7 +378,7 @@ byte[]&nbsp;noiseData)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSeededScratchy(int,int,int)">getSeededScratchy</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.186">getSeededScratchy</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.272">getSeededScratchy</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;seed)</span></div>
 <div class="block">Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
@@ -397,7 +397,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSeededScratchy(int,int,int,byte[])">getSeededScratchy</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.205">getSeededScratchy</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.291">getSeededScratchy</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;seed,
 byte[]&nbsp;noiseData)</span></div>
@@ -419,7 +419,7 @@ byte[]&nbsp;noiseData)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSeededSeamless(int,int,int)">getSeededSeamless</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.232">getSeededSeamless</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.318">getSeededSeamless</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;seed)</span></div>
 <div class="block">Gets a byte from one of 16 blue noise textures, choosing which one based on the given x,y position in a way that
@@ -448,7 +448,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="blueSpill(int,int,int,squidpony.squidmath.IRNG)">blueSpill</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.265">blueSpill</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.351">blueSpill</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;spillerLimit,
 <a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
@@ -470,7 +470,7 @@ int&nbsp;spillerLimit,
 <li class="blockList">
 <section class="detail">
 <h3><a id="blueSpill(int[][],int,squidpony.squidmath.IRNG)">blueSpill</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.278">blueSpill</a></span>&#8203;(<span class="arguments">int[][]&nbsp;toFill,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.364">blueSpill</a></span>&#8203;(<span class="arguments">int[][]&nbsp;toFill,
 int&nbsp;spillerLimit,
 <a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Modifies <code>toFill</code> in-place by filling it with the (seeded variant) blue noise of this class, finding any

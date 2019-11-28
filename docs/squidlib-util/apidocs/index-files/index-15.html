@@ -356,6 +356,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Get up to 32 bits (inclusive) of random output; the int this produces
+ will not require more than <code>bits</code> bits to represent.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/EditRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/EditRNG.html" title="class in squidpony.squidmath">EditRNG</a></dt>
@@ -480,6 +485,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#nextBoolean()">nextBoolean()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextBoolean()">nextBoolean()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#nextBoolean()">nextBoolean()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>
 <div class="block">Gets a random value, true or false.</div>
@@ -628,6 +637,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Generate a random double, altering the result if recently generated results have been leaning
  away from this class' fairness value.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextDouble()">nextDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#nextDouble()">nextDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>
 <div class="block">Gets a uniform random double in the range [0.0,1.0)</div>
@@ -753,8 +766,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/BathtubDistribution.html#nextDouble(squidpony.squidmath.IRNG)">nextDouble(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BathtubDistribution.html" title="class in squidpony.squidmath">BathtubDistribution</a></dt>
 <dd>
-<div class="block">Gets a double between <a href="../squidpony/squidmath/BathtubDistribution.html#getLowerBound()"><code>BathtubDistribution.getLowerBound()</code></a> and <a href="../squidpony/squidmath/BathtubDistribution.html#getUpperBound()"><code>BathtubDistribution.getUpperBound()</code></a> that obeys this distribution.</div>
+<div class="block">Gets a double between <a href="../squidpony/squidmath/IDistribution.SimpleDistribution.html#getLowerBound()"><code>IDistribution.SimpleDistribution.getLowerBound()</code></a> and <a href="../squidpony/squidmath/IDistribution.SimpleDistribution.html#getUpperBound()"><code>IDistribution.SimpleDistribution.getUpperBound()</code></a> that obeys this distribution.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CurvedBoundedDistribution.html#nextDouble(squidpony.squidmath.IRNG)">nextDouble(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CurvedBoundedDistribution.html" title="class in squidpony.squidmath">CurvedBoundedDistribution</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ExponentialDistribution.html#nextDouble(squidpony.squidmath.IRNG)">nextDouble(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ExponentialDistribution.html" title="class in squidpony.squidmath">ExponentialDistribution</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GaussianDistribution.html#nextDouble(squidpony.squidmath.IRNG)">nextDouble(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GaussianDistribution.html" title="class in squidpony.squidmath">GaussianDistribution</a></dt>
@@ -766,6 +781,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SpikeDistribution.html#nextDouble(squidpony.squidmath.IRNG)">nextDouble(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SpikeDistribution.html" title="class in squidpony.squidmath">SpikeDistribution</a></dt>
 <dd>
 <div class="block">Gets a double between <a href="../squidpony/squidmath/SpikeDistribution.html#getLowerBound()"><code>SpikeDistribution.getLowerBound()</code></a> and <a href="../squidpony/squidmath/SpikeDistribution.html#getUpperBound()"><code>SpikeDistribution.getUpperBound()</code></a> that obeys this distribution.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SpikeDistribution.SimpleSpikeDistribution.html#nextDouble(squidpony.squidmath.IRNG)">nextDouble(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SpikeDistribution.SimpleSpikeDistribution.html" title="class in squidpony.squidmath">SpikeDistribution.SimpleSpikeDistribution</a></dt>
+<dd>
+<div class="block">Gets a double between <a href="../squidpony/squidmath/IDistribution.SimpleDistribution.html#getLowerBound()"><code>IDistribution.SimpleDistribution.getLowerBound()</code></a> and <a href="../squidpony/squidmath/IDistribution.SimpleDistribution.html#getUpperBound()"><code>IDistribution.SimpleDistribution.getUpperBound()</code></a> that obeys this distribution.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#nextDoubleInclusive()">nextDoubleInclusive()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
@@ -785,6 +804,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#nextFloat()">nextFloat()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextFloat()">nextFloat()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#nextFloat()">nextFloat()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>
 <div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
@@ -887,6 +910,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#nextInt()">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>
 <div class="block">Returns a random integer, which may be any positive or negative value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextInt()">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#nextInt()">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>
@@ -1005,6 +1032,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#nextInt(int)">nextInt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>
 <div class="block">Returns a random integer below the given bound, or 0 if the bound is 0 or
+ negative.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextInt(int)">nextInt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
  negative.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#nextInt(int)">nextInt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
@@ -1162,6 +1194,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Returns a random long, which may be any positive or negative value.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextLong()">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#nextLong()">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>
 <div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</div>
@@ -1308,6 +1344,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns a random long below the given bound, or 0 if the bound is 0 or
  negative.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextLong(long)">nextLong(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Exclusive on bound (which must be positive), with an inner bound of 0.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#nextLong(long)">nextLong(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>
 <div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
@@ -1429,6 +1469,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextSignedInt(int)">nextSignedInt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
+<dd>
+<div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
+ or 0 if the bound is 0.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IRNG.html#nextSignedInt(int)">nextSignedInt(int)</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
 <dd>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
@@ -1440,6 +1485,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  or 0 if the bound is 0.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/AbstractRNG.html#nextSignedLong(long)">nextSignedLong(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
+<dd>
+<div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DistributedRNG.html#nextSignedLong(long)">nextSignedLong(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DistributedRNG.html" title="class in squidpony.squidmath">DistributedRNG</a></dt>
 <dd>
 <div class="block">Exclusive on bound (which may be positive or negative), with an inner bound of 0.</div>
 </dd>

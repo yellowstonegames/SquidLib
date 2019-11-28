@@ -438,7 +438,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="state">state</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.45">state</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.36">state</a></span></div>
 </section>
 </li>
 </ul>
@@ -454,14 +454,14 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">LightRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.48">LightRNG</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.39">LightRNG</a></span>()</div>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">LightRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.53">LightRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.44">LightRNG</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 </section>
 </li>
 </ul>
@@ -477,7 +477,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="next(int)">next</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.68">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.59">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
 <div class="block">Gets a pseudo-random int with at most the specified count of bits; for example, if bits is 3 this can return any
  int between 0 and 2 to the 3 (that is, 8), exclusive on the upper end. That would mean 7 could be returned, but
  no higher ints, and 0 could be returned, but no lower ints.
@@ -498,7 +498,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="compatibleNext(int)">compatibleNext</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.87">compatibleNext</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.78">compatibleNext</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
 <div class="block">Gets a pseudo-random int with at most the specified count of bits; for example, if bits is 3 this can return any
  int between 0 and 2 to the 3 (that is, 8), exclusive on the upper end. That would mean 7 could be returned, but
  no higher ints, and 0 could be returned, but no lower ints.
@@ -518,7 +518,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong()">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.97">nextLong</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.88">nextLong</a></span>()</div>
 <div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -531,7 +531,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.112">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.103">copy</a></span>()</div>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -548,7 +548,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextInt()">nextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.121">nextInt</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.112">nextInt</a></span>()</div>
 <div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -559,7 +559,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextInt(int)">nextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.141">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.132">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
  Uses an aggressively optimized technique that has some bias, but mostly for values of
@@ -579,7 +579,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="compatibleNextInt(int)">compatibleNextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.154">compatibleNextInt</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.145">compatibleNextInt</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
 <div class="block">Like <a href="#compatibleNext(int)"><code>compatibleNext(int)</code></a>, but for compatibility with <a href="#nextInt(int)"><code>nextInt(int)</code></a>.
  Exclusive on the upper bound.  The lower bound is 0.</div>
 <dl>
@@ -593,7 +593,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextInt(int,int)">nextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.170">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;lower,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.161">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;lower,
 int&nbsp;upper)</span></div>
 <div class="block">Inclusive lower, exclusive upper. Although you should usually use a higher value for upper than for lower, you
  can use a lower "upper" than "lower" and this will still work, producing an int between the two bounds.</div>
@@ -609,7 +609,7 @@ int&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="compatibleNextInt(int,int)">compatibleNextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.180">compatibleNextInt</a></span>&#8203;(<span class="arguments">int&nbsp;lower,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.171">compatibleNextInt</a></span>&#8203;(<span class="arguments">int&nbsp;lower,
 int&nbsp;upper)</span></div>
 <div class="block">Inclusive lower, exclusive upper.</div>
 <dl>
@@ -624,7 +624,7 @@ int&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong(long)">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.191">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;bound)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.182">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;bound)</span></div>
 <div class="block">Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
  result.</div>
 <dl>
@@ -638,7 +638,7 @@ int&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong(long,long)">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.210">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;inner,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.201">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;inner,
 long&nbsp;outer)</span></div>
 <div class="block">Inclusive inner, exclusive outer; both inner and outer can be positive or negative.</div>
 <dl>
@@ -653,7 +653,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="compatibleNextLong(long)">compatibleNextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.226">compatibleNextLong</a></span>&#8203;(<span class="arguments">long&nbsp;bound)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.217">compatibleNextLong</a></span>&#8203;(<span class="arguments">long&nbsp;bound)</span></div>
 <div class="block">Exclusive on the upper bound. The lower bound is 0. Unlike <a href="#nextInt(int)"><code>nextInt(int)</code></a> or <a href="#nextLong(long)"><code>nextLong(long)</code></a>, this
  may sometimes advance the state more than once, depending on what numbers are produced internally and the bound.
  <a href="#nextLong(long)"><code>nextLong(long)</code></a> is preferred because it is much faster and reliably advances the state only once. Because
@@ -672,7 +672,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="compatibleNextLong(long,long)">compatibleNextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.242">compatibleNextLong</a></span>&#8203;(<span class="arguments">long&nbsp;lower,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.233">compatibleNextLong</a></span>&#8203;(<span class="arguments">long&nbsp;lower,
 long&nbsp;upper)</span></div>
 <div class="block">Inclusive lower, exclusive upper.</div>
 <dl>
@@ -687,7 +687,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextDouble()">nextDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.250">nextDouble</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.241">nextDouble</a></span>()</div>
 <div class="block">Gets a uniform random double in the range [0.0,1.0)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -698,7 +698,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextDouble(double)">nextDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.263">nextDouble</a></span>&#8203;(<span class="arguments">double&nbsp;outer)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.254">nextDouble</a></span>&#8203;(<span class="arguments">double&nbsp;outer)</span></div>
 <div class="block">Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer
  is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.</div>
 <dl>
@@ -712,7 +712,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextFloat()">nextFloat</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.271">nextFloat</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.262">nextFloat</a></span>()</div>
 <div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -723,7 +723,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextBoolean()">nextBoolean</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.284">nextBoolean</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.275">nextBoolean</a></span>()</div>
 <div class="block">Gets a random value, true or false.
  Calls nextLong() once.</div>
 <dl>
@@ -735,7 +735,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextBytes(byte[])">nextBytes</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.293">nextBytes</a></span>&#8203;(<span class="arguments">byte[]&nbsp;bytes)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.284">nextBytes</a></span>&#8203;(<span class="arguments">byte[]&nbsp;bytes)</span></div>
 <div class="block">Given a byte array as a parameter, this will fill the array with random bytes (modifying it
  in-place). Calls nextLong() <code>Math.ceil(bytes.length / 8.0)</code> times.</div>
 <dl>
@@ -747,7 +747,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setSeed(long)">setSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.307">setSeed</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.298">setSeed</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Sets the seed of this generator (which is also the current state).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -758,7 +758,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setState(long)">setState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.314">setState</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.305">setState</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Sets the seed (also the current state) of this generator.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -771,7 +771,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getState()">getState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.322">getState</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.313">getState</a></span>()</div>
 <div class="block">Gets the current state of this generator.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -784,7 +784,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="skip(long)">skip</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.335">skip</a></span>&#8203;(<span class="arguments">long&nbsp;advance)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.326">skip</a></span>&#8203;(<span class="arguments">long&nbsp;advance)</span></div>
 <div class="block">Advances or rolls back the LightRNG's state without actually generating each number. Skips forward
  or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
  and returns the random number produced at that step (you can get the state with <a href="#getState()"><code>getState()</code></a>).</div>
@@ -801,7 +801,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.344">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.335">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -811,7 +811,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.349">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.340">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -821,7 +821,7 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.359">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.350">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -831,27 +831,27 @@ long&nbsp;upper)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determine(long)">determine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.364">determine</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.355">determine</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determine(int,int)">determine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.368">determine</a></span>&#8203;(<span class="arguments">int&nbsp;a,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.359">determine</a></span>&#8203;(<span class="arguments">int&nbsp;a,
 int&nbsp;b)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineBounded(long,int)">determineBounded</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.376">determineBounded</a></span>&#8203;(<span class="arguments">long&nbsp;state,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.367">determineBounded</a></span>&#8203;(<span class="arguments">long&nbsp;state,
 int&nbsp;bound)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineFloat(long)">determineFloat</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.393">determineFloat</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.384">determineFloat</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float. This is expected to be called with a changing variable, e.g. <code>determine(++state)</code>,
  where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
@@ -871,7 +871,7 @@ int&nbsp;bound)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineDouble(long)">determineDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.407">determineDouble</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LightRNG.html#line.398">determineDouble</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
  will return the same float. This is expected to be called with a changing variable, e.g.
  <code>determine(++state)</code>, where the increment for state should be odd but otherwise doesn't really matter. This

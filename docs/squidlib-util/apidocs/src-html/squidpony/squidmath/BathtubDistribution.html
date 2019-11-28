@@ -18,7 +18,7 @@
 <span class="sourceLineNo">006</span><a id="line.6"> * &lt;br&gt;</a>
 <span class="sourceLineNo">007</span><a id="line.7"> * Created by Tommy Ettinger on 11/23/2019.</a>
 <span class="sourceLineNo">008</span><a id="line.8"> */</a>
-<span class="sourceLineNo">009</span><a id="line.9">public class BathtubDistribution implements IDistribution {</a>
+<span class="sourceLineNo">009</span><a id="line.9">public class BathtubDistribution extends IDistribution.SimpleDistribution implements IDistribution {</a>
 <span class="sourceLineNo">010</span><a id="line.10">    public static final BathtubDistribution instance = new BathtubDistribution();</a>
 <span class="sourceLineNo">011</span><a id="line.11">    /**</a>
 <span class="sourceLineNo">012</span><a id="line.12">     * Gets a double between {@link #getLowerBound()} and {@link #getUpperBound()} that obeys this distribution.</a>
@@ -32,26 +32,7 @@
 <span class="sourceLineNo">020</span><a id="line.20">        d = d * d * d + 1.0;</a>
 <span class="sourceLineNo">021</span><a id="line.21">        return d - (int)d;</a>
 <span class="sourceLineNo">022</span><a id="line.22">    }</a>
-<span class="sourceLineNo">023</span><a id="line.23"></a>
-<span class="sourceLineNo">024</span><a id="line.24">    /**</a>
-<span class="sourceLineNo">025</span><a id="line.25">     * Gets the lower bound of the distribution, which is 0, inclusive.</a>
-<span class="sourceLineNo">026</span><a id="line.26">     * @return the lower bound of the distribution</a>
-<span class="sourceLineNo">027</span><a id="line.27">     */</a>
-<span class="sourceLineNo">028</span><a id="line.28">    @Override</a>
-<span class="sourceLineNo">029</span><a id="line.29">    public double getLowerBound() {</a>
-<span class="sourceLineNo">030</span><a id="line.30">        return 0.0;</a>
-<span class="sourceLineNo">031</span><a id="line.31">    }</a>
-<span class="sourceLineNo">032</span><a id="line.32"></a>
-<span class="sourceLineNo">033</span><a id="line.33">    /**</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * Gets the upper bound of the distribution, which is 1, exclusive.</a>
-<span class="sourceLineNo">035</span><a id="line.35">     *</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * @return the upper bound of the distribution</a>
-<span class="sourceLineNo">037</span><a id="line.37">     */</a>
-<span class="sourceLineNo">038</span><a id="line.38">    @Override</a>
-<span class="sourceLineNo">039</span><a id="line.39">    public double getUpperBound() {</a>
-<span class="sourceLineNo">040</span><a id="line.40">        return 1.0;</a>
-<span class="sourceLineNo">041</span><a id="line.41">    }</a>
-<span class="sourceLineNo">042</span><a id="line.42">}</a>
+<span class="sourceLineNo">023</span><a id="line.23">}</a>
 
 
 
