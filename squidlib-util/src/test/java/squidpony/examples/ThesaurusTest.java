@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
+import squidpony.StringKit;
 import squidpony.Thesaurus;
 
 /**
@@ -8,7 +9,7 @@ import squidpony.Thesaurus;
  */
 public class ThesaurusTest {
     public static void main(String[] args) {
-        Thesaurus thesaurus = new Thesaurus("SquidLib!"), thesaurus2  = new Thesaurus("SquidLib!");
+        Thesaurus thesaurus = new Thesaurus("SquidLib!"), thesaurus2  = new Thesaurus("SQUID! LIB!");
 //        thesaurus.addSynonyms(makeList("devil", "fiend", "demon", "horror", "abomination", "terror", "hellspawn"));
 //        thesaurus.addSynonyms(makeList("despoiler", "defiler", "blighter", "poisoner"));
 //        thesaurus2.addKnownCategories().addFakeWords();
@@ -68,11 +69,14 @@ public class ThesaurusTest {
             text.append(thesaurus2.lookup("leaf`noun`")).append(" of ").append(thesaurus2.makePlantName(lang)).append(", ");
         }
         text.append("and ").append(thesaurus2.lookup("leaf`noun`")).append(" of ").append(thesaurus2.makePlantName(lang)).append(". Bring me this before the winter equinox and you shall have your potion.");
-        System.out.println(text);
-//        for(String s : StringKit.wrap(text, 80))
-//        {
-//            System.out.println(s);
-//        }
+        text.append("\n...Oh, and could you also pick me up a ").append(thesaurus2.makeFruitName(lang)).append(", maybe a ").append(thesaurus2.makeFruitName(lang))
+                .append(", uh, a ").append(thesaurus2.makeNutName(lang)).append(", a ").append(thesaurus2.makeNutName(lang))
+                .append(", a ").append(thesaurus2.makeFlowerName(lang)).append(", and maybe a ").append(thesaurus2.makeFlowerName(lang)).append(", if it's not too much trouble.");
+//        System.out.println(text);
+        for(String s : StringKit.wrap(text, 80))
+        {
+            System.out.println(s);
+        }
 //        for (int i = 0; i < 10; i++) {
 //            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );
 //            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );

@@ -23,7 +23,7 @@ public class Thesaurus implements Serializable{
     public OrderedMap<CharSequence, GapShuffler<String>> mappings;
     public ArrayList<FakeLanguageGen.Alteration> alterations = new ArrayList<>(4);
     public SilkRNG rng;
-    public GapShuffler<String> plantTermShuffler;
+    public GapShuffler<String> plantTermShuffler, fruitTermShuffler, nutTermShuffler, flowerTermShuffler;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
     public transient String latestGenerated = "Nationia";
     /**
@@ -90,6 +90,9 @@ public class Thesaurus implements Serializable{
             mappings.getAt(i).setRNG(rng, true);
         }
         plantTermShuffler.setRNG(rng, true);
+        fruitTermShuffler.setRNG(rng, true);
+        nutTermShuffler.setRNG(rng, true);
+        flowerTermShuffler.setRNG(rng, true);
     }
     
     /**
@@ -226,6 +229,9 @@ public class Thesaurus implements Serializable{
             addCategory(kv.getKey(), kv.getValue());
         }
         plantTermShuffler = new GapShuffler<>(plantTerms, rng, true);
+        fruitTermShuffler = new GapShuffler<>(fruitTerms, rng, true);
+        nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
+        flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
         return this;
     }
 
@@ -661,6 +667,204 @@ public class Thesaurus implements Serializable{
     }
 
     /**
+     * Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date".
+     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
+     * to String if needed. Shortly after calling this method, but before
+     * calling it again, you can retrieve the generated random languages, if any were used while making names, by
+     * getting the FakeLanguageGen elements of this class' {@link #randomLanguages} field. Using one of these
+     * FakeLanguageGen objects, you can produce many more words with a similar style to the person or place name, like
+     * "Drayo" in "The Last Drayo Commonwealth". Calling this method replaces the current contents of
+     * randomLanguages, so if you want to use those languages, get them while you can.
+     *
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makeFruitName()
+    {
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(fruitTermShuffler == null)
+        {
+            fruitTermShuffler = new GapShuffler<>(fruitTerms, rng, true);
+        }
+        String working = process(fruitTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(fruitTermShuffler.next());
+        randomLanguages.clear();
+        RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+    /**
+     * Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date",
+     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
+     * calling {@link FakeLanguageGen#removeAccents()} on the FakeLanguageGen you would give this.
+     *
+     * @param language a FakeLanguageGen that will be used to construct any non-English names
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makeFruitName(FakeLanguageGen language)
+    {
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(fruitTermShuffler == null)
+        {
+            fruitTermShuffler = new GapShuffler<>(fruitTerms, rng, true);
+        }
+        String working = process(fruitTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(fruitTermShuffler.next());
+        randomLanguages.clear();
+        KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+
+    /**
+     * Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew".
+     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
+     * to String if needed. Shortly after calling this method, but before
+     * calling it again, you can retrieve the generated random languages, if any were used while making names, by
+     * getting the FakeLanguageGen elements of this class' {@link #randomLanguages} field. Using one of these
+     * FakeLanguageGen objects, you can produce many more words with a similar style to the person or place name, like
+     * "Drayo" in "The Last Drayo Commonwealth". Calling this method replaces the current contents of
+     * randomLanguages, so if you want to use those languages, get them while you can.
+     *
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makeNutName()
+    {
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(nutTermShuffler == null)
+        {
+            nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
+        }
+        String working = process(nutTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(nutTermShuffler.next());
+        randomLanguages.clear();
+        RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+    /**
+     * Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew",
+     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
+     * calling {@link FakeLanguageGen#removeAccents()} on the FakeLanguageGen you would give this.
+     *
+     * @param language a FakeLanguageGen that will be used to construct any non-English names
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makeNutName(FakeLanguageGen language)
+    {
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(nutTermShuffler == null)
+        {
+            nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
+        }
+        String working = process(nutTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(nutTermShuffler.next());
+        randomLanguages.clear();
+        KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+
+    /**
+     * Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac".
+     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
+     * to String if needed. Shortly after calling this method, but before
+     * calling it again, you can retrieve the generated random languages, if any were used while making names, by
+     * getting the FakeLanguageGen elements of this class' {@link #randomLanguages} field. Using one of these
+     * FakeLanguageGen objects, you can produce many more words with a similar style to the person or place name, like
+     * "Drayo" in "The Last Drayo Commonwealth". Calling this method replaces the current contents of
+     * randomLanguages, so if you want to use those languages, get them while you can.
+     *
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makeFlowerName()
+    {
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(flowerTermShuffler == null)
+        {
+            flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
+        }
+        String working = process(flowerTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(flowerTermShuffler.next());
+        randomLanguages.clear();
+        RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+    /**
+     * Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac",
+     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
+     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
+     * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
+     * calling {@link FakeLanguageGen#removeAccents()} on the FakeLanguageGen you would give this.
+     *
+     * @param language a FakeLanguageGen that will be used to construct any non-English names
+     * @return a random name for a plant, shrub, or tree, as a String
+     */
+    public String makeFlowerName(FakeLanguageGen language)
+    {
+        if(categories.isEmpty())
+        {
+            addKnownCategories();
+        }
+        if(flowerTermShuffler == null)
+        {
+            flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
+        }
+        String working = process(flowerTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(flowerTermShuffler.next());
+        randomLanguages.clear();
+        KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
+        Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
+        return replacer.replace(working).replace("\t", "");
+    }
+
+    /**
      * Gets an English word for a given number, if this knows it. These words are known from 0 ("zero") to 20
      * ("twenty"), as well as some higher numbers. If a word isn't known for a number, this returns the number as a
      * String, such as "537" or "-1".
@@ -810,16 +1014,28 @@ public class Thesaurus implements Serializable{
             "sensory`adj`-leaf`noun` tree`noun`",
     };
     private static final String[] fruitTerms = new String[]{
+            "fruit`noun` of @",
+            "@'s fruit`noun`",
             "@'s flavor`adj` fruit`noun`",
             "@'s color`adj` fruit`noun`",
             "flavor`adj` fruit`noun`-fruit`noun`",
             "color`adj` fruit`noun`-fruit`noun`",
     };
     private static final String[] nutTerms = new String[]{
+            "nut`noun` of @",
+            "@'s nut`noun`",
             "@'s flavor`adj` nut`noun`",
             "@'s color`adj` nut`noun`",
             "flavor`adj` nut`noun`",
             "color`adj` nut`noun`",
+    };
+    private static final String[] flowerTerms = new String[]{
+            "flower`noun` of @",
+            "@'s flower`noun`",
+            "@'s shape`adj` flower`noun`",
+            "@'s color`adj` flower`noun`",
+            "shape`adj` flower`noun`",
+            "color`adj` flower`noun`",
     };
     public static final OrderedMap<String, ArrayList<String>> categories = makeOM(
             "calm`adj`",
@@ -971,9 +1187,11 @@ public class Thesaurus implements Serializable{
             "leaf`noun`",
             makeList("leaf", "bark", "root", "thorn", "seed", "branch", "twig", "wort", "cress", "flower", "wood", "vine", "sap"),
             "fruit`noun`",
-            makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig", "date", "mango", "banana"),
+            makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig", "date", "mango", "banana", "juniper", "grape", "papaya", "pear", "quince"),
             "nut`noun`",
-            makeList("nut", "bean", "almond", "peanut", "pecan", "walnut", "cashew", "pea"),
+            makeList("nut", "bean", "almond", "peanut", "pecan", "walnut", "cashew", "pea", "chestnut", "hazelnut"),
+            "flower`noun`",
+            makeList("flower", "rose", "lilac", "orchid", "peony", "oleander", "chrysanthemum", "amaryllis", "camellia", "mallow", "lily", "gardenia", "daisy", "hibiscus", "dandelion", "jasmine", "lotus", "lantana", "phlox", "petunia", "tulip"),
             "tree`noun`",
             makeList("tree", "oak", "pine", "juniper", "maple", "beech", "birch", "larch", "willow", "alder", "cedar", "palm", "magnolia", "hazel", "cactus", "mangrove", "elm"),
             "flavor`noun`",
@@ -983,21 +1201,9 @@ public class Thesaurus implements Serializable{
             "color`adj`",
             makeList("black", "white", "red", "orange", "yellow", "green", "blue", "violet"),
             "shape`adj`",
-            makeList("hollow", "tufted", "drooping", "fibrous", "giant", "miniature", "delicate", "hardy", "spiny"),
+            makeList("hollow", "tufted", "drooping", "fibrous", "giant", "miniature", "delicate", "hardy", "spiny", "thorny", "fragile", "sturdy", "long", "stubby", "stiff", "yielding"),
             "sensory`adj`",
-            makeList("fragrant", "pungent", "rustling", "fuzzy", "glossy", "weeping", "rough", "smooth"),
-            //"flavor`noun`\tleaf`noun` tree`noun`"
-            //"flavor`adj` fruit`noun` tree`noun`"
-            //"flavor`adj` nut`noun` tree`noun`"
-            //"color`adj` fruit`noun` tree`noun`"
-            //"color`adj` nut`noun` tree`noun`"
-            //"flavor`adj` fruit`noun`-fruit`noun`"
-            //"color`adj` fruit`noun`-fruit`noun`"
-
-            //"shape`adj`-fruit`noun` tree`noun`",
-            //"shape`adj`-leaf`noun` tree`noun`",
-            //"sensory`adj` tree`noun`-tree`noun`",
-            //"sensory`adj`-leaf`noun` tree`noun`",
+            makeList("fragrant", "pungent", "rustling", "fuzzy", "glossy", "weeping", "rough", "smooth", "soft", "aromatic"),
             "smart`adj`",
             makeList("brilliant", "smart", "genius", "wise", "clever", "cunning", "mindful", "aware"),
             "smart`noun`",
