@@ -54,9 +54,21 @@ public class WildMapView {
     {
         HashMap<String, ICellVisible> viewer = new HashMap<>(128);
 
-        viewer.put("snow", new Basic('.', ALICE_BLUE));
+        viewer.put("snow path", new Basic('.', ALICE_BLUE.toEditedFloat(0.0f, -0.2f, -0.15f)));
+        viewer.put("dirt path", new Basic('.', CLOVE_BROWN.toEditedFloat(-0.005f, -0.275f, 0.17f)));
+        viewer.put("sand path", new Basic('.', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.17f, -0.075f)));
+        viewer.put("grass path", new Basic('.', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, -0.15f, -0.1f)));
+        viewer.put("stone path", new Basic('.', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.09f, -0.05f, 0.1f)));
+
+        viewer.put("ice ledge", new Basic('¬', SColor.toEditedFloat(PALE_CORNFLOWER_BLUE, 0.0f, -0.1f, 0.1f)));
+        viewer.put("dirt ledge", new Basic('¬', CLOVE_BROWN.toEditedFloat(-0.005f, -0.175f, -0.18f)));
+        viewer.put("sand ledge", new Basic('¬', CW_PALE_ORANGE.toEditedFloat(0.05f, -0.15f, -0.125f)));
+        viewer.put("grass ledge", new Basic('¬', AURORA_DUSTY_GREEN.toEditedFloat(0.0f, -0.025f, -0.45f)));
+        viewer.put("stone ledge", new Basic('¬', AURORA_CHIPPED_GRANITE.toEditedFloat(-0.07f, -0.1f, -0.25f)));
+
+        viewer.put("snow", new Basic('…', ALICE_BLUE));
         viewer.put("ice", new Basic('-', SColor.lightenFloat(PALE_CORNFLOWER_BLUE, 0.3f)));
-        viewer.put("dirt", new Basic('.', CLOVE_BROWN.toEditedFloat(-0.005f, -0.075f, 0.02f)));
+        viewer.put("dirt", new Basic('·', CLOVE_BROWN.toEditedFloat(-0.005f, -0.075f, 0.02f)));
         viewer.put("pebbles", new Basic('…', AURORA_WET_STONE.toEditedFloat(0.0f, 0.0f, 0.0f)));
         viewer.put("dry grass", new Basic('\'', CW_FADED_BROWN.toEditedFloat(0.06f, 0.05f, 0.05f)));
         viewer.put("fresh water", new Basic('~', AURORA_BLUE_EYE));
