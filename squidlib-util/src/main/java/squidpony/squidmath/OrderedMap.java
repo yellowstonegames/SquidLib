@@ -380,7 +380,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     private int realSize() {
         return containsNullKey ? size - 1 : size;
     }
-    private void ensureCapacity(final int capacity) {
+    
+    public void ensureCapacity(final int capacity) {
         final int needed = arraySize(capacity, f);
         if (needed > n)
             rehash(needed);
@@ -393,7 +394,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         if (needed > n)
             rehash(needed);
     }
-    private V removeEntry(final int pos) {
+    protected V removeEntry(final int pos) {
         final V oldValue = value[pos];
         value[pos] = null;
         size--;
@@ -403,7 +404,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             rehash(n / 2);
         return oldValue;
     }
-    private V removeNullEntry() {
+    protected V removeNullEntry() {
         containsNullKey = false;
         key[n] = null;
         final V oldValue = value[n];
@@ -1148,38 +1149,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             next = size == 0 ? -1 : order.items[0];
             index = 0;
         }
-        /*
-        private MapIterator(final K from) {
-            if (((from) == null)) {
-                if (containsNullKey) {
-                    next = (int) link[n];
-                    prev = n;
-                    return;
-                } else
-                    throw new NoSuchElementException("The key null"
-                            + " does not belong to this map.");
-            }
-            if (((key[last]) != null && (key[last]).equals(from))) {
-                prev = last;
-                index = size;
-                return;
-            }
-            // The starting point.
-            int pos = (((from).hashCode()))
-                    & mask;
-            // There's always an unused entry.
-            while (!((key[pos]) == null)) {
-                if (((key[pos]).equals(from))) {
-                    // Note: no valid index known.
-                    next = (int) link[pos];
-                    prev = pos;
-                    return;
-                }
-                pos = (pos + 1) & mask;
-            }
-            throw new NoSuchElementException("The key " + from
-                    + " does not belong to this map.");
-        }*/
         public boolean hasNext() {
             return next != -1;
         }
@@ -1198,10 +1167,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 return;
             }
             index = 0;
-            /*while (pos != prev) {
-                pos = (int) link[pos];
-                index++;
-            }*/
         }
         public int nextIndex() {
             ensureIndexKnown();
@@ -1230,7 +1195,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 prev = -1;
             else
                 prev = order.get(index - 1);
-            //prev = (int) (link[curr] >>> 32);
             next = curr;
             return curr;
         }
@@ -1332,28 +1296,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
     }
 
-    public class FastEntryIterator extends MapIterator implements ListIterator<MapEntry>, Serializable {
-        private static final long serialVersionUID = 0L;
-
-        final MapEntry entry = new MapEntry();
-
-        public FastEntryIterator() {
-        }
-        public MapEntry next() {
-            entry.index = nextEntry();
-            return entry;
-        }
-        public MapEntry previous() {
-            entry.index = previousEntry();
-            return entry;
-        }
-        public void set(MapEntry ok) {
-            throw new UnsupportedOperationException();
-        }
-        public void add(MapEntry ok) {
-            throw new UnsupportedOperationException();
-        }
-    }
     public final class MapEntrySet
             implements Cloneable, SortedSet<Entry<K, V>>, Set<Entry<K, V>>, Collection<Entry<K, V>>, Serializable {
         private static final long serialVersionUID = 0L;
@@ -1462,10 +1404,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
         public void clear() {
             OrderedMap.this.clear();
-        }
-
-        public FastEntryIterator fastIterator() {
-            return new FastEntryIterator();
         }
 
         @Override
@@ -1597,11 +1535,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     @Override
-    public SortedSet<Entry<K, V>> entrySet() {
-        if (entries == null) entries = new MapEntrySet();
-        return entries;
-    }
-    public MapEntrySet mapEntrySet() {
+    public SortedSet<Entry<K,V>> entrySet() {
         if (entries == null) entries = new MapEntrySet();
         return entries;
     }
@@ -1836,7 +1770,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
     }
 
-    public KeySet keySet() {
+    public SortedSet<K> keySet() {
         if (keys == null) keys = new KeySet();
         return keys;
     }
@@ -2139,7 +2073,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param max    the maximum number of elements to unwrap.
      * @return the number of elements unwrapped.
      */
-    private int unwrap(final ValueIterator i, final Object[] array, int offset, final int max) {
+    protected int unwrap(final ValueIterator i, final Object[] array, int offset, final int max) {
         if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
         if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
         int j = max;
@@ -2158,7 +2092,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped.
      */
-    private int unwrap(final ValueIterator i, final Object[] array) {
+    protected int unwrap(final ValueIterator i, final Object[] array) {
         return unwrap(i, array, 0, array.length);
     }
 
@@ -2173,7 +2107,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param offset the first element of the array to be returned.
      * @param max the maximum number of elements to unwrap.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max ) {
+    protected static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max ) {
         if ( max < 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );
         if ( offset < 0 || offset + max > array.length ) throw new IllegalArgumentException();
         int j = max;
@@ -2190,7 +2124,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param i a type-specific iterator.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
+    protected static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length );
     }
 
