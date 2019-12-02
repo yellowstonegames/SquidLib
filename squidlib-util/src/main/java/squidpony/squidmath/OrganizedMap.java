@@ -406,18 +406,21 @@ public class OrganizedMap<K, V> extends OrderedMap<K, V> {
         public Comparator<? super Entry<K, V>> comparator() {
             return null;
         }
-        public SortedSet<Entry<K, V>> subSet(
+        public MapEntrySet subSet(
                 Entry<K, V> fromElement,
                 Entry<K, V> toElement) {
-            throw new UnsupportedOperationException();
+            return new MapEntrySet(OrganizedMap.this.indexOf(fromElement.getKey()),
+                    OrganizedMap.this.indexOf(toElement.getKey()));
         }
-        public SortedSet<Entry<K, V>> headSet(
+        public MapEntrySet headSet(
                 Entry<K, V> toElement) {
-            throw new UnsupportedOperationException();
+            return new MapEntrySet(0,
+                    OrganizedMap.this.indexOf(toElement.getKey()));
         }
-        public SortedSet<Entry<K, V>> tailSet(
+        public MapEntrySet tailSet(
                 Entry<K, V> fromElement) {
-            throw new UnsupportedOperationException();
+            return new MapEntrySet(OrganizedMap.this.indexOf(fromElement.getKey()),
+                    0x7FFFFFFF);
         }
         public Entry<K, V> first() {
             if (size <= lowerLimit)
@@ -648,7 +651,7 @@ public class OrganizedMap<K, V> extends OrderedMap<K, V> {
      * <P>We simply override the {@link ListIterator#next()}/{@link ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return keys
      * instead of entries.
      */
-    public final class KeyIterator extends MapIterator implements Iterator<K>, Serializable {
+    public class KeyIterator extends MapIterator implements Iterator<K>, Serializable {
         private static final long serialVersionUID = 0L;
         public K previous() {
             return key[previousEntry()];
@@ -671,7 +674,7 @@ public class OrganizedMap<K, V> extends OrderedMap<K, V> {
         public void remove() { super.remove(); }
     }
 
-    public final class KeySet implements SortedSet<K>, Serializable {
+    public class KeySet implements SortedSet<K>, Serializable {
         private static final long serialVersionUID = 0L;
 
         public int lowerLimit, upperLimit;
@@ -710,16 +713,16 @@ public class OrganizedMap<K, V> extends OrderedMap<K, V> {
             return null;
         }
 
-        public final SortedSet<K> tailSet(K from) {
-            throw new UnsupportedOperationException();
+        public KeySet tailSet(K from) {
+            return new KeySet(OrganizedMap.this.indexOf(from), 0x7FFFFFFF);
         }
 
-        public final SortedSet<K> headSet(K to) {
-            throw new UnsupportedOperationException();
+        public KeySet headSet(K to) {
+            return new KeySet(0, OrganizedMap.this.indexOf(to));
         }
 
-        public final SortedSet<K> subSet(K from, K to) {
-            throw new UnsupportedOperationException();
+        public KeySet subSet(K from, K to) {
+            return new KeySet(OrganizedMap.this.indexOf(from), OrganizedMap.this.indexOf(to));
         }
 
         @SuppressWarnings("unchecked")
@@ -900,7 +903,7 @@ public class OrganizedMap<K, V> extends OrderedMap<K, V> {
      * <P>We simply override the {@link ListIterator#next()}/{@link ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return values
      * instead of entries.
      */
-    public final class ValueIterator extends MapIterator implements ListIterator<V>, Serializable {
+    public class ValueIterator extends MapIterator implements ListIterator<V>, Serializable {
         private static final long serialVersionUID = 0L;
 
         public V previous() {
@@ -923,7 +926,7 @@ public class OrganizedMap<K, V> extends OrderedMap<K, V> {
         }
         public void remove() { super.remove(); }
     }
-    public final class ValueCollection extends AbstractCollection<V> implements Serializable
+    public class ValueCollection extends AbstractCollection<V> implements Serializable
     {
         private static final long serialVersionUID = 0L;
         public int lowerLimit, upperLimit;
@@ -959,5 +962,16 @@ public class OrganizedMap<K, V> extends OrderedMap<K, V> {
         if (org == null) organizedValues.put(c, org = new ValueCollection(lower, upper));
         return org;
     }
-
+    
+    public void reorganize(K key, Coord target)
+    {
+        final int idx = indexOf(key);
+        int s = organizedKeys.size;
+        Coord c;
+        for (int i = 0; i < s; i++) {
+            if((c = organizedKeys.keyAt(i)) == target)
+                return;
+        }
+        // this is going to need a lot of work and may be quite error-prone... index ranges probably aren't good here.
+    }
 }
