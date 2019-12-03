@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Work in progress Map that can be split up into separate or overlapping iteration orders.
+ * Work in progress Map that can be split up into separate or overlapping iteration orders; it's probably easier and
+ * more full-featured to manage an iteration order as an {@link OrderedSet} of keys and fetch them from any kind of
+ * larger Map with the same type of keys. The larger Map could work well as a HashMap. This class is not recommended.
  * <br>
  * Created by Tommy Ettinger on 11/29/2019.
  */
@@ -15,7 +17,6 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
     private static final long serialVersionUID = 0L;
     protected HashMap<K, V> internalMap;
     protected OrderedSet<K> order;
-    protected ArrayList<OrderedSet<K>> organizations;
 
     private SharedEntries entries;
     private SharedKeySet keySet;
@@ -35,7 +36,6 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
     {
         internalMap = new HashMap<>(capacity, loadFactor);
         order = new OrderedSet<>(capacity, loadFactor * 0.5f);
-        organizations =  new ArrayList<>(4);
     }
     
     public OrganizedMap(Map<? extends K, ? extends V> other)
@@ -81,7 +81,6 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
     }
 
     public void clear() {
-        organizations.clear();
         order.clear();
         internalMap.clear();
     }
@@ -89,20 +88,18 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
     public class SharedKeySet extends AbstractSet<K> implements Serializable {
         private static final long serialVersionUID = 0L;
 
-        public int start, end;
+        public OrderedSet<K> order;
 
         public SharedKeySet()
         {
-            start = 0;
-            end = 0x7FFFFFFF;
-        }
-
-        public SharedKeySet(int start, int end)
-        {
-            this.start = start;
-            this.end = Math.max(start, end);
+            order = OrganizedMap.this.order;
         }
         
+        public SharedKeySet(OrderedSet<K> order)
+        {
+            this.order = order;
+        }
+
         public class SharedKeyIterator implements Iterator<K>, Serializable
         {
             private static final long serialVersionUID = 0L;
@@ -111,12 +108,12 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
             
             public SharedKeyIterator()
             {
-                current = start;
+                current = 0;
             }
             
             @Override
             public boolean hasNext() {
-                return current < end;
+                return current < order.size;
             }
 
             @Override
@@ -126,10 +123,10 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
             @Override
             public void remove() {
-                internalMap.remove(order.getAt(current));
+                final K k = order.getAt(current);
+                internalMap.remove(k);
                 order.removeAt(current);
-                if(end != 0x7FFFFFFF)
-                    end--;
+                OrganizedMap.this.order.remove(k);
             }
         }
         
@@ -140,29 +137,31 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
         @Override
         public int size() {
-            return end == 0x7FFFFFFF ? order.size() : end - start;
+            return order.size;
         }
     }
     public SharedKeySet keySet() {
-        if(keySet == null) 
+        if(keySet == null)
             keySet = new SharedKeySet();
         return keySet;
     }
 
+    public SharedKeySet keySet(OrderedSet<K> alternateOrder) {
+        return new SharedKeySet(alternateOrder);
+    }
+
     public class SharedValues extends AbstractCollection<V> implements Serializable {
         private static final long serialVersionUID = 0L;
-        public int start, end;
+        public OrderedSet<K> order;
 
         public SharedValues()
-        {
-            start = 0;
-            end = 0x7FFFFFFF;
+        { 
+            order = OrganizedMap.this.order;
         }
 
-        public SharedValues(int start, int end)
+        public SharedValues(OrderedSet<K> order)
         {
-            this.start = start;
-            this.end = Math.max(start, end);
+            this.order = order;
         }
 
         public class SharedValueIterator implements Iterator<V>, Serializable  {
@@ -172,12 +171,12 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
             public SharedValueIterator()
             {
-                current = start;
+                current = 0;
             }
 
             @Override
             public boolean hasNext() {
-                return current < end;
+                return current < order.size;
             }
 
             @Override
@@ -187,10 +186,10 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
             @Override
             public void remove() {
-                internalMap.remove(order.getAt(current));
+                final K k = order.getAt(current);
+                internalMap.remove(k);
                 order.removeAt(current);
-                if(end != 0x7FFFFFFF)
-                    end--;
+                OrganizedMap.this.order.remove(k);
             }
         }
 
@@ -201,7 +200,7 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
         @Override
         public int size() {
-            return end == 0x7FFFFFFF ? order.size() : end - start;
+            return order.size;
         }
     }
     
@@ -209,9 +208,12 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
         if(values == null)
             values = new SharedValues();
         return values;
-
     }
-    
+
+    public SharedValues values(OrderedSet<K> alternateOrder) {
+        return new SharedValues(alternateOrder);
+    }
+
     public class MapEntry implements Map.Entry<K, V>, Serializable {
         private static final long serialVersionUID = 0L;
 
@@ -240,18 +242,16 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
     public class SharedEntries extends AbstractSet<Entry<K, V>> implements Serializable {
         private static final long serialVersionUID = 0L;
 
-        public int start, end;
+        public OrderedSet<K> order;
 
         public SharedEntries()
         {
-            start = 0;
-            end = 0x7FFFFFFF;
+            order = OrganizedMap.this.order;
         }
 
-        public SharedEntries(int start, int end)
+        public SharedEntries(OrderedSet<K> order)
         {
-            this.start = start;
-            this.end = Math.max(start, end);
+            this.order = order;
         }
 
         public class SharedEntryIterator implements Iterator<Entry<K, V>>, Serializable
@@ -262,12 +262,12 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
             public SharedEntryIterator()
             {
-                current = start;
+                current = 0;
             }
 
             @Override
             public boolean hasNext() {
-                return current < end;
+                return current < order.size;
             }
 
             @Override
@@ -277,10 +277,10 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
             @Override
             public void remove() {
-                internalMap.remove(order.getAt(current));
+                final K k = order.getAt(current);
+                internalMap.remove(k);
                 order.removeAt(current);
-                if(end != 0x7FFFFFFF)
-                    end--;
+                OrganizedMap.this.order.remove(k);
             }
         }
 
@@ -291,7 +291,7 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
 
         @Override
         public int size() {
-            return end == 0x7FFFFFFF ? order.size() : end - start;
+            return order.size;
         }
     }
 
@@ -299,6 +299,10 @@ public class OrganizedMap<K, V> implements Map<K, V>, Serializable {
         if(entries == null)
             entries = new SharedEntries();
         return entries;
+    }
+
+    public SharedEntries entrySet(OrderedSet<K> alternateOrder) {
+        return new SharedEntries(alternateOrder);
     }
 
     public V getOrDefault(Object key, V defaultValue) {
