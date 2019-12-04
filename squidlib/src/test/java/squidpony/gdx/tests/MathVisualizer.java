@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 31;
+    private int mode = 32;
     private int modes = 47;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -1342,8 +1342,8 @@ public class MathVisualizer extends ApplicationAdapter {
             case 32: {
                 Gdx.graphics.setTitle("atan2_ random, uniform points at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    amounts[(int) (NumberTools.atan2_(DiverRNG.determineFloat(i) - 0.5f,
-                            DiverRNG.randomizeFloat(i ^ 0x94D049BB133111EBL) - 0.5f) * 512f)]++;   // SquidLib's no-LUT way
+                    amounts[(int) (NumberTools.atan2_(diver.nextFloat() - 0.5f,
+                            diver.nextFloat() - 0.5f) * 512f)]++;   // SquidLib's no-LUT way
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -1387,11 +1387,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 34: {
                 Gdx.graphics.setTitle("atan2_ random, less-biased, inverted triangular at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = DiverRNG.randomize(i);
+                    long r = diver.nextLong();
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13;
                     amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 385.0 + (DiverRNG.determine(r) & 0x7F))]++;
+                            Math.cbrt(b)) * 385.0 + (diver.nextLong() & 127))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1413,11 +1413,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 35: {
                 Gdx.graphics.setTitle("atan2_ random, biased-toward-center, inverted triangular at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = DiverRNG.randomize(i);
+                    long r = diver.nextLong();
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0xBFF.8p0) * 0x1p-13;
                     amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 385.0 + (DiverRNG.determine(r) & 0x7F))]++;
+                            Math.cbrt(b)) * 385.0 + (diver.nextLong() & 127))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1439,11 +1439,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 36: {
                 Gdx.graphics.setTitle("atan2_ random, biased-toward-extreme at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = DiverRNG.randomize(i);
+                    long r = diver.nextLong();
                     double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
                             b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
                     amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-                            Math.cbrt(b)) * 385.0 + (DiverRNG.determine(r) & 0x7F))]++;
+                            Math.cbrt(b)) * 385.0 + (diver.nextLong() & 0x7F))]++;
 //                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
 //                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
                 }
@@ -1463,37 +1463,34 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 37: {
-                long tm = (TimeUtils.timeSinceMillis(startTime) * 7 & 0xFFFF) - 0x8000;
+                float tm = (TimeUtils.timeSinceMillis(startTime) * 7 & 0xFFFF) * 0x1p-17f;
                 Gdx.graphics.setTitle("atan2_ random, bias value " + tm + ", at " + Gdx.graphics.getFramesPerSecond());
                 for (int i = 1; i <= 0x100000; i++) {
-                    long r = DiverRNG.randomize(i), d = DiverRNG.determine(r);
-//                    double a = (((r & 0xFFF) + (r >>> 12 & 0xFFF) & 0xFFF) - 0x7FF.8p0) * 0x1p-13,
-//                            b = (((r >>> 24 & 0xFFF) + (r >>> 36 & 0xFFF) & 0xFFF) - 0x3FF.8p0) * 0x1p-13;
-                    long a = ((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)),
-                            b = ((((r >>> 32 & 0xFF) - (r >>> 40 & 0xFF)) * ((r >>> 48 & 0xFF) - (r >>> 56 & 0xFF))) + tm);
-//                    amounts[(int) (NumberTools.atan2_(a,
-//                            b) * 511.0 + 0.5)]++;
-//                    amounts[(int) (NumberTools.atan2_((a),
-//                            (b)) * 384.0 + (DiverRNG.determine(r) & 127)+ 0.5)]++;
-                    amounts[(int) (NumberTools.atan2_((a),
-                            (b)) * 384.0
-                            +
-                            (d
-                                    //        (d & 63) + (d >>> 6 & 63) +
-                                    //                (d >>> 12 & 63) + (d >>> 18 & 63)
-                                    & 127))]++;
-//                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-//                            Math.cbrt(b)) * 384.0 + 
-//                            ((DiverRNG.determine(r & 0xFFFFFFFFL) & 127) +
-//                                    (DiverRNG.determine(r >>> 32) & 127)
-//                                    & 127) + 0.5)]++;
-//                    amounts[(int) (NumberTools.atan2_(a,
-//                            b) * 448.0 + (DiverRNG.determine(r) & 63) + 0.5)]++;
-//                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
-//                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
-//                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
-//                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+                    long r = diver.nextLong();
+                    amounts[(int) ((NumberTools.sin_((r & 0xFFFL) * 0x1p-12f) * tm
+                    + ((r >>> 16 & 0xFFFL) - (r >>> 28 & 0xFFFL) + (r >>> 40 & 0xFFFL) - (r >>> 52)) * 0x1p-13f * (0.5f - tm)
+//                    + (NumberTools.asin_((r >>> 32 & 0xFFFF) * 0x1p-16f) - NumberTools.asin_((r >>> 48) * 0x1p-16f)) * (2f - tm)
+                            + 0.5f) * 511f)]++;
                 }
+//                long tm = (TimeUtils.timeSinceMillis(startTime) * 7 & 0xFFFF) - 0x8000;
+//                Gdx.graphics.setTitle("atan2_ random, bias value " + tm + ", at " + Gdx.graphics.getFramesPerSecond());
+//                for (int i = 1; i <= 0x100000; i++) {
+//                    long r = diver.nextLong();
+//                    long a = ((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)),
+//                            b = ((((r >>> 32 & 0xFF) - (r >>> 40 & 0xFF)) * ((r >>> 48 & 0xFF) - (r >>> 56 & 0xFF))) + tm);
+//                    amounts[(int) (NumberTools.atan2_(a, b) * 385.0 + (diver.nextLong() & 127))]++;
+////                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
+////                            Math.cbrt(b)) * 384.0 + 
+////                            ((DiverRNG.determine(r & 0xFFFFFFFFL) & 127) +
+////                                    (DiverRNG.determine(r >>> 32) & 127)
+////                                    & 127) + 0.5)]++;
+////                    amounts[(int) (NumberTools.atan2_(a,
+////                            b) * 448.0 + (DiverRNG.determine(r) & 63) + 0.5)]++;
+////                    amounts[(int) (NumberTools.atan2_(Math.cbrt(a),
+////                            Math.cbrt(b)) * 384.0 + (r >>> 48 & 0x7F) + 0.5)]++;
+////                    amounts[(int)(NumberTools.atan2_((r & 0xFF) + (r >>> 8 & 0xFF) - (r >>> 16 & 0xFF) - (r >>> 24 & 0xFF),
+////                            (r >>> 32 & 0xFF) + (r >>> 40 & 0xFF) - (r >>> 48 & 0xFF) - (r >>> 56)) * 512f)]++;
+//                }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
