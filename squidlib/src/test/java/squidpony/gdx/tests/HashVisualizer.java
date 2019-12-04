@@ -4740,12 +4740,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
 //                                yy = y + (ctr >> 2);
                                 yy = y + ctr;
-                                final int xs = xx & 63, ys = yy & 63;
-                                //final int hash = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64((xx >>> 5 & -2) + ((xx & 32) >>> 4) - 1, yy >>> 6, ~12345678)][(yy << 6 & 0xFC0) | (xx & 0x3F)] + 128;
-                                iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 12345678)][(ys << 6) | (xs)] + 128;
-                                if((32 - xs ^ 32 - xs >> 31) > (iBright & 1) + 31 || (32 - ys ^ 32 - ys >> 31) > (iBright & 1) + 31)
-                                    iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64((xx >>> 6) + ((xx & 32) >>> 4) - 1, (yy >>> 6) + ((yy & 32) >>> 4) - 1, 12345678)][(ys << 6) | (xs)] + 128;
-                                //iBright = (BlueNoise.getSeededSeamless(xx, yy, 12345789) + 128);
+//                                final int xs = xx & 63, ys = yy & 63;
+//                                //final int hash = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64((xx >>> 5 & -2) + ((xx & 32) >>> 4) - 1, yy >>> 6, ~12345678)][(yy << 6 & 0xFC0) | (xx & 0x3F)] + 128;
+//                                iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 12345678)][(ys << 6) | (xs)] + 128;
+//                                if((32 - xs ^ 32 - xs >> 31) > (iBright & 1) + 31 || (32 - ys ^ 32 - ys >> 31) > (iBright & 1) + 31)
+//                                    iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64((xx >>> 6) + ((xx & 32) >>> 4) - 1, (yy >>> 6) + ((yy & 32) >>> 4) - 1, 12345678)][(ys << 6) | (xs)] + 128;
+                                iBright = (BlueNoise.getSeededSeamless(xx, yy, 12345789) + 128);
                                 
                                 
                                 
