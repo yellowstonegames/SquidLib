@@ -4734,15 +4734,22 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 133:
                         Gdx.graphics.setTitle("Blue Noise with seamless adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        int a, b;
-                        int ad;
                         for (int x = 0; x < width; x++) {
 //                            xx = x + (ctr >> 2);
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
 //                                yy = y + (ctr >> 2);
                                 yy = y + ctr;
-                                iBright = (BlueNoise.getSeededSeamless(xx, yy, 12345789) + 128);
+                                final int xs = xx & 63, ys = yy & 63;
+                                //final int hash = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64((xx >>> 5 & -2) + ((xx & 32) >>> 4) - 1, yy >>> 6, ~12345678)][(yy << 6 & 0xFC0) | (xx & 0x3F)] + 128;
+                                iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 12345678)][(ys << 6) | (xs)] + 128;
+                                if((32 - xs ^ 32 - xs >> 31) > (iBright & 1) + 31 || (32 - ys ^ 32 - ys >> 31) > (iBright & 1) + 31)
+                                    iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64((xx >>> 6) + ((xx & 32) >>> 4) - 1, (yy >>> 6) + ((yy & 32) >>> 4) - 1, 12345678)][(ys << 6) | (xs)] + 128;
+                                //iBright = (BlueNoise.getSeededSeamless(xx, yy, 12345789) + 128);
+                                
+                                
+                                
+                                
 //                                a = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[Noise.IntPointHash.hash32(xx >>> 6, yy >>> 6, 1122334455) & 15]) + 128;
 //                                b = BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[(Noise.IntPointHash.hash32(xx - 32 >>> 6, yy - 32 >>> 6, 1122334455) & 15) | 16]) + 128;
 //                                ad = Math.abs((xx << 1 & 126) - 63) + Math.abs((yy << 1 & 126) - 63);
