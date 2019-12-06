@@ -1105,7 +1105,6 @@ public final class NumberTools {
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. This method changed from an earlier
      * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also
-     * {@link #atan2Rough(double, double)} if the speed isn't good enough with this method and lower quality is OK, or
      * {@link #atan2_(double, double)} if you don't want a mess converting to degrees or some other measurement, since
      * that method returns an angle from 0.0 (equal to 0 degrees) to 1.0 (equal to 360 degrees).
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
@@ -1147,7 +1146,6 @@ if y < 0 then r := -r
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. This method changed from an earlier
      * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also
-     * {@link #atan2Rough(float, float)} if the speed isn't good enough with this method and lower quality is OK, or
      * {@link #atan2_(float, float)} if you don't want a mess converting to degrees or some other measurement, since
      * that method returns an angle from 0f (equal to 0 degrees) to 1f (equal to 360 degrees).
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
@@ -1175,66 +1173,6 @@ if y < 0 then r := -r
         else {
             final float a = ay / ax, s = a * a,
                     r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
-            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
-        }
-    }
-
-    /**
-     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with
-     * worse average and max error than {@link #atan2(double, double)} but better error all-around than the old
-     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(double, double)}.
-     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks
-     * like map projections that operate on finer grids.
-     * <br>
-     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in
-     * <a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition">this DSP article</a>.
-     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in radians as a double
-     */
-    public static double atan2Rough(final double y, final double x)
-    {
-        if(y == 0f && x >= 0f) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final double a = ax / ay,
-                    r = 1.57079637 - (a * (0.7853981633974483 + 0.273 * (1.0 - a)));
-            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
-        }
-        else {
-            final double a = ay / ax,
-                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a)));
-            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
-        }
-    }
-
-    /**
-     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with
-     * worse average and max error than {@link #atan2(float, float)} but better error all-around than the old
-     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(float, float)}.
-     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks
-     * like map projections that operate on finer grids.
-     * <br>
-     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in
-     * <a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition">this DSP article</a>.
-     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in radians as a float
-     */
-    public static float atan2Rough(final float y, final float x)
-    {
-        if(y == 0f && x >= 0f) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final float a = ax / ay,
-                    r = 1.57079637f - (a * (0.7853981633974483f + 0.273f * (1f - a)));
-            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
-        }
-        else {
-            final float a = ay / ax,
-                    r = (a * (0.7853981633974483f + 0.273f * (1f - a)));
             return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
         }
     }
@@ -1301,68 +1239,7 @@ if y < 0 then r := -r
     }
 
 
-    /**
-     * Less-precise but somewhat faster altered-range approximation of the frequently-used trigonometric method atan2, with
-     * worse average and max error than {@link #atan2(double, double)} but better speed. Takes y and x positions as
-     * floats and returns an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI
-     * radians. Should be up to twice as fast as {@link #atan2_(double, double)}.
-     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks
-     * like map projections that operate on finer grids.
-     * <br>
-     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in
-     * <a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition">this DSP article</a>.
-     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in radians as a double
-     */
-    public static double atan2Rough_(final double y, final double x)
-    {
-        if(y == 0f && x >= 0f) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final double a = ax / ay,
-                    r = 0.25 - (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;
-            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
-        }
-        else {
-            final double a = ay / ax,
-                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;
-            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
-        }
-    }
-
-    /**
-     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with
-     * worse average and max error than {@link #atan2(float, float)} but better error all-around than the old
-     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(float, float)}.
-     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks
-     * like map projections that operate on finer grids.
-     * <br>
-     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in
-     * <a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition">this DSP article</a>.
-     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
-     * @return the angle to the given point, in radians as a float
-     */
-    public static float atan2Rough_(final float y, final float x)
-    {
-        if(y == 0f && x >= 0f) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y);
-        if(ax < ay)
-        {
-            final float a = ax / ay,
-                    r = 0.25f - (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;
-            return (x < 0f) ? (y < 0f) ? 0.5f + r : 0.5f - r : (y < 0f) ? 1f - r : r;
-        }
-        else {
-            final float a = ay / ax,
-                    r = (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;
-            return (x < 0f) ? (y < 0f) ? 0.5f + r : 0.5f - r : (y < 0f) ? 1f - r : r;
-        }
-    }
-
-//    /**
+    //    /**
 //     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.
 //     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
 //     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
@@ -1389,8 +1266,9 @@ if y < 0 then r := -r
     /**
      * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.
      * This method is usually much faster than {@link Math#asin(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
-     * performance regression, but not likely that Math.asin() will speed up by 30x (Math.sin() has sped up, though).
+     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
+     * performance regression, but not likely that the JDK's Math.asin() will speed up by 30x (Math.sin() has sped up,
+     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
      * @param n an input to the inverse sine function, from -1 to 1 inclusive
      * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.
      */
@@ -1426,8 +1304,9 @@ if y < 0 then r := -r
     /**
      * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.
      * This method is usually much faster than {@link Math#asin(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
-     * performance regression, but not likely that Math.asin() will speed up by 30x (Math.sin() has sped up, though).
+     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
+     * performance regression, but not likely that the JDK's Math.asin() will speed up by 30x (Math.sin() has sped up,
+     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
      * @param n an input to the inverse sine function, from -1 to 1 inclusive
      * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.
      */
@@ -1449,8 +1328,9 @@ if y < 0 then r := -r
     /**
      * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.
      * This method is usually much faster than {@link Math#acos(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
-     * performance regression, but not likely that Math.acos() will speed up by 30x (Math.sin() has sped up, though).
+     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
+     * performance regression, but not likely that the JDK's Math.acos() will speed up by 30x (Math.cos() has sped up,
+     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
      * @param n an input to the inverse cosine function, from -1 to 1 inclusive
      * @return an output from the inverse cosine function, from 0 to PI inclusive.
      */
@@ -1486,8 +1366,9 @@ if y < 0 then r := -r
     /**
      * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.
      * This method is usually much faster than {@link Math#acos(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). It's likely that OpenJ9 will be able to undo a
-     * performance regression, but not likely that Math.acos() will speed up by 30x (Math.sin() has sped up, though).
+     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
+     * performance regression, but not likely that the JDK's Math.acos() will speed up by 30x (Math.cos() has sped up,
+     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
      * @param n an input to the inverse cosine function, from -1 to 1 inclusive
      * @return an output from the inverse cosine function, from 0 to PI inclusive.
      */
@@ -1512,7 +1393,7 @@ if y < 0 then r := -r
      * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).
      * <br>
      * This method is extremely similar to the non-turn approximation.
-     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
+     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin_() or cos_()
      * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}
      */
     public static double asin_(final double n)
@@ -1536,7 +1417,7 @@ if y < 0 then r := -r
      * range from 0.0 (inclusive) to 0.5 (inclusive).
      * <br>
      * This method is extremely similar to the non-turn approximation.
-     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
+     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin_() or cos_()
      * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(double)}
      */
     public static double acos_(final double n)
@@ -1562,7 +1443,7 @@ if y < 0 then r := -r
      * (inclusive).
      * <br>
      * This method is extremely similar to the non-turn approximation.
-     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
+     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin_() or cos_()
      * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}
      */
     public static float asin_(final float n)
@@ -1586,7 +1467,7 @@ if y < 0 then r := -r
      * range from 0.0f (inclusive) to 0.5f (inclusive).
      * <br>
      * This method is extremely similar to the non-turn approximation.
-     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
+     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin_() or cos_()
      * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(float)}
      */
     public static float acos_(final float n)

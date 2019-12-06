@@ -645,8 +645,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;squidpony.FakeLanguageGen.Alteration&gt; alterations</pre>
 </li>
 <li class="blockList">
+<h5>flowerTermShuffler</h5>
+<pre>squidpony.squidmath.GapShuffler&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt; flowerTermShuffler</pre>
+</li>
+<li class="blockList">
+<h5>fruitTermShuffler</h5>
+<pre>squidpony.squidmath.GapShuffler&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt; fruitTermShuffler</pre>
+</li>
+<li class="blockList">
 <h5>mappings</h5>
 <pre>squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>,&#8203;squidpony.squidmath.GapShuffler&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt; mappings</pre>
+</li>
+<li class="blockList">
+<h5>nutTermShuffler</h5>
+<pre>squidpony.squidmath.GapShuffler&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt; nutTermShuffler</pre>
 </li>
 <li class="blockList">
 <h5>plantTermShuffler</h5>
@@ -2967,30 +2979,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </section>
 </li>
 <li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrderedMap.FastEntryIterator">
-<!--   -->
-</a>
-<h3>Class squidpony.squidmath.OrderedMap.FastEntryIterator extends squidpony.squidmath.OrderedMap.MapIterator implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>entry</h5>
-<pre>squidpony.squidmath.OrderedMap.MapEntry entry</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
 <section class="serializedClassDetails"><a id="squidpony.squidmath.OrderedMap.KeyIterator">
 <!--   -->
 </a>
@@ -3121,6 +3109,214 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h5>size</h5>
 <pre>int size</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>entries</h5>
+<pre>squidpony.squidmath.OrganizedMap.SharedEntries entries</pre>
+</li>
+<li class="blockList">
+<h5>internalMap</h5>
+<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/HashMap.html?is-external=true" title="class or interface in java.util" class="externalLink">HashMap</a>&lt;K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>,&#8203;V extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; internalMap</pre>
+</li>
+<li class="blockList">
+<h5>keySet</h5>
+<pre>squidpony.squidmath.OrganizedMap.SharedKeySet keySet</pre>
+</li>
+<li class="blockList">
+<h5>order</h5>
+<pre>squidpony.squidmath.OrderedSet&lt;K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; order</pre>
+</li>
+<li class="blockList">
+<h5>values</h5>
+<pre>squidpony.squidmath.OrganizedMap.SharedValues values</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.MapEntry">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap.MapEntry extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>key</h5>
+<pre>K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> key</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedEntries">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap.SharedEntries extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/AbstractSet.html?is-external=true" title="class or interface in java.util" class="externalLink">AbstractSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util" class="externalLink">Map.Entry</a>&lt;K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>,&#8203;V extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>order</h5>
+<pre>squidpony.squidmath.OrderedSet&lt;K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; order</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedEntries.SharedEntryIterator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap.SharedEntries.SharedEntryIterator extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>current</h5>
+<pre>int current</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedKeySet">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap.SharedKeySet extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/AbstractSet.html?is-external=true" title="class or interface in java.util" class="externalLink">AbstractSet</a>&lt;K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>order</h5>
+<pre>squidpony.squidmath.OrderedSet&lt;K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; order</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedKeySet.SharedKeyIterator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap.SharedKeySet.SharedKeyIterator extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>current</h5>
+<pre>int current</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedValues">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap.SharedValues extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util" class="externalLink">AbstractCollection</a>&lt;V extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>order</h5>
+<pre>squidpony.squidmath.OrderedSet&lt;K extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; order</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedValues.SharedValueIterator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.OrganizedMap.SharedValues.SharedValueIterator extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>current</h5>
+<pre>int current</pre>
 </li>
 </ul>
 </section>

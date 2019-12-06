@@ -561,18 +561,6 @@ public class MathBenchmark {
     }
 
     @Benchmark
-    public double measureApproxAtan2Alt()
-    {
-        return NumberTools.atan2Rough(inputs[atan2ApproxAY++ & 0xFFFF], inputs[atan2ApproxAX++ & 0xFFFF]);
-    }
-
-    @Benchmark
-    public float measureApproxAtan2AltFloat()
-    {
-        return NumberTools.atan2Rough(floatInputs[atan2ApproxAYF++ & 0xFFFF], floatInputs[atan2ApproxAXF++ & 0xFFFF]);
-    }
-
-    @Benchmark
     public double measureAtan2Baseline()
     {
         return inputs[atan2ApproxAY++ & 0xFFFF] + inputs[atan2ApproxAX++ & 0xFFFF];
@@ -676,7 +664,9 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
         System.out.println("sin GDX deg      : " + sinDegGdxError);
         System.out.println("cos GDX deg      : " + cosDegGdxError);
         System.out.println("asin approx      : " + asinChristensenError);
-        double atan2ApproxError = 0, atan2GDXError = 0, atan2AltError = 0, at;
+        double atan2ApproxError = 0;
+        double atan2GDXError = 0;
+        double at;
         for(int r = 0; r < 0x10000; r++)
         {
             short i = (short) (DiverRNG.determine(r) & 0xFFFF);
@@ -691,11 +681,9 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
             u.atan2GdxY = j;
             at = u.measureMathAtan2();
             atan2ApproxError += Math.abs(u.measureApproxAtan2() - at);
-            atan2AltError += Math.abs(u.measureApproxAtan2Alt() - at);
             atan2GDXError += Math.abs(u.measureGdxAtan2() - at);
         }
         System.out.println("atan2 approx     : " + atan2ApproxError);
-        System.out.println("atan2 alt approx : " + atan2AltError);
         System.out.println("atan2 GDX approx : " + atan2GDXError);
     }
 }
