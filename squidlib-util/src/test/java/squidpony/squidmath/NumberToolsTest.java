@@ -41,43 +41,7 @@ public class NumberToolsTest {
     Assert.assertEquals(0.0f, NumberTools.atan2(0.0f, 0.0f), 0.0f);
     Assert.assertEquals(0.0, NumberTools.atan2(0.0, 0.0), 0.0);
   }
-
-  @Test
-  public void testAtan2Rough() {
-    Assert.assertEquals(Float.NaN, NumberTools.atan2Rough_(Float.NaN, -0x1p-112f), 0.0f);
-    Assert.assertEquals(Float.NaN, NumberTools.atan2Rough_(Float.NaN, 0x1p-112f), 0.0f);
-    Assert.assertEquals(Double.NaN, NumberTools.atan2Rough_(Double.NaN, 0x1.c14f63f4d3e5dp+12), 0.0);
-    Assert.assertEquals(Float.NaN, NumberTools.atan2Rough_(Float.NEGATIVE_INFINITY, Float.NaN), 0.0f);
-    Assert.assertEquals(0.75f, NumberTools.atan2Rough_(Float.NEGATIVE_INFINITY, -0x1p+127f), 0.0f);
-    Assert.assertEquals(0.75f, NumberTools.atan2Rough_(Float.NEGATIVE_INFINITY, -0.0f), 0.0f);
-    Assert.assertEquals(0.5f, NumberTools.atan2Rough_(-0x1p-148f, -0x1.4p+127f), 0.0f);
-    Assert.assertEquals(0x1.7ffff9ef92726p-1, NumberTools.atan2Rough_(-0x1.00000405p-1003, -0x0.9p-1022), 0.0);
-    Assert.assertEquals(0.5, NumberTools.atan2Rough_(-0x1.00000405p-1003, -0x1.9p+1020), 0.0);
-    Assert.assertEquals(0.75, NumberTools.atan2Rough_(-0x1.83cd7de9211e5p-767, 0x0.5cb21a37aef3cp-1022), 0.0);
-    Assert.assertEquals(1.0, NumberTools.atan2Rough_(-0x1.00000405p-1003, 0x1.9p+1016), 0.0);
-    Assert.assertEquals(0.25f, NumberTools.atan2Rough_(Float.POSITIVE_INFINITY, -0x1p+112f), 0.0f);
-    Assert.assertEquals(0.25, NumberTools.atan2Rough_(0x1.00000405p+2, -0x0.9p-1022), 0.0);
-    Assert.assertEquals(0.5, NumberTools.atan2Rough_(0x1.7a51840820114p-984, -0x1.aa3e40653fb2p+421), 0.0);
-    Assert.assertEquals(0.25f, NumberTools.atan2Rough_(0x1p-149f, 0.0f), 0.0f);
-    Assert.assertEquals(0.0f, NumberTools.atan2Rough_(0.0f, 0.0f), 0.0f);
-    Assert.assertEquals(0.0, NumberTools.atan2Rough_(0.0, 0.0), 0.0);
-    Assert.assertEquals(Double.NaN, NumberTools.atan2Rough(-0x0.c8p-1022, Double.NaN), 0.0);
-    Assert.assertEquals(-0x1.921fb6p+0f, NumberTools.atan2Rough(-0x1.00001p+3f, -0x1p-111f), 0.0f);
-    Assert.assertEquals(-0x1.921fb6p+1f, NumberTools.atan2Rough(-0x1.00001p+3f, -0x1p+113f), 0.0f);
-    Assert.assertEquals(-0x1.921fb5fcc659fp+1, NumberTools.atan2Rough(-0x0.0000000001002p-1022, -0x0.008100000512p-1022), 0.0);
-    Assert.assertEquals(-0x1.921fb5fdd355p+0, NumberTools.atan2Rough(-0x1.87c38164c16dbp+1022, -0x1.ff4d006930883p-999), 0.0);
-    Assert.assertEquals(-0x1.0ef1p-13f, NumberTools.atan2Rough(-0x1p-136f, 0x1p-123f), 0.0f);
-    Assert.assertEquals(-0x1.921fb5fdd355p+0, NumberTools.atan2Rough(-0x1.87c38164c16dbp+1022, 0x1.ff4d006930883p-999), 0.0);
-    Assert.assertEquals(-0x1.921fb6p+0f, NumberTools.atan2Rough(-0x1p-145f, 0.0f), 0.0f);
-    Assert.assertEquals(0x1.921fb6p+0f, NumberTools.atan2Rough(0x1.00001p+3f, -0x1p-111f), 0.0f);
-    Assert.assertEquals(0x1.91a24674931e4p+1, NumberTools.atan2Rough(0x0.ec099903081e7p-1022, -0x1.fd61acp-1015), 0.0);
-    Assert.assertEquals(0x1.921fb5fdd355p+0, NumberTools.atan2Rough(0x1.87c38164c16dbp+1022, -0x1.ff4d006930883p-999), 0.0);
-    Assert.assertEquals(0x1.921fb6p+0f, NumberTools.atan2Rough(0x1p-149f, 0.0f), 0.0f);
-    Assert.assertEquals(0x1.921fb6p+1f, NumberTools.atan2Rough(-0.0f, -0x1.000002p+113f), 0.0f);
-    Assert.assertEquals(0.0, NumberTools.atan2Rough(0.0, 0.0), 0.0);
-    Assert.assertEquals(0.0f, NumberTools.atan2Rough(0.0f, 0.0f), 0.0f);
-  }
-
+  
   @Test
   public void testCosDegrees() {
     Assert.assertEquals(Float.NEGATIVE_INFINITY, NumberTools.cosDegrees(-0x1.7a573cp+102f), 0.0f);
@@ -88,25 +52,25 @@ public class NumberToolsTest {
     Assert.assertEquals(-0x1.6a61f2p-1f, NumberTools.cos(-0x1.f6a936p+1f), 0.0f);
     Assert.assertEquals(0x1.fff1139353f1cp-1, NumberTools.cos(0x1.f03bda2455007p-7), 0.0);
     for (float f = 0f; f <= 6.283185307179586f; f += 0.001f) {
-      Assert.assertEquals("Bad sin result at " + f, Math.sin(f), NumberTools.sin(f), 0.00125);
-      Assert.assertEquals("Bad cos result at " + f, Math.cos(f), NumberTools.cos(f), 0.00125);
+      Assert.assertEquals("Bad sin result at " + f, Math.sin(f), NumberTools.sin(f), 0.0011);
+      Assert.assertEquals("Bad cos result at " + f, Math.cos(f), NumberTools.cos(f), 0.0011);
     }
 
   }
 
   @Test
   public void testTurns() {
-    Assert.assertEquals(Math.sin(0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(0.2499999999999), 0.00125);
-    Assert.assertEquals(Math.cos(0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(0.2499999999999), 0.00125);
+    Assert.assertEquals(Math.sin(0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(0.2499999999999), 0.0011);
+    Assert.assertEquals(Math.cos(0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(0.2499999999999), 0.0011);
 
-    Assert.assertEquals(Math.sin(-0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(-0.2499999999999), 0.00125);
-    Assert.assertEquals(Math.cos(-0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(-0.2499999999999), 0.00125);
+    Assert.assertEquals(Math.sin(-0.2499999999999 * Math.PI * 2.0), NumberTools.sin_(-0.2499999999999), 0.0011);
+    Assert.assertEquals(Math.cos(-0.2499999999999 * Math.PI * 2.0), NumberTools.cos_(-0.2499999999999), 0.0011);
     
-    Assert.assertEquals(Math.sin(Math.PI * -0.5), NumberTools.sin_(-0.25), 0.00125);
-    Assert.assertEquals(Math.cos(Math.PI * -0.5), NumberTools.cos_(-0.25), 0.00125);
+    Assert.assertEquals(Math.sin(Math.PI * -0.5), NumberTools.sin_(-0.25), 0.0011);
+    Assert.assertEquals(Math.cos(Math.PI * -0.5), NumberTools.cos_(-0.25), 0.0011);
     for (float f = 0f; f <= 1f; f += 0.0001f) {
-      Assert.assertEquals("Bad sin_ result at " + f, Math.sin(f * Math.PI * 2.0), NumberTools.sin_(f), 0.00125);
-      Assert.assertEquals("Bad cos_ result at " + f, Math.cos(f * Math.PI * 2.0), NumberTools.cos_(f), 0.00125);
+      Assert.assertEquals("Bad sin_ result at " + f, Math.sin(f * Math.PI * 2.0), NumberTools.sin_(f), 0.0011);
+      Assert.assertEquals("Bad cos_ result at " + f, Math.cos(f * Math.PI * 2.0), NumberTools.cos_(f), 0.0011);
     }
   }
   @Test
@@ -115,14 +79,14 @@ public class NumberToolsTest {
 //    System.out.println("-1.000: Should be " + Math.asin(-1.0) + ", approx is " + NumberTools.asin(-1.0));
 //    System.out.println("-0.998: Should be " + Math.asin(-0.998) + ", approx is " + NumberTools.asin(-0.998));
 //    System.out.println(" 0.998: Should be " + Math.asin(0.998) + ", approx is " + NumberTools.asin(0.998));
-    for (double f = -1f; f <= 1f; f += 0.001) {
+    for (double f = -1f; f <= 1f; f += 0.0001) {
       Assert.assertEquals("Bad asin result at " + f, Math.asin(f), NumberTools.asin(f), 0.001);
       Assert.assertEquals("Bad acos result at " + f, Math.acos(f), NumberTools.acos(f), 0.001);
     }
   }
   @Test
   public void testInverseTrigTurns() {
-    for (float f = -1f; f <= 1f; f += 0.001f) {
+    for (float f = -1f; f <= 1f; f += 0.0001f) {
       Assert.assertEquals("Bad asin_ result at " + f, ((Math.asin(f) * 0.15915494309189535 + 1.0) % 1.0), NumberTools.asin_(f), 0.001);
       Assert.assertEquals("Bad acos_ result at " + f, ((Math.acos(f) * 0.15915494309189535 + 1.0) % 1.0), NumberTools.acos_(f), 0.001);
     }
