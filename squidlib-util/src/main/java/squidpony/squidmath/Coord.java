@@ -438,32 +438,67 @@ public class Coord implements Serializable {
 
     /**
      * Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
-     * generate, but instead uses a highly-specific technique based on {@link Lathe32RNG}'s random int generation, which
-     * also has two independent ints it uses like a Coord's x and y. Unlike Lathe32RNG, this uses only bitwise
-     * operations (not even addition). This guarantees it will behave correctly on GWT (Lathe32RNG uses an alternate
-     * source file on GWT).  It also manages to get extremely low collision rates under many circumstances, and very
-     * frequently manages to avoid colliding on more than 25% of Coords (making the load factor of most hash-based
-     * collections fine at a default of 0.75) while often having 0 collisions with some data sets.
+     * generate, but instead uses a highly-specific technique based on Cantor's pairing function, xorshifts,
+     * xor-rotate-xor-rotate, and an XLCG step at the end. It manages to get extremely low collision rates under many
+     * circumstances, and very frequently manages to avoid colliding on more than 25% of Coords (making the load factor
+     * of most hash-based collections fine at a default of 0.75) while often having 0 collisions with some data sets.
+     * It tolerates negative x and y for Coords fairly well.
      * <br>
-     * For reference, this was tested on several rectangular sections of Coords of varying density, with sizes from 64
-     * to 512 for x and y separately. On a total of 7,830,980 Coords, an older hashCode() this used got 2,159,553
-     * collisions (27.6% rate), the previous similar hashCode() this used got 1,514,191 collisions (19.3% rate), a naive
-     * {@link java.util.Objects#hash(Object...)} approach on x and y got 6,163,604 collisions (78.7% rate), and this
-     * method gets 179,922 collisions (2.3% rate). A perfect general hashCode isn't possible, but for the common usage
-     * of Coords (usually x and y are no greater than 511 and are rarely negative, etc.) we can do better than
-     * {@code return x * 31 + y;} (which is close to the high-collision Objects.hash way).
+     * This gets comparable collision rates to a previous version used by SquidLib, around 3% across a wide variety of
+     * rectangular areas, but has much better results when used for seeding procedural generation based on a Coord (a
+     * reasonable usage of this method). The previous method changed bits in large checkerboard patterns, leaving heavy
+     * square-shaped biases in generated results, while this version only has checkerboard-reminiscent patterns in the
+     * lowest 4 or 5 bits, and even then has some chaotic scattering.
      * <br>
-     * This changed at least five times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
+     * This changed at least six times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
      * same across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
      * unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
      * {@link OrderedSet} and {@link OrderedMap}; if you use the ordered kinds, then the only things that matter about
      * this hash code are that it's fast (it's fast enough), it's cross-platform compatible (this version avoids using
      * long values, which are slow on GWT, and is carefully written to behave the same on GWT as desktop) and that it
      * doesn't collide often (which is now much more accurate than in earlier versions of this method).
+     * @see #cantorHashCode(int, int) A static method that gets the same result as this method without involving a Coord
      * @return an int that should, for most different Coord values, be significantly different from the other hash codes
      */
     @Override
     public int hashCode() {
+        int r = x, s = y;
+        r ^= r >> 31;
+        s ^= s >> 31;
+        s += ((r+s) * (r+s+1) >> 1);
+        s ^= s >>> 1 ^ s >>> 6;
+        return (s ^ (s << 15 | s >>> 17) ^ (s << 23 | s >>> 9)) * 0x125493 ^ 0xD1B54A35;
+    }
+
+    /**
+     * A static version of the current {@link #hashCode()} method of this class, taking x and y as parameters instead of
+     * requiring a Coord object. Like the current hashCode() method, this involves the close-to-optimal mathematical
+     * Cantor pairing function to distribute x and y without overlap until they get very large. Cantor's pairing
+     * function can be written simply as {@code ((x + y) * (x + y + 1)) / 2 + y}; it produces sequential results for a
+     * sequence of positive points traveling in diagonal stripes away from the origin.
+     * @param x the x coordinate of the "imaginary Coord" to hash
+     * @param y the y coordinate of the "imaginary Coord" to hash
+     * @return the equivalent to the hashCode() of an "imaginary Coord"
+     */
+    public static int cantorHashCode(int x, int y) {
+        x ^= x >> 31;
+        y ^= y >> 31;
+        y += ((x + y) * (x + y + 1) >> 1);
+        y ^= y >>> 1 ^ y >>> 6;
+        return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+    }     
+    /**
+     * An earlier hashCode() implementation used by this class, now standalone in case you want to replicate the results
+     * of the older code. This uses only bitwise operations, which tend to be fairly fast on all platforms, and when
+     * used in a collection it has comparable collision rates to the current hashCode() method (very, very low rates),
+     * but if used for procedural generation it's simply terrible, with large blocks of nearby x,y points having
+     * identical values for several bits and all changes happening in a repetitive checkerboard pattern. It is
+     * structured very similarly to {@link XoRoRNG} and {@link Lathe32RNG} in particular, but using only bitwise math.
+     * @param x the x coordinate of the "imaginary Coord" to hash
+     * @param y the y coordinate of the "imaginary Coord" to hash
+     * @return the equivalent to the hashCode() of an "imaginary Coord"
+     */
+    public static int xoroHashCode(final int x, final int y) {
         int r = x ^ y;
         r ^= (x << 13 | x >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
         r = x ^ (r << 11 | r >>> 21);
