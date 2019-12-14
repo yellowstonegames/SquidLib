@@ -52,8 +52,7 @@ import static squidpony.squidmath.NumberTools.swayTight;
  *     versions of noise here. One samples 3D noise using the current x and y for a point at 3 different z values based
  *     on the number of frames rendered, and uses those 3 numbers as the red, green, and blue channels. Another samples
  *     3D noise only once, and interprets the single value as a 24-bit int representing a color. The first looks good!
- *     It can be previewed at https://dl.dropboxusercontent.com/u/11914692/rainbow-perlin.gif , although the GIF format
- *     reduces the visible color depth. The second doesn't look good at all, but may be handy for spotting quirks.</ul>
+ *     The second doesn't look good at all, but may be handy for spotting quirks.</ul>
  *     <ul>There are also "artistic interpretations" of the otherwise-chaotic hashes. Nice for getting ideas, they're a
  *     sort of Rorschach-test-like concept.</ul>
  * </li>
@@ -66,9 +65,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 134;
-    private int hashMode = 0, rngMode = 0, noiseMode = 133, otherMode = 1;//74;//118;//82;
+    private int hashMode = 2, rngMode = 0, noiseMode = 133, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -423,8 +422,7 @@ public class HashVisualizer extends ApplicationAdapter {
     {
         return (int)((bound * (((x = ((x = x * 0x6C8E9CF570932BD5L + seed + 0x2545F4914F6CDD1DL * index) ^ x >>> 26) * ((y *= 0x9E3779B97F4A7C15L) ^ (y + 0xC6BC279692B5CC85L))) ^ x >>> 28) & 0xFFFFFFFFL)) >> 32);
     }
-    public static int szudzikHash2D(int x, int y)
-    {
+    public static int szudzikHash2D(int x, int y) {
         //return (y += ((x = (x ^ 0x41C64E6D) * ((y << 3 & 0xFFFF8) ^ 0x9E373)) ^ x >>> 15 ^ 0x9E3779B5) * 0xACEDB) ^ y >>> 13;
 //        x *= 0x9E375;
 //        y *= 0xACEDB;
@@ -437,11 +435,64 @@ public class HashVisualizer extends ApplicationAdapter {
         // szudzik, rather slow, but near-optimal for positive ints
 //        return (x >= y ? x * x + x + y : x + y * y);
         // szudzik with modifications to output; a little better hash quality
-        return ((x += (x >= y ? x * x + y : y * y)) ^ (x << 11 | x >>> 21) ^ (x << 20 | x >>> 12)) * 0x13C6EF;
+//        return ((x += (x >= y ? x * x + y : y * y)) ^ (x << 11 | x >>> 21) ^ (x << 20 | x >>> 12)) * 0x13C6EF;
+
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+//        s = 42 ^ s * 0x1827F5 ^ y * 0x123C21;
+//        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+        x ^= x >> 31;
+        y ^= y >> 31;
+        y += ((x+y) * (x+y+1) >> 1);
+        y ^= y >>> 1 ^ y >>> 6;
+        return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+//        y = 
+//                (x >= y
+//                ? x * x + x + y
+//                : x + y * y);
+
+//        y = (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+//        return  (y ^ (y << 13 | y >>> 19) ^ (y << 25 | y >>> 7)) * 0xACEDB ^ 0xC13FA9AD;
+
+//        y += x ^ (x << 15 | x >>> 17) ^ (x << 29 | x >>> 3);
+//        x += y ^ (y << 15 | y >>> 17) ^ (y << 29 | y >>> 3);
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        x += ((x+y) * (x+y+1) >> 1);
+////                (x >= y
+////                ? x * x + x + y
+////                : x + y * y);
+//        return (x ^ (x << 13 | x >>> 19) ^ (x << 21 | x >>> 11)) * 0x125493 ^ 0xC13FA9AD;
+//        return ((x ^ (x << 13 | x >>> 19) ^ (x << 22 | x >>> 12) ^ (x << 6 | x >>> 26) ^ (x << 29 | x >>> 3) ^ 0xC13FA9AD) * 0x125493 ^ 0x91E10DA5) * 0xACEDB ^ 0xD1B54A35;
+
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        x ^= x >>> 1;
+//        y ^= y >>> 1;
+//        x = ((x >= y
+//                ? x * x + x + y
+//                : x + y * y) ^ 0xC13FA9AD) * 0x125493;
+//        x = (x ^ x >>> 7 ^ x >>> 23 ^ x >>> 18 ^ x << 16 ^ 0x91E10DA5) * 0xACEDB;
+//        return x ^ x >>> 16;
+
+
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        x = ((x >= y
+//                ? x * x + x + y
+//                : x + y * y) ^ 0xC13FA9AD) * 0x125493;
+//        x ^= x >>> (x >>> 28) + 4 ^ 0x91E10DA5;
+//        x *= 0x125493;
+//        return x ^ x >>> (x >>> 28) + 4;
+
+
+        // * 0xA5CB3;
         // cantor
 //        x += (((x+y) * (x+y+1) >> 1) + y) * 0xC13FA9A902A6328FL;
 //        return ((x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ x >>> 22);
-        
+
 //        return ((x = ((x *= 0xC6BC279692B5CC85L) ^ x >>> 26) * ((y *= 0x9E3779B97F4A7C15L) ^ (y + 0x9E3779B97F4A7C15L))) ^ x >>> 28);
 //        long state = (x << 16 ^ y) + 0xBEEFL;
 //        long state = (y*0x41C64E6DL + x*0x9E3779B5L) + 0xBEEFL;
@@ -499,9 +550,9 @@ public class HashVisualizer extends ApplicationAdapter {
 //        y -= (x << 8) + (y >>> 7);//y -= (x << 5 | x >>> 27);// + 0x41C64E6D;
 //        x += (y << 21 | y >>> 11) ^ (y << 6 | y >>> 26) ^ y;
 //        y += (x << 13 | x >>> 19) ^ (x << 22 | x >>> 10) ^ x;
-        
+
 //        return (y << 9 | y >>> 23) ^ (x << 25 | x >>> 7);
-        
+
 //        return (x = ((x = x * 0xFACED + y) ^ x >>> 13) * ((y * 0x9E375 - x >> 12 | 1))) ^ (x << 21 | x >>> 11) ^ (x << 12 | x >>> 20);
 //        return (int)(TangleRNG.determine(x, y));
 //        y ^= 0x9E3779B5;
@@ -513,6 +564,14 @@ public class HashVisualizer extends ApplicationAdapter {
 //        x = (x << 13 | x >>> 19) ^ y ^ (y << 5); // a, b
 //        y = (y << 28 | y >>> 4) + x; // c
 //        return (y << 21 | y >>> 11) ^ x;
+    }
+
+    public static int coordHash(final int x, final int y)
+    {
+        int r = x ^ y;
+        r ^= (x << 13 | x >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
+        r = x ^ (r << 11 | r >>> 21);
+        return r ^ (r << 25 | r >>> 7);
     }
 
     /**
@@ -1528,26 +1587,28 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 2:
-                        extra = System.nanoTime() >>> 30 & 63;
-                        Gdx.graphics.setTitle("PointHash on length 2, bit " + extra);
+                        extra = System.nanoTime() >>> 30 & 31;
+                        Gdx.graphics.setTitle("Szudzik Hash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 //code = -(Noise.PointHash.hashAll(x, y, 123L) >>> extra & 1L) | 255L;
 //                                code = szudzikHash2D(x, y) & 0xFFFFFF00L | 255L;
-                                back[x][y] = (Noise.PointHash.hashAll(x, y, 123L) >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (szudzikHash2D(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+//                                back[x][y] = (Noise.PointHash.hashAll(x, y, 123L) >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
 //                                back[x][y] = BOLD[szudzikHash2D(x, y)];
                             }
                         }
                         break;
                     case 3:
-                        extra = System.nanoTime() >>> 30 & 63;
-                        Gdx.graphics.setTitle("HastyPointHash on length 2, bit " + extra);
+                        extra = System.nanoTime() >>> 30 & 31;
+                        Gdx.graphics.setTitle("Coord's hashCode() on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = -(Noise.HastyPointHash.hashAll(x, y, 123) >>> extra & 1L) | 255L;
+                                back[x][y] = (coordHash(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;
+//                                code = -(Noise.HastyPointHash.hashAll(x, y, 123) >>> extra & 1L) | 255L;
 //                                code = Noise.HastyPointHash.hashAll(x, y, 123) >> 63 | 255L;
                                 //code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
-                                back[x][y] = floatGet(code);
+//                                back[x][y] = floatGet(code);
                             }
                         }
                         break;

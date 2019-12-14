@@ -8422,15 +8422,15 @@ public class SColor extends Color implements Serializable {
     public static final SColor CW_WHITE = new SColor(0xFFFFFF, "CW White");
 
     /**
-     * This color constant "Aurora Transparent" has RGB code {@code 0x000000}, red 0.0, green 0.0, blue 0.0, alpha 1, hue 0.0, saturation 0.0, and value 0.0.
-     * It can be represented as a packed float with the constant {@code -0x1.0p125F}.
+     * This color constant "Aurora Transparent" has RGB code {@code 0x000000}, red 0.0, green 0.0, blue 0.0, alpha 0, hue 0.0, saturation 0.0, and value 0.0.
+     * It can be represented as a packed float with the constant {@code 0x0.0p0F}.
      * <pre>
      * <font style='background-color: #000000;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #000000;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #000000; color: #888888'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #000000;'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_TRANSPARENT = new SColor(0x000000, "Aurora Transparent");
+    public static final SColor AURORA_TRANSPARENT = new SColor(0, 0, 0, 0, "Aurora Transparent");
 
     /**
      * This color constant "Aurora Pitch Black" has RGB code {@code 0x010101}, red 0.003921569, green 0.003921569, blue 0.003921569, alpha 1, hue 0.0, saturation 0.0, and value 0.003921569.
@@ -12729,17 +12729,19 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Given a packed float color {@code encoded}, gets another packed float color with a contrasting luma in YCbCr
-     * space but the same Cb, Cr, and opacity (Cb and Cr are likely to be clamped if the result gets close to white or
-     * black). This won't ever produce black or other very dark colors, and also has a gap in the range it produces
-     * for luma values between 0.425 and 0.7. That allows most of the colors this method produces to contrast well as a
-     * background with a foreground of {@code encoded}, or vice versa.
-     * @param encoded a packed float color, as produced by {@link #toFloatBits()}
+     * Given a packed float color {@code mainColor} and another color that it should be made to contrast with, gets a
+     * packed float color with a contrasting luma in YCbCr space but the same Cb, Cr, and opacity (Cb and Cr are likely
+     * to be clamped if the result gets close to white or black). This won't ever produce black or other very dark
+     * colors, and also has a gap in the range it produces for luma values between 0.5 and 0.55. That allows most of the
+     * colors this method produces to contrast well as a foreground when displayed on a background of
+     * {@code contrastingColor}, or vice versa.
+     * @param mainColor a packed float color, as produced by {@link #toFloatBits()}; this is the color that will be adjusted
+     * @param contrastingColor a packed float color, as produced by {@link #toFloatBits()}; the adjusted mainColor will contrast with this
      * @return a different, contrasting packed float color
      */
-    public static float contrastLuma(final float encoded, final float contrastingColor)
+    public static float contrastLuma(final float mainColor, final float contrastingColor)
     {
-        final int bits = NumberTools.floatToIntBits(encoded),
+        final int bits = NumberTools.floatToIntBits(mainColor),
                 contrastBits = NumberTools.floatToIntBits(contrastingColor),
                 r = (bits & 0x000000ff), 
                 g = (bits & 0x0000ff00),
@@ -12765,12 +12767,12 @@ public class SColor extends Color implements Serializable {
                         ctg * (0x1.010102p-16f * -0.418688f) + 
                         ctb * (0x1.010102p-24f * -0.081312f);
         if((cb - ctcb) * (cb - ctcb) + (cr - ctcr) * (cr - ctcr) >= 0.1875f)
-            return encoded;
+            return mainColor;
         final float luma =
-                r * (0x1.010102p-8f  * 0.299f) +
+                r * (0x1.010102p-8f * 0.299f) +
                         g * (0x1.010102p-16f * 0.587f) +
                         b * (0x1.010102p-24f * 0.114f),
-                contrastLuma =  ctr * (0x1.010102p-8f  * 0.299f) +
+                contrastLuma = ctr * (0x1.010102p-8f * 0.299f) +
                         ctg * (0x1.010102p-16f * 0.587f) +
                         ctb * (0x1.010102p-24f * 0.114f);
         return floatGetYCbCr(contrastLuma < 0.5f ? luma * 0.45f + 0.55f : 0.5f - luma * 0.45f, cb, cr, 0x1.010102p-8f * a);
@@ -12879,23 +12881,6 @@ public class SColor extends Color implements Serializable {
         return ((bits & 0x000000ff) + ((bits & 0x0000ff00) >>> 7) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
     }
     /**
-     * The "luma" of the given packed float, which is like its lightness, in YCwCm format; ranges from 0.0f to
-     * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCwCm(float, float, float, float)}.
-     * YCwCm is useful for modifications to colors because you can get a grayscale version of a color by setting Cw and
-     * Cm to 0, you can desaturate by multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by
-     * multiplying Cw and Cm by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
-     * so on and so forth. Unlike YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some
-     * effect; multiplying Cw by a number greater than 1 will make warm colors warmer and cool colors cooler, for
-     * instance. This might not be as perceptually accurate at determining lightness as {@link #lumaOfFloat(float)}.
-     * @param encoded a packed float
-     * @return the luma as a float from 0.0f to 1.0f
-     */
-    public static float lumaYCwCm(final float encoded)
-    {
-        final int bits = NumberTools.floatToIntBits(encoded);
-        return (bits & 0xFF) * 0x3p-11f + (bits >>> 8 & 0xFF) * 0x1p-9f + (bits >>> 16 & 0xFF) * 0x1p-11f;
-    }
-    /**
      * The "luminance" of the given libGDX Color, which is like its lightness, in YCoCg format; ranges from 0.0f to
      * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCoCg(float, float, float, float)}.
      * YCoCg is useful for modifications to colors because you can get a grayscale version of a color by setting Co and
@@ -12914,6 +12899,25 @@ public class SColor extends Color implements Serializable {
                 (color.g * 0.5f) +
                 (color.b * 0.25f);
     }
+
+    /**
+     * The "luma" of the given packed float, which is like its lightness, in YCwCm format; ranges from 0.0f to
+     * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCwCm(float, float, float, float)}.
+     * YCwCm is useful for modifications to colors because you can get a grayscale version of a color by setting Cw and
+     * Cm to 0, you can desaturate by multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by
+     * multiplying Cw and Cm by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth. Unlike YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some
+     * effect; multiplying Cw by a number greater than 1 will make warm colors warmer and cool colors cooler, for
+     * instance. This might not be as perceptually accurate at determining lightness as {@link #lumaOfFloat(float)}.
+     * @param encoded a packed float
+     * @return the luma as a float from 0.0f to 1.0f
+     */
+    public static float lumaYCwCm(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return (bits & 0xFF) * 0x3p-11f + (bits >>> 8 & 0xFF) * 0x1p-9f + (bits >>> 16 & 0xFF) * 0x1p-11f;
+    }
+
     /**
      * The "luma" of the given libGDX Color, which is like its lightness, in YCwCm format; ranges from 0.0f to
      * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCwCm(float, float, float, float)}.
