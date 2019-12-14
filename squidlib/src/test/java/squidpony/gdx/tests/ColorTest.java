@@ -18,7 +18,6 @@ import squidpony.squidmath.OrderedSet;
 
 import java.util.Comparator;
 
-import static squidpony.StringKit.safeSubstring;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
 //import static squidpony.squidgrid.gui.gdx.SColor.floatGetYCwCm;
 
@@ -508,7 +507,9 @@ public class ColorTest extends ApplicationAdapter {
     public double lightnessAltLAB(Color color)
     {
 //        y = (r * 0.3125 + g * 0.5625 + b * 0.125);        //(r * 0x3p-3 + g * 0x4p-3 + b * 0x1p-3);
-        return Math.sqrt((Math.pow(color.r, 2.19921875) * 0x3p-3 + Math.pow(color.g, 2.19921875) * 0x4p-3 + Math.pow(color.b, 2.19921875) * 0x1p-3));
+        return Math.sqrt((Math.pow(color.r, 2.19921875) * 0x3p-3
+                + Math.pow(color.g, 2.19921875) * 0x4p-3
+                + Math.pow(color.b, 2.19921875) * 0x1p-3));
 //        r = ((r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92);
 //        g = ((g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92);
 //        b = ((b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92);
@@ -1205,15 +1206,15 @@ public class ColorTest extends ApplicationAdapter {
     public static void tabSplit(String[] receiving, String source) {
         int dl = 1, idx = -1, idx2;
         for (int i = 0; i < 2; i++) {
-            receiving[i] = safeSubstring(source, idx+dl, idx = source.indexOf('\t', idx+dl));
+            receiving[i] = StringKit.safeSubstring(source, idx+dl, idx = source.indexOf('\t', idx+dl));
         }
         if((idx2 = source.indexOf('\t', idx+dl)) < 0)
         {
-            receiving[2] = safeSubstring(source, idx+dl, source.length());
+            receiving[2] = StringKit.safeSubstring(source, idx+dl, source.length());
         }
         else
         {
-            receiving[2] = safeSubstring(source, idx+dl, idx2);
+            receiving[2] = StringKit.safeSubstring(source, idx+dl, idx2);
         }
     }
 

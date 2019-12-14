@@ -685,8 +685,24 @@ public class HashQualityTest {
 //        y = y << 1 ^ y >> 31;
 //        s = 42 ^ s * 0x1827F5 ^ y * 0x123C21;
 //        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
 
-        return (x >= y ? x * x + x + y : x + y * y);// * 0xA5CB3;
+        x ^= x >> 31;
+        y ^= y >> 31;
+        return (x >= y
+                ? x * x + x + y
+                : x + y * y);
+//        return x ^ (x << 13 | x >>> 19) ^ (x << 22 | x >>> 12) ^ (x << 6 | x >>> 26) ^ (x << 29 | x >>> 3);
+//        x ^= x >>> (x >>> 28) + 4 ^ 0x91E10DA5;
+//        return x * 0x125493;
+//        return x ^ x >>> (x >>> 28) + 4;
+        
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        return ((x >= y 
+//                ? x * x + x + y 
+//                : x + y * y) ^ 0xD1B54A35) * 0x125493 ^ 0x9E3779B9;
     }
     public static int szudzik2Coord(int x, int y)
     {
@@ -705,7 +721,12 @@ public class HashQualityTest {
 //        x = x << 1 ^ x >> 31;
 //        y = y << 1 ^ y >> 31;
 //        return (((x+y >> 1) * (x+y+1 >> 1)) + y);// * 0xA5CB3;
-        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
+
+//        x ^= x >> 1;
+//        y ^= y >> 1;
+        x += 3;
+        y += 3;
+        return (((x+y) * (x+y+1) >> 1) + y) ^ 0x9E3779B9;// * 0xA5CB3;
 //        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
     }
 
@@ -719,34 +740,25 @@ public class HashQualityTest {
     }
 
     public static int pelotonCoord(int x, int y) {
-//        int s = 42 ^ x + y;
-//        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1827F5;// ^ 0x02A6328F;
-//        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
-//        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x123C21;// ^ 0xC79E7B1D;
-//        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7;
+//        final long a = x + CrossHash.Water.b1, b = y + CrossHash.Water.b2;
+//        return (int) ((a ^ (b << 39 | b >>> 25)) * (b ^ (a << 39 | a >>> 25)) >>> 32);
+//        x = (x ^ (x << 13 | x >>> 19) ^ (x << 21 | x >>> 11));
+//        y = (y ^ (y << 15 | y >>> 17) ^ (y << 29 | y >>> 3));
+        x ^= x >> 31;
+        y ^= y >> 31;
+        y += ((x+y) * (x+y+1) >> 1);
+        y ^= y >>> 1 ^ y >>> 6;
+        return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+
+//        y =
+//                (x >= y
+//                ? x * x + x + y
+//                : x + y * y);
         
         
-//        int s = 0x9E3779B9 + (x * 0x1827F5);
-//        s ^= s << 8 ^ s >>> 15 ^ s >>> 9;
-//        s += (y * 0x123C21);
-//        return s ^ s << 8 ^ s >>> 15 ^ s >>> 9;
-        
-//        int state = 0x9E3779B9 ^ x * 0x1827F5 ^ y * 0x123C21;
-//        return ((state = ((state = (state ^ (state << 19 | state >>> 13) ^ (state << 7 | state >>> 25) ^ 0xD1B54A33) * 0x15DE2D) ^ (state << 20 | state >>> 12) ^ (state << 8 | state >>> 24)) * 0x1B69E5) ^ state >>> 14);
+//        int s = 42 ^ x * 0x1827F5 ^ y * 0x123C21;
+//        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
 
-//        int state = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
-//        return ((state = ((state = (state ^ (state << 19 | state >>> 13) ^ (state << 7 | state >>> 25) ^ 0xD1B54A33) * 0x15DE2D) ^ (state << 20 | state >>> 12) ^ (state << 8 | state >>> 24)) * 0x1B69E5) ^ state >>> 14);
-        //int s = 42 ^ x * 0x1827F5 ^ y * 0x123C21;
-        int s = 42 ^ x * 0x1827F5 ^ y * 0x123C21;
-        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
-
-
-//        int s = (x + y ^ 0xD192ED03) * 0x1A36A9;
-//        s ^= s << 13 ^ s >>> 12 ^ s >>> 7;
-//        s ^= (x ^ 0xFB8FAC03) * 0x157931;
-//        s ^= s << 13 ^ s >>> 12 ^ s >>> 7;
-//        s ^= (y ^ 0x2F3D8DD7) * 0x119725;
-//        return s ^ s << 13 ^ s >>> 12 ^ s >>> 7;
         //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
     }
 
