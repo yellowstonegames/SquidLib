@@ -10,6 +10,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Objects;
 
 /**
@@ -686,11 +687,11 @@ public class HashQualityTest {
 //        y = y << 1 ^ y >> 31;
 //        s = 42 ^ s * 0x1827F5 ^ y * 0x123C21;
 //        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
-//        x = x << 1 ^ x >> 31;
-//        y = y << 1 ^ y >> 31;
-
-        x ^= x >> 31;
-        y ^= y >> 31;
+        x = x << 1 ^ x >> 31;
+        y = y << 1 ^ y >> 31;
+//
+//        x ^= x >> 31;
+//        y ^= y >> 31;
         return (x >= y
                 ? x * x + x + y
                 : x + y * y);
@@ -725,9 +726,12 @@ public class HashQualityTest {
 
 //        x ^= x >> 1;
 //        y ^= y >> 1;
-        x += 3;
-        y += 3;
-        return (((x+y) * (x+y+1) >> 1) + y) ^ 0x9E3779B9;// * 0xA5CB3;
+//        x += 3;
+//        y += 3;
+        x = x << 1 ^ x >> 31;
+        y = y << 1 ^ y >> 31;
+        y += ((x+y) * (x+y+1) >> 1);
+        return y ^ y >>> 1;// * 0xA5CB3;
 //        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
     }
 
@@ -745,11 +749,24 @@ public class HashQualityTest {
 //        return (int) ((a ^ (b << 39 | b >>> 25)) * (b ^ (a << 39 | a >>> 25)) >>> 32);
 //        x = (x ^ (x << 13 | x >>> 19) ^ (x << 21 | x >>> 11));
 //        y = (y ^ (y << 15 | y >>> 17) ^ (y << 29 | y >>> 3));
-        x ^= x >> 31;
-        y ^= y >> 31;
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+
+//        y += ((x+y) * (x+y+1) >> 1);
+
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+//        y += (y >= x ? y * y + x : x * x);
+        x = x << 1 ^ x >> 31;
+        y = y << 1 ^ y >> 31;
         y += ((x+y) * (x+y+1) >> 1);
+//        y ^= y >>> 1 ^ y >>> 6;
         y ^= y >>> 1 ^ y >>> 6;
-        return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+//        y = (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0xACEDB;
+        y = (y ^ (y << 13 | y >>> 19) ^ (y << 21 | y >>> 11)) * 0xACEDB;
+        return y ^ y >>> 1;
+        //        return (y ^ (y << 13 | y >>> 19) ^ (y << 21 | y >>> 11) ^ 0xD1B54A35) * 0xACEDB ^ 0x9E3779BD;
+//        return (y ^ y >>> 1);// * 0x125493 ^ 0xD1B54A35;
 
 //        y =
 //                (x >= y
@@ -787,8 +804,23 @@ public class HashQualityTest {
         //s ^= s << 8 ^ s >>> 15 ^ s >>> 9;
 //        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
 
-        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
-        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
+        x = x << 1 ^ x >> 31;
+        y = y << 1 ^ y >> 31;
+        z = z << 1 ^ z >> 31;
+
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        z ^= z >> 31;
+
+//        x += (x >= z ? x * x + z : z * z);
+//        y += (y >= x ? y * y + x : x * x);
+        y += ((z+y) * (z+y+1) >> 1);
+        y += ((x+y) * (x+y+1) >> 1);
+        y ^= y >>> 1 ^ y >>> 6;
+        return (y ^ (y << 15 | y >>> 17) ^ (y << 21 | y >>> 11)) * 0x125493 ^ 0xD1B54A35;
+
+//        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
+//        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
 
 
 //        int s = 0x9E3779B9 ^ 0x1A36A9 * (x ^ 0x157931 * (y ^ z * 0x119725));
@@ -859,23 +891,25 @@ public class HashQualityTest {
                     SNShuffledIntSequence
                             xShuffle = new SNShuffledIntSequence(WIDTH, 1),
                             yShuffle = new SNShuffledIntSequence(HEIGHT, -1);
-                    UnorderedSet<Coord> points = new UnorderedSet<>(WIDTH * HEIGHT);
+                    BitSet points = new BitSet(WIDTH * HEIGHT + WIDTH + HEIGHT << 2);
+//                    UnorderedSet<Coord> points = new UnorderedSet<>(WIDTH * HEIGHT);
                     for (int i = 0; i < WIDTH; i++) {
                         for (int j = 0; j < HEIGHT; j++) {
 //                            int x = xShuffle.next(), y = yShuffle.next();
-                            int x = xShuffle.next(), y = yShuffle.next();
-                            Coord c = Coord.get(x, y);
-                            if (rng.next(3) > reduction || points.contains(c)) {
+                            int x = xShuffle.next() ^ -rng.next(1), y = yShuffle.next() ^ -rng.next(1);
+                            int c = x + WIDTH + 1 + (y + HEIGHT + 1) * WIDTH;
+                            if (rng.next(3) > reduction || points.get(c)) {
                                 --SIZE;
                                 continue;
                             }
-                            points.add(c);
-                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
-                            colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
+                            points.set(c);
+//                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
                             colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
+                            colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
                             colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
-                            colliderGold.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
-                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
+//                            colliderGold.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
+//                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
+                            
 //                            for (int i = 0; i < 31; i++) {
 //                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
 //                            }
@@ -965,16 +999,16 @@ public class HashQualityTest {
                             for (int j = 0; j < HEIGHT; j++) {
                                 for (int k = 0; k < DEPTH; k++) {
 //                            int x = xShuffle.next(), y = yShuffle.next();
-                                    int x = xShuffle.next(), y = yShuffle.next(), z = zShuffle.next();
+                                    int x = xShuffle.next() ^ -rng.next(1), y = yShuffle.next() ^ -rng.next(1), z = zShuffle.next() ^ -rng.next(1);
                                     Coord3D c = Coord3D.get(x, y, z);
                                     if (rng.next(3) > reduction || points.contains(c)) {
                                         --SIZE;
                                         continue;
                                     }
                                     points.add(c);
-                                    colliderBase.put((int) Noise.PointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
-                                    colliderPelo.put(Noise.IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict, 0.0);
-                                    colliderSzud.put(peloton3D(x, y, z) & restrict, 0.0);
+                                    colliderBase.put(Noise.IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict, 0.0);//((int) Noise.PointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
+                                    colliderPelo.put(peloton3D(x, y, z) & restrict, 0.0);
+                                    colliderSzud.put(szudzikCoord(z, szudzikCoord(x, y)) & restrict, 0.0);
                                     colliderCant.put(cantorCoord(z, cantorCoord(x, y)) & restrict, 0.0);
                                     colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
                                     colliderObje.put(Objects.hash(x, y, z) & restrict, 0.0);
@@ -1024,7 +1058,7 @@ public class HashQualityTest {
                     }
                 }
             }
-            System.out.println("INTERMEDIATE number of Coords added: " + total);
+            System.out.println("INTERMEDIATE number of Coords added: " + total + " on reduction " + reduction);
             System.out.println("INTERMEDIATE Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
             System.out.println("INTERMEDIATE Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
             System.out.println("INTERMEDIATE Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);

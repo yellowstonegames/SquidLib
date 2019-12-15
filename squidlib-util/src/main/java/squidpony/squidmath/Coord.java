@@ -486,7 +486,7 @@ public class Coord implements Serializable {
         y += ((x + y) * (x + y + 1) >> 1);
         y ^= y >>> 1 ^ y >>> 6;
         return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
-    }     
+    }
     /**
      * An earlier hashCode() implementation used by this class, now standalone in case you want to replicate the results
      * of the older code. This uses only bitwise operations, which tend to be fairly fast on all platforms, and when

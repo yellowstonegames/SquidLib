@@ -443,11 +443,24 @@ public class HashVisualizer extends ApplicationAdapter {
 //        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
 //        x = x << 1 ^ x >> 31;
 //        y = y << 1 ^ y >> 31;
-        x ^= x >> 31;
-        y ^= y >> 31;
-        y += ((x+y) * (x+y+1) >> 1);
-        y ^= y >>> 1 ^ y >>> 6;
+
+
+        x = x << 1 ^ x >> 31;
+        y = y << 1 ^ y >> 31;
+        x += ((x+y) * (x+y+1) >> 1);
+        y += x ^ x >>> 1 ^ x >>> 6;
         return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+//        return (y ^ y >>> 1) * 0xACEDB ^ 0x9E3779BD;
+        
+//        //what Coord uses as of December 13, 2019
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        y += ((x+y) * (x+y+1) >> 1);
+//        y ^= y >>> 1 ^ y >>> 6;
+//        return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+
+        
+        
 //        y = 
 //                (x >= y
 //                ? x * x + x + y
