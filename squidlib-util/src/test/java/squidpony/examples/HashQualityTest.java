@@ -757,14 +757,21 @@ public class HashQualityTest {
 //        x = x << 1 ^ x >> 31;
 //        y = y << 1 ^ y >> 31;
 //        y += (y >= x ? y * y + x : x * x);
+//        x *= 0x125493;
+//        y *= 0x177C0B;
         x = x << 1 ^ x >> 31;
         y = y << 1 ^ y >> 31;
         y += ((x+y) * (x+y+1) >> 1);
-//        y ^= y >>> 1 ^ y >>> 6;
-        y ^= y >>> 1 ^ y >>> 6;
-//        y = (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0xACEDB;
-        y = (y ^ (y << 13 | y >>> 19) ^ (y << 21 | y >>> 11)) * 0xACEDB;
+        y ^= y >>> 2 ^ y >>> 11;
+        y = ((y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3)) * 0xACEDB ^ 0xD1B54A35) * 0x125493;
         return y ^ y >>> 1;
+
+// ^ 0x9E3779BD;
+//        y ^= y >>> 1 ^ y >>> 6;
+//        y = (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0xACEDB;
+//        y = (y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3)) * 0xACEDB ^ 0xD1B54A35;
+//        return y ^ y >>> 1;
+
         //        return (y ^ (y << 13 | y >>> 19) ^ (y << 21 | y >>> 11) ^ 0xD1B54A35) * 0xACEDB ^ 0x9E3779BD;
 //        return (y ^ y >>> 1);// * 0x125493 ^ 0xD1B54A35;
 
@@ -849,11 +856,20 @@ public class HashQualityTest {
      * TOTAL Cant collisions: 7260455 (4.8385858289075045%), BEST 0, WORST 8859
      * TOTAL Gold collisions: 23246597 (15.492232210587863%), BEST 1, WORST 21527
      * TOTAL Obje collisions: 106566447 (71.01908906414579%), BEST 0, WORST 87793
+     * <br>
+     * Running on sizes: 16, 56, 61, 65, 92, 95, 103, 106, 116, 131, 136, 150, 152, 154, 172, 173, 220, 273, 293, 297, 311, 316, 324, 327, 353, 357, 360, 369, 370, 376, 386, 398
+     * Number of Coords added: 192057238
+     * TOTAL Lath collisions: 32765410 (17.060231804437382%), BEST 0, WORST 30062
+     * TOTAL Szud collisions: 28092096 (14.6269394960267%), BEST 0, WORST 26903
+     * TOTAL Pelo collisions: 28679649 (14.932865482528703%), BEST 1, WORST 27994
+     * TOTAL Cant collisions: 28541456 (14.86091141225305%), BEST 0, WORST 27817
+     * TOTAL Gold collisions: 38067211 (19.8207635371701%), BEST 2, WORST 33344
+     * TOTAL Obje collisions: 112523166 (58.588349583575706%), BEST 1, WORST 99462
      */
     @Test
     public void testCoord() {
         RNG prng = new RNG(new MiniMover64RNG(123));
-        final int[] params = new int[30];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
+        final int[] params = new int[32];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
         System.arraycopy(prng.randomOrdering(400), 0, params, 0, params.length);
 //        final int[] params = new int[]{64, 128, 256, 512};
         Arrays.sort(params);
@@ -903,12 +919,12 @@ public class HashQualityTest {
                                 continue;
                             }
                             points.set(c);
-//                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
+                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
                             colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
                             colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
                             colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
-//                            colliderGold.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
-//                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
+                            colliderGold.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
+                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
                             
 //                            for (int i = 0; i < 31; i++) {
 //                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
