@@ -450,14 +450,21 @@ public class HashVisualizer extends ApplicationAdapter {
 //        x += ((x+y) * (x+y+1) >> 1);
 //        y += x ^ x >>> 1 ^ x >>> 6;
 //        return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+        
+        
+//        y = (int)((x * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL) >>> 32);
+//        return (y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3));
 
+        
         x = x << 1 ^ x >> 31;
         y = y << 1 ^ y >> 31;
         y += ((x+y) * (x+y+1) >> 1);
-        y ^= y >>> 2 ^ y >>> 11;
+        y ^= y >>> 2 ^ y >>> 5 ^ y >>> 6 ^ y >>> 11;
         y = ((y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3)) * 0xACEDB ^ 0xD1B54A35) * 0x125493;
         return y ^ y >>> 1;
 
+//        y + (y >= x ? y * y + y - x : x * x);
+        
 //        return (y ^ y >>> 1) * 0xACEDB ^ 0x9E3779BD;
         
 //        //what Coord uses as of December 13, 2019

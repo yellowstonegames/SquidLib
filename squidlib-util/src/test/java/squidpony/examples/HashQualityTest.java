@@ -683,36 +683,42 @@ public class HashQualityTest {
 
     public static int szudzikCoord(int x, int y)
     {
-//        x = x << 1 ^ x >> 31;
-//        y = y << 1 ^ y >> 31;
-//        s = 42 ^ s * 0x1827F5 ^ y * 0x123C21;
-//        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
         x = x << 1 ^ x >> 31;
         y = y << 1 ^ y >> 31;
-//
-//        x ^= x >> 31;
-//        y ^= y >> 31;
         return (x >= y
                 ? x * x + x + y
                 : x + y * y);
-//        return x ^ (x << 13 | x >>> 19) ^ (x << 22 | x >>> 12) ^ (x << 6 | x >>> 26) ^ (x << 29 | x >>> 3);
-//        x ^= x >>> (x >>> 28) + 4 ^ 0x91E10DA5;
-//        return x * 0x125493;
-//        return x ^ x >>> (x >>> 28) + 4;
-        
-//        x ^= x >> 31;
-//        y ^= y >> 31;
-//        return ((x >= y 
-//                ? x * x + x + y 
-//                : x + y * y) ^ 0xD1B54A35) * 0x125493 ^ 0x9E3779B9;
+    }
+
+    public static int rosenbergStrongCoord(int x, int y)
+    {
+        x = x << 1 ^ x >> 31;
+        y = y << 1 ^ y >> 31;
+        return y + (y >= x ? y * y + y - x : x * x);
+//        return x + (x >= y ? x * x + x - y : y * y);
     }
     public static int szudzik2Coord(int x, int y)
     {
+//        s = 42 ^ s * 0x1827F5 ^ y * 0x123C21;
+//        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+
         //return (x + (x >= y ? x * x + y : y * y)) * 0x41C6B ^ 0x9E3779BD;
         //x *= 0x41C64E6B;
         //y *= 0x9E3779BD;
 //        return (x += (x >= y ? x * x + y : y * y)) ^ (x << 11 | x >>> 21) ^ (x << 20 | x >>> 12);
         return ((x += (x >= y ? x * x + y : y * y)) ^ (x << 11 | x >>> 21) ^ (x << 20 | x >>> 12)) * 0x13C6EF;
+
+//        return x ^ (x << 13 | x >>> 19) ^ (x << 22 | x >>> 12) ^ (x << 6 | x >>> 26) ^ (x << 29 | x >>> 3);
+//        x ^= x >>> (x >>> 28) + 4 ^ 0x91E10DA5;
+//        return x * 0x125493;
+//        return x ^ x >>> (x >>> 28) + 4;
+
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        return ((x >= y 
+//                ? x * x + x + y 
+//                : x + y * y) ^ 0xD1B54A35) * 0x125493 ^ 0x9E3779B9;
+
     }
 
 
@@ -730,8 +736,9 @@ public class HashQualityTest {
 //        y += 3;
         x = x << 1 ^ x >> 31;
         y = y << 1 ^ y >> 31;
-        y += ((x+y) * (x+y+1) >> 1);
-        return y ^ y >>> 1;// * 0xA5CB3;
+        return y + ((x+y) * (x+y+1) >> 1);
+//        return y ^ y >>> 1;
+
 //        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
     }
 
@@ -759,13 +766,25 @@ public class HashQualityTest {
 //        y += (y >= x ? y * y + x : x * x);
 //        x *= 0x125493;
 //        y *= 0x177C0B;
+        
+//        //working fine except for lowest 4 bits
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+//        y += ((x+y) * (x+y+1) >> 1);
+//        y ^= y >>> 2 ^ y >>> 11;
+//        y = ((y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3)) * 0xACEDB ^ 0xD1B54A35) * 0x125493;
+//        return y ^ y >>> 1;
+
+        // similar to above but has slightly better low bits
         x = x << 1 ^ x >> 31;
         y = y << 1 ^ y >> 31;
         y += ((x+y) * (x+y+1) >> 1);
-        y ^= y >>> 2 ^ y >>> 11;
+        y ^= y >>> 2 ^ y >>> 5 ^ y >>> 6 ^ y >>> 11;
         y = ((y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3)) * 0xACEDB ^ 0xD1B54A35) * 0x125493;
         return y ^ y >>> 1;
 
+        // about the same as either hash above in collision rates, beats raw Cantor, but horrible visual bit bias
+//        return (int)((x * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL) >>> 32);
 // ^ 0x9E3779BD;
 //        y ^= y >>> 1 ^ y >>> 6;
 //        y = (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0xACEDB;
@@ -868,20 +887,20 @@ public class HashQualityTest {
      */
     @Test
     public void testCoord() {
-        RNG prng = new RNG(new MiniMover64RNG(123));
+        RNG prng = new RNG(new LightRNG(123));
         final int[] params = new int[32];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
         System.arraycopy(prng.randomOrdering(400), 0, params, 0, params.length);
 //        final int[] params = new int[]{64, 128, 256, 512};
         Arrays.sort(params);
         System.out.println("Running on sizes: " + StringKit.join(", ", params));
-        long lathTotal = 0L, objeTotal = 0L, peloTotal = 0L, goldTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L,
+        long lathTotal = 0L, objeTotal = 0L, peloTotal = 0L, rostTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L,
                 lathBest = 1000000L,
                 objeBest = 1000000L,
                 peloBest = 1000000L,
-                goldBest = 1000000L,
+                rostBest = 1000000L,
                 szudBest = 1000000L,
                 cantBest = 1000000L,
-                lathWorst = 0L, objeWorst = 0L, peloWorst = 0L, goldWorst = 0L, szudWorst = 0L, cantWorst = 0L, t;
+                lathWorst = 0L, objeWorst = 0L, peloWorst = 0L, rostWorst = 0L, szudWorst = 0L, cantWorst = 0L, t;
 //        long[] confTotals = new long[31];
         for (int reduction = 7; reduction >= 0; reduction--) {
             System.out.println("Running reduction level " + reduction);
@@ -898,12 +917,12 @@ public class HashQualityTest {
                             colliderPelo = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderSzud = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderCant = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderGold = new IntDoubleOrderedMap(SIZE, 0.5f);
+                            colliderRoSt = new IntDoubleOrderedMap(SIZE, 0.5f);
 //                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
 //                    for (int i = 0; i < 31; i++) {
 //                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
 //                    }
-                    DiverRNG rng = new DiverRNG(1L);
+                    LightRNG rng = new LightRNG(1L);
                     SNShuffledIntSequence
                             xShuffle = new SNShuffledIntSequence(WIDTH, 1),
                             yShuffle = new SNShuffledIntSequence(HEIGHT, -1);
@@ -919,12 +938,13 @@ public class HashQualityTest {
                                 continue;
                             }
                             points.set(c);
-                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
+//                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
                             colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
                             colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
                             colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
-                            colliderGold.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
-                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
+                            colliderRoSt.put(rosenbergStrongCoord(x, y) & restrict, 0.0);
+//                            colliderGold.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
+//                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
                             
 //                            for (int i = 0; i < 31; i++) {
 //                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
@@ -940,8 +960,8 @@ public class HashQualityTest {
 //                    System.out.println("Szud collisions: " + t);
                     t = (SIZE - colliderCant.size()); cantBest = Math.min(t, cantBest); cantWorst = Math.max(t, cantWorst);
 //                    System.out.println("Cant collisions: " + t);
-                    t = (SIZE - colliderGold.size()); goldBest = Math.min(t, goldBest); goldWorst = Math.max(t, goldWorst);
-//                    System.out.println("Gold collisions: " + t);
+                    t = (SIZE - colliderRoSt.size()); rostBest = Math.min(t, rostBest); rostWorst = Math.max(t, rostWorst);
+//                    System.out.println("RoSt collisions: " + t);
                     t = (SIZE - colliderObje.size()); objeBest = Math.min(t, objeBest); objeWorst = Math.max(t, objeWorst);
 //                    System.out.println("Obje collisions: " + t);
 
@@ -953,7 +973,7 @@ public class HashQualityTest {
                     peloTotal += (SIZE - colliderPelo.size());
                     szudTotal += (SIZE - colliderSzud.size());
                     cantTotal += (SIZE - colliderCant.size());
-                    goldTotal += (SIZE - colliderGold.size());
+                    rostTotal += (SIZE - colliderRoSt.size());
                     objeTotal += (SIZE - colliderObje.size());
                     total += SIZE;
                 }
@@ -964,7 +984,7 @@ public class HashQualityTest {
         System.out.println("TOTAL Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
         System.out.println("TOTAL Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
         System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
-        System.out.println("TOTAL Gold collisions: " + goldTotal + " (" + (goldTotal * 100.0 / total) + "%), BEST " + goldBest + ", WORST " + goldWorst);
+        System.out.println("TOTAL RoSt collisions: " + rostTotal + " (" + (rostTotal * 100.0 / total) + "%), BEST " + rostBest + ", WORST " + rostWorst);
         System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
