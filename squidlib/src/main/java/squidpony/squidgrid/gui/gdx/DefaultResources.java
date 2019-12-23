@@ -1930,7 +1930,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.msdfCarved = new TextCellFactory()
                         .fontMultiDistanceField(crispCarved, crispCarvedTexture)
-                        .width(32f).height(32f).setSmoothingMultiplier(1.5f);
+                        .width(7f).height(24f).setSmoothingMultiplier(1.0f);
             } catch (Exception e) {
                 e.printStackTrace();
             }

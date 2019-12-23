@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.Maker;
@@ -71,40 +70,44 @@ public class FontTest extends ApplicationAdapter {
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
         widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105, 100, 100, 100, 250, 250};
         heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25,  20,  20};
+        index = widths.length - 1;
         factories = new TextCellFactory[]{
-                DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getCrispSlabFamily().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getCrispLeanFont().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getCrispLeanFamily().width(14).height(28).initBySize(),
-                //DefaultResources.getCrispLeanItalicFont().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getCrispDejaVuFont().width(ZOOM * 15).height(18).initBySize(),
+                DefaultResources.getCrispSlabFont().width(11).height(21).initBySize(),
+                DefaultResources.getCrispSlabFamily().width(11).height(21).initBySize(),
+                DefaultResources.getCrispLeanFont().width(11).height(21).initBySize(),
+                DefaultResources.getCrispLeanFamily().width(11).height(21).initBySize(),
+                //DefaultResources.getCrispLeanItalicFont().width(14).height(28).initBySize(),
+                DefaultResources.getCrispDejaVuFont().width(12).height(14).initBySize(),
                 DefaultResources.getCrispIconFont().width(32).height(32).initBySize(),
-                DefaultResources.getStretchableHeavySquareFont().width(ZOOM * 32).height(32).initBySize(),
+                DefaultResources.getStretchableHeavySquareFont().width(32).height(32).initBySize(),
 
-                DefaultResources.getStretchableFont().width(ZOOM * 13).height(30).initBySize(),
-                DefaultResources.getStretchableTypewriterFont().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getStretchableCodeFont().width(ZOOM * 15).height(27).initBySize(),
-                DefaultResources.getStretchableDejaVuFont().width(ZOOM * 14).height(25).initBySize(),
-                DefaultResources.getStretchableSlabFont().width(ZOOM * 13).height(21).initBySize(),
-                DefaultResources.getStretchableSlabLightFont().width(ZOOM * 13).height(21).initBySize(),
-                //DefaultResources.getStretchableSquareFont().width(ZOOM * 20).height(20).initBySize(),
-                DefaultResources.getStretchableLeanFont().width(ZOOM * 13).height(21).initBySize(),
-                DefaultResources.getStretchableLeanLightFont().width(ZOOM * 13).height(21).initBySize(),
+                DefaultResources.getStretchableFont().width(11).height(21).initBySize(),
+                DefaultResources.getStretchableTypewriterFont().width(12).height(24).initBySize(),
+                DefaultResources.getStretchableCodeFont().width(12).height(21).initBySize(),
+                DefaultResources.getStretchableDejaVuFont().width(11).height(23).initBySize(),
+                DefaultResources.getStretchableSlabFont().width(11).height(21).initBySize(),
+                DefaultResources.getStretchableSlabLightFont().width(11).height(21).initBySize(),
+                //DefaultResources.getStretchableSquareFont().width(20).height(20).initBySize(),
+                DefaultResources.getStretchableLeanFont().width(11).height(21).initBySize(),
+                DefaultResources.getStretchableLeanLightFont().width(11).height(21).initBySize(),
 
-                DefaultResources.getStretchableCodeJPFont().width(ZOOM * 21).height(ZOOM * 22).initBySize(),
-                DefaultResources.getCrispCurvySquareFont().width(ZOOM * 19).height(19).initBySize(),
-                DefaultResources.getCrispLeanFont().width(ZOOM * 19).height(19).initBySize(),
-                DefaultResources.getCrispSlabFont().width(ZOOM * 19).height(19).initBySize(),
-                DefaultResources.getGoFamily().width(ZOOM * 7).height(18).initBySize(),
+                DefaultResources.getStretchableCodeJPFont().width(17).height(18).initBySize(),
+                DefaultResources.getCrispCurvySquareFont().width(16).height(16).initBySize(),
+                DefaultResources.getCrispLeanFont().width(16).height(16).initBySize(),
+                DefaultResources.getCrispSlabFont().width(16).height(16).initBySize(),
+                DefaultResources.getGoFamily().width(7).height(18).initBySize(),
                 DefaultResources.getCrispPrintFamily().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getCrispCarvedFont().initBySize(),
                 DefaultResources.getCrispRobotoSansFont().initBySize(),
                 new TextCellFactory().fontMultiDistanceField("Roboto-Bold-msdf.fnt", "Roboto-Bold-msdf.png").width(3f).height(14).initBySize().setSmoothingMultiplier(2f)
+//                new TextCellFactory().fontMultiDistanceField("VeryWow-msdf.fnt", "VeryWow-msdf.png").width(6f).height(24f).initBySize().setSmoothingMultiplier(1.5f)
                 //DefaultResources.getStretchableCleanFont().initBySize(),
         };
         for(TextCellFactory tc : factories)
             tc.bmpFont.setUseIntegerPositions(false);
+        int sw = Gdx.graphics.getWidth(), sh = Gdx.graphics.getHeight();
+        viewport = new StretchViewport(totalWidth, totalHeight);
         viewports = new Viewport[]{
                 new StretchViewport(factories[0].width() * widths[0], factories[0].height() * heights[0]),
                 new StretchViewport(factories[1].width() * widths[1], factories[1].height() * heights[1]),
@@ -127,11 +130,16 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[18].width() * widths[18], factories[18].height() * heights[18]),
                 new StretchViewport(factories[19].width() * widths[19], factories[19].height() * heights[19]),
 
-                new ScreenViewport(),
-                new ScreenViewport(),
-                new ScreenViewport(),
-                new ScreenViewport(),
-                new ScreenViewport(),
+                new StretchViewport(sw, sh),
+                new StretchViewport(sw, sh),
+                new StretchViewport(sw, sh),
+                new StretchViewport(sw, sh),
+                new StretchViewport(sw, sh),
+//                new ScreenViewport(),
+//                new ScreenViewport(),
+//                new ScreenViewport(),
+//                new ScreenViewport(),
+//                new ScreenViewport(),
 
 //                new StretchViewport(factories[20].width() * widths[20], factories[20].height() * heights[20]),
 //                new StretchViewport(factories[21].width() * widths[21], factories[21].height() * heights[21]),
@@ -182,47 +190,9 @@ public class FontTest extends ApplicationAdapter {
             text.init(totalWidth, totalHeight, samples);
             texts.add(text);
         }
-        for (int i = 0; i < factories.length; i++) {
-            tcf = factories[i];
-            display = displays[i];
-            BitmapFont.BitmapFontData data = tcf.font().getData();
-            int dgl = data.glyphs.length, p = 0, x = 0, y = 0;
-            BitmapFont.Glyph[] glyphs;
-            BitmapFont.Glyph g;
-            ALL_PAGES:
-            while (p < dgl) {
-                glyphs = data.glyphs[p++];
-                if(glyphs == null) continue;
-                int gl = glyphs.length;
-                for (int gi = 0; gi < gl; gi++) {
-                    if ((g = glyphs[gi]) != null) {
-                        display.put(x++, y, (char) g.id);
-                        if (x >= widths[i]) {
-                            x = 0;
-                            if (++y >= heights[i]) {
-                                break ALL_PAGES;
-                            }
-                        }
-                    }
-                }
-            }
-            /*
-            REST:
-            while (y < heights[i])
-            {
-                display.put(x++, y, TextCellFactory.LINE_FITTING.charAt(DefaultResources.getGuiRandom().nextIntHasty(11)));
-                if (x >= widths[i]) {
-                    x = 0;
-                    if (++y >= heights[i]) {
-                        break REST;
-                    }
-                }
-            }
-            */
-        }
         tcf = factories[index];
         display = displays[index];
-        viewport = viewports[index];
+//        viewport = viewports[index];
         stage = new Stage(viewport, batch);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -306,7 +276,7 @@ public class FontTest extends ApplicationAdapter {
                 }
                 else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
                     index = ((index + 1) % factories.length);
-                    viewport = viewports[index];
+//                    viewport = viewports[index];
                     if (index < factories.length - texts.size()) {
                         tcf = factories[index];
                         display = displays[index];
@@ -326,7 +296,15 @@ public class FontTest extends ApplicationAdapter {
         });
         Gdx.graphics.setTitle("SquidLib Demo: Fonts, previewing font #" + (index) + ": " + factories[index].bmpFont + " (press any key)");
 
-        stage.addActor(display);
+        if(index < factories.length - texts.size()) 
+            stage.clear();//stage.addActor(display);
+        else 
+        {
+            text = texts.get(index - factories.length + texts.size());
+            stage.clear();
+//            stage.setViewport(viewport = viewports[index]);
+            stage.addActor(text.getScrollPane());
+        }
     }
 
     @Override
@@ -334,16 +312,48 @@ public class FontTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.getViewport().update(totalWidth, totalHeight, true);
-        stage.getViewport().apply(true);
-        stage.draw();
+//        stage.getViewport().update(totalWidth, totalHeight, true);
+//        stage.getViewport().apply(true);
+        if (index < factories.length - texts.size()) {
+            batch.begin();
+            tcf.configureShader(batch);
+            BitmapFont.BitmapFontData data = tcf.font().getData();
+            int dgl = data.glyphs.length, p = 0, x = 0, y = totalHeight;
+            BitmapFont.Glyph[] glyphs;
+            BitmapFont.Glyph g;
+            StringBuilder sb = new StringBuilder(1);
+            sb.append(' ');
+            ALL_PAGES:
+            while (p < dgl) {
+                glyphs = data.glyphs[p++];
+                if (glyphs == null) continue;
+                int gl = glyphs.length;
+                for (int gi = 0; gi < gl; gi++) {
+                    if ((g = glyphs[gi]) != null) {
+//                        display.put(x, y, (char) g.id);
+                        sb.setCharAt(0, (char) g.id);
+                        tcf.font().draw(batch, sb, x, y);
+                        x += tcf.actualCellWidth;
+                        if (x >= totalWidth - tcf.actualCellWidth) {
+                            x = 0;
+                            if ((y -= tcf.actualCellHeight) <= 0) {
+                                break ALL_PAGES;
+                            }
+                        }
+                    }
+                }
+            }
+            batch.end();
+        }
+        else
+            stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        totalWidth = width;
-        totalHeight = height;
+//        totalWidth = width;
+//        totalHeight = height;
         stage.getViewport().update(width, height, true);
     }
     public static void main (String[] arg) {

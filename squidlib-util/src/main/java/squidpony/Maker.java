@@ -109,14 +109,10 @@ public class Maker {
                 hm.put((K) rest[i], (V) rest[i + 1]);
             }catch (ClassCastException cce) {
                 issueLog.append("makeHM call had a casting problem with pair at rest[")
-                        .append(i)
-                        .append("] and/or rest[")
-                        .append(i + 1)
-                        .append("], with contents: ")
-                        .append(rest[i])
-                        .append(", ")
-                        .append(rest[i + 1])
-                        .append(".\n\nException messages:\n")
+                        .append(i).append("] and/or rest[")
+                        .append(i + 1).append("], with contents: ")
+                        .append(rest[i]).append(", ")
+                        .append(rest[i + 1]).append(".\n\nException messages:\n")
                         .append(cce);
                 String msg = cce.getMessage();
                 if (msg != null) {

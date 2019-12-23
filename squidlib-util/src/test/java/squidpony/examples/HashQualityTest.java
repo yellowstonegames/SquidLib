@@ -694,8 +694,8 @@ public class HashQualityTest {
     {
         x = x << 1 ^ x >> 31;
         y = y << 1 ^ y >> 31;
-        return y + (y >= x ? y * y + y - x : x * x);
-//        return x + (x >= y ? x * x + x - y : y * y);
+        return x + (x >= y ? x * x + x - y : y * y);
+//        return y + (y >= x ? y * y + y - x : x * x);
     }
     public static int szudzik2Coord(int x, int y)
     {
@@ -776,15 +776,17 @@ public class HashQualityTest {
 //        return y ^ y >>> 1;
 
         // similar to above but has slightly better low bits
-        x = x << 1 ^ x >> 31;
-        y = y << 1 ^ y >> 31;
-        y += ((x+y) * (x+y+1) >> 1);
-        y ^= y >>> 2 ^ y >>> 5 ^ y >>> 6 ^ y >>> 11;
-        y = ((y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3)) * 0xACEDB ^ 0xD1B54A35) * 0x125493;
-        return y ^ y >>> 1;
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+//        y += ((x+y) * (x+y+1) >> 1);
+//        y ^= y >>> 2 ^ y >>> 5 ^ y >>> 6 ^ y >>> 11;
+//        y = ((y ^ (y << 11 | y >>> 21) ^ (y << 29 | y >>> 3)) * 0xACEDB ^ 0xD1B54A35) * 0x125493;
+//        return y ^ y >>> 1;
 
         // about the same as either hash above in collision rates, beats raw Cantor, but horrible visual bit bias
 //        return (int)((x * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL) >>> 32);
+        return (int)((x * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL) >>> 32);
+
 // ^ 0x9E3779BD;
 //        y ^= y >>> 1 ^ y >>> 6;
 //        y = (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0xACEDB;
