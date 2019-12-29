@@ -22,8 +22,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 32;
-    private int modes = 47;
+    private int mode = 47;
+    private int modes = 49;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -362,7 +362,14 @@ public class MathVisualizer extends ApplicationAdapter {
                     System.out.println("Changed to mode " + mode);
                     update();
                     return true;
+                } else if(keycode == Input.Keys.MINUS || keycode == Input.Keys.BACKSPACE)
+                {
+                    mode = (mode + modes - 1) % modes;
+                    System.out.println("Changed to mode " + mode);
+                    update();
+                    return true;
                 }
+
                 return false;
             }
         };
@@ -1752,6 +1759,49 @@ public class MathVisualizer extends ApplicationAdapter {
                     }
                 }
             }
+            break;
+            case 47: {
+                // thanks to Mitchell Spector, https://math.stackexchange.com/a/1860731
+                Gdx.graphics.setTitle("Spiral Numbering Thing, from position");
+                for (int x = -8; x < 8; x++) {
+                    for (int y = -8; y < 8; y++) {
+                        int m, sign, g;
+                        if((x + (x >> 31) ^ x >> 31) >= (y + (y >> 31) ^ y >> 31)) {
+                            m = -x;
+                            sign = -1;
+                        }
+                        else {
+                            m = y;
+                            sign = 0;
+                        }
+                        g = 4 * m * m + ((m >= 0) ? y + x : (m + m + y - x + sign ^ sign));
+                        float color = SColor.floatGetI(g, g, g);
+                        for (int a = 0; a < 32; a++) {
+                            for (int b = 0; b < 32; b++) {
+                                layers.backgrounds[256 + 8 + (x << 5) + a][256 + (y << 5) + b] = color;
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+            case 48: {
+                // thanks to Jonathan M, https://stackoverflow.com/a/20591835
+                Gdx.graphics.setTitle("Spiral Numbering Thing, from index");
+                for (int g = 0; g < 256; g++) {
+                    final int root = (int)(Math.sqrt(g));
+                    final int sign = -(root & 1);
+                    final int big  = (root * (root + 1)) - g << 1;
+                    final int y=((root + 1 >> 1) + sign ^ sign) + ((sign ^ sign + Math.min(big, 0)) >> 1);
+                    final int x=((root + 1 >> 1) + sign ^ sign) - ((sign ^ sign + Math.max(big, 0)) >> 1);
+                    float color = SColor.floatGetI(g, g, g);
+                        for (int a = 0; a < 32; a++) {
+                            for (int b = 0; b < 32; b++) {
+                                layers.backgrounds[256 + 8 + (x << 5) + a][256 + (y << 5) + b] = color;
+                            }
+                        }
+                    }
+                }
             break;
         }
     }
