@@ -161,7 +161,7 @@ public class BasicDemo extends ApplicationAdapter {
         //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
         //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
         // up as the colors for the cell with the same x and y.
-        bgColor = SColor.DARK_SLATE_GRAY;
+        bgColor = SColor.DB_INK;
         colors = MapUtility.generateDefaultColors(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
         baseLightness = ArrayTools.fill(40, gridWidth, gridHeight);

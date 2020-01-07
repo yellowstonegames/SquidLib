@@ -27,7 +27,7 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
     private int width, height;
     private int cellWidth, cellHeight;
     private SquidInput input;
-    private static final SColor bgColor = SColor.DARK_SLATE_GRAY;
+    private static final SColor bgColor = SColor.DB_INK;
     private Stage stage;
     private Viewport view;
 

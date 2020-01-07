@@ -40,7 +40,7 @@ public class SquidAIDemo extends ApplicationAdapter {
     private int numMonsters = 16;
 
     private SquidInput input;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
+    private static final Color bgColor = SColor.DB_INK;
     private Array<AnimatedEntity> teamRed, teamBlue;
     private IntArray redHealth, blueHealth;
     //private OrderedMap<AnimatedEntity, Integer> teamRed, teamBlue;

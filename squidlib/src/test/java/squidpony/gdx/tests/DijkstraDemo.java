@@ -286,7 +286,7 @@ public class DijkstraDemo extends ApplicationAdapter {
         //same size as decoDungeon that store the colors for the foregrounds and backgrounds of each cell as packed
         //floats (a format SparseLayers can use throughout its API), using the colors for the cell with the same x and
         //y. By changing an item in SColor.LIMITED_PALETTE, we also change the color assigned by MapUtility to floors.
-        bgColor = SColor.DARK_SLATE_GRAY;
+        bgColor = SColor.DB_INK;
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
         colors = ArrayTools.fill(SColor.FLOAT_BLACK, bigWidth, bigHeight);
         bgColors = new float[bigWidth][bigHeight];

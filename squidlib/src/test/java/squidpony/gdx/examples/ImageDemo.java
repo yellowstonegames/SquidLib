@@ -27,7 +27,7 @@ public class ImageDemo extends ApplicationAdapter {
     private int width, height;
     private int cellWidth, cellHeight;
     private SquidInput input;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
+    private static final Color bgColor = SColor.DB_INK;
     private HashMap<Coord, AnimatedEntity> creatures;
     private Stage stage;
     @Override

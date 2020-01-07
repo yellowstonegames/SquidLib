@@ -390,7 +390,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(playerPos);
         playerToCursor.partialScan(13, blockage);
-        bgColor = SColor.DARK_SLATE_GRAY;
+        bgColor = SColor.DB_INK;
         colors = MapUtility.generateDefaultColors(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
         // the line after this automatically sets the brightness of backgrounds in display to match their contents, so

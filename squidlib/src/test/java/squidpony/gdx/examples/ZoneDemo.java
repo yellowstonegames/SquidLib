@@ -37,7 +37,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private Coord[] centers, shiftedCenters;
     private AnimatedEntity[] centerEntities;
     private SquidInput input;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
+    private static final Color bgColor = SColor.DB_INK, textColor = SColor.SLATE_GRAY;
     private Stage stage;
     private SquidColorCenter colorCenter;
     private TextPanel current;
