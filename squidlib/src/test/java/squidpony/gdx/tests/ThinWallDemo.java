@@ -251,7 +251,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         toCursor = new IntVLA(10);
         awaitedMoves = new IntVLA(10);
         playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency, rng);
-        bgColor = SColor.DARK_SLATE_GRAY;
+        bgColor = SColor.DB_INK;
 
         colors = MapUtility.generateDefaultColors(lineDungeon);
         bgColors = MapUtility.generateDefaultBGColors(lineDungeon);
@@ -593,7 +593,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         IColoredString<Color> helping3 = new IColoredString.Impl<>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
 
         /* Some grey color */
-        final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
+        final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 1f);
 
         final Actor a;
             /*
