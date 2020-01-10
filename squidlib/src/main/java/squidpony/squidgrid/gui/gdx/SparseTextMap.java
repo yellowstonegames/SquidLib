@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.StringKit;
 import squidpony.squidmath.HashCommon;
+import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.NumberTools;
 
 import java.util.Iterator;
@@ -37,8 +38,6 @@ import java.util.NoSuchElementException;
  * @author Tommy Ettinger
  */
 public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
-//    private static final int PRIME2 = 0x1EBF69;//0xb4b82e39;
-//    private static final int PRIME3 = 0x1A3491;//0xced1c241;
     private static final int EMPTY = 0;
 
     public int size;
@@ -47,6 +46,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     private char[] charValueTable;
     private float[] floatValueTable;
     private int[] ib;
+    private final IntVLA keys;
 
     private char zeroChar;
     private float zeroFloat;
@@ -101,6 +101,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         charValueTable = new char[initialCapacity];
         floatValueTable = new float[initialCapacity];
         ib = new int[initialCapacity];
+        keys = new IntVLA(initialCapacity);
     }
 
     /**
@@ -123,6 +124,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         zeroChar = map.zeroChar;
         zeroFloat = map.zeroFloat;
         hasZeroValue = map.hasZeroValue;
+        keys = new IntVLA(map.keys);
     }
 
     /**
@@ -415,6 +417,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             zeroFloat = floatValue;
             if (!hasZeroValue) {
                 hasZeroValue = true;
+                keys.add(0);
                 size++;
             }
             return;
@@ -428,13 +431,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             floatValueTable[loc] = floatValue;
             return;
         }
-        if (++size >= threshold) {
-            resize(ib.length << 1);
-        }
         final int[] keyTable = this.keyTable;
         final char[] charValueTable = this.charValueTable;
         final float[] floatValueTable = this.floatValueTable;
         final int[] ib = this.ib;
+        keys.add(key);
 
         for (int i = b; ; i = (i + 1) & mask) {
             // space is available so we insert and break
@@ -443,6 +444,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
                 charValueTable[i] = charValue;
                 floatValueTable[i] = floatValue;
                 ib[i] = b;
+                
+                if (++size >= threshold) {
+                    resize(ib.length << 1);
+                }
                 return;
             }
             // if there is a key with a lower probe distance, we swap with it
@@ -461,85 +466,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
                 floatValue = tv;
                 b = tb;
             }
-        } 
+        }
     }
-
-
-//    public void put(int key, char charValue, float floatValue) {
-//        if (key == 0) {
-//            zeroChar = charValue;
-//            zeroFloat = floatValue;
-//            if (!hasZeroValue) {
-//                hasZeroValue = true;
-//                size++;
-//            }
-//            return;
-//        }
-//
-//        int[] keyTable = this.keyTable;
-//
-//        // Check for existing keys.
-//        int index1 = key & mask;
-//        int key1 = keyTable[index1];
-//        if (key == key1) {
-//            charValueTable[index1] = charValue;
-//            floatValueTable[index1] = floatValue;
-//            return;
-//        }
-//
-//        int index2 = hash2(key);
-//        int key2 = keyTable[index2];
-//        if (key == key2) {
-//            charValueTable[index2] = charValue;
-//            floatValueTable[index2] = floatValue;
-//            return;
-//        }
-//
-//        int index3 = hash3(key);
-//        int key3 = keyTable[index3];
-//        if (key == key3) {
-//            charValueTable[index3] = charValue;
-//            floatValueTable[index3] = floatValue;
-//            return;
-//        }
-//
-//        // Update key in the stash.
-//        for (int i = capacity, n = i + stashSize; i < n; i++) {
-//            if (key == keyTable[i]) {
-//                charValueTable[i] = charValue;
-//                floatValueTable[i] = floatValue;
-//                return;
-//            }
-//        }
-//
-//        // Check for empty buckets.
-//        if (key1 == EMPTY) {
-//            keyTable[index1] = key;
-//            charValueTable[index1] = charValue;
-//            floatValueTable[index1] = floatValue;
-//            if (size++ >= threshold) resize(capacity << 1);
-//            return;
-//        }
-//
-//        if (key2 == EMPTY) {
-//            keyTable[index2] = key;
-//            charValueTable[index2] = charValue;
-//            floatValueTable[index2] = floatValue;
-//            if (size++ >= threshold) resize(capacity << 1);
-//            return;
-//        }
-//
-//        if (key3 == EMPTY) {
-//            keyTable[index3] = key;
-//            charValueTable[index3] = charValue;
-//            floatValueTable[index3] = floatValue;
-//            if (size++ >= threshold) resize(capacity << 1);
-//            return;
-//        }
-//
-//        push(key, charValue, floatValue, index1, key1, index2, key2, index3, key3);
-//    }
-
+    
     /**
      * If and only if key is already present, this changes the float associated with it while leaving the char the same.
      * @param key the encoded key as produced by {@link #encodePosition(int, int)}
@@ -579,16 +508,27 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
 
     public void putAll(SparseTextMap map) {
         ensureCapacity(map.size);
-        if (map.hasZeroValue)
-            put(0, map.zeroChar, map.zeroFloat);
-        final int[] keyTable = map.keyTable;
-        final char[] charValueTable = map.charValueTable;
-        final float[] floatValueTable = map.floatValueTable;
-        int k;
-        for (int i = 0, n = keyTable.length; i < n; i++) {
-            if ((k = keyTable[i]) != 0)
-                put(k, charValueTable[i], floatValueTable[i]);
+        final int[] keys = map.keys.items;
+        final char[] chars = map.charValueTable;
+        final float[] floats = map.floatValueTable;
+        int k, loc;
+        for (int i = 0, n = map.keys.size; i < n; i++) {
+            k = keys[i];
+            loc = map.locateKey(k);
+            put(k, chars[loc], floats[loc]);
         }
+
+//        ensureCapacity(map.size);
+//        if (map.hasZeroValue)
+//            put(0, map.zeroChar, map.zeroFloat);
+//        final int[] keyTable = map.keyTable;
+//        final char[] charValueTable = map.charValueTable;
+//        final float[] floatValueTable = map.floatValueTable;
+//        int k;
+//        for (int i = 0, n = keyTable.length; i < n; i++) {
+//            if ((k = keyTable[i]) != 0)
+//                put(k, charValueTable[i], floatValueTable[i]);
+//        }
 
 //        for (Entry entry : map.entries())
 //            put(entry.key, entry.charValue, entry.floatValue);
@@ -608,9 +548,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return;
         }
 
-        if (++size >= threshold) {
-            resize(ib.length << 1);
-        }
         int b = place(key);
         final int[] keyTable = this.keyTable;
         final char[] charValueTable = this.charValueTable;
@@ -624,6 +561,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
                 charValueTable[i] = charValue;
                 floatValueTable[i] = floatValue;
                 ib[i] = b;
+
+                if (++size >= threshold) {
+                    resize(ib.length << 1);
+                }
                 return;
             }
             // if there is a key with a lower probe distance, we swap with it
@@ -730,6 +671,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             if (!hasZeroValue) return defaultValue;
             hasZeroValue = false;
             size--;
+            keys.removeValue(0);
             return zeroChar;
         }
 
@@ -737,6 +679,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (loc == -1) {
             return defaultValue;
         }
+        keys.removeValue(key);
         final int[] keyTable = this.keyTable;
         final float[] floatValueTable = this.floatValueTable;
         final char[] charValueTable = this.charValueTable;
@@ -776,11 +719,13 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         }
         hasZeroValue = false;
         size = 0;
+        keys.clear();
         resize(maximumCapacity);
     }
 
     public void clear() {
         if (size == 0) return;
+        keys.clear();
         final int[] keyTable = this.keyTable;
         final int[] ib = this.ib;
         for (int i = ib.length; i > 0; ) {
@@ -856,6 +801,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (additionalCapacity < 0)
             throw new IllegalArgumentException("additionalCapacity must be >= 0: " + additionalCapacity);
         int sizeNeeded = size + additionalCapacity;
+        keys.ensureCapacity(additionalCapacity);
         if (sizeNeeded >= threshold)
             resize(HashCommon.nextPowerOfTwo((int)Math.ceil(sizeNeeded / loadFactor)));
     }
@@ -877,6 +823,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
 
         int oldSize = size;
         size = 0;
+        hasZeroValue = false;
         if (oldSize > 0) {
             for (int i = 0; i < oldCapacity; i++) {
                 int key = oldKeyTable[i];
@@ -889,7 +836,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     public int hashCode() {
         int h = 0;
         if (hasZeroValue) {
-            // 0x1FFF is a Mersenne prime; multiplication by powers of 2 plus or minus 1 is often optimized
             h = NumberTools.floatToIntBits(zeroFloat) ^ zeroChar;
         }
         int[] keyTable = this.keyTable;
@@ -933,24 +879,28 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (size == 0) return "{}";
         StringBuilder buffer = new StringBuilder(32);
         buffer.append('{');
-        int[] keyTable = this.keyTable;
+        int[] keys = this.keys.items;
         char[] charTable = this.charValueTable;
         float[] floatTable = this.floatValueTable;
-        int i = keyTable.length;
-        if (hasZeroValue) {
+        int n = size, loc, k = keys[0];
+        if(k == 0)
             StringKit.appendHex(buffer.append("0=").append(zeroChar).append(','), zeroFloat);
-        } else {
-            while (i-- > 0) {
-                int key = keyTable[i];
-                if (key == EMPTY) continue;
-                StringKit.appendHex(buffer.append(key).append('=').append(charTable[i]).append(','), floatTable[i]);
-                break;
-            }
+        else
+        {
+            loc = locateKey(k);
+            StringKit.appendHex(buffer.append(k).append('=').append(charTable[loc]).append(','), floatTable[loc]);
         }
-        while (i-- > 0) {
-            int key = keyTable[i];
-            if (key == EMPTY) continue;
-            StringKit.appendHex(buffer.append("; ").append(key).append('=').append(charTable[i]).append(','), floatTable[i]);
+
+        for (int i = 1; i < n; i++) {
+            buffer.append("; ");
+            k = keys[i];
+            if(k == 0)
+                StringKit.appendHex(buffer.append("0=").append(zeroChar).append(','), zeroFloat);
+            else 
+            {
+                loc = locateKey(k);
+                StringKit.appendHex(buffer.append(k).append('=').append(charTable[loc]).append(','), floatTable[loc]);
+            }
         }
         buffer.append('}');
         return buffer.toString();
@@ -1061,57 +1011,20 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         public boolean hasNext;
 
         final SparseTextMap map;
+        final IntVLA keys;
         int nextIndex, currentIndex;
         boolean valid = true;
 
         public MapIterator(SparseTextMap map) {
             this.map = map;
+            this.keys = map.keys;
             reset();
         }
 
         public void reset() {
-            currentIndex = INDEX_ILLEGAL;
-            nextIndex = INDEX_ZERO;
-            if (map.hasZeroValue)
-                hasNext = true;
-            else
-                findNextIndex();
-        }
-
-        void findNextIndex () {
-            hasNext = false;
-            int[] keyTable = map.keyTable;
-            for (int n = keyTable.length; ++nextIndex < n; ) {
-                if (keyTable[nextIndex] != 0) {
-                    hasNext = true;
-                    break;
-                }
-            }
-        }
-
-        public void remove () {
-            if (currentIndex == INDEX_ZERO && map.hasZeroValue) {
-                map.hasZeroValue = false;
-            } else if (currentIndex < 0) {
-                throw new IllegalStateException("next must be called before remove.");
-            } else {
-                final int[] keyTable = map.keyTable;
-                final float[] floatValueTable = map.floatValueTable;
-                final char[] charValueTable = map.charValueTable;
-                final int[] ib = map.ib;
-                final int mask = map.mask;
-                keyTable[currentIndex] = 0;
-                for (int i = (currentIndex + 1) & mask; (keyTable[i] != 0 && (i - ib[i] & mask) != 0); i = (i + 1) & mask) {
-                    keyTable[i - 1 & mask] = keyTable[i];
-                    floatValueTable[i - 1 & mask] = floatValueTable[i];
-                    charValueTable[i - 1 & mask] = charValueTable[i];
-                    ib[i - 1 & mask] = ib[i];
-                    keyTable[i] = 0;
-                    ib[i] = 0;
-                }
-            }
-            currentIndex = INDEX_ILLEGAL;
-            map.size--;
+            currentIndex = -1;
+            nextIndex = 0;
+            hasNext = map.size > 0;
         }
     }
 
@@ -1128,17 +1041,20 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         public Entry next() {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");
-            if (nextIndex == INDEX_ZERO) {
-                entry.key = 0;
+            currentIndex = nextIndex;
+            entry.key = keys.get(nextIndex);
+            if(entry.key == 0)
+            {
                 entry.charValue = map.zeroChar;
                 entry.floatValue = map.zeroFloat;
-            } else {
-                entry.key = map.keyTable[nextIndex];
-                entry.charValue = map.charValueTable[nextIndex];
-                entry.floatValue = map.floatValueTable[nextIndex];
             }
-            currentIndex = nextIndex;
-            findNextIndex();
+            else {
+                int loc = map.locateKey(entry.key);
+                entry.charValue = map.charValueTable[loc];
+                entry.floatValue = map.floatValueTable[loc];
+            }
+            nextIndex++;
+            hasNext = nextIndex < map.size;
             return entry;
         }
 
@@ -1151,8 +1067,12 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return this;
         }
 
-        public void remove() {
-            super.remove();
+        public void remove () {
+            if (currentIndex < 0)
+                throw new IllegalStateException("next must be called before remove.");
+            map.remove(entry.key);
+            nextIndex--;
+            currentIndex = -1;
         }
     }
 
@@ -1169,13 +1089,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         public char next() {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");
-            char value;
-            if (nextIndex == INDEX_ZERO)
-                value = map.zeroChar;
-            else
-                value = map.charValueTable[nextIndex];
+            char value = map.getChar(keys.get(nextIndex), '\0');
             currentIndex = nextIndex;
-            findNextIndex();
+            nextIndex++;
+            hasNext = nextIndex < map.size;
             return value;
         }
 
@@ -1183,7 +1100,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
          * Returns a new array containing the remaining values.
          */
         public char[] toArray() {
-            char[] array = new char[map.size];
+            char[] array = new char[map.size - nextIndex];
             int idx = 0;
             while (hasNext && idx < array.length)
                 array[idx++] = next();
@@ -1204,13 +1121,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         public float next() {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");
-            float value;
-            if (nextIndex == INDEX_ZERO)
-                value = map.zeroFloat;
-            else
-                value = map.floatValueTable[nextIndex];
+            float value = map.getFloat(keys.get(nextIndex), '\0');
             currentIndex = nextIndex;
-            findNextIndex();
+            nextIndex++;
+            hasNext = nextIndex < map.size;
             return value;
         }
 
@@ -1218,7 +1132,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
          * Returns a new array containing the remaining values.
          */
         public float[] toArray() {
-            float[] array = new float[map.size];
+            float[] array = new float[map.size - nextIndex];
             int idx = 0;
             while (hasNext && idx < array.length)
                 array[idx++] = next();
@@ -1239,9 +1153,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         public int next() {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");
-            int key = nextIndex == INDEX_ZERO ? 0 : map.keyTable[nextIndex];
+            int key = keys.get(nextIndex);
             currentIndex = nextIndex;
-            findNextIndex();
+            nextIndex++;
+            hasNext = nextIndex < map.size;
             return key;
         }
 
@@ -1249,7 +1164,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
          * Returns a new array containing the remaining keys.
          */
         public int[] toArray() {
-            int[] array = new int[map.size];
+            int[] array = new int[map.size - nextIndex];
             int idx = 0;
             while (hasNext && idx < array.length)
                 array[idx++] = next();
