@@ -19,7 +19,6 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Frustum;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import squidpony.StringKit;
 import squidpony.squidmath.HashCommon;
@@ -38,8 +37,8 @@ import java.util.NoSuchElementException;
  * @author Tommy Ettinger
  */
 public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
-    private static final int PRIME2 = 0x1EBF69;//0xb4b82e39;
-    private static final int PRIME3 = 0x1A3491;//0xced1c241;
+//    private static final int PRIME2 = 0x1EBF69;//0xb4b82e39;
+//    private static final int PRIME3 = 0x1A3491;//0xced1c241;
     private static final int EMPTY = 0;
 
     public int size;
@@ -47,15 +46,14 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     private int[] keyTable;
     private char[] charValueTable;
     private float[] floatValueTable;
-    private int capacity, stashSize;
+    private int[] ib;
+
     private char zeroChar;
     private float zeroFloat;
     private boolean hasZeroValue;
 
     private float loadFactor;
-    private int hashShift, mask, threshold;
-    private int stashCapacity;
-    private int pushIterations;
+    private int shift, mask, threshold;
 
     private transient Entries entries1, entries2;
     private transient CharValues charValues1, charValues2;
@@ -63,19 +61,19 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     private transient Keys keys1, keys2;
 
     /**
-     * Creates a new map with an initial capacity of 51 and a load factor of 0.55.
+     * Creates a new map with an initial capacity of 192 and a load factor of 0.75.
      */
     public SparseTextMap() {
-        this(63, 0.55f);
+        this(256, 0.75f);
     }
 
     /**
-     * Creates a new map with a load factor of 0.55.
+     * Creates a new map with a load factor of 0.75.
      *
      * @param initialCapacity If not a power of two, it is increased to the next nearest power of two.
      */
     public SparseTextMap(int initialCapacity) {
-        this(initialCapacity, 0.55f);
+        this(initialCapacity, 0.75f);
     }
 
     /**
@@ -85,45 +83,42 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @param initialCapacity If not a power of two, it is increased to the next nearest power of two.
      */
     public SparseTextMap(int initialCapacity, float loadFactor) {
-        if (initialCapacity < 0) throw new IllegalArgumentException("initialCapacity must be >= 0: " + initialCapacity);
-        initialCapacity = HashCommon.nextPowerOfTwo((int) Math.ceil(initialCapacity / loadFactor));
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("initialCapacity must be >= 0: " + initialCapacity);
+        if (loadFactor <= 0f || loadFactor >= 1f)
+            throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+        initialCapacity = HashCommon.nextPowerOfTwo((int)Math.ceil(initialCapacity / loadFactor));
         if (initialCapacity > 1 << 30)
             throw new IllegalArgumentException("initialCapacity is too large: " + initialCapacity);
-        capacity = initialCapacity;
 
-        if (loadFactor <= 0) throw new IllegalArgumentException("loadFactor must be > 0: " + loadFactor);
         this.loadFactor = loadFactor;
 
-        threshold = (int) (capacity * loadFactor);
-        mask = capacity - 1;
-        hashShift = 31 - Integer.numberOfTrailingZeros(capacity);
-        stashCapacity = Math.max(3, (int) Math.ceil(Math.log(capacity)) * 2);
-        pushIterations = Math.max(Math.min(capacity, 8), (int) Math.sqrt(capacity) / 8);
+        threshold = (int)(initialCapacity * loadFactor);
+        mask = initialCapacity - 1;
+        shift = Long.numberOfLeadingZeros(mask);
 
-        keyTable = new int[capacity + stashCapacity];
-        charValueTable = new char[keyTable.length];
-        floatValueTable = new float[keyTable.length];
+        keyTable = new int[initialCapacity];
+        charValueTable = new char[initialCapacity];
+        floatValueTable = new float[initialCapacity];
+        ib = new int[initialCapacity];
     }
 
     /**
      * Creates a new map identical to the specified map.
      */
     public SparseTextMap(SparseTextMap map) {
-        //this((int) Math.floor(map.capacity * map.loadFactor), map.loadFactor);
-        capacity = map.capacity;
         loadFactor = map.loadFactor;
         threshold = map.threshold;
         mask = map.mask;
-        hashShift = map.hashShift;
-        stashCapacity = map.stashCapacity;
-        pushIterations = map.pushIterations;
-        stashSize = map.stashSize;
+        shift = map.shift;
         keyTable = new int[map.keyTable.length];
         System.arraycopy(map.keyTable, 0, keyTable, 0, map.keyTable.length);
         charValueTable = new char[map.charValueTable.length];
         System.arraycopy(map.charValueTable, 0, charValueTable, 0, map.charValueTable.length);
         floatValueTable = new float[map.floatValueTable.length];
         System.arraycopy(map.floatValueTable, 0, floatValueTable, 0, map.floatValueTable.length);
+        ib = new int[map.ib.length];
+        System.arraycopy(map.ib, 0, ib, 0, map.ib.length);
         size = map.size;
         zeroChar = map.zeroChar;
         zeroFloat = map.zeroFloat;
@@ -175,8 +170,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n ^= n >>> 16;
-            n *= 0xA123B;
+//            n ^= n >>> 16;
+//            n *= 0xA123B;
+
 //            n ^= n << 26;
 //            n ^= n >>> 15;
 //            n ^= n << 17;
@@ -232,8 +228,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n ^= n >>> 16;
-            n *= 0xA123B;
+//            n ^= n >>> 16;
+//            n *= 0xA123B;
+
 //            n ^= n << 26;
 //            n ^= n >>> 15;
 //            n ^= n << 17;
@@ -273,8 +270,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n ^= n >>> 16;
-            n *= 0xA123B;
+//            n ^= n >>> 16;
+//            n *= 0xA123B;
+
 //            n ^= n << 26;
 //            n ^= n >>> 15;
 //            n ^= n << 17;
@@ -298,8 +296,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return an encoded form of the x,y pair in the style used elsewhere in this class
      */
     public static int encodePosition(final int x, final int y) {
-        final int n = (x | y << 16) * 0x4F6F3;
-        return n ^ n >>> 16;
+        return (x | y << 16);
+//        final int n = (x | y << 16) * 0x4F6F3;
+//        return n ^ n >>> 16;
 
 //        n ^= n << 17;
 //        n ^= n >>> 15;
@@ -316,7 +315,8 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the x component packed in the parameter
      */
     public static int decodeX(final int encoded) {
-        return ((encoded ^ encoded >>> 16) * 0xA123B) & 0xFFFF;
+        return encoded & 0xFFFF;
+//        return ((encoded ^ encoded >>> 16) * 0xA123B) & 0xFFFF;
 //        encoded ^= encoded << 26;
 //        return (encoded ^ encoded >>> 15) & 0xFFFF;
         //return GreasedRegion.disperseBits(encoded) & 0xFFFF;
@@ -330,12 +330,50 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the y component packed in the parameter
      */
     public static int decodeY(final int encoded) {
-        return ((encoded ^ encoded >>> 16) * 0xA123B) >>> 16;
+        return encoded >>> 16;
+//        return ((encoded ^ encoded >>> 16) * 0xA123B) >>> 16;
 //        encoded ^= encoded << 26;
 //        encoded ^= encoded >>> 15;
 //        return (encoded ^ encoded << 17) >>> 16;
         //return GreasedRegion.disperseBits(encoded) >>> 16;
     }
+
+    private int place (final int item) {
+        // shift is always greater than 32, less than 64
+        return (int)(item * 0x9E3779B97F4A7C15L >>> shift);
+    }
+
+    private int locateKey (final int key) {
+        return locateKey(key, place(key));
+    }
+
+    /**
+     * Given a key and its initial placement to try in an array, this finds the actual location of the key in the array
+     * if it is present, or -1 if the key is not present. This can be overridden if a subclass needs to compare for
+     * equality differently than just by using == with int keys, but only within the same package.
+     *
+     * @param key       a K key that will be checked for equality if a similar-seeming key is found
+     * @param placement as calculated by {@link #place(int)}, almost always with {@code place(key)}
+     * @return the location in the key array of key, if found, or -1 if it was not found.
+     */
+    private int locateKey (final int key, final int placement) {
+        for (int i = placement; ; i = i + 1 & mask) {
+            // empty space is available
+            if (keyTable[i] == 0) {
+                return -1;
+            }
+            if (key == (keyTable[i])) {
+                return i;
+            }
+            // ib holds the initial bucket position before probing offset the item
+            // if the distance required to probe to a position is greater than the
+            // stored distance for an item at that position, we can Robin Hood and swap them.
+            if ((i - ib[i] & mask) < (i - placement & mask)) {
+                return -1;
+            }
+        }
+    }
+
 
     /**
      * Places a char in the given libGDX Color at the requested x, y position in grid cells, where x and y must each be
@@ -371,7 +409,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         return code;
     }
 
-    public void put(int key, char charValue, float floatValue) {
+    public void put (int key, char charValue, float floatValue) {
         if (key == 0) {
             zeroChar = charValue;
             zeroFloat = floatValue;
@@ -382,69 +420,125 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return;
         }
 
-        int[] keyTable = this.keyTable;
-
-        // Check for existing keys.
-        int index1 = key & mask;
-        int key1 = keyTable[index1];
-        if (key == key1) {
-            charValueTable[index1] = charValue;
-            floatValueTable[index1] = floatValue;
+        int b = place(key);
+        int loc = locateKey(key, b);
+        // an identical key already exists
+        if (loc != -1) {
+            charValueTable[loc] = charValue;
+            floatValueTable[loc] = floatValue;
             return;
         }
-
-        int index2 = hash2(key);
-        int key2 = keyTable[index2];
-        if (key == key2) {
-            charValueTable[index2] = charValue;
-            floatValueTable[index2] = floatValue;
-            return;
+        if (++size >= threshold) {
+            resize(ib.length << 1);
         }
+        final int[] keyTable = this.keyTable;
+        final char[] charValueTable = this.charValueTable;
+        final float[] floatValueTable = this.floatValueTable;
+        final int[] ib = this.ib;
 
-        int index3 = hash3(key);
-        int key3 = keyTable[index3];
-        if (key == key3) {
-            charValueTable[index3] = charValue;
-            floatValueTable[index3] = floatValue;
-            return;
-        }
-
-        // Update key in the stash.
-        for (int i = capacity, n = i + stashSize; i < n; i++) {
-            if (key == keyTable[i]) {
+        for (int i = b; ; i = (i + 1) & mask) {
+            // space is available so we insert and break
+            if (keyTable[i] == 0) {
+                keyTable[i] = key;
                 charValueTable[i] = charValue;
                 floatValueTable[i] = floatValue;
+                ib[i] = b;
                 return;
             }
-        }
-
-        // Check for empty buckets.
-        if (key1 == EMPTY) {
-            keyTable[index1] = key;
-            charValueTable[index1] = charValue;
-            floatValueTable[index1] = floatValue;
-            if (size++ >= threshold) resize(capacity << 1);
-            return;
-        }
-
-        if (key2 == EMPTY) {
-            keyTable[index2] = key;
-            charValueTable[index2] = charValue;
-            floatValueTable[index2] = floatValue;
-            if (size++ >= threshold) resize(capacity << 1);
-            return;
-        }
-
-        if (key3 == EMPTY) {
-            keyTable[index3] = key;
-            charValueTable[index3] = charValue;
-            floatValueTable[index3] = floatValue;
-            if (size++ >= threshold) resize(capacity << 1);
-            return;
-        }
-
-        push(key, charValue, floatValue, index1, key1, index2, key2, index3, key3);
+            // if there is a key with a lower probe distance, we swap with it
+            // and keep going until we find a place we can insert
+            else if ((i - ib[i] & mask) < (i - b & mask)) {
+                int temp = keyTable[i];
+                float tv = floatValueTable[i];
+                char tc = charValueTable[i];
+                int tb = ib[i];
+                keyTable[i] = key;
+                charValueTable[i] = charValue;
+                floatValueTable[i] = floatValue;
+                ib[i] = b;
+                key = temp;
+                charValue = tc;
+                floatValue = tv;
+                b = tb;
+            }
+        } 
     }
+
+
+//    public void put(int key, char charValue, float floatValue) {
+//        if (key == 0) {
+//            zeroChar = charValue;
+//            zeroFloat = floatValue;
+//            if (!hasZeroValue) {
+//                hasZeroValue = true;
+//                size++;
+//            }
+//            return;
+//        }
+//
+//        int[] keyTable = this.keyTable;
+//
+//        // Check for existing keys.
+//        int index1 = key & mask;
+//        int key1 = keyTable[index1];
+//        if (key == key1) {
+//            charValueTable[index1] = charValue;
+//            floatValueTable[index1] = floatValue;
+//            return;
+//        }
+//
+//        int index2 = hash2(key);
+//        int key2 = keyTable[index2];
+//        if (key == key2) {
+//            charValueTable[index2] = charValue;
+//            floatValueTable[index2] = floatValue;
+//            return;
+//        }
+//
+//        int index3 = hash3(key);
+//        int key3 = keyTable[index3];
+//        if (key == key3) {
+//            charValueTable[index3] = charValue;
+//            floatValueTable[index3] = floatValue;
+//            return;
+//        }
+//
+//        // Update key in the stash.
+//        for (int i = capacity, n = i + stashSize; i < n; i++) {
+//            if (key == keyTable[i]) {
+//                charValueTable[i] = charValue;
+//                floatValueTable[i] = floatValue;
+//                return;
+//            }
+//        }
+//
+//        // Check for empty buckets.
+//        if (key1 == EMPTY) {
+//            keyTable[index1] = key;
+//            charValueTable[index1] = charValue;
+//            floatValueTable[index1] = floatValue;
+//            if (size++ >= threshold) resize(capacity << 1);
+//            return;
+//        }
+//
+//        if (key2 == EMPTY) {
+//            keyTable[index2] = key;
+//            charValueTable[index2] = charValue;
+//            floatValueTable[index2] = floatValue;
+//            if (size++ >= threshold) resize(capacity << 1);
+//            return;
+//        }
+//
+//        if (key3 == EMPTY) {
+//            keyTable[index3] = key;
+//            charValueTable[index3] = charValue;
+//            floatValueTable[index3] = floatValue;
+//            if (size++ >= threshold) resize(capacity << 1);
+//            return;
+//        }
+//
+//        push(key, charValue, floatValue, index1, key1, index2, key2, index3, key3);
+//    }
 
     /**
      * If and only if key is already present, this changes the float associated with it while leaving the char the same.
@@ -458,41 +552,12 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             zeroFloat = floatValue;
             return;
         }
-
-        int[] keyTable = this.keyTable;
-
-        // Check for existing keys.
-        int index1 = key & mask;
-        int key1 = keyTable[index1];
-        if (key == key1) {
-            //charValueTable[index1] = charValue;
-            floatValueTable[index1] = floatValue;
-            return;
-        }
-
-        int index2 = hash2(key);
-        int key2 = keyTable[index2];
-        if (key == key2) {
-            //charValueTable[index2] = charValue;
-            floatValueTable[index2] = floatValue;
-            return;
-        }
-
-        int index3 = hash3(key);
-        int key3 = keyTable[index3];
-        if (key == key3) {
-            //charValueTable[index3] = charValue;
-            floatValueTable[index3] = floatValue;
-            return;
-        }
-
-        // Update key in the stash.
-        for (int i = capacity, n = i + stashSize; i < n; i++) {
-            if (key == keyTable[i]) {
-                //charValueTable[i] = charValue;
-                floatValueTable[i] = floatValue;
-                return;
-            }
+        
+        int loc = locateKey(key);
+        // an identical key already exists
+        if (loc != -1) {
+//            charValueTable[loc] = charValue;
+            floatValueTable[loc] = floatValue;
         }
     }
 
@@ -504,46 +569,29 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return;
         }
 
-        int[] keyTable = this.keyTable;
-
-        // Check for existing keys.
-        int index1 = key & mask;
-        int key1 = keyTable[index1];
-        if (key == key1) {
-            charValueTable[index1] = charValue;
-            //floatValueTable[index1] = floatValue;
-            return;
-        }
-
-        int index2 = hash2(key);
-        int key2 = keyTable[index2];
-        if (key == key2) {
-            charValueTable[index2] = charValue;
-            //floatValueTable[index2] = floatValue;
-            return;
-        }
-
-        int index3 = hash3(key);
-        int key3 = keyTable[index3];
-        if (key == key3) {
-            charValueTable[index3] = charValue;
-            //floatValueTable[index3] = floatValue;
-            return;
-        }
-
-        // Update key in the stash.
-        for (int i = capacity, n = i + stashSize; i < n; i++) {
-            if (key == keyTable[i]) {
-                charValueTable[i] = charValue;
-                //floatValueTable[i] = floatValue;
-                return;
-            }
+        int loc = locateKey(key);
+        // an identical key already exists
+        if (loc != -1) {
+            charValueTable[loc] = charValue;
+//            floatValueTable[loc] = floatValue;
         }
     }
 
     public void putAll(SparseTextMap map) {
-        for (Entry entry : map.entries())
-            put(entry.key, entry.charValue, entry.floatValue);
+        ensureCapacity(map.size);
+        if (map.hasZeroValue)
+            put(0, map.zeroChar, map.zeroFloat);
+        final int[] keyTable = map.keyTable;
+        final char[] charValueTable = map.charValueTable;
+        final float[] floatValueTable = map.floatValueTable;
+        int k;
+        for (int i = 0, n = keyTable.length; i < n; i++) {
+            if ((k = keyTable[i]) != 0)
+                put(k, charValueTable[i], floatValueTable[i]);
+        }
+
+//        for (Entry entry : map.entries())
+//            put(entry.key, entry.charValue, entry.floatValue);
     }
 
     /**
@@ -553,140 +601,50 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (key == 0) {
             zeroChar = charValue;
             zeroFloat = floatValue;
-            hasZeroValue = true;
-            return;
-        }
-
-        // Check for empty buckets.
-        int index1 = key & mask;
-        int key1 = keyTable[index1];
-        if (key1 == EMPTY) {
-            keyTable[index1] = key;
-            charValueTable[index1] = charValue;
-            floatValueTable[index1] = floatValue;
-            if (size++ >= threshold) resize(capacity << 1);
-            return;
-        }
-
-        int index2 = hash2(key);
-        int key2 = keyTable[index2];
-        if (key2 == EMPTY) {
-            keyTable[index2] = key;
-            charValueTable[index2] = charValue;
-            floatValueTable[index2] = floatValue;
-            if (size++ >= threshold) resize(capacity << 1);
-            return;
-        }
-
-        int index3 = hash3(key);
-        int key3 = keyTable[index3];
-        if (key3 == EMPTY) {
-            keyTable[index3] = key;
-            charValueTable[index3] = charValue;
-            floatValueTable[index3] = floatValue;
-            if (size++ >= threshold) resize(capacity << 1);
-            return;
-        }
-
-        push(key, charValue, floatValue, index1, key1, index2, key2, index3, key3);
-    }
-
-    private void push(int insertKey, char insertChar, float insertFloat, int index1, int key1, int index2, int key2, int index3, int key3) {
-        int[] keyTable = this.keyTable;
-        char[] charTable = this.charValueTable;
-        float[] floatTable = this.floatValueTable;
-        int mask = this.mask;
-
-        // Push keys until an empty bucket is found.
-        int evictedKey;
-        char evictedChar;
-        float evictedFloat;
-        int i = 0, pushIterations = this.pushIterations;
-        do {
-            // Replace the key and value for one of the hashes.
-            switch (MathUtils.random(2)) {
-                case 0:
-                    evictedKey = key1;
-                    evictedChar = charTable[index1];
-                    evictedFloat = floatTable[index1];
-                    keyTable[index1] = insertKey;
-                    charTable[index1] = insertChar;
-                    floatTable[index1] = insertFloat;
-                    break;
-                case 1:
-                    evictedKey = key2;
-                    evictedChar = charTable[index2];
-                    evictedFloat = floatTable[index2];
-                    keyTable[index2] = insertKey;
-                    charTable[index2] = insertChar;
-                    floatTable[index2] = insertFloat;
-                    break;
-                default:
-                    evictedKey = key3;
-                    evictedChar = charTable[index3];
-                    evictedFloat = floatTable[index3];
-                    keyTable[index3] = insertKey;
-                    charTable[index3] = insertChar;
-                    floatTable[index3] = insertFloat;
-                    break;
+            if (!hasZeroValue) {
+                hasZeroValue = true;
+                size++;
             }
+            return;
+        }
 
-            // If the evicted key hashes to an empty bucket, put it there and stop.
-            index1 = evictedKey & mask;
-            key1 = keyTable[index1];
-            if (key1 == EMPTY) {
-                keyTable[index1] = evictedKey;
-                charTable[index1] = evictedChar;
-                floatTable[index1] = evictedFloat;
-                if (size++ >= threshold) resize(capacity << 1);
+        if (++size >= threshold) {
+            resize(ib.length << 1);
+        }
+        int b = place(key);
+        final int[] keyTable = this.keyTable;
+        final char[] charValueTable = this.charValueTable;
+        final float[] floatValueTable = this.floatValueTable;
+        final int[] ib = this.ib;
+
+        for (int i = b; ; i = (i + 1) & mask) {
+            // space is available so we insert and break
+            if (keyTable[i] == 0) {
+                keyTable[i] = key;
+                charValueTable[i] = charValue;
+                floatValueTable[i] = floatValue;
+                ib[i] = b;
                 return;
             }
-
-            index2 = hash2(evictedKey);
-            key2 = keyTable[index2];
-            if (key2 == EMPTY) {
-                keyTable[index2] = evictedKey;
-                charTable[index2] = evictedChar;
-                floatTable[index2] = evictedFloat;
-                if (size++ >= threshold) resize(capacity << 1);
-                return;
+            // if there is a key with a lower probe distance, we swap with it
+            // and keep going until we find a place we can insert
+            else if ((i - ib[i] & mask) < (i - b & mask)) {
+                int temp = keyTable[i];
+                float tv = floatValueTable[i];
+                char tc = charValueTable[i];
+                int tb = ib[i];
+                keyTable[i] = key;
+                charValueTable[i] = charValue;
+                floatValueTable[i] = floatValue;
+                ib[i] = b;
+                key = temp;
+                charValue = tc;
+                floatValue = tv;
+                b = tb;
             }
-
-            index3 = hash3(evictedKey);
-            key3 = keyTable[index3];
-            if (key3 == EMPTY) {
-                keyTable[index3] = evictedKey;
-                charTable[index3] = evictedChar;
-                floatTable[index3] = evictedFloat;
-                if (size++ >= threshold) resize(capacity << 1);
-                return;
-            }
-
-            if (++i == pushIterations) break;
-
-            insertKey = evictedKey;
-            insertChar = evictedChar;
-            insertFloat = evictedFloat;
-        } while (true);
-
-        putStash(evictedKey, evictedChar, evictedFloat);
-    }
-
-    private void putStash(int key, char charValue, float floatValue) {
-        if (stashSize == stashCapacity) {
-            // Too many pushes occurred and the stash is full, increase the table size.
-            resize(capacity << 1);
-            put(key, charValue, floatValue);
-            return;
         }
-        // Store key in the stash.
-        int index = capacity + stashSize;
-        keyTable[index] = key;
-        charValueTable[index] = charValue;
-        floatValueTable[index] = floatValue;
-        stashSize++;
-        size++;
     }
+
     /**
      * @param x the x-component of the position to look up 
      * @param y the y-component of the position to look up
@@ -707,22 +665,22 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             if (!hasZeroValue) return defaultValue;
             return zeroChar;
         }
-        int index = key & mask;
-        if (keyTable[index] != key) {
-            index = hash2(key);
-            if (keyTable[index] != key) {
-                index = hash3(key);
-                if (keyTable[index] != key) return getStashChar(key, defaultValue);
+        final int placement = place(key);
+        for (int i = placement; ; i = i + 1 & mask) {
+            // empty space is available
+            if (keyTable[i] == 0) {
+                return defaultValue;
+            }
+            if (key == (keyTable[i])) {
+                return charValueTable[i];
+            }
+            // ib holds the initial bucket position before probing offset the item
+            // if the distance required to probe to a position is greater than the
+            // stored distance for an item at that position, we can Robin Hood and swap them.
+            if ((i - ib[i] & mask) < (i - placement & mask)) {
+                return defaultValue;
             }
         }
-        return charValueTable[index];
-    }
-
-    private char getStashChar(int key, char defaultValue) {
-        int[] keyTable = this.keyTable;
-        for (int i = capacity, n = i + stashSize; i < n; i++)
-            if (key == keyTable[i]) return charValueTable[i];
-        return defaultValue;
     }
 
     /**
@@ -745,22 +703,22 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             if (!hasZeroValue) return defaultValue;
             return zeroFloat;
         }
-        int index = key & mask;
-        if (keyTable[index] != key) {
-            index = hash2(key);
-            if (keyTable[index] != key) {
-                index = hash3(key);
-                if (keyTable[index] != key) return getStashFloat(key, defaultValue);
+        final int placement = place(key);
+        for (int i = placement; ; i = i + 1 & mask) {
+            // empty space is available
+            if (keyTable[i] == 0) {
+                return defaultValue;
+            }
+            if (key == (keyTable[i])) {
+                return floatValueTable[i];
+            }
+            // ib holds the initial bucket position before probing offset the item
+            // if the distance required to probe to a position is greater than the
+            // stored distance for an item at that position, we can Robin Hood and swap them.
+            if ((i - ib[i] & mask) < (i - placement & mask)) {
+                return defaultValue;
             }
         }
-        return floatValueTable[index];
-    }
-
-    private float getStashFloat(int key, float defaultValue) {
-        int[] keyTable = this.keyTable;
-        for (int i = capacity, n = i + stashSize; i < n; i++)
-            if (key == keyTable[i]) return floatValueTable[i];
-        return defaultValue;
     }
 
     public void remove(int key) {
@@ -775,54 +733,26 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return zeroChar;
         }
 
-        int index = key & mask;
-        if (key == keyTable[index]) {
-            keyTable[index] = EMPTY;
-            char oldValue = charValueTable[index];
-            size--;
-            return oldValue;
+        int loc = locateKey(key);
+        if (loc == -1) {
+            return defaultValue;
         }
-
-        index = hash2(key);
-        if (key == keyTable[index]) {
-            keyTable[index] = EMPTY;
-            char oldValue = charValueTable[index];
-            size--;
-            return oldValue;
+        final int[] keyTable = this.keyTable;
+        final float[] floatValueTable = this.floatValueTable;
+        final char[] charValueTable = this.charValueTable;
+        final int[] ib = this.ib;
+        keyTable[loc] = 0;
+        char oldChar = charValueTable[loc];
+        for (int i = (loc + 1) & mask; (keyTable[i] != 0 && (i - ib[i] & mask) != 0); i = (i + 1) & mask) {
+            keyTable[i - 1 & mask] = keyTable[i];
+            floatValueTable[i - 1 & mask] = floatValueTable[i];
+            charValueTable[i - 1 & mask] = charValueTable[i];
+            ib[i - 1 & mask] = ib[i];
+            keyTable[i] = 0;
+            ib[i] = 0;
         }
-
-        index = hash3(key);
-        if (key == keyTable[index]) {
-            keyTable[index] = EMPTY;
-            char oldValue = charValueTable[index];
-            size--;
-            return oldValue;
-        }
-
-        return removeStash(key, defaultValue);
-    }
-
-    private char removeStash(int key, char defaultValue) {
-        int[] keyTable = this.keyTable;
-        for (int i = capacity, n = i + stashSize; i < n; i++) {
-            if (key == keyTable[i]) {
-                char oldValue = charValueTable[i];
-                removeStashIndex(i);
-                size--;
-                return oldValue;
-            }
-        }
-        return defaultValue;
-    }
-
-    private void removeStashIndex(int index) {
-        // If the removed location was not last, move the last tuple to the removed location.
-        stashSize--;
-        int lastIndex = capacity + stashSize;
-        if (index < lastIndex) {
-            keyTable[index] = keyTable[lastIndex];
-            charValueTable[index] = charValueTable[lastIndex];
-        }
+        --size;
+        return oldChar;
     }
 
     /**
@@ -832,16 +762,15 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     public void shrink(int maximumCapacity) {
         if (maximumCapacity < 0) throw new IllegalArgumentException("maximumCapacity must be >= 0: " + maximumCapacity);
         if (size > maximumCapacity) maximumCapacity = size;
-        if (capacity <= maximumCapacity) return;
-        maximumCapacity = HashCommon.nextPowerOfTwo(maximumCapacity);
-        resize(maximumCapacity);
+        if (ib.length <= maximumCapacity) return;
+        resize(HashCommon.nextPowerOfTwo(maximumCapacity));
     }
 
     /**
      * Clears the map and reduces the size of the backing arrays to be the specified capacity if they are larger.
      */
     public void clear(int maximumCapacity) {
-        if (capacity <= maximumCapacity) {
+        if (ib.length <= maximumCapacity) {
             clear();
             return;
         }
@@ -852,11 +781,13 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
 
     public void clear() {
         if (size == 0) return;
-        int[] keyTable = this.keyTable;
-        for (int i = capacity + stashSize; i-- > 0; )
-            keyTable[i] = EMPTY;
+        final int[] keyTable = this.keyTable;
+        final int[] ib = this.ib;
+        for (int i = ib.length; i > 0; ) {
+            keyTable[--i] = 0;
+            ib[i] = 0;
+        }
         size = 0;
-        stashSize = 0;
         hasZeroValue = false;
     }
 
@@ -868,7 +799,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (hasZeroValue && zeroChar == value) return true;
         int[] keyTable = this.keyTable;
         char[] valueTable = this.charValueTable;
-        for (int i = capacity + stashSize; i-- > 0; )
+        for (int i = keyTable.length; i-- > 0; )
             if (keyTable[i] != 0 && valueTable[i] == value) return true;
         return false;
     }
@@ -881,29 +812,14 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (hasZeroValue && zeroFloat == value) return true;
         int[] keyTable = this.keyTable;
         float[] valueTable = this.floatValueTable;
-        for (int i = capacity + stashSize; i-- > 0; )
+        for (int i = keyTable.length; i-- > 0; )
             if (keyTable[i] != 0 && valueTable[i] == value) return true;
         return false;
     }
 
     public boolean containsKey(int key) {
         if (key == 0) return hasZeroValue;
-        int index = key & mask;
-        if (keyTable[index] != key) {
-            index = hash2(key);
-            if (keyTable[index] != key) {
-                index = hash3(key);
-                if (keyTable[index] != key) return containsKeyStash(key);
-            }
-        }
-        return true;
-    }
-
-    private boolean containsKeyStash(int key) {
-        int[] keyTable = this.keyTable;
-        for (int i = capacity, n = i + stashSize; i < n; i++)
-            if (key == keyTable[i]) return true;
-        return false;
+        return locateKey(key) != -1;
     }
 
     /**
@@ -914,7 +830,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (hasZeroValue && zeroChar == value) return 0;
         int[] keyTable = this.keyTable;
         char[] valueTable = this.charValueTable;
-        for (int i = capacity + stashSize; i-- > 0; )
+        for (int i = keyTable.length; i-- > 0; )
             if (keyTable[i] != 0 && valueTable[i] == value) return keyTable[i];
         return notFound;
     }
@@ -927,7 +843,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (hasZeroValue && zeroFloat == value) return 0;
         int[] keyTable = this.keyTable;
         float[] valueTable = this.floatValueTable;
-        for (int i = capacity + stashSize; i-- > 0; )
+        for (int i = keyTable.length; i-- > 0; )
             if (keyTable[i] != 0 && valueTable[i] == value) return keyTable[i];
         return notFound;
     }
@@ -937,63 +853,53 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * items to avoid multiple backing array resizes.
      */
     public void ensureCapacity(int additionalCapacity) {
+        if (additionalCapacity < 0)
+            throw new IllegalArgumentException("additionalCapacity must be >= 0: " + additionalCapacity);
         int sizeNeeded = size + additionalCapacity;
-        if (sizeNeeded >= threshold) resize(HashCommon.nextPowerOfTwo((int) Math.ceil(sizeNeeded / loadFactor)));
+        if (sizeNeeded >= threshold)
+            resize(HashCommon.nextPowerOfTwo((int)Math.ceil(sizeNeeded / loadFactor)));
     }
 
     private void resize(int newSize) {
-        int oldEndIndex = capacity + stashSize;
-
-        capacity = newSize;
-        threshold = (int) (newSize * loadFactor);
+        int oldCapacity = ib.length;
+        threshold = (int)(newSize * loadFactor);
         mask = newSize - 1;
-        hashShift = 31 - Integer.numberOfTrailingZeros(newSize);
-        stashCapacity = Math.max(3, (int) Math.ceil(Math.log(newSize)) * 2);
-        pushIterations = Math.max(Math.min(newSize, 8), (int) Math.sqrt(newSize) / 8);
+        shift = Long.numberOfLeadingZeros(mask);
 
-        int[] oldKeyTable = keyTable;
-        char[] oldCharTable = charValueTable;
-        float[] oldFloatTable = floatValueTable;
+        final int[] oldKeyTable = keyTable;
+        final float[] oldFloats = floatValueTable;
+        final char[] oldChars = charValueTable;
 
-        keyTable = new int[newSize + stashCapacity];
-        charValueTable = new char[newSize + stashCapacity];
-        floatValueTable = new float[newSize + stashCapacity];
+        keyTable = new int[newSize];
+        floatValueTable = new float[newSize];
+        charValueTable = new char[newSize];
+        ib = new int[newSize];
 
         int oldSize = size;
-        size = hasZeroValue ? 1 : 0;
-        stashSize = 0;
+        size = 0;
         if (oldSize > 0) {
-            for (int i = 0; i < oldEndIndex; i++) {
+            for (int i = 0; i < oldCapacity; i++) {
                 int key = oldKeyTable[i];
-                if (key != EMPTY) putResize(key, oldCharTable[i], oldFloatTable[i]);
+                if (key != 0)
+                    putResize(key, oldChars[i], oldFloats[i]);
             }
         }
-    }
-
-    private int hash2(int h) {
-        h *= PRIME2;
-        return (h ^ h >>> hashShift) & mask;
-    }
-
-    private int hash3(int h) {
-        h *= PRIME3;
-        return (h ^ h >>> hashShift) & mask;
     }
 
     public int hashCode() {
         int h = 0;
         if (hasZeroValue) {
             // 0x1FFF is a Mersenne prime; multiplication by powers of 2 plus or minus 1 is often optimized
-            h = NumberTools.floatToIntBits(zeroFloat) ^ (zeroChar * 0x1FFF);
+            h = NumberTools.floatToIntBits(zeroFloat) ^ zeroChar;
         }
         int[] keyTable = this.keyTable;
         char[] charTable = this.charValueTable;
         float[] floatTable = this.floatValueTable;
-        for (int i = 0, n = capacity + stashSize; i < n; i++) {
+        for (int i = 0, n = keyTable.length; i < n; i++) {
             int key = keyTable[i];
             if (key != EMPTY) {
-                h += key * 31 + NumberTools.floatToIntBits(floatTable[i]);
-                h ^= charTable[i] * 0x1FFF;
+                h += key ^ NumberTools.floatToIntBits(floatTable[i]);
+                h ^= charTable[i];
             }
         }
         return h;
@@ -1009,14 +915,15 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return false;
         }
         int[] keyTable = this.keyTable;
-        char[] valueTable = this.charValueTable;
-        for (int i = 0, n = capacity + stashSize; i < n; i++) {
+        char[] charTable = this.charValueTable;
+        float[] floatTable = this.floatValueTable;
+        for (int i = 0, n = keyTable.length; i < n; i++) {
             int key = keyTable[i];
             if (key != EMPTY) {
                 char otherValue = other.getChar(key, '\0');
-                if (otherValue == 0 && !other.containsKey(key)) return false;
-                int value = valueTable[i];
-                if (otherValue != value) return false;
+                if (otherValue == 0 && !other.containsKey(key) 
+                        || otherValue != charTable[i]
+                        || other.getFloat(key, Float.NaN) != floatTable[i]) return false;
             }
         }
         return true;
@@ -1171,28 +1078,37 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
                 findNextIndex();
         }
 
-        void findNextIndex() {
+        void findNextIndex () {
             hasNext = false;
             int[] keyTable = map.keyTable;
-            for (int n = map.capacity + map.stashSize; ++nextIndex < n; ) {
-                if (keyTable[nextIndex] != EMPTY) {
+            for (int n = keyTable.length; ++nextIndex < n; ) {
+                if (keyTable[nextIndex] != 0) {
                     hasNext = true;
                     break;
                 }
             }
         }
 
-        public void remove() {
+        public void remove () {
             if (currentIndex == INDEX_ZERO && map.hasZeroValue) {
                 map.hasZeroValue = false;
             } else if (currentIndex < 0) {
                 throw new IllegalStateException("next must be called before remove.");
-            } else if (currentIndex >= map.capacity) {
-                map.removeStashIndex(currentIndex);
-                nextIndex = currentIndex - 1;
-                findNextIndex();
             } else {
-                map.keyTable[currentIndex] = EMPTY;
+                final int[] keyTable = map.keyTable;
+                final float[] floatValueTable = map.floatValueTable;
+                final char[] charValueTable = map.charValueTable;
+                final int[] ib = map.ib;
+                final int mask = map.mask;
+                keyTable[currentIndex] = 0;
+                for (int i = (currentIndex + 1) & mask; (keyTable[i] != 0 && (i - ib[i] & mask) != 0); i = (i + 1) & mask) {
+                    keyTable[i - 1 & mask] = keyTable[i];
+                    floatValueTable[i - 1 & mask] = floatValueTable[i];
+                    charValueTable[i - 1 & mask] = charValueTable[i];
+                    ib[i - 1 & mask] = ib[i];
+                    keyTable[i] = 0;
+                    ib[i] = 0;
+                }
             }
             currentIndex = INDEX_ILLEGAL;
             map.size--;
