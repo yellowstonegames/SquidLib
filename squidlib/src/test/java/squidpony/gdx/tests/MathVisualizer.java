@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 47;
+    private int mode = 31;
     private int modes = 49;
     private FilterBatch batch;
     private SparseLayers layers;
@@ -1326,10 +1326,12 @@ public class MathVisualizer extends ApplicationAdapter {
             case 31: {
                 Gdx.graphics.setTitle("Sine frequencies");
                 float p = MathUtils.PI;
-                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI) % 360f) {        // good case, modulo
+                float q = 0.6180339887498949f;
+                for (int i = 1; i <= 0x1000000; i++, p = (p + 1.6180339887498949f) % 360f, q = (q + MathUtils.PI) % 360f) {        // good case, modulo
 //                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI)) {             // bad case, high inputs
-                    amounts[MathUtils.round(MathUtils.sinDeg(p) * 255f + 256f)]++;           // libGDX's LUT way
-//                    amounts[MathUtils.round(NumberTools.sinDegrees(p) * 255f + 256f)]++;   // SquidLib's no-LUT way
+//                    amounts[MathUtils.round(MathUtils.sinDeg(p) * 255f + 256f)]++;           // libGDX's LUT way
+                    amounts[MathUtils.round((NumberTools.sinDegrees(p)) * 255f + 256f)]++;   // SquidLib's no-LUT way
+//                    amounts[MathUtils.round((NumberTools.sinDegrees(p) + NumberTools.sinDegrees(q)) * 255f * 0.5f + 256f)]++;   // SquidLib's no-LUT way
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
