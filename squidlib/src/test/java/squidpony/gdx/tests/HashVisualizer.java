@@ -65,9 +65,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 134;
-    private int hashMode = 2, rngMode = 0, noiseMode = 133, otherMode = 1;//74;//118;//82;
+    private int hashMode = 2, rngMode = 0, noiseMode = 110, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -949,12 +949,36 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        NumberTools.swayRandomized(~seed, xin - 0.35f * NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, 1.2f * yin))
                 ) + 2.5f) * (3.456789f + NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, xin - yin)));// + (yin + xin)
     }
-    public static float beachNoise(final long seed, float xin, float yin)
+    public static float beachNoise(int seed, float xin, float yin)
     {
-//        xin = (float) Math.sqrt(xin);
-//        yin = (float) Math.sqrt(yin);
-        final float angle = NumberTools.swayAngleRandomized(seed, xin + 0.2f) - NumberTools.swayAngleRandomized(~seed, yin - 0.2f);
-        return (NumberTools.swayRandomized(0x9E3779B97F4A7C15L - seed, (xin * NumberTools.cos(angle) + yin * NumberTools.sin(angle)) * 0.125f));
+        xin += NumberTools.swayRandomized(seed, yin);
+        final int xfloor = xin >= 0f ? (int) xin : (int) xin - 1;
+        final int yfloor = yin >= 0f ? (int) yin : (int) yin - 1;
+        seed += yfloor * 0x9E3;
+//        seed *= ~(yfloor << 1);
+        int s = (seed + xfloor);
+        float start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f,
+                end = (((s = (seed + xfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        xin -= xfloor;
+        xin *= xin * (3 - 2 * xin);
+        final float left = (1 - xin) * start + xin * end;
+        seed+= 0x9E3;
+//        seed += ~(yfloor << 1);
+        s = seed + xfloor;
+        start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        end = (((s = (seed + xfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        final float right = (1 - xin) * start + xin * end;
+        yin -= yfloor;
+        yin *= yin * (3 - 2 * yin);
+        return  (1 - yin) * left + yin * right;
+
+
+//        final float angle = NumberTools.swayAngleRandomized(seed, xin + 0.2f) - NumberTools.swayAngleRandomized(~seed, yin - 0.2f);
+//        return (NumberTools.swayRandomized(0x9E3779B97F4A7C15L - seed, (xin * NumberTools.cos(angle) + yin * NumberTools.sin(angle)) * 0.125f));
+        
+        
+        
+        
                 //+ NumberTools.swayRandomized(seed + 0xD0E89D2D311E289FL, yin * NumberTools.sin(angle))) * 0.5f;
 //        return NumberTools.swayRandomized(seed, (NumberTools.swayRandomized(seed + 0x9E3779B97F4A7C15L, xin + NumberTools.swayRandomized(0xD0E89D2D311E289FL + seed, yin + xin * 0.375f)) + NumberTools.swayRandomized(seed - 0x9E3779B97F4A7C15L, yin + NumberTools.swayRandomized(seed - 0xD0E89D2D311E289FL, xin + yin * 0.375f))) * 2.25f);
 
@@ -4534,7 +4558,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = beachNoise(-999999L, (x + ctr + 512) * 0.003125f, (y + ctr + 512) * 0.003125f) * 0.5f + 0.5f; //0.61803398875
+                                bright = prepare((
+                                        beachNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f) +
+                                        beachNoise(9999, (y + ctr) * 0.03125f + 0.618f, (x + ctr) * 0.03125f + 0.618f)) * 0.3125f
+                                );
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -4543,7 +4570,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Experimental Noise 3D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f) * 0.5f + 0.5f; //0.61803398875
+                                bright = basicPrepare(beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f)); //0.61803398875
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
