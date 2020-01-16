@@ -951,28 +951,54 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
     public static float beachNoise(int seed, float xin, float yin)
     {
-        xin += NumberTools.swayRandomized(seed, yin);
-        final int xfloor = xin >= 0f ? (int) xin : (int) xin - 1;
-        final int yfloor = yin >= 0f ? (int) yin : (int) yin - 1;
-        seed += yfloor * 0x9E3;
-//        seed *= ~(yfloor << 1);
-        int s = (seed + xfloor);
+        float x = xin + NumberTools.swayRandomized(seed, yin) * 0.625f;
+        float y = yin;
+        int xfloor = x >= 0f ? (int) x : (int) x - 1;
+        x -= xfloor;
+        x *= x * (3 - 2 * x);
+        int yfloor = y >= 0f ? (int) y : (int) y - 1;
+        y -= yfloor;
+        y *= y * (3 - 2 * y);
+        int stream = seed - yfloor * 0x9E3;
+        int s = (stream + xfloor);
         float start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f,
-                end = (((s = (seed + xfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
-        xin -= xfloor;
-        xin *= xin * (3 - 2 * xin);
-        final float left = (1 - xin) * start + xin * end;
-        seed+= 0x9E3;
-//        seed += ~(yfloor << 1);
-        s = seed + xfloor;
+                end = (((s = (stream + xfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        float alpha = (1 - x) * start + x * end;
+        stream -= 0x9E3;
+        s = stream + xfloor;
         start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
-        end = (((s = (seed + xfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
-        final float right = (1 - xin) * start + xin * end;
-        yin -= yfloor;
-        yin *= yin * (3 - 2 * yin);
-        return  (1 - yin) * left + yin * right;
+        end = (((s = (stream + xfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        float omega = (1 - x) * start + x * end;
+        final float result0 = (1 - y) * alpha + y * omega;
+        
+//        return result0 * 0.5f + 0.5f;
 
+        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed ^= seed >>> 14;
+        x = xin + 1.618f;
+        y = yin + NumberTools.swayRandomized(seed, xin) * 0.625f - 1.618f;
+        xfloor = x >= 0f ? (int) x : (int) x - 1;
+        x -= xfloor;
+        x *= x * (3 - 2 * x);
+        yfloor = y >= 0f ? (int) y : (int) y - 1;
+        y -= yfloor;
+        y *= y * (3 - 2 * y);
+        stream = seed - xfloor * 0xAB3;
+        s = (stream + yfloor);
+        start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        end = (((s = (stream + yfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        alpha = (1 - y) * start + y * end;
+        stream -= 0xAB3;
+        s = stream + yfloor;
+        start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        end = (((s = (stream + yfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+        omega = (1 - y) * start + y * end;
+        final float result1 = (1 - x) * alpha + x * omega;
 
+//        float result = (result1) * 0.5f + 0.5f;
+        float result = (result0 + result1) * 0.25f + 0.5f;
+        return result * result * (3 - 2 * result);
+        
 //        final float angle = NumberTools.swayAngleRandomized(seed, xin + 0.2f) - NumberTools.swayAngleRandomized(~seed, yin - 0.2f);
 //        return (NumberTools.swayRandomized(0x9E3779B97F4A7C15L - seed, (xin * NumberTools.cos(angle) + yin * NumberTools.sin(angle)) * 0.125f));
         
@@ -4558,10 +4584,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = prepare((
-                                        beachNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f) +
-                                        beachNoise(9999, (y + ctr) * 0.03125f + 0.618f, (x + ctr) * 0.03125f + 0.618f)) * 0.3125f
-                                );
+                                bright = beachNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f);
+//                                bright = prepare((
+//                                        beachNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f) +
+//                                        beachNoise(9999, (y + ctr) * 0.03125f - 1.618f, (x + ctr) * 0.03125f - 1.618f)) * 0.375f
+//                                );
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
