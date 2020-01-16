@@ -1326,18 +1326,29 @@ public class MathVisualizer extends ApplicationAdapter {
             case 31: {
                 Gdx.graphics.setTitle("Sine frequencies");
                 float p = MathUtils.PI;
-                float q = 0.6180339887498949f;
-                for (int i = 1; i <= 0x1000000; i++, p = (p + 1.6180339887498949f) % 360f, q = (q + MathUtils.PI) % 360f) {        // good case, modulo
-//                for (int i = 1; i <= 0x1000000; i++, p = (p + MathUtils.PI)) {             // bad case, high inputs
+                if((TimeUtils.timeSinceMillis(startTime) & 512L) == 0L) {
+                    for (int i = 1; i <= 0x400000; i++, p = (p + 1.6180339887498949f) % MathUtils.PI2) {
 //                    amounts[MathUtils.round(MathUtils.sinDeg(p) * 255f + 256f)]++;           // libGDX's LUT way
-                    amounts[MathUtils.round((NumberTools.sinDegrees(p)) * 255f + 256f)]++;   // SquidLib's no-LUT way
-//                    amounts[MathUtils.round((NumberTools.sinDegrees(p) + NumberTools.sinDegrees(q)) * 255f * 0.5f + 256f)]++;   // SquidLib's no-LUT way
+                        amounts[MathUtils.round((NumberTools.sin(p)) * 255f + 256f)]++;   // SquidLib's no-LUT way
+                    }
                 }
+                else {
+                    for (int i = 1; i <= 0x400000; i++, p = (p + 1.6180339887498949f) % MathUtils.PI2) {
+//                    amounts[MathUtils.round(MathUtils.sin(p) * 255f + 256f)]++;           // libGDX's LUT way
+                    amounts[MathUtils.round(minimaxSin(p) * 255f + 256f)]++;           // libGDX's LUT way
+//                        amounts[MathUtils.round((NumberTools.sinDegrees(p)) * 255f + 256f)]++;   // SquidLib's no-LUT way
+                    }
+                    
+                }
+//                float q = 0.6180339887498949f;
+//                for (int i = 1; i <= 0x1000000; i++, p = (p + 1.6180339887498949f) % 360f, q = (q + MathUtils.PI) % 360f) {
+//                    amounts[MathUtils.round((NumberTools.sinDegrees(p) + NumberTools.sinDegrees(q)) * 255f * 0.5f + 256f)]++;   // SquidLib's no-LUT way
+
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = Math.max(0, 520 - (amounts[i] / 1000)); j < 520; j++) {
+                    for (int j = Math.max(0, 520 - (amounts[i] >>> 8)); j < 520; j++) {
                         layers.backgrounds[i + 8][j] = color;
                     }
                 }
@@ -1888,6 +1899,17 @@ public class MathVisualizer extends ApplicationAdapter {
 //            denominator *= base;
 //        }
         return res - (int)res;
+    }
+    
+    public static float minimaxSin(float x)
+    {
+//        x %= MathUtils.PI2;
+        final float c3 = -0.16666f, c5 = 0.0083143f, c7 = -0.00018542f;
+        float xp = x * x;
+        final float d = xp * c3, h = xp * c7;
+        xp *= xp;
+        return ((h + c5) * xp + d + 1) * x;
+        
     }
 
     @Override
