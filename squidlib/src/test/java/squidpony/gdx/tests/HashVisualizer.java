@@ -114,9 +114,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.InverseLayered3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
     private final Noise.InverseLayered4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
     //private final Noise.Noise6D layered6D = new Noise.Layered6D(WhirlingNoise.instance, 3, 1.75);
-    private final Noise.Noise2D foam2D_1 = FoamNoise.instance;
-    private final Noise.Noise2D foam2D_2 = new Noise.Layered2D(FoamNoise.instance, 2, 1.0, 1.0);
-    private final Noise.Noise2D foam2D_3 = new Noise.Layered2D(FoamNoise.instance, 3, 1.0, 1.0);
+    private final Noise.Noise2D foam2D_1 = new Noise.InverseLayered2D(FoamNoise.instance, 1, 0x1p-9, 2.5);
+    private final Noise.Noise2D foam2D_2 = new Noise.InverseLayered2D(FoamNoise.instance, 2, 0x1p-9, 2.5);
+    private final Noise.Noise2D foam2D_3 = new Noise.InverseLayered2D(FoamNoise.instance, 3, 0x1p-9, 2.5);
 //    private final Noise.Layered2D white2D = new Noise.Layered2D(WhiteNoise.instance, 2);
 //    private final Noise.Layered3D white3D = new Noise.Layered3D(WhiteNoise.instance, 2);
 //    private final Noise.Layered4D white4D = new Noise.Layered4D(WhiteNoise.instance, 2);
@@ -4986,7 +4986,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright =
-                                        basicPrepare(foam2D_1.getNoise(xx * 0.025, yy * 0.025)
+                                        basicPrepare(foam2D_1.getNoise(xx, yy)
                                         );
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
@@ -4999,7 +4999,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright =
-                                        basicPrepare(foam2D_2.getNoise(xx * 0.025, yy * 0.025)
+                                        basicPrepare(foam2D_2.getNoise(xx, yy)
                                         );
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
@@ -5012,7 +5012,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright =
-                                        basicPrepare(foam2D_3.getNoise(xx * 0.025, yy * 0.025)
+                                        basicPrepare(foam2D_3.getNoise(xx, yy)
                                         );
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
