@@ -949,15 +949,37 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        NumberTools.swayRandomized(~seed, xin - 0.35f * NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, 1.2f * yin))
                 ) + 2.5f) * (3.456789f + NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, xin - yin)));// + (yin + xin)
     }
-    public static float beachNoise(int seed, float xin, float yin) 
+//    public static float beachNoise(int seed, float xin, float yin) 
+//    {
+//        final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
+//        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+//        seed ^= seed >>> 14;
+//        final float b = valueNoise(seed, yin + NumberTools.swayRandomized(~seed, xin - a) * 0.5f, xin + a);
+//        final float result = (a + b) * 0.5f;
+//        return result * result * (3f - 2f * result);
+//    }
+    public static float foamNoise(int seed, final float x, final float y) 
     {
+        float xin = x * 0.540302f + y * 0.841471f; // sin and cos of 1
+        float yin = x * -0.841471f + y * 0.540302f;
         final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
         seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed ^= seed >>> 14;
-        final float b = valueNoise(seed, yin + NumberTools.swayRandomized(~seed, xin - a) * 0.5f, xin + a);
-        final float result = (a + b) * 0.5f;
+        xin = x * -0.989992f + y * 0.141120f; // sin and cos of 3
+        yin = x * -0.141120f + y * -0.989992f;
+        final float b = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin - a) * 0.5f, yin + a);
+        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = x * 0.283662f + y * -0.958924f; // sin and cos of 5
+        yin = x * 0.958924f + y * 0.283662f;
+        final float c = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin + b) * 0.5f, yin - b);
+        final float result = (a + b) * 0.3125f + c * 0.375f;
         return result * result * (3f - 2f * result);
     }
+    
+    //x * 0.540302, y * 0.841471,     x * -0.989992f + y * 0.141120f; , x * 0.283662f + y * -0.958924f;
+    //x * -0.841471f + y * 0.540302f, x * -0.141120f + y * -0.989992f;, x * 0.958924f + y * 0.283662f;
+    
     public static float valueNoiseSway(int seed, float xin, float yin)
     {
 //        float x = xin + NumberTools.swayRandomized(seed, yin) * 0.625f;
@@ -4628,7 +4650,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = beachNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f);
+                                bright = foamNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f);
 //                                bright = prepare((
 //                                        beachNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f) +
 //                                        beachNoise(9999, (y + ctr) * 0.03125f - 1.618f, (x + ctr) * 0.03125f - 1.618f)) * 0.375f
