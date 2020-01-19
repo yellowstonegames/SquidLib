@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.FakeLanguageGen;
+import squidpony.StringKit;
 import squidpony.Thesaurus;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
@@ -29,7 +31,8 @@ import java.util.Date;
 public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1920, height = 1080;
 //    private static final int width = 256, height = 256; // localMimic
-    private static final int width = 512, height = 256; // mimic, elliptical
+//    private static final int width = 512, height = 256; // mimic, elliptical
+    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
     private static final int LIMIT = 6;
     //private static final int width = 256, height = 128;
@@ -37,22 +40,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     //private static final int width = 512, height = 512;
 
     private FilterBatch batch;
-    OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
-    private String makeName()
+//    private OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
+    private Thesaurus thesaurus;
+    private String makeName(final Thesaurus thesaurus)
     {
-        String a = adjective.randomItem(rng);
-        while (a.contains("'"))
-            a = adjective.randomItem(rng);
-        String b = noun.randomItem(rng);
-        while (b.contains("'"))
-            b = noun.randomItem(rng);
-        final int al = a.length(), bl = b.length();
-        final char[] ch = new char[al + bl];
-        a.getChars(1, al, ch, 1);
-        b.getChars(1, bl, ch, al+1);
-        ch[0] = Character.toUpperCase(a.charAt(0));
-        ch[al] = Character.toUpperCase(b.charAt(0));
-        return String.valueOf(ch);
+        return StringKit.capitalize(thesaurus.makePlantName(FakeLanguageGen.MALAY).replaceAll("'s", "")).replaceAll("\\W", "");
     }
 
     //    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
@@ -91,15 +83,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
-//        path = "out/worlds/" + date + "/Hyperellipse/";
+        path = "out/worlds/" + date + "/Hyperellipse/";
 //        path = "out/worlds/" + date + "/Tiling/";
 //        path = "out/worlds/" + date + "/RoundSide/";
 //        path = "out/worlds/" + date + "/Local/";
-        path = "out/worlds/" + date + "/LocalMimic/";
-//        path = "out/worlds/EllipseHammer " + date + "/";
-//        path = "out/worlds/SpaceCompare " + date + "/";
-//        path = "out/worlds/HyperCompare " + date + "/";
-//        path = "out/worlds/EllipseCompare " + date + "/";
+//        path = "out/worlds/" + date + "/LocalMimic/";
+//        path = "out/worlds/" + date + "/EllipseHammer/";
         
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
@@ -118,13 +107,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
         seed = rng.getState();
-
-        for (int i = 0; i < Thesaurus.adjective.size(); i++) {
-            adjective.addAll(Thesaurus.adjective.getAt(i));
-        }
-        for (int i = 0; i < Thesaurus.noun.size(); i++) {
-            noun.addAll(Thesaurus.noun.getAt(i));
-        }
+        
+        thesaurus = new Thesaurus(rng);
 
         WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
 //        WorldMapGenerator.DEFAULT_NOISE.setFrequency(1.5f);
@@ -139,10 +123,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
@@ -175,9 +159,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     public void putMap() {
         ++counter;
-        String name = makeName();
+        String name = makeName(thesaurus);
         while (Gdx.files.local(path + name + ".png").exists())
-            name = makeName();
+            name = makeName(thesaurus);
         generate(CrossHash.hash64(name));
         
 //        greasedWorld.refill(heightCodeData, 4, 10001).perceptualHashQuick(worldHash, workingHash);

@@ -617,7 +617,7 @@ public class Thesaurus implements Serializable{
      */
     public String makePlantName()
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("tree`noun`"))
         {
             addKnownCategories();
         }
@@ -648,7 +648,7 @@ public class Thesaurus implements Serializable{
      */
     public String makePlantName(FakeLanguageGen language)
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("tree`noun`"))
         {
             addKnownCategories();
         }
@@ -683,7 +683,7 @@ public class Thesaurus implements Serializable{
      */
     public String makeFruitName()
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("fruit`noun`"))
         {
             addKnownCategories();
         }
@@ -714,7 +714,7 @@ public class Thesaurus implements Serializable{
      */
     public String makeFruitName(FakeLanguageGen language)
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("fruit`noun`"))
         {
             addKnownCategories();
         }
@@ -749,7 +749,7 @@ public class Thesaurus implements Serializable{
      */
     public String makeNutName()
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("nut`noun`"))
         {
             addKnownCategories();
         }
@@ -780,7 +780,7 @@ public class Thesaurus implements Serializable{
      */
     public String makeNutName(FakeLanguageGen language)
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("nut`noun`"))
         {
             addKnownCategories();
         }
@@ -815,7 +815,7 @@ public class Thesaurus implements Serializable{
      */
     public String makeFlowerName()
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("flower`noun`"))
         {
             addKnownCategories();
         }
@@ -846,7 +846,7 @@ public class Thesaurus implements Serializable{
      */
     public String makeFlowerName(FakeLanguageGen language)
     {
-        if(categories.isEmpty())
+        if(!this.mappings.containsKey("flower`noun`"))
         {
             addKnownCategories();
         }
@@ -997,12 +997,16 @@ public class Thesaurus implements Serializable{
     private static final String[] plantTerms = new String[]{
             "@'s color`adj`\tleaf`noun`",
             "@'s tree`noun`",
+            "@'s flower`noun`",
             "leaf`noun` of @",
             "@'s ground`noun`\tleaf`noun`",
             "ground`noun`\tleaf`noun` of @",
             "sensory`adj` tree`noun` of @",
+            "sensory`adj` flower`noun` of @",
+            "color`adj` flower`noun` of @",
             "@'s sensory`adj`-leaf`noun`",
             "ground`noun`\tleaf`noun`",
+            "ground`noun`\tflower`noun`",
             "flavor`noun`\tleaf`noun` tree`noun`",
             "flavor`adj` fruit`noun` tree`noun`",
             "flavor`adj` nut`noun` tree`noun`",
@@ -1012,6 +1016,10 @@ public class Thesaurus implements Serializable{
             "shape`adj`-leaf`noun` tree`noun`",
             "sensory`adj` tree`noun`-tree`noun`",
             "sensory`adj`-leaf`noun` tree`noun`",
+            "color`adj`-leaf`noun` flower`noun`",
+            "shape`adj`-leaf`noun` flower`noun`",
+            "sensory`adj` flower`noun`-flower`noun`",
+            "sensory`adj`-leaf`noun` flower`noun`",
     };
     private static final String[] fruitTerms = new String[]{
             "fruit`noun` of @",
