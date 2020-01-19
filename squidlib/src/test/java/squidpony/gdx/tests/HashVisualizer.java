@@ -66,8 +66,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 134;
-    private int hashMode = 2, rngMode = 0, noiseMode = 110, otherMode = 1;//74;//118;//82;
+    private static final int NOISE_LIMIT = 137;
+    private int hashMode = 2, rngMode = 0, noiseMode = 133, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -114,10 +114,13 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.InverseLayered3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
     private final Noise.InverseLayered4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
     //private final Noise.Noise6D layered6D = new Noise.Layered6D(WhirlingNoise.instance, 3, 1.75);
-    private final Noise.Layered2D value2D = new Noise.Layered2D(ValueNoise.instance, 2);
-    private final Noise.Layered3D value3D = new Noise.Layered3D(ValueNoise.instance, 2);
-    private final Noise.Layered4D value4D = new Noise.Layered4D(ValueNoise.instance, 2);
-    private final Noise.Layered6D value6D = new Noise.Layered6D(ValueNoise.instance, 2);
+    private final Noise.Noise2D foam2D_1 = FoamNoise.instance;
+    private final Noise.Noise2D foam2D_2 = new Noise.Layered2D(FoamNoise.instance, 2, 1.0, 1.0);
+    private final Noise.Noise2D foam2D_3 = new Noise.Layered2D(FoamNoise.instance, 3, 1.0, 1.0);
+//    private final Noise.Layered2D white2D = new Noise.Layered2D(WhiteNoise.instance, 2);
+//    private final Noise.Layered3D white3D = new Noise.Layered3D(WhiteNoise.instance, 2);
+//    private final Noise.Layered4D white4D = new Noise.Layered4D(WhiteNoise.instance, 2);
+//    private final Noise.Layered6D white6D = new Noise.Layered6D(WhiteNoise.instance, 2);
     private final Noise.Scaled2D scaled2D = new Noise.Scaled2D(seeded, 1.43, 1.43);
     private final Noise.Scaled3D scaled3D = new Noise.Scaled3D(seeded, 1.43, 1.43, 1.43);
     private final Noise.Scaled4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
@@ -958,27 +961,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //        final float result = (a + b) * 0.5f;
 //        return result * result * (3f - 2f * result);
 //    }
-    public static float foamNoise(int seed, final float x, final float y) 
-    {
-        float xin = x * 0.540302f + y * 0.841471f; // sin and cos of 1
-        float yin = x * -0.841471f + y * 0.540302f;
-        final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
-        seed ^= seed >>> 14;
-        xin = x * -0.989992f + y * 0.141120f; // sin and cos of 3
-        yin = x * -0.141120f + y * -0.989992f;
-        final float b = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin - a) * 0.5f, yin + a);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
-        seed ^= seed >>> 14;
-        xin = x * 0.283662f + y * -0.958924f; // sin and cos of 5
-        yin = x * 0.958924f + y * 0.283662f;
-        final float c = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin + b) * 0.5f, yin - b);
-        final float result = (a + b) * 0.3125f + c * 0.375f;
-        return result * result * (3f - 2f * result);
-    }
-    
-    //x * 0.540302, y * 0.841471,     x * -0.989992f + y * 0.141120f; , x * 0.283662f + y * -0.958924f;
-    //x * -0.841471f + y * 0.540302f, x * -0.141120f + y * -0.989992f;, x * 0.958924f + y * 0.283662f;
     
     public static float valueNoiseSway(int seed, float xin, float yin)
     {
@@ -1064,6 +1046,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 ////        ay *= ay * ay * (ay * (ay * 6.0 - 15.0) + 10.0);
 //        return ((1f - ay) * ((1f - ax) * x0y0 + ax * x1y0) + ay * ((1f - ax) * x0y1 + ax * x1y1));
     }
+
+    public static float foamNoise(int seed, final float x, final float y) {
+        float xin = x * 0.540302f + y * 0.841471f; // sin and cos of 1
+        float yin = x * -0.841471f + y * 0.540302f;
+        final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
+        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = x * -0.989992f + y * 0.141120f; // sin and cos of 3
+        yin = x * -0.141120f + y * -0.989992f;
+        final float b = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin - a) * 0.5f, yin + a);
+        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = x * 0.283662f + y * -0.958924f; // sin and cos of 5
+        yin = x * 0.958924f + y * 0.283662f;
+        final float c = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin + b) * 0.5f, yin - b);
+        final float result = (a + b) * 0.3125f + c * 0.375f;
+        return result * result * (3f - 2f * result);
+    }
+
     public static float valueNoise(int seed, float x, float y)
     {
         int xFloor = x >= 0f ? (int) x : (int) x - 1;
@@ -1074,13 +1075,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         y *= y * (3 - 2 * y);
         xFloor *= 0xD1B55;
         yFloor *= 0xABC99;
-        return ((1f - y) * ((1f - x) * hash256(xFloor, yFloor, seed) + x * hash256(xFloor + 0xD1B55, yFloor, seed))
-                + y * ((1f - x) * hash256(xFloor, yFloor + 0xABC99, seed) + x * hash256(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * 0x1.010102p-10f;
+        return ((1f - y) * ((1f - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, seed))
+                + y * ((1f - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * 0x1.010102p-10f;
     }
 
     //x should be premultiplied by 0xD1B55
     //y should be premultiplied by 0xABC99
-    private static int hash256(final int x, final int y, int s) {
+    private static int hashPart1024(final int x, final int y, int s) {
         s += x ^ y;
         s ^= s << 8;
         return s >>> 10 & 0x3FF;
@@ -1089,7 +1090,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     //x should be premultiplied by 0xD1B55
     //y should be premultiplied by 0xABC99
     //z should be premultiplied by 0x8CB93
-    private static int hash256(final int x, final int y, final int z, int s) {
+    private static int hashPart1024(final int x, final int y, final int z, int s) {
         s += x ^ y ^ z;
         s ^= s << 8;
         return s >>> 10 & 0x3FF;
@@ -4978,6 +4979,46 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 134:
+                        Gdx.graphics.setTitle("Foam 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright =
+                                        basicPrepare(foam2D_1.getNoise(xx * 0.025, yy * 0.025)
+                                        );
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        break;
+                    case 135:
+                        Gdx.graphics.setTitle("Foam 2D Noise, unprocessed, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright =
+                                        basicPrepare(foam2D_2.getNoise(xx * 0.025, yy * 0.025)
+                                        );
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        break;
+                    case 136:
+                        Gdx.graphics.setTitle("Foam 2D Noise, unprocessed, three octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright =
+                                        basicPrepare(foam2D_3.getNoise(xx * 0.025, yy * 0.025)
+                                        );
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                            }
+                        }
+                        break;
+
                 }
             }
             break;
