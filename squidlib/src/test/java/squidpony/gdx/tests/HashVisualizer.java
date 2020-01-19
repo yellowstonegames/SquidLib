@@ -949,9 +949,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        NumberTools.swayRandomized(~seed, xin - 0.35f * NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, 1.2f * yin))
                 ) + 2.5f) * (3.456789f + NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, xin - yin)));// + (yin + xin)
     }
-    public static float beachNoise(int seed, float xin, float yin)
+    public static float beachNoise(int seed, float xin, float yin) 
     {
-        float x = xin + NumberTools.swayRandomized(seed, yin) * 0.625f;
+        final float a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin);
+        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed ^= seed >>> 14;
+        final float b = valueNoise(seed, yin + NumberTools.swayRandomized(~seed, xin - a) * 0.5f, xin + a);
+        final float result = (a + b) * 0.5f;
+        return result * result * (3f - 2f * result);
+    }
+    public static float valueNoiseSway(int seed, float xin, float yin)
+    {
+//        float x = xin + NumberTools.swayRandomized(seed, yin) * 0.625f;
+        float x = xin;
         float y = yin;
         int xfloor = x >= 0f ? (int) x : (int) x - 1;
         x -= xfloor;
@@ -971,33 +981,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         float omega = (1 - x) * start + x * end;
         final float result0 = (1 - y) * alpha + y * omega;
         
-//        return result0 * 0.5f + 0.5f;
+        return result0 * 0.5f + 0.5f;
 
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
-        seed ^= seed >>> 14;
-        x = xin + 1.618f;
-        y = yin + NumberTools.swayRandomized(seed, xin) * 0.625f - 1.618f;
-        xfloor = x >= 0f ? (int) x : (int) x - 1;
-        x -= xfloor;
-        x *= x * (3 - 2 * x);
-        yfloor = y >= 0f ? (int) y : (int) y - 1;
-        y -= yfloor;
-        y *= y * (3 - 2 * y);
-        stream = seed - xfloor * 0xAB3;
-        s = (stream + yfloor);
-        start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
-        end = (((s = (stream + yfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
-        alpha = (1 - y) * start + y * end;
-        stream -= 0xAB3;
-        s = stream + yfloor;
-        start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
-        end = (((s = (stream + yfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
-        omega = (1 - y) * start + y * end;
-        final float result1 = (1 - x) * alpha + x * omega;
+//        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+//        seed ^= seed >>> 14;
+//        x = xin + 1.618f;
+//        y = yin + NumberTools.swayRandomized(seed, xin) * 0.625f - 1.618f;
+//        xfloor = x >= 0f ? (int) x : (int) x - 1;
+//        x -= xfloor;
+//        x *= x * (3 - 2 * x);
+//        yfloor = y >= 0f ? (int) y : (int) y - 1;
+//        y -= yfloor;
+//        y *= y * (3 - 2 * y);
+//        stream = seed - xfloor * 0xAB3;
+//        s = (stream + yfloor);
+//        start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+//        end = (((s = (stream + yfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+//        alpha = (1 - y) * start + y * end;
+//        stream -= 0xAB3;
+//        s = stream + yfloor;
+//        start = (((s = (s ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+//        end = (((s = (stream + yfloor + 1 ^ 0xD1B54A35) * 0x102473) ^ (s << 11 | s >>> 21) ^ (s << 19 | s >>> 13)) * ((s ^ s >>> 15) | 0xFFE00001) ^ s) * 0x0.ffffffp-31f;
+//        omega = (1 - y) * start + y * end;
+//        final float result1 = (1 - x) * alpha + x * omega;
 
 //        float result = (result1) * 0.5f + 0.5f;
-        float result = (result0 + result1) * 0.25f + 0.5f;
-        return result * result * (3 - 2 * result);
+
+//        float result = (result0 + result1) * 0.25f + 0.5f;
+//        return result * result * (3 - 2 * result);
         
 //        final float angle = NumberTools.swayAngleRandomized(seed, xin + 0.2f) - NumberTools.swayAngleRandomized(~seed, yin - 0.2f);
 //        return (NumberTools.swayRandomized(0x9E3779B97F4A7C15L - seed, (xin * NumberTools.cos(angle) + yin * NumberTools.sin(angle)) * 0.125f));
@@ -1031,6 +1042,39 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 ////        ay *= ay * ay * (ay * (ay * 6.0 - 15.0) + 10.0);
 //        return ((1f - ay) * ((1f - ax) * x0y0 + ax * x1y0) + ay * ((1f - ax) * x0y1 + ax * x1y1));
     }
+    public static float valueNoise(int seed, float x, float y)
+    {
+        int xFloor = x >= 0f ? (int) x : (int) x - 1;
+        x -= xFloor;
+        x *= x * (3 - 2 * x);
+        int yFloor = y >= 0f ? (int) y : (int) y - 1;
+        y -= yFloor;
+        y *= y * (3 - 2 * y);
+        xFloor *= 0xD1B55;
+        yFloor *= 0xABC99;
+        return ((1f - y) * ((1f - x) * hash256(xFloor, yFloor, seed) + x * hash256(xFloor + 0xD1B55, yFloor, seed))
+                + y * ((1f - x) * hash256(xFloor, yFloor + 0xABC99, seed) + x * hash256(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * 0x1.010102p-10f;
+    }
+
+    //x should be premultiplied by 0xD1B55
+    //y should be premultiplied by 0xABC99
+    private static int hash256(final int x, final int y, int s) {
+        s += x ^ y;
+        s ^= s << 8;
+        return s >>> 10 & 0x3FF;
+    }
+
+    //x should be premultiplied by 0xD1B55
+    //y should be premultiplied by 0xABC99
+    //z should be premultiplied by 0x8CB93
+    private static int hash256(final int x, final int y, final int z, int s) {
+        s += x ^ y ^ z;
+        s ^= s << 8;
+        return s >>> 10 & 0x3FF;
+    }
+
+//        return 0xC13FB * x + 0x91E11 * y >>> 12 & 0xFF;
+//        s += 0xD1B55 * x ^ 0xABC99 * y ^ 0x8CB93 * s;
 
     public static float beachNoise(final long seed, final float xin, final float yin, final float zin)
     {
@@ -4594,10 +4638,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 111:
-                        Gdx.graphics.setTitle("Experimental Noise 3D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Value Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f)); //0.61803398875
+//                                bright = basicPrepare(beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f)); //0.61803398875
+                                bright = valueNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f);
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
