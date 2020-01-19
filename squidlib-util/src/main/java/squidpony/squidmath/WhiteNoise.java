@@ -1,30 +1,30 @@
 package squidpony.squidmath;
 
 /**
- * Performance-oriented "white noise" generator for 1D, 2D, 3D, 4D, and 6D. Produces noise values from -1.0 inclusive
+ * Performance-oriented white noise generator for 1D, 2D, 3D, 4D, and 6D. Produces noise values from -1.0 inclusive
  * to 1.0 exclusive. Should produce a completely different double even for extremely-nearby points, so this is not a
  * kind of continuous noise like {@link PerlinNoise}. It is not actually random, and the value is always determined by
- * the exact double positions (and possibly an int seed) given to it. Even a slight change should drastically alter the
+ * the exact double positions (and possibly a long seed) given to it. Even a slight change should drastically alter the
  * returned value, though below some very small epsilon the results might not be different between two very close points
- * in space.
+ * in space. The output should look like "TV static" if rendered as grayscale pixels.
  * <br>
  * Meant for cases where you want to use a different number for every pixel, tile, or other unit of noise generated,
- * often coupled with another kind of noise but with the result of the ValueNoise made less significant to add a "fuzzy"
+ * often coupled with another kind of noise but with the result of the WhiteNoise made less significant to add a "fuzzy"
  * effect to the appearance.
  * <br>
- * Implementation is based on {@link CrossHash#hash64(int[])}, treating doubles as ints
+ * Implementation is based on {@link CrossHash.Wisp#hash64(double[])}, treating doubles as ints
  * by using {@link NumberTools#doubleToMixedIntBits(double)}, which XORs the bottom and top halves of the long bits of
  * each double. Finishes by passing the top 52 bits as a significand to {@link NumberTools#longBitsToDouble(long)},
  * using an exponent that allows this to produce numbers between -1.0 and 1.0. Has special treatment for the seed when
- * present (since it is an int).
+ * present (since it is a long).
  * <br>
  * This can also be used as a sort of hashing function that produces a double, if you find a need for such a thing, with
  * {@link #hash(double...)}.
  */
-public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
-    public static final ValueNoise instance = new ValueNoise();
+public class WhiteNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
+    public static final WhiteNoise instance = new WhiteNoise();
 
-    public ValueNoise() {
+    public WhiteNoise() {
     }
 
     @Override
