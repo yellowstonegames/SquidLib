@@ -64,10 +64,10 @@ public class ProjectionTools {
      */
     public static double[] simpsonODESolveHyperellipse(final double T, final double[] y, final double h, final double alpha, final double kappa, final double epsilon)
     {
-        final int n = y.length - 1;
+        final int m = y.length - 1, n = m + 1;
         double t = 0;
         double sum = 0;
-        for (int i = 0; i <= n; i++) {
+        for (int i = 0; i <= m; i++) {
             while (t < i * T / n) {
                 final double tph = Math.min(t + h, i * T / n);
                 sum += (tph - t) / 6 * (Math.abs((alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs(t), kappa), 1.0/kappa)) / (alpha + (1-alpha)*epsilon))
