@@ -83,8 +83,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
-//        path = "out/worlds/" + date + "/Hyperellipse/";
-        path = "out/worlds/" + date + "/HyperellipseFoam/";
+        path = "out/worlds/" + date + "/Hyperellipse/";
+//        path = "out/worlds/" + date + "/HyperellipseFoam/";
 //        path = "out/worlds/" + date + "/Tiling/";
 //        path = "out/worlds/" + date + "/RoundSide/";
 //        path = "out/worlds/" + date + "/Local/";
@@ -127,11 +127,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75, 0.03125, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.75, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new Noise.Layered3D(FoamNoise.instance, 2, 3.5, 0.625), 0.375, 0.03125, 2.5);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new Noise.Layered3D(FoamNoise.instance, 2, 3.5, 0.625), 0.375, 0.03125, 2.5);
         wmv = new WorldMapView(world);
 
         //generate(seed);

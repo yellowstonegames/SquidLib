@@ -37,28 +37,47 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D {
         return result * result * (6.0 - 4.0 * result) - 1.0;
     }
     
+    /*
+x * -0.185127 + y * -0.791704 + z * -0.582180;
+x * -0.776796 + y * 0.628752 + z * -0.035464;
+x * 0.822283 + y * 0.467437 + z * -0.324582;
+
+x * 0.139640 + y * -0.304485 + z * 0.942226;
+x * -0.776796 + y * 0.628752 + z * -0.035464;
+x * 0.822283 + y * 0.467437 + z * -0.324582;
+
+x * 0.139640 + y * -0.304485 + z * 0.942226;
+x * -0.185127 + y * -0.791704 + z * -0.582180;
+x * 0.822283 + y * 0.467437 + z * -0.324582;
+
+x * 0.139640 + y * -0.304485 + z * 0.942226;
+x * -0.185127 + y * -0.791704 + z * -0.582180;
+x * -0.776796 + y * 0.628752 + z * -0.035464;
+     */
+    
+    
     public static double foamNoise(final double x, final double y, final double z, int seed) {
-        double xin = x * 0.038219 + y * 0.059523 + z * 0.997495;
-        double yin = x * -0.839363 + y * 0.538949 + z * -0.070737;
-        double zin = x * -0.224845 + y * -0.350175 + z * 0.909297;
+        double xin = x * -0.185127 + y * -0.791704 + z * -0.582180;
+        double yin = x * -0.776796 + y * 0.628752 + z * -0.035464;
+        double zin = x * 0.822283 + y * 0.467437 + z * -0.324582;
         final double a = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, yin) * 0.5f, yin, zin);
         seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed ^= seed >>> 14;
-        xin = x * 0.793126 + y * -0.113057 + z * 0.598472;
-        yin = x * -0.084456 + y * -0.592483 + z * 0.801144;
-        zin = x * 0.647102 + y * -0.092242 + z * -0.756802;
+        xin = x * 0.139640 + y * -0.304485 + z * 0.942226;
+        yin = x * -0.776796 + y * 0.628752 + z * -0.035464;
+        zin = x * 0.822283 + y * 0.467437 + z * -0.324582;
         final double b = valueNoise(seed, xin - a, yin + NumberTools.swayRandomized(~seed, zin - a) * 0.5f, zin + a);
         seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed ^= seed >>> 14;
-        xin = x * -0.265637 + y * 0.897991 + z * -0.350783;
-        yin = x * -0.336375 + y * -0.099504 + z * 0.936457;
-        zin = x * 0.272364 + y * -0.920731 + z * -0.279415;
+        xin = x * 0.139640 + y * -0.304485 + z * 0.942226;
+        yin = x * -0.185127 + y * -0.791704 + z * -0.582180;
+        zin = x * 0.822283 + y * 0.467437 + z * -0.324582;
         final double c = valueNoise(seed, xin + b, yin - b, zin  + NumberTools.swayRandomized(~seed, xin - b) * 0.5f);
         seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed ^= seed >>> 14;
-        xin = x * -0.158919 + y * -0.138490 + z * -0.977530;
-        yin = x * 0.642224 + y * -0.736962 + z * 0.210796;
-        zin = x * -0.109693 + y * -0.095592 + z * 0.989358;
+        xin = x * 0.139640 + y * -0.304485 + z * 0.942226;
+        yin = x * -0.185127 + y * -0.791704 + z * -0.582180;
+        zin = x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double d = valueNoise(seed, xin + NumberTools.swayRandomized(~seed, zin - c) * 0.5f, yin - c, zin + c);
 
         final double result = (a + b + c + d) * 0.25;
@@ -98,21 +117,22 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D {
         int zFloor = z >= 0.0 ? (int) z : (int) z - 1;
         z -= zFloor;
         z *= z * (3.0 - 2.0 * z);
-        xFloor *= 0xD1B55;
-        yFloor *= 0xABC99;
-        zFloor *= 0x8CB93;
+        //0xDB4F1, 0xBBE05, 0xA0F2F
+        xFloor *= 0xDB4F1;
+        yFloor *= 0xBBE05;
+        zFloor *= 0xA0F2F;
         return ((1.0 - z) *
-                ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, zFloor, seed))
-                        + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xABC99, zFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, zFloor, seed)))
+                ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor, zFloor, seed))
+                        + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xBBE05, zFloor, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor + 0xBBE05, zFloor, seed)))
                 + z * 
-                ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor + 0x8CB93, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, zFloor + 0x8CB93, seed)) 
-                        + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xABC99, zFloor + 0x8CB93, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, zFloor + 0x8CB93, seed)))
+                ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor, zFloor + 0xA0F2F, seed)) 
+                        + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed)))
                 ) * (0x1.010101010101p-10);
     }
 
-    //x should be premultiplied by 0xD1B55
-    //y should be premultiplied by 0xABC99
-    //z should be premultiplied by 0x8CB93
+    //x should be premultiplied by 0xDB4F1
+    //y should be premultiplied by 0xBBE05
+    //z should be premultiplied by 0xA0F2F
     private static int hashPart1024(final int x, final int y, final int z, int s) {
         s += x ^ y ^ z;
         s ^= s << 8;
