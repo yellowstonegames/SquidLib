@@ -379,9 +379,28 @@ public final class NumberTools {
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
     }
-    
+
     /**
-     * A variant on {@link #swayRandomized(long, float)} that takes an int seed instead of a float, and is optimized for
+     * A variant on {@link #swayRandomized(long, double)} that takes an int seed instead of a long, and is optimized for
+     * usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
+     * points; only the method of generating those random peaks and valleys has changed.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a double that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
+     */
+    public static double swayRandomized(final int seed, double value)
+    {
+        final int floor = value >= 0.0 ? (int) value : (int) value - 1;
+        int z = seed + floor;
+        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
+                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
+        value -= floor;
+        value *= value * (3.0 - 2.0 * value);
+        return (1.0 - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #swayRandomized(long, float)} that takes an int seed instead of a long, and is optimized for
      * usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
      * points; only the method of generating those random peaks and valleys has changed.
      * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls

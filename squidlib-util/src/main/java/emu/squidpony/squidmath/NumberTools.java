@@ -162,6 +162,16 @@ public class NumberTools {
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
     }
+    public static double swayRandomized(final int seed, double value)
+    {
+        final int floor = value >= 0.0 ? (int) value : (int) value - 1;
+        int z = seed + floor;
+        final double start = (((z = (z ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31,
+                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x1D2BC3)) * ((z ^ z >>> 15) | 0xFFE00001) ^ z ^ z << 11) * 0x0.ffffffp-31;
+        value -= floor;
+        value *= value * (3.0 - 2.0 * value);
+        return (1.0 - value) * start + value * end;
+    }
     public static float swayRandomized(final int seed, float value)
     {
         final int floor = value >= 0f ? (int) value : (int) value - 1;
