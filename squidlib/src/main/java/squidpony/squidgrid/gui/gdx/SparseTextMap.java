@@ -45,7 +45,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     private int[] keyTable;
     private char[] charValueTable;
     private float[] floatValueTable;
-    private int[] ib;
     private final IntVLA keys;
 
     private char zeroChar;
@@ -100,7 +99,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         keyTable = new int[initialCapacity];
         charValueTable = new char[initialCapacity];
         floatValueTable = new float[initialCapacity];
-        ib = new int[initialCapacity];
         keys = new IntVLA(initialCapacity);
     }
 
@@ -118,8 +116,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         System.arraycopy(map.charValueTable, 0, charValueTable, 0, map.charValueTable.length);
         floatValueTable = new float[map.floatValueTable.length];
         System.arraycopy(map.floatValueTable, 0, floatValueTable, 0, map.floatValueTable.length);
-        ib = new int[map.ib.length];
-        System.arraycopy(map.ib, 0, ib, 0, map.ib.length);
         size = map.size;
         zeroChar = map.zeroChar;
         zeroFloat = map.zeroFloat;
@@ -340,13 +336,13 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         //return GreasedRegion.disperseBits(encoded) >>> 16;
     }
 
-    private int place (final int item) {
+    private int fibonacci(final int item) {
         // shift is always greater than 32, less than 64
         return (int)(item * 0x9E3779B97F4A7C15L >>> shift);
     }
 
     private int locateKey (final int key) {
-        return locateKey(key, place(key));
+        return locateKey(key, fibonacci(key));
     }
 
     /**
@@ -355,7 +351,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * equality differently than just by using == with int keys, but only within the same package.
      *
      * @param key       a K key that will be checked for equality if a similar-seeming key is found
-     * @param placement as calculated by {@link #place(int)}, almost always with {@code place(key)}
+     * @param placement as calculated by {@link #fibonacci(int)}, almost always with {@code place(key)}
      * @return the location in the key array of key, if found, or -1 if it was not found.
      */
     private int locateKey (final int key, final int placement) {
@@ -366,12 +362,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             }
             if (key == (keyTable[i])) {
                 return i;
-            }
-            // ib holds the initial bucket position before probing offset the item
-            // if the distance required to probe to a position is greater than the
-            // stored distance for an item at that position, we can Robin Hood and swap them.
-            if ((i - ib[i] & mask) < (i - placement & mask)) {
-                return -1;
             }
         }
     }
@@ -423,7 +413,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return;
         }
 
-        int b = place(key);
+        int b = fibonacci(key);
         int loc = locateKey(key, b);
         // an identical key already exists
         if (loc != -1) {
@@ -434,7 +424,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         final int[] keyTable = this.keyTable;
         final char[] charValueTable = this.charValueTable;
         final float[] floatValueTable = this.floatValueTable;
-        final int[] ib = this.ib;
         keys.add(key);
 
         for (int i = b; ; i = (i + 1) & mask) {
@@ -443,28 +432,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
                 keyTable[i] = key;
                 charValueTable[i] = charValue;
                 floatValueTable[i] = floatValue;
-                ib[i] = b;
                 
                 if (++size >= threshold) {
-                    resize(ib.length << 1);
+                    resize(keyTable.length << 1);
                 }
                 return;
-            }
-            // if there is a key with a lower probe distance, we swap with it
-            // and keep going until we find a place we can insert
-            else if ((i - ib[i] & mask) < (i - b & mask)) {
-                int temp = keyTable[i];
-                float tv = floatValueTable[i];
-                char tc = charValueTable[i];
-                int tb = ib[i];
-                keyTable[i] = key;
-                charValueTable[i] = charValue;
-                floatValueTable[i] = floatValue;
-                ib[i] = b;
-                key = temp;
-                charValue = tc;
-                floatValue = tv;
-                b = tb;
             }
         }
     }
@@ -548,11 +520,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             return;
         }
 
-        int b = place(key);
+        int b = fibonacci(key);
         final int[] keyTable = this.keyTable;
         final char[] charValueTable = this.charValueTable;
         final float[] floatValueTable = this.floatValueTable;
-        final int[] ib = this.ib;
 
         for (int i = b; ; i = (i + 1) & mask) {
             // space is available so we insert and break
@@ -560,28 +531,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
                 keyTable[i] = key;
                 charValueTable[i] = charValue;
                 floatValueTable[i] = floatValue;
-                ib[i] = b;
-
+ 
                 if (++size >= threshold) {
-                    resize(ib.length << 1);
+                    resize(keyTable.length << 1);
                 }
                 return;
-            }
-            // if there is a key with a lower probe distance, we swap with it
-            // and keep going until we find a place we can insert
-            else if ((i - ib[i] & mask) < (i - b & mask)) {
-                int temp = keyTable[i];
-                float tv = floatValueTable[i];
-                char tc = charValueTable[i];
-                int tb = ib[i];
-                keyTable[i] = key;
-                charValueTable[i] = charValue;
-                floatValueTable[i] = floatValue;
-                ib[i] = b;
-                key = temp;
-                charValue = tc;
-                floatValue = tv;
-                b = tb;
             }
         }
     }
@@ -606,7 +560,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             if (!hasZeroValue) return defaultValue;
             return zeroChar;
         }
-        final int placement = place(key);
+        final int placement = fibonacci(key);
         for (int i = placement; ; i = i + 1 & mask) {
             // empty space is available
             if (keyTable[i] == 0) {
@@ -614,12 +568,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             }
             if (key == (keyTable[i])) {
                 return charValueTable[i];
-            }
-            // ib holds the initial bucket position before probing offset the item
-            // if the distance required to probe to a position is greater than the
-            // stored distance for an item at that position, we can Robin Hood and swap them.
-            if ((i - ib[i] & mask) < (i - placement & mask)) {
-                return defaultValue;
             }
         }
     }
@@ -644,7 +592,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             if (!hasZeroValue) return defaultValue;
             return zeroFloat;
         }
-        final int placement = place(key);
+        final int placement = fibonacci(key);
         for (int i = placement; ; i = i + 1 & mask) {
             // empty space is available
             if (keyTable[i] == 0) {
@@ -652,12 +600,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             }
             if (key == (keyTable[i])) {
                 return floatValueTable[i];
-            }
-            // ib holds the initial bucket position before probing offset the item
-            // if the distance required to probe to a position is greater than the
-            // stored distance for an item at that position, we can Robin Hood and swap them.
-            if ((i - ib[i] & mask) < (i - placement & mask)) {
-                return defaultValue;
             }
         }
     }
@@ -683,17 +625,13 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         final int[] keyTable = this.keyTable;
         final float[] floatValueTable = this.floatValueTable;
         final char[] charValueTable = this.charValueTable;
-        final int[] ib = this.ib;
-        keyTable[loc] = 0;
         char oldChar = charValueTable[loc];
-        for (int i = (loc + 1) & mask; (keyTable[i] != 0 && (i - ib[i] & mask) != 0); i = (i + 1) & mask) {
-            keyTable[i - 1 & mask] = keyTable[i];
-            floatValueTable[i - 1 & mask] = floatValueTable[i];
-            charValueTable[i - 1 & mask] = charValueTable[i];
-            ib[i - 1 & mask] = ib[i];
-            keyTable[i] = 0;
-            ib[i] = 0;
+        while ((key = keyTable[loc + 1 & mask]) != 0 && (loc + 1 & mask) != fibonacci(key)) {
+            keyTable[loc] = key;
+            floatValueTable[loc] = floatValueTable[loc + 1 & mask];
+            charValueTable[loc] = charValueTable[++loc & mask];
         }
+        keyTable[loc] = 0;
         --size;
         return oldChar;
     }
@@ -705,7 +643,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     public void shrink(int maximumCapacity) {
         if (maximumCapacity < 0) throw new IllegalArgumentException("maximumCapacity must be >= 0: " + maximumCapacity);
         if (size > maximumCapacity) maximumCapacity = size;
-        if (ib.length <= maximumCapacity) return;
+        if (keyTable.length <= maximumCapacity) return;
         resize(HashCommon.nextPowerOfTwo(maximumCapacity));
     }
 
@@ -713,7 +651,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * Clears the map and reduces the size of the backing arrays to be the specified capacity if they are larger.
      */
     public void clear(int maximumCapacity) {
-        if (ib.length <= maximumCapacity) {
+        if (keyTable.length <= maximumCapacity) {
             clear();
             return;
         }
@@ -727,10 +665,8 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (size == 0) return;
         keys.clear();
         final int[] keyTable = this.keyTable;
-        final int[] ib = this.ib;
-        for (int i = ib.length; i > 0; ) {
+        for (int i = keyTable.length; i > 0; ) {
             keyTable[--i] = 0;
-            ib[i] = 0;
         }
         size = 0;
         hasZeroValue = false;
@@ -807,7 +743,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     }
 
     private void resize(int newSize) {
-        int oldCapacity = ib.length;
+        int oldCapacity = keyTable.length;
         threshold = (int)(newSize * loadFactor);
         mask = newSize - 1;
         shift = Long.numberOfLeadingZeros(mask);
@@ -819,7 +755,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         keyTable = new int[newSize];
         floatValueTable = new float[newSize];
         charValueTable = new char[newSize];
-        ib = new int[newSize];
 
         int oldSize = size;
         size = 0;
