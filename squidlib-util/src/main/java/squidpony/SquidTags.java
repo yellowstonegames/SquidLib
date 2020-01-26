@@ -27,8 +27,7 @@ public class SquidTags {
 	public static final String LAYOUT = "squid layout";
 
 	/**
-	 * Use this tag when logging things about AbstractSquidScreen or other
-	 * screen-changing methods if your display has them..
+	 * Use this tag when logging things about screens or the context of gameplay changing.
 	 */
 	public static final String SCREEN = "squid screen";
 }

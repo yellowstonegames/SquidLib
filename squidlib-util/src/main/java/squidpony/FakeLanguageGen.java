@@ -2970,7 +2970,7 @@ public class FakeLanguageGen implements Serializable {
     public static final FakeLanguageGen[] romanizedHumanLanguages = {
             ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE_SIMPLIFIED, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH,
             MAORI, GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI, CROW, 
-            ANCIENT_EGYPTIAN, MALAY
+            ANCIENT_EGYPTIAN, MALAY, CHINESE_ROMANIZED
     };
 
     /**
