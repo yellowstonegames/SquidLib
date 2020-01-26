@@ -11,9 +11,9 @@ import squidpony.squidmath.VanDerCorputQRNG;
 public class SobolTest {
     public static void main(String[] args) {
         System.out.println("SOBOL:");
-        for(int d = 1; d <= 50; d++)
+        for(int d = 1; d <= 16; d++)
         {
-            SobolQRNG sq = new SobolQRNG(d, true);
+            SobolQRNG sq = new SobolQRNG(d);
             sq.skipTo(9000);
             long[] result;
             for(int c = 0; c < 10; c++)
@@ -26,8 +26,7 @@ public class SobolTest {
                 System.out.println();
             }
             System.out.println();
-
-            sq = new SobolQRNG(d, true);
+            
             sq.skipTo(9000);
             for(int c = 0; c < 10; c++)
             {

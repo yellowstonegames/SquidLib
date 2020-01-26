@@ -16,16 +16,7 @@
  */
 package squidpony.squidmath;
 
-import squidpony.annotation.GwtIncompatible;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 
 /**
  * Implementation of a Sobol sequence as a Quasi-Random Number Generator.
@@ -38,7 +29,7 @@ import java.util.StringTokenizer;
  * nextVector, nextIntVector, and nextLongVector methods all increment the position in the
  * sequence, and do not use separate sequences for separate types.
  * <p>
- * The implementation already comes with support for up to 1000 dimensions with direction numbers
+ * The implementation already comes with support for up to 16 dimensions with direction numbers
  * calculated from <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Stephen Joe and Frances Kuo</a>.
  * <p>
  * The generator supports two modes:
@@ -63,12 +54,9 @@ public class SobolQRNG implements RandomnessSource {
     private static final double SCALE = Math.pow(2, BITS);
 
     /** The maximum supported space dimension. */
-    private static final int MAX_DIMENSION = 1000;
+    private static final int MAX_DIMENSION = 16;
 
-    /** The maximum supported space dimension. */
-    private static final int MAX_DIMENSION_GWT = 16;
-
-    /** The maximum supported space dimension. */
+    /** The first 16 dimensions' direction numbers. */
     private static final int[][] RESOURCE_PRELOAD = new int[][]{
             new int[]{2, 0,   1},
             new int[]{3, 1,   1,3},
@@ -87,13 +75,7 @@ public class SobolQRNG implements RandomnessSource {
             new int[]{16, 16, 1,3,1,13,27,49},
     };
 
-    /** The resource containing the direction numbers. */
-    private static final String RESOURCE_NAME = "/qrng/new-joe-kuo-6.1000.txt";
-
-    /** Character set for file input. */
-    private static final String FILE_CHARSET = "US-ASCII";
-
-	private static final long serialVersionUID = -6759002780425873173L;
+    private static final long serialVersionUID = -6759002780425873173L;
 
     /** Space dimension. */
     private final int dimension;
@@ -114,12 +96,12 @@ public class SobolQRNG implements RandomnessSource {
      * all will be 0 (this class starts at index 1 instead of 0 for that reason). This is true for all dimensions.
      *
      * @param dimension the space dimension
-     * @throws ArithmeticException if the space dimension is outside the allowed range of [1, 1000]
+     * @throws ArithmeticException if the space dimension is outside the allowed range of [1, 16]
      */
     public SobolQRNG(final int dimension) throws ArithmeticException {
-        if (dimension < 1 || dimension > MAX_DIMENSION_GWT) {
-            throw new ArithmeticException("Dimension " + dimension + "is outside the GWT-compatible range of" +
-                    "[1, 16]; did you want the GWT-incompatible two-argument constructor?");
+        if (dimension < 1 || dimension > MAX_DIMENSION) {
+            throw new ArithmeticException("Dimension " + dimension + "is outside the range of" +
+                    "[1, 16]; higher dimensions are not supported.");
         }
 
         this.dimension = dimension;
@@ -138,181 +120,6 @@ public class SobolQRNG implements RandomnessSource {
 
     }
 
-    /**
-     * Construct a new Sobol sequence generator for the given space dimension.
-     * You should call {@link #skipTo(int)} with a fairly large number (over 1000) to ensure the results aren't
-     * too obviously non-random. If you skipTo(1), all doubles in that result will be 0.5, and if you skipTo(0),
-     * all will be 0 (this class starts at index 1 instead of 0 for that reason). This is true for all dimensions.
-     *
-     * @param dimension the space dimension
-     * @param ignored not used, except to differentiate this from the GWT-compatible constructor
-     * @throws ArithmeticException if the space dimension is outside the allowed range of [1, 1000]
-     */
-    @GwtIncompatible /* Because of getResourceAsStream */
-    public SobolQRNG(final int dimension, boolean ignored) throws ArithmeticException {
-        if (dimension < 1 || dimension > MAX_DIMENSION) {
-            throw new ArithmeticException("Dimension " + dimension + "is outside the allowed range of [1, 1000]");
-        }
-
-        // initialize the other dimensions with direction numbers from a resource
-        final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
-        if (is == null) {
-            throw new ArithmeticException("Could not load embedded resource 'new-joe-kuo-6.1000'");
-        }
-
-        this.dimension = dimension;
-
-        // init data structures
-        direction = new long[dimension][BITS + 1];
-        x = new long[dimension];
-
-        try {
-            initFromStream(is);
-        } catch (IOException e) {
-            // the internal resource file could not be read -> should not happen
-            throw new InternalError("Resource is unreadable, abort!\n" + e.getMessage());
-        } catch (ArithmeticException e) {
-            // the internal resource file could not be parsed -> should not happen
-            throw new InternalError("Resource is unreadable, abort!\n" + e.getMessage());
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) { // NOPMD
-                // ignore
-            }
-        }
-    }
-
-    /*
-    / **
-     * Construct a new Sobol sequence generator for the given space dimension with
-     * direction vectors loaded from the given stream.
-     * <p>
-     * The expected format is identical to the files available from
-     * <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Stephen Joe and Frances Kuo</a>.
-     * The first line will be ignored as it is assumed to contain only the column headers.
-     * The columns are:
-     * <ul>
-     *  <li>d: the dimension</li>
-     *  <li>s: the degree of the primitive polynomial</li>
-     *  <li>a: the number representing the coefficients</li>
-     *  <li>m: the list of initial direction numbers</li>
-     * </ul>
-     * Example:
-     * <pre>
-     * d       s       a       m_i
-     * 2       1       0       1
-     * 3       2       1       1 3
-     * </pre>
-     * <p>
-     * The input stream <i>must</i> be an ASCII text containing one valid direction vector per line.
-     *
-     * @param dimension the space dimension
-     * @param is the stream to read the direction vectors from
-     * @throws ArithmeticException if the space dimension is outside the range [1, max], where
-     *   max refers to the maximum dimension found in the input stream
-     * @throws IOException if an error occurs while reading from the input stream
-     * /
-    public SobolQRNG(final int dimension, final InputStream is)
-            throws ArithmeticException, IOException {
-
-        if (dimension < 1) {
-            throw new ArithmeticException("The given dimension, " + dimension + ", is too low (must be greater than 0)");
-        }
-
-        this.dimension = dimension;
-
-        // init data structures
-        direction = new long[dimension][BITS + 1];
-        x = new long[dimension];
-
-        // initialize the other dimensions with direction numbers from the stream
-        int lastDimension = initFromStream(is);
-        if (lastDimension < dimension) {
-            throw new ArithmeticException("Dimension " + dimension + "is outside the allowed range of [1, 1000]");
-        }
-    }
-*/
-    /**
-     * Load the direction vector for each dimension from the given stream.
-     * <p>
-     * The input stream <i>must</i> be an ASCII text containing one
-     * valid direction vector per line.
-     *
-     * @param is the input stream to read the direction vector from
-     * @return the last dimension that has been read from the input stream
-     * @throws IOException if the stream could not be read
-     * @throws ArithmeticException if the content could not be parsed successfully
-     */
-    @GwtIncompatible
-    private int initFromStream(final InputStream is) throws ArithmeticException, IOException {
-
-        // special case: dimension 1 -> use unit initialization
-        for (int i = 1; i <= BITS; i++) {
-            direction[0][i] = 1L << (BITS - i);
-        }
-
-        final Charset charset = Charset.forName(FILE_CHARSET);
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
-        int dim = -1;
-
-        try {
-            // ignore first line
-            reader.readLine();
-
-            int lineNumber = 2;
-            int index = 1;
-            String line;
-            while ( (line = reader.readLine()) != null) {
-                StringTokenizer st = new StringTokenizer(line, " ");
-                try {
-                    dim = Integer.parseInt(st.nextToken());
-                    if (dim >= 2 && dim <= dimension) { // we have found the right dimension
-                        final int s = Integer.parseInt(st.nextToken());
-                        final int a = Integer.parseInt(st.nextToken());
-                        final int[] m = new int[s + 1];
-                        for (int i = 1; i <= s; i++) {
-                            m[i] = Integer.parseInt(st.nextToken());
-                        }
-                        initDirectionVector(index++, a, m);
-                    }
-
-                    if (dim > dimension) {
-                        return dim;
-                    }
-                } catch (NoSuchElementException e) {
-                    throw new ArithmeticException("Resource error at line " + lineNumber + ":\n  " + line);
-                } catch (NumberFormatException e) {
-                    throw new ArithmeticException("Resource error at line " + lineNumber + ":\n  " + line);
-                }
-                lineNumber++;
-            }
-        } finally {
-            reader.close();
-        }
-
-        return dim;
-    }
-
-    /**
-     * Calculate the direction numbers from the given polynomial.
-     *
-     * @param d the dimension, zero-based
-     * @param a the coefficients of the primitive polynomial
-     * @param m the initial direction numbers
-     */
-    private void initDirectionVector(final int d, final int a, final int[] m) {
-        final int s = m.length - 1;
-        for (int i = 1; i <= s; i++) {
-            direction[d][i] = (long) m[i] << (BITS - i);
-        }
-        for (int i = s + 1; i <= BITS; i++) {
-            direction[d][i] = direction[d][i - s] ^ (direction[d][i - s] >> s);
-            for (int k = 1; k <= s - 1; k++) {
-                direction[d][i] ^= ((a >> (s - 1 - k)) & 1) * direction[d][i - k];
-            }
-        }
-    }
     /**
      * Calculate the direction numbers from the given polynomial.
      *
@@ -370,8 +177,10 @@ public class SobolQRNG implements RandomnessSource {
         count++;
         return toFill;
     }
-    /** Generate a random vector.
-     * @return a random vector as an array of double in the range [0.0, 1.0).
+    /** Generate a random vector as a Coord, scaled between 0 (inclusive) and the given limits (exclusive).
+     * @param xLimit the upper exclusive bound for the Coord's x-coordinate
+     * @param yLimit the upper exclusive bound for the Coord's y-coordinate
+     * @return a random vector as a Coord between (0,0) inclusive and (xLimit,yLimit) exclusive
      */
     public Coord nextCoord(int xLimit, int yLimit) {
         if (count == 0) {
