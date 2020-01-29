@@ -7,12 +7,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
 import squidpony.annotation.GwtIncompatible;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.zip.CRC32;
-import java.util.zip.CheckedOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
@@ -61,7 +58,8 @@ import java.util.zip.DeflaterOutputStream;
 
 // If you're porting this into libGDX, remove the GwtIncompatible annotation and exclude this from GWT reflection.
 // You'll also need to include the PaletteReducer class, which only depends on libGDX and the JDK, and does not need to
-// be excluded from GWT in any way. 
+// be excluded from GWT in any way. The ChunkReducer class this depends on is a static inner class in libGDX's PixmapIO;
+// it is package-private so it is duplicated here.
 @GwtIncompatible
 public class PNG8 implements Disposable {
     static private final byte[] SIGNATURE = {(byte)137, 80, 78, 71, 13, 10, 26, 10};
@@ -1062,29 +1060,5 @@ public class PNG8 implements Disposable {
     /** Should probably be done explicitly; finalize() has been scheduled for removal from the JVM. */
     public void dispose () {
         deflater.end();
-    }
-
-    static class ChunkBuffer extends DataOutputStream {
-        final ByteArrayOutputStream buffer;
-        final CRC32 crc;
-
-        ChunkBuffer (int initialSize) {
-            this(new ByteArrayOutputStream(initialSize), new CRC32());
-        }
-
-        private ChunkBuffer (ByteArrayOutputStream buffer, CRC32 crc) {
-            super(new CheckedOutputStream(buffer, crc));
-            this.buffer = buffer;
-            this.crc = crc;
-        }
-
-        public void endChunk (DataOutputStream target) throws IOException {
-            flush();
-            target.writeInt(buffer.size() - 4);
-            buffer.writeTo(target);
-            target.writeInt((int)crc.getValue());
-            buffer.reset();
-            crc.reset();
-        }
     }
 }
