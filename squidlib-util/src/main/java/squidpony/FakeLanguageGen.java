@@ -2912,6 +2912,65 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen CHINESE_ROMANIZED = chinese().register("Chinese Romanized");
 
+    private static FakeLanguageGen cherokee(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "e", "i", "o", "u", "ü", "a", "e", "i", "o", "u", "ü", "a", "e", "i", "o", "u", "ü",
+                        "a", "e", "i", "o", "u", "ü", "a", "e", "i", "o", "u", "ü", "a", "e", "i", "o", "u", "ü",
+                        "ai", "au", "oa", "oi", "ai", "au", "oa", "oi",
+                        "a", "a", "a", "a", "a", "a", "a", "a", "a",
+                        "ah", "ah", "ah", "ah", "ah", "ah", "ah",
+                },
+                new String[]{
+                },
+                new String[]{
+                        "g", "k", "h", "l", "n", "qu", "s", "d", "t", "dl", "ts", "w", "y",
+                        "g", "k", "h", "l", "n", "qu", "s", "d", "t", "dl", "ts", "w", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "n", "qu", "s", "d", "t",
+                        "g", "h", "n", "qu", "s", "d", "t",
+                        "h", "n", "s", "d", "t", "h", "n", "s", "d", "t",
+                        "h", "n", "s", "d", "t", "h", "n", "s", "d", "t",
+                        "h", "n", "s", "d", "t", "h", "n", "s", "d", "t",
+                        },
+                new String[]{
+                        "g", "k", "h", "l", "n", "qu", "s", "d", "t", "dl", "ts", "w", "y",
+                        "g", "k", "h", "l", "n", "qu", "s", "d", "t", "dl", "ts", "w", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "l", "n", "qu", "s", "d", "t", "ts", "y",
+                        "g", "h", "n", "qu", "s", "d", "t",
+                        "g", "h", "n", "qu", "s", "d", "t",
+                        "h", "n", "s", "d", "t", "h", "n", "s", "d", "t",
+                        "h", "n", "s", "d", "t", "h", "n", "s", "d", "t",
+                        "h", "n", "s", "d", "t", "h", "n", "s", "d", "t",
+                        "sn", "sn", "st", "st", "squ", "squ",
+                        "th", "kh", "sh", "th", "kh", "sh", "th", "kh", "sh",
+                        "th", "sh", "th", "sh", "th", "sh", "th", "sh",
+                },
+                new String[]{
+                        "s"
+                },
+                new String[]{
+                },
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{4, 7, 6, 2}, 0.3, 0.96, 0.0, 0.0, null, true);
+    }
+    /**
+     * A rough imitation of the Cherokee language, using an attempt at romanizing the syllabary the language is often
+     * written with, using only the parts of the language that are usually written down. Some of the orthography
+     * rules aren't clear across Internet information about the language, so this really is a "fake" language it will be
+     * generating, not the real thing at all. The vowel 'ü' is used in place of the 'v' that the normal transliteration
+     * uses, to help with profanity-checking what this generates; it is pronounced like in the French word "un".
+     * <br>
+     * Dah utugü tsahnahsütoi gohü usütahdi asi tsau dah tashi.
+     */
+    public static final FakeLanguageGen CHEROKEE_ROMANIZED = cherokee().register("Cherokee Romanized");
+
+
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
      * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric
@@ -2970,7 +3029,7 @@ public class FakeLanguageGen implements Serializable {
     public static final FakeLanguageGen[] romanizedHumanLanguages = {
             ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE_SIMPLIFIED, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH,
             MAORI, GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI, CROW, 
-            ANCIENT_EGYPTIAN, MALAY, CHINESE_ROMANIZED
+            ANCIENT_EGYPTIAN, MALAY, CHINESE_ROMANIZED, CHEROKEE_ROMANIZED
     };
 
     /**
