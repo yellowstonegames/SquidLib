@@ -109,11 +109,6 @@ public interface IRNG extends RandomnessSource {
      * noticeable bias if the generator's period is exhausted by only calls to this method. Unlike all unbiased methods,
      * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling
      * would sometimes advance by one call, but other times by arbitrarily many more.
-     * <br>
-     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
-     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
-     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at
-     * most one random number, so it advances the state as much as {@link #nextInt(int)} or {@link #nextLong()}.
      * @param bound the outer exclusive bound; can be positive or negative
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */

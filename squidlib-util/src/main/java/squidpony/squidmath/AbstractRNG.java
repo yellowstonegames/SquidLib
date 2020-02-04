@@ -61,10 +61,12 @@ public abstract class AbstractRNG implements IRNG {
      * Exclusive on bound (which must be positive), with an inner bound of 0.
      * If bound is negative or 0 this always returns 0.
      * <br>
-     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
-     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
-     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets
-     * exactly one random number, so it advances the state as much as {@link #nextInt(int)}.
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
+     * for the original idea, and the JDK10 Math class' usage of Karatsuba multiplication for the current algorithm. 
+     * This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
+     * faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
+     * as {@link #nextLong()}; subclasses can generate two ints instead of one long if they prefer.
+     * 
      * @param bound the outer exclusive bound; should be positive, otherwise this always returns 0L
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
@@ -153,10 +155,13 @@ public abstract class AbstractRNG implements IRNG {
      * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling
      * would sometimes advance by one call, but other times by arbitrarily many more.
      * <br>
-     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
-     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
-     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at
-     * most one random number, so it advances the state as much as {@link #nextInt(int)} or {@link #nextLong()}.
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
+     * for the original idea, and the JDK10 Math class' usage of Hacker's Delight code for the current algorithm. 
+     * This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
+     * faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
+     * as {@link #nextLong()}; subclasses that are better at generating ints can override this and generate two ints
+     * instead of one long that needs separating internally.
+     *
      * @param bound the outer exclusive bound; can be positive or negative
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
@@ -165,7 +170,7 @@ public abstract class AbstractRNG implements IRNG {
         long rand = nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>= 32;
+        rand >>>= 32;
         bound >>= 32;
         final long t = rand * boundLow + (randLow * boundLow >>> 32);
         return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);

@@ -183,7 +183,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
         long rand = nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>= 32;
+        rand >>>= 32;
         bound >>= 32;
         final long t = rand * boundLow + (randLow * boundLow >>> 32);
         return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);

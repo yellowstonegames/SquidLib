@@ -82,9 +82,12 @@ public class BasicRandom32 extends Random implements RandomnessSource, Serializa
      * Exclusive on bound (which must be positive), with an inner bound of 0.
      * If bound is negative or 0 this always returns 0.
      * <br>
-     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
-     * with some adaptation for signed long values and a 64-bit generator. It also always gets
-     * exactly two random numbers, so it advances the state as much as {@link #nextLong()}.
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
+     * for the original idea, and the JDK10 Math class' usage of Karatsuba multiplication for the current algorithm. 
+     * This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
+     * faster, possibly more). It also always gets exactly two random ints, so by default it advances the state as much
+     * as {@link #nextLong()}.
+     *
      * @param bound the outer exclusive bound; should be positive, otherwise this always returns 0L
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
