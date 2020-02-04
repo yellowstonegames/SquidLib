@@ -89,14 +89,14 @@ public class BasicRandom32 extends Random implements RandomnessSource, Serializa
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
     public long nextLong(long bound) {
-        if (bound <= 0) return 0;
         final long rand = nextInt() & 0xFFFFFFFFL;
         final long randLow = nextInt() & 0xFFFFFFFFL;
+        if (bound <= 0) return 0;
         final long boundLow = bound & 0xFFFFFFFFL;
-        bound >>= 32;
-        final long z = (randLow * boundLow >> 32);
-        final long t = rand * boundLow + z;
-        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+        bound >>>= 32;
+        final long a = rand * bound;
+        final long b = randLow * boundLow;
+        return (((b >>> 32) + (rand + randLow) * (bound + boundLow) - a - b) >>> 32) + a;
     }
 
     /**

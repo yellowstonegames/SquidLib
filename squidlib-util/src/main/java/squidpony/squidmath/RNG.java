@@ -857,10 +857,10 @@ public class RNG implements Serializable, IRNG {
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
         rand >>>= 32;
-        bound >>= 32;
-        final long z = (randLow * boundLow >> 32);
-        final long t = rand * boundLow + z;
-        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+        bound >>>= 32;
+        final long a = rand * bound;
+        final long b = randLow * boundLow;
+        return (((b >>> 32) + (rand + randLow) * (bound + boundLow) - a - b) >>> 32) + a;
     }
     /**
      * Exclusive on bound (which may be positive or negative), with an inner bound of 0.
@@ -883,11 +883,10 @@ public class RNG implements Serializable, IRNG {
         long rand = random.nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>>= 32;
+        rand >>= 32;
         bound >>= 32;
-        final long z = (randLow * boundLow >> 32);
-        final long t = rand * boundLow + z;
-        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+        final long t = rand * boundLow + (randLow * boundLow >>> 32);
+        return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);
     }
 
     /**
