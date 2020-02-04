@@ -153,14 +153,16 @@ public final class MizuchiRNG implements StatefulRandomness, Serializable {
      * @param bound the upper bound; should be positive (if negative, this returns 0)
      * @return a random long less than n
      */
-    public final long nextLong(final long bound) {
+    public final long nextLong(long bound) {
+        long rand = nextLong();
         if (bound <= 0) return 0;
-        final long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
-        for (; ; ) {
-            long bits = nextLong() & 0x7fffffffffffffffL;
-            if (bits >= threshold)
-                return bits % bound;
-        }
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long boundLow = bound & 0xFFFFFFFFL;
+        rand >>>= 32;
+        bound >>>= 32;
+        final long a = rand * bound;
+        final long b = randLow * boundLow;
+        return (((b >>> 32) + (rand + randLow) * (bound + boundLow) - a - b) >>> 32) + a;
     }
 
     /**

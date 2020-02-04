@@ -150,26 +150,26 @@ public final class PulleyRNG implements StatefulRandomness, SkippingRandomness, 
      * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
      * can even be 0, which will cause this to return 0L every time.
      * <br>
-     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
-     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
-     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at
-     * most one random number, so it advances the state as much as {@link #nextInt(int)}.
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>
+     * for the original idea, and the JDK10 Math class' usage of Hacker's Delight code for the current algorithm. 
+     * This method is drastically faster than the previous implementation when the bound varies often (roughly 4x
+     * faster, possibly more). It also always gets exactly one random long, so by default it advances the state as much
+     * as {@link #nextLong()}.
+     *
      * @param bound the outer exclusive bound; can be positive or negative
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
     public long nextLong(long bound) {
-        long z = state++;
-        z = (z ^ (z << 41 | z >>> 23) ^ (z << 17 | z >>> 47)) * 0x369DEA0F31A53F85L;
-        z = (z ^ z >>> 25 ^ z >>> 37) * 0xDB4F0B9175AE2165L;
-        z ^= z >>> 28;
-        final long randLow = z & 0xFFFFFFFFL;
+        long rand = state++;
+        rand = (rand ^ (rand << 41 | rand >>> 23) ^ (rand << 17 | rand >>> 47)) * 0x369DEA0F31A53F85L;
+        rand = (rand ^ rand >>> 25 ^ rand >>> 37) * 0xDB4F0B9175AE2165L;
+        rand ^= rand >>> 28;
+        final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
-        z >>>= 32;
+        rand >>>= 32;
         bound >>= 32;
-        final long carry = (randLow * boundLow >> 32);
-        final long t = z * boundLow + carry;
-        final long tLow = t & 0xFFFFFFFFL;
-        return z * bound + (t >>> 32) + (tLow + randLow * bound >> 32) - (carry >> 63) - (bound >> 63);
+        final long t = rand * boundLow + (randLow * boundLow >>> 32);
+        return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);
     }
     /**
      * Inclusive inner, exclusive outer; lower and upper can be positive or negative and there's no requirement for one

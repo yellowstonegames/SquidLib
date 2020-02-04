@@ -3,6 +3,7 @@ package squidpony.examples;
 import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.squidmath.LinnormRNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.math.BigInteger;
 
@@ -19,6 +20,7 @@ public class RangedRandomTest {
     public LinnormRNG r0 = new LinnormRNG(-1L),
         r1 = new LinnormRNG(-1L),
         r2 = new LinnormRNG(-1L);
+    public StatefulRNG s0 = new StatefulRNG(new LinnormRNG(-1L));
     public long mult128(long bound)
     {
         long rand = r0.nextLong();
@@ -42,15 +44,22 @@ public class RangedRandomTest {
     }
     public long mult128Signed(long bound)
     {
-        long rand = r1.nextLong();
-        final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>>= 32;
-        bound >>= 32;
-        final long z = (randLow * boundLow >> 32);
-        final long t = rand * boundLow + z;
-        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+        return r1.nextLong(bound);
     }
+    public long mult128RNG(long bound)
+    {
+        return s0.nextLong(bound);
+    }
+
+//        long rand = r1.nextLong();
+//        final long randLow = rand & 0xFFFFFFFFL;
+//        final long boundLow = bound & 0xFFFFFFFFL;
+//        rand >>>= 32;
+//        bound >>= 32;
+//        final long z = (randLow * boundLow >> 32);
+//        final long t = rand * boundLow + z;
+//        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+
     @Test
     public void testMult128()
     {
@@ -71,6 +80,18 @@ public class RangedRandomTest {
         double total = 0.0, optimal = 0.0;
         for (int i = 0; i < 0x1000000; i++) {
             total += mult128Signed(BOUND) * 0x1p-24;
+            optimal += (BOUND - 1L) * 0x1p-25;
+        }
+        System.out.printf("average: %1.16a, optimal %1.16a, difference %+02.12f\n", total, optimal, (total / optimal - 1.0));
+    }
+    @Test
+    public void testMult128RNG()
+    {
+        s0.setState(-1L);
+        System.out.println("Mult128RNG");
+        double total = 0.0, optimal = 0.0;
+        for (int i = 0; i < 0x1000000; i++) {
+            total += mult128RNG(BOUND) * 0x1p-24;
             optimal += (BOUND - 1L) * 0x1p-25;
         }
         System.out.printf("average: %1.16a, optimal %1.16a, difference %+02.12f\n", total, optimal, (total / optimal - 1.0));
@@ -138,16 +159,16 @@ public class RangedRandomTest {
 //                    System.out.println(l + " " + r);
 //            }
 //        }
-        System.out.println(multiplyHigh(0xFFFFFFFFL, 0xFFFFFFFFL));
-        System.out.printf("%016X\n", (0xFFFFFFFFL * 0xFFFFFFFFL));
-        System.out.printf("%016X\n", (0xFFFFFFFFL * 0xFFFFFFFFL >>> 32));
-        System.out.printf("%016X\n", (0xFFFFFFFFL * 0xFFFFFFFFL >> 32));
-        System.out.println(multiplyHighJDK(0xFFFFFFFFL, 0xFFFFFFFFL));
+//        System.out.println(multiplyHigh(0xFFFFFFFFL, 0xFFFFFFFFL));
+//        System.out.printf("%016X\n", (0xFFFFFFFFL * 0xFFFFFFFFL));
+//        System.out.printf("%016X\n", (0xFFFFFFFFL * 0xFFFFFFFFL >>> 32));
+//        System.out.printf("%016X\n", (0xFFFFFFFFL * 0xFFFFFFFFL >> 32));
+//        System.out.println(multiplyHighJDK(0xFFFFFFFFL, 0xFFFFFFFFL));
         r0.setState(0L);
         r1.setState(0L);
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 10000; i++) {
             long l = r0.nextLong();
-            for (int j = 0; j < 20000; j++) {
+            for (int j = 0; j < 10000; j++) {
                 long r = r1.nextLong();
                 if(multiplyHighJDK(l, r) != multiplyHigh(l, r))
 //                if(multiplyHighJDK(l, r) != BigInteger.valueOf(l).multiply(BigInteger.valueOf(r)).shiftRight(64).longValue())
