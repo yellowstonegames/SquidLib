@@ -169,11 +169,10 @@ public final class LinnormRNG implements RandomnessSource, StatefulRandomness, S
         rand ^= rand >>> 25;
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>>= 32;
+        rand >>= 32;
         bound >>= 32;
-        final long z = (randLow * boundLow >> 32);
-        final long t = rand * boundLow + z;
-        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+        final long t = rand * boundLow + (randLow * boundLow >>> 32);
+        return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);
     }
     /**
      * Inclusive inner, exclusive outer; lower and upper can be positive or negative and there's no requirement for one

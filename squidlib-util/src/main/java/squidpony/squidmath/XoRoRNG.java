@@ -162,13 +162,10 @@ public final class XoRoRNG implements RandomnessSource, Serializable {
         long rand = nextLong();
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>>= 32;
+        rand >>= 32;
         bound >>= 32;
-        final long z = (randLow * boundLow >> 32);
-        long t = rand * boundLow + z;
-        final long tLow = t & 0xFFFFFFFFL;
-        t >>>= 32;
-        return rand * bound + t + (tLow + randLow * bound >> 32) - (z >> 63) - (bound >> 63);
+        final long t = rand * boundLow + (randLow * boundLow >>> 32);
+        return rand * bound + (t >> 32) + (randLow * bound + (t & 0xFFFFFFFFL) >> 32);
     }
     /**
      * Inclusive inner, exclusive outer; both inner and outer can be positive or negative.
