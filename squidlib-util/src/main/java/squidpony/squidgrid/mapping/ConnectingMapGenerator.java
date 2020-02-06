@@ -2,13 +2,77 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
-import squidpony.squidmath.GWTRNG;
-import squidpony.squidmath.IRNG;
-import squidpony.squidmath.IntIntOrderedMap;
-import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.*;
 
 /**
- * Work in progress.
+ * A room placing algorithm developed by Rayvolution for his game Fail To Hero, this was simple to implement but
+ * delivers complex connectivity. It is meant to ensure all rooms are connected, but usually not directly, and many
+ * routes need to wind throughout the map to get to a goal.
+ * <br>
+ * <pre>{@code
+ * ┌────────────────────────────┐┌────────┐┌────────┐┌────────┐
+ * │............................││........││........││........│
+ * │............................││........││........││........│
+ * │............................││........││........││........│
+ * │...┌──────────┐...┌─────┐...││...┌┐...│└────┐...││...┌────┘
+ * │...│┌───┐┌────┘...│┌────┘...└┘...││...└────┐│...││...└────┐
+ * │...││...││........││.............││........││...││........│
+ * │...││...││........││.............││........││...││........│
+ * │...││...││........││.......<.....││........││...││........│
+ * └───┘│...││...┌────┘│...┌─────────┘└────────┘│...│└────┐...│
+ * ┌────┘...││...└────┐│...│┌───────────────────┘...└─────┘...│
+ * │........││........││...││.................................│
+ * │.......>││........││...││.................................│
+ * │........││........││...││.................................│
+ * │...┌────┘└────┐...│└───┘│...┌─────────────────────────────┘
+ * │...│┌────────┐│...└─────┘...└────┐┌───┐┌────────┐┌────────┐
+ * │...││........││..................││...││........││........│
+ * │...││........││..................││...││........││........│
+ * │...││........││..................││...││........││........│
+ * │...││...┌┐...│└────┐...┌─────────┘│...│└────┐...│└────┐...│
+ * │...││...││...└─────┘...│┌────────┐│...└────┐│...└─────┘...│
+ * │...││...││.............││........││........││.............│
+ * │...││...││.............││........││........││.............│
+ * │...││...││.............││........││........││.............│
+ * │...││...││...┌─────────┘│...┌┐...││...┌────┘│...┌─────┐...│
+ * │...└┘...││...└──────────┘...││...└┘...└─────┘...│┌────┘...│
+ * │........││..................││..................││........│
+ * │........││..................││..................││........│
+ * │........││..................││..................││........│
+ * └────────┘└──────────────────┘└──────────────────┘└────────┘
+ * }</pre>
+ * <br>
+ * <pre>{@code
+ * ┌───────────────┬─┬───────────┬─────┬───┬─────────┬─┬───┬─┐
+ * │...............│.│...........│.....│...│.........│.│...│.│
+ * │.┌──────────.┌─┘.│.┌──.────┬─┤.┌───┤.│.│.──┐.──┐.│.│.│.│.│
+ * │.│...........│.....│.......│.│.│...│.│.....│...│.│...│...│
+ * ├─┘.┌────.┌─┐.└─────┘.┌──.│.│.│.│.┌─┘.│.│.──┼───┤.└─┬─┘.│.│
+ * │...│.....│.│.........│...│.│...│.│...│.│...│...│...│...│.│
+ * │.┌─┴───┬─┘.│.┌──.┌───┤.──┤.│.┌─┤.│.┌─┴─┼─┐.│.│.└───┤.│.└─┤
+ * │.│.....│...│.│...│...│...│.│.│.│...│...│.│...│.....│.│...│
+ * ├─┤.│.│.│.──┘.│.│.└─┐.├───┤.│.│.│.──┤.│.│.│.──┤.│.│.│.└─┐.│
+ * │.│.│.│.......│.│...│.│...│.│.......│.│...│...│.│.│.│...│.│
+ * │.│.└─┼────.┌─┘.└───┘.│.│.└─┴─┬─┬──.├─┤.──┴───┼─┤.├─┴─┐.└─┤
+ * │.│...│>....│.........│.│.....│.│...│.│.......│.│.│...│...│
+ * │.└─┐.│.┌───┴────.│.│.│.└─┬───┘.│.┌─┘.├───┐.┌─┘.├─┘.│.│.│<│
+ * │...│.│.│.........│.│.....│.......│...│...│.│...│...│...│.│
+ * ├──.├─┼─┴──.│.│.┌─┘.├───┐.└──.──┬─┘.┌─┘.│.│.│.┌─┘.──┴───┤.│
+ * │...│.│.....│.│.│...│...│.......│...│...│...│.│.........│.│
+ * ├─┐.│.│.──┬─┘.├─┘.┌─┤.──┼───┐.│.│.│.└──.└───┤.│.│.┌─┐.│.│.│
+ * │.│...│...│...│...│.│...│...│.│.│.│.........│.│.│.│.│.│.│.│
+ * │.│.│.└─┬─┴─┬─┴─┬─┤.├──.│.──┘.│.│.├──────.│.│.└─┤.│.│.└─┤.│
+ * │...│...│...│...│.│.│.........│...│.......│.....│.│.│...│.│
+ * │.┌─┤.│.│.│.│.│.│.│.│.──┐.──┐.├──.└───────┴─────┘.│.├──.├─┤
+ * │.│.│.│.│.│.│.│...│.│...│...│.│...................│.│...│.│
+ * │.│.├─┘.│.│.│.├──.│.└───┴─┐.│.└───────┐.──┐.──┬─┐.│.│.──┘.│
+ * │.│.│.....│.│.│...│.......│.│.........│...│...│.│...│.....│
+ * ├─┘.│.┌──.│.└─┘.┌─┴────.│.│.├───────┐.└─┐.├──.│.└─┬─┘.┌──.│
+ * │.....│...│.....│.......│...│.......│...│.│.......│...│...│
+ * │.────┴─┐.├────.│.│.────┤.──┘.┌────.├───┘.│.┌────.├──.│.──┤
+ * │.......│.│.......│.....│.....│.....│.....│.│.....│...│...│
+ * └───────┴─┴───────┴─────┴─────┴─────┴─────┴─┴─────┴───┴───┘
+ * }</pre>
  * <br>
  * Created by Tommy Ettinger on 5/7/2019.
  */
@@ -19,43 +83,83 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
     public int height;
     public int roomWidth;
     public int roomHeight;
+    public int wallThickness;
     public char[][] dungeon;
     public int[][] environment;
+    public GreasedRegion region;
+    private transient GreasedRegion tempRegion;
     public IRNG rng;
-    
+
+    /**
+     * Calls {@link #ConnectingMapGenerator(int, int, int, int, IRNG, int)} with width 80, height 80, roomWidth 8,
+     * roomHeight 8, a new {@link GWTRNG} for random, and wallThickness 2.
+     */
     public ConnectingMapGenerator()
     {
-        this(80, 80, new GWTRNG());
+        this(80, 80, 8, 8, new GWTRNG(), 2);
     }
+    /**
+     * Determines room width and room height by dividing width or height by 10; wallThickness is 2. 
+     * @param width total width of the map, in cells
+     * @param height total height of the map, in cells
+     * @param random an IRNG to make random choices for connecting rooms
+     */
+
     public ConnectingMapGenerator(int width, int height, IRNG random)
     {
-        this(width, height, width >> 3, height >> 3, random);
+        this(width, height, width / 10, height / 10, random, 2);
     }
+    /**
+     * Exactly like {@link #ConnectingMapGenerator(int, int, int, int, IRNG, int)} with wallThickness 2.
+     * @param width total width of the map, in cells
+     * @param height total height of the map, in cells
+     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room
+     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room
+     * @param random an IRNG to make random choices for connecting rooms
+     */
     public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random)
+    {
+        this(width, height, roomWidth, roomHeight, random, 2);
+    }
+
+    /**
+     * 
+     * @param width total width of the map, in cells
+     * @param height total height of the map, in cells
+     * @param roomWidth target width of each room, in cells; only counts the center floor area of a room
+     * @param roomHeight target height of each room, in cells; only counts the center floor area of a room
+     * @param random an IRNG to make random choices for connecting rooms
+     * @param wallThickness how thick a wall between two rooms should be, in cells; 1 is minimum, and this usually
+     *                      shouldn't be much more than roomWidth or roomHeight
+     */
+    public ConnectingMapGenerator(int width, int height, int roomWidth, int roomHeight, IRNG random, int wallThickness)
     {
         this.width = Math.max(1, width);
         this.height = Math.max(1, height);
-        this.roomWidth = Math.max(3, roomWidth);
-        this.roomHeight = Math.max(3, roomHeight);
+        this.region = new GreasedRegion(this.width, this.height);
+        tempRegion = new GreasedRegion(this.width, this.height);
+        this.roomWidth = Math.max(1, roomWidth);
+        this.roomHeight = Math.max(1, roomHeight);
+        this.wallThickness = Math.max(1, wallThickness);
         dungeon = ArrayTools.fill(' ', this.width, this.height);
         environment = new int[this.width][this.height];
         rng = random;
     }
     /**
-     * Generates a dungeon or other map as a 2D char array. Any implementation may allow its own configuration and
-     * customization of how dungeons are generated, but each must provide this as a sane default. Most implementations
-     * should use the convention of '#' representing a wall and '.' representing a bare floor, but beyond that, anything
-     * could be present in the char array.
-     *
-     * @return a 2D char array representing some kind of map, probably using standard conventions for walls/floors
+     * Generates a dungeon or other map as a 2D char array. Uses the convention of '#' representing a wall and '.'
+     * representing a bare floor, and also fills {@link #environment} with appropriate constants from DungeonUtility,
+     * like {@link DungeonUtility#ROOM_FLOOR} and {@link DungeonUtility#ROOM_WALL}.
+     * 
+     * @return a 2D char array representing a room-based map, using standard conventions for walls/floors
      */
     @Override
     public char[][] generate() {
-        int gridWidth = width / roomWidth, gridHeight = height / roomHeight, gridMax = gridWidth * gridHeight;
+        int gridWidth = (width + wallThickness - 2) / (roomWidth + wallThickness), gridHeight = (height + wallThickness - 2) / (roomHeight + wallThickness), gridMax = gridWidth * gridHeight;
         if(gridWidth <= 0 || gridHeight <= 0)
             return dungeon;
-        ArrayTools.fill(dungeon, '.');
-        ArrayTools.fill(environment, DungeonUtility.ROOM_FLOOR);
+        ArrayTools.fill(dungeon, '#');
+        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);
+        region.resizeAndEmpty(width, height);
         IntIntOrderedMap links = new IntIntOrderedMap(gridMax), surface = new IntIntOrderedMap(gridMax);
         IntVLA choices = new IntVLA(4);
         int dx = rng.nextSignedInt(gridWidth), dy = rng.nextSignedInt(gridHeight),
@@ -70,8 +174,7 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
             if (dy > 0 && !links.containsKey(d - 0x10000)) choices.add(8);
             if (choices.isEmpty()) {
                 surface.remove(d);
-                i--;
-                continue;
+                break;
             }
             int choice = choices.getRandomElement(rng);
             links.replace(d, links.get(d) | choice);
@@ -153,52 +256,19 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
             dy = d >>> 16;
             int conn = links.getAt(i);
             
-            dungeon[dx * roomWidth][dy * roomHeight] = '#';
-            dungeon[dx * roomWidth + roomWidth - 1][dy * roomHeight] = '#';
-            dungeon[dx * roomWidth][dy * roomHeight + roomHeight - 1] = '#';
-            dungeon[dx * roomWidth + roomWidth - 1][dy * roomHeight + roomHeight - 1] = '#';
-
-            if((conn & 1) == 0) {
-                ArrayTools.fill(dungeon, '#', dx * roomWidth + roomWidth - 1, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
-                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth + roomWidth - 1, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
-            }
-            else {
-                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth + roomWidth - 1, dy * roomHeight + 1, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 2);
-                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
-                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
-            }
-
-            if((conn & 2) == 0) {
-                ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight + roomHeight - 1, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
-                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth, dy * roomHeight + roomHeight - 1, dx * roomWidth + roomWidth - 1, dy * roomHeight + roomHeight - 1);
-            }
-            else {
-                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth + 1, dy * roomHeight + roomHeight - 1, dx * roomWidth + roomWidth - 2, dy * roomHeight + roomHeight - 1);
-                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
-                environment[dx * roomWidth][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
-            }
-
-            if((conn & 4) == 0) {
-                ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight, dx * roomWidth, dy * roomHeight + roomHeight - 1);
-                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth, dy * roomHeight, dx * roomWidth, dy * roomHeight + roomHeight - 1);
-            }
-            else {
-                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth, dy * roomHeight + 1, dx * roomWidth, dy * roomHeight + roomHeight - 2);
-                environment[dx * roomWidth][dy * roomHeight] = DungeonUtility.CORRIDOR_WALL;
-                environment[dx * roomWidth][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
-            }
-
-            if((conn & 8) == 0) {
-                ArrayTools.fill(dungeon, '#', dx * roomWidth, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight);
-                ArrayTools.fill(environment, DungeonUtility.ROOM_WALL, dx * roomWidth, dy * roomHeight, dx * roomWidth + roomWidth - 1, dy * roomHeight);
-            }
-            else {
-                ArrayTools.fill(environment, DungeonUtility.CORRIDOR_FLOOR, dx * roomWidth + 1, dy * roomHeight, dx * roomWidth + roomWidth - 2, dy * roomHeight);
-                environment[dx * roomWidth][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
-                environment[dx * roomWidth + roomWidth - 1][dy * roomHeight + roomHeight - 1] = DungeonUtility.CORRIDOR_WALL;
-            }
-            
+            region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness), roomWidth, roomHeight);
+            if((conn & 1) != 0)
+                region.insertRectangle(1 + dx * (roomWidth + wallThickness) + roomWidth, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
+            if((conn & 2) != 0)
+                region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) + roomHeight, roomWidth, wallThickness);
+            if((conn & 4) != 0)
+                region.insertRectangle(1 + dx * (roomWidth + wallThickness) - wallThickness, 1 + dy * (roomHeight + wallThickness), wallThickness, roomHeight);
+            if((conn & 8) != 0)
+                region.insertRectangle(1 + dx * (roomWidth + wallThickness), 1 + dy * (roomHeight + wallThickness) - wallThickness, roomWidth, wallThickness);
         }
+        region.writeCharsInto(dungeon, '.');
+        region.writeIntsInto(environment, DungeonUtility.ROOM_FLOOR);
+        tempRegion.remake(region).fringe8way().writeIntsInto(environment, DungeonUtility.ROOM_WALL);
         return dungeon;
     }
 

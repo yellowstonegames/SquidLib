@@ -373,7 +373,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("ConnectingMapGenerator\n");
         rng.setState(1L);
-        ConnectingMapGenerator cmg = new ConnectingMapGenerator(90, 48, 6, 6, rng);
+        ConnectingMapGenerator cmg = new ConnectingMapGenerator(60, 30, 1, 1, rng, 1);
         sdg.clearEffects();
         //sdg.addGrass(DungeonUtility.CORRIDOR_FLOOR, 20);
         cmg.generate();
