@@ -218,6 +218,80 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
+     * Constructs a GreasedRegion with the given rectangular char array, with width of map.length and height of
+     * map[0].length, any value that equals yes is considered "on", and any other value considered "off."
+     * @param map a rectangular 2D char array where yes is on and everything else is off
+     * @param yes which char to encode as "on"
+     */
+    public GreasedRegion(final char[][] map, final char[] yes)
+    {
+        width = map.length;
+        height = map[0].length;
+        ySections = (height + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                for(char e : yes)
+                {
+                    if(map[x][y] == e) {
+                        data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                        break;
+                    }
+                }
+            }
+        }
+        counts = new int[width * ySections];
+        tallied = false;
+    }
+    /**
+     * Reassigns this GreasedRegion with the given rectangular char array, reusing the current data storage (without
+     * extra allocations) if this.width == map.length and this.height == map[0].length. The current values stored in
+     * this are always cleared, then any value that equals yes is considered "on", and any other value considered "off."
+     * @param map a rectangular 2D char array where yes is on and everything else is off
+     * @param yes which char to encode as "on"
+     * @return this for chaining
+     */
+    public GreasedRegion refill(final char[][] map, final char[] yes) {
+        if (map != null && map.length > 0 && width == map.length && height == map[0].length) {
+            Arrays.fill(data, 0L);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    for(char e : yes)
+                    {
+                        if(map[x][y] == e) {
+                            data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                            break;
+                        }
+                    }
+                }
+            }
+            tallied = false;
+            return this;
+        } else {
+            width = (map == null) ? 0 : map.length;
+            height = (map == null || map.length <= 0) ? 0 : map[0].length;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    for(char e : yes)
+                    {
+                        if(map[x][y] == e) {
+                            data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                            break;
+                        }
+                    }
+                }
+            }
+            counts = new int[width * ySections];
+            tallied = false;
+            return this;
+        }
+    }
+
+    /**
      * Weird constructor that takes a String array, _as it would be printed_, so each String is a row and indexing would
      * be done with y, x instead of the normal x, y.
      * @param map String array (as printed, not the normal storage) where each String is a row
