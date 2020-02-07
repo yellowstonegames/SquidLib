@@ -1,7 +1,6 @@
 package squidpony.squidgrid.zone;
 
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
@@ -121,7 +120,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 	 * @return The x-coordinate of the Coord within {@code this} that has the
 	 *         smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
 	 */
-	int x(boolean smallestOrBiggest);
+	int xBound(boolean smallestOrBiggest);
 
 	/**
 	 * @param smallestOrBiggest if true, finds the smallest y-coordinate value;
@@ -129,7 +128,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 	 * @return The y-coordinate of the Coord within {@code this} that has the
 	 *         smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
 	 */
-	int y(boolean smallestOrBiggest);
+	int yBound(boolean smallestOrBiggest);
 
     /**
      * @return All cells in this zone.
@@ -243,7 +242,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 		/* Convenience implementation, feel free to override. */
 		public int getWidth() {
 			if (width == -2)
-				width = isEmpty() ? -1 : x(false) - x(true);
+				width = isEmpty() ? -1 : xBound(false) - xBound(true);
 			return width;
 		}
 
@@ -251,7 +250,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 		/* Convenience implementation, feel free to override. */
 		public int getHeight() {
 			if (height == -2)
-				height = isEmpty() ? -1 : y(false) - y(true);
+				height = isEmpty() ? -1 : yBound(false) - yBound(true);
 			return height;
 		}
 
@@ -264,13 +263,13 @@ public interface Zone extends Serializable, Iterable<Coord> {
 
 		@Override
 		/* Convenience implementation, feel free to override. */
-		public int x(boolean smallestOrBiggest) {
+		public int xBound(boolean smallestOrBiggest) {
 			return smallestOrBiggest ? smallest(true) : biggest(true);
 		}
 
 		@Override
 		/* Convenience implementation, feel free to override. */
-		public int y(boolean smallestOrBiggest) {
+		public int yBound(boolean smallestOrBiggest) {
 			return smallestOrBiggest ? smallest(false) : biggest(false);
 		}
 
