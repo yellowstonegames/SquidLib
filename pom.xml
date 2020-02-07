@@ -231,36 +231,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven.pmd.version}</version>
-                <configuration>
-                    <linkXRef>true</linkXRef>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>${jdk.version}</targetJdk>
-                </configuration>
-            </plugin>
-            -->
-            <!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${cobertura.version}</version>
-                <configuration>
-                    <format>xml</format>
-                    <format>html</format>
-                    <maxmem>256m</maxmem>
-                    <aggregate>true</aggregate>
-                    <check/>
-                </configuration>
-            </plugin>
-            -->
-        </plugins>
-    </reporting>
-
 </project>

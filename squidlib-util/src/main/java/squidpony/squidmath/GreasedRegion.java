@@ -5436,12 +5436,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     }
 
+    /**
+     * Gets the first Coord in the iteration order, or (-1,-1) if this GreasedRegion is empty.
+     * @return the first Coord in the iteration order, or (-1,-1) if this GreasedRegion is empty
+     */
     public Coord first()
     {
         long w;
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0) {
+                if ((w = (data[x * ySections + s])) != 0) {
                     return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                 }
             }
@@ -5454,13 +5458,44 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         long w;
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0) {
+                if ((w = (data[x * ySections + s])) != 0) {
                     return ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
                 }
             }
         }
         return -1;
     }
+
+    /**
+     * Gets the last Coord in the iteration order, or (-1,-1) if this GreasedRegion is empty.
+     * @return the last Coord in the iteration order, or (-1,-1) if this GreasedRegion is empty
+     */
+    public Coord last()
+    {
+        long w;
+        for (int x = width - 1; x >= 0; x--) {
+            for (int s = ySections - 1; s >= 0; s--) {
+                if ((w = (data[x * ySections + s])) != 0) {
+                    return Coord.get(x, (s << 6) | 63 - Long.numberOfLeadingZeros(w));
+                }
+            }
+        }
+        return Coord.get(-1, -1);
+    }
+
+    public int lastTight()
+    {
+        long w;
+        for (int x = width - 1; x >= 0; x--) {
+            for (int s = ySections - 1; s >= 0; s--) {
+                if ((w = (data[x * ySections + s])) != 0) {
+                    return ((s << 6) | 63 - Long.numberOfLeadingZeros(w)) * width + x;
+                }
+            }
+        }
+        return -1;
+    }
+
     public Coord nth(final int index)
     {
         if(index < 0)
@@ -6784,64 +6819,48 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * @param smallestOrBiggest if true, finds the smallest x-coordinate value;
+     * @param findSmallest if true, finds the smallest x-coordinate value;
      *                          if false, finds the biggest.
      * @return The x-coordinate of the Coord within {@code this} that has the
      * smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
      */
     @Override
-    public int x(boolean smallestOrBiggest) {
-        if(smallestOrBiggest)
+    public int xBound(boolean findSmallest) {
+        if(findSmallest)
             return first().x;
         else
-            return nth(size()-1).x;
+            return last().x;
     }
 
     /**
-     * @param smallestOrBiggest if true, finds the smallest y-coordinate value;
+     * @param findSmallest if true, finds the smallest y-coordinate value;
      *                          if false, finds the biggest.
      * @return The y-coordinate of the Coord within {@code this} that has the
      * smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
      */
     @Override
-    public int y(boolean smallestOrBiggest) {
-        long t, w;
-        if(smallestOrBiggest) {
-            int best = Integer.MAX_VALUE;
-            for (int x = 0; x < width; x++) {
-                for (int s = 0; s < ySections; s++) {
-                    if ((t = data[x * ySections + s]) != 0) {
-                        w = NumberTools.lowestOneBit(t);
-                        while (w != 0) {
-                            best = Math.min(s << 6 | Long.numberOfTrailingZeros(w), best);
-                            if(best == 0)
-                                return 0;
-                            t ^= w;
-                            w = NumberTools.lowestOneBit(t);
-                        }
-                    }
+    public int yBound(boolean findSmallest) {
+        long t = 0L;
+        if(findSmallest) {
+            for (int s = 0; s < ySections; s++) {
+                for (int x = 0; x < width; x++) {
+                    t |= data[x * ySections + s];
                 }
+                if(t != 0L)
+                    return s << 6 | Long.numberOfTrailingZeros(t);
             }
-            return best == Integer.MAX_VALUE ? -1 : best;
+            return -1;
         }
         else
         {
-            int best = -1;
-            for (int x = 0; x < width; x++) {
-                for (int s = 0; s < ySections; s++) {
-                    if ((t = data[x * ySections + s]) != 0) {
-                        w = NumberTools.lowestOneBit(t);
-                        while (w != 0) {
-                            best = Math.max(s << 6 | Long.numberOfTrailingZeros(w), best);
-                            if(best == height - 1)
-                                return best;
-                            t ^= w;
-                            w = NumberTools.lowestOneBit(t);
-                        }
-                    }
+            for (int s = ySections - 1; s >= 0; s--) {
+                for (int x = 0; x < width; x++) {
+                    t |= data[x * ySections + s];
                 }
+                if(t != 0L)
+                    return s << 6 | 63 - Long.numberOfLeadingZeros(t);
             }
-            return best;
+            return -1;
         }
     }
 
@@ -6857,7 +6876,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     @Override
     public int getWidth() {
         if (super.width == -2)
-            super.width = isEmpty() ? -1 : x(false) - x(true);
+            super.width = isEmpty() ? -1 : xBound(false) - xBound(true);
         return super.width;
     }
     /**
@@ -6872,7 +6891,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     @Override
     public int getHeight() {
         if (super.height == -2)
-            super.height = isEmpty() ? -1 : y(false) - y(true);
+            super.height = isEmpty() ? -1 : yBound(false) - yBound(true);
         return super.height;
     }
 
