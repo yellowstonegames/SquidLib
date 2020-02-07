@@ -67,7 +67,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 140;
-    private int hashMode = 2, rngMode = 0, noiseMode = 133, otherMode = 1;//74;//118;//82;
+    private int hashMode = 2, rngMode = 0, noiseMode = 130, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -4915,17 +4915,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 131:
-                        Gdx.graphics.setTitle("Blue Noise with choice " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            xx = (x + ctr);
-                            for (int y = 0; y < height; y++) {
-                                yy = (y + ctr);
-                                bright = (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr >>> 5 & 15]) + 128) / 255f;
-                                back[x][y] = floatGet(bright, bright, bright, 1f);
-                            }
-                        }
-                        break;
-                    case 132:
                         Gdx.graphics.setTitle("Blue Noise with scratchy adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
@@ -4935,13 +4924,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                iBright = (((BlueNoise.get(xx, yy) & 0xE0) 
 //                                        ^ (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[((12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21) >>> 16 & 62)]) >>> 3 & 0x1F)
                                 iBright = ((BlueNoise.getSeededScratchy(xx, yy,  12345789)
-                                   //((iBright ^ (iBright << 19 | iBright >>> 13) ^ (iBright << 5 | iBright >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 20 & 0x3F)
-                                   //^ (xx + xx + yy >> 2 & 0x3F) ^ (xx - yy - yy >> 2 & 0x3F)
+                                        //((iBright ^ (iBright << 19 | iBright >>> 13) ^ (iBright << 5 | iBright >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 20 & 0x3F)
+                                        //^ (xx + xx + yy >> 2 & 0x3F) ^ (xx - yy - yy >> 2 & 0x3F)
                                 ) + 128);
 
 //                                bright = //(BlueNoise.getSeeded(xx, yy, 12345789) + 128) / 255f;
 //                                        ((BlueNoise.get(xx, yy) ^ 128 ^ Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 1234567)
 //                                        ^ (xx + yy >> 2 & 0x3F) ^ (xx - yy >> 2 & 0x3F)) & 255) / 255f;
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
+                            }
+                        }
+                        break;
+                    case 132:
+//                        Gdx.graphics.setTitle("Blue Noise with choice " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            xx = (x + ctr);
+//                            for (int y = 0; y < height; y++) {
+//                                yy = (y + ctr);
+//                                bright = (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr >>> 5 & 15]) + 128) / 255f;
+//                                back[x][y] = floatGet(bright, bright, bright, 1f);
+//                            }
+//                        }
+//                        break;
+                        Gdx.graphics.setTitle("Blue Noise with changing scratchy adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                iBright = BlueNoise.getSeededScratchy(xx, yy, ctr) + 128;
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
