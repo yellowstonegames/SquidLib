@@ -179,6 +179,8 @@ public class BlueNoise {
      * Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
      * patterns are much less noticeable. Unlike {@link #get(int, int)}, this won't repeat every 64 cells on x or y, but
      * it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in places, like TV static.
+     * This chooses a sub-array from {@link #ALT_NOISE} based on the seed, and the same seed will use the same sub-array
+     * in all locations.
      *
      * @param x    x position, can be any int; results will not repeat for a very long time
      * @param y    y position, can be any int; results will not repeat for a very long time
@@ -186,9 +188,10 @@ public class BlueNoise {
      * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
      */
     public static byte getSeededScratchy(final int x, final int y, int seed) {
+        final int s = seed & 63;        
         seed ^= (x >>> 5) * 0x1827F5 ^ (y >>> 5) * 0x123C21;
-        return (byte) (RAW_NOISE[(y << 6 & 0xFC0) | (x & 0x3F)] ^
-                ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26)
+        return (byte) (ALT_NOISE[s][(y << 6 & 0xFC0) | (x & 0x3F)] ^
+                ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 15 & 63)
                 ^ (x + x + y >> 2 & 0x3F) ^ (x - y - y >> 2 & 0x3F));
     }
 
@@ -196,7 +199,9 @@ public class BlueNoise {
      * Gets a modified byte from some raw noise data in an array of at least 4096 bytes, using seed to adjust repeated
      * sections of noise so patterns are much less noticeable. Unlike {@link #get(int, int)}, this won't repeat every 64
      * cells on x or y, but it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in
-     * places, like TV static. You probably want to get the noiseData from an element of {@link #ALT_NOISE}.
+     * places, like TV static. You probably want to get the noiseData from an element of {@link #ALT_NOISE}; unlike
+     * {@link #getSeededScratchy(int, int, int)}, this won't choose a different byte array, and will always use the
+     * given {@code noiseData}.
      *
      * @param x         x position, can be any int; results will not repeat for a very long time
      * @param y         y position, can be any int; results will not repeat for a very long time
@@ -248,10 +253,8 @@ public class BlueNoise {
 //                | (x + sx + y >>> 8 & 4)
 //                | (x + sx + y + sy + sy >>> 7 & 8)
 //                ][seed];
-
 //                | (x + sx + y + sy + sy >>> 8 & 4)
 //                | (x + sx + y >>> 7 & 8)
-
     }
     /**
      * Generates a 2D int array (as with {@code new int[width][height]}) and fills it with the (seeded variant) blue
@@ -287,7 +290,7 @@ public class BlueNoise {
         int t, rx, ry, ctr;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                toFill[x][y] = (getSeededSeamless(x + xOffset, y, seed0) + getSeededSeamless(x, y + yOffset, seed1) + 256) >> 1;
+                toFill[x][y] = (getSeededScratchy(x + xOffset, y, seed0) + getSeededScratchy(x, y + yOffset, seed1) + 256) >> 1;
             }
         }
         int[] ox = new int[width], oy = new int[height];
