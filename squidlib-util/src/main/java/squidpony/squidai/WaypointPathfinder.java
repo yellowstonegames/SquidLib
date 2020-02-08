@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-import static squidpony.squidmath.CoordPacker.*;
-
 /**
  * Pathfind to known connections between rooms or other "chokepoints" without needing full-map Dijkstra scans.
  * Pre-calculates a path either from or to any given chokepoint to each other chokepoint.
@@ -148,14 +146,12 @@ public class WaypointPathfinder {
 
         if(thickCorridors)
         {
-            short[] floors = pack(simplified, '.'),
-                    rooms = flood(floors, retract(floors, 1, 60, 60, true), 2, false),
-                    corridors = differencePacked(floors, rooms),
-                    doors = intersectPacked(rooms, fringe(corridors, 1, 60, 60, false));
-            Coord[] apart = apartPacked(doors, 1);
-            Collections.addAll(chokes, apart);
-            for (int i = 0; i < apart.length; i++) {
-                waypoints.put(apart[i], new OrderedMap<Coord, Edge>());
+            GreasedRegion floors = new GreasedRegion(simplified, '.'),
+                    rooms = floors.copy().retract8way().expand().and(floors).expand().and(floors);
+                    rooms.and(floors.copy().andNot(rooms).fringe()).disperse8way();
+                    chokes.addAll(rooms);
+            for (int i = 0; i < rooms.size(); i++) {
+                waypoints.put(rooms.nth(i), new OrderedMap<Coord, Edge>());
             }
         }
         else {
@@ -267,8 +263,7 @@ public class WaypointPathfinder {
         waypoints = new OrderedMap<>(64);
         OrderedSet<Coord> chokes = new OrderedSet<>(128);
 
-        short[] floors = pack(simplified, '.');
-        Coord[] apart = fractionPacked(floors, fraction);
+        Coord[] apart = new GreasedRegion(simplified, '.').quasiRandomSeparated(1.0 / fraction);
         Collections.addAll(chokes, apart);
         for (int i = 0; i < apart.length; i++) {
             waypoints.put(apart[i], new OrderedMap<Coord, Edge>());

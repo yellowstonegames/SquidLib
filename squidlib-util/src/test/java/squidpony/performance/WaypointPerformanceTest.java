@@ -2,13 +2,12 @@ package squidpony.performance;
 
 import squidpony.squidai.WaypointPathfinder;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
-
-import java.util.ArrayList;
 
 /**
  * a simple performance test
@@ -31,19 +30,19 @@ import java.util.ArrayList;
  *
  */
 final class WaypointPerformanceTest extends AbstractPerformanceTest {
-	// a 40 * 40 map should be possible to really profile
-	private static final int WIDTH = 40, HEIGHT = 40;
-	private final SerpentMapGenerator generator;
+	// a 60 * 60 map should be possible to really profile
+	private static final int WIDTH = 60, HEIGHT = 60;
+	private final char[][] maps;
 
 	public WaypointPerformanceTest() {
-		generator = new SerpentMapGenerator(WIDTH, HEIGHT, RNG);
-        generator.putBoxRoomCarvers(1);
+		final DungeonGenerator generator = new DungeonGenerator(WIDTH, HEIGHT, RNG);
+		maps = generator.generate();
 		createThreadList();
 	}
 
 	@Override
 	protected AbstractPerformanceUnit createWorkUnit() {
-		return new Test(generator);
+		return new Test(maps);
 	}
 
 	/**
@@ -57,16 +56,17 @@ final class WaypointPerformanceTest extends AbstractPerformanceTest {
 		private char[][] map;
 		private WaypointPathfinder pathfinder;
 		private DungeonUtility utility;
+		private Coord[] floors;
 
-		public Test(SerpentMapGenerator m) {
-			map = m.generate();
+		public Test(char[][] map) {
+			this.map = map;
 			utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEF)));
+			floors = new GreasedRegion(map, '.').asCoords();
 		}
 
 		@Override
 		protected void doWork() {
 			Coord r, s;
-            ArrayList<Coord> path;
 			pathfinder = new WaypointPathfinder(map, Radius.DIAMOND, new StatefulRNG(new LightRNG(0x1337BEEF)));
 			for (int x = 1; x < WIDTH - 1; x++) {
 				for (int y = 1; y < HEIGHT - 1; y++) {
@@ -77,8 +77,8 @@ final class WaypointPerformanceTest extends AbstractPerformanceTest {
 					// this should ensure no blatant correlation between R and W
 					utility.rng.setState((x << 22) | (y << 16) | (x * y));
 					pathfinder.rng.setState((x << 20) | (y << 14) | (x * y));
-					r = utility.randomFloor(map);
-					path = pathfinder.getKnownPath(s, r);
+					r = utility.rng.getRandomElement(floors);
+					pathfinder.getKnownPath(s, r);
                 }
 			}
 		}

@@ -14,7 +14,7 @@ public class PerfTest {
 
 	// TODO add more tests when appropriate here
 	private static final AbstractPerformanceTest[] tests = new AbstractPerformanceTest[] {
-			new FOVLOSPerformanceTest(),
+//			new FOVLOSPerformanceTest(),
 			new DijkstraPerformanceTest(),
 			new WaypointPerformanceTest()
 	};

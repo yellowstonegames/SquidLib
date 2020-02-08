@@ -1,12 +1,13 @@
 package squidpony.performance;
 
 import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RandomnessSource;
 import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.StatefulRandomness;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * super class for performance related tests.<br>
@@ -16,11 +17,11 @@ import java.util.concurrent.*;
  */
 abstract class AbstractPerformanceTest {
 	// we want predictable outcome for our test
-	protected static final RandomnessSource SOURCE = new LightRNG(0x1337BEEF);
+	protected static final StatefulRandomness SOURCE = new LightRNG(0x1337BEEF);
 	protected static final StatefulRNG RNG = new StatefulRNG(SOURCE);
 
 	protected static final int NUM_THREADS = 1;
-	protected static final int NUM_TASKS = 1;
+	protected static final int NUM_TASKS = 32;
 
 	protected final List<AbstractPerformanceUnit> tasks = new ArrayList<>();
 
@@ -52,14 +53,15 @@ abstract class AbstractPerformanceTest {
 		ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
 		System.out.println("invoking " + NUM_TASKS + " tasks on " + NUM_THREADS + " threads");
 		final List<Future<Long>> invoke = executor.invokeAll(tasks);
-
+		AtomicLong atom = new AtomicLong(0);
 		for (Future<Long> future : invoke) {
 			try {
-				System.out.println(future.get(120, TimeUnit.SECONDS));
+				atom.getAndAdd(future.get(120, TimeUnit.SECONDS));
 			} catch (TimeoutException e) {
 				System.out.println("Task timed out after 120 seconds!");
 			}
 		}
+		System.out.println("Task took " + atom.doubleValue() / NUM_TASKS + " ms on average");
 		executor.shutdown();
 	}
 

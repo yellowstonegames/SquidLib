@@ -4,6 +4,7 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -30,8 +31,8 @@ import squidpony.squidmath.StatefulRNG;
  *
  */
 final class DijkstraPerformanceTest extends AbstractPerformanceTest {
-	// a 40 * 40 map should be possible to really profile
-	private static final int WIDTH = 40, HEIGHT = 40, PATH_LENGTH = (WIDTH - 2) * (HEIGHT - 2);
+	// a 60 * 60 map should be possible to really profile
+	private static final int WIDTH = 60, HEIGHT = 60, PATH_LENGTH = (WIDTH - 2) * (HEIGHT - 2);
 	private final char[][] maps;
 
 	public DijkstraPerformanceTest() {
@@ -54,19 +55,19 @@ final class DijkstraPerformanceTest extends AbstractPerformanceTest {
 	private static final class Test extends AbstractPerformanceUnit {
 
 		private char[][] map;
-		private DijkstraMap dijkstra;
 		private DungeonUtility utility;
+		private Coord[] floors;
 
 		public Test(char[][] m) {
 			map = m;
-			dijkstra = new DijkstraMap(map, new StatefulRNG(new LightRNG(0x1337BEEF)));
 			utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEF)));
+			floors = new GreasedRegion(map, '.').asCoords();
 		}
 
 		@Override
 		protected void doWork() {
-			Coord r;
-
+			DijkstraMap dijkstra = new DijkstraMap(map, new StatefulRNG(new LightRNG(0x1337BEEF)));
+			Coord[] filler = new Coord[1];
 			for (int x = 1; x < WIDTH - 1; x++) {
 				for (int y = 1; y < HEIGHT - 1; y++) {
 					if (map[x][y] == '#')
@@ -74,12 +75,9 @@ final class DijkstraPerformanceTest extends AbstractPerformanceTest {
 					// this should ensure no blatant correlation between R and W
 					utility.rng.setState((x << 22) | (y << 16) | (x * y));
 					((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-					r = utility.randomFloor(map);
-					dijkstra.setGoal(x, y);
-					dijkstra.setGoal(r);
-					dijkstra.scan(null, null);
-					dijkstra.clearGoals();
-					dijkstra.findPath(PATH_LENGTH, null, null, Coord.get(x, y), r);
+					filler[0] = utility.rng.getRandomElement(floors);
+					dijkstra.setGoal(filler[0]);
+					dijkstra.findPath(PATH_LENGTH, null, null, Coord.get(x, y), filler);
 				}
 			}
 		}
