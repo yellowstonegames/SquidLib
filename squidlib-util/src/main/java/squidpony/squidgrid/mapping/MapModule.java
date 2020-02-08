@@ -1,9 +1,8 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
-import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
@@ -28,7 +27,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
      * Stores Coords just outside the contents of the MapModule, where doors are allowed to connect into this.
      * Uses Coord positions that are relative to this MapModule's map field, not whatever this is being placed into.
      */
-    public Coord[] validDoors;
+    public GreasedRegion validDoors;
     /**
      * The minimum point on the bounding rectangle of the room, including walls.
      */
@@ -42,7 +41,8 @@ public class MapModule implements Comparable<MapModule>, Serializable {
 
     public int category;
 
-    private static final char[] validPacking = new char[]{'.', ',', '"', '^', '<', '>'},
+    private static final char[]
+            validPacking = new char[]{'.', ',', '"', '^', '<', '>'},
             doors = new char[]{'+', '/'};
     public MapModule()
     {
@@ -61,7 +61,6 @@ public class MapModule implements Comparable<MapModule>, Serializable {
     {
         if(map == null || map.length <= 0)
             throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
-        CoordPacker.init();
         this.map = ArrayTools.copy(map);
         environment = ArrayTools.fill(DungeonUtility.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
@@ -70,59 +69,18 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                     environment[x][y] = DungeonUtility.ROOM_WALL;
             }
         }
-        short[] pk = CoordPacker.fringe(
-                CoordPacker.pack(this.map, validPacking),
-                1, this.map.length, this.map[0].length, false, true);
-        Coord[] tmp = CoordPacker.bounds(pk);
-        min = tmp[0];
-        max = tmp[1];
+        GreasedRegion pack = new GreasedRegion(this.map, validPacking).fringe();
+//        short[] pk = CoordPacker.fringe(
+//                CoordPacker.pack(this.map, validPacking),
+//                1, this.map.length, this.map[0].length, false, true);
+//        Coord[] tmp = CoordPacker.bounds(pk);
+        min = Coord.get(pack.xBound(true), pack.yBound(true));
+        max = Coord.get(pack.xBound(false), pack.yBound(false));
         category = categorize(Math.max(max.x, max.y));
-        short[] drs = CoordPacker.pack(this.map, doors);
-        if(drs.length >= 2)
-            validDoors = CoordPacker.allPacked(drs);
-        else {
-            validDoors = CoordPacker.fractionPacked(pk, 5);//CoordPacker.allPacked(pk);
-            //for(Coord dr : validDoors)
-            //    this.map[dr.x][dr.y] = '+';
-        }
-        initSides();
-    }
-    /**
-     * Constructs a MapModule given only a short array of packed data (as produced by CoordPacker and consumed or produced
-     * by several other classes) that when unpacked will yield the contents of this section of map. The actual MapModule
-     * will use a slightly larger 2D array than the given width and height to ensure walls can be drawn around the floors,
-     * and the valid locations for doors will be any outer wall adjacent to an "on" coordinate in packed. The max and min
-     * Coords of the bounding rectangle, including one layer of outer walls, will also be calculated. Notably, the packed
-     * data you pass to this does not need to have a gap between floors and the edge of the map to make walls.
-     * @param packed the short array, as packed data from CoordPacker, that contains the contents of this section of map
-     */
-    public MapModule(short[] packed, int width, int height)
-    {
-        if(map == null || map.length <= 0)
-            throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
-        CoordPacker.init();
-        map = ArrayTools.copy(CoordPacker.unpackChar(packed, width, height, '.', '#'));
-        environment = ArrayTools.fill(DungeonUtility.ROOM_FLOOR, this.map.length, this.map[0].length);
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[0].length; y++) {
-                if(map[x][y] == '#')
-                    environment[x][y] = DungeonUtility.ROOM_WALL;
-            }
-        }
-        short[] pk = CoordPacker.fringe(
-                CoordPacker.pack(map, validPacking),
-                1, map.length, map[0].length, false, true);
-        Coord[] tmp = CoordPacker.bounds(pk);
-        min = tmp[0];
-        max = tmp[1];
-        category = categorize(Math.max(max.x, max.y));
-        short[] drs = CoordPacker.pack(map, doors);
-        if(drs.length >= 2)
-            validDoors = CoordPacker.allPacked(drs);
-        else {
-            validDoors = CoordPacker.fractionPacked(pk, 5);//CoordPacker.allPacked(pk);
-            //for(Coord dr : validDoors)
-            //    this.map[dr.x][dr.y] = '+';
+        validDoors = new GreasedRegion(this.map, doors);
+        if(validDoors.size() < 2)
+        {
+            validDoors.remake(pack).quasiRandomRegion(0.2);
         }
         initSides();
     }
@@ -135,9 +93,8 @@ public class MapModule implements Comparable<MapModule>, Serializable {
      * @param min the minimum Coord of this MapModule's bounding rectangle
      * @param max the maximum Coord of this MapModule's bounding rectangle
      */
-    public MapModule(char[][] map, Coord[] validDoors, Coord min, Coord max)
+    public MapModule(char[][] map, GreasedRegion validDoors, Coord min, Coord max)
     {
-        CoordPacker.init();
         this.map = ArrayTools.copy(map);
         environment = ArrayTools.fill(DungeonUtility.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
@@ -146,18 +103,13 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                     environment[x][y] = DungeonUtility.ROOM_WALL;
             }
         }
-        this.validDoors = GwtCompatibility.cloneCoords(validDoors);
         this.min = min;
         this.max = max;
         category = categorize(Math.max(max.x, max.y));
-        ArrayList<Coord> doors2 = new ArrayList<>(16);
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[x].length; y++) {
-                if(map[x][y] == '+' || map[x][y] == '/')
-                    doors2.add(Coord.get(x, y));
-            }
-        }
-        if(!doors2.isEmpty()) this.validDoors = doors2.toArray(new Coord[doors2.size()]);
+        
+        this.validDoors = new GreasedRegion(map, doors);
+        if(this.validDoors.isEmpty()) this.validDoors.remake(validDoors);
+        
         initSides();
     }
 
@@ -180,10 +132,10 @@ public class MapModule implements Comparable<MapModule>, Serializable {
      */
     public MapModule rotate(int turns)
     {
-        turns %= 4;
+        turns &= 3;
         char[][] map2;
-        Coord[] doors2;
         Coord min2, max2;
+        GreasedRegion doors2;
         int xSize = map.length - 1, ySize = map[0].length - 1;
         switch (turns)
         {
@@ -194,9 +146,10 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                         map2[ySize - j][i] = map[i][j];
                     }
                 }
-                doors2 = new Coord[validDoors.length];
-                for (int i = 0; i < validDoors.length; i++) {
-                    doors2[i] = Coord.get(ySize - validDoors[i].y, validDoors[i].x);
+                doors2 = new GreasedRegion(validDoors.height, validDoors.width);
+                for (int i = 0; i < validDoors.size(); i++) {
+                    Coord n = validDoors.nth(i);
+                    doors2.insert(ySize - n.y, n.x);
                 }
                 min2 = Coord.get(ySize - max.y, min.x);
                 max2 = Coord.get(ySize - min.y, max.x);
@@ -208,9 +161,10 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                         map2[xSize - i][ySize - j] = map[i][j];
                     }
                 }
-                doors2 = new Coord[validDoors.length];
-                for (int i = 0; i < validDoors.length; i++) {
-                    doors2[i] = Coord.get(xSize - validDoors[i].x, ySize - validDoors[i].y);
+                doors2 = new GreasedRegion(validDoors.width, validDoors.height);
+                for (int i = 0; i < validDoors.size(); i++) {
+                    Coord n = validDoors.nth(i);
+                    doors2.insert(xSize - n.x, ySize - n.y);
                 }
                 min2 = Coord.get(xSize - max.x, ySize - max.y);
                 max2 = Coord.get(xSize - min.x, ySize - min.y);
@@ -222,9 +176,10 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                         map2[j][xSize - i] = map[i][j];
                     }
                 }
-                doors2 = new Coord[validDoors.length];
-                for (int i = 0; i < validDoors.length; i++) {
-                    doors2[i] = Coord.get(validDoors[i].y, xSize - validDoors[i].x);
+                doors2 = new GreasedRegion(validDoors.height, validDoors.width);
+                for (int i = 0; i < validDoors.size(); i++) {
+                    Coord n = validDoors.nth(i);
+                    doors2.insert(n.y, xSize - n.x);
                 }
                 min2 = Coord.get(min.y, xSize - max.x);
                 max2 = Coord.get(max.y, xSize - min.x);
@@ -239,7 +194,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
         if(!flipLeftRight && !flipUpDown)
             return new MapModule(map, validDoors, min, max);
         char[][] map2 = new char[map.length][map[0].length];
-        Coord[] doors2 = new Coord[validDoors.length];
+        GreasedRegion doors2 = new GreasedRegion(map.length, map[0].length);
         Coord min2, max2;
         int xSize = map.length - 1, ySize = map[0].length - 1;
         if(flipLeftRight && flipUpDown)
@@ -249,8 +204,9 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                     map2[xSize - i][ySize - j] = map[i][j];
                 }
             }
-            for (int i = 0; i < validDoors.length; i++) {
-                doors2[i] = Coord.get(xSize - validDoors[i].x, ySize - validDoors[i].y);
+            for (int i = 0; i < validDoors.size(); i++) {
+                Coord n = validDoors.nth(i);
+                doors2.insert(xSize - n.x, ySize - n.y);
             }
             min2 = Coord.get(xSize - max.x, ySize - max.y);
             max2 = Coord.get(xSize - min.x, xSize - min.y);
@@ -260,8 +216,9 @@ public class MapModule implements Comparable<MapModule>, Serializable {
             for (int i = 0; i < map.length; i++) {
                 System.arraycopy(map[i], 0, map2[xSize - i], 0, map[0].length);
             }
-            for (int i = 0; i < validDoors.length; i++) {
-                doors2[i] = Coord.get(xSize - validDoors[i].x, validDoors[i].y);
+            for (int i = 0; i < validDoors.size(); i++) {
+                Coord n = validDoors.nth(i);
+                doors2.insert(xSize - n.x, n.y);
             }
             min2 = Coord.get(xSize - max.x, min.y);
             max2 = Coord.get(xSize - min.x, max.y);
@@ -273,8 +230,9 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                     map2[i][ySize - j] = map[i][j];
                 }
             }
-            for (int i = 0; i < validDoors.length; i++) {
-                doors2[i] = Coord.get(validDoors[i].x, ySize - validDoors[i].y);
+            for (int i = 0; i < validDoors.size(); i++) {
+                Coord n = validDoors.nth(i);
+                doors2.insert(n.x, ySize - n.y);
             }
             min2 = Coord.get(min.x, ySize - max.y);
             max2 = Coord.get(max.x, xSize - min.y);
@@ -297,7 +255,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
         {
             if(dr.x * max.y < dr.y * max.x && dr.y * max.x < (max.x - dr.x) * max.y)
                 leftDoors.add(dr);
-            else if(dr.x * max.y> dr.y * max.x && dr.y * max.x > (max.x - dr.x) * max.y)
+            else if(dr.x * max.y > dr.y * max.x && dr.y * max.x > (max.x - dr.x) * max.y)
                 rightDoors.add(dr);
             else if(dr.x * max.y > dr.y * max.x && dr.y * max.x < (max.x - dr.x) * max.y)
                 topDoors.add(dr);
