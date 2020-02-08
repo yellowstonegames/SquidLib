@@ -4557,6 +4557,42 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return found;
     }
+    /**
+     * Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+     * point is appended into the Collection {@code into}.
+     * @param into a Collection of GreasedRegion that will be modified if this succeeds
+     * @param x the x-coordinate to look up
+     * @param y the y-coordinate to look up
+     * @param packed the array or varargs of GreasedRegion to try to look up the given position in
+     * @return {@code into}, potentially modified
+     */
+    public static Collection<GreasedRegion> appendContaining(Collection<GreasedRegion> into, int x, int y, GreasedRegion ... packed)
+    {
+        GreasedRegion tmp;
+        for (int i = 0; i < packed.length; i++) {
+            if((tmp = packed[i]) != null && tmp.contains(x, y))
+                into.add(tmp);
+        }
+        return into;
+    }
+
+    /**
+     * Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+     * point is appended into the Collection {@code into}.
+     * @param into a Collection of GreasedRegion that will be modified if this succeeds
+     * @param x the x-coordinate to look up
+     * @param y the y-coordinate to look up
+     * @param packed the Collection of GreasedRegion to try to look up the given position in
+     * @return {@code into}, potentially modified
+     */
+    public static Collection<GreasedRegion> appendContaining(Collection<GreasedRegion> into, int x, int y, Collection<GreasedRegion> packed)
+    {
+        for (GreasedRegion tmp : packed) {
+            if(tmp != null && tmp.contains(x, y))
+                into.add(tmp);
+        }
+        return into;
+    }
 
 
     public int size()
