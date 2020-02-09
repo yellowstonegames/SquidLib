@@ -1852,4 +1852,12 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     {
         TimSort.sort(key, order, start, end, comparator);
     }
+
+    /**
+     * Reverses the iteration order in linear time.
+     */
+    public void reverse()
+    {
+        order.reverse();
+    }
 }

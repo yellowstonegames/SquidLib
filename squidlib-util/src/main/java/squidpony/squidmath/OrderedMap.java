@@ -2646,4 +2646,12 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     {
         TimSort.sort(value, order, start, end, comparator);
     }
+
+    /**
+     * Reverses the iteration order in linear time.
+     */
+    public void reverse()
+    {
+        order.reverse();
+    }
 }

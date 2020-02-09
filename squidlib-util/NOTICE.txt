@@ -1,5 +1,5 @@
 SquidLib
-Copyright 2011-2019 Eben Howard
+Copyright 2011-2020 Eben Howard
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -103,11 +103,16 @@ The squidpony.squidai.AOE interface and its implementing classes are essentially
 made possible by the Progressive Dijkstra Scan technique, so more thanks must go
 to Brian Pender and Joshua Day.
 
-The hashing techniques used in CrossHash are not derived (at least not
+CrossHash.Water and CrossHash.Yolk are closely related to wyhash v1, available at
+https://github.com/wangyi-fudan/wyhash/blob/master/wyhash_v1.h , though neither is
+nor can be an exact port due to JVM differences.
+The other hashing techniques used in CrossHash are not derived (at least not
 intentionally) from any other hashing algorithms; earlier versions contained
 code derived from FNV-1a and Daniel Lemire's StronglyUniversalStringHashing projects.
 Some of the hashes in CrossHash have been tested with smhasher to verify their quality;
-the fork of smhasher used is available at https://github.com/rurban/smhasher .
+the forks of smhasher used are available at https://github.com/rurban/smhasher and
+an updated version of https://github.com/demerphq/smhasher , with changes available at
+https://github.com/tommyettinger/smhasher-with-junk .
 
 The phonetic locality-sensitive hashing of word sounds in NaturalLanguageCipher
 owes some credit to eudex, a Rust library for the same type of hashing which can
@@ -136,6 +141,11 @@ ProjectionTools and parts of WorldMapGenerator.HyperellipticalMap are derived fr
 Justin Kunimune's work on Map-Projections, https://github.com/jkunimune15/Map-Projections ,
 which is MIT licensed. Those in turn are derived from Waldo Tobler's work on the
 hyperelliptical map projection that bears his name.
+
+The squidpony.squidai.astar package is a close port of part of gdx-ai; only the indexed A*
+pathfinding has been brought over. gdx-ai is Apache licensed and available here
+https://github.com/libgdx/gdx-ai . The code here incorporates work from a pull request,
+https://github.com/libgdx/gdx-ai/pull/96 by JasonKDarby.
 
 A substantial amount of work on SquidLib has been done by smelC, https://github.com/smelc ,
 especially in the areas of color handling, text layout, and shape analysis for dungeons.

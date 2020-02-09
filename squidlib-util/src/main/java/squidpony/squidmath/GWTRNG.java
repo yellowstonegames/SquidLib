@@ -27,7 +27,7 @@ import java.io.Serializable;
  * <a href="http://xoshiro.di.unimi.it/xoroshiro64starstar.c">Original version here for xoroshiro64**</a>.
  * <br>
  * Written in 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)
- * Ported and modified in 2018  and 2019 by Tommy Ettinger
+ * Ported and modified in 2018 and 2019 by Tommy Ettinger
  * @author Sebastiano Vigna
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)

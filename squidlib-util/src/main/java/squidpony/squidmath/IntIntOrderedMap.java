@@ -2355,4 +2355,12 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
     {
         return new IntIntOrderedMap();
     }
+    
+    /**
+     * Reverses the iteration order in linear time.
+     */
+    public void reverse()
+    {
+        order.reverse();
+    }
 }

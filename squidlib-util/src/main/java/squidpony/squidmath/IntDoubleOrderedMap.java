@@ -2221,4 +2221,12 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
         } else
             return defRetValue;
     }
+    
+    /**
+     * Reverses the iteration order in linear time.
+     */
+    public void reverse()
+    {
+        order.reverse();
+    }
 }
