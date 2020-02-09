@@ -18,7 +18,9 @@ package squidpony.squidai.astar;
 
 import java.util.ArrayList;
 
-/** A graph is a collection of nodes, each one having a collection of outgoing {@link Connection connections}.
+/**
+ * A graph is a collection of nodes, each one having a collection of outgoing {@link Connection connections}.
+ * Because this works with indexed A*, each node must also have a unique index.
  * 
  * @param <N> Type of node
  * 
