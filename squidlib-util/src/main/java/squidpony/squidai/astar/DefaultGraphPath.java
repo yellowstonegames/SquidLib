@@ -18,58 +18,30 @@ package squidpony.squidai.astar;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
-/** Default implementation of a {@link GraphPath} that uses an internal {@link ArrayList} to store nodes or connections.
+/** Default implementation of a {@link GraphPath} that extends {@link ArrayList} to store nodes or connections.
  * 
  * @param <N> Type of node
  * 
  * @author davebaol */
-public class DefaultGraphPath<N> implements GraphPath<N> {
-	public final ArrayList<N> nodes;
-
+public class DefaultGraphPath<N> extends ArrayList<N> implements GraphPath<N> {
 	/** Creates a {@code DefaultGraphPath} with no nodes. */
 	public DefaultGraphPath () {
-		this(new ArrayList<N>());
+		super();
 	}
 
 	/** Creates a {@code DefaultGraphPath} with the given capacity and no nodes. */
 	public DefaultGraphPath (int capacity) {
-		this(new ArrayList<N>(capacity));
+		super(capacity);
 	}
 
 	/** Creates a {@code DefaultGraphPath} with the given nodes. */
 	public DefaultGraphPath (ArrayList<N> nodes) {
-		this.nodes = nodes;
-	}
-
-	@Override
-	public void clear () {
-		nodes.clear();
-	}
-
-	@Override
-	public int getCount () {
-		return nodes.size();
-	}
-
-	@Override
-	public void add (N node) {
-		nodes.add(node);
-	}
-
-	@Override
-	public N get (int index) {
-		return nodes.get(index);
+		super(nodes);
 	}
 
 	@Override
 	public void reverse () {
-		Collections.reverse(nodes);
-	}
-
-	@Override
-	public Iterator<N> iterator () {
-		return nodes.iterator();
+		Collections.reverse(this);
 	}
 }

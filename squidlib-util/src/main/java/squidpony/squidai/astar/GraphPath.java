@@ -25,13 +25,13 @@ package squidpony.squidai.astar;
 public interface GraphPath<N> extends Iterable<N> {
 
 	/** Returns the number of items of this path. */
-	int getCount();
+	int size();
 
 	/** Returns the item of this path at the given index. */
 	N get(int index);
 
 	/** Adds an item at the end of this path. */
-	void add(N node);
+	boolean add(N node);
 
 	/** Clears this path. */
 	void clear();
