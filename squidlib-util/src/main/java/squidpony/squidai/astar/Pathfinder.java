@@ -18,7 +18,8 @@ package squidpony.squidai.astar;
 
 import squidpony.squidmath.BinaryHeap;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An indexed A* pathfinder that works with a Graph of nodes (generic type {@code N}). The path this returns is an
@@ -79,7 +80,7 @@ public class Pathfinder<N> {
 	 * @param outPath the output path that will only be filled if a path is found, otherwise it won't get touched.
 	 * @return {@code true} if a path was found; {@code false} otherwise.
 	 */
-	public boolean searchConnectionPath (N startNode, N endNode, Heuristic<N> heuristic, GraphPath<Connection<N>> outPath) {
+	public boolean searchConnectionPath (N startNode, N endNode, Heuristic<N> heuristic, List<Connection<N>> outPath) {
 
 		// Perform AStar
 		boolean found = search(startNode, endNode, heuristic);
@@ -102,7 +103,7 @@ public class Pathfinder<N> {
 	 * @param outPath the output path that will only be filled if a path is found, otherwise it won't get touched.
 	 * @return {@code true} if a path was found; {@code false} otherwise.
 	 */
-	public boolean searchNodePath (N startNode, N endNode, Heuristic<N> heuristic, GraphPath<N> outPath) {
+	public boolean searchNodePath (N startNode, N endNode, Heuristic<N> heuristic, List<N> outPath) {
 
 		// Perform AStar
 		boolean found = search(startNode, endNode, heuristic);
@@ -202,7 +203,7 @@ public class Pathfinder<N> {
 
 	protected void visitChildren (N endNode, Heuristic<N> heuristic) {
 		// Get current node's outgoing connections
-		ArrayList<Connection<N>> connections = graph.getConnections(current.node);
+		List<Connection<N>> connections = graph.getConnections(current.node);
 
 		// Loop through each connection in turn
 		for (int i = 0; i < connections.size(); i++) {
@@ -252,7 +253,7 @@ public class Pathfinder<N> {
 
 	}
 
-	protected void generateConnectionPath (N startNode, GraphPath<Connection<N>> outPath) {
+	protected void generateConnectionPath (N startNode, List<Connection<N>> outPath) {
 
 		// Work back along the path, accumulating connections
 		// outPath.clear();
@@ -262,10 +263,10 @@ public class Pathfinder<N> {
 		}
 
 		// Reverse the path
-		outPath.reverse();
+		Collections.reverse(outPath);
 	}
 
-	protected void generateNodePath (N startNode, GraphPath<N> outPath) {
+	protected void generateNodePath (N startNode, List<N> outPath) {
 
 		// Work back along the path, accumulating nodes
 		// outPath.clear();
@@ -276,7 +277,7 @@ public class Pathfinder<N> {
 		outPath.add(startNode);
 
 		// Reverse the path
-		outPath.reverse();
+		Collections.reverse(outPath);
 	}
 
 	protected void addToOpenList (NodeRecord<N> nodeRecord, float estimatedTotalCost) {
