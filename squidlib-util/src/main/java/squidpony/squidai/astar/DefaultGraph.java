@@ -106,11 +106,11 @@ public class DefaultGraph implements Graph<Coord> {
                     positions.add(Coord.get(i, j));
             }
         }
-        final int size = positions.size();
         final Direction[] dirs = eightWay ? Direction.CLOCKWISE : Direction.CARDINALS_CLOCKWISE;
+        final int size = positions.size(), dirCount = dirs.length;
         for (int i = 0; i < size; i++) {
             Coord c = positions.keyAt(i);
-            ArrayList<Connection<Coord>> list = new ArrayList<>(4);
+            ArrayList<Connection<Coord>> list = new ArrayList<>(dirCount);
             for(Direction dir : dirs)
             {
                 Coord offset = c.translate(dir);
