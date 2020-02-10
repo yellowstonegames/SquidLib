@@ -16,7 +16,7 @@
 
 package squidpony.squidai.astar;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A graph is a collection of nodes, each one having a collection of outgoing {@link Connection connections}.
@@ -30,7 +30,7 @@ public interface Graph<N> {
 	/** Returns the connections outgoing from the given node.
 	 * @param fromNode the node whose outgoing connections will be returned
 	 * @return the array of connections outgoing from the given node. */
-	ArrayList<Connection<N>> getConnections(N fromNode);
+	List<Connection<N>> getConnections(N fromNode);
 	
 	/** Returns the unique index of the given node.
 	 * @param node the node whose index will be returned

@@ -16,10 +16,11 @@
 
 package squidpony.squidai.astar;
 
-/** A connection between two nodes of the {@link Graph}. The connection has a non-negative cost that often represents time or
- * distance. However, the cost can be anything you want, for instance a combination of time, distance, and other factors.
- * Possible such factors could be how dangerous or unpleasant it seems to go between two nodes, how much it costs to make
- * payments to use toll roads, whether a specific path crosses an international border, and so on.
+/** 
+ * A connection between two nodes of the {@link Graph}. The connection has a non-negative cost that often represents
+ * time or distance. However, the cost can be anything you want, for instance a combination of time, distance, and other
+ * factors. Possible such factors could be how dangerous or unpleasant it seems to go between two nodes, how much it
+ * costs to make payments to use toll roads, whether a specific path crosses an international border, and so on.
  * 
  * @param <N> Type of node
  * 
