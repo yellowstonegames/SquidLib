@@ -160,25 +160,28 @@ import static squidpony.squidgrid.Measurement.CHEBYSHEV;
  * The tests with DijkstraMapPQ did not do well at all, and were generally much slower than the equivalent current
  * DijkstraMap class. DijkstraMapPQ uses the JDK's PriorityQueue implementation but its Comparator may be... bad.
  * <br>
- * Testing a version of gdx-ai's Indexed A* in SquidLib. Something in the port has slowed it down by about 30-40%.
+ * Testing a version of gdx-ai's Indexed A* in SquidLib. Earlier benchmarks erroneously tested gdx-ai with the Manhattan
+ * heuristic when everything else used Chebyshev; changing them all to match puts SquidLib's indexed A* in the lead.
+ * This isn't because the library code is any better, it's probably the same -- but the code using gdx-ai, code which
+ * needs to be supplied by the library user, isn't optimal here, and the DefaultGraph in SquidLib turns out to be best.
  * <pre>
  * Benchmark                                   Mode  Cnt     Score    Error  Units
- * DijkstraBenchmark.doPathCustomDijkstra      avgt    5   518.870 ±  5.172  ms/op
- * DijkstraBenchmark.doPathDijkstra            avgt    5   287.382 ±  2.314  ms/op
- * DijkstraBenchmark.doPathDijkstraPQ          avgt    5   624.479 ± 10.922  ms/op
- * DijkstraBenchmark.doPathGDXAStar            avgt    5   148.291 ±  0.368  ms/op
- * DijkstraBenchmark.doPathIndexedAStar        avgt    5   193.107 ±  1.220  ms/op
- * DijkstraBenchmark.doPathOtherDijkstra       avgt    5   331.382 ±  1.542  ms/op
- * DijkstraBenchmark.doScanCustomDijkstra      avgt    5   805.800 ±  3.768  ms/op
- * DijkstraBenchmark.doScanDijkstra            avgt    5   587.741 ±  1.060  ms/op
- * DijkstraBenchmark.doScanDijkstraPQ          avgt    5  1172.282 ± 25.673  ms/op
- * DijkstraBenchmark.doScanOtherDijkstra       avgt    5   616.242 ±  1.634  ms/op
- * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    5    23.332 ±  1.074  ms/op
- * DijkstraBenchmark.doTinyPathDijkstra        avgt    5    16.205 ±  0.098  ms/op
- * DijkstraBenchmark.doTinyPathDijkstraPQ      avgt    5    20.239 ±  0.058  ms/op
- * DijkstraBenchmark.doTinyPathGDXAStar        avgt    5     4.742 ±  0.012  ms/op
- * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    5     5.217 ±  0.030  ms/op
- * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    5    20.109 ±  0.116  ms/op
+ * DijkstraBenchmark.doPathCustomDijkstra      avgt    4   530.563 ±  6.197  ms/op
+ * DijkstraBenchmark.doPathDijkstra            avgt    4   285.308 ±  3.221  ms/op
+ * DijkstraBenchmark.doPathDijkstraPQ          avgt    4   616.417 ± 26.729  ms/op
+ * DijkstraBenchmark.doPathGDXAStar            avgt    4   266.524 ±  2.485  ms/op
+ * DijkstraBenchmark.doPathIndexedAStar        avgt    4   191.194 ±  4.310  ms/op
+ * DijkstraBenchmark.doPathOtherDijkstra       avgt    4   327.755 ±  2.748  ms/op
+ * DijkstraBenchmark.doScanCustomDijkstra      avgt    4   814.130 ± 42.122  ms/op
+ * DijkstraBenchmark.doScanDijkstra            avgt    4   567.830 ±  6.023  ms/op
+ * DijkstraBenchmark.doScanDijkstraPQ          avgt    4  1174.243 ± 16.153  ms/op
+ * DijkstraBenchmark.doScanOtherDijkstra       avgt    4   623.162 ± 10.047  ms/op
+ * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    4    23.542 ±  0.254  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstra        avgt    4    15.707 ±  0.164  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstraPQ      avgt    4    19.804 ±  0.153  ms/op
+ * DijkstraBenchmark.doTinyPathGDXAStar        avgt    4     7.545 ±  0.053  ms/op
+ * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    4     5.314 ±  0.073  ms/op
+ * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    4    20.470 ±  0.547  ms/op
  * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
@@ -656,12 +659,24 @@ public class DijkstraBenchmark {
     {
         public ObjectIntMap<Coord> points = new ObjectIntMap<>(128 * 128);
         public char[][] map;
+//        public Heuristic<Coord> heu = new Heuristic<Coord>() {
+//            @Override
+//            public float estimate(Coord node, Coord endNode) {
+//                return (Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y));
+//            }
+//        };
         public Heuristic<Coord> heu = new Heuristic<Coord>() {
             @Override
             public float estimate(Coord node, Coord endNode) {
-                return Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
+                return Math.max(Math.abs(node.x - endNode.x), Math.abs(node.y - endNode.y));
             }
         };
+//        public Heuristic<Coord> heu = new Heuristic<Coord>() {
+//            @Override
+//            public float estimate(Coord node, Coord endNode) {
+//                return (float)node.distance(endNode);
+//            }
+//        };
 
         public GridGraph(GreasedRegion floors, char[][] map)
         {
