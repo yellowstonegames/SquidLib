@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -701,57 +701,63 @@ implements java.io.Serializable, java.lang.Cloneable</pre>
 </td>
 </tr>
 <tr id="i50" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#reverse--">reverse</a></span>()</code>
+<div class="block">Reverses the iteration order in linear time.</div>
+</td>
+</tr>
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#shiftKeys-int-">shiftKeys</a></span>(int&nbsp;pos)</code>
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 </td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#shuffle-squidpony.squidmath.IRNG-">shuffle</a></span>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#size--">size</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#swap-int-int-">swap</a></span>(int&nbsp;left,
     int&nbsp;right)</code>
 <div class="block">Swaps the positions in the ordering for the given items, if they are both present.</div>
 </td>
 </tr>
-<tr id="i54" class="altColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#swapIndices-int-int-">swapIndices</a></span>(int&nbsp;left,
            int&nbsp;right)</code>
 <div class="block">Swaps the given indices in the ordering, if they are both valid int indices.</div>
 </td>
 </tr>
-<tr id="i55" class="rowColor">
+<tr id="i56" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i56" class="altColor">
+<tr id="i57" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#trim--">trim</a></span>()</code>
 <div class="block">Rehashes the map, making the table as small as possible.</div>
 </td>
 </tr>
-<tr id="i57" class="rowColor">
+<tr id="i58" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#trim-int-">trim</a></span>(int&nbsp;n)</code>
 <div class="block">Rehashes this map if the table is too large.</div>
 </td>
 </tr>
-<tr id="i58" class="altColor">
+<tr id="i59" class="rowColor">
 <td class="colFirst"><code>java.util.Collection&lt;java.lang.Double&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#values--">values</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i59" class="rowColor">
+<tr id="i60" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.html#valuesAsArray--">valuesAsArray</a></span>()</code>&nbsp;</td>
 </tr>
@@ -1988,7 +1994,7 @@ implements java.io.Serializable, java.lang.Cloneable</pre>
 <a name="replace-int-double-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>replace</h4>
 <pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2218">replace</a>(int&nbsp;key,
@@ -2006,6 +2012,16 @@ implements java.io.Serializable, java.lang.Cloneable</pre>
  (A <code>null</code> return can also indicate that the map
  previously associated <code>null</code> with the key.)</dd>
 </dl>
+</li>
+</ul>
+<a name="reverse--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>reverse</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.2228">reverse</a>()</pre>
+<div class="block">Reverses the iteration order in linear time.</div>
 </li>
 </ul>
 </li>

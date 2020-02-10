@@ -344,6 +344,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#malphas_">malphas_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#MANHATTAN">MANHATTAN</a></span> - Static variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dd>
+<div class="block">A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing twice as
+ much as orthogonal movement.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#MANHATTAN">MANHATTAN</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord3D.html#manhattanDistance-squidpony.squidmath.Coord3D-">manhattanDistance(Coord3D)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord3D.html" title="class in squidpony.squidmath">Coord3D</a></dt>
@@ -399,12 +404,7 @@
 <dd>
 <div class="block">Constructs a MapModule given only a 2D char array as the contents of this section of map.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#MapModule-short:A-int-int-">MapModule(short[], int, int)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
-<dd>
-<div class="block">Constructs a MapModule given only a short array of packed data (as produced by CoordPacker and consumed or produced
- by several other classes) that when unpacked will yield the contents of this section of map.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.Coord:A-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule(char[][], Coord[], Coord, Coord)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule(char[][], GreasedRegion, Coord, Coord)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
 <dd>
 <div class="block">Constructs a MapModule from the given arguments without modifying them, copying map without changing its size,
  copying validDoors, and using the same min and max (which are immutable, so they can be reused).</div>
@@ -905,6 +905,10 @@
 <dd>
 <div class="block">Determines how distance will be measured.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#metrics">metrics</a></span> - Variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.Metrics.html#Metrics--">Metrics()</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">MetsaMapFactory</span></a> - Class in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
 <dd>
 <div class="block">A map generation factory using Perlin noise to make island chain style maps.</div>

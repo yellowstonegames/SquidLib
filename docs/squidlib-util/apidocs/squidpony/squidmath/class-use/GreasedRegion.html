@@ -307,6 +307,12 @@
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">WorldMapGenerator.LocalMimicMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#shallow">shallow</a></span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">MapModule.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#validDoors">validDoors</a></span></code>
+<div class="block">Stores Coords just outside the contents of the MapModule, where doors are allowed to connect into this.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
@@ -508,19 +514,28 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule</a></span>(char[][]&nbsp;map,
+         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;validDoors,
+         <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;min,
+         <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;max)</code>
+<div class="block">Constructs a MapModule from the given arguments without modifying them, copying map without changing its size,
+ copying validDoors, and using the same min and max (which are immutable, so they can be reused).</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#MimicMap-squidpony.squidmath.GreasedRegion-">MimicMap</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</code>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
  given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#MimicMap-long-squidpony.squidmath.GreasedRegion-">MimicMap</a></span>(long&nbsp;initialSeed,
         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</code>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
  given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#MimicMap-long-squidpony.squidmath.GreasedRegion-double-">MimicMap</a></span>(long&nbsp;initialSeed,
         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
         double&nbsp;octaveMultiplier)</code>
@@ -528,7 +543,7 @@
  given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#MimicMap-long-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Noise.Noise3D-">MimicMap</a></span>(long&nbsp;initialSeed,
         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
         <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator)</code>
@@ -536,7 +551,7 @@
  given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#MimicMap-long-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Noise.Noise3D-double-">MimicMap</a></span>(long&nbsp;initialSeed,
         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
         <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
@@ -1551,6 +1566,26 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>static java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#appendContaining-java.util.Collection-int-int-java.util.Collection-">appendContaining</a></span>(java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+                int&nbsp;x,
+                int&nbsp;y,
+                java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</code>
+<div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+ point is appended into the Collection <code>into</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#appendContaining-java.util.Collection-int-int-squidpony.squidmath.GreasedRegion...-">appendContaining</a></span>(java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+                int&nbsp;x,
+                int&nbsp;y,
+                <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</code>
+<div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+ point is appended into the Collection <code>into</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#expandSeriesToLimit--">expandSeriesToLimit</a></span>()</code>&nbsp;</td>
 </tr>
@@ -1648,49 +1683,59 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#appendContaining-java.util.Collection-int-int-squidpony.squidmath.GreasedRegion...-">appendContaining</a></span>(java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+                int&nbsp;x,
+                int&nbsp;y,
+                <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</code>
+<div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+ point is appended into the Collection <code>into</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#bitSum-squidpony.squidmath.GreasedRegion...-">bitSum</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</code>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, treating each cell in the nth region as the
  nth bit of the int at the corresponding x,y cell in the int array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood-squidpony.squidmath.GreasedRegion-">flood</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood-squidpony.squidmath.GreasedRegion-int-">flood</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
      int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood8way-squidpony.squidmath.GreasedRegion-">flood8way</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#flood8way-squidpony.squidmath.GreasedRegion-int-">flood8way</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
          int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#floodSeries-squidpony.squidmath.GreasedRegion-int-">floodSeries</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
            int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#floodSeries8way-squidpony.squidmath.GreasedRegion-int-">floodSeries8way</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                int&nbsp;amount)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#floodSeriesToLimit-squidpony.squidmath.GreasedRegion-">floodSeriesToLimit</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#floodSeriesToLimit8way-squidpony.squidmath.GreasedRegion-">floodSeriesToLimit8way</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#insert-int-int-squidpony.squidmath.GreasedRegion-">insert</a></span>(int&nbsp;x,
       int&nbsp;y,
@@ -1699,38 +1744,38 @@
  GreasedRegion at the given x,y offset, allowing negative x and/or y to put only part of other in this.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#intersects-squidpony.squidmath.GreasedRegion-">intersects</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">Returns true if any cell is "on" in both this GreasedRegion and in other; returns false otherwise.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#notAnd-squidpony.squidmath.GreasedRegion-">notAnd</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">Like andNot, but subtracts this GreasedRegion from other and stores the result in this GreasedRegion, without
  mutating other.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#or-squidpony.squidmath.GreasedRegion-">or</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">Union of two GreasedRegions, assigning the result into this GreasedRegion.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/CellularAutomaton.html" title="class in squidpony.squidmath">CellularAutomaton</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CellularAutomaton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CellularAutomaton.html#remake-squidpony.squidmath.GreasedRegion-">remake</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;next)</code>
 <div class="block">Re-initializes this CellularAutomaton using a different GreasedRegion as a basis.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#remake-squidpony.squidmath.GreasedRegion-">remake</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">A useful method for efficiency, remake() reassigns this GreasedRegion to have its contents replaced by other.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#remove-int-int-squidpony.squidmath.GreasedRegion-">remove</a></span>(int&nbsp;x,
       int&nbsp;y,
@@ -1739,13 +1784,13 @@
  GreasedRegion at the given x,y offset, allowing negative x and/or y to remove only part of other in this.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#spill-squidpony.squidmath.GreasedRegion-int-squidpony.squidmath.IRNG-">spill</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
      int&nbsp;volume,
      <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sum-squidpony.squidmath.GreasedRegion...-">sum</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</code>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
@@ -1754,7 +1799,7 @@
  produce any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumDouble-squidpony.squidmath.GreasedRegion...-">sumDouble</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</code>
 <div class="block">Generates a 2D double array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the double at
@@ -1763,7 +1808,7 @@
  produce any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumInto-int:A:A-squidpony.squidmath.GreasedRegion...-">sumInto</a></span>(int[][]&nbsp;existing,
        <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</code>
@@ -1773,7 +1818,7 @@
  increase the value in existing by any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumIntoDouble-double:A:A-squidpony.squidmath.GreasedRegion...-">sumIntoDouble</a></span>(double[][]&nbsp;existing,
              <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</code>
@@ -1783,7 +1828,7 @@
  increase the value in existing by any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumWeighted-squidpony.squidmath.GreasedRegion:A-int:A-">sumWeighted</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;regions,
            int[]&nbsp;weights)</code>
@@ -1792,7 +1837,7 @@
  the position of that cell.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumWeightedDouble-squidpony.squidmath.GreasedRegion:A-double:A-">sumWeightedDouble</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;regions,
                  double[]&nbsp;weights)</code>
@@ -1801,7 +1846,7 @@
  array at the position of that cell.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#unpackIntoGreasedRegion-short:A-squidpony.squidmath.GreasedRegion-">unpackIntoGreasedRegion</a></span>(short[]&nbsp;packed,
                        <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;target)</code>
@@ -1809,7 +1854,7 @@
  <code>packed</code>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#unpackIntoGreasedRegion-short:A-squidpony.squidmath.GreasedRegion-int-int-">unpackIntoGreasedRegion</a></span>(short[]&nbsp;packed,
                        <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;target,
@@ -1819,13 +1864,13 @@
  <code>packed</code>, inserting cells from packed at an offset when they go into target.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#whichContain-int-int-squidpony.squidmath.GreasedRegion...-">whichContain</a></span>(int&nbsp;x,
             int&nbsp;y,
             <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#xor-squidpony.squidmath.GreasedRegion-">xor</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">Symmetric difference (more commonly known as exclusive or, hence the name) of two GreasedRegions, assigning the
@@ -1842,6 +1887,36 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>static java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#appendContaining-java.util.Collection-int-int-java.util.Collection-">appendContaining</a></span>(java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+                int&nbsp;x,
+                int&nbsp;y,
+                java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</code>
+<div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+ point is appended into the Collection <code>into</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#appendContaining-java.util.Collection-int-int-java.util.Collection-">appendContaining</a></span>(java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+                int&nbsp;x,
+                int&nbsp;y,
+                java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</code>
+<div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+ point is appended into the Collection <code>into</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#appendContaining-java.util.Collection-int-int-squidpony.squidmath.GreasedRegion...-">appendContaining</a></span>(java.util.Collection&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+                int&nbsp;x,
+                int&nbsp;y,
+                <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</code>
+<div class="block">Tries to look up the position x,y in each GreasedRegion in packed; each GreasedRegion that contains that x,y
+ point is appended into the Collection <code>into</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sum-java.util.List-">sum</a></span>(java.util.List&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</code>
 <div class="block">Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
@@ -1850,7 +1925,7 @@
  produce any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumDouble-java.util.List-">sumDouble</a></span>(java.util.List&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</code>
 <div class="block">Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
@@ -1859,7 +1934,7 @@
  produce any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#whichContain-int-int-java.util.Collection-">whichContain</a></span>(int&nbsp;x,
             int&nbsp;y,

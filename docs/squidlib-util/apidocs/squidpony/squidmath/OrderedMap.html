@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -859,29 +859,35 @@ implements java.util.SortedMap&lt;K,V&gt;, java.io.Serializable, java.lang.Clone
 </td>
 </tr>
 <tr id="i62" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#reverse--">reverse</a></span>()</code>
+<div class="block">Reverses the iteration order in linear time.</div>
+</td>
+</tr>
+<tr id="i63" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#shiftKeys-int-">shiftKeys</a></span>(int&nbsp;pos)</code>
 <div class="block">Shifts left entries with the specified hash code, starting at the
  specified position, and empties the resulting free entry.</div>
 </td>
 </tr>
-<tr id="i63" class="rowColor">
+<tr id="i64" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#shuffle-squidpony.squidmath.IRNG-">shuffle</a></span>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
 </td>
 </tr>
-<tr id="i64" class="altColor">
+<tr id="i65" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#size--">size</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i65" class="rowColor">
+<tr id="i66" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#sort-java.util.Comparator-">sort</a></span>(java.util.Comparator&lt;? super <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;comparator)</code>
 <div class="block">Sorts this whole OrderedMap on its keys using the supplied Comparator.</div>
 </td>
 </tr>
-<tr id="i66" class="altColor">
+<tr id="i67" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#sort-java.util.Comparator-int-int-">sort</a></span>(java.util.Comparator&lt;? super <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&gt;&nbsp;comparator,
     int&nbsp;start,
@@ -890,13 +896,13 @@ implements java.util.SortedMap&lt;K,V&gt;, java.io.Serializable, java.lang.Clone
  including) the index <code>end</code>, using the supplied Comparator.</div>
 </td>
 </tr>
-<tr id="i67" class="rowColor">
+<tr id="i68" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#sortByValue-java.util.Comparator-">sortByValue</a></span>(java.util.Comparator&lt;? super <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;comparator)</code>
 <div class="block">Sorts this whole OrderedMap on its values using the supplied Comparator.</div>
 </td>
 </tr>
-<tr id="i68" class="altColor">
+<tr id="i69" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#sortByValue-java.util.Comparator-int-int-">sortByValue</a></span>(java.util.Comparator&lt;? super <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;comparator,
            int&nbsp;start,
@@ -905,53 +911,53 @@ implements java.util.SortedMap&lt;K,V&gt;, java.io.Serializable, java.lang.Clone
  including) the index <code>end</code>, using the supplied Comparator.</div>
 </td>
 </tr>
-<tr id="i69" class="rowColor">
+<tr id="i70" class="altColor">
 <td class="colFirst"><code>java.util.SortedMap&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#subMap-K-K-">subMap</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from,
       <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;to)</code>&nbsp;</td>
 </tr>
-<tr id="i70" class="altColor">
+<tr id="i71" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#swap-K-K-">swap</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;left,
     <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;right)</code>
 <div class="block">Swaps the positions in the ordering for the given items, if they are both present.</div>
 </td>
 </tr>
-<tr id="i71" class="rowColor">
+<tr id="i72" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#swapIndices-int-int-">swapIndices</a></span>(int&nbsp;left,
            int&nbsp;right)</code>
 <div class="block">Swaps the given indices in the ordering, if they are both valid int indices.</div>
 </td>
 </tr>
-<tr id="i72" class="altColor">
+<tr id="i73" class="rowColor">
 <td class="colFirst"><code>java.util.SortedMap&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>,<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#tailMap-K-">tailMap</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">K</a>&nbsp;from)</code>&nbsp;</td>
 </tr>
-<tr id="i73" class="rowColor">
+<tr id="i74" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i74" class="altColor">
+<tr id="i75" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#trim--">trim</a></span>()</code>
 <div class="block">Rehashes the map, making the table as small as possible.</div>
 </td>
 </tr>
-<tr id="i75" class="rowColor">
+<tr id="i76" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#trim-int-">trim</a></span>(int&nbsp;n)</code>
 <div class="block">Rehashes this map if the table is too large.</div>
 </td>
 </tr>
-<tr id="i76" class="altColor">
+<tr id="i77" class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#unwrap-squidpony.squidmath.OrderedMap.ValueIterator-java.lang.Object:A-">unwrap</a></span>(<a href="../../squidpony/squidmath/OrderedMap.ValueIterator.html" title="class in squidpony.squidmath">OrderedMap.ValueIterator</a>&nbsp;i,
       java.lang.Object[]&nbsp;array)</code>
 <div class="block">Unwraps an iterator into an array.</div>
 </td>
 </tr>
-<tr id="i77" class="rowColor">
+<tr id="i78" class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#unwrap-squidpony.squidmath.OrderedMap.ValueIterator-java.lang.Object:A-int-int-">unwrap</a></span>(<a href="../../squidpony/squidmath/OrderedMap.ValueIterator.html" title="class in squidpony.squidmath">OrderedMap.ValueIterator</a>&nbsp;i,
       java.lang.Object[]&nbsp;array,
@@ -960,11 +966,11 @@ implements java.util.SortedMap&lt;K,V&gt;, java.io.Serializable, java.lang.Clone
 <div class="block">Unwraps an iterator into an array starting at a given offset for a given number of elements.</div>
 </td>
 </tr>
-<tr id="i78" class="altColor">
+<tr id="i79" class="rowColor">
 <td class="colFirst"><code>java.util.Collection&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#values--">values</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i79" class="rowColor">
+<tr id="i80" class="altColor">
 <td class="colFirst"><code>java.util.ArrayList&lt;<a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/OrderedMap.html#valuesAsList--">valuesAsList</a></span>()</code>&nbsp;</td>
 </tr>
@@ -2879,7 +2885,7 @@ implements java.util.SortedMap&lt;K,V&gt;, java.io.Serializable, java.lang.Clone
 <a name="sortByValue-java.util.Comparator-int-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>sortByValue</h4>
 <pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2645">sortByValue</a>(java.util.Comparator&lt;? super <a href="../../squidpony/squidmath/OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;&nbsp;comparator,
@@ -2893,6 +2899,16 @@ implements java.util.SortedMap&lt;K,V&gt;, java.io.Serializable, java.lang.Clone
 <dd><code>start</code> - the first index of a value to sort (the index can change after this)</dd>
 <dd><code>end</code> - the exclusive bound on the indices to sort; often this is just <a href="../../squidpony/squidmath/OrderedMap.html#size--"><code>size()</code></a></dd>
 </dl>
+</li>
+</ul>
+<a name="reverse--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>reverse</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/OrderedMap.html#line.2653">reverse</a>()</pre>
+<div class="block">Reverses the iteration order in linear time.</div>
 </li>
 </ul>
 </li>

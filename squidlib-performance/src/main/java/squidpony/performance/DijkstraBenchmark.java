@@ -44,6 +44,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import squidpony.performance.alternate.DijkstraMapPQ;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidai.astar.DefaultGraph;
+import squidpony.squidai.astar.Pathfinder;
 import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -157,6 +159,27 @@ import static squidpony.squidgrid.Measurement.CHEBYSHEV;
  * </pre>
  * The tests with DijkstraMapPQ did not do well at all, and were generally much slower than the equivalent current
  * DijkstraMap class. DijkstraMapPQ uses the JDK's PriorityQueue implementation but its Comparator may be... bad.
+ * <br>
+ * Testing a version of gdx-ai's Indexed A* in SquidLib. Something in the port has slowed it down by about 30-40%.
+ * <pre>
+ * Benchmark                                   Mode  Cnt     Score    Error  Units
+ * DijkstraBenchmark.doPathCustomDijkstra      avgt    5   518.870 ±  5.172  ms/op
+ * DijkstraBenchmark.doPathDijkstra            avgt    5   287.382 ±  2.314  ms/op
+ * DijkstraBenchmark.doPathDijkstraPQ          avgt    5   624.479 ± 10.922  ms/op
+ * DijkstraBenchmark.doPathGDXAStar            avgt    5   148.291 ±  0.368  ms/op
+ * DijkstraBenchmark.doPathIndexedAStar        avgt    5   193.107 ±  1.220  ms/op
+ * DijkstraBenchmark.doPathOtherDijkstra       avgt    5   331.382 ±  1.542  ms/op
+ * DijkstraBenchmark.doScanCustomDijkstra      avgt    5   805.800 ±  3.768  ms/op
+ * DijkstraBenchmark.doScanDijkstra            avgt    5   587.741 ±  1.060  ms/op
+ * DijkstraBenchmark.doScanDijkstraPQ          avgt    5  1172.282 ± 25.673  ms/op
+ * DijkstraBenchmark.doScanOtherDijkstra       avgt    5   616.242 ±  1.634  ms/op
+ * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    5    23.332 ±  1.074  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstra        avgt    5    16.205 ±  0.098  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstraPQ      avgt    5    20.239 ±  0.058  ms/op
+ * DijkstraBenchmark.doTinyPathGDXAStar        avgt    5     4.742 ±  0.012  ms/op
+ * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    5     5.217 ±  0.030  ms/op
+ * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    5    20.109 ±  0.116  ms/op
+ * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -184,7 +207,9 @@ public class DijkstraBenchmark {
         public CustomDijkstraMap customDijkstra;
         public StatefulRNG srng;
         public GridGraph gg;
+        public DefaultGraph dg;
         public IndexedAStarPathFinder<Coord> astar;
+        public Pathfinder<Coord> iasSquid;
         public GraphPath<Coord> dgp;
         public ArrayList<Coord> path;
         @Setup(Level.Trial)
@@ -224,8 +249,10 @@ public class DijkstraBenchmark {
             otherDijkstra.setBlockingRequirement(0);
             customDijkstra = new CustomDijkstraMap(map, adj, new StatefulRNG(0x1337BEEF));
             gg = new GridGraph(floors, map);
-            astar = new IndexedAStarPathFinder<>(gg);
+            astar = new IndexedAStarPathFinder<>(gg, false);
             dgp = new DefaultGraphPath<>(DIMENSION << 2);
+            dg = new DefaultGraph(map, true);
+            iasSquid = new Pathfinder<>(dg, false);
             path = new ArrayList<>(DIMENSION << 2);
         }
 
@@ -704,6 +731,46 @@ public class DijkstraBenchmark {
                 state.dgp.clear();
                 if(state.astar.searchNodePath(r, Coord.get(x, y), state.gg.heu, state.dgp))
                     scanned += state.dgp.getCount();
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    public long doPathIndexedAStar(BenchmarkState state)
+    {
+        Coord r;
+        long scanned = 0;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                state.srng.setState((x << 22) | (y << 16) | (x * y));
+                r = state.srng.getRandomElement(state.floorArray);
+                state.path.clear();
+                if(state.iasSquid.searchNodePath(r, Coord.get(x, y), DefaultGraph.CHEBYSHEV, state.path))
+                    scanned += state.path.size();
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    public long doTinyPathIndexedAStar(BenchmarkState state)
+    {
+        Coord r;
+        long scanned = 0;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                //state.srng.setState((x << 22) | (y << 16) | (x * y));
+                r = state.nearbyMap[x][y];
+                state.path.clear();
+                if(state.iasSquid.searchNodePath(r, Coord.get(x, y), DefaultGraph.CHEBYSHEV, state.path))
+                    scanned += state.path.size();
             }
         }
         return scanned;

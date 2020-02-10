@@ -419,6 +419,8 @@
 <div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
  rendering method, but meant for the background palette.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#generateConnectionPath-N-java.util.List-">generateConnectionPath(N, List&lt;Connection&lt;N&gt;&gt;)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#generateCostMap-char:A:A-java.util.Map-double-">generateCostMap(char[][], Map&lt;Character, Double&gt;, double)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>
 <div class="block">Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and
@@ -466,6 +468,8 @@
 <dd>
 <div class="block">Gets an ArrayList of random String names, sized to match amountToGenerate.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#generateNodePath-N-java.util.List-">generateNodePath(N, List&lt;N&gt;)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#generatePackingLevels-int-">generatePackingLevels(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Given a number of total levels to consider separate in a double[][] such as an FOV result, this produces a levels
@@ -840,10 +844,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TweakRNG.html#getCentrality--">getCentrality()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getChars-java.lang.CharSequence-">getChars(CharSequence)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getChars-int-">getChars(int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html#getCities--">getCities()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/IColoredString.Bucket.html#getColor--">getColor()</a></span> - Method in class squidpony.panel.<a href="../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a></dt>
@@ -872,6 +872,14 @@
  <a href="../squidpony/squidmath/FastNoise.html#setFrequency-float-"><code>FastNoise.setFrequency(float)</code></a>, <a href="../squidpony/squidmath/FastNoise.html#setFractalOctaves-int-"><code>FastNoise.setFractalOctaves(int)</code></a>, and <a href="../squidpony/squidmath/FastNoise.html#setFractalType-int-"><code>FastNoise.setFractalType(int)</code></a>, among others,
  you can call this method to get the particular variety of noise you specified, in 3D.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#getConnections-squidpony.squidmath.Coord-">getConnections(Coord)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dd>
+<div class="block">Returns the connections outgoing from the given node.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Graph.html#getConnections-N-">getConnections(N)</a></span> - Method in interface squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Graph.html" title="interface in squidpony.squidai.astar">Graph</a></dt>
+<dd>
+<div class="block">Returns the connections outgoing from the given node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CosmicNumbering.html#getConnections--">getConnections()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Region.html#getCoords--">getCoords()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a></dt>
@@ -886,6 +894,12 @@
 <div class="block">Gets an OrderedSet of OrderedSet of Coord, where each inner OrderedSet of Coord refers to a room's
  corners, and each Coord is one of those corners.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Connection.html#getCost--">getCost()</a></span> - Method in interface squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a></dt>
+<dd>
+<div class="block">Returns the non-negative cost of this connection</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultConnection.html#getCost--">getCost()</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getCubic-float-float-float-">getCubic(float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getCubic-float-float-">getCubic(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
@@ -923,10 +937,6 @@
 <dd>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>CosmicNumbering.getConnections()</code></a>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getDoubles-java.lang.CharSequence-">getDoubles(CharSequence)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getDoubles-int-">getDoubles(int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#getDungeon--">getDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html" title="class in squidpony.squidgrid.mapping">ClassicRogueMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#getDungeon--">getDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
@@ -1053,10 +1063,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MixedGenerator.html#getFixedRooms--">getFixedRooms()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MixedGenerator.html" title="class in squidpony.squidgrid.mapping">MixedGenerator</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getFloats-java.lang.CharSequence-">getFloats(CharSequence)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getFloats-int-">getFloats(int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#getFortune--">getFortune()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>
 <div class="block">Gets the status of the fortune used when calculating fairness adjustments.</div>
@@ -1082,6 +1088,12 @@
 <dd>
 <div class="block">Gets the frequency for all noise types.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Connection.html#getFromNode--">getFromNode()</a></span> - Method in interface squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a></dt>
+<dd>
+<div class="block">Returns the node that this connection came from</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultConnection.html#getFromNode--">getFromNode()</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#getGreen-T-">getGreen(T)</a></span> - Method in interface squidpony.<a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#getHeatCode-int-int-">getHeatCode(int, int)</a></span> - Method in interface squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a></dt>
@@ -1153,6 +1165,14 @@
 <dd>
 <div class="block">Gets the identity of the element at the given Coord position.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#getIndex-squidpony.squidmath.Coord-">getIndex(Coord)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dd>
+<div class="block">Returns the unique index of the given node.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Graph.html#getIndex-N-">getIndex(N)</a></span> - Method in interface squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Graph.html" title="interface in squidpony.squidai.astar">Graph</a></dt>
+<dd>
+<div class="block">Returns the unique index of the given node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/GreasedZOI.html#getInfluences--">getInfluences()</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/GreasedZOI.html" title="class in squidpony.squidai">GreasedZOI</a></dt>
 <dd>
 <div class="block">Gets the influencing groups; ideally the result should not be changed without setting it back with setInfluences.</div>
@@ -1176,10 +1196,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/Zone.Skeleton.html#getInternalBorder--">getInternalBorder()</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#getInternalBorder--">getInternalBorder()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getInts-java.lang.CharSequence-">getInts(CharSequence)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#getInts-int-">getInts(int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html#getKey--">getKey()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></dt>
 <dd>&nbsp;</dd>
@@ -1393,6 +1409,16 @@
 <div class="block">Returns the index i of the next point in the Sobol sequence that will be returned
  by calling <a href="../squidpony/squidmath/SobolQRNG.html#nextVector--"><code>SobolQRNG.nextVector()</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#getNodeCount--">getNodeCount()</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dd>
+<div class="block">Returns the number of nodes in this graph.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Graph.html#getNodeCount--">getNodeCount()</a></span> - Method in interface squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Graph.html" title="interface in squidpony.squidai.astar">Graph</a></dt>
+<dd>
+<div class="block">Returns the number of nodes in this graph.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#getNodeRecord-N-">getNodeRecord(N)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ClassicNoise.html#getNoise-double-double-">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ClassicNoise.html#getNoise-double-double-double-">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></dt>
@@ -2355,6 +2381,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/TilesetType.html#getTileset--">getTileset()</a></span> - Method in enum squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Connection.html#getToNode--">getToNode()</a></span> - Method in interface squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a></dt>
+<dd>
+<div class="block">Returns the node that this connection leads to</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultConnection.html#getToNode--">getToNode()</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CombinationGenerator.html#getTotalCombinations--">getTotalCombinations()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CombinationGenerator.html" title="class in squidpony.squidmath">CombinationGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutationGenerator.html#getTotalPermutations--">getTotalPermutations()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutationGenerator.html" title="class in squidpony.squidmath">PermutationGenerator</a></dt>
@@ -2415,6 +2447,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#getValue-float-float-float-">getValue(float, float, float)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#getValue-T-">getValue(T)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BinaryHeap.Node.html#getValue--">getValue()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BinaryHeap.Node.html" title="class in squidpony.squidmath">BinaryHeap.Node</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getValue-float-float-float-">getValue(float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -2642,6 +2676,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.GranularHasher.html#GranularHasher--">GranularHasher()</a></span> - Constructor for class squidpony.<a href="../squidpony/IColorCenter.Skeleton.GranularHasher.html" title="class in squidpony">IColorCenter.Skeleton.GranularHasher</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidai/astar/Graph.html" title="interface in squidpony.squidai.astar"><span class="typeNameLink">Graph</span></a>&lt;<a href="../squidpony/squidai/astar/Graph.html" title="type parameter in Graph">N</a>&gt; - Interface in <a href="../squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a></dt>
+<dd>
+<div class="block">A graph is a collection of nodes, each one having a collection of outgoing <a href="../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar"><code>connections</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#graph">graph</a></span> - Variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#grassLower">grassLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#grassUpper">grassUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
@@ -2823,14 +2863,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#gremory">gremory</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#gremory_">gremory_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid"><span class="typeNameLink">GridData</span></a> - Class in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
-<dd>
-<div class="block">Customized storage of multiple types of 2D data, accessible by String (or CharSequence) keys.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#GridData--">GridData()</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#GridData-int-">GridData(int)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/ISquidPanel.html#gridHeight--">gridHeight()</a></span> - Method in interface squidpony.panel.<a href="../squidpony/panel/ISquidPanel.html" title="interface in squidpony.panel">ISquidPanel</a></dt>
 <dd>&nbsp;</dd>

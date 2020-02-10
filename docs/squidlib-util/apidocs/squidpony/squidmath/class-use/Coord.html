@@ -95,28 +95,32 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidai.astar">squidpony.squidai.astar</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></td>
 <td class="colLast">
 <div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.iterator">squidpony.squidgrid.iterator</a></td>
 <td class="colLast">
 <div class="block">Iterators that allow traversal of squidpony.squidmath.Coord points on a map's grid.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></td>
 <td class="colLast">
 <div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.zone">squidpony.squidgrid.zone</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -2957,6 +2961,85 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="squidpony.squidai.astar">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> in <a href="../../../squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a> with type parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.ArrayList&lt;java.util.List&lt;<a href="../../../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#allConnections">allConnections</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#CHEBYSHEV">CHEBYSHEV</a></span></code>
+<div class="block">A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing the same as
+ orthogonal movement.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#EUCLIDEAN">EUCLIDEAN</a></span></code>
+<div class="block">A predefined Heuristic for Coord nodes in a 2D plane where all movement is calculated "as-the-crow-flies," using
+ the standard Pythagorean formula for distance as in the real world.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#MANHATTAN">MANHATTAN</a></span></code>
+<div class="block">A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing twice as
+ much as orthogonal movement.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#positions">positions</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a> that return types with arguments of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.List&lt;<a href="../../../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#getConnections-squidpony.squidmath.Coord-">getConnections</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;fromNode)</code>
+<div class="block">Returns the connections outgoing from the given node.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a> with parameters of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>java.util.List&lt;<a href="../../../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#getConnections-squidpony.squidmath.Coord-">getConnections</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;fromNode)</code>
+<div class="block">Returns the connections outgoing from the given node.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/astar/DefaultGraph.html#getIndex-squidpony.squidmath.Coord-">getIndex</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;node)</code>
+<div class="block">Returns the unique index of the given node.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid">
 <!--   -->
 </a>
@@ -3878,12 +3961,6 @@
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SectionDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#stairsUp">stairsUp</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">MapModule.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#validDoors">validDoors</a></span></code>
-<div class="block">Stores Coords just outside the contents of the MapModule, where doors are allowed to connect into this.</div>
-</td>
-</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
@@ -4479,17 +4556,8 @@
     int&nbsp;height)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.Coord:A-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule</a></span>(char[][]&nbsp;map,
-         <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;validDoors,
-         <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;min,
-         <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;max)</code>
-<div class="block">Constructs a MapModule from the given arguments without modifying them, copying map without changing its size,
- copying validDoors, and using the same min and max (which are immutable, so they can be reused).</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.Coord:A-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule</a></span>(char[][]&nbsp;map,
-         <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;validDoors,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule</a></span>(char[][]&nbsp;map,
+         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;validDoors,
          <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;min,
          <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;max)</code>
 <div class="block">Constructs a MapModule from the given arguments without modifying them, copying map without changing its size,

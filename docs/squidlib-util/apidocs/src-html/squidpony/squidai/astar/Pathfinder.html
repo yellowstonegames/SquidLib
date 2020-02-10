@@ -1,0 +1,429 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Copyright 2014 See AUTHORS file.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * <a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * you may not use this file except in compliance with the License.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * You may obtain a copy of the License at<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * <a name="line.7"></a>
+<span class="sourceLineNo">008</span> *   http://www.apache.org/licenses/LICENSE-2.0<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * <a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Unless required by applicable law or agreed to in writing, software<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * See the License for the specific language governing permissions and<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * limitations under the License.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> ******************************************************************************/<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>package squidpony.squidai.astar;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import squidpony.squidmath.BinaryHeap;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>import java.util.Collections;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import java.util.List;<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>/**<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * An indexed A* pathfinder that works with a Graph of nodes (generic type {@code N}). The path this returns is an<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * ArrayList of {@link Connection} items, which can be entered in order to handle movement.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * &lt;p&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * This implementation is a common variation of the A* algorithm that is faster than the general A*.<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;p&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * In the general A* implementation, data are held for each node in the open or closed lists, and these data are held as a<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * NodeRecord instance. Records are created when a node is first considered and then moved between the open and closed lists, as<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * required. There is a key step in the algorithm where the lists are searched for a node record corresponding to a particular<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * node. This operation is something time-consuming.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;p&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * The indexed A* algorithm improves execution speed by using an array of all the node records for every node in the graph. Nodes<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * must be numbered using sequential integers (see {@link Graph#getIndex(Object)}), so we don't need to search for a node in the<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * two lists at all. We can simply use the node index to look up its record in the array (creating it if it is missing). This<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * means that the close list is no longer needed. To know whether a node is open or closed, we use the {@link NodeRecord#category<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * category} of the node record. This makes the search step very fast indeed (in fact, there is no search, and we can go straight<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * to the information we need). Unfortunately, we can't get rid of the open list because we still need to be able to retrieve the<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * element with the lowest cost. However, we use a {@link BinaryHeap} for the open list in order to keep performance as high as<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * possible.<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * <a name="line.43"></a>
+<span class="sourceLineNo">044</span> * @param &lt;N&gt; Type of node<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * <a name="line.45"></a>
+<span class="sourceLineNo">046</span> * @author davebaol<a name="line.46"></a>
+<span class="sourceLineNo">047</span> */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>public class Pathfinder&lt;N&gt; {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        protected Graph&lt;N&gt; graph;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        protected NodeRecord&lt;N&gt;[] nodeRecords;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        protected BinaryHeap&lt;NodeRecord&lt;N&gt;&gt; openList;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        protected NodeRecord&lt;N&gt; current;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        public Metrics metrics;<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>        /** The unique ID for each search run. Used to mark nodes. */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        private int searchId;<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>        private static final int UNVISITED = 0;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        private static final int OPEN = 1;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        private static final int CLOSED = 2;<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>        public Pathfinder(Graph&lt;N&gt; graph) {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>                this(graph, false);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        }<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>        @SuppressWarnings("unchecked")<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        public Pathfinder(Graph&lt;N&gt; graph, boolean calculateMetrics) {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                this.graph = graph;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>                this.nodeRecords = (NodeRecord&lt;N&gt;[])new NodeRecord[graph.getNodeCount()];<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                this.openList = new BinaryHeap&lt;&gt;();<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                if (calculateMetrics) this.metrics = new Metrics();<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        }<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>         * Performs a non-interruptible search, trying to find a path made up of connections from the start node to the goal node<a name="line.74"></a>
+<span class="sourceLineNo">075</span>         * attempting to honor costs provided by the graph.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>         *<a name="line.76"></a>
+<span class="sourceLineNo">077</span>         * @param startNode the start node<a name="line.77"></a>
+<span class="sourceLineNo">078</span>         * @param endNode the end node<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         * @param heuristic the heuristic function<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         * @param outPath the output path that will only be filled if a path is found, otherwise it won't get touched.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>         * @return {@code true} if a path was found; {@code false} otherwise.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>         */<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        public boolean searchConnectionPath (N startNode, N endNode, Heuristic&lt;N&gt; heuristic, List&lt;Connection&lt;N&gt;&gt; outPath) {<a name="line.83"></a>
+<span class="sourceLineNo">084</span><a name="line.84"></a>
+<span class="sourceLineNo">085</span>                // Perform AStar<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                boolean found = search(startNode, endNode, heuristic);<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>                if (found) {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>                        // Create a path made of connections<a name="line.89"></a>
+<span class="sourceLineNo">090</span>                        generateConnectionPath(startNode, outPath);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                }<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>                return found;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        }<a name="line.94"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>        /**<a name="line.96"></a>
+<span class="sourceLineNo">097</span>         * Performs a non-interruptible search, trying to find a path made up of nodes from the start node to the goal node attempting<a name="line.97"></a>
+<span class="sourceLineNo">098</span>         * to honor costs provided by the graph.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>         *<a name="line.99"></a>
+<span class="sourceLineNo">100</span>         * @param startNode the start node<a name="line.100"></a>
+<span class="sourceLineNo">101</span>         * @param endNode the end node<a name="line.101"></a>
+<span class="sourceLineNo">102</span>         * @param heuristic the heuristic function<a name="line.102"></a>
+<span class="sourceLineNo">103</span>         * @param outPath the output path that will only be filled if a path is found, otherwise it won't get touched.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>         * @return {@code true} if a path was found; {@code false} otherwise.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>         */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        public boolean searchNodePath (N startNode, N endNode, Heuristic&lt;N&gt; heuristic, List&lt;N&gt; outPath) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>                // Perform AStar<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                boolean found = search(startNode, endNode, heuristic);<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>                if (found) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                        // Create a path made of nodes<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                        generateNodePath(startNode, outPath);<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>                return found;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        }<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>        protected boolean search (N startNode, N endNode, Heuristic&lt;N&gt; heuristic) {<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>                initSearch(startNode, endNode, heuristic);<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>                // Iterate through processing each node<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                do {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                        // Retrieve the node with smallest estimated total cost from the open list<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                        current = openList.pop();<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                        current.category = CLOSED;<a name="line.127"></a>
+<span class="sourceLineNo">128</span><a name="line.128"></a>
+<span class="sourceLineNo">129</span>                        // Terminate if we reached the goal node<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                        if (current.node.equals(endNode)) return true;<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>                        visitChildren(endNode, heuristic);<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>                } while (openList.size &gt; 0);<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>                // We've run out of nodes without finding the goal, so there's no solution<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                return false;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>//      @Override<a name="line.140"></a>
+<span class="sourceLineNo">141</span>//      public boolean search (PathFinderRequest&lt;N&gt; request, long timeToRun) {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>//<a name="line.142"></a>
+<span class="sourceLineNo">143</span>//              long lastTime = TimeUtils.nanoTime();<a name="line.143"></a>
+<span class="sourceLineNo">144</span>//<a name="line.144"></a>
+<span class="sourceLineNo">145</span>//              // We have to initialize the search if the status has just changed<a name="line.145"></a>
+<span class="sourceLineNo">146</span>//              if (request.statusChanged) {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>//                      initSearch(request.startNode, request.endNode, request.heuristic);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>//                      request.statusChanged = false;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>//              }<a name="line.149"></a>
+<span class="sourceLineNo">150</span>//<a name="line.150"></a>
+<span class="sourceLineNo">151</span>//              // Iterate through processing each node<a name="line.151"></a>
+<span class="sourceLineNo">152</span>//              do {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>//<a name="line.153"></a>
+<span class="sourceLineNo">154</span>//                      // Check the available time<a name="line.154"></a>
+<span class="sourceLineNo">155</span>//                      long currentTime = TimeUtils.nanoTime();<a name="line.155"></a>
+<span class="sourceLineNo">156</span>//                      timeToRun -= currentTime - lastTime;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>//                      if (timeToRun &lt;= TheWay.TIME_TOLERANCE) return false;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>//<a name="line.158"></a>
+<span class="sourceLineNo">159</span>//                      // Retrieve the node with smallest estimated total cost from the open list<a name="line.159"></a>
+<span class="sourceLineNo">160</span>//                      current = openList.pop();<a name="line.160"></a>
+<span class="sourceLineNo">161</span>//                      current.category = CLOSED;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>//<a name="line.162"></a>
+<span class="sourceLineNo">163</span>//                      // Terminate if we reached the goal node; we've found a path.<a name="line.163"></a>
+<span class="sourceLineNo">164</span>//                      if (current.node == request.endNode) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>//                              request.pathFound = true;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>//<a name="line.166"></a>
+<span class="sourceLineNo">167</span>//                              generateNodePath(request.startNode, request.resultPath);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>//<a name="line.168"></a>
+<span class="sourceLineNo">169</span>//                              return true;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>//                      }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>//<a name="line.171"></a>
+<span class="sourceLineNo">172</span>//                      // Visit current node's children<a name="line.172"></a>
+<span class="sourceLineNo">173</span>//                      visitChildren(request.endNode, request.heuristic);<a name="line.173"></a>
+<span class="sourceLineNo">174</span>//<a name="line.174"></a>
+<span class="sourceLineNo">175</span>//                      // Store the current time<a name="line.175"></a>
+<span class="sourceLineNo">176</span>//                      lastTime = currentTime;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>//<a name="line.177"></a>
+<span class="sourceLineNo">178</span>//              } while (openList.size &gt; 0);<a name="line.178"></a>
+<span class="sourceLineNo">179</span>//<a name="line.179"></a>
+<span class="sourceLineNo">180</span>//              // The open list is empty and we've not found a path.<a name="line.180"></a>
+<span class="sourceLineNo">181</span>//              request.pathFound = false;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>//              return true;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>//      }<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>        protected void initSearch (N startNode, N endNode, Heuristic&lt;N&gt; heuristic) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                if (metrics != null) metrics.reset();<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>                // Increment the search id<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                if (++searchId &lt; 0) searchId = 1;<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>                // Initialize the open list<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                openList.clear();<a name="line.192"></a>
+<span class="sourceLineNo">193</span><a name="line.193"></a>
+<span class="sourceLineNo">194</span>                // Initialize the record for the start node and add it to the open list<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                NodeRecord&lt;N&gt; startRecord = getNodeRecord(startNode);<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                startRecord.node = startNode;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                startRecord.connection = null;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                startRecord.costSoFar = 0;<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                addToOpenList(startRecord, heuristic.estimate(startNode, endNode));<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>                current = null;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        }<a name="line.202"></a>
+<span class="sourceLineNo">203</span><a name="line.203"></a>
+<span class="sourceLineNo">204</span>        protected void visitChildren (N endNode, Heuristic&lt;N&gt; heuristic) {<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                // Get current node's outgoing connections<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                List&lt;Connection&lt;N&gt;&gt; connections = graph.getConnections(current.node);<a name="line.206"></a>
+<span class="sourceLineNo">207</span><a name="line.207"></a>
+<span class="sourceLineNo">208</span>                // Loop through each connection in turn<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                for (int i = 0; i &lt; connections.size(); i++) {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>                        if (metrics != null) metrics.visitedNodes++;<a name="line.210"></a>
+<span class="sourceLineNo">211</span><a name="line.211"></a>
+<span class="sourceLineNo">212</span>                        Connection&lt;N&gt; connection = connections.get(i);<a name="line.212"></a>
+<span class="sourceLineNo">213</span><a name="line.213"></a>
+<span class="sourceLineNo">214</span>                        // Get the cost estimate for the node<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                        N node = connection.getToNode();<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                        float nodeCost = current.costSoFar + connection.getCost();<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>                        float nodeHeuristic;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                        NodeRecord&lt;N&gt; nodeRecord = getNodeRecord(node);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                        if (nodeRecord.category == CLOSED) { // The node is closed<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>                                // If we didn't find a shorter route, skip<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                                if (nodeRecord.costSoFar &lt;= nodeCost) continue;<a name="line.223"></a>
+<span class="sourceLineNo">224</span><a name="line.224"></a>
+<span class="sourceLineNo">225</span>                                // We can use the node's old cost values to calculate its heuristic<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                                // without calling the possibly expensive heuristic function<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                                nodeHeuristic = nodeRecord.getEstimatedTotalCost() - nodeRecord.costSoFar;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                        } else if (nodeRecord.category == OPEN) { // The node is open<a name="line.228"></a>
+<span class="sourceLineNo">229</span><a name="line.229"></a>
+<span class="sourceLineNo">230</span>                                // If our route is no better, then skip<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                                if (nodeRecord.costSoFar &lt;= nodeCost) continue;<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>                                // Remove it from the open list (it will be re-added with the new cost)<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                                openList.remove(nodeRecord);<a name="line.234"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>                                // We can use the node's old cost values to calculate its heuristic<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                                // without calling the possibly expensive heuristic function<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                                nodeHeuristic = nodeRecord.getEstimatedTotalCost() - nodeRecord.costSoFar;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                        } else { // the node is unvisited<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>                                // We'll need to calculate the heuristic value using the function,<a name="line.241"></a>
+<span class="sourceLineNo">242</span>                                // since we don't have a node record with a previously calculated value<a name="line.242"></a>
+<span class="sourceLineNo">243</span>                                nodeHeuristic = heuristic.estimate(node, endNode);<a name="line.243"></a>
+<span class="sourceLineNo">244</span>                        }<a name="line.244"></a>
+<span class="sourceLineNo">245</span><a name="line.245"></a>
+<span class="sourceLineNo">246</span>                        // Update node record's cost and connection<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                        nodeRecord.costSoFar = nodeCost;<a name="line.247"></a>
+<span class="sourceLineNo">248</span>                        nodeRecord.connection = connection;<a name="line.248"></a>
+<span class="sourceLineNo">249</span><a name="line.249"></a>
+<span class="sourceLineNo">250</span>                        // Add it to the open list with the estimated total cost<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                        addToOpenList(nodeRecord, nodeCost + nodeHeuristic);<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                }<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>        }<a name="line.254"></a>
+<span class="sourceLineNo">255</span><a name="line.255"></a>
+<span class="sourceLineNo">256</span>        protected void generateConnectionPath (N startNode, List&lt;Connection&lt;N&gt;&gt; outPath) {<a name="line.256"></a>
+<span class="sourceLineNo">257</span><a name="line.257"></a>
+<span class="sourceLineNo">258</span>                // Work back along the path, accumulating connections<a name="line.258"></a>
+<span class="sourceLineNo">259</span>                // outPath.clear();<a name="line.259"></a>
+<span class="sourceLineNo">260</span>                while (current.node != startNode) {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>                        outPath.add(current.connection);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                        current = nodeRecords[graph.getIndex(current.connection.getFromNode())];<a name="line.262"></a>
+<span class="sourceLineNo">263</span>                }<a name="line.263"></a>
+<span class="sourceLineNo">264</span><a name="line.264"></a>
+<span class="sourceLineNo">265</span>                // Reverse the path<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                Collections.reverse(outPath);<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        }<a name="line.267"></a>
+<span class="sourceLineNo">268</span><a name="line.268"></a>
+<span class="sourceLineNo">269</span>        protected void generateNodePath (N startNode, List&lt;N&gt; outPath) {<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>                // Work back along the path, accumulating nodes<a name="line.271"></a>
+<span class="sourceLineNo">272</span>                // outPath.clear();<a name="line.272"></a>
+<span class="sourceLineNo">273</span>                while (current.connection != null) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>                        outPath.add(current.node);<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                        current = nodeRecords[graph.getIndex(current.connection.getFromNode())];<a name="line.275"></a>
+<span class="sourceLineNo">276</span>                }<a name="line.276"></a>
+<span class="sourceLineNo">277</span>                outPath.add(startNode);<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>                // Reverse the path<a name="line.279"></a>
+<span class="sourceLineNo">280</span>                Collections.reverse(outPath);<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        }<a name="line.281"></a>
+<span class="sourceLineNo">282</span><a name="line.282"></a>
+<span class="sourceLineNo">283</span>        protected void addToOpenList (NodeRecord&lt;N&gt; nodeRecord, float estimatedTotalCost) {<a name="line.283"></a>
+<span class="sourceLineNo">284</span>                openList.add(nodeRecord, estimatedTotalCost);<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                nodeRecord.category = OPEN;<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                if (metrics != null) {<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                        metrics.openListAdditions++;<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                        metrics.openListPeak = Math.max(metrics.openListPeak, openList.size);<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                }<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        }<a name="line.290"></a>
+<span class="sourceLineNo">291</span><a name="line.291"></a>
+<span class="sourceLineNo">292</span>        protected NodeRecord&lt;N&gt; getNodeRecord (N node) {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                int index = graph.getIndex(node);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                NodeRecord&lt;N&gt; nr = nodeRecords[index];<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                if (nr != null) {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                        if (nr.searchId != searchId) {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                                nr.category = UNVISITED;<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                                nr.searchId = searchId;<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                        }<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                        return nr;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                }<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                nr = nodeRecords[index] = new NodeRecord&lt;&gt;();<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                nr.node = node;<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                nr.searchId = searchId;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                return nr;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        }<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>        /** This nested class is used to keep track of the information we need for each node during the search.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>         * <a name="line.309"></a>
+<span class="sourceLineNo">310</span>         * @param &lt;N&gt; Type of node<a name="line.310"></a>
+<span class="sourceLineNo">311</span>         * <a name="line.311"></a>
+<span class="sourceLineNo">312</span>         * @author davebaol */<a name="line.312"></a>
+<span class="sourceLineNo">313</span>        static class NodeRecord&lt;N&gt; extends BinaryHeap.Node {<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                /** The reference to the node. */<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                N node;<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>                /** The incoming connection to the node */<a name="line.317"></a>
+<span class="sourceLineNo">318</span>                Connection&lt;N&gt; connection;<a name="line.318"></a>
+<span class="sourceLineNo">319</span><a name="line.319"></a>
+<span class="sourceLineNo">320</span>                /** The actual cost from the start node. */<a name="line.320"></a>
+<span class="sourceLineNo">321</span>                float costSoFar;<a name="line.321"></a>
+<span class="sourceLineNo">322</span><a name="line.322"></a>
+<span class="sourceLineNo">323</span>                /** The node category: {@link #UNVISITED}, {@link #OPEN} or {@link #CLOSED}. */<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                int category;<a name="line.324"></a>
+<span class="sourceLineNo">325</span><a name="line.325"></a>
+<span class="sourceLineNo">326</span>                /** ID of the current search. */<a name="line.326"></a>
+<span class="sourceLineNo">327</span>                int searchId;<a name="line.327"></a>
+<span class="sourceLineNo">328</span><a name="line.328"></a>
+<span class="sourceLineNo">329</span>                /** Creates a {@code NodeRecord}. */<a name="line.329"></a>
+<span class="sourceLineNo">330</span>                public NodeRecord () {<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                        super(0);<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                }<a name="line.332"></a>
+<span class="sourceLineNo">333</span><a name="line.333"></a>
+<span class="sourceLineNo">334</span>                /** Returns the estimated total cost. */<a name="line.334"></a>
+<span class="sourceLineNo">335</span>                public float getEstimatedTotalCost () {<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                        return getValue();<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                }<a name="line.337"></a>
+<span class="sourceLineNo">338</span>        }<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>        /** A class used by {@link Pathfinder} to collect search metrics.<a name="line.340"></a>
+<span class="sourceLineNo">341</span>         * <a name="line.341"></a>
+<span class="sourceLineNo">342</span>         * @author davebaol */<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        public static class Metrics {<a name="line.343"></a>
+<span class="sourceLineNo">344</span>                public int visitedNodes;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>                public int openListAdditions;<a name="line.345"></a>
+<span class="sourceLineNo">346</span>                public int openListPeak;<a name="line.346"></a>
+<span class="sourceLineNo">347</span><a name="line.347"></a>
+<span class="sourceLineNo">348</span>                public Metrics () {<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                }<a name="line.349"></a>
+<span class="sourceLineNo">350</span><a name="line.350"></a>
+<span class="sourceLineNo">351</span>                public void reset () {<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                        visitedNodes = 0;<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                        openListAdditions = 0;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                        openListPeak = 0;<a name="line.354"></a>
+<span class="sourceLineNo">355</span>                }<a name="line.355"></a>
+<span class="sourceLineNo">356</span>        }<a name="line.356"></a>
+<span class="sourceLineNo">357</span>}<a name="line.357"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

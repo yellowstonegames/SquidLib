@@ -8,6 +8,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultGraph implements Graph<Coord> {
+
+    /**
+     * A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing twice as
+     * much as orthogonal movement. This is a good choice for graphs where only four-way movement is used.
+     */
+    public static final Heuristic<Coord> MANHATTAN = new Heuristic<Coord>() {
+        @Override
+        public float estimate(Coord node, Coord endNode) {
+            return Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
+        }
+    };
+    /**
+     * A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing the same as
+     * orthogonal movement. This is only suggested for graphs where eight-way movement is used, and it may produce
+     * erratic paths compared to {@link #EUCLIDEAN}.
+     */
+    public static final Heuristic<Coord> CHEBYSHEV = new Heuristic<Coord>() {
+        @Override
+        public float estimate(Coord node, Coord endNode) {
+            return Math.max(Math.abs(node.x - endNode.x), Math.abs(node.y - endNode.y));
+        }
+    };
+    /**
+     * A predefined Heuristic for Coord nodes in a 2D plane where all movement is calculated "as-the-crow-flies," using
+     * the standard Pythagorean formula for distance as in the real world. This does not make diagonal connections, if
+     * they are allowed, actually cost more or less, but they won't be preferred if an orthogonal route can be taken.
+     * This is recommended for graphs where eight-way movement is used.
+     */
+    public static final Heuristic<Coord> EUCLIDEAN = new Heuristic<Coord>() {
+        @Override
+        public float estimate(Coord node, Coord endNode) {
+            return (float) node.distance(endNode);
+        }
+    };
     
     public Arrangement<Coord> positions;
     public ArrayList<List<Connection<Coord>>> allConnections;

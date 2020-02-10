@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.16">MapModule</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.15">MapModule</a>
 extends java.lang.Object
 implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;, java.io.Serializable</pre>
 <div class="block">A subsection of a (typically modern-day or sci-fi) area map that can be placed by ModularMapGenerator.
@@ -185,7 +185,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#topDoors">topDoors</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#validDoors">validDoors</a></span></code>
 <div class="block">Stores Coords just outside the contents of the MapModule, where doors are allowed to connect into this.</div>
 </td>
@@ -213,8 +213,8 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.Coord:A-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule</a></span>(char[][]&nbsp;map,
-         <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;validDoors,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-char:A:A-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">MapModule</a></span>(char[][]&nbsp;map,
+         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;validDoors,
          <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;min,
          <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;max)</code>
 <div class="block">Constructs a MapModule from the given arguments without modifying them, copying map without changing its size,
@@ -224,14 +224,6 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-squidpony.squidgrid.mapping.MapModule-">MapModule</a></span>(<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;other)</code>
 <div class="block">Copies another MapModule and uses it to construct a new one.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MapModule.html#MapModule-short:A-int-int-">MapModule</a></span>(short[]&nbsp;packed,
-         int&nbsp;width,
-         int&nbsp;height)</code>
-<div class="block">Constructs a MapModule given only a short array of packed data (as produced by CoordPacker and consumed or produced
- by several other classes) that when unpacked will yield the contents of this section of map.</div>
 </td>
 </tr>
 </table>
@@ -292,7 +284,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>map</h4>
-<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.22">map</a></pre>
+<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.21">map</a></pre>
 <div class="block">The contents of this section of map.</div>
 </li>
 </ul>
@@ -302,7 +294,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>environment</h4>
-<pre>public&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.26">environment</a></pre>
+<pre>public&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.25">environment</a></pre>
 <div class="block">The room/cave/corridor/wall status for each cell of this section of map.</div>
 </li>
 </ul>
@@ -312,7 +304,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>validDoors</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[] <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.31">validDoors</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.30">validDoors</a></pre>
 <div class="block">Stores Coords just outside the contents of the MapModule, where doors are allowed to connect into this.
  Uses Coord positions that are relative to this MapModule's map field, not whatever this is being placed into.</div>
 </li>
@@ -323,7 +315,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>min</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.35">min</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.34">min</a></pre>
 <div class="block">The minimum point on the bounding rectangle of the room, including walls.</div>
 </li>
 </ul>
@@ -333,7 +325,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>max</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.39">max</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.38">max</a></pre>
 <div class="block">The maximum point on the bounding rectangle of the room, including walls.</div>
 </li>
 </ul>
@@ -343,7 +335,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>leftDoors</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.41">leftDoors</a></pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">leftDoors</a></pre>
 </li>
 </ul>
 <a name="rightDoors">
@@ -352,7 +344,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>rightDoors</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.41">rightDoors</a></pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">rightDoors</a></pre>
 </li>
 </ul>
 <a name="topDoors">
@@ -361,7 +353,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>topDoors</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.41">topDoors</a></pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">topDoors</a></pre>
 </li>
 </ul>
 <a name="bottomDoors">
@@ -370,7 +362,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>bottomDoors</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.41">bottomDoors</a></pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">bottomDoors</a></pre>
 </li>
 </ul>
 <a name="category">
@@ -379,7 +371,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockListLast">
 <li class="blockList">
 <h4>category</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.43">category</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.42">category</a></pre>
 </li>
 </ul>
 </li>
@@ -417,35 +409,14 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 </dl>
 </li>
 </ul>
-<a name="MapModule-short:A-int-int-">
+<a name="MapModule-char:A:A-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>MapModule</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.99">MapModule</a>(short[]&nbsp;packed,
-                 int&nbsp;width,
-                 int&nbsp;height)</pre>
-<div class="block">Constructs a MapModule given only a short array of packed data (as produced by CoordPacker and consumed or produced
- by several other classes) that when unpacked will yield the contents of this section of map. The actual MapModule
- will use a slightly larger 2D array than the given width and height to ensure walls can be drawn around the floors,
- and the valid locations for doors will be any outer wall adjacent to an "on" coordinate in packed. The max and min
- Coords of the bounding rectangle, including one layer of outer walls, will also be calculated. Notably, the packed
- data you pass to this does not need to have a gap between floors and the edge of the map to make walls.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>packed</code> - the short array, as packed data from CoordPacker, that contains the contents of this section of map</dd>
-</dl>
-</li>
-</ul>
-<a name="MapModule-char:A:A-squidpony.squidmath.Coord:A-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>MapModule</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.138">MapModule</a>(char[][]&nbsp;map,
-                 <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;validDoors,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.96">MapModule</a>(char[][]&nbsp;map,
+                 <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;validDoors,
                  <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;min,
                  <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;max)</pre>
 <div class="block">Constructs a MapModule from the given arguments without modifying them, copying map without changing its size,
@@ -465,7 +436,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MapModule</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.168">MapModule</a>(<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.120">MapModule</a>(<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;other)</pre>
 <div class="block">Copies another MapModule and uses it to construct a new one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -487,7 +458,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>rotate</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.181">rotate</a>(int&nbsp;turns)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.133">rotate</a>(int&nbsp;turns)</pre>
 <div class="block">Rotates a copy of this MapModule by the given number of 90-degree turns. Describing the turns as clockwise or
  counter-clockwise depends on whether the y-axis "points up" or "points down." If higher values for y are toward the
  bottom of the screen (the default for when 2D arrays are printed), a turn of 1 is clockwise 90 degrees, but if the
@@ -506,7 +477,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockList">
 <li class="blockList">
 <h4>flip</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.237">flip</a>(boolean&nbsp;flipLeftRight,
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.192">flip</a>(boolean&nbsp;flipLeftRight,
                       boolean&nbsp;flipUpDown)</pre>
 </li>
 </ul>
@@ -516,7 +487,7 @@ implements java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping
 <ul class="blockListLast">
 <li class="blockList">
 <h4>compareTo</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.310">compareTo</a>(<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;o)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.268">compareTo</a>(<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>compareTo</code>&nbsp;in interface&nbsp;<code>java.lang.Comparable&lt;<a href="../../../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;</code></dd>

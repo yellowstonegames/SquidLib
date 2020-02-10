@@ -77,6 +77,7 @@
 <li><a href="squidpony/annotation/package-tree.html">squidpony.annotation</a>, </li>
 <li><a href="squidpony/panel/package-tree.html">squidpony.panel</a>, </li>
 <li><a href="squidpony/squidai/package-tree.html">squidpony.squidai</a>, </li>
+<li><a href="squidpony/squidai/astar/package-tree.html">squidpony.squidai.astar</a>, </li>
 <li><a href="squidpony/squidgrid/package-tree.html">squidpony.squidgrid</a>, </li>
 <li><a href="squidpony/squidgrid/iterator/package-tree.html">squidpony.squidgrid.iterator</a>, </li>
 <li><a href="squidpony/squidgrid/mapping/package-tree.html">squidpony.squidgrid.mapping</a>, </li>
@@ -146,6 +147,8 @@
 <li type="circle">squidpony.<a href="squidpony/ArrayTools.html" title="class in squidpony"><span class="typeNameLink">ArrayTools</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath"><span class="typeNameLink">AStarSearch</span></a> (implements java.io.Serializable)</li>
 <li type="circle">squidpony.squidai.<a href="squidpony/squidai/BeamAOE.html" title="class in squidpony.squidai"><span class="typeNameLink">BeamAOE</span></a> (implements squidpony.squidai.<a href="squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a>, java.io.Serializable)</li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/BinaryHeap.html" title="class in squidpony.squidmath"><span class="typeNameLink">BinaryHeap</span></a>&lt;T&gt;</li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/BinaryHeap.Node.html" title="class in squidpony.squidmath"><span class="typeNameLink">BinaryHeap.Node</span></a></li>
 <li type="circle">squidpony.squidai.<a href="squidpony/squidai/BlastAOE.html" title="class in squidpony.squidai"><span class="typeNameLink">BlastAOE</span></a> (implements squidpony.squidai.<a href="squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a>, java.io.Serializable)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/BlueNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">BlueNoise</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/Bresenham.html" title="class in squidpony.squidmath"><span class="typeNameLink">Bresenham</span></a></li>
@@ -182,7 +185,9 @@
 <li type="circle">squidpony.squidai.<a href="squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai"><span class="typeNameLink">CustomDijkstraMap</span></a> (implements java.io.Serializable)</li>
 <li type="circle">squidpony.<a href="squidpony/DamerauLevenshteinAlgorithm.html" title="class in squidpony"><span class="typeNameLink">DamerauLevenshteinAlgorithm</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/DDALine.html" title="class in squidpony.squidmath"><span class="typeNameLink">DDALine</span></a></li>
+<li type="circle">squidpony.squidai.astar.<a href="squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar"><span class="typeNameLink">DefaultConnection</span></a>&lt;N&gt; (implements squidpony.squidai.astar.<a href="squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;N&gt;)</li>
 <li type="circle">squidpony.tileset.<a href="squidpony/tileset/DefaultDungeon.html" title="class in squidpony.tileset"><span class="typeNameLink">DefaultDungeon</span></a></li>
+<li type="circle">squidpony.squidai.astar.<a href="squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar"><span class="typeNameLink">DefaultGraph</span></a> (implements squidpony.squidai.astar.<a href="squidpony/squidai/astar/Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;N&gt;)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath"><span class="typeNameLink">Delaunay3D</span></a> (implements java.io.Serializable)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/Delaunay3D.Edge.html" title="class in squidpony.squidmath"><span class="typeNameLink">Delaunay3D.Edge</span></a> (implements java.io.Serializable)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath"><span class="typeNameLink">Delaunay3D.MultiCoord</span></a></li>
@@ -230,7 +235,6 @@
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/GlitchNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">GlitchNoise</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/Noise.Noise1D.html" title="interface in squidpony.squidmath">Noise.Noise1D</a>, squidpony.squidmath.<a href="squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, squidpony.squidmath.<a href="squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, squidpony.squidmath.<a href="squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, squidpony.squidmath.<a href="squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/GreasedRegion.GRIterator.html" title="class in squidpony.squidmath"><span class="typeNameLink">GreasedRegion.GRIterator</span></a> (implements java.util.Iterator&lt;E&gt;)</li>
 <li type="circle">squidpony.squidai.<a href="squidpony/squidai/GreasedZOI.html" title="class in squidpony.squidai"><span class="typeNameLink">GreasedZOI</span></a> (implements java.io.Serializable)</li>
-<li type="circle">squidpony.squidgrid.<a href="squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid"><span class="typeNameLink">GridData</span></a></li>
 <li type="circle">squidpony.squidgrid.mapping.<a href="squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">GrowingTreeMazeGenerator</span></a></li>
 <li type="circle">squidpony.<a href="squidpony/GwtCompatibility.html" title="class in squidpony"><span class="typeNameLink">GwtCompatibility</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/HashCommon.html" title="class in squidpony.squidmath"><span class="typeNameLink">HashCommon</span></a></li>
@@ -402,6 +406,8 @@
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/Oriole32RNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Oriole32RNG</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, java.io.Serializable)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/OrthoLine.html" title="class in squidpony.squidmath"><span class="typeNameLink">OrthoLine</span></a></li>
 <li type="circle">squidpony.squidgrid.mapping.<a href="squidpony/squidgrid/mapping/PacMazeGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">PacMazeGenerator</span></a></li>
+<li type="circle">squidpony.squidai.astar.<a href="squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar"><span class="typeNameLink">Pathfinder</span></a>&lt;N&gt;</li>
+<li type="circle">squidpony.squidai.astar.<a href="squidpony/squidai/astar/Pathfinder.Metrics.html" title="class in squidpony.squidai.astar"><span class="typeNameLink">Pathfinder.Metrics</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">PerlinNoise</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/PermutationGenerator.html" title="class in squidpony.squidmath"><span class="typeNameLink">PermutationGenerator</span></a>&lt;T&gt; (implements java.lang.Iterable&lt;T&gt;, java.io.Serializable)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">PermutedRNG</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, java.io.Serializable, squidpony.squidmath.<a href="squidpony/squidmath/SkippingRandomness.html" title="interface in squidpony.squidmath">SkippingRandomness</a>, squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)</li>
@@ -560,7 +566,10 @@
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
 <li type="circle">squidpony.squidgrid.<a href="squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid"><span class="typeNameLink">AestheticDifference</span></a></li>
+<li type="circle">squidpony.squidai.astar.<a href="squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar"><span class="typeNameLink">Connection</span></a>&lt;N&gt;</li>
+<li type="circle">squidpony.squidai.astar.<a href="squidpony/squidai/astar/Graph.html" title="interface in squidpony.squidai.astar"><span class="typeNameLink">Graph</span></a>&lt;N&gt;</li>
 <li type="circle">squidpony.squidgrid.mapping.<a href="squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping"><span class="typeNameLink">GrowingTreeMazeGenerator.ChoosingMethod</span></a></li>
+<li type="circle">squidpony.squidai.astar.<a href="squidpony/squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar"><span class="typeNameLink">Heuristic</span></a>&lt;N&gt;</li>
 <li type="circle">squidpony.<a href="squidpony/IColorCenter.html" title="interface in squidpony"><span class="typeNameLink">IColorCenter</span></a>&lt;T&gt;</li>
 <li type="circle">squidpony.panel.<a href="squidpony/panel/ICombinedPanel.html" title="interface in squidpony.panel"><span class="typeNameLink">ICombinedPanel</span></a>&lt;T&gt;</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IDistribution.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IDistribution</span></a></li>
