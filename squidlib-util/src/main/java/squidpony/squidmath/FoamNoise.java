@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import static squidpony.squidmath.NumberTools.swayRandomized;
-
 /**
  * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D.
  * Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs about a third as many octaves as the
@@ -17,7 +15,7 @@ import static squidpony.squidmath.NumberTools.swayRandomized;
 public class FoamNoise implements Noise.Noise2D, Noise.Noise3D {
     public static final FoamNoise instance = new FoamNoise();
     
-    public int seed = 0xF0F0F0F0;
+    public int seed = 0xD1CEBEEF;
     public FoamNoise() {
     }
 
@@ -32,18 +30,20 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D {
     public static double foamNoise(final double x, final double y, int seed) {
         double xin = x * 0.540302 + y * 0.841471; // sin and cos of 1
         double yin = x * -0.841471 + y * 0.540302;
-        final double a = valueNoise(seed, xin + swayRandomized(~seed, yin) * 0.5f, yin);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        final double a = valueNoise(seed, xin, yin);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
         seed ^= seed >>> 14;
         xin = x * -0.989992 + y * 0.141120; // sin and cos of 3
         yin = x * -0.141120 + y * -0.989992;
-        final double b = valueNoise(seed, xin + swayRandomized(~seed, yin - a) * 0.5f, yin + a);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        final double b = valueNoise(seed, xin, yin + a);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
         seed ^= seed >>> 14;
         xin = x * 0.283662 + y * -0.958924; // sin and cos of 5
         yin = x * 0.958924 + y * 0.283662;
-        final double c = valueNoise(seed, xin + swayRandomized(~seed, yin + b) * 0.5f, yin - b);
-        final double result = (a + b) * 0.3125 + c * 0.375;
+        final double c = valueNoise(seed, xin, yin - b);
+        final double result = a * 0.3125 + (b + c) * 0.34375;
         return result * result * (6.0 - 4.0 * result) - 1.0;
     }
     
@@ -74,25 +74,28 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         double xin = p1;
         double yin = p2;
         double zin = p3;
-        final double a = valueNoise(seed, xin + swayRandomized(~seed, yin) * 0.5f, yin, zin);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        final double a = valueNoise(seed, xin, yin, zin);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p2;
         zin = p3;
-        final double b = valueNoise(seed, xin - a, yin + swayRandomized(~seed, zin - a) * 0.5f, zin + a);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        final double b = valueNoise(seed, xin - a, yin, zin + a);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p1;
         zin = p3;
-        final double c = valueNoise(seed, xin + b, yin - b, zin  + swayRandomized(~seed, xin - b) * 0.5f);
-        seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        final double c = valueNoise(seed, xin + b, yin - b, zin);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p1;
         zin = p2;
-        final double d = valueNoise(seed, xin + swayRandomized(~seed, zin - c) * 0.5f, yin - c, zin + c);
+        final double d = valueNoise(seed, xin, yin - c, zin + c);
 
         final double result = (a + b + c + d) * 0.25;
         return  (result * result * (6.0 - 4.0 * result) - 1.0);
