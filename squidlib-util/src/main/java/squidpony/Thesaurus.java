@@ -20,10 +20,12 @@ public class Thesaurus implements Serializable{
     private static final long serialVersionUID = 3387639905758074640L;
     protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)"),
             similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
+    protected static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa]) (?=[AEIOUaeiou])"), "$1n ");
     public OrderedMap<CharSequence, GapShuffler<String>> mappings;
     public ArrayList<FakeLanguageGen.Alteration> alterations = new ArrayList<>(4);
     public SilkRNG rng;
-    public GapShuffler<String> plantTermShuffler, fruitTermShuffler, nutTermShuffler, flowerTermShuffler;
+    public GapShuffler<String> plantTermShuffler, fruitTermShuffler, nutTermShuffler, flowerTermShuffler,
+            potionTermShuffler;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
     public transient String latestGenerated = "Nationia";
     /**
@@ -93,6 +95,7 @@ public class Thesaurus implements Serializable{
         fruitTermShuffler.setRNG(rng, true);
         nutTermShuffler.setRNG(rng, true);
         flowerTermShuffler.setRNG(rng, true);
+        potionTermShuffler.setRNG(rng, true);
     }
     
     /**
@@ -232,6 +235,7 @@ public class Thesaurus implements Serializable{
         fruitTermShuffler = new GapShuffler<>(fruitTerms, rng, true);
         nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
         flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
+        potionTermShuffler = new GapShuffler<>(potionTerms, rng, true);
         return this;
     }
 
@@ -540,7 +544,7 @@ public class Thesaurus implements Serializable{
 
     /**
      * Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth".
-     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first. May use accented characters, as in
+     * May use accented characters, as in
      * "Thùdshù-Hyóttiálb Hegemony" or "The Glorious Chô Empire"; if you want to strip these out and replace accented
      * chars with their un-accented counterparts, you can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
      * returns a CharSequence that can be converted to String if needed. Shortly after calling this method, but before
@@ -559,6 +563,10 @@ public class Thesaurus implements Serializable{
      */
     public String makeNationName()
     {
+        if(!this.mappings.containsKey("empire`noun`"))
+        {
+            addKnownCategories();
+        }
         String working = process(rng.getRandomElement(nationTerms));
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
@@ -570,9 +578,9 @@ public class Thesaurus implements Serializable{
     }
     /**
      * Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth",
-     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
-     * called on this Thesaurus first. May use accented characters, as in "Thùdshù Hegemony" or "The Glorious Chô
-     * Empire", if the given language can produce them; if you want to strip these out and replace accented chars
+     * with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
+     * "Thùdshù Hegemony" or "The Glorious Chô Empire",
+     * if the given language can produce them; if you want to strip these out and replace accented chars
      * with their un-accented counterparts, you can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
      * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
      * calling {@link FakeLanguageGen#removeAccents()} on the FakeLanguageGen you would give this. This assigns the
@@ -590,6 +598,10 @@ public class Thesaurus implements Serializable{
      */
     public String makeNationName(FakeLanguageGen language)
     {
+        if(!this.mappings.containsKey("empire`noun`"))
+        {
+            addKnownCategories();
+        }
         String working = process(rng.getRandomElement(nationTerms));
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
@@ -602,8 +614,7 @@ public class Thesaurus implements Serializable{
 
     /**
      * Generates a random possible name for a plant or tree, such as "Ikesheha's maple" or "sugarleaf birch".
-     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
      * to String if needed. Shortly after calling this method, but before
@@ -636,8 +647,8 @@ public class Thesaurus implements Serializable{
     }
     /**
      * Generates a random possible name for a plant or tree, such as "Ikesheha's maple" or "sugarleaf birch",
-     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
+     * "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
      * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
@@ -668,8 +679,7 @@ public class Thesaurus implements Serializable{
 
     /**
      * Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date".
-     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
      * to String if needed. Shortly after calling this method, but before
@@ -702,8 +712,8 @@ public class Thesaurus implements Serializable{
     }
     /**
      * Generates a random possible name for a plant or tree, such as "green lime-melon" or "Ung's date",
-     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
+     * "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
      * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
@@ -734,8 +744,7 @@ public class Thesaurus implements Serializable{
 
     /**
      * Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew".
-     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
      * to String if needed. Shortly after calling this method, but before
@@ -768,8 +777,8 @@ public class Thesaurus implements Serializable{
     }
     /**
      * Generates a random possible name for a plant or tree, such as "nut of Gikoim" or "Pelyt's cashew",
-     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * with the FakeLanguageGen already available instead of randomly created.
+     * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
      * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
@@ -800,8 +809,7 @@ public class Thesaurus implements Serializable{
 
     /**
      * Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac".
-     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first.
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * May use accented characters, as in "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which returns a CharSequence that can be converted
      * to String if needed. Shortly after calling this method, but before
@@ -834,8 +842,8 @@ public class Thesaurus implements Serializable{
     }
     /**
      * Generates a random possible name for a plant or tree, such as "tulip of Jirui" or "Komert's thorny lilac",
-     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
-     * called on this Thesaurus first. May use accented characters, as in "Emôa's greenwood", if the given language can
+     * with the FakeLanguageGen already available instead of randomly created. May use accented characters, as in
+     * "Emôa's greenwood", if the given language can
      * produce them; if you want to strip these out and replace accented chars with their un-accented counterparts, you
      * can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
      * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
@@ -862,6 +870,30 @@ public class Thesaurus implements Serializable{
         KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
         Replacer replacer = Pattern.compile("@(-@)?").replacer(sub);
         return replacer.replace(working).replace("\t", "");
+    }
+
+    /**
+     * Generates a random possible description for a potion in a container, such as "a smoky glass flask containing a
+     * few drops of an orange tonic", "a milk carton filled with a red fluid", "a shining silver bottle filled with an
+     * effervescent violet potion", or "a wineskin filled with a black serum".
+     *
+     * @return a random description for a potion or other liquid in a container
+     */
+    public String makePotionDescription()
+    {
+        if(!this.mappings.containsKey("liquid`noun`"))
+        {
+            addKnownCategories();
+        }
+        if(potionTermShuffler == null)
+        {
+            potionTermShuffler = new GapShuffler<>(potionTerms, rng, true);
+        }
+        String working = process(potionTermShuffler.next());
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(potionTermShuffler.next());
+        return anReplacer.replace(working);
     }
 
     /**
@@ -1045,6 +1077,13 @@ public class Thesaurus implements Serializable{
             "shape`adj` flower`noun`",
             "color`adj` flower`noun`",
     };
+    private static final String[] potionTerms = new String[]{
+            "a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`",
+            "a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`",
+            "a calabash`adj` filled with a color`adj` liquid`noun`",
+            "a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`",
+            "a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`",
+    };
     public static final OrderedMap<String, ArrayList<String>> categories = makeOM(
             "calm`adj`",
             makeList("harmonious", "peaceful", "pleasant", "serene", "placid", "tranquil", "calm"),
@@ -1207,11 +1246,21 @@ public class Thesaurus implements Serializable{
             "flavor`adj`",
             makeList("sweet", "spicy", "sour", "bitter", "salty", "savory", "smoky"),
             "color`adj`",
-            makeList("black", "white", "red", "orange", "yellow", "green", "blue", "violet"),
+            makeList("black", "white", "red", "orange", "yellow", "green", "blue", "violet", "gray", "brown"),
             "shape`adj`",
             makeList("hollow", "tufted", "drooping", "fibrous", "giant", "miniature", "delicate", "hardy", "spiny", "thorny", "fragile", "sturdy", "long", "stubby", "stiff", "yielding"),
             "sensory`adj`",
             makeList("fragrant", "pungent", "rustling", "fuzzy", "glossy", "weeping", "rough", "smooth", "soft", "aromatic"),
+            "liquid`noun`",
+            makeList("liquid", "elixir", "tonic", "fluid", "brew", "broth", "potion", "serum"),
+            "liquid`adj`",
+            makeList("bubbling", "effervescent", "swirling", "murky", "thick", "congealing", "sloshing", "slimy", "milky"),
+            "bottle`noun`",
+            makeList("bottle", "flask", "vial", "jug", "phial", "flagon", "canister"),
+            "bottle`adj`",
+            makeList("clear glass", "smoky glass", "green glass", "brown glass", "fluted crystal", "tarnished silver", "dull pewter", "shining silver", "curvaceous glass", "rough-cut glass", "sharp-edged tin"),
+            "calabash`adj`",
+            makeList("hollow gourd", "calabash", "milk carton", "waterskin", "wineskin"),
             "smart`adj`",
             makeList("brilliant", "smart", "genius", "wise", "clever", "cunning", "mindful", "aware"),
             "smart`noun`",
