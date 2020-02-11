@@ -67,7 +67,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 140;
-    private int hashMode = 2, rngMode = 0, noiseMode = 130, otherMode = 1;//74;//118;//82;
+    private int hashMode = 2, rngMode = 0, noiseMode = 110, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -4668,7 +4668,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
 //                                bright = basicPrepare(beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f)); //0.61803398875
-                                bright = valueNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f);
+                                bright = (float) (ValueNoise.valueNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
