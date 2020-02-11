@@ -1,7 +1,7 @@
 package squidpony.squidmath;
 
 /**
- * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D.
+ * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D and 3D.
  * Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs about a third as many octaves as the
  * Simplex option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. It's
  * strongly encouraged to experiment with the lacunarity parameter in {@link Noise.Layered3D} and similar classes if you
@@ -67,10 +67,15 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
     
     
     public static double foamNoise(final double x, final double y, final double z, int seed) {
-        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;
-        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;
-        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;
-        final double p3 = x * 0.822283 + y * 0.467437 + z * -0.324582;
+        final double p0 = (x + y + z) * 0.5;
+        final double p1 = x - (y + z) * 0.25;
+        final double p2 = y - (x + z) * 0.25;
+        final double p3 = z - (x + y) * 0.25;
+////rotated version of above points on a tetrahedron; the ones below are "more correct" but more complex (and slower?)       
+//        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;
+//        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;
+//        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;
+//        final double p3 = x * 0.822283 + y * 0.467437 + z * -0.324582;
         double xin = p1;
         double yin = p2;
         double zin = p3;
