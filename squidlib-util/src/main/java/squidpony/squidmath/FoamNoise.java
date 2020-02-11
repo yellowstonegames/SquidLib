@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import static squidpony.squidmath.ValueNoise.valueNoise;
+
 /**
  * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D and 3D.
  * Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs about a third as many octaves as the
@@ -12,7 +14,7 @@ package squidpony.squidmath;
  * <a href="https://i.imgur.com/5FTjEIR.gifv">3D FoamNoise animated over time, one octave</a>,
  * <a href="https://i.imgur.com/ktCTiIK.jpg">World map made using FoamNoise</a>.
  */
-public class FoamNoise implements Noise.Noise2D, Noise.Noise3D {
+public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
     public static final FoamNoise instance = new FoamNoise();
     
     public int seed = 0xD1CEBEEF;
@@ -64,8 +66,8 @@ x * 0.139640 + y * -0.304485 + z * 0.942226;
 x * -0.185127 + y * -0.791704 + z * -0.582180;
 x * -0.776796 + y * 0.628752 + z * -0.035464;
      */
-    
-    
+
+
     public static double foamNoise(final double x, final double y, final double z, int seed) {
         final double p0 = (x + y + z) * 0.5;
         final double p1 = x - (y + z) * 0.25;
@@ -106,61 +108,56 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 
-    private static double valueNoise(int seed, double x, double y)
-    {
-        int xFloor = x >= 0.0 ? (int) x : (int) x - 1;
-        x -= xFloor;
-        x *= x * (3.0 - 2.0 * x);
-        int yFloor = y >= 0.0 ? (int) y : (int) y - 1;
-        y -= yFloor;
-        y *= y * (3.0 - 2.0 * y);
-        xFloor *= 0xD1B55;
-        yFloor *= 0xABC99;
-        return ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, seed))
-                + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * (0x1.010101010101p-10);
-    }
+    public static double foamNoise(final double x, final double y, final double z, final double w, int seed) {
+        final double p0 = (x + y + z + w);
+        final double p1 = x - (y + z + w);
+        final double p2 = y - (x + z + w);
+        final double p3 = z - (x + y + w);
+        final double p4 = w - (x + y + z);
+////rotated version of above points on a tetrahedron; the ones below are "more correct" but more complex (and slower?)       
+//        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;
+//        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;
+//        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;
+//        final double p3 = x * 0.822283 + y * 0.467437 + z * -0.324582;
+        double xin = p1;
+        double yin = p2;
+        double zin = p3;
+        double win = p4;
+        final double a = valueNoise(seed, xin, yin, zin, win);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p2;
+        zin = p3;
+        win = p4;
+        final double b = valueNoise(seed, xin - a, yin - a, zin + a, win + a);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p3;
+        win = p4;
+        final double c = valueNoise(seed, xin + b, yin - b, zin + b, win - b);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p4;
+        final double d = valueNoise(seed, xin + c, yin + c, zin - c, win - c);
+        seed += 0x9E3779BD;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        final double e = valueNoise(seed, xin - d, yin + d, zin - d, win + d);
 
-    //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
-    //// they should normally be used for the 3D version of R2, but we only use 2 of the 3 constants
-    //x should be premultiplied by 0xD1B55
-    //y should be premultiplied by 0xABC99
-    private static int hashPart1024(final int x, final int y, int s) {
-        s += x ^ y;
-        return (s >>> 3 ^ s >>> 10) & 0x3FF;
-    }
-
-    private static double valueNoise(int seed, double x, double y, double z)
-    {
-        int xFloor = x >= 0.0 ? (int) x : (int) x - 1;
-        x -= xFloor;
-        x *= x * (3.0 - 2.0 * x);
-        int yFloor = y >= 0.0 ? (int) y : (int) y - 1;
-        y -= yFloor;
-        y *= y * (3.0 - 2.0 * y);
-        int zFloor = z >= 0.0 ? (int) z : (int) z - 1;
-        z -= zFloor;
-        z *= z * (3.0 - 2.0 * z);
-        //0xDB4F1, 0xBBE05, 0xA0F2F
-        xFloor *= 0xDB4F1;
-        yFloor *= 0xBBE05;
-        zFloor *= 0xA0F2F;
-        return ((1.0 - z) *
-                ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor, zFloor, seed))
-                        + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xBBE05, zFloor, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor + 0xBBE05, zFloor, seed)))
-                + z * 
-                ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor, zFloor + 0xA0F2F, seed)) 
-                        + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed)))
-                ) * (0x1.010101010101p-10);
-    }
-
-    //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
-    //// they should normally be used for the 4D version of R2, but we only use 3 of the 4 constants
-    //x should be premultiplied by 0xDB4F1
-    //y should be premultiplied by 0xBBE05
-    //z should be premultiplied by 0xA0F2F
-    private static int hashPart1024(final int x, final int y, final int z, int s) {
-        s += x ^ y ^ z;
-        return (s >>> 3 ^ s >>> 10) & 0x3FF;
+        final double result = (a + b + c + d + e) * 0.2;
+        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 
     @Override
@@ -178,5 +175,13 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
     @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
         return foamNoise(x, y, z, (int) (seed ^ seed >>> 32));
+    }
+    @Override
+    public double getNoise(double x, double y, double z, double w) {
+        return foamNoise(x, y, z, w, seed);
+    }
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
+        return foamNoise(x, y, z, w, (int) (seed ^ seed >>> 32));
     }
 }
