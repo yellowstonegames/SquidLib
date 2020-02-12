@@ -9,18 +9,18 @@ import squidpony.Thesaurus;
  */
 public class ThesaurusTest {
     public static void main(String[] args) {
-        Thesaurus thesaurus = new Thesaurus("SquidLib!"), thesaurus2  = new Thesaurus("SQUID! LIB!");
-//        Thesaurus thesaurus2  = new Thesaurus();
+        Thesaurus thesaurus  = new Thesaurus("SQUID! LIB!");
+//        Thesaurus thesaurus = new Thesaurus();
 //        thesaurus.addSynonyms(makeList("devil", "fiend", "demon", "horror", "abomination", "terror", "hellspawn"));
 //        thesaurus.addSynonyms(makeList("despoiler", "defiler", "blighter", "poisoner"));
-//        thesaurus2.addKnownCategories().addFakeWords();
+//        thesaurus.addKnownCategories().addFakeWords();
 //        for (int i = 0; i < 12; i++) {
 //            //System.out.println(
 //            //        thesaurus.process("You fiend! You demon! You despoiler of creation; devil made flesh!"));
 //            //System.out.println(
-//            //        thesaurus2.process("The small state of Ru`gen` in the Empire`noun` of Fr`gen`, ruled by Duke`noun` So`mod`gen`."));
+//            //        thesaurus.process("The small state of Ru`gen` in the Empire`noun` of Fr`gen`, ruled by Duke`noun` So`mod`gen`."));
 //            System.out.println(
-//                    thesaurus2.process("Calm`adj` Org`noun`\n"+
+//                    thesaurus.process("Calm`adj` Org`noun`\n"+
 //                            "Fancy`adj` Fr`gen` Empire`noun`\n"+
 //                            "Ar`jp`gen` Militia`noun`\n"+
 //                            "Lethal`noun` Blade`noun`\n"+
@@ -39,11 +39,11 @@ public class ThesaurusTest {
 //        }
 //        System.out.println();
 //        for (int i = 0; i < 10; i++) {
-//            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.JAPANESE_ROMANIZED));
-//            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.FRENCH)            );
-//            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.NAHUATL)           );
-//            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.INUKTITUT)         );
-//            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.MONGOLIAN)         );
+//            System.out.println(thesaurus.makeNationName(FakeLanguageGen.JAPANESE_ROMANIZED));
+//            System.out.println(thesaurus.makeNationName(FakeLanguageGen.FRENCH)            );
+//            System.out.println(thesaurus.makeNationName(FakeLanguageGen.NAHUATL)           );
+//            System.out.println(thesaurus.makeNationName(FakeLanguageGen.INUKTITUT)         );
+//            System.out.println(thesaurus.makeNationName(FakeLanguageGen.MONGOLIAN)         );
 //        }
 //        System.out.println();
 //        String[] ozzes = new String[] {
@@ -62,31 +62,37 @@ public class ThesaurusTest {
 //        String oz = StringKit.join("", ozzes);
 //        System.out.println(Thesaurus.ORK.process(oz));
 //        System.out.println();
-        thesaurus2.addKnownCategories();
+        thesaurus.addKnownCategories();
         StringBuilder text = new StringBuilder("The elixir you desire is no simple matter to brew. I would require many ingredients, most rare or exotic, to even begin to craft this tonic. If you remain undaunted... I require ");
-        thesaurus2.refresh(thesaurus2.rng.nextLong());
+        thesaurus.refresh(thesaurus.rng.nextLong());
         FakeLanguageGen lang = FakeLanguageGen.mixAll(FakeLanguageGen.GREEK_ROMANIZED, 4, FakeLanguageGen.SIMPLISH, 2, FakeLanguageGen.MALAY, 1);
         for (int i = 0; i < 10; i++) {
-            text.append(thesaurus2.lookup("leaf`noun`")).append(" of ").append(thesaurus2.makePlantName(lang)).append(", ");
+            text.append(thesaurus.lookup("leaf`noun`")).append(" of ").append(thesaurus.makePlantName(lang)).append(", ");
         }
-        text.append("and ").append(thesaurus2.lookup("leaf`noun`")).append(" of ").append(thesaurus2.makePlantName(lang)).append(". Bring me this before the winter equinox and you shall have your potion.")
-                .append(" Look for ").append(thesaurus2.makePotionDescription()).append(", or maybe ")
-                .append(thesaurus2.makePotionDescription()).append(", if you're lucky.")
-                .append("\n...Oh, and could you also pick me up a ").append(thesaurus2.makeFruitName(lang)).append(", maybe a ").append(thesaurus2.makeFruitName(lang))
-                .append(", uh, a ").append(thesaurus2.makeNutName(lang)).append(", a ").append(thesaurus2.makeNutName(lang))
-                .append(", a ").append(thesaurus2.makeFlowerName(lang)).append(", and maybe a ").append(thesaurus2.makeFlowerName(lang)).append(", if it's not too much trouble.");
+        text.append("and ").append(thesaurus.lookup("leaf`noun`")).append(" of ").append(thesaurus.makePlantName(lang)).append(". Bring me this before the winter equinox and you shall have your potion.")
+//                .append(" Look for ").append(thesaurus.makePotionDescription()).append(", or maybe ")
+//                .append(thesaurus.makePotionDescription()).append(", if you're lucky.")
+                .append("\n...Oh, and could you also pick me up a ").append(thesaurus.makeFruitName(lang)).append(", maybe a ").append(thesaurus.makeFruitName(lang))
+                .append(", uh, a ").append(thesaurus.makeNutName(lang)).append(", a ").append(thesaurus.makeNutName(lang))
+                .append(", a ").append(thesaurus.makeFlowerName(lang)).append(", and maybe a ").append(thesaurus.makeFlowerName(lang)).append(", if it's not too much trouble.");
 //        System.out.println(text);
+        text.append("\nYou have slain the ").append(FakeLanguageGen.DEMONIC.word(thesaurus.rng, true))
+                .append("!\nYou loot its body, and find ")
+                .append(thesaurus.makePotionDescription()).append(", ")
+                .append(thesaurus.makePotionDescription()).append(", ")
+                .append(thesaurus.makePotionDescription()).append(", and ")
+                .append(thesaurus.makePotionDescription()).append(".");
         for(String s : StringKit.wrap(text, 80))
         {
             System.out.println(s);
         }
 //        for (int i = 0; i < 10; i++) {
-//            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );
-//            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );
-//            System.out.println(FakeLanguageGen.removeAccents(thesaurus2.makePlantName())    );
-//            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.JAPANESE_ROMANIZED));
-//            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.MALAY)             );
-//            System.out.println(thesaurus2.makePlantName(FakeLanguageGen.SIMPLISH)          );
+//            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())    );
+//            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())    );
+//            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())    );
+//            System.out.println(thesaurus.makePlantName(FakeLanguageGen.JAPANESE_ROMANIZED));
+//            System.out.println(thesaurus.makePlantName(FakeLanguageGen.MALAY)             );
+//            System.out.println(thesaurus.makePlantName(FakeLanguageGen.SIMPLISH)          );
 //        }
     }
 }

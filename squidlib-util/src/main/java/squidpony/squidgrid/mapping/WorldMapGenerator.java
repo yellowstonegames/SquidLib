@@ -4702,6 +4702,11 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         @Override
+        public int wrapX(final int x, final int y)  {
+            return Math.max(0, Math.min(x, width - 1));
+        }
+
+        @Override
         public int wrapY(final int x, final int y)  {
             return Math.max(0, Math.min(y, height - 1));
         }
@@ -4739,13 +4744,13 @@ public abstract class WorldMapGenerator implements Serializable {
                     ps, pc,
                     qs, qc,
                     h, temp,
-                    i_w = 1.0 / width, i_h = 1.0 / (height),
-                    i_uw = usedWidth * i_w * i_w, i_uh = usedHeight * i_h * i_h, xPos, yPos = startY * i_h;
+                    i_w = 1.0 / width, i_h = 1.0 / (height),  ii = Math.max(i_w, i_h),
+                    i_uw = usedWidth * i_w * ii, i_uh = usedHeight * i_h * ii, xPos, yPos = startY * i_h;
             for (int y = 0; y < height; y++, yPos += i_uh) { 
                 xPos = startX * i_w;
-                for (int x = 0, xt = 0; x < width; x++, xPos += i_uw) {
-                    xPositions[x][y] = (xPos - .5) * 2.0;
-                    yPositions[x][y] = (yPos - .5) * 2.0;
+                for (int x = 0; x < width; x++, xPos += i_uw) {
+                    xPositions[x][y] = xPos;
+                    yPositions[x][y] = yPos;
                     zPositions[x][y] = 0.0;
                     heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(xPos +
                                     terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,
