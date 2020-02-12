@@ -33,9 +33,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 256, height = 256; // localMimic
 //    private static final int width = 512, height = 256; // mimic, elliptical
 //    private static final int width = 1024, height = 512; // mimic, elliptical
-    private static final int width = 2048, height = 1024; // mimic, elliptical
+//    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
-    private static final int LIMIT = 6;
+    private static final int width = 1200, height = 400; // space view
+    private static final int LIMIT = 10;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -85,10 +86,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
 //        path = "out/worlds/" + date + "/Hyperellipse/";
-        path = "out/worlds/" + date + "/HyperellipseFoam/";
+//        path = "out/worlds/" + date + "/HyperellipseFoam/";
 //        path = "out/worlds/" + date + "/Tiling/";
 //        path = "out/worlds/" + date + "/RoundSide/";
 //        path = "out/worlds/" + date + "/Local/";
+        path = "out/worlds/" + date + "/LocalSquat/";
 //        path = "out/worlds/" + date + "/LocalMimic/";
 //        path = "out/worlds/" + date + "/EllipseHammer/";
         
@@ -131,8 +133,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.75, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+        world = new WorldMapGenerator.LocalMap(seed, width, height, new Noise.Layered2D(FoamNoise.instance, 2, 3.125, 0.7), 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new Noise.Layered3D(FoamNoise.instance, 2, 3.125, 0.7), 0.6, 0.03125, 2.5);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new Noise.Layered3D(FoamNoise.instance, 2, 3.125, 0.7), 0.6, 0.03125, 2.5);
         //parameters used above:
         //new Noise.Layered3D(FoamNoise.instance, 2, 3.125, 0.7)
         // FoamNoise with default seed
