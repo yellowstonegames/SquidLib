@@ -35,7 +35,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1024, height = 512; // mimic, elliptical
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
-    private static final int width = 1200, height = 400; // space view
+    private static final int width = 1200, height = 400; // squat
     private static final int LIMIT = 10;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
