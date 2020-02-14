@@ -696,7 +696,19 @@ public class HashQualityTest {
         y = y << 1 ^ y >> 31;
         x += ((x >= y ? x * x + x + x - y : y * y + x) ^ 0xD1B54A35) * 0x9E375 + y;
         return x ^ x >>> 11 ^ x << 15;
-//        return ((x >= y ? (x + 2) * x - y : y * y + x) ^ 0xD1B54A35) * 0x9E375 ^ 0x9E3779B9;
+    }
+
+    public static int rosenbergStrong3D(int x, int y, int z)
+    {
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+//        z = z << 1 ^ z >> 31;
+//        int n = (x >= y ? x * x + x + x - y : y * y + x);
+//        x += ((n >= z ? n * n + n + n - z : z * z + n) ^ 0xD1B54A35) * 0x9E375 + y + z;
+//        return x ^ x >>> 11 ^ x << 15;
+        return 0xABC9B * (0x8CBA5 * (0x346D5 * x + y ^ 0xD1B54A33) + z ^ 0xABC98389) ^ 0x8CB92BA7;
+        // the commented out one below is better, but doesn't work on GWT
+//        return 0x8CB92BA7 * (0xABC98389 * (0xD1B54A33 * x + y) + z);
     }
     public static int szudzik2Coord(int x, int y)
     {
@@ -1003,7 +1015,7 @@ public class HashQualityTest {
     // This one takes a while to run; be advised.
     @Test
     public void testCoord3() {
-        final int[] params = ArrayTools.range(8, 18);// new int[]{33, 65, 129, 257, 513};
+        final int[] params = ArrayTools.range(8, 14);// new int[]{33, 65, 129, 257, 513};
 //        final int[] params = new int[]{64, 128, 256, 512};
         long baseTotal = 0L, objeTotal = 0L, peloTotal = 0L, hastTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L,
                 baseBest = 1000000L,
@@ -1056,7 +1068,9 @@ public class HashQualityTest {
                                     colliderPelo.put(peloton3D(x, y, z) & restrict, 0.0);
                                     colliderSzud.put(szudzikCoord(z, szudzikCoord(x, y)) & restrict, 0.0);
                                     colliderCant.put(cantorCoord(z, cantorCoord(x, y)) & restrict, 0.0);
-                                    colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
+                                    colliderHast.put(rosenbergStrong3D(x, y, z) & restrict, 0.0);
+//                                    colliderHast.put(rosenbergStrongCoord(z, rosenbergStrongCoord(x, y)) & restrict, 0.0);
+//                                    colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
                                     colliderObje.put(Objects.hash(x, y, z) & restrict, 0.0);
 //                            for (int i = 0; i < 31; i++) {
 //                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
@@ -1109,7 +1123,7 @@ public class HashQualityTest {
             System.out.println("INTERMEDIATE Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
             System.out.println("INTERMEDIATE Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
             System.out.println("INTERMEDIATE Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
-            System.out.println("INTERMEDIATE Hast collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
+            System.out.println("INTERMEDIATE RoSt collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
             System.out.println("INTERMEDIATE Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 
         }
@@ -1118,7 +1132,7 @@ public class HashQualityTest {
         System.out.println("TOTAL Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
         System.out.println("TOTAL Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
         System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
-        System.out.println("TOTAL Hast collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
+        System.out.println("TOTAL RoSt collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
         System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
