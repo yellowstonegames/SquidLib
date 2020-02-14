@@ -1954,6 +1954,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Removes all "on" cells from (startX, startY) inclusive 
+     * to (startX+rectangleWidth, startY+rectangleHeight) exclusive, removing a total width of rectangleWidth and a
+     * total height of rectangleHeight in cells.
+     * @param startX left side x-coordinate
+     * @param startY top side (or bottom if positive y is up) y-coordinate
+     * @param rectangleWidth how many cells wide the area to remove is
+     * @param rectangleHeight how many cells tal the area to remove is
+     * @return this, after modification, for chaining
+     */
     public GreasedRegion removeRectangle(int startX, int startY, int rectangleWidth, int rectangleHeight)
     {
         if(startX < 0)

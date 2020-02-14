@@ -266,38 +266,34 @@ public class Technique implements Serializable {
      * @param resistanceMap a 2D double array where walls are 1.0 and other values are less; often produced by {@link DungeonUtility#generateSimpleResistances(char[][])}
      * @return all possible Coord values that can be used as targets for this Technique from the given starting Coord, as a GreasedRegion
      */
-    public GreasedRegion possibleTargets(Coord user, double[][] resistanceMap)
-    {
-        if(aoe.getMaxRange() <= 0) return new GreasedRegion(user, dungeon.length, dungeon[0].length);
+    public GreasedRegion possibleTargets(Coord user, double[][] resistanceMap) {
+        if (aoe.getMaxRange() <= 0) return new GreasedRegion(user, dungeon.length, dungeon[0].length);
         double[][] fovmap = new double[dungeon.length][dungeon[0].length];
         FOV.reuseFOV(resistanceMap, fovmap, user.x, user.y, aoe.getMaxRange(), aoe.getMetric());
         double rangeBound = 1.0001 - ((double) aoe.getMinRange() / aoe.getMaxRange());
         AimLimit limit = aoe.getLimitType();
-        if(limit == null) limit = AimLimit.FREE;
-        switch (limit)
-        {
-            case ORTHOGONAL:
+        if (limit == null) limit = AimLimit.FREE;
+        switch (limit) {
+            case ORTHOGONAL: {
+                // Thanks, SillyNameRandomNumber, for finding this fix
                 return new GreasedRegion(fovmap, 0.0001, rangeBound)
-                        .removeRectangle(0, 0, user.x - 1, user.y - 1)
-                        .removeRectangle(0, user.y + 1, user.x - 1, dungeon[0].length - user.y - 1)
-                        .removeRectangle(user.x + 1, 0, dungeon.length - user.x - 1, user.y - 1)
+                        .removeRectangle(0, 0, user.x, user.y)
+                        .removeRectangle(0, user.y + 1, user.x, dungeon[0].length - user.y - 1)
+                        .removeRectangle(user.x + 1, 0, dungeon.length - user.x - 1, user.y)
                         .removeRectangle(user.x + 1, user.y + 1, dungeon.length - user.x - 1, dungeon[0].length - user.y - 1);
-            case DIAGONAL:
-            {
+            }
+            case DIAGONAL: {
                 GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);
-                for(Coord c : all)
-                {
-                    if(Math.abs(c.x - user.x) == Math.abs(c.y - user.y))
+                for (Coord c : all) {
+                    if (Math.abs(c.x - user.x) == Math.abs(c.y - user.y))
                         used.insert(c);
                 }
                 return used;
             }
-            case EIGHT_WAY:
-            {
+            case EIGHT_WAY: {
                 GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);
-                for(Coord c : all)
-                {
-                    if(Math.abs(c.x - user.x) == Math.abs(c.y - user.y) || c.x == user.x || c.y == user.y)
+                for (Coord c : all) {
+                    if (Math.abs(c.x - user.x) == Math.abs(c.y - user.y) || c.x == user.x || c.y == user.y)
                         used.insert(c);
                 }
                 return used;
@@ -305,6 +301,5 @@ public class Technique implements Serializable {
             default:
                 return new GreasedRegion(fovmap, 0.0001, rangeBound);
         }
-
     }
 }
