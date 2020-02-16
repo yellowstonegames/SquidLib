@@ -81,7 +81,7 @@ public class ShufflerTest {
     @Test
     public void testLSSBounds()
     {
-        for (int i = 2; i <= 42; i++) {
+        for (int i = 3; i <= 80; i += 7) {
             LowStorageShuffler lss = new LowStorageShuffler(i, 31337);
             System.out.printf("Bound %02d: %d", i, lss.next());
             for (int j = 1; j < i; j++) {
@@ -137,7 +137,7 @@ public class ShufflerTest {
     @Test
     public void testSNBounds()
     {
-        for (int i = 3; i <= 42; i++) {
+        for (int i = 3; i <= 80; i += 7) {
             SwapOrNotShuffler sn = new SwapOrNotShuffler(i, 31337 + i);
             System.out.printf("Bound %02d: %d", i, sn.next());
             for (int j = 1; j < i; j++) {

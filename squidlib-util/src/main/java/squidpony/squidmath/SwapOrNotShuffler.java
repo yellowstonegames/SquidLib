@@ -35,9 +35,9 @@ import java.io.Serializable;
 public class SwapOrNotShuffler implements Serializable {
     private static final long serialVersionUID = 1L;
     public final int bound;
-    protected static final int ROUNDS = 6;
+    protected final int ROUNDS;
     protected int index;
-    protected final int[] keys = new int[ROUNDS];
+    protected final int[] keys;
     protected int func;
     /**
      * Constructs a SwapOrNotShuffler with a random seed and a bound of 10.
@@ -62,7 +62,9 @@ public class SwapOrNotShuffler implements Serializable {
     public SwapOrNotShuffler(int bound, int seed)
     {
         // initialize our state
-        this.bound = bound;
+        this.bound = Math.max(1, bound);
+        ROUNDS = this.bound + 4;
+        keys = new int[ROUNDS];
         restart(seed);
     }
 
@@ -152,10 +154,14 @@ public class SwapOrNotShuffler implements Serializable {
      */
     public int encode(int index)
     {
+        int f = func ^ func >>> 13;
         for (int i = 0; i < ROUNDS; i++) { 
             int key = keys[i] - index;
             key += (key >> 31 & bound);
-            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            // (f ^ func >>> (f += i)) is a very special piece of code.
+            // it takes the current value of f and XORs it with a shifted version of func; the shift is unusual.
+            // to do the shift, it adds the current round counter i to f, and then uses the bottom 5 bits as the shift.
+            if(((f ^ func >>> (f += i)) + Math.max(index, key) & 1) == 0) index = key;
         }
         return index;
     }
