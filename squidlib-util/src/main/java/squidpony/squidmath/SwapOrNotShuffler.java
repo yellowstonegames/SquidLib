@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
- * of the sequence in memory. Uses a Swap-Or-Not shuffle with 6 rounds on a non-power-of-two domain (0 inclusive to
+ * of the sequence in memory. Uses a Swap-Or-Not shuffle with many rounds on a non-power-of-two domain (0 inclusive to
  * bound exclusive), as described in <a href="https://arxiv.org/abs/1208.1176">this paper by Viet Tung Hoang, Ben
  * Morris, and Phillip Rogaway</a>. The API is very simple; you construct a SwapOrNotShuffler by specifying how many
  * items it can shuffle, and you can optionally use a seed (it will be random if you don't specify a seed). Call
@@ -15,18 +15,19 @@ import java.io.Serializable;
  * different seed (the bound is fixed).
  * <br>
  * This class is extremely similar to {@link LowStorageShuffler}; both classes are optimized for usage on GWT but
- * SwapOrNotShuffler is meant to have higher quality in general. LowStorageShuffler sometimes performs better (when the
- * bound is equal to or just less than a power of 4), but often performs much worse (when the bound is just a little
- * more than a power of 4), while SwapOrNotShuffler has steady performance that has an expected-case near the best-case
- * of LowStorageShuffler. There's also {@link ShuffledIntSequence}, which extends LowStorageShuffler and uses different
- * behavior so it "re-shuffles" the results when all results have been produced, and {@link SNShuffledIntSequence},
- * which extends this class but is otherwise like ShuffledIntSequence.
+ * SwapOrNotShuffler is meant to have higher quality in general at the expense of speed. LowStorageShuffler performs
+ * better when the bound is small, though this performance fluctuates based on how much lower the bound is than the
+ * next-highest power of four. There's also {@link ShuffledIntSequence}, which extends LowStorageShuffler and uses
+ * different behavior so it "re-shuffles" the results when all results have been produced, and
+ * {@link SNShuffledIntSequence}, which extends this class but is otherwise like ShuffledIntSequence. In most cases,
+ * LowStorageShuffler is a better choice than this class, especially for large bounds.
  * <br>
- * Don't use this for cryptographic purposes; it uses too-few rounds, the "function" is probably as insecure as it gets,
- * and in this version there are only 2 to the 32 possible keys, which would make a brute-force attack trivial. It seems
- * good enough for generating shuffles for domains with unusual small sizes when the purpose is game-related, and not
- * anything too serious. While the Swap-or-Not Shuffle algorithm is capable of strong security guarantees, this
- * implementation emphasizes speed and does not offer any hope of security against a competent attacker.
+ * Don't use this for cryptographic purposes; even though this uses a lot of rounds, it may still not be enough, the
+ * "function" is probably as insecure as it gets, and in this version there are only 2 to the 32 possible keys, which
+ * would make a brute-force attack trivial. It seems good enough for generating shuffles for domains with unusual small
+ * sizes when the purpose is game-related, and not anything too serious. While the Swap-or-Not Shuffle algorithm is
+ * capable of strong security guarantees, this implementation emphasizes speed and does not offer any hope of security
+ * against a competent attacker.
  * <br>
  * Created by Tommy Ettinger on 10/1/2018.
  * @author Viet Tung Hoang, Ben Morris, and Phillip Rogaway
