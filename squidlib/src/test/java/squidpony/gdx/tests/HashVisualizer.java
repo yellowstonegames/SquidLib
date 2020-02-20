@@ -4958,7 +4958,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = (BlueNoise.get(xx, yy) + 128) / 255f;
-                                back[x][y] = getGray(bright);
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;

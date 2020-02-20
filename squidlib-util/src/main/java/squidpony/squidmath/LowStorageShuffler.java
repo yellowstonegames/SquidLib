@@ -19,18 +19,14 @@ import java.io.Serializable;
  * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
  * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
  * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
- * randomness slightly. The {@link #round(int, int)} method used here acts like {@link Coord#hashCode()}, but with two
- * small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this
+ * randomness slightly. The {@link #round(int, int)} method used here acts like an unbalanced, irreversible PRNG with
+ * two states, and that turns out to be just fine for a Feistel network. Using 4 rounds turns out to be overkill in this
  * case. This also uses a different seed for each round.
  * <br>
  * This class is extremely similar to {@link SwapOrNotShuffler}; both are optimized for usage on GWT but
- * SwapOrNotShuffler is meant to have higher quality in general. SwapOrNotShuffler also performs much better for some
- * values of bound; this class slows down drastically when bound is just slightly more than a power of 4, but can be
- * slightly faster when bound is equal to a power of 4. There's also {@link ShuffledIntSequence}, which extends this
- * class and uses different behavior so it "re-shuffles" the results when all results have been produced, and
- * {@link SNShuffledIntSequence}, which extends SwapOrNotShuffler but is otherwise like ShuffledIntSequence.
- * SwapOrNotShuffler should usually be preferred over this class when the bound is unknown or known to be a problem for
- * this class.
+ * SwapOrNotShuffler is meant to have higher quality in general, and performs many more rounds of encoding when the
+ * bound is large (which is slow). There's also {@link ShuffledIntSequence}, which extends this class and uses different
+ * behavior so it "re-shuffles" the results when all results have been produced.
  * <br>
  * Created by Tommy Ettinger on 9/22/2018.
  * @author Alan Wolfe
@@ -130,9 +126,15 @@ public class LowStorageShuffler implements Serializable {
         index = 0;
     }
 
+    /**
+     * Used to rearrange the bits of seeds this is given in a way that should partly randomize them.
+     * A high-quality 32-bit input, 32-bit output unary hash is pretty hard to find.
+     * @param z any int
+     * @return a pseudo-random but deterministic change of z
+     */
     public static int determine(int z)
     {
-        return (z = ((z = ((z = ((z *= 0xBDEAD) ^ z >>> 13) * 0x7FFFF) ^ z >>> 12) * 0x1FFFF) ^ z >>> 14) * 0x1FFF) ^ z >>> 15;
+        return (z = ((z = ((z = (z ^ 0xC1C64E6D) * 0xDAB) ^ z >>> 13 ^ 0x9E3779B9) * 0x7FFFF) ^ z >>> 12) * 0x1FFFF) ^ z >>> 15;
 
     }    
     /**
@@ -151,22 +153,24 @@ public class LowStorageShuffler implements Serializable {
 
     /**
      * An irreversible mixing function that seems to give good results; GWT-compatible.
-     * This is mostly the same as {@link Coord#hashCode()}, with data acting like x and seed acting like y, but also
-     * includes two small multiplications (each by 16-bit numbers, which doesn't risk GWT safety). The algorithm is a
-     * little complicated, and is much like the 32-bit xoroshiro variant used by {@link Lathe32RNG}, but changes any
-     * additive operations to use XOR. Less involved schemes did not do well at all. There's four bitwise rotations and
-     * two multiplications used here, plus several XOR and bitwise shift operations.
+     * This is similar to {@link SilkRNG}'s way of combining two states, but because this doesn't need to be reversible
+     * or even evenly distributed, it has been significantly simplified. It uses one int multiplication, two additions,
+     * two subtractions, two XORs, two unsigned right shifts, and one signed right shift. 
      * @param data the data being ciphered
      * @param seed the current seed
      * @return the ciphered data
      */
     public int round(int data, int seed)
     {
+        final int s = seed + data;
+        final int x = (s ^ s >>> 17) * (seed - data + 0x9E3779BB >> 12) - s;
+        return x ^ x >>> 15;
         
-        seed ^= data * 0xBCFD;
-        seed ^= (data << 13 | data >>> 19) ^ (seed << 5) ^ (seed << 28 | seed >>> 4);
-        data ^= (seed << 11 | seed >>> 21) * 0xC6D5;
-        return data ^ (data << 25 | data >>> 7);
+        ////used earlier, similar to Coord.xoroHashCode(int, int)
+        //seed ^= data * 0xBCFD;
+        //seed ^= (data << 13 | data >>> 19) ^ (seed << 5) ^ (seed << 28 | seed >>> 4);
+        //data ^= (seed << 11 | seed >>> 21) * 0xC6D5;
+        //return data ^ (data << 25 | data >>> 7);
 
 //        seed ^= data * 0xC6D5 + 0xB531A935;
 //        data ^= seed * 0xBCFD + 0x41C64E6D;
