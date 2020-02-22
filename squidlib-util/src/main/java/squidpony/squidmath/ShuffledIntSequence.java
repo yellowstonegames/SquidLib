@@ -20,8 +20,8 @@ import java.io.Serializable;
  * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
  * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
  * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
- * randomness slightly. The {@link #round(int, int)} method used here acts like {@link Coord#hashCode()}, but with two
- * small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this
+ * randomness slightly. The {@link #round(int, int)} method used here acts like SilkRNG's way of mixing two states, but
+ * here changed to be irreversible and unbalanced (which is fine here). Using 4 rounds turns out to be overkill in this
  * case. This also uses a different seed for each round.
  * <br>
  * This class extends {@link LowStorageShuffler}, changing it from producing a unique set of ints once, to producing
