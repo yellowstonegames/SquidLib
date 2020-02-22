@@ -160,7 +160,7 @@ public class LowStorageShuffler implements Serializable {
      * @param seed the current seed
      * @return the ciphered data
      */
-    public int round(int data, int seed)
+    public static int round(int data, int seed)
     {
         final int s = seed + data;
         final int x = (s ^ s >>> 17) * (seed - data + 0x9E3779BB >> 12) - s;

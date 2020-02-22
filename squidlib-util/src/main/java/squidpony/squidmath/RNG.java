@@ -1243,12 +1243,11 @@ public class RNG implements Serializable, IRNG {
 
     /**
      * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
-     * it can, and then returns output. Will only use a given position in the given data at most once; uses the
-     * Swap-Or-Not Shuffle to accomplish this without allocations. Internally, makes 1 call to {@link #nextInt()} and
-     * 6 calls to {@link #nextSignedInt(int)}, regardless of the data being randomized. It will get progressively less
-     * random as output gets larger.
+     * it can, and then returns output. Will only use a given position in the given data at most once; uses a Feistel
+     * Network to accomplish this without allocations. Internally, makes 2 calls to {@link #nextInt()}, regardless of
+     * the data being randomized.
      * <br>
-     * Uses approximately the same code as {@link SwapOrNotShuffler}, but without any object or array allocations.
+     * Uses approximately the same code as {@link LowStorageShuffler}, but without any object or array allocations.
      *
      * @param data   an array of T; will not be modified.
      * @param output an array of T that will be overwritten; should always be instantiated with the portion length
@@ -1257,33 +1256,41 @@ public class RNG implements Serializable, IRNG {
      */
     @Override
     public <T> T[] randomPortion(T[] data, T[] output) {
-        final int length = data.length, n = Math.min(length, output.length),
-                func = nextInt(),
-                a = nextSignedInt(length), b = nextSignedInt(length), c = nextSignedInt(length),
-                d = nextSignedInt(length), e = nextSignedInt(length), f = nextSignedInt(length);
-        int key, index;
+        final int length = data.length, n = Math.min(length, output.length);
+        // calculate next power of 4.  Needed since the balanced Feistel network needs
+        // an even number of bits to work with
+        int pow4 = HashCommon.nextPowerOfTwo(length);
+        if((pow4 & 0x55555554) == 0)
+            pow4 = HashCommon.nextPowerOfTwo(pow4);
+        pow4--;
+        // calculate our left and right masks to split our indices for the Feistel network
+        final int halfBits = Integer.bitCount(pow4) >>> 1;
+        final int rightMask = pow4 >>> halfBits;
+        final int leftMask = pow4 ^ rightMask;
+        final int key0 = nextInt(), key1 = nextInt();
+        int index = 0;
         for (int i = 0; i < n; i++) {
-            index = i;
-            key = a - index;
-            key += (key >> 31 & length);
-            if(((func) + Math.max(index, key) & 1) == 0) index = key;
-            key = b - index;
-            key += (key >> 31 & length);
-            if(((func >>> 1) + Math.max(index, key) & 1) == 0) index = key;
-            key = c - index;
-            key += (key >> 31 & length);
-            if(((func >>> 2) + Math.max(index, key) & 1) == 0) index = key;
-            key = d - index;
-            key += (key >> 31 & length);
-            if(((func >>> 3) + Math.max(index, key) & 1) == 0) index = key;
-            key = e - index;
-            key += (key >> 31 & length);
-            if(((func >>> 4) + Math.max(index, key) & 1) == 0) index = key;
-            key = f - index;
-            key += (key >> 31 & length);
-            if(((func >>> 5) + Math.max(index, key) & 1) == 0) index = key;
+            int shuffleIndex;
+            // index is the index to start searching for the next number at
+            while (index <= pow4)
+            {
+                // break our index into the left and right half
+                int left = (index & leftMask) >>> halfBits;
+                int right = (index & rightMask);
+                // do 2 Feistel rounds
+                int newRight = left ^ (LowStorageShuffler.round(right, key0) & rightMask);
+                left = right;
+                right = newRight;
+                newRight = left ^ (LowStorageShuffler.round(right, key1) & rightMask);
+                shuffleIndex = right << halfBits | newRight;
+                index++;
 
-            output[i] = data[index];
+                // if we found a valid index, return it!
+                if (shuffleIndex < length) {
+                    output[i] = data[shuffleIndex];
+                    break;
+                }
+            }
         }
         return output;
     }
