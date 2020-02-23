@@ -22,8 +22,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 31;
-    private int modes = 49;
+    private int mode = 49;
+    private int modes = 50;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -1816,6 +1816,19 @@ public class MathVisualizer extends ApplicationAdapter {
                     }
                 }
             break;
+            case 49: {
+                Gdx.graphics.setTitle("Jitter Test at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                long r = diver.nextLong(), s = diver.nextLong();
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 10000; j++) {
+//                    x = Noise.fastFloor(Math.cbrt(((short)r) * ((short)(r >>> 16)) * 0x1p-32) * 250 + 260);
+//                    y = Noise.fastFloor(Math.cbrt(((short)(r>>>32)) * ((short)(r >>> 48)) * 0x1p-32) * 250 + 260);
+                    x = ((int)((Long.bitCount(r += 0xC13FA9A902A6328FL) - Long.bitCount(r += 0xC13FA9A902A6328FL) + (int)(r += 0xC13FA9A902A6328FL) * 0x4p-32) * 4 + 256) & 511) + 4;
+                    y = ((int)((Long.bitCount(s += 0x91E10DA5C79E7B1DL) - Long.bitCount(s += 0x91E10DA5C79E7B1DL) + (int)(s += 0x91E10DA5C79E7B1DL) * 0x4p-32) * 4 + 256) & 511) + 4;
+                    layers.backgrounds[x][y] = color;
+                }
+            }
         }
     }
     
