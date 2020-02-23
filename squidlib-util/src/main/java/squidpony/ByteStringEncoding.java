@@ -1,5 +1,7 @@
 package squidpony;
 
+import squidpony.annotation.Beta;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.HashSet;
  * <br>
  * Created by Tommy Ettinger on 1/11/2020.
  */
+@Beta
 public final class ByteStringEncoding {
     private ByteStringEncoding(){}
 
