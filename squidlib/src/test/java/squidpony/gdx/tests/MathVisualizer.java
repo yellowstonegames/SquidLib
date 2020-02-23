@@ -23,7 +23,7 @@ import java.util.Arrays;
  */
 public class MathVisualizer extends ApplicationAdapter {
     private int mode = 49;
-    private int modes = 50;
+    private int modes = 51;
     private FilterBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -1825,8 +1825,24 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    x = Noise.fastFloor(Math.cbrt(((short)r) * ((short)(r >>> 16)) * 0x1p-32) * 250 + 260);
 //                    y = Noise.fastFloor(Math.cbrt(((short)(r>>>32)) * ((short)(r >>> 48)) * 0x1p-32) * 250 + 260);
                     x = ((int)((Long.bitCount(r += 0xC13FA9A902A6328FL) - Long.bitCount(r += 0xC13FA9A902A6328FL) + (int)(r += 0xC13FA9A902A6328FL) * 0x4p-32) * 4 + 256) & 511) + 4;
-                    y = ((int)((Long.bitCount(s += 0x91E10DA5C79E7B1DL) - Long.bitCount(s += 0x91E10DA5C79E7B1DL) + (int)(s += 0x91E10DA5C79E7B1DL) * 0x4p-32) * 4 + 256) & 511) + 4;
+                    y = ((int)((Long.bitCount(s += 0x9E3779B97F4A7C15L) - Long.bitCount(s += 0x9E3779B97F4A7C15L) + (int)(s += 0x9E3779B97F4A7C15L) * 0x4p-32) * 4 + 256) & 511) + 4;
                     layers.backgrounds[x][y] = color;
+                }
+            }
+            break;
+            case 50: {
+                Gdx.graphics.setTitle("Indexed Blue Noise Points at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                long size = (System.nanoTime() >>> 20 & 0xfff) + 1L;
+                int x, y;
+                for (int i = 0; i < size; i++) {
+                    BlueNoise.indexedBlueNoisePoint(circleCoord, i, 1.0);
+                    x = (int)(circleCoord[0] * 512);
+                    y = (int)(circleCoord[1] * 512);
+                    if (layers.backgrounds[x][y] != 0f) {
+                        layers.backgrounds[x][y] = -0x1.7677e8p125F;
+                        System.out.println("Overlap on index " + i);
+                    } else
+                        layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
             }
         }
