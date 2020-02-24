@@ -12,7 +12,7 @@ public class PhantomNoise {
     public final int dim;
     private final double scale, inverse;
     private final double[] working, points;
-    private final int[] floors;
+    private final int[] floors, hashFloors;
     public PhantomNoise() {
         this(0xFEEDBEEF1337CAFEL, 3);
     }
@@ -22,6 +22,7 @@ public class PhantomNoise {
         working = new double[dim+1];
         points = new double[dim+1];
         floors = new int[dim+1];
+        hashFloors = new int[dim+1];
         yolk = new CrossHash.Yolk(seed);
         scale = 1.0 / Math.sqrt(dim);
         inverse = 1.0 / (dim+1);
@@ -29,11 +30,10 @@ public class PhantomNoise {
 
     public double valueNoise()
     {
-        floors[dim] = NumberTools.doubleToMixedIntBits(working[dim]);
+        hashFloors[dim] = NumberTools.doubleToMixedIntBits(working[dim]);
         for (int i = 0; i < dim; i++) {
             floors[i] = working[i] >= 0.0 ? (int)working[i] : (int)working[i] - 1;
             working[i] -= floors[i];
-            floors[i] <<= 1;
             working[i] *= working[i] * (3.0 - 2.0 * working[i]);
         }
         double sum = 0.0, temp;
@@ -44,11 +44,11 @@ public class PhantomNoise {
             for (int j = 0; j < dim; j++) {
                 bit = (i >>> j & 1);
                 temp *= bit + (1|-bit) * (working[j]);
-                floors[j] = (floors[j] & -2) | bit;
+                hashFloors[j] = floors[j] + 1 - bit;
             }
-            sum += temp * yolk.hash(floors);
+            sum += temp * yolk.hash(hashFloors);
         }
-        return (sum * 0x1p-32 + 0.5) * inverse;
+        return (sum * 0x1p-32 + 0.5);
     }
 
     public double phantomNoise(double[] args) {
@@ -56,23 +56,27 @@ public class PhantomNoise {
             points[i] = args[i];
             for (int j = 0; j < dim; j++) {
                 if(i != j)
-                    points[i] -= args[i];
+                    points[i] -= args[j];
             }
+            points[i] *= scale;
         }
         points[dim] = 0.0;
         for (int i = 0; i < dim; i++) {
             points[dim] += args[i];
         }
+        points[dim] *= scale;
         working[dim] = Math.PI;
-        double result = 0.0;
+        double result = 0.0, warp = 0.0;
         for (int i = 0; i <= dim; i++) {
-            for (int j = 0, d = 0; j < dim; j++) {
+            for (int j = 0, d = 0; j < dim; j++, d++) {
                 if(d == i) d++;
-                working[j] = points[d];
+                working[j] = points[d] + warp;
             }
-            result += valueNoise();
+            warp = valueNoise();
+            result += warp;
             working[dim] += Math.E;
         }
+        result *= inverse;
         return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
     
