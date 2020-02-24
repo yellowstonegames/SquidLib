@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 import static squidpony.squidmath.ValueNoise.valueNoise;
 
 /**
@@ -34,6 +36,7 @@ import static squidpony.squidmath.ValueNoise.valueNoise;
  * <a href="https://i.imgur.com/jEbUdun.gifv">4D FoamNoise animated over time, two octaves colorized</a>,
  * <a href="https://i.imgur.com/ktCTiIK.jpg">World map made using FoamNoise</a>.
  */
+@Beta
 public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
     public static final FoamNoise instance = new FoamNoise();
     

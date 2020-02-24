@@ -1,12 +1,15 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 /**
  * A low-quality continuous noise generator with strong grid artifacts, this is nonetheless useful as a building block.
  * This implements Noise2D, Noise3D, and Noise4D, and could have more dimensionality support added later. It has much
  * lower quality than {@link ClassicNoise}, but is structured similarly in many ways, and should be a little faster.
  * @see FoamNoise FoamNoise produces high-quality noise by combining a few rotated results of ValueNoise with domain warping.
  */
-public class ValueNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
+@Beta
+public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
     public static final ValueNoise instance = new ValueNoise();
     
     public int seed = 0xD1CEBEEF;
@@ -21,8 +24,23 @@ public class ValueNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
         this.seed = (int) (seed ^ seed >>> 32);
     }
 
+    public static double valueNoise(int seed, double x) {
+        int xFloor = x >= 0.0 ? (int) x : (int) x - 1;
+        x -= xFloor;
+        x *= x * (3.0 - 2.0 * x);
+        xFloor *= 0x9E377;
+        seed ^= seed >>> 17;
+        return (1.0 - x) * hashPart1024(xFloor, seed) + x * hashPart1024(xFloor + 0x9E377, seed);
+    }
+    private static int hashPart1024(final int x, int s) {
+        s *= ((x ^ x >>> 12) | 1);
+        s = (s ^ s >>> 16) * 0xAC451;
+        return (s >>> 3 ^ s >>> 10) & 0x3FF;
+    }
+
     public static double valueNoise(int seed, double x, double y)
     {
+
         int xFloor = x >= 0.0 ? (int) x : (int) x - 1;
         x -= xFloor;
         x *= x * (3.0 - 2.0 * x);
@@ -32,7 +50,7 @@ public class ValueNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
         xFloor *= 0xD1B55;
         yFloor *= 0xABC99;
         return ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, seed))
-                + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * (0x1.010101010101p-10);
+                + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * (0x1.0040100401004p-10);
     }
 
     //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
@@ -65,7 +83,7 @@ public class ValueNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
                 + z * 
                 ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor, zFloor + 0xA0F2F, seed)) 
                         + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed) + x * hashPart1024(xFloor + 0xDB4F1, yFloor + 0xBBE05, zFloor + 0xA0F2F, seed)))
-                ) * (0x1.010101010101p-10);
+                ) * (0x1.0040100401004p-10);
     }
 
     //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
@@ -111,7 +129,7 @@ public class ValueNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
                 + z *
                 ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, zFloor + 0xAF36D, wFloor + 0x9A695, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor, zFloor + 0xAF36D, wFloor + 0x9A695, seed))
                         + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor + 0x9A695, seed) + x * hashPart1024(xFloor + 0xE19B1, yFloor + 0xC6D1D, zFloor + 0xAF36D, wFloor + 0x9A695, seed)))
-        ))) * (0x1.010101010101p-10);
+        ))) * (0x1.0040100401004p-10);
     }
 
     //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
@@ -123,6 +141,16 @@ public class ValueNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
     private static int hashPart1024(final int x, final int y, final int z, final int w, int s) {
         s += x ^ y ^ z ^ w;
         return (s >>> 3 ^ s >>> 10) & 0x3FF;
+    }
+    
+    @Override
+    public double getNoise(double x) {
+        return valueNoise(seed, x) * 2.0 - 1.0;
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, long seed) {
+        return valueNoise((int) (seed ^ seed >>> 32), x) * 2.0 - 1.0;
     }
 
     @Override
