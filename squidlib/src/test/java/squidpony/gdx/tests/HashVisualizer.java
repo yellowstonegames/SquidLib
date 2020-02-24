@@ -69,7 +69,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 134, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -6209,21 +6209,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
     private double[] alter4D(int x, int y, int ctr) {
         point4D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
-        point4D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        point4D[1]  = (x * 0.6 - y) * 0.03325f + ctr * 0.02125f;
         point4D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
         point4D[3]  = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
         return point4D;
     }
     private double[] alter5D(int x, int y, int ctr) {
-        point5D[0] = (x * 0.6 + y) * 0.05625f;
-        point5D[1] = (x * 0.6 - y) * 0.05625f;
-        point5D[2] = (y * 0.3 + x * 0.8) * 0.03125f + ctr * 0.03125f;
-        point5D[3] = (y * 0.3 - x * 0.8) * 0.01625f + ctr * 0.06125f;
-        point5D[4] = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
-      //point5D[5] = (y * 0.3 + x * 0.8) * 0.03125f + ctr * 0.03125f;
-      //point5D[6] = (y * 0.3 - x * 0.8) * 0.01625f + ctr * 0.06125f;
-      //point5D[7] = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
-      //point5D[8] = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
+        point5D[0] = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
+        point5D[1] = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        point5D[2] = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
+        point5D[3] = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
+        point5D[4] = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125f + ctr * 0.02625f;
         return point5D;
     }
     private double[] alter6D(int x, int y, int ctr) {
