@@ -68,8 +68,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 140;
-    private int hashMode = 0, rngMode = 0, noiseMode =134, otherMode = 1;//74;//118;//82;
+    private static final int NOISE_LIMIT = 146;
+    private int hashMode = 0, rngMode = 0, noiseMode = 134, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -122,6 +122,12 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise3D foam3D_2 = new Noise.Layered3D(FoamNoise.instance, 2, 0x1p-4);
     private final Noise.Noise4D foam4D_1 = new Noise.Layered4D(FoamNoise.instance, 1, 0x1p-4);
     private final Noise.Noise4D foam4D_2 = new Noise.Layered4D(FoamNoise.instance, 2, 0x1p-4);
+    private final PhantomNoise phantom2D = new PhantomNoise(0x1337BEEF, 2);
+    private final PhantomNoise phantom3D = new PhantomNoise(0x1337BEEF, 3);
+    private final PhantomNoise phantom4D = new PhantomNoise(0x1337BEEF, 4);
+    private final PhantomNoise phantom5D = new PhantomNoise(0x1337BEEF, 5);
+    private final PhantomNoise phantom6D = new PhantomNoise(0x1337BEEF, 6);
+    private final PhantomNoise phantom7D = new PhantomNoise(0x1337BEEF, 7);
 //    private final Noise.Layered2D white2D = new Noise.Layered2D(WhiteNoise.instance, 2);
 //    private final Noise.Layered3D white3D = new Noise.Layered3D(WhiteNoise.instance, 2);
 //    private final Noise.Layered4D white4D = new Noise.Layered4D(WhiteNoise.instance, 2);
@@ -5089,16 +5095,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 138:
-                    Gdx.graphics.setTitle("Foam 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bright =
-                                    basicPrepare(foam4D_1.getNoise(x, y, ctr, foam3D_1.getNoise(ctr, x, y))
-                                    );
-                            back[x][y] = getGray(bright);
+                        Gdx.graphics.setTitle("Foam 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(foam4D_1.getNoise(x, y, ctr, foam3D_1.getNoise(ctr, x, y))
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
                         }
-                    }
-                    break;
+                        break;
                     case 139:
                         Gdx.graphics.setTitle("Foam 4D Noise, unprocessed, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -5110,7 +5116,72 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-
+                    case 140:
+                        Gdx.graphics.setTitle("Phantom 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(phantom2D.getNoise(alter2D(x, y, ctr))
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 141:
+                        Gdx.graphics.setTitle("Phantom 3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(phantom3D.getNoise(alter3D(x, y, ctr))
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 142:
+                        Gdx.graphics.setTitle("Phantom 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(phantom4D.getNoise(alter4D(x, y, ctr))
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 143:
+                        Gdx.graphics.setTitle("Phantom 5D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(phantom5D.getNoise(alter5D(x, y, ctr))
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 144:
+                        Gdx.graphics.setTitle("Phantom 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(phantom6D.getNoise(alter6D(x, y, ctr))
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 145:
+                        Gdx.graphics.setTitle("Phantom 7D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(phantom7D.getNoise(alter7D(x, y, ctr))
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
                 }
             }
             break;
@@ -6117,7 +6188,32 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         }
     }
 
-    private final double[] point5D = new double[5], point7D = new double[7];
+    private final double[]
+            point2D = new double[2],
+            point3D = new double[3],
+            point4D = new double[4],
+            point5D = new double[5],
+            point6D = new double[6],
+            point7D = new double[7];
+    private double[] alter2D(int x, int y, int ctr) {
+        point2D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
+        point2D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        return point2D;
+    }
+
+    private double[] alter3D(int x, int y, int ctr) {
+        point3D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
+        point3D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        point3D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
+        return point3D;
+    }
+    private double[] alter4D(int x, int y, int ctr) {
+        point4D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
+        point4D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        point4D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
+        point4D[3]  = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
+        return point4D;
+    }
     private double[] alter5D(int x, int y, int ctr) {
         point5D[0] = (x * 0.6 + y) * 0.05625f;
         point5D[1] = (x * 0.6 - y) * 0.05625f;
@@ -6130,6 +6226,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
       //point5D[8] = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
         return point5D;
     }
+    private double[] alter6D(int x, int y, int ctr) {
+        point6D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
+        point6D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        point6D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
+        point6D[3]  = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
+        point6D[4]  = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125f + ctr * 0.02625f;
+        point6D[5]  = (ctr * 0.55 + y * 0.5 - x * 0.3) * 0.06125f - ctr * 0.01625f;
+        return point6D;
+    }
     private double[] alter7D(int x, int y, int ctr) {
         point7D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
         point7D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
@@ -6138,11 +6243,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         point7D[4]  = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125f + ctr * 0.02625f;
         point7D[5]  = (ctr * 0.55 + y * 0.5 - x * 0.3) * 0.06125f - ctr * 0.01625f;
         point7D[6]  = (ctr * 0.45 + x * 0.45 + y * 0.45) * 0.05125f - ctr * 0.02125f;
-      //point7D[7]  = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
-      //point7D[8]  = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
-      //point7D[9]  = (ctr * 0.55 + x * 0.3 - y * 0.2) * 0.04125f + ctr * 0.02625f;
-      //point7D[10] = (ctr * 0.55 + y * 0.3 - x * 0.2) * 0.06125f - ctr * 0.01625f;
-      //point7D[11] = (ctr * 0.45 + x * 0.3 + y * 0.3) * 0.05125f - ctr * 0.02125f;
+        //point7D[7]  = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
+        //point7D[8]  = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
+        //point7D[9]  = (ctr * 0.55 + x * 0.3 - y * 0.2) * 0.04125f + ctr * 0.02625f;
+        //point7D[10] = (ctr * 0.55 + y * 0.3 - x * 0.2) * 0.06125f - ctr * 0.01625f;
+        //point7D[11] = (ctr * 0.45 + x * 0.3 + y * 0.3) * 0.05125f - ctr * 0.02125f;
         return point7D;
     }
 
