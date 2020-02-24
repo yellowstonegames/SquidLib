@@ -3,15 +3,35 @@ package squidpony.squidmath;
 import static squidpony.squidmath.ValueNoise.valueNoise;
 
 /**
- * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D and 3D.
- * Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs about a third as many octaves as the
- * Simplex option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. It's
- * strongly encouraged to experiment with the lacunarity parameter in {@link Noise.Layered3D} and similar classes if you
- * use one of those variants; the default lacunarity of 0.5 is often not high enough for good results (0.6 to 0.8 should
- * yield better layering effects).
+ * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, and
+ * 4D. Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs about a third as many octaves as the
+ * Simplex option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. A useful
+ * property of FoamNoise is how its visual "character" doesn't change much as dimensions are added; whereas 4D simplex
+ * noise tends to separate into "surflets" separated by spans of 0, and higher dimensions of simplex only have larger
+ * such spans, FoamNoise seems to stay approximately as coherent in 2D, 3D, and 4D. Verifying this claim about FoamNoise
+ * is not easy, but it makes sense intuitively because of how this generator works. Simplex noise in N dimensions relies
+ * on a lattice of N-simplices (such as triangles in 2D or tetrahedra in 3D) and evaluates the noise at a point by
+ * hashing each of the N+1 vertices, looking up a gradient vector for each vertex, and combining the gradient vectors
+ * based on proximity of the evaluated point to each vertex. FoamNoise in N dimensions is not nearly as complex; it
+ * relies on making N+1 averaged calls to N-dimensional value noise, each call using a rotated (and potentially skewed)
+ * set of axes, with each call's result also affecting the inputs to the next call (domain warping). Value noise uses a
+ * cubic lattice or its hypercube equivalent in higher dimensions, which seems to be more "stable" as dimensionality
+ * increases, and the number of value noise calls increases at the same rate as simplex noise adds gradient vectors.
+ * Averaging more calls causes the distribution of the noise to gradually approach Gaussian, but the effect of this
+ * approach gets less pronounced past 3 calls.
+ * <br>
+ * It's strongly encouraged to experiment with the lacunarity parameter in {@link Noise.Layered3D} and similar classes
+ * if you use one of those variants, which also probably needs adjustments to frequency. Changing lacunarity with
+ * multiple octaves can be useful to edit how tightly the noise clumps together.
  * <br>
  * <a href="https://i.imgur.com/WpUz1xP.png">2D FoamNoise, one octave</a>,
+ * <a href="https://i.imgur.com/39Brm9Y.png">2D FoamNoise, one octave colorized</a>,
+ * <a href="https://i.imgur.com/ytKe4MW.png">2D FoamNoise, two octaves colorized</a> (note fewer peaks and valleys),
  * <a href="https://i.imgur.com/5FTjEIR.gifv">3D FoamNoise animated over time, one octave</a>,
+ * <a href="https://i.imgur.com/su9naGx.gifv">3D FoamNoise animated over time, one octave colorized</a>,
+ * <a href="https://i.imgur.com/nr4TROD.gifv">3D FoamNoise animated over time, two octaves colorized</a>,
+ * <a href="https://i.imgur.com/r5cx6im.gifv">4D FoamNoise animated over time, one octave colorized</a>,
+ * <a href="https://i.imgur.com/jEbUdun.gifv">4D FoamNoise animated over time, two octaves colorized</a>,
  * <a href="https://i.imgur.com/ktCTiIK.jpg">World map made using FoamNoise</a>.
  */
 public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
@@ -69,10 +89,10 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 
 
     public static double foamNoise(final double x, final double y, final double z, int seed) {
-        final double p0 = (x + y + z) * 0.5;
-        final double p1 = x - (y + z) * 0.25;
-        final double p2 = y - (x + z) * 0.25;
-        final double p3 = z - (x + y) * 0.25;
+        final double p0 = (x + y + z);// * 0.5;
+        final double p1 = x - (y + z);// * 0.25;
+        final double p2 = y - (x + z);// * 0.25;
+        final double p3 = z - (x + y);// * 0.25;
 ////rotated version of above points on a tetrahedron; the ones below are "more correct" but more complex (and slower?)       
 //        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;
 //        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;
@@ -170,18 +190,18 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
     }
     @Override
     public double getNoise(double x, double y, double z) {
-        return foamNoise(x, y, z, seed);
+        return foamNoise(x * 0.5, y * 0.5, z * 0.5, seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
-        return foamNoise(x, y, z, (int) (seed ^ seed >>> 32));
+        return foamNoise(x * 0.5, y * 0.5, z * 0.5, (int) (seed ^ seed >>> 32));
     }
     @Override
     public double getNoise(double x, double y, double z, double w) {
-        return foamNoise(x, y, z, w, seed);
+        return foamNoise(x * 0.5, y * 0.5, z * 0.5, w * 0.5, seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-        return foamNoise(x, y, z, w, (int) (seed ^ seed >>> 32));
+        return foamNoise(x * 0.5, y * 0.5, z * 0.5, w * 0.5, (int) (seed ^ seed >>> 32));
     }
 }

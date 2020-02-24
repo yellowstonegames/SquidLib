@@ -67,9 +67,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 140;
-    private int hashMode = 0, rngMode = 0, noiseMode = 0, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode =134, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -116,12 +116,12 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.InverseLayered3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
     private final Noise.InverseLayered4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
     //private final Noise.Noise6D layered6D = new Noise.Layered6D(WhirlingNoise.instance, 3, 1.75);
-    private final Noise.Noise2D foam2D_1 = new Noise.Layered2D(FoamNoise.instance, 1, 0x1p-4, 0.75);
-    private final Noise.Noise2D foam2D_2 = new Noise.Layered2D(FoamNoise.instance, 2, 0x1p-4, 0.75);
-    private final Noise.Noise3D foam3D_1 = new Noise.Layered3D(FoamNoise.instance, 1, 0x1p-4, 0.75);
-    private final Noise.Noise3D foam3D_2 = new Noise.Layered3D(FoamNoise.instance, 2, 0x1p-4, 0.75);
-    private final Noise.Noise4D foam4D_1 = new Noise.Layered4D(FoamNoise.instance, 1, 0x1p-4, 0.75);
-    private final Noise.Noise4D foam4D_2 = new Noise.Layered4D(FoamNoise.instance, 2, 0x1p-4, 0.75);
+    private final Noise.Noise2D foam2D_1 = new Noise.Layered2D(FoamNoise.instance, 1, 0x1p-4);
+    private final Noise.Noise2D foam2D_2 = new Noise.Layered2D(FoamNoise.instance, 2, 0x1p-4);
+    private final Noise.Noise3D foam3D_1 = new Noise.Layered3D(FoamNoise.instance, 1, 0x1p-4);
+    private final Noise.Noise3D foam3D_2 = new Noise.Layered3D(FoamNoise.instance, 2, 0x1p-4);
+    private final Noise.Noise4D foam4D_1 = new Noise.Layered4D(FoamNoise.instance, 1, 0x1p-4);
+    private final Noise.Noise4D foam4D_2 = new Noise.Layered4D(FoamNoise.instance, 2, 0x1p-4);
 //    private final Noise.Layered2D white2D = new Noise.Layered2D(WhiteNoise.instance, 2);
 //    private final Noise.Layered3D white3D = new Noise.Layered3D(WhiteNoise.instance, 2);
 //    private final Noise.Layered4D white4D = new Noise.Layered4D(WhiteNoise.instance, 2);
