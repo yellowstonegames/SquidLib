@@ -30,7 +30,8 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
         x *= x * (3.0 - 2.0 * x);
         xFloor *= 0x9E377;
         seed ^= seed >>> 17;
-        return (1.0 - x) * hashPart1024(xFloor, seed) + x * hashPart1024(xFloor + 0x9E377, seed);
+        return ((1.0 - x) * hashPart1024(xFloor, seed) + x * hashPart1024(xFloor + 0x9E377, seed))
+                * (0x1.0040100401004p-10);
     }
     private static int hashPart1024(final int x, int s) {
         s *= ((x ^ x >>> 12) | 1);
@@ -50,7 +51,8 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
         xFloor *= 0xD1B55;
         yFloor *= 0xABC99;
         return ((1.0 - y) * ((1.0 - x) * hashPart1024(xFloor, yFloor, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor, seed))
-                + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed))) * (0x1.0040100401004p-10);
+                + y * ((1.0 - x) * hashPart1024(xFloor, yFloor + 0xABC99, seed) + x * hashPart1024(xFloor + 0xD1B55, yFloor + 0xABC99, seed)))
+                * (0x1.0040100401004p-10);
     }
 
     //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
