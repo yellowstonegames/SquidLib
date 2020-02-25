@@ -10,7 +10,8 @@ public class PhantomNoise {
     
     private final CrossHash.Yolk yolk;
     public final int dim;
-    private final double scale, inverse;
+    private final double inverse;
+    private final double scale;
     private final double[] working, points;
     private final int[] floors, hashFloors;
     public PhantomNoise() {
@@ -24,7 +25,7 @@ public class PhantomNoise {
         floors = new int[dim+1];
         hashFloors = new int[dim+1];
         yolk = new CrossHash.Yolk(seed);
-        scale = 1.0 / Math.sqrt(dim);
+        scale = 1.0 / dim;
         inverse = 1.0 / (dim+1);
     }
 
