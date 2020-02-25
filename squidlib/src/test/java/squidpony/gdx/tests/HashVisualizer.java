@@ -6196,49 +6196,52 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             point6D = new double[6],
             point7D = new double[7];
     private double[] alter2D(int x, int y, int ctr) {
-        point2D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
-        point2D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        point2D[0]  = x * 0.03125 + ctr * 0.125;
+        point2D[1]  = y * 0.03125 - ctr * 0.125;
         return point2D;
     }
 
     private double[] alter3D(int x, int y, int ctr) {
-        point3D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
-        point3D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
-        point3D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
+        point3D[0]  = x * 0.03125;
+        point3D[1]  = y * 0.03125;
+        point3D[2]  = ctr * 0.125;
+//        point3D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
+//        point3D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+//        point3D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
         return point3D;
     }
     private double[] alter4D(int x, int y, int ctr) {
-        point4D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
-        point4D[1]  = (x * 0.6 - y) * 0.03325f + ctr * 0.02125f;
-        point4D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
-        point4D[3]  = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
+        point4D[0]  = (y * 0.6 + x) * 0.02625 + ctr * 0.03125;
+        point4D[1]  = (x * 0.6 - y) * 0.03325 + ctr * 0.02125;
+        point4D[2]  = (x * 0.8 + y * 0.5) * 0.02125 - ctr * 0.04625;
+        point4D[3]  = (y * 0.8 - x * 0.5) * 0.02625 - ctr * 0.04125;
         return point4D;
     }
     private double[] alter5D(int x, int y, int ctr) {
-        point5D[0] = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
-        point5D[1] = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
-        point5D[2] = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
-        point5D[3] = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
-        point5D[4] = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125f + ctr * 0.02625f;
+        point5D[0] = (y * 0.6 + x) * 0.02625 + ctr * 0.03125;
+        point5D[1] = (x * 0.6 - y) * 0.01625 + ctr * 0.05125;
+        point5D[2] = (x * 0.8 + y * 0.5) * 0.02125 - ctr * 0.04625;
+        point5D[3] = (y * 0.8 - x * 0.5) * 0.02625 - ctr * 0.04125;
+        point5D[4] = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125 + ctr * 0.02625;
         return point5D;
     }
     private double[] alter6D(int x, int y, int ctr) {
-        point6D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
-        point6D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
-        point6D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
-        point6D[3]  = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
-        point6D[4]  = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125f + ctr * 0.02625f;
-        point6D[5]  = (ctr * 0.55 + y * 0.5 - x * 0.3) * 0.06125f - ctr * 0.01625f;
+        point6D[0]  = (y * 0.6 + x) * 0.02625 + ctr * 0.03125;
+        point6D[1]  = (x * 0.6 - y) * 0.01625 + ctr * 0.05125;
+        point6D[2]  = (x * 0.8 + y * 0.5) * 0.02125 - ctr * 0.04625;
+        point6D[3]  = (y * 0.8 - x * 0.5) * 0.02625 - ctr * 0.04125;
+        point6D[4]  = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125 + ctr * 0.02625;
+        point6D[5]  = (ctr * 0.55 + y * 0.5 - x * 0.3) * 0.06125 - ctr * 0.01625;
         return point6D;
     }
     private double[] alter7D(int x, int y, int ctr) {
-        point7D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
-        point7D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
-        point7D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
-        point7D[3]  = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
-        point7D[4]  = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125f + ctr * 0.02625f;
-        point7D[5]  = (ctr * 0.55 + y * 0.5 - x * 0.3) * 0.06125f - ctr * 0.01625f;
-        point7D[6]  = (ctr * 0.45 + x * 0.45 + y * 0.45) * 0.05125f - ctr * 0.02125f;
+        point7D[0]  = (y * 0.6 + x) * 0.02625 + ctr * 0.03125;
+        point7D[1]  = (x * 0.6 - y) * 0.01625 + ctr * 0.05125;
+        point7D[2]  = (x * 0.8 + y * 0.5) * 0.02125 - ctr * 0.04625;
+        point7D[3]  = (y * 0.8 - x * 0.5) * 0.02625 - ctr * 0.04125;
+        point7D[4]  = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125 + ctr * 0.02625;
+        point7D[5]  = (ctr * 0.55 + y * 0.5 - x * 0.3) * 0.06125 - ctr * 0.01625;
+        point7D[6]  = (ctr * 0.45 + x * 0.45 + y * 0.45) * 0.05125 - ctr * 0.02125;
         //point7D[7]  = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
         //point7D[8]  = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
         //point7D[9]  = (ctr * 0.55 + x * 0.3 - y * 0.2) * 0.04125f + ctr * 0.02625f;
