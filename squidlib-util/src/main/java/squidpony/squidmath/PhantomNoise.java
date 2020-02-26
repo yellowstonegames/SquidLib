@@ -44,7 +44,7 @@ public class PhantomNoise {
             temp = 1.0;
             for (int j = 0; j < dim; j++) {
                 bit = (i >>> j & 1);
-                temp *= bit + (1|-bit) * (working[j]);
+                temp *= bit + (1|-bit) * working[j];
                 hashFloors[j] = floors[j] + 1 - bit;
             }
             sum += temp * yolk.hash(hashFloors);
@@ -54,12 +54,11 @@ public class PhantomNoise {
 
     public double phantomNoise(double[] args) {
         for (int i = 0; i < dim; i++) {
-            points[i] = args[i];
+            points[i] = args[i] * inverse;
             for (int j = 0; j < dim; j++) {
                 if(i != j)
-                    points[i] -= args[j];
+                    points[i] -= args[j] * scale;
             }
-            points[i] *= scale;
         }
         points[dim] = 0.0;
         for (int i = 0; i < dim; i++) {
