@@ -370,9 +370,9 @@ public class BlueNoise {
         double x = ++index * 0.7548776662466927;
         double y = index * 0.5698402909980532;
         strength *= (0.19 * 1.7724538509055159 * 0x3p-7) / Math.sqrt(index - 0.7);
-        long r = index * 0x9E3779B97F4A7C15L, s = index * 0xC13FA9A902A6328FL; 
-        x += strength * (Long.bitCount(r) - Long.bitCount(r += 0xC13FA9A902A6328FL) + (int)(r + 0xC13FA9A902A6328FL) * 0x1p-30);
-        y += strength * (Long.bitCount(s) - Long.bitCount(s += 0x9E3779B97F4A7C15L) + (int)(s + 0x9E3779B97F4A7C15L) * 0x1p-30);
+        long r = index * 0xC13FA9A902A633EBL, s = index * 0x9E3779B97F4C0401L; 
+        x += strength * (Long.bitCount(r) - Long.bitCount(r += 0xC13FA9A902A633EBL) + (r + 0xC13FA9A902A633EBL >> 32) * 0x1.4p-30);
+        y += strength * (Long.bitCount(s) - Long.bitCount(s += 0x9E3779B97F4C0401L) + (s + 0x9E3779B97F4C0401L >> 32) * 0x1.4p-30);
         dest[0] = x - Noise.fastFloor(x);
         dest[1] = y - Noise.fastFloor(y);
     }

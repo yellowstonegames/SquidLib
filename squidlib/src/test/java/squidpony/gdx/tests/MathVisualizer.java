@@ -1824,8 +1824,11 @@ public class MathVisualizer extends ApplicationAdapter {
                 for (int j = 0; j < 10000; j++) {
 //                    x = Noise.fastFloor(Math.cbrt(((short)r) * ((short)(r >>> 16)) * 0x1p-32) * 250 + 260);
 //                    y = Noise.fastFloor(Math.cbrt(((short)(r>>>32)) * ((short)(r >>> 48)) * 0x1p-32) * 250 + 260);
-                    x = ((int)((Long.bitCount(r += 0xC13FA9A902A6328FL) - Long.bitCount(r += 0xC13FA9A902A6328FL) + (int)(r += 0xC13FA9A902A6328FL) * 0x4p-32) * 4 + 256) & 511) + 4;
-                    y = ((int)((Long.bitCount(s += 0x9E3779B97F4A7C15L) - Long.bitCount(s += 0x9E3779B97F4A7C15L) + (int)(s += 0x9E3779B97F4A7C15L) * 0x4p-32) * 4 + 256) & 511) + 4;
+                    x = ((int)((Long.bitCount(r += 0xC13FA9A902A633EBL) - Long.bitCount(r += 0xC13FA9A902A633EBL) + (int)(r += 0xC13FA9A902A633EBL) * 0x1.4p-30) * 4 + 256) & 511) + 4;
+                    y = ((int)((Long.bitCount(s += 0x9E3779B97F4C0401L) - Long.bitCount(s += 0x9E3779B97F4C0401L) + (int)(s += 0x9E3779B97F4C0401L) * 0x1.4p-30) * 4 + 256) & 511) + 4;
+                    // 0xC13FA9A902A6328FL 0x9E3779B97F4A7C15L
+                    // changed to (bit counts are better)
+                    // 0xC13FA9A902A633EBL 0x9E3779B97F4C0401L
                     layers.backgrounds[x][y] = color;
                 }
             }
