@@ -52,13 +52,14 @@ public class PhantomNoise {
         return (sum * 0x1p-32 + 0.5);
     }
 
-    public double phantomNoise(double[] args) {
+    public double getNoise(double... args) {
         for (int i = 0; i < dim; i++) {
-            points[i] = args[i] * inverse;
+            points[i] = args[i];
             for (int j = 0; j < dim; j++) {
                 if(i != j)
-                    points[i] -= args[j] * scale;
+                    points[i] -= args[j];
             }
+            points[i] *= scale;
         }
         points[dim] = 0.0;
         for (int i = 0; i < dim; i++) {
@@ -79,8 +80,23 @@ public class PhantomNoise {
         result *= inverse;
         return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
-    
-    public double getNoise(double... args) {
-        return phantomNoise(args);
+
+    public double getNoise(double x, double y) {
+        points[0] = -0.4161468365471422 * x + 0.9092974268256818 * y;
+        points[1] = -0.5794012529532914 * x + -0.8150424455671962 * y;
+        points[2] = 0.9955480895004332 * x + -0.09425498125848553 * y;
+        working[dim] = Math.PI;
+        double result = 0.0, warp = 0.0;
+        for (int i = 0; i <= dim; i++) {
+            for (int j = 0, d = 0; j < dim; j++, d++) {
+                if(d == i) d++;
+                working[j] = points[d] + warp;
+            }
+            warp = valueNoise();
+            result += warp;
+            working[dim] += Math.E;
+        }
+        result *= inverse;
+        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 }
