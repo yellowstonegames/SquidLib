@@ -78,6 +78,9 @@ public class PhantomNoise {
             working[dim] += Math.E;
         }
         result *= inverse;
+        for (int i = 1; i < dim; i++) {
+            result *= result * (3.0 - 2.0 * result);
+        }
         return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 
@@ -97,6 +100,7 @@ public class PhantomNoise {
             working[dim] += Math.E;
         }
         result *= inverse;
+        result *= result * (3.0 - 2.0 * result);
         return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 }
