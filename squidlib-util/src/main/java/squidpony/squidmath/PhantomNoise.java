@@ -79,10 +79,13 @@ public class PhantomNoise {
             working[dim] += Math.E;
         }
         result *= inverse;
-        for (int i = 1; i < dim; i++) {
-            result *= result * (3.0 - 2.0 * result);
-        }
-        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+        return (result <= 0.5)
+                ? Math.pow(result * 2, dim) - 1.0
+                : Math.pow((result - 1) * 2, dim) * (((dim & 1) << 1) - 1) + 1.0;
+//        for (int i = 1; i < dim; i++) {
+//            result *= result * (3.0 - 2.0 * result);
+//        }
+//        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 
     public double getNoise(double x, double y) {
@@ -101,7 +104,11 @@ public class PhantomNoise {
             working[dim] += Math.E;
         }
         result *= inverse;
-        result *= result * (3.0 - 2.0 * result);
-        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+        return (result <= 0.5)
+                ? (result * result * 4) - 1.0
+                : ((result - 1) * (result - 1) * -4) + 1.0;
+
+//        result *= result * (3.0 - 2.0 * result);
+//        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 }
