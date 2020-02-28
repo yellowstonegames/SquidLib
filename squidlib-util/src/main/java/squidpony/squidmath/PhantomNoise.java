@@ -25,7 +25,7 @@ public class PhantomNoise {
         floors = new int[dim+1];
         hashFloors = new int[dim+1];
         yolk = new CrossHash.Yolk(seed);
-        scale = 1.0 / dim;
+        scale = -1.0 / (1.0 + Math.sqrt(1.0 + dim));
         inverse = 1.0 / (dim+1);
     }
 
@@ -52,15 +52,16 @@ public class PhantomNoise {
         return (sum * 0x1p-32 + 0.5);
     }
 
-    public double getNoise(double... args) {
-        for (int i = 0; i < dim; i++) {
-            points[i] = args[i];
-            for (int j = 0; j < dim; j++) {
-                if(i != j)
-                    points[i] -= args[j];
-            }
-            points[i] *= scale;
-        }
+    public double getNoise(double... args) { 
+        System.arraycopy(args, 0, points, 0, dim);
+//        for (int i = 0; i < dim; i++) {
+//            points[i] = args[i];
+//            for (int j = 0; j < dim; j++) {
+//                if(i != j)
+//                    points[i] -= args[j];
+//            }
+//            points[i] *= scale;
+//        }
         points[dim] = 0.0;
         for (int i = 0; i < dim; i++) {
             points[dim] += args[i];

@@ -5141,10 +5141,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 142:
                         Gdx.graphics.setTitle("Phantom 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                slice3D(point4D, x, y, ctr);
                                 bright =
-                                        basicPrepare(phantom4D.getNoise(alter4D(x, y, ctr))
+                                        basicPrepare(phantom4D.getNoise(point4D)
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5152,10 +5154,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 143:
                         Gdx.graphics.setTitle("Phantom 5D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point5D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                slice3D(point5D, x, y, ctr);
                                 bright =
-                                        basicPrepare(phantom5D.getNoise(alter5D(x, y, ctr))
+                                        basicPrepare(phantom5D.getNoise(point5D)
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5163,10 +5167,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 144:
                         Gdx.graphics.setTitle("Phantom 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point6D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                slice3D(point6D, x, y, ctr);
                                 bright =
-                                        basicPrepare(phantom6D.getNoise(alter6D(x, y, ctr))
+                                        basicPrepare(phantom6D.getNoise(point6D)
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5174,10 +5180,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 145:
                         Gdx.graphics.setTitle("Phantom 7D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point7D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                slice3D(point7D, x, y, ctr);
                                 bright =
-                                        basicPrepare(phantom7D.getNoise(alter7D(x, y, ctr))
+                                        basicPrepare(phantom7D.getNoise(point7D)
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -6196,6 +6204,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             point5D = new double[5],
             point6D = new double[6],
             point7D = new double[7];
+    private double[] slice2D(double[] points, int x, int y, int ctr) {
+        points[0]  = x * 0.3125 + ctr * 0.375;
+        points[1]  = y * 0.3125 - ctr * 0.375;
+        return points;
+    }
+    private double[] slice3D(double[] points, int x, int y, int ctr) {
+        points[0] = x * 0.3125;
+        points[1] = y * 0.3125;
+        points[2] = ctr * 0.375;
+        return points;
+    }
     private double[] alter2D(int x, int y, int ctr) {
         point2D[0]  = x * 0.3125 + ctr * 0.375;
         point2D[1]  = y * 0.3125 - ctr * 0.375;
