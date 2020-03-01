@@ -69,7 +69,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 130, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -4977,7 +4977,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 //iBright = 12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21;
 //                                iBright = (((BlueNoise.get(xx, yy) & 0xE0) 
 //                                        ^ (BlueNoise.get(yy, xx, BlueNoise.ALT_NOISE[((12345789 ^ (xx >>> 6) * 0x1827F5 ^ (yy >>> 6) * 0x123C21) >>> 16 & 62)]) >>> 3 & 0x1F)
-                                iBright = ((BlueNoise.getSeededScratchy(xx, yy,  12345789)
+                                iBright = ((BlueNoise.getSeeded(xx, yy,  12345789)
                                         //((iBright ^ (iBright << 19 | iBright >>> 13) ^ (iBright << 5 | iBright >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 20 & 0x3F)
                                         //^ (xx + xx + yy >> 2 & 0x3F) ^ (xx - yy - yy >> 2 & 0x3F)
                                 ) + 128);
@@ -4990,28 +4990,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 132:
-//                        Gdx.graphics.setTitle("Blue Noise with choice " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        for (int x = 0; x < width; x++) {
-//                            xx = (x + ctr);
-//                            for (int y = 0; y < height; y++) {
-//                                yy = (y + ctr);
-//                                bright = (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr >>> 5 & 15]) + 128) / 255f;
-//                                back[x][y] = getGray(bright);
-//                            }
-//                        }
-//                        break;
-                        Gdx.graphics.setTitle("Blue Noise with changing scratchy adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
-                            for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
-                                iBright = BlueNoise.getSeededScratchy(xx, yy, ctr) + 128;
-                                back[x][y] = floatGetI(iBright, iBright, iBright);
-                            }
-                        }
-                        break;
-                    case 133:
-                        Gdx.graphics.setTitle("Blue Noise with seamless adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Blue Noise with choice " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
 //                            xx = x + (ctr >> 2);
                             xx = x + ctr;
@@ -5023,7 +5002,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(xx >>> 6, yy >>> 6, 12345678)][(ys << 6) | (xs)] + 128;
 //                                if((32 - xs ^ 32 - xs >> 31) > (iBright & 1) + 31 || (32 - ys ^ 32 - ys >> 31) > (iBright & 1) + 31)
 //                                    iBright = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64((xx >>> 6) + ((xx & 32) >>> 4) - 1, (yy >>> 6) + ((yy & 32) >>> 4) - 1, 12345678)][(ys << 6) | (xs)] + 128;
-                                iBright = (BlueNoise.getSeededSeamless(xx, yy, 12345789) + 128);
+                                iBright = (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr & 63]) + 128);
                                 
                                 
                                 
@@ -5042,6 +5021,27 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                        ? (a + b + 1) >>> 1//((BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) < 0) ? Math.min(a, b) : Math.max(a, b))
 ////                                        ? (a * (79 - ad)) + (b * (ad - 47)) >>> 5// ^ (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[32]) & 0xF)
 //                                        : ad <= 63 ? a : b));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
+                            }
+                        }
+                        break;
+                    case 133:
+//                        Gdx.graphics.setTitle("Blue Noise with choice " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            xx = (x + ctr);
+//                            for (int y = 0; y < height; y++) {
+//                                yy = (y + ctr);
+//                                bright = (BlueNoise.get(xx, yy, BlueNoise.ALT_NOISE[ctr >>> 5 & 15]) + 128) / 255f;
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
+//                        break;
+                        Gdx.graphics.setTitle("Blue Noise with changing scratchy adjust " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                iBright = BlueNoise.getSeeded(xx, yy, ctr) + 128;
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
@@ -5144,7 +5144,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice3D(point4D, x, y, ctr);
+                                slice2D(point4D, x, y, ctr);
                                 bright =
                                         basicPrepare(phantom4D.getNoise(point4D)
                                         );
@@ -5157,7 +5157,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point5D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice3D(point5D, x, y, ctr);
+                                slice2D(point5D, x, y, ctr);
                                 bright =
                                         basicPrepare(phantom5D.getNoise(point5D)
                                         );
@@ -5170,7 +5170,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point6D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice3D(point6D, x, y, ctr);
+                                slice2D(point6D, x, y, ctr);
                                 bright =
                                         basicPrepare(phantom6D.getNoise(point6D)
                                         );
@@ -5183,7 +5183,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point7D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice3D(point7D, x, y, ctr);
+                                slice2D(point7D, x, y, ctr);
                                 bright =
                                         basicPrepare(phantom7D.getNoise(point7D)
                                         );
