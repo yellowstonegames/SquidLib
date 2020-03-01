@@ -101,6 +101,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private Starfish32RNG starfish = new Starfish32RNG(1L);
     
     private TangleRNG tangle = new TangleRNG(1);
+    
+    private TangleRNG[][] randomGrid = new TangleRNG[64][64];
 
 
     private final int[] coordinates = new int[2];
@@ -1444,6 +1446,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         mistB = CrossHash.Mist.beta;
         mistC = CrossHash.Mist.chi;
         fuzzy = new ThrustAltRNG(0xBEEFCAFEF00DCABAL);
+
+        for (int y = 0; y < 64; y++) {
+            for (int x = 0; x < 64; x++) {
+                randomGrid[x][y] = new TangleRNG(x, DiverRNG.randomize(y));
+            }
+        }
+        
         view = new ScreenViewport();
 
         Noise.seamless3D(seamless[0], 1337, 1);
@@ -5226,21 +5235,33 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 3:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = silk.nextLong() | 255L;
-                                back[x][y] = floatGet(code);
+                                iBright = silk.nextInt() | 255;
+                                back[x][y] = floatGet(iBright);
                             }
                         }
                         Gdx.graphics.setTitle("SilkRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 4:
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                code = xoRo.nextLong() | 255L;
-                                back[x][y] = floatGet(code);
+                        for (int x = 0; x < 64; x++) {
+                            for (int y = 0; y < 64; y++) {
+                                bright = floatGet(randomGrid[x][y].nextLong() | 255L);
+                                for (int gx = 0; gx < 512; gx += 64) {
+                                    for (int gy = 0; gy < 512; gy += 64) {
+                                        back[gx + x][gy + y] = bright;
+                                    }
+                                }
                             }
                         }
-                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("TangleRNG Stream Grid at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                code = xoRo.nextLong() | 255L;
+//                                back[x][y] = floatGet(code);
+//                            }
+//                        }
+//                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        break;
                     case 5:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
