@@ -69,13 +69,13 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 130, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
     
     private TextCellFactory tcf;
-    private static final int width = 512, height = 512;
+    private static final int width = 256, height = 256;
     private static final float[][] back = new float[width][height];
 
     private SquidInput input;
@@ -227,7 +227,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomXS128 gdxRandom = new RandomXS128(1L);
     private BasicRandom32 br32 = new BasicRandom32(1);
     private BasicRandom64 br64 = new BasicRandom64(1L);
-    private CellularAutomaton ca = new CellularAutomaton(512, 512);
+    private CellularAutomaton ca = new CellularAutomaton(width, height);
     
     private ArrayList<Color> gradient;
     private final float[] gradientF = new float[256];
@@ -1338,8 +1338,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     private float getGray(float brightness) {
-        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
-//        return gradientF[(int)(brightness * 255)];
+//        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
+        return gradientF[(int)(brightness * 255)];
     }
 
 //    public static class Dunes implements Noise.Noise2D {
@@ -4479,46 +4479,46 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 104:
                         Gdx.graphics.setTitle("Basic 1D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int i = 0; i < 511; i++)
-                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+                        for (int i = 0; i < width - 1; i++)
+                            System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[511], FLOAT_WHITE);
                         if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
                             iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 240);
-                            back[511][255 + iBright] =  bright;
-                            back[511][256 + iBright] =  bright;
-                            back[511][257 + iBright] =  bright;
+                            back[width - 1][255 + iBright] =  bright;
+                            back[width - 1][256 + iBright] =  bright;
+                            back[width - 1][257 + iBright] =  bright;
 
-                            back[510][255 + iBright] =  bright;
-                            back[510][256 + iBright] =  bright;
-                            back[510][257 + iBright] =  bright;
+                            back[width - 2][255 + iBright] =  bright;
+                            back[width - 2][256 + iBright] =  bright;
+                            back[width - 2][257 + iBright] =  bright;
 
-                            back[509][255 + iBright] =  bright;
-                            back[509][256 + iBright] =  bright;
-                            back[509][257 + iBright] =  bright;
+                            back[width - 3][255 + iBright] =  bright;
+                            back[width - 3][256 + iBright] =  bright;
+                            back[width - 3][257 + iBright] =  bright;
                         }
                         break;
                     case 105:
                         Gdx.graphics.setTitle("Basic 1D Noise, five inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int i = 0; i < 511; i++)
-                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
-                        Arrays.fill(back[511], FLOAT_WHITE);
+                        for (int i = 0; i < width - 1; i++)
+                            System.arraycopy(back[i+1], 0, back[i], 0, width);
+                        Arrays.fill(back[width - 1], FLOAT_WHITE);
                         if((ctr & 3) == 0)
                         {
                             iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 240);
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                            back[511][255 + iBright] =  bright;
-                            back[511][256 + iBright] =  bright;
-                            back[511][257 + iBright] =  bright;
+                            back[width - 1][255 + iBright] =  bright;
+                            back[width - 1][256 + iBright] =  bright;
+                            back[width - 1][257 + iBright] =  bright;
 
-                            back[510][255 + iBright] =  bright;
-                            back[510][256 + iBright] =  bright;
-                            back[510][257 + iBright] =  bright;
+                            back[width - 2][255 + iBright] =  bright;
+                            back[width - 2][256 + iBright] =  bright;
+                            back[width - 2][257 + iBright] =  bright;
 
-                            back[509][255 + iBright] =  bright;
-                            back[509][256 + iBright] =  bright;
-                            back[509][257 + iBright] =  bright;
+                            back[width - 3][255 + iBright] =  bright;
+                            back[width - 3][256 + iBright] =  bright;
+                            back[width - 3][257 + iBright] =  bright;
                         }
                         break;
                     case 106:
@@ -4544,9 +4544,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                    }
 //                        Gdx.graphics.setTitle("SwayRandomized 1D Noise Battle, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         Gdx.graphics.setTitle("1D noise for terrain, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int i = 0; i < 511; i++)
-                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
-                        Arrays.fill(back[511], FLOAT_WHITE);
+                        for (int i = 0; i < width - 1; i++)
+                            System.arraycopy(back[i+1], 0, back[i], 0, width);
+                        Arrays.fill(back[width - 1], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
                         {
 //                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.75f, 1, 1);
@@ -4570,17 +4570,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                     BLUE_GREEN_SERIES[(iBright + 1) % BLUE_GREEN_SERIES.length].toFloatBits(),
                                     (257+ctr) * 0x1.44cbc89p-8f - (int)((257+ctr) * 0x1.44cbc89p-8f));
                             iBright = (int) (riverSway(0, ctr * 0x3p-9f) * 240f);
-                            back[511][255 + iBright] =  bright;
-                            back[511][256 + iBright] =  bright;
-                            back[511][257 + iBright] =  bright;
+                            back[width - 1][255 + iBright] =  bright;
+                            back[width - 1][256 + iBright] =  bright;
+                            back[width - 1][257 + iBright] =  bright;
 
-                            back[510][255 + iBright] =  bright;
-                            back[510][256 + iBright] =  bright;
-                            back[510][257 + iBright] =  bright;
+                            back[width - 2][255 + iBright] =  bright;
+                            back[width - 2][256 + iBright] =  bright;
+                            back[width - 2][257 + iBright] =  bright;
 
-                            back[509][255 + iBright] =  bright;
-                            back[509][256 + iBright] =  bright;
-                            back[509][257 + iBright] =  bright;
+                            back[width - 3][255 + iBright] =  bright;
+                            back[width - 3][256 + iBright] =  bright;
+                            back[width - 3][257 + iBright] =  bright;
 
 //                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 0.4f, 1f, 1);
 //                            iBright = (int) (swayRandomized3(0, ctr * 0x1p-7f) * 240f);
@@ -4599,46 +4599,46 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 107:
                         Gdx.graphics.setTitle("Sway1D Noise, 5 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int i = 0; i < 511; i++)
-                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
-                        Arrays.fill(back[511], FLOAT_WHITE);
+                        for (int i = 0; i < width - 1; i++)
+                            System.arraycopy(back[i+1], 0, back[i], 0, width);
+                        Arrays.fill(back[width - 1], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
                             iBright = (int)(layeredSway1D.getNoise(ctr * 0x1p-6) * 240);
-                            back[511][255 + iBright] =  bright;
-                            back[511][256 + iBright] =  bright;
-                            back[511][257 + iBright] =  bright;
+                            back[width - 1][255 + iBright] =  bright;
+                            back[width - 1][256 + iBright] =  bright;
+                            back[width - 1][257 + iBright] =  bright;
 
-                            back[510][255 + iBright] =  bright;
-                            back[510][256 + iBright] =  bright;
-                            back[510][257 + iBright] =  bright;
+                            back[width - 2][255 + iBright] =  bright;
+                            back[width - 2][256 + iBright] =  bright;
+                            back[width - 2][257 + iBright] =  bright;
 
-                            back[509][255 + iBright] =  bright;
-                            back[509][256 + iBright] =  bright;
-                            back[509][257 + iBright] =  bright;
+                            back[width - 3][255 + iBright] =  bright;
+                            back[width - 3][256 + iBright] =  bright;
+                            back[width - 3][257 + iBright] =  bright;
                         }
                     break;
                     case 108:
                         Gdx.graphics.setTitle("swayRandomizedTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int i = 0; i < 511; i++)
-                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
-                        Arrays.fill(back[511], FLOAT_WHITE);
+                        for (int i = 0; i < width - 1; i++)
+                            System.arraycopy(back[i+1], 0, back[i], 0, width);
+                        Arrays.fill(back[width - 1], FLOAT_WHITE);
                         //if((ctr & 3) == 0) 
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
                             iBright = (int) (swayRandomizedTight(9001L, ctr * 0x1p-8f) * 480f);
-                            back[511][15 + iBright] =  bright;
-                            back[511][16 + iBright] =  bright;
-                            back[511][17 + iBright] =  bright;
+                            back[width - 1][255 + iBright] =  bright;
+                            back[width - 1][256 + iBright] =  bright;
+                            back[width - 1][257 + iBright] =  bright;
 
-                            back[510][15 + iBright] =  bright;
-                            back[510][16 + iBright] =  bright;
-                            back[510][17 + iBright] =  bright;
+                            back[width - 2][255 + iBright] =  bright;
+                            back[width - 2][256 + iBright] =  bright;
+                            back[width - 2][257 + iBright] =  bright;
 
-                            back[509][15 + iBright] =  bright;
-                            back[509][16 + iBright] =  bright;
-                            back[509][17 + iBright] =  bright;
+                            back[width - 3][255 + iBright] =  bright;
+                            back[width - 3][256 + iBright] =  bright;
+                            back[width - 3][257 + iBright] =  bright;
                         }
                         break;
 //                        Gdx.graphics.setTitle("randomWobbleTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -5153,7 +5153,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice2D(point4D, x, y, ctr);
+                                //slice2D(point4D, x, y, ctr);
+                                point4D[0] = x * 0.02625;
+                                point4D[1] = y * 0.02625;
+                                point4D[2] = ctr * 0.13125;
+                                point4D[3] = fn.singleSimplex(1337, x * 0.02125f, y * 0.02125f, ctr * 0.03125f) * 16.0;
+//                                point4D[3] = fn.getCubic(x * 0.03125f, y * 0.03125f, ctr * 0.13125f);
                                 bright =
                                         basicPrepare(phantom4D.getNoise(point4D)
                                         );
@@ -5245,8 +5250,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < 64; x++) {
                             for (int y = 0; y < 64; y++) {
                                 bright = floatGet(randomGrid[x][y].nextLong() | 255L);
-                                for (int gx = 0; gx < 512; gx += 64) {
-                                    for (int gy = 0; gy < 512; gy += 64) {
+                                for (int gx = 0; gx < width; gx += 64) {
+                                    for (int gy = 0; gy < height; gy += 64) {
                                         back[gx + x][gy + y] = bright;
                                     }
                                 }
@@ -6226,8 +6231,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             point6D = new double[6],
             point7D = new double[7];
     private double[] slice2D(double[] points, int x, int y, int ctr) {
-        points[0]  = x * 0.3125 + ctr * 0.375;
-        points[1]  = y * 0.3125 - ctr * 0.375;
+        points[0]  = x * 0.03125 + ctr * 0.1375;
+        points[1]  = y * 0.03125 - ctr * 0.1375;
         return points;
     }
     private double[] slice3D(double[] points, int x, int y, int ctr) {
@@ -6237,15 +6242,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return points;
     }
     private double[] alter2D(int x, int y, int ctr) {
-        point2D[0]  = x * 0.3125 + ctr * 0.375;
-        point2D[1]  = y * 0.3125 - ctr * 0.375;
+        point2D[0]  = x * 0.03125 + ctr * 0.1375;
+        point2D[1]  = y * 0.03125 - ctr * 0.1375;
         return point2D;
     }
 
     private double[] alter3D(int x, int y, int ctr) {
-        point3D[0]  = x * 0.3125;
-        point3D[1]  = y * 0.3125;
-        point3D[2]  = ctr * 0.375;
+        point3D[0]  = x * 0.03125;
+        point3D[1]  = y * 0.03125;
+        point3D[2]  = ctr * 0.1375;
 //        point3D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
 //        point3D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
 //        point3D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
