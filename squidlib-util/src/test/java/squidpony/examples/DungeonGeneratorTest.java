@@ -78,7 +78,7 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 110, height = 70, depth = 16;
+    public static int width = 60, height = 30, depth = 16;
 
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
@@ -356,7 +356,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("ClassicRogueMapGenerator\n");
         rng.setState(2252637788195L);
-        ClassicRogueMapGenerator classic = new ClassicRogueMapGenerator(6, 6, width, height, 6, 15, 4, 8,rng);
+        ClassicRogueMapGenerator classic = new ClassicRogueMapGenerator(4, 4, width, height, 6, 10, 4, 7,rng);
         dungeonGenerator.clearEffects();
         dungeon = dungeonGenerator.generate(classic.generate());
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
@@ -399,6 +399,23 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(dungeon, true));
         System.out.println(dungeonGenerator);
         System.out.println();
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println("BasicCaveGenerator\n");
+        rng.setState(2252637788195L);
+        BasicCaveGenerator caveGen = new BasicCaveGenerator(width, height, rng);
+        dungeonGenerator.clearEffects();
+        dungeon = dungeonGenerator.generate(caveGen.generate());
+        //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+//        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+//        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+        System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
         

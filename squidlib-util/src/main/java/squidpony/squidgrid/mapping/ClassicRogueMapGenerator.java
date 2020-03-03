@@ -41,11 +41,10 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
         @Override
         public int hashCode() {
-            // same as Coord.hashCode(); has extremely good resistance to collisions on common points
-            int r = cellx ^ celly;
-            r ^= (cellx << 13 | cellx >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
-            r = cellx ^ (r << 11 | r >>> 21);
-            return r ^ (r << 25 | r >>> 7);
+            return Coord.xoroHashCode(cellx, celly);
+            // the actual algorithm doesn't matter much here.
+            // another good option, if you don't feel like looking up xoroHashCode(), is
+            //return (int)(0xC13FA9A902A6328FL * cellx + 0x91E10DA5C79E7B1DL * celly >>> 32);
         }
 
         @Override
