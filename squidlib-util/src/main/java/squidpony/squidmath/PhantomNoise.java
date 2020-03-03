@@ -26,7 +26,7 @@ public class PhantomNoise {
         hashFloors = new int[dim+1];
         yolk = new CrossHash.Yolk(seed);
         scale = -1.0 / (1.0 + Math.sqrt(1.0 + dim));
-        inverse = 1.0 / (dim+1);
+        inverse = 1.0 / (dim + 1.0);
     }
 
     public double valueNoise()
@@ -45,7 +45,7 @@ public class PhantomNoise {
             for (int j = 0; j < dim; j++) {
                 bit = (i >>> j & 1);
                 temp *= bit + (1|-bit) * working[j];
-                hashFloors[j] = floors[j] + 1 - bit;
+                hashFloors[j] = floors[j] - bit;
             }
             sum += temp * yolk.hash(hashFloors);
         }
