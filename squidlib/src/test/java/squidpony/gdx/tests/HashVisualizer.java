@@ -1338,8 +1338,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     private float getGray(float brightness) {
-//        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
-        return gradientF[(int)(brightness * 255)];
+        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
+//        return gradientF[(int)(brightness * 255)];
     }
 
 //    public static class Dunes implements Noise.Noise2D {
@@ -5157,7 +5157,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 point4D[0] = x * 0.02625;
                                 point4D[1] = y * 0.02625;
                                 point4D[2] = ctr * 0.13125;
-                                point4D[3] = fn.singleSimplex(1337, x * 0.02125f, y * 0.02125f, ctr * 0.03125f) * 16.0;
+//                                point4D[3] = fn.getCubic(x, y, ctr) * 16.0;
+                                point4D[3] = fn.getPerlin(x - y, y - ctr, ctr - x);
 //                                point4D[3] = fn.getCubic(x * 0.03125f, y * 0.03125f, ctr * 0.13125f);
                                 bright =
                                         basicPrepare(phantom4D.getNoise(point4D)
