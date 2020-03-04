@@ -626,10 +626,17 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         final float[] floatValueTable = this.floatValueTable;
         final char[] charValueTable = this.charValueTable;
         char oldChar = charValueTable[loc];
-        while ((key = keyTable[loc + 1 & mask]) != 0 && (loc + 1 & mask) != fibonacci(key)) {
-            keyTable[loc] = key;
-            floatValueTable[loc] = floatValueTable[loc + 1 & mask];
-            charValueTable[loc] = charValueTable[++loc & mask];
+        int next = loc + 1 & mask;
+        int placement;
+        while ((key = keyTable[next]) != 0) {
+            placement = fibonacci(key);
+            if((next - placement & mask) > (loc - placement & mask)) {
+                keyTable[loc] = key;
+                floatValueTable[loc] = floatValueTable[next];
+                charValueTable[loc] = charValueTable[next];
+                loc = next;
+            }
+            next = next + 1 & mask;
         }
         keyTable[loc] = 0;
         --size;
