@@ -35,6 +35,12 @@ import java.io.Serializable;
  * its full period, which is 2 to the 128 (with one stream) instead of the 2 to the 64 (with 2 to the 63 streams) here.
  * There's also {@link SilkRNG}, which is like OrbitRNG but uses 32-bit math and is GWT-optimized.
  * <br>
+ * This added a small extra step to the generation on March 4, 2020; the extra step reduces correlation between streams
+ * by further randomizing the output. Without this step (an additional right-xorshift by 6), nearby stateA or stateB
+ * values would often produce visibly similar sequences; with the step they are much less similar and more random. The
+ * additional step slows down TangleRNG by a very small amount. This edit also added {@link #getStream()}, which may
+ * have a use somewhere (maybe diagnosing possible problems?).
+ * <br>
  * Created by Tommy Ettinger on 7/9/2018.
  */
 public final class TangleRNG implements RandomnessSource, SkippingRandomness, Serializable {
@@ -116,7 +122,7 @@ public final class TangleRNG implements RandomnessSource, SkippingRandomness, Se
     public final int next(final int bits) {
         final long s = (stateA += 0xC6BC279692B5C323L);
         final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
-        return (int)(z ^ z >>> 26) >>> (32 - bits);
+        return (int)(z ^ z >>> 26 ^ z >>> 6) >>> (32 - bits);
     }
     /**
      * Using this method, any algorithm that needs to efficiently generate more
@@ -130,7 +136,7 @@ public final class TangleRNG implements RandomnessSource, SkippingRandomness, Se
     public final long nextLong() {
         final long s = (stateA += 0xC6BC279692B5C323L);
         final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
-        return z ^ z >>> 26;
+        return z ^ z >>> 26 ^ z >>> 6;
     }
 
     /**
@@ -177,6 +183,20 @@ public final class TangleRNG implements RandomnessSource, SkippingRandomness, Se
     public long skip(long advance) {
         final long s = (stateA += 0xC6BC279692B5C323L * advance);
         final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L * advance);
-        return z ^ z >>> 26;
+        return z ^ z >>> 26 ^ z >>> 6;
     }
+    /**
+     * Gets a long that identifies which stream of numbers this generator is producing; this stream identifier is always
+     * an odd long and won't change by generating numbers. It is determined at construction and will usually (not
+     * always) change if {@link #setStateA(long)} or {@link #setStateB(long)} are called. Each stream is a
+     * probably-unique sequence of 2 to the 64 longs, where approximately 1/3 of all possible longs will not ever occur
+     * (while others occur twice or more), but this set of results is different for every stream. There are 2 to the 63
+     * possible streams, one for every odd long.
+     * @return an odd long that identifies which stream this TangleRNG is generating from
+     */
+    public long getStream()
+    {
+        return stateB - (stateA * 0x1743CE5C6E1B848BL) * 0x9E3779B97F4A7C16L;
+    }
+
 }
