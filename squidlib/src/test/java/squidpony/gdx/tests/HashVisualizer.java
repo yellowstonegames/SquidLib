@@ -67,15 +67,15 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType =5;
     private static final int NOISE_LIMIT = 146;
     private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
-    //private SparseLayers display;//, overlay;
     
     private TextCellFactory tcf;
-    private static final int width = 256, height = 256;
+    private static final int width = 512, height = 512;
+//    private static final int width = 256, height = 256;
     private static final float[][] back = new float[width][height];
 
     private SquidInput input;
@@ -5158,7 +5158,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 point4D[1] = y * 0.02625;
                                 point4D[2] = ctr * 0.13125;
 //                                point4D[3] = fn.getCubic(x, y, ctr) * 16.0;
-                                point4D[3] = fn.getPerlin(x - y, y - ctr, ctr - x);
+                                point4D[3] = fn.ridged3D(-y, -x, -ctr, 1337, 3, 0.0023125f, 3f) * 16.0;
 //                                point4D[3] = fn.getCubic(x * 0.03125f, y * 0.03125f, ctr * 0.13125f);
                                 bright =
                                         basicPrepare(phantom4D.getNoise(point4D)
@@ -5250,7 +5250,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 4:
                         for (int x = 0; x < 64; x++) {
                             for (int y = 0; y < 64; y++) {
-                                bright = floatGet(randomGrid[x][y].nextLong() | 255L);
+                                bright = floatGet(randomGrid[x][y].nextLong() << 8 | 255L);
                                 for (int gx = 0; gx < width; gx += 64) {
                                     for (int gy = 0; gy < height; gy += 64) {
                                         back[gx + x][gy + y] = bright;
