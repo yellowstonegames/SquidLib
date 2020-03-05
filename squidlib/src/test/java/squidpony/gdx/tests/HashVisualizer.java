@@ -67,7 +67,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType =5;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 146;
     private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
 
@@ -5131,7 +5131,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 alter2D(x, y, ctr);
                                 bright =
-                                        basicPrepare(phantom2D.getNoise(point2D[0], point2D[1])
+                                        basicPrepare(phantom2D.getNoise(point2D)
+//                                        basicPrepare(phantom2D.getNoise(point2D[0], point2D[1])
                                         );
                                 back[x][y] = getGray(bright);
                             }

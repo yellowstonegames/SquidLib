@@ -11,8 +11,8 @@ public class PhantomNoise {
     private final CrossHash.Yolk yolk;
     public final int dim;
     private final double inverse;
-    private final double scale;
     private final double[] working, points;
+    private final double[][] vertices;
     private final int[] floors, hashFloors;
     public PhantomNoise() {
         this(0xFEEDBEEF1337CAFEL, 3);
@@ -22,10 +22,26 @@ public class PhantomNoise {
         dim = Math.max(2, dimension);
         working = new double[dim+1];
         points = new double[dim+1];
+        vertices = new double[dim+1][dim];
+        double id = -1.0 / dim;
+        vertices[0][0] = 1.0;
+        for (int v = 1; v <= dim; v++) {
+            vertices[v][0] = id;
+        }
+        for (int d = 1; d < dim; d++) {
+            double t = 0.0;
+            for (int i = 0; i < d; i++) {
+                t += vertices[d][i] * vertices[d][i];
+            }
+            vertices[d][d] = Math.sqrt(1.0 - t);
+            t = (id - t) / vertices[d][d];
+            for (int v = d + 1; v <= dim; v++) {
+                vertices[v][d] = t;
+            }
+        }
         floors = new int[dim+1];
         hashFloors = new int[dim+1];
         yolk = new CrossHash.Yolk(seed);
-        scale = -1.0 / (1.0 + Math.sqrt(1.0 + dim));
         inverse = 1.0 / (dim + 1.0);
     }
 
@@ -52,8 +68,14 @@ public class PhantomNoise {
         return (sum * 0x1p-32 + 0.5);
     }
 
-    public double getNoise(double... args) { 
-        System.arraycopy(args, 0, points, 0, dim);
+    public double getNoise(double... args) {
+        for (int v = 0; v <= dim; v++) {
+            points[v] = 0.0;
+            for (int d = 0; d < dim; d++) {
+                points[v] += args[d] * vertices[v][d];
+            }
+        }
+//        System.arraycopy(args, 0, points, 0, dim);
 //        for (int i = 0; i < dim; i++) {
 //            points[i] = args[i];
 //            for (int j = 0; j < dim; j++) {
@@ -62,11 +84,12 @@ public class PhantomNoise {
 //            }
 //            points[i] *= scale;
 //        }
-        points[dim] = 0.0;
-        for (int i = 0; i < dim; i++) {
-            points[dim] += args[i];
-        }
-        points[dim] *= scale;
+
+//        points[dim] = 0.0;
+//        for (int i = 0; i < dim; i++) {
+//            points[dim] += args[i];
+//        }
+//        points[dim] *= scale;
         working[dim] = Math.PI;
         double result = 0.0, warp = 0.0;
         for (int i = 0; i <= dim; i++) {
