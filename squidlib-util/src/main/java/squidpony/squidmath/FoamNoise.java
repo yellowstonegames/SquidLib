@@ -53,21 +53,31 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
     }
 
     public static double foamNoise(final double x, final double y, int seed) {
-        double xin = x * 0.540302 + y * 0.841471; // sin and cos of 1
-        double yin = x * -0.841471 + y * 0.540302;
+        final double p0 = x;
+        final double p1 = x * -0.5 + y * 0.8660254037844386;
+        final double p2 = x * -0.5 + y * -0.8660254037844387;
+        
+        double xin = p1;
+        double yin = p2;        
+        //double xin = x * 0.540302 + y * 0.841471; // sin and cos of 1
+        //double yin = x * -0.841471 + y * 0.540302;
         final double a = valueNoise(seed, xin, yin);
-        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
-        xin = x * -0.989992 + y * 0.141120; // sin and cos of 3
-        yin = x * -0.141120 + y * -0.989992;
-        final double b = valueNoise(seed, xin, yin + a);
-        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        xin = p2;
+        yin = p0;
+        //xin = x * -0.989992 + y * 0.141120; // sin and cos of 3
+        //yin = x * -0.141120 + y * -0.989992;
+        final double b = valueNoise(seed, xin + a, yin);
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
-        xin = x * 0.283662 + y * -0.958924; // sin and cos of 5
-        yin = x * 0.958924 + y * 0.283662;
-        final double c = valueNoise(seed, xin, yin - b);
+        xin = p0;
+        yin = p1;
+        //xin = x * 0.283662 + y * -0.958924; // sin and cos of 5
+        //yin = x * 0.958924 + y * 0.283662;
+        final double c = valueNoise(seed, xin + b, yin);
         final double result = a * 0.3125 + (b + c) * 0.34375;
         return result * result * (6.0 - 4.0 * result) - 1.0;
     }
@@ -92,10 +102,15 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 
 
     public static double foamNoise(final double x, final double y, final double z, int seed) {
-        final double p0 = (x + y + z);// * 0.5;
-        final double p1 = x - (y + z);// * 0.25;
-        final double p2 = y - (x + z);// * 0.25;
-        final double p3 = z - (x + y);// * 0.25;
+        final double p0 = x;
+        final double p1 = x * -0.3333333333333333 + y * 0.9428090415820634;
+        final double p2 = x * -0.3333333333333333 + y * -0.4714045207910317 + z * 0.816496580927726;
+        final double p3 = x * -0.3333333333333333 + y * -0.4714045207910317 + z * -0.816496580927726;
+
+        //final double p0 = (x + y + z);// * 0.5;
+        //final double p1 = x - (y + z);// * 0.25;
+        //final double p2 = y - (x + z);// * 0.25;
+        //final double p3 = z - (x + y);// * 0.25;
 ////rotated version of above points on a tetrahedron; the ones below are "more correct" but more complex (and slower?)       
 //        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;
 //        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;
@@ -107,37 +122,45 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double a = valueNoise(seed, xin, yin, zin);
         //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p2;
         zin = p3;
-        final double b = valueNoise(seed, xin - a, yin, zin + a);
+        final double b = valueNoise(seed, xin + a, yin, zin);
         //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p1;
         zin = p3;
-        final double c = valueNoise(seed, xin + b, yin - b, zin);
+        final double c = valueNoise(seed, xin + b, yin, zin);
         //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p1;
         zin = p2;
-        final double d = valueNoise(seed, xin, yin - c, zin + c);
+        final double d = valueNoise(seed, xin + c, yin, zin);
 
         final double result = (a + b + c + d) * 0.25;
         return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 
     public static double foamNoise(final double x, final double y, final double z, final double w, int seed) {
-        final double p0 = (x + y + z + w);
-        final double p1 = x - (y + z + w);
-        final double p2 = y - (x + z + w);
-        final double p3 = z - (x + y + w);
-        final double p4 = w - (x + y + z);
-////rotated version of above points on a tetrahedron; the ones below are "more correct" but more complex (and slower?)       
+        final double p0 = x;
+        final double p1 = x * -0.25 + y * 0.9682458365518543;
+        final double p2 = x * -0.25 + y * -0.3227486121839514 + z * 0.9128709291752769;
+        final double p3 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * 0.7905694150420949;
+        final double p4 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * -0.7905694150420947;
+        //final double p0 = (x + y + z + w);
+        //final double p1 = x - (y + z + w);
+        //final double p2 = y - (x + z + w);
+        //final double p3 = z - (x + y + w);
+        //final double p4 = w - (x + y + z);
+////rotated version of above points on a 5-cell; the ones below are "more correct" but more complex (and slower?)       
 //        final double p0 = x * 0.139640 + y * -0.304485 + z * 0.942226;
 //        final double p1 = x * -0.185127 + y * -0.791704 + z * -0.582180;
 //        final double p2 = x * -0.776796 + y * 0.628752 + z * -0.035464;
@@ -149,35 +172,39 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double a = valueNoise(seed, xin, yin, zin, win);
         //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p2;
         zin = p3;
         win = p4;
-        final double b = valueNoise(seed, xin - a, yin - a, zin + a, win + a);
+        final double b = valueNoise(seed, xin + a, yin, zin, win);
         //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p1;
         zin = p3;
         win = p4;
-        final double c = valueNoise(seed, xin + b, yin - b, zin + b, win - b);
+        final double c = valueNoise(seed, xin + b, yin, zin, win);
         //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p1;
         zin = p2;
         win = p4;
-        final double d = valueNoise(seed, xin + c, yin + c, zin - c, win - c);
+        final double d = valueNoise(seed, xin + c, yin, zin, win);
         seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
         xin = p0;
         yin = p1;
         zin = p2;
         win = p3;
-        final double e = valueNoise(seed, xin - d, yin + d, zin - d, win + d);
+        final double e = valueNoise(seed, xin + d, yin, zin, win);
 
         final double result = (a + b + c + d + e) * 0.2;
         return  (result * result * (6.0 - 4.0 * result) - 1.0);

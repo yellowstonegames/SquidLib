@@ -75,28 +75,14 @@ public class PhantomNoise {
                 points[v] += args[d] * vertices[v][d];
             }
         }
-//        System.arraycopy(args, 0, points, 0, dim);
-//        for (int i = 0; i < dim; i++) {
-//            points[i] = args[i];
-//            for (int j = 0; j < dim; j++) {
-//                if(i != j)
-//                    points[i] -= args[j];
-//            }
-//            points[i] *= scale;
-//        }
-
-//        points[dim] = 0.0;
-//        for (int i = 0; i < dim; i++) {
-//            points[dim] += args[i];
-//        }
-//        points[dim] *= scale;
         working[dim] = Math.PI;
         double result = 0.0, warp = 0.0;
         for (int i = 0; i <= dim; i++) {
             for (int j = 0, d = 0; j < dim; j++, d++) {
                 if(d == i) d++;
-                working[j] = points[d] + warp;
+                working[j] = points[d];
             }
+            working[0] += warp;
             warp = valueNoise();
             result += warp;
             working[dim] += Math.E;
@@ -133,5 +119,26 @@ public class PhantomNoise {
 
 //        result *= result * (3.0 - 2.0 * result);
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+    }
+    
+    void printDebugInfo(){         
+        System.out.println("PhantomNoise with Dimension " + dim + ":");
+        final String dimNames = "xyzwuvabcdefghijklmnopqrst";
+        for (int v = 0; v <= dim; v++) {
+            System.out.print("points[" + v + "] = ");
+            for (int i = 0; i < dim; i++) {
+                if(vertices[v][i] != 0.0) 
+                {
+                    if(i > 0)
+                        System.out.print(" + ");
+                    if(vertices[v][i] == 1.0)
+                        System.out.print(dimNames.charAt(i % dimNames.length()));
+                    else 
+                        System.out.print(dimNames.charAt(i % dimNames.length()) + " * " + vertices[v][i]);
+                }
+            }
+            System.out.println(';');
+        }
+
     }
 }

@@ -20,6 +20,13 @@ public class LineKit {
      * bitwise AND with an existing encoded pattern as another long, as with {@code LineKit.interiorSquare & encoded}.
      * If you limit the area to the square with this, you may sometimes want to add a border, and for that you can use
      * {@link #exteriorSquare} and bitwise OR that with the restricted area.
+     * <br>This looks like: 
+     * <pre>
+     * "┌┬┬┐"
+     * "├┼┼┤"
+     * "├┼┼┤"
+     * "└┴┴┘"
+     * </pre>
      */
     public final static long interiorSquare = 0x3776BFFEBFFE9DDCL,
     /**
@@ -27,6 +34,13 @@ public class LineKit {
      * either restrict cells to the border by using bitwise AND with an existing encoded pattern as another long, as
      * with {@code LineKit.exteriorSquare & encoded}, or to add a border to an existing pattern with bitwise OR, as with
      * {@code LineKit.exteriorSquare | encoded}.
+     * <br>This looks like: 
+     * <pre>
+     * "┌──┐"
+     * "│  │"
+     * "│  │"
+     * "└──┘"
+     * </pre>
      */
     exteriorSquare = 0x3556A00AA00A955CL,
     /**
@@ -34,6 +48,13 @@ public class LineKit {
      * pattern has no lines in the corners of the 4x4 area, but has some lines in all other cells, though none that
      * would touch cells adjacent to this 4x4 area. Meant to restrict cells to the border by using bitwise AND with an
      * existing encoded pattern as another long, as with {@code LineKit.interiorPlus & encoded}.
+     * <br>This looks like: 
+     * <pre>
+     * " ┌┐ "
+     * "┌┼┼┐"
+     * "└┼┼┘"
+     * " └┘ "
+     * </pre>
      */
     interiorPlus = 0x03603FF69FFC09C0L,
     /**
@@ -42,6 +63,13 @@ public class LineKit {
      * would touch cells adjacent to this 4x4 area. Meant to either restrict cells to the border by using bitwise AND
      * with an existing encoded pattern as another long, as with {@code LineKit.exteriorPlus & encoded}, or to add a
      * border to an existing pattern with bitwise OR, as with {@code LineKit.exteriorPlus | encoded}.
+     * <br>This looks like: 
+     * <pre>
+     * " ┌┐ "
+     * "┌┘└┐"
+     * "└┐┌┘"
+     * " └┘ "
+     * </pre>
      */
     exteriorPlus = 0x03603C96963C09C0L,
     /**
@@ -52,6 +80,13 @@ public class LineKit {
      * {@code (LineKit.interiorSquareLarge | LineKit.flipHorizontal4x4(LineKit.interiorSquareLarge))}. If you want it to
      * touch everything but the left border, you can use
      * {@code (LineKit.interiorSquareLarge | LineKit.flipVertical4x4(LineKit.interiorSquareLarge))}.
+     * <br>This looks like: 
+     * <pre>
+     * "┌┬┬┬"
+     * "├┼┼┼"
+     * "├┼┼┼"
+     * "├┼┼┼"
+     * </pre>
      * @see #interiorSquare The docs here cover how to use this as a mask with bitwise AND.
      */
     interiorSquareLarge = 0xFFFEFFFEFFFEDDDCL,
@@ -60,6 +95,13 @@ public class LineKit {
      * touch the upper or left borders, but they do extend into the lower and right borders. The entirety of this
      * pattern is one right-angle. This is expected to be flipped using {@link #flipHorizontal4x4(long)} and/or
      * {@link #flipVertical4x4(long)} to make the other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "┌───"
+     * "│   "
+     * "│   "
+     * "│   "
+     * </pre>
      * @see #exteriorSquare The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
      */
     exteriorSquareLarge = 0x000A000A000A555CL,
@@ -68,7 +110,15 @@ public class LineKit {
      * space. A 3x3 square will be filled of the 4x4 area this represents. No lines will touch the upper or left
      * borders, but they do extend into the lower and right borders. This is expected to be flipped using
      * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "    "
+     * " ┌┬┬"
+     * " ├┼┼"
+     * " ├┼┼"
+     * </pre>
      * @see #interiorSquare The docs here cover how to use this as a mask with bitwise AND.
+     * 
      */
     shallowInteriorSquareLarge = 0xFFE0FFE0DDC00000L,
     /**
@@ -77,6 +127,13 @@ public class LineKit {
      * the upper or left borders, but they do extend into the lower and right borders. The entirety of this
      * pattern is one right-angle. This is expected to be flipped using {@link #flipHorizontal4x4(long)} and/or
      * {@link #flipVertical4x4(long)} to make the other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "    "
+     * " ┌──"
+     * " │  "
+     * " │  "
+     * </pre>
      * @see #exteriorSquare The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
      */
     shallowExteriorSquareLarge = 0x00A000A055C00000L,
@@ -85,6 +142,13 @@ public class LineKit {
      * space. A 2x2 square will be filled of the 4x4 area this represents. No lines will touch the upper or left
      * borders, but they do extend into the lower and right borders. This is expected to be flipped using
      * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "    "
+     * "    "
+     * "  ┌┬"
+     * "  ├┼"
+     * </pre>
      * @see #interiorSquare The docs here cover how to use this as a mask with bitwise AND.
      */
     shallowerInteriorSquareLarge = 0xFE00DC0000000000L,
@@ -94,6 +158,13 @@ public class LineKit {
      * the upper or left borders, but they do extend into the lower and right borders. The entirety of this
      * pattern is one right-angle. This is expected to be flipped using {@link #flipHorizontal4x4(long)} and/or
      * {@link #flipVertical4x4(long)} to make the other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "    "
+     * "    "
+     * "  ┌─"
+     * "  │ "
+     * </pre>
      * @see #exteriorSquare The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
      */
     shallowerExteriorSquareLarge = 0x0A005C0000000000L,
@@ -103,6 +174,13 @@ public class LineKit {
      * upper left 2x2 area blank, and touches all of the lower and right borders. This is expected to be flipped using
      * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
      * @see #interiorPlus The docs here cover how to use this as a mask with bitwise AND.
+     * <br>This looks like: 
+     * <pre>
+     * "  ┌┬"
+     * "  ├┼"
+     * "┌┬┼┼"
+     * "├┼┼┼"
+     * </pre>
      */
     interiorPlusLarge = 0xFFFEFFDCFE00DC00L,
     /**
@@ -110,6 +188,13 @@ public class LineKit {
      * will touch the upper or left borders, but they do extend into the lower and right borders. This pattern leaves
      * the upper left 2x2 area blank, as well as all but one each of the bottom and right border cells. This is expected
      * to be flipped using {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "  ┌─"
+     * "  │ "
+     * "┌─┘ "
+     * "│   "
+     * </pre>
      * @see #exteriorPlus The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
      */
     exteriorPlusLarge = 0x000A035C0A005C00L,
@@ -117,6 +202,13 @@ public class LineKit {
      * A constant that represents the encoded pattern for the upper left 4x4 area of an 8x8 circle shape. No lines will
      * touch the upper or left borders, but they do extend into the lower and right borders. This is expected to be
      * flipped using {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "  ┌┬"
+     * " ┌┼┼"
+     * "┌┼┼┼"
+     * "├┼┼┼"
+     * </pre>
      * @see #interiorPlus The docs here cover how to use this as a mask with bitwise AND.
      */
     interiorCircleLarge = 0xFFFEFFFCFFC0DC00L,
@@ -125,6 +217,13 @@ public class LineKit {
      * will touch the upper or left borders, but they do extend into the lower and right borders. The entirety of this
      * pattern is one curving line. This is expected to be flipped using {@link #flipHorizontal4x4(long)} and/or
      * {@link #flipVertical4x4(long)} to make other corners.
+     * <br>This looks like: 
+     * <pre>
+     * "  ┌─"
+     * " ┌┘ "
+     * "┌┘  "
+     * "│   "
+     * </pre>
      * @see #exteriorPlus The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
      */
     exteriorCircleLarge = 0x000A003C03C05C00L,
@@ -134,6 +233,13 @@ public class LineKit {
      * upper left 2x2 area blank, and touches all of the lower and right borders. This is expected to be flipped using
      * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners. This has more of a
      * fine angle than {@link #interiorPlusLarge}, which is otherwise similar.
+     * <br>This looks like: 
+     * <pre>
+     * "   ┌"
+     * "  ┌┼"
+     * " ┌┼┼"
+     * "┌┼┼┼"
+     * </pre>
      * @see #interiorPlus The docs here cover how to use this as a mask with bitwise AND.
      */
     interiorDiamondLarge = 0xFFFCFFC0FC00C000L,
@@ -143,6 +249,13 @@ public class LineKit {
      * leaves the upper left 2x2 area blank, as well as all but one each of the bottom and right border cells. This is
      * expected to be flipped using {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other
      * corners. This has more of a fine angle than {@link #exteriorPlusLarge}, which is otherwise similar.
+     * <br>This looks like: 
+     * <pre>
+     * "   ┌"
+     * "  ┌┘"
+     * " ┌┘ "
+     * "┌┘  "
+     * </pre>
      * @see #exteriorPlus The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
      */
     exteriorDiamondLarge = 0x003C03C03C00C000L;
