@@ -401,7 +401,7 @@
 <span class="sourceLineNo">393</span>        BlueNoise.blueSpill(floors, floorLimit, rng);<a name="line.393"></a>
 <span class="sourceLineNo">394</span>        for (int x = 0; x &lt; width; x++) {<a name="line.394"></a>
 <span class="sourceLineNo">395</span>            for (int y = 0; y &lt; height; y++) {<a name="line.395"></a>
-<span class="sourceLineNo">396</span>                if((b = BlueNoise.getSeededScratchy(x, y, seed) + 128) &lt; limit)<a name="line.396"></a>
+<span class="sourceLineNo">396</span>                if((b = BlueNoise.getSeeded(x, y, seed) + 128) &lt; limit)<a name="line.396"></a>
 <span class="sourceLineNo">397</span>                    content[x][y] = b;<a name="line.397"></a>
 <span class="sourceLineNo">398</span>                //floors[x][y] = (int)((FastNoise.instance.layered2D(x,  y, otherSeed, 2, 0x1p-5f) * 0.4999f + 0.5f) * (floorLimit - 1) + 0.25f + rng.nextFloat(0.5f));<a name="line.398"></a>
 <span class="sourceLineNo">399</span>            }<a name="line.399"></a>

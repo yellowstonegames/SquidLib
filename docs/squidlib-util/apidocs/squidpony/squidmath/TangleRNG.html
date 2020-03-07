@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.40">TangleRNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.46">TangleRNG</a>
 extends java.lang.Object
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="../../squidpony/squidmath/SkippingRandomness.html" title="interface in squidpony.squidmath">SkippingRandomness</a>, java.io.Serializable</pre>
 <div class="block">A very fast generator on 64-bit systems that allows choosing any of 2 to the 63 odd-number streams. Each stream
@@ -145,6 +145,12 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
  See also <a href="../../squidpony/squidmath/OrbitRNG.html" title="class in squidpony.squidmath"><code>OrbitRNG</code></a>, which gives up more speed but moves through all 2 to the 64 long values as streams over
  its full period, which is 2 to the 128 (with one stream) instead of the 2 to the 64 (with 2 to the 63 streams) here.
  There's also <a href="../../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath"><code>SilkRNG</code></a>, which is like OrbitRNG but uses 32-bit math and is GWT-optimized.
+ <br>
+ This added a small extra step to the generation on March 4, 2020; the extra step reduces correlation between streams
+ by further randomizing the output. Without this step (an additional right-xorshift by 6), nearby stateA or stateB
+ values would often produce visibly similar sequences; with the step they are much less similar and more random. The
+ additional step slows down TangleRNG by a very small amount. This edit also added <a href="../../squidpony/squidmath/TangleRNG.html#getStream--"><code>getStream()</code></a>, which may
+ have a use somewhere (maybe diagnosing possible problems?).
  <br>
  Created by Tommy Ettinger on 7/9/2018.</div>
 <dl>
@@ -219,42 +225,49 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#getStream--">getStream</a></span>()</code>
+<div class="block">Gets a long that identifies which stream of numbers this generator is producing; this stream identifier is always
+ an odd long and won't change by generating numbers.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#setStateA-long-">setStateA</a></span>(long&nbsp;stateA)</code>
 <div class="block">Set the "A" part of the internal state with a long.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#setStateB-long-">setStateB</a></span>(long&nbsp;stateB)</code>
 <div class="block">Set the "B" part of the internal state with a long; the least significant bit is ignored (will always be odd).</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#skip-long-">skip</a></span>(long&nbsp;advance)</code>
 <div class="block">Advances or rolls back the SkippingRandomness' state without actually generating each number.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/TangleRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -286,7 +299,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>TangleRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.55">TangleRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.61">TangleRNG</a>()</pre>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </li>
 </ul>
@@ -296,7 +309,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>TangleRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.62">TangleRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.68">TangleRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="TangleRNG-long-long-">
@@ -305,7 +318,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TangleRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.67">TangleRNG</a>(long&nbsp;seedA,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.73">TangleRNG</a>(long&nbsp;seedA,
                  long&nbsp;seedB)</pre>
 </li>
 </ul>
@@ -323,7 +336,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateA</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.77">getStateA</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.83">getStateA</a>()</pre>
 <div class="block">Get the "A" part of the internal state as a long.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -337,7 +350,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateA</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.86">setStateA</a>(long&nbsp;stateA)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.92">setStateA</a>(long&nbsp;stateA)</pre>
 <div class="block">Set the "A" part of the internal state with a long.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -351,7 +364,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateB</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.95">getStateB</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.101">getStateB</a>()</pre>
 <div class="block">Get the "B" part of the internal state as a long.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -365,7 +378,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateB</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.104">setStateB</a>(long&nbsp;stateB)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.110">setStateB</a>(long&nbsp;stateB)</pre>
 <div class="block">Set the "B" part of the internal state with a long; the least significant bit is ignored (will always be odd).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -379,7 +392,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.116">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.122">next</a>(int&nbsp;bits)</pre>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -398,7 +411,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.130">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.136">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  <p>
@@ -417,7 +430,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.144">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.150">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -435,7 +448,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.148">toString</a>()</pre>
+<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.154">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -448,7 +461,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.153">equals</a>(java.lang.Object&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.159">equals</a>(java.lang.Object&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -461,7 +474,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.163">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.169">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -471,10 +484,10 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <a name="skip-long-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>skip</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.177">skip</a>(long&nbsp;advance)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.183">skip</a>(long&nbsp;advance)</pre>
 <div class="block">Advances or rolls back the SkippingRandomness' state without actually generating each number. Skips forward
  or backward a number of steps specified by advance, where a step is equal to one call to <a href="../../squidpony/squidmath/TangleRNG.html#nextLong--"><code>nextLong()</code></a>,
  and returns the random number produced at that step. Negative numbers can be used to step backward, or 0 can be
@@ -486,6 +499,25 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <dd><code>advance</code> - Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the random long generated after skipping forward or backwards by <code>advance</code> numbers</dd>
+</dl>
+</li>
+</ul>
+<a name="getStream--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getStream</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/TangleRNG.html#line.197">getStream</a>()</pre>
+<div class="block">Gets a long that identifies which stream of numbers this generator is producing; this stream identifier is always
+ an odd long and won't change by generating numbers. It is determined at construction and will usually (not
+ always) change if <a href="../../squidpony/squidmath/TangleRNG.html#setStateA-long-"><code>setStateA(long)</code></a> or <a href="../../squidpony/squidmath/TangleRNG.html#setStateB-long-"><code>setStateB(long)</code></a> are called. Each stream is a
+ probably-unique sequence of 2 to the 64 longs, where approximately 1/3 of all possible longs will not ever occur
+ (while others occur twice or more), but this set of results is different for every stream. There are 2 to the 63
+ possible streams, one for every odd long.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an odd long that identifies which stream this TangleRNG is generating from</dd>
 </dl>
 </li>
 </ul>

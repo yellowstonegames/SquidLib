@@ -127,7 +127,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.4855">WorldMapGenerator.LocalMimicMap</a>
+<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.4860">WorldMapGenerator.LocalMimicMap</a>
 extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></pre>
 <div class="block">An unusual map generator that imitates an existing local map (such as a map of Australia, which it can do by
  default), without applying any projection or changing heat levels in the polar regions or equator.
@@ -301,14 +301,14 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></h3>
-<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#wrapY-int-int-">wrapY</a></code></li>
+<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#wrapX-int-int-">wrapX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#wrapY-int-int-">wrapY</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.mapping.WorldMapGenerator">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></h3>
-<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#codeHeight-double-">codeHeight</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeX-int-">decodeX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeY-int-">decodeY</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-double-double-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#project-double-double-">project</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#removeExcess-double-">removeExcess</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapX-int-int-">wrapX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></code></li>
+<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#codeHeight-double-">codeHeight</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeX-int-">decodeX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeY-int-">decodeY</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-double-double-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#project-double-double-">project</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#removeExcess-double-">removeExcess</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -337,7 +337,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>earth</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4857">earth</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4862">earth</a></pre>
 </li>
 </ul>
 <a name="shallow">
@@ -346,7 +346,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>shallow</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4858">shallow</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4863">shallow</a></pre>
 </li>
 </ul>
 <a name="coast">
@@ -355,7 +355,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>coast</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4859">coast</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4864">coast</a></pre>
 </li>
 </ul>
 <a name="earthOriginal">
@@ -364,7 +364,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>earthOriginal</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4860">earthOriginal</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4865">earthOriginal</a></pre>
 </li>
 </ul>
 </li>
@@ -381,7 +381,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4868">LocalMimicMap</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4873">LocalMimicMap</a>()</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should look like Australia, without projecting the
  land positions or changing heat by latitude. Always makes a 256x256 map.
  Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -395,7 +395,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4882">LocalMimicMap</a>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4887">LocalMimicMap</a>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
  given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
  The initial seed is set to the same large long every time, and it's likely that you would set the seed when
@@ -413,7 +413,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4897">LocalMimicMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4902">LocalMimicMap</a>(long&nbsp;initialSeed,
                      <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
  given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
@@ -434,7 +434,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4914">LocalMimicMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4919">LocalMimicMap</a>(long&nbsp;initialSeed,
                      <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
                      double&nbsp;octaveMultiplier)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
@@ -458,7 +458,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4934">LocalMimicMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4939">LocalMimicMap</a>(long&nbsp;initialSeed,
                      <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
                      <a href="../../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>&nbsp;noiseGenerator)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
@@ -485,7 +485,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4958">LocalMimicMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4963">LocalMimicMap</a>(long&nbsp;initialSeed,
                      <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
                      <a href="../../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>&nbsp;noiseGenerator,
                      double&nbsp;octaveMultiplier)</pre>
@@ -518,7 +518,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockList">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4972">LocalMimicMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4977">LocalMimicMap</a>(long&nbsp;initialSeed,
                      <a href="../../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>&nbsp;noiseGenerator,
                      double&nbsp;octaveMultiplier)</pre>
 <div class="block">Constructs a 256x256 unprojected local map that will use land forms with a similar shape to Australia.</div>
@@ -536,7 +536,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LocalMimicMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4986">LocalMimicMap</a>(<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMimicMap</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4991">LocalMimicMap</a>(<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMimicMap</a>&nbsp;other)</pre>
 <div class="block">Copies the LocalMimicMap <code>other</code> to construct a new one that is exactly the same. References will only
  be shared to Noise classes.</div>
 <dl>
@@ -559,7 +559,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap
 <ul class="blockListLast">
 <li class="blockList">
 <h4>regenerate</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4997">regenerate</a>(int&nbsp;startX,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.5002">regenerate</a>(int&nbsp;startX,
                           int&nbsp;startY,
                           int&nbsp;usedWidth,
                           int&nbsp;usedHeight,

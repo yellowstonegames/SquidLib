@@ -1533,7 +1533,11 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GreasedRegion.html#removeRectangle-int-int-int-int-">removeRectangle</a></span>(int&nbsp;startX,
                int&nbsp;startY,
                int&nbsp;rectangleWidth,
-               int&nbsp;rectangleHeight)</code>&nbsp;</td>
+               int&nbsp;rectangleHeight)</code>
+<div class="block">Removes all "on" cells from (startX, startY) inclusive 
+ to (startX+rectangleWidth, startY+rectangleHeight) exclusive, removing a total width of rectangleWidth and a
+ total height of rectangleHeight in cells.</div>
+</td>
 </tr>
 <tr id="i169" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
@@ -3199,10 +3203,22 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>removeRectangle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1957">removeRectangle</a>(int&nbsp;startX,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.1967">removeRectangle</a>(int&nbsp;startX,
                                      int&nbsp;startY,
                                      int&nbsp;rectangleWidth,
                                      int&nbsp;rectangleHeight)</pre>
+<div class="block">Removes all "on" cells from (startX, startY) inclusive 
+ to (startX+rectangleWidth, startY+rectangleHeight) exclusive, removing a total width of rectangleWidth and a
+ total height of rectangleHeight in cells.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>startX</code> - left side x-coordinate</dd>
+<dd><code>startY</code> - top side (or bottom if positive y is up) y-coordinate</dd>
+<dd><code>rectangleWidth</code> - how many cells wide the area to remove is</dd>
+<dd><code>rectangleHeight</code> - how many cells tal the area to remove is</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this, after modification, for chaining</dd>
+</dl>
 </li>
 </ul>
 <a name="removeCircle-squidpony.squidmath.Coord-int-">
@@ -3211,7 +3227,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>removeCircle</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2014">removeCircle</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2024">removeCircle</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
                                   int&nbsp;radius)</pre>
 </li>
 </ul>
@@ -3221,7 +3237,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>empty</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2036">empty</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2046">empty</a>()</pre>
 <div class="block">Equivalent to <a href="../../squidpony/squidmath/GreasedRegion.html#clear--"><code>clear()</code></a>, setting all cells to "off," but also returns this for chaining.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -3235,7 +3251,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>allOn</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2049">allOn</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2059">allOn</a>()</pre>
 <div class="block">Sets all cells in this to "on."</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -3249,7 +3265,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2083">fill</a>(boolean&nbsp;contents)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2093">fill</a>(boolean&nbsp;contents)</pre>
 <div class="block">Sets all cells in this to "on" if contents is true, or "off" if contents is false.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -3265,7 +3281,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>removeEdges</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2126">removeEdges</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2136">removeEdges</a>()</pre>
 <div class="block">Turns all cells that are adjacent to the boundaries of the GreasedRegion to "off".</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -3279,7 +3295,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2155">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2165">copy</a>()</pre>
 <div class="block">Simple method that returns a newly-allocated copy of this GreasedRegion; modifications to one won't change the
  other, and this method returns the copy while leaving the original unchanged.</div>
 <dl>
@@ -3294,7 +3310,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>decode</h4>
-<pre>public&nbsp;boolean[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2165">decode</a>()</pre>
+<pre>public&nbsp;boolean[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2175">decode</a>()</pre>
 <div class="block">Returns this GreasedRegion's data as a 2D boolean array, [width][height] in size, with on treated as true and off
  treated as false.</div>
 <dl>
@@ -3309,7 +3325,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>intoChars</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2184">intoChars</a>(char[][]&nbsp;chars,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2194">intoChars</a>(char[][]&nbsp;chars,
                           char&nbsp;on,
                           char&nbsp;off)</pre>
 <div class="block">Fills this GreasedRegion's data into the given 2D char array, modifying it and returning it, with "on" cells
@@ -3330,7 +3346,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>intoChars</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2201">intoChars</a>(char[][]&nbsp;chars,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2211">intoChars</a>(char[][]&nbsp;chars,
                           char&nbsp;on)</pre>
 <div class="block">Fills this GreasedRegion's data into the given 2D char array, modifying it and returning it, with "on" cells
  filled with the char parameter <code>on</code> and "off" cells left as-is.</div>
@@ -3349,7 +3365,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>toChars</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2219">toChars</a>(char&nbsp;on,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2229">toChars</a>(char&nbsp;on,
                         char&nbsp;off)</pre>
 <div class="block">Returns this GreasedRegion's data as a 2D char array,  [width][height] in size, with "on" cells filled with the
  char parameter on and "off" cells with the parameter off.</div>
@@ -3368,7 +3384,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>toChars</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2235">toChars</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2245">toChars</a>()</pre>
 <div class="block">Returns this GreasedRegion's data as a 2D char array,  [width][height] in size, with "on" cells filled with '.'
  and "off" cells with '#'.</div>
 <dl>
@@ -3383,7 +3399,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>show</h4>
-<pre>public&nbsp;java.lang.StringBuilder&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2247">show</a>(char&nbsp;on,
+<pre>public&nbsp;java.lang.StringBuilder&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2257">show</a>(char&nbsp;on,
                                     char&nbsp;off)</pre>
 <div class="block">Returns this GreasedRegion's data as a StringBuilder, with each row made of the parameter on for "on" cells and
  the parameter off for "off" cells, separated by newlines, with no trailing newline at the end.</div>
@@ -3402,7 +3418,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2267">toString</a>()</pre>
+<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2277">toString</a>()</pre>
 <div class="block">Returns a legible String representation of this that can be printed over multiple lines, with all "on" cells
  represented by '.' and all "off" cells by '#', in roguelike floors-on walls-off convention, separating each row
  by newlines (without a final trailing newline, so you could append text right after this).</div>
@@ -3420,7 +3436,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mask</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2279">mask</a>(char[][]&nbsp;map,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2289">mask</a>(char[][]&nbsp;map,
                      char&nbsp;filler)</pre>
 <div class="block">Returns a copy of map where if a cell is "on" in this GreasedRegion, this keeps the value in map intact,
  and where a cell is "off", it instead writes the char filler.</div>
@@ -3439,7 +3455,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mask</h4>
-<pre>public&nbsp;short[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2301">mask</a>(short[][]&nbsp;map,
+<pre>public&nbsp;short[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2311">mask</a>(short[][]&nbsp;map,
                       short&nbsp;filler)</pre>
 <div class="block">Returns a copy of map where if a cell is "on" in this GreasedRegion, this keeps the value in map intact,
  and where a cell is "off", it instead writes the short filler. Meant for use with MultiSpill, but may be
@@ -3459,7 +3475,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>inverseMask</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2322">inverseMask</a>(char[][]&nbsp;map,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2332">inverseMask</a>(char[][]&nbsp;map,
                             char&nbsp;toWrite)</pre>
 <div class="block">Returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps the value in map intact,
  and where a cell is "on", it instead writes the char toWrite.</div>
@@ -3478,7 +3494,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>writeInts</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2343">writeInts</a>(int[][]&nbsp;map,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2353">writeInts</a>(int[][]&nbsp;map,
                          int&nbsp;toWrite)</pre>
 <div class="block">"Inverse mask for ints;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
  the value in map intact, and where a cell is "on", it instead writes the int toWrite.</div>
@@ -3497,7 +3513,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>writeIntsInto</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2365">writeIntsInto</a>(int[][]&nbsp;map,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2375">writeIntsInto</a>(int[][]&nbsp;map,
                              int&nbsp;toWrite)</pre>
 <div class="block">"Inverse mask for ints;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
  the value in map intact, and where a cell is "on", it instead writes the int toWrite. Modifies map in-place,
@@ -3517,7 +3533,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>writeDoubles</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2385">writeDoubles</a>(double[][]&nbsp;map,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2395">writeDoubles</a>(double[][]&nbsp;map,
                                double&nbsp;toWrite)</pre>
 <div class="block">"Inverse mask for doubles;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
  the value in map intact, and where a cell is "on", it instead writes the double toWrite.</div>
@@ -3536,7 +3552,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>writeDoublesInto</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2407">writeDoublesInto</a>(double[][]&nbsp;map,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2417">writeDoublesInto</a>(double[][]&nbsp;map,
                                    double&nbsp;toWrite)</pre>
 <div class="block">"Inverse mask for doubles;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
  the value in map intact, and where a cell is "on", it instead writes the double toWrite. Modifies map in-place,
@@ -3556,7 +3572,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>writeCharsInto</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2428">writeCharsInto</a>(char[][]&nbsp;map,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2438">writeCharsInto</a>(char[][]&nbsp;map,
                                char&nbsp;toWrite)</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/GreasedRegion.html#inverseMask-char:A:A-char-"><code>inverseMask(char[][], char)</code></a>, but modifies <code>map</code> in-place and returns it. If a cell is "off"
  in this GreasedRegion, this keeps the value in map intact, and where a cell is "on", it instead writes the char
@@ -3576,7 +3592,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>or</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2448">or</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2458">or</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Union of two GreasedRegions, assigning the result into this GreasedRegion. Any cell that is "on" in either
  GreasedRegion will be made "on" in this GreasedRegion.</div>
 <dl>
@@ -3593,7 +3609,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>and</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2472">and</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2482">and</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Intersection of two GreasedRegions, assigning the result into this GreasedRegion. Any cell that is "on" in both
  GreasedRegions will be kept "on" in this GreasedRegion, but all other cells will be made "off."</div>
 <dl>
@@ -3610,7 +3626,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>andWrapping64</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2491">andWrapping64</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2501">andWrapping64</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Intersection of two GreasedRegions, assigning the result into this GreasedRegion, with the special requirement
  that other must be a 64x64 area, and the special property that other will be considered tiled to cover all of the
  area of this GreasedRegion. Any cell that is "on" in both GreasedRegions (treating other as tiling) will be kept
@@ -3629,7 +3645,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>andNot</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2508">andNot</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2518">andNot</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Difference of two GreasedRegions, assigning the result into this GreasedRegion. Any cell that is "on" in this
  GreasedRegion and "off" in other will be kept "on" in this GreasedRegion, but all other cells will be made "off."</div>
 <dl>
@@ -3648,7 +3664,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>notAnd</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2526">notAnd</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2536">notAnd</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Like andNot, but subtracts this GreasedRegion from other and stores the result in this GreasedRegion, without
  mutating other.</div>
 <dl>
@@ -3667,7 +3683,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>xor</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2545">xor</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2555">xor</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Symmetric difference (more commonly known as exclusive or, hence the name) of two GreasedRegions, assigning the
  result into this GreasedRegion. Any cell that is "on" in this and "off" in other, or "off" in this and "on" in
  other, will be made "on" in this; all other cells will be made "off." Useful to find cells that are "on" in
@@ -3686,7 +3702,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>not</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2566">not</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2576">not</a>()</pre>
 <div class="block">Negates this GreasedRegion, turning "on" to "off" and "off" to "on."</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -3700,7 +3716,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2588">translate</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2598">translate</a>(int&nbsp;x,
                                int&nbsp;y)</pre>
 <div class="block">Moves the "on" cells in this GreasedRegion to the given x and y offset, removing cells that move out of bounds.</div>
 <dl>
@@ -3722,7 +3738,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>insertTranslation</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2660">insertTranslation</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2670">insertTranslation</a>(int&nbsp;x,
                                        int&nbsp;y)</pre>
 <div class="block">Adds to this GreasedRegion with a moved set of its own "on" cells, moved to the given x and y offset.
  Ignores cells that would be added out of bounds. Keeps all cells that are currently "on" unchanged.</div>
@@ -3741,7 +3757,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>zoom</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2736">zoom</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2746">zoom</a>(int&nbsp;x,
                           int&nbsp;y)</pre>
 <div class="block">Effectively doubles the x and y values of each cell this contains (not scaling each cell to be larger, so each
  "on" cell will be surrounded by "off" cells), and re-maps the positions so the given x and y in the doubled space
@@ -3761,7 +3777,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>connect</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2869">connect</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2879">connect</a>()</pre>
 <div class="block">Takes the pairs of "on" cells in this GreasedRegion that are separated by exactly one cell in an orthogonal line,
  and changes the gap cells to "on" as well.
  <br>
@@ -3780,7 +3796,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>connect8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2929">connect8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2939">connect8way</a>()</pre>
 <div class="block">Takes the pairs of "on" cells in this GreasedRegion that are separated by exactly one cell in an orthogonal or
  diagonal line, and changes the gap cells to "on" as well.
  <br>
@@ -3799,7 +3815,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>connectLines</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.2999">connectLines</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3009">connectLines</a>()</pre>
 <div class="block">Takes the pairs of "on" cells in this GreasedRegion that are separated by exactly one cell in an orthogonal or
  diagonal line, and changes the gap cells to "on" as well. As a special case, this requires diagonals to either
  have no "on" cells adjacent along the perpendicular diagonal, or both cells on that perpendicular diagonal need
@@ -3821,7 +3837,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>thin</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3071">thin</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3081">thin</a>()</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/GreasedRegion.html#retract--"><code>retract()</code></a>, this reduces the width of thick areas of this GreasedRegion, but thin() will not remove
  areas that would be identical in a subsequent call to retract(), such as if the area would be eliminated. This
  is useful primarily for adjusting areas so they do not exceed a width of 2 cells, though their length (the longer
@@ -3844,7 +3860,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>thinFully</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3097">thinFully</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3107">thinFully</a>()</pre>
 <div class="block">Calls <a href="../../squidpony/squidmath/GreasedRegion.html#thin--"><code>thin()</code></a> repeatedly, until the result is unchanged from the last call. Consider using the idiom
  <code>expand8way().retract().thinFully()</code> to help change a possibly-strange appearance when the GreasedRegion
  this is called on touches the edges of the grid. In general, this method is likely to go too far when it tries to
@@ -3865,7 +3881,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>thin8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3115">thin8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3125">thin8way</a>()</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/GreasedRegion.html#retract8way--"><code>retract8way()</code></a>, this reduces the width of thick areas of this GreasedRegion, but thin8way() will not
  remove areas that would be identical in a subsequent call to retract8way(), such as if the area would be
  eliminated. This is useful primarily for adjusting areas so they do not exceed a width of 2 cells, though their
@@ -3886,7 +3902,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>thinFully8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3134">thinFully8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3144">thinFully8way</a>()</pre>
 <div class="block">Calls <a href="../../squidpony/squidmath/GreasedRegion.html#thin8way--"><code>thin8way()</code></a> repeatedly, until the result is unchanged from the last call. Consider using the idiom
  <code>expand8way().retract().thinFully8way()</code> to help change a strange appearance when the GreasedRegion this is
  called on touches the edges of the grid. In general, this method is likely to go too far when it tries to thin a
@@ -3905,7 +3921,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>disperse</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3147">disperse</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3157">disperse</a>()</pre>
 <div class="block">Removes "on" cells that are orthogonally adjacent to other "on" cells, keeping at least one cell in a group "on."
  Uses a "checkerboard" pattern to determine which cells to turn  off, with all cells that would be black on a
  checkerboard turned off and all others kept as-is.</div>
@@ -3921,7 +3937,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>disperse8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3167">disperse8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3177">disperse8way</a>()</pre>
 <div class="block">Removes "on" cells that are 8-way adjacent to other "on" cells, keeping at least one cell in a group "on."
  Uses a "grid-like" pattern to determine which cells to turn off, with all cells with even x and even y kept as-is
  but all other cells (with either or both odd x or odd y) turned off.</div>
@@ -3937,7 +3953,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>disperseRandom</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3187">disperseRandom</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3197">disperseRandom</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
 <div class="block">Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
  that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
  which makes the bottom row slightly random).</div>
@@ -3955,7 +3971,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>approximateBits</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3216">approximateBits</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3226">approximateBits</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
                                    int&nbsp;bitCount)</pre>
 <div class="block">Generates a random 64-bit long with a number of '1' bits (Hamming weight) equal on average to bitCount.
  For example, calling this with a parameter of 32 will be equivalent to calling nextLong() on the given
@@ -3985,7 +4001,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomInterleave</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3242">randomInterleave</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3252">randomInterleave</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
 <div class="block">Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
  2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.
  <br>
@@ -4002,7 +4018,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expand</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3277">expand</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3287">expand</a>()</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and expands them by one cell in the 4 orthogonal directions, making
  each "on" cell take up a plus-shaped area that may overlap with other "on" cells (which is just a normal "on"
  cell then).
@@ -4022,7 +4038,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expand</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3325">expand</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3335">expand</a>(int&nbsp;amount)</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and expands them by amount cells in the 4 orthogonal directions,
  making each "on" cell take up a plus-shaped area that may overlap with other "on" cells (which is just a normal
  "on" cell then).
@@ -4046,7 +4062,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3343">expandSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3353">expandSeries</a>(int&nbsp;amount)</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and produces amount GreasedRegions, each one expanded by 1 cell in
  the 4 orthogonal directions relative to the previous GreasedRegion, making each "on" cell take up a plus-shaped
  area that may overlap with other "on" cells (which is just a normal "on" cell then). This returns an array of
@@ -4067,7 +4083,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeriesToLimit</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3354">expandSeriesToLimit</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3364">expandSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="fringe--">
@@ -4076,7 +4092,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3375">fringe</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3385">fringe</a>()</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and expands them by one cell in the 4 orthogonal directions, producing
  a diamoond shape, then removes the original area before expansion, producing only the cells that were "off" in
  this and within 1 cell (orthogonal-only) of an "on" cell. This method is similar to <a href="../../squidpony/squidmath/GreasedRegion.html#surface--"><code>surface()</code></a>, but
@@ -4098,7 +4114,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3395">fringe</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3405">fringe</a>(int&nbsp;amount)</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and expands them by amount cells in the 4 orthogonal directions
  (iteratively, producing a diamond shape), then removes the original area before expansion, producing only the
  cells that were "off" in this and within amount cells (orthogonal-only) of an "on" cell. This method is similar
@@ -4121,7 +4137,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3415">fringeSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3425">fringeSeries</a>(int&nbsp;amount)</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and produces amount GreasedRegions, each one expanded by 1 cell in
  the 4 orthogonal directions relative to the previous GreasedRegion, making each "on" cell take up a diamond-
  shaped area. After producing the expansions, this removes the previous GreasedRegion from the next GreasedRegion
@@ -4144,7 +4160,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeriesToLimit</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3430">fringeSeriesToLimit</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3440">fringeSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="retract--">
@@ -4153,7 +4169,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retract</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3449">retract</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3459">retract</a>()</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and retracts them by one cell in the 4 orthogonal directions,
  making each "on" cell that was orthogonally adjacent to an "off" cell into an "off" cell.
  <br>
@@ -4172,7 +4188,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retract</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3509">retract</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3519">retract</a>(int&nbsp;amount)</pre>
 <div class="block">Takes the "on" cells in this GreasedRegion and retracts them by one cell in the 4 orthogonal directions, doing
  this iteeratively amount times, making each "on" cell that was within amount orthogonal distance to an "off" cell
  into an "off" cell.
@@ -4192,7 +4208,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3517">retractSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3527">retractSeries</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="retractSeriesToLimit--">
@@ -4201,7 +4217,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeriesToLimit</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3528">retractSeriesToLimit</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3538">retractSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="surface--">
@@ -4210,7 +4226,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surface</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3538">surface</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3548">surface</a>()</pre>
 </li>
 </ul>
 <a name="surface-int-">
@@ -4219,7 +4235,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surface</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3543">surface</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3553">surface</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeries-int-">
@@ -4228,7 +4244,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3549">surfaceSeries</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3559">surfaceSeries</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeriesToLimit--">
@@ -4237,7 +4253,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeriesToLimit</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3565">surfaceSeriesToLimit</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3575">surfaceSeriesToLimit</a>()</pre>
 </li>
 </ul>
 <a name="expand8way--">
@@ -4246,7 +4262,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expand8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3576">expand8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3586">expand8way</a>()</pre>
 </li>
 </ul>
 <a name="expand8way-int-">
@@ -4255,7 +4271,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expand8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3623">expand8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3633">expand8way</a>(int&nbsp;amount)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidgrid/zone/MutableZone.html#expand8way-int-">MutableZone</a></code></span></div>
 <div class="block">Expands this Zone in the four cardinal and four diagonal directions, performing the expansion consecutively
  <code>distance</code> times. Modified this Zone in-place and returns it for chaining.</div>
@@ -4275,7 +4291,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3631">expandSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3641">expandSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="expandSeriesToLimit8way--">
@@ -4284,7 +4300,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>expandSeriesToLimit8way</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3641">expandSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3651">expandSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="fringe8way--">
@@ -4293,7 +4309,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3651">fringe8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3661">fringe8way</a>()</pre>
 </li>
 </ul>
 <a name="fringe8way-int-">
@@ -4302,7 +4318,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringe8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3657">fringe8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3667">fringe8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="fringeSeries8way-int-">
@@ -4311,7 +4327,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3664">fringeSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3674">fringeSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="fringeSeriesToLimit8way--">
@@ -4320,7 +4336,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fringeSeriesToLimit8way</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3679">fringeSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3689">fringeSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="retract8way--">
@@ -4329,7 +4345,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retract8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3689">retract8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3699">retract8way</a>()</pre>
 </li>
 </ul>
 <a name="retract8way-int-">
@@ -4338,7 +4354,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retract8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3758">retract8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3768">retract8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="retractSeries8way-int-">
@@ -4347,7 +4363,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3766">retractSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3776">retractSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="retractSeriesToLimit8way--">
@@ -4356,7 +4372,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>retractSeriesToLimit8way</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3777">retractSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3787">retractSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="surface8way--">
@@ -4365,7 +4381,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surface8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3787">surface8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3797">surface8way</a>()</pre>
 </li>
 </ul>
 <a name="surface8way-int-">
@@ -4374,7 +4390,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surface8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3793">surface8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3803">surface8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeries8way-int-">
@@ -4383,7 +4399,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3799">surfaceSeries8way</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3809">surfaceSeries8way</a>(int&nbsp;amount)</pre>
 </li>
 </ul>
 <a name="surfaceSeriesToLimit8way--">
@@ -4392,7 +4408,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>surfaceSeriesToLimit8way</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3814">surfaceSeriesToLimit8way</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3824">surfaceSeriesToLimit8way</a>()</pre>
 </li>
 </ul>
 <a name="flood-squidpony.squidmath.GreasedRegion-">
@@ -4401,7 +4417,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>flood</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3825">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3835">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="flood-squidpony.squidmath.GreasedRegion-int-">
@@ -4410,7 +4426,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>flood</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3880">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3890">flood</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                            int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -4420,7 +4436,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeries</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3895">floodSeries</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3905">floodSeries</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                                    int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -4430,7 +4446,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeriesToLimit</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3917">floodSeriesToLimit</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3927">floodSeriesToLimit</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="flood8way-squidpony.squidmath.GreasedRegion-">
@@ -4439,7 +4455,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>flood8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3932">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3942">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="flood8way-squidpony.squidmath.GreasedRegion-int-">
@@ -4448,7 +4464,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>flood8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.3997">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4007">flood8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                                int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -4458,7 +4474,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeries8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4010">floodSeries8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4020">floodSeries8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                                        int&nbsp;amount)</pre>
 </li>
 </ul>
@@ -4468,7 +4484,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>floodSeriesToLimit8way</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4031">floodSeriesToLimit8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4041">floodSeriesToLimit8way</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds)</pre>
 </li>
 </ul>
 <a name="spill-squidpony.squidmath.GreasedRegion-int-squidpony.squidmath.IRNG-">
@@ -4477,7 +4493,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>spill</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4045">spill</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4055">spill</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
                            int&nbsp;volume,
                            <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 </li>
@@ -4488,7 +4504,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>removeCorners</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4098">removeCorners</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4108">removeCorners</a>()</pre>
 </li>
 </ul>
 <a name="split--">
@@ -4497,7 +4513,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>split</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4193">split</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4203">split</a>()</pre>
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
  are only adjacent diagonally are considered separate from each other) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area. Not to be confused with
@@ -4534,7 +4550,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>split8way</h4>
-<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4232">split8way</a>()</pre>
+<pre>public&nbsp;java.util.ArrayList&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4242">split8way</a>()</pre>
 <div class="block">If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
  are only adjacent diagonally are considered <b>one area</b> with this) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area. This should not be confused with
@@ -4571,7 +4587,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>largestPart</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4255">largestPart</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4265">largestPart</a>()</pre>
 <div class="block">Finds the largest contiguous area of "on" cells in this GreasedRegion and returns it; does not modify this
  GreasedRegion. If there are multiple areas that are all equally large with no larger area, this returns the
  region it checks first and still is largest (first determined by the same ordering <a href="../../squidpony/squidmath/GreasedRegion.html#nth-int-"><code>nth(int)</code></a> takes).
@@ -4590,7 +4606,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>largestPart8way</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4282">largestPart8way</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4292">largestPart8way</a>()</pre>
 <div class="block">Finds the largest contiguous area of "on" cells in this GreasedRegion and returns it; does not modify this
  GreasedRegion. If there are multiple areas that are all equally large with no larger area, this returns the
  region it checks first and still is largest (first determined by the same ordering <a href="../../squidpony/squidmath/GreasedRegion.html#nth-int-"><code>nth(int)</code></a> takes).
@@ -4609,7 +4625,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborUp</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4306">neighborUp</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4316">neighborUp</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards when this is called.
  Up is defined as negative y. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
  without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.</div>
@@ -4625,7 +4641,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborDown</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4332">neighborDown</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4342">neighborDown</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards when this is called.
  Down is defined as positive y. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
  without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.</div>
@@ -4641,7 +4657,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborLeft</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4358">neighborLeft</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4368">neighborLeft</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor to the left when this is called.
  Left is defined as negative x. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
  without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.</div>
@@ -4657,7 +4673,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborRight</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4378">neighborRight</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4388">neighborRight</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor to the right when this is called.
  Right is defined as positive x. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
  without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.</div>
@@ -4673,7 +4689,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborUpLeft</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4399">neighborUpLeft</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4409">neighborUpLeft</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards and to the left when this
  is called. Up is defined as negative y, left as negative x. Neighbors are "on" cells exactly one cell away. A
  cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from "on"
@@ -4690,7 +4706,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborUpRight</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4427">neighborUpRight</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4437">neighborUpRight</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards and to the right when
  this is called. Up is defined as negative y, right as positive x. Neighbors are "on" cells exactly one cell away.
  A cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from
@@ -4707,7 +4723,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborDownLeft</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4456">neighborDownLeft</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4466">neighborDownLeft</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards and to the left when
  this is called. Down is defined as positive y, left as negative x. Neighbors are "on" cells exactly one cell
  away. A cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from
@@ -4724,7 +4740,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>neighborDownRight</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4485">neighborDownRight</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4495">neighborDownRight</a>()</pre>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards and to the right when
  this is called. Down is defined as positive y, right as positive x. Neighbors are "on" cells exactly one cell
  away. A cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from
@@ -4741,7 +4757,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>removeIsolated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4507">removeIsolated</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4517">removeIsolated</a>()</pre>
 </li>
 </ul>
 <a name="intersects-squidpony.squidmath.GreasedRegion-">
@@ -4750,7 +4766,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>intersects</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4527">intersects</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4537">intersects</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</pre>
 <div class="block">Returns true if any cell is "on" in both this GreasedRegion and in other; returns false otherwise. For example,
  if (1,1) is "on" in this and (1,1) is "on" in other, this would return true, regardless of other cells.</div>
 <dl>
@@ -4767,7 +4783,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>whichContain</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4540">whichContain</a>(int&nbsp;x,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4550">whichContain</a>(int&nbsp;x,
                                                      int&nbsp;y,
                                                      <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</pre>
 </li>
@@ -4778,7 +4794,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>whichContain</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4551">whichContain</a>(int&nbsp;x,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4561">whichContain</a>(int&nbsp;x,
                                                      int&nbsp;y,
                                                      java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</pre>
 </li>
@@ -4789,7 +4805,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>appendContaining</h4>
-<pre>public static&nbsp;java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4569">appendContaining</a>(java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+<pre>public static&nbsp;java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4579">appendContaining</a>(java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
                                                                    int&nbsp;x,
                                                                    int&nbsp;y,
                                                                    <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;packed)</pre>
@@ -4812,7 +4828,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>appendContaining</h4>
-<pre>public static&nbsp;java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4588">appendContaining</a>(java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
+<pre>public static&nbsp;java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4598">appendContaining</a>(java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;into,
                                                                    int&nbsp;x,
                                                                    int&nbsp;y,
                                                                    java.util.Collection&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;packed)</pre>
@@ -4835,7 +4851,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>size</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4598">size</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4608">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>size</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -4855,7 +4871,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fit</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4605">fit</a>(double&nbsp;xFraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4615">fit</a>(double&nbsp;xFraction,
                  double&nbsp;yFraction)</pre>
 </li>
 </ul>
@@ -4865,7 +4881,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fit</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4648">fit</a>(int[][]&nbsp;basis,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4658">fit</a>(int[][]&nbsp;basis,
                    int&nbsp;defaultValue)</pre>
 </li>
 </ul>
@@ -4875,7 +4891,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedPortion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4707">separatedPortion</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4717">separatedPortion</a>(double&nbsp;fraction)</pre>
 <div class="block">Don't use this in new code; prefer <a href="../../squidpony/squidmath/GreasedRegion.html#mixedRandomSeparated-double-"><code>mixedRandomSeparated(double)</code></a>, <a href="../../squidpony/squidmath/GreasedRegion.html#quasiRandomSeparated-double-"><code>quasiRandomSeparated(double)</code></a>,
  or <a href="../../squidpony/squidmath/GreasedRegion.html#separatedZCurve-double-"><code>separatedZCurve(double)</code></a>. This method has issues with being unable to fill the requested fraction, but
  the others mentioned don't. See their documentation for what all these group of methods do.</div>
@@ -4893,7 +4909,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4764">randomSeparated</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4774">randomSeparated</a>(double&nbsp;fraction,
                                <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 <div class="block">Don't use this in new code; prefer <a href="../../squidpony/squidmath/GreasedRegion.html#mixedRandomSeparated-double-int-long-"><code>mixedRandomSeparated(double, int, long)</code></a> with a random long as the
  last parameter. This method has issues with being unable to fill the requested fraction, but mixedRandomSeparated
@@ -4913,7 +4929,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4777">randomSeparated</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4787">randomSeparated</a>(double&nbsp;fraction,
                                <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                                int&nbsp;limit)</pre>
 <div class="block">Don't use this in new code; prefer <a href="../../squidpony/squidmath/GreasedRegion.html#mixedRandomSeparated-double-int-long-"><code>mixedRandomSeparated(double, int, long)</code></a> with a random long as the
@@ -4935,7 +4951,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mixedRandomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4841">mixedRandomSeparated</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4851">mixedRandomSeparated</a>(double&nbsp;fraction)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
  scattering of chosen cells with a count that matches the given <code>fraction</code> of the total amount of "on" cells
  in this. This is pseudo-random with a fixed seed, but is very good at avoiding overlap (just as good as
@@ -4957,7 +4973,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mixedRandomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4858">mixedRandomSeparated</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4868">mixedRandomSeparated</a>(double&nbsp;fraction,
                                     int&nbsp;limit)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
  scattering of chosen cells with a count that matches the given <code>fraction</code> of the total amount of "on" cells
@@ -4981,7 +4997,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mixedRandomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4877">mixedRandomSeparated</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4887">mixedRandomSeparated</a>(double&nbsp;fraction,
                                     int&nbsp;limit,
                                     long&nbsp;seed)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
@@ -5008,7 +5024,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mixedRandomRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4926">mixedRandomRegion</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4936">mixedRandomRegion</a>(double&nbsp;fraction)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
  choosing cells so that the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells
  in this. This is pseudo-random with a fixed seed, and is very good at avoiding overlap (just as good as
@@ -5030,7 +5046,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mixedRandomRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4941">mixedRandomRegion</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4951">mixedRandomRegion</a>(double&nbsp;fraction,
                                        int&nbsp;limit)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
  choosing cells so that the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells
@@ -5054,7 +5070,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>mixedRandomRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4957">mixedRandomRegion</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.4967">mixedRandomRegion</a>(double&nbsp;fraction,
                                        int&nbsp;limit,
                                        long&nbsp;seed)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
@@ -5080,7 +5096,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>quasiRandomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5032">quasiRandomSeparated</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5042">quasiRandomSeparated</a>(double&nbsp;fraction)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
  random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
@@ -5104,7 +5120,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>quasiRandomSeparated</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5052">quasiRandomSeparated</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5062">quasiRandomSeparated</a>(double&nbsp;fraction,
                                     int&nbsp;limit)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
@@ -5131,7 +5147,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>quasiRandomRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5111">quasiRandomRegion</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5121">quasiRandomRegion</a>(double&nbsp;fraction)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
  the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
  random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
@@ -5156,7 +5172,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>quasiRandomRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5129">quasiRandomRegion</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5139">quasiRandomRegion</a>(double&nbsp;fraction,
                                        int&nbsp;limit)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
  the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
@@ -5183,7 +5199,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fray</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5199">fray</a>(double&nbsp;fractionKept)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5209">fray</a>(double&nbsp;fractionKept)</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/GreasedRegion.html#retract--"><code>retract()</code></a>, this removes the "on" cells that are 4-way-adjacent to any "off" cell, but unlike that
  method it keeps a fraction of those surface cells, quasi-randomly selecting them. This can be thought of as
  running <a href="../../squidpony/squidmath/GreasedRegion.html#surface--"><code>surface()</code></a> on a copy of this GreasedRegion, running <a href="../../squidpony/squidmath/GreasedRegion.html#quasiRandomRegion-double-"><code>quasiRandomRegion(double)</code></a> on that
@@ -5204,7 +5220,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomScatter</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5213">randomScatter</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5223">randomScatter</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                                    int&nbsp;minimumDistance)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a random subset of its previous contents, choosing cells so that the
  distance between any two "on" cells is at least <code>minimumDistance</code>, with at least one cell as "on" if any
@@ -5224,7 +5240,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomScatter</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5227">randomScatter</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5237">randomScatter</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                                    int&nbsp;minimumDistance,
                                    int&nbsp;limit)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a random subset of its previous contents, choosing cells so that the
@@ -5248,7 +5264,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>rateDensity</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5271">rateDensity</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5281">rateDensity</a>()</pre>
 </li>
 </ul>
 <a name="rateRegularity--">
@@ -5257,7 +5273,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>rateRegularity</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5279">rateRegularity</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5289">rateRegularity</a>()</pre>
 </li>
 </ul>
 <a name="perceptualHashQuick-long:A-int:A-">
@@ -5266,7 +5282,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>perceptualHashQuick</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5311">perceptualHashQuick</a>(long[]&nbsp;into,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5321">perceptualHashQuick</a>(long[]&nbsp;into,
                                 int[]&nbsp;working)</pre>
 <div class="block">Calculates a perceptual hash for this GreasedRegion using a method that is only precise for some sizes of
  GreasedRegion; it writes a result to into, and uses working as a temporary buffer. The lengths of into and
@@ -5290,7 +5306,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>asCoords</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5383">asCoords</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5393">asCoords</a>()</pre>
 </li>
 </ul>
 <a name="asCoords-squidpony.squidmath.Coord:A-">
@@ -5299,7 +5315,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>asCoords</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5388">asCoords</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;points)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5398">asCoords</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;points)</pre>
 </li>
 </ul>
 <a name="asEncoded--">
@@ -5308,7 +5324,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>asEncoded</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5410">asEncoded</a>()</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5420">asEncoded</a>()</pre>
 </li>
 </ul>
 <a name="asTightEncoded--">
@@ -5317,7 +5333,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>asTightEncoded</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5430">asTightEncoded</a>()</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5440">asTightEncoded</a>()</pre>
 </li>
 </ul>
 <a name="getAll--">
@@ -5326,7 +5342,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getAll</h4>
-<pre>public&nbsp;java.util.List&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5455">getAll</a>()</pre>
+<pre>public&nbsp;java.util.List&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5465">getAll</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -5341,7 +5357,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>first</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5479">first</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5489">first</a>()</pre>
 <div class="block">Gets the first Coord in the iteration order, or (-1,-1) if this GreasedRegion is empty.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -5355,7 +5371,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>firstTight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5492">firstTight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5502">firstTight</a>()</pre>
 </li>
 </ul>
 <a name="last--">
@@ -5364,7 +5380,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>last</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5509">last</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5519">last</a>()</pre>
 <div class="block">Gets the last Coord in the iteration order, or (-1,-1) if this GreasedRegion is empty.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -5378,7 +5394,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>lastTight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5522">lastTight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5532">lastTight</a>()</pre>
 </li>
 </ul>
 <a name="nth-int-">
@@ -5387,7 +5403,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>nth</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5535">nth</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5545">nth</a>(int&nbsp;index)</pre>
 </li>
 </ul>
 <a name="atFraction-double-">
@@ -5396,7 +5412,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>atFraction</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5560">atFraction</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5570">atFraction</a>(double&nbsp;fraction)</pre>
 </li>
 </ul>
 <a name="atFractionTight-double-">
@@ -5405,7 +5421,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>atFractionTight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5583">atFractionTight</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5593">atFractionTight</a>(double&nbsp;fraction)</pre>
 </li>
 </ul>
 <a name="singleRandom-squidpony.squidmath.IRNG-">
@@ -5414,7 +5430,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>singleRandom</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5620">singleRandom</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5630">singleRandom</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 <div class="block">Gets a single random Coord from the "on" positions in this GreasedRegion, or the Coord (-1,-1) if this is empty.
  Uses the given IRNG to generate one random int, which is used as an index. The technique this uses to iterate
  over bits can be credited to Erling Ellingsen and Daniel Lemire, found
@@ -5438,7 +5454,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>singleRandomTight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5640">singleRandomTight</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5650">singleRandomTight</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 </li>
 </ul>
 <a name="interleaveBits-int-int-">
@@ -5447,7 +5463,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>interleaveBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5672">interleaveBits</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5682">interleaveBits</a>(int&nbsp;x,
                                  int&nbsp;y)</pre>
 <div class="block">Narrow-purpose; takes an x and a y value, each between 0 and 65535 inclusive, and interleaves their bits so the
  least significant bit and every other bit after it are filled with the bits of x, while the
@@ -5469,7 +5485,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>disperseBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5689">disperseBits</a>(int&nbsp;n)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5699">disperseBits</a>(int&nbsp;n)</pre>
 <div class="block">Narrow-purpose; takes an int that represents a distance down the Z-order curve and moves its bits around so that
  its x component is stored in the bottom 16 bits (use <code>(n &amp; 0xffff)</code> to obtain) and its y component is
  stored in the upper 16 bits (use <code>(n &gt;&gt;&gt; 16)</code> to obtain). This may be useful for ordering traversals of all
@@ -5488,7 +5504,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>nthZCurve</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5710">nthZCurve</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5720">nthZCurve</a>(int&nbsp;index)</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/GreasedRegion.html#nth-int-"><code>nth(int)</code></a>, this gets the Coord at a given index along a path through the GreasedRegion, but unlike
  nth(), this traverses the path in a zig-zag pattern called the Z-Order Curve. This method is often not very fast
  compared to nth(), but this different path can help if iteration needs to seem less regular while still covering
@@ -5507,7 +5523,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>nthZCurveTight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5741">nthZCurveTight</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5751">nthZCurveTight</a>(int&nbsp;index)</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/GreasedRegion.html#nth-int-"><code>nth(int)</code></a>, this finds a given index along a path through the GreasedRegion, but unlike nth(), this
  traverses the path in a zig-zag pattern called the Z-Order Curve, and unlike <a href="../../squidpony/squidmath/GreasedRegion.html#nthZCurve-int-"><code>nthZCurve(int)</code></a>, this does
  not return a Coord and instead produces a "tight"-encoded int. This method is often not very fast compared to
@@ -5527,7 +5543,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedZCurve</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5781">separatedZCurve</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5791">separatedZCurve</a>(double&nbsp;fraction)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
  random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
@@ -5556,7 +5572,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedZCurve</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5806">separatedZCurve</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5816">separatedZCurve</a>(double&nbsp;fraction,
                                int&nbsp;limit)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
@@ -5588,7 +5604,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedRegionZCurve</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5842">separatedRegionZCurve</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5852">separatedRegionZCurve</a>(double&nbsp;fraction)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
  the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
  random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
@@ -5617,7 +5633,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedRegionZCurve</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5867">separatedRegionZCurve</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5877">separatedRegionZCurve</a>(double&nbsp;fraction,
                                            int&nbsp;limit)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
  the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
@@ -5649,7 +5665,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedBlue</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5902">separatedBlue</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5912">separatedBlue</a>(double&nbsp;fraction)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
  random instead of pseudo-random because it uses blue noise to sharply limit the likelihood of nearby points being
@@ -5674,7 +5690,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedBlue</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5922">separatedBlue</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5932">separatedBlue</a>(double&nbsp;fraction,
                              int&nbsp;limit)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
@@ -5701,7 +5717,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedRegionBlue</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5946">separatedRegionBlue</a>(double&nbsp;fraction)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5956">separatedRegionBlue</a>(double&nbsp;fraction)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
  the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
  random instead of pseudo-random because it uses blue noise to sharply limit the likelihood of nearby points being
@@ -5725,7 +5741,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>separatedRegionBlue</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5965">separatedRegionBlue</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5975">separatedRegionBlue</a>(double&nbsp;fraction,
                                          int&nbsp;limit)</pre>
 <div class="block">Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
  the <a href="../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells in this. This is quasi-
@@ -5751,7 +5767,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomPortion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5984">randomPortion</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.5994">randomPortion</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                              int&nbsp;size)</pre>
 </li>
 </ul>
@@ -5761,7 +5777,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomRegion</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6015">randomRegion</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6025">randomRegion</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                                   int&nbsp;size)</pre>
 </li>
 </ul>
@@ -5771,7 +5787,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6050">contains</a>(int&nbsp;x,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6060">contains</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -5789,7 +5805,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6061">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6071">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>isEmpty</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -5806,7 +5822,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sum</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6077">sum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6087">sum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -5825,7 +5841,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sum</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6101">sum</a>(java.util.List&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6111">sum</a>(java.util.List&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</pre>
 <div class="block">Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -5844,7 +5860,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sumDouble</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6126">sumDouble</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6136">sumDouble</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
 <div class="block">Generates a 2D double array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the double at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -5863,7 +5879,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sumDouble</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6150">sumDouble</a>(java.util.List&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</pre>
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6160">sumDouble</a>(java.util.List&lt;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&gt;&nbsp;regions)</pre>
 <div class="block">Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
@@ -5882,7 +5898,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sumWeighted</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6179">sumWeighted</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;regions,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6189">sumWeighted</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;regions,
                                   int[]&nbsp;weights)</pre>
 <div class="block">Generates a 2D int array from an array of GreasedRegions and an array of weights, starting the 2D result at all 0
  and, for every GreasedRegion that has that cell as "on," adding the int in the corresponding weights array at
@@ -5906,7 +5922,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sumWeightedDouble</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6207">sumWeightedDouble</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;regions,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6217">sumWeightedDouble</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;regions,
                                            double[]&nbsp;weights)</pre>
 <div class="block">Generates a 2D double array from an array of GreasedRegions and an array of weights, starting the 2D result at
  all 0 and, for every GreasedRegion that has that cell as "on," adding the double in the corresponding weights
@@ -5930,7 +5946,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sumInto</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6232">sumInto</a>(int[][]&nbsp;existing,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6242">sumInto</a>(int[][]&nbsp;existing,
                               <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
 <div class="block">Adds to an existing 2D int array with an array or vararg of GreasedRegions, adding 1 to the int in existing at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
@@ -5951,7 +5967,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>sumIntoDouble</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6259">sumIntoDouble</a>(double[][]&nbsp;existing,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6269">sumIntoDouble</a>(double[][]&nbsp;existing,
                                        <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
 <div class="block">Adds to an existing 2D double array with an array or vararg of GreasedRegions, adding 1 to the double in existing
  at a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
@@ -5972,7 +5988,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>dijkstraScan</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6280">dijkstraScan</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6290">dijkstraScan</a>(char[][]&nbsp;map,
                                       <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</pre>
 <div class="block">Discouraged from active use; slower than <a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>DijkstraMap</code></a> and has less features.</div>
 <dl>
@@ -5990,7 +6006,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>dijkstraScan8way</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6305">dijkstraScan8way</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6315">dijkstraScan8way</a>(char[][]&nbsp;map,
                                           <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</pre>
 <div class="block">Discouraged from active use; slower than <a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>DijkstraMap</code></a> and has less features.</div>
 <dl>
@@ -6008,7 +6024,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>bitSum</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6333">bitSum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6343">bitSum</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</pre>
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, treating each cell in the nth region as the
  nth bit of the int at the corresponding x,y cell in the int array. This means if you give 8 GreasedRegions to
  this method, it can produce any 8-bit number in a cell (0-255); if you give 16 GreasedRegions, then it can
@@ -6027,7 +6043,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6365">equals</a>(java.lang.Object&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6375">equals</a>(java.lang.Object&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>equals</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6042,7 +6058,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6379">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6389">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>hashCode</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6057,7 +6073,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6396">hash64</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6406">hash64</a>()</pre>
 </li>
 </ul>
 <a name="hash64-long-">
@@ -6066,7 +6082,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6423">hash64</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6433">hash64</a>(long&nbsp;seed)</pre>
 <div class="block">Computes a 64-bit hash code of this GreasedRegion given a 64-bit seed; even if given two very similar seeds,
  this should produce very different hash codes for the same GreasedRegion.
  <br>
@@ -6085,7 +6101,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>serializeToString</h4>
-<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6448">serializeToString</a>()</pre>
+<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6458">serializeToString</a>()</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -6094,7 +6110,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6454">deserializeFromString</a>(java.lang.String&nbsp;s)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6464">deserializeFromString</a>(java.lang.String&nbsp;s)</pre>
 </li>
 </ul>
 <a name="of-int-int-long...-">
@@ -6103,7 +6119,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <ul class="blockList">
 <li class="blockList">
 <h4>of</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6476">of</a>(int&nbsp;width,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6486">of</a>(int&nbsp;width,
                                int&nbsp;height,
                                long...&nbsp;data)</pre>
 <div class="block">Constructs a GreasedRegion using a vararg for data. Primarily meant for generated code, since
@@ -6125,7 +6141,7 @@ implements java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html
 <li class="blockList">
 <h4>toCompressedString</h4>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6490">toCompressedString</a>()</pre>
+public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6500">toCompressedString</a>()</pre>
 <div class="block">Compresses this GreasedRegion into a UTF-16 String and returns the String without modifying this GreasedRegion.
  Uses <a href="../../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a>'s algorithm and data to compress this GreasedRegion in 256x128 blocks, storing the
  CoordPacker-like data as chars with values from 256 to 33023 (a concept also used in <a href="../../squidpony/LZSPlus.html" title="class in squidpony"><code>LZSPlus</code></a>),
@@ -6144,7 +6160,7 @@ public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/Gr
 <li class="blockList">
 <h4>decompress</h4>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6552">decompress</a>(java.lang.String&nbsp;compressed)</pre>
+public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6562">decompress</a>(java.lang.String&nbsp;compressed)</pre>
 <div class="block">Decompresses a String returned by <a href="../../squidpony/squidmath/GreasedRegion.html#toCompressedString--"><code>toCompressedString()</code></a>, returning a new GreasedRegion with identical
  width, height, and contents to the GreasedRegion before compression.</div>
 <dl>
@@ -6161,7 +6177,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6587">contains</a>(java.lang.Object&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6597">contains</a>(java.lang.Object&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>contains</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6174,7 +6190,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;java.util.Iterator&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6594">iterator</a>()</pre>
+<pre>public&nbsp;java.util.Iterator&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6604">iterator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>iterator</code>&nbsp;in interface&nbsp;<code>java.lang.Iterable&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6191,7 +6207,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>toArray</h4>
-<pre>public&nbsp;java.lang.Object[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6599">toArray</a>()</pre>
+<pre>public&nbsp;java.lang.Object[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6609">toArray</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>toArray</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6206,7 +6222,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>toArray</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6605">toArray</a>(T[]&nbsp;a)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6615">toArray</a>(T[]&nbsp;a)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>toArray</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6219,7 +6235,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6612">add</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6622">add</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>add</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6232,7 +6248,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6619">clear</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6629">clear</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>clear</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6245,7 +6261,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6625">remove</a>(java.lang.Object&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6635">remove</a>(java.lang.Object&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>remove</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6258,7 +6274,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>containsAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6639">containsAll</a>(java.util.Collection&lt;?&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6649">containsAll</a>(java.util.Collection&lt;?&gt;&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>containsAll</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6271,7 +6287,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>addAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6649">addAll</a>(java.util.Collection&lt;? extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6659">addAll</a>(java.util.Collection&lt;? extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>addAll</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6284,7 +6300,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6659">removeAll</a>(java.util.Collection&lt;?&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6669">removeAll</a>(java.util.Collection&lt;?&gt;&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>removeAll</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6297,7 +6313,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>retainAll</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6669">retainAll</a>(java.util.Collection&lt;?&gt;&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6679">retainAll</a>(java.util.Collection&lt;?&gt;&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>retainAll</code>&nbsp;in interface&nbsp;<code>java.util.Collection&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -6310,7 +6326,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>deteriorate</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6691">deteriorate</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;rng,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6701">deteriorate</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;rng,
                                  int&nbsp;preservation)</pre>
 <div class="block">Randomly removes points from a GreasedRegion, with larger values for preservation keeping more of the existing
  shape intact. If preservation is 1, roughly 1/2 of all points will be removed; if 2, roughly 1/4, if 3, roughly
@@ -6330,7 +6346,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>deteriorate</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6722">deteriorate</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6732">deteriorate</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random,
                                  double&nbsp;preservation)</pre>
 <div class="block">Randomly removes points from a GreasedRegion, with preservation as a fraction between 1.0 (keep all) and 0.0
  (remove all). If preservation is 0.5, roughly 1/2 of all points will be removed; if 0.25, roughly 3/4 will be
@@ -6358,7 +6374,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>flip</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6741">flip</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6751">flip</a>(int&nbsp;x,
                           int&nbsp;y)</pre>
 <div class="block">Inverts the on/off state of the cell with the given x and y.</div>
 <dl>
@@ -6376,7 +6392,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>mirrorY</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6758">mirrorY</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6768">mirrorY</a>()</pre>
 <div class="block">Returns a new GreasedRegion that has been mirrored along the rightmost edge, parallel to the y-axis. The new
  GreasedRegion will have exactly twice the width, the additional width will have the contents of the original
  GreasesRegion in reversed order. The positions shared by both GreasedRegions will be the same, that is, any area
@@ -6393,7 +6409,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>intersectsWith</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6768">intersectsWith</a>(<a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6778">intersectsWith</a>(<a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -6410,7 +6426,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6793">translate</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6803">translate</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <div class="block">Translates a copy of <code>this</code> by the x,y values in <code>c</code>.
  Implemented with <code>return copy().translate(c.x, c.y);</code></div>
 <dl>
@@ -6429,7 +6445,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>getExternalBorder</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6806">getExternalBorder</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6816">getExternalBorder</a>()</pre>
 <div class="block">Gets a Collection of Coord values that are not in this GreasedRegion, but are
  adjacent to it, either orthogonally or diagonally. Related to the fringe()
  methods in CoordPacker and GreasedRegion, but guaranteed to use 8-way
@@ -6452,7 +6468,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>extend</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6822">extend</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6832">extend</a>()</pre>
 <div class="block">Gets a new Zone that contains all the Coords in <code>this</code> plus all
  neighboring Coords, which can be orthogonally or diagonally adjacent
  to any Coord this has in it. Related to the expand() methods in
@@ -6477,7 +6493,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6835">contains</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6845">contains</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <div class="block">Checks if <code>c</code> is present in this GreasedRegion. Returns true if and only if c is present in this
  GreasedRegion as an "on" cell. This will never be true if c is null, has negative x or y, has a value for x that
  is equal to or greater than <a href="../../squidpony/squidmath/GreasedRegion.html#width"><code>width</code></a>, or has a value for y that is equal to or greater than
@@ -6500,7 +6516,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6846">contains</a>(<a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6856">contains</a>(<a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
 <div class="block">Checks whether all Coords in <code>other</code> are also present in <code>this</code>.
  Requires that <code>other</code> won't give a null Coord while this method iterates over it.</div>
 <dl>
@@ -6521,7 +6537,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>xBound</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6864">xBound</a>(boolean&nbsp;findSmallest)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6874">xBound</a>(boolean&nbsp;findSmallest)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#xBound-boolean-">xBound</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -6542,7 +6558,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>yBound</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6878">yBound</a>(boolean&nbsp;findSmallest)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6888">yBound</a>(boolean&nbsp;findSmallest)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#yBound-boolean-">yBound</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -6563,7 +6579,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>getWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6913">getWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6923">getWidth</a>()</pre>
 <div class="block">Gets the distance between the minimum x-value contained in this GreasedRegion and the maximum x-value in it.
  Not the same as accessing the field <a href="../../squidpony/squidmath/GreasedRegion.html#width"><code>width</code></a> on a GreasedRegion! The field will get the span of the space
  that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between
@@ -6586,7 +6602,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>getHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6928">getHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6938">getHeight</a>()</pre>
 <div class="block">Gets the distance between the minimum y-value contained in this GreasedRegion and the maximum y-value in it.
  Not the same as accessing the field <a href="../../squidpony/squidmath/GreasedRegion.html#height"><code>height</code></a> on a GreasedRegion! The field will get the span of the space
  that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between
@@ -6609,7 +6625,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>getDiagonal</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6943">getDiagonal</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6953">getDiagonal</a>()</pre>
 <div class="block">Gets the diagonal distance from the point combining the lowest x-value present in this GreasedRegion with the
  lowest y-value in this, to the point combining the highest x-value and the highest y-value. These minimum and
  maximum values don't necessarily match a single "on" cell for each min and max corner, and can take their x and y
@@ -6631,7 +6647,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>getInternalBorder</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6955">getInternalBorder</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6965">getInternalBorder</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidgrid/zone/Zone.html#getInternalBorder--">getInternalBorder</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -6649,7 +6665,7 @@ public static&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title=
 <ul class="blockListLast">
 <li class="blockList">
 <h4>mixedRandomSeparatedAlt</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6973">mixedRandomSeparatedAlt</a>(double&nbsp;fraction,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/GreasedRegion.html#line.6983">mixedRandomSeparatedAlt</a>(double&nbsp;fraction,
                                        int&nbsp;limit,
                                        long&nbsp;seed)</pre>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming

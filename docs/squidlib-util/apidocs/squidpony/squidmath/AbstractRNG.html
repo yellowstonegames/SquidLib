@@ -1040,15 +1040,14 @@ implements <a href="../../squidpony/squidmath/IRNG.html" title="interface in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>randomPortion</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.492">randomPortion</a>(T[]&nbsp;data,
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.491">randomPortion</a>(T[]&nbsp;data,
                              T[]&nbsp;output)</pre>
 <div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
- it can, and then returns output. Will only use a given position in the given data at most once; uses the
- Swap-Or-Not Shuffle to accomplish this without allocations. Internally, makes 1 call to <a href="../../squidpony/squidmath/AbstractRNG.html#nextInt--"><code>nextInt()</code></a> and
- 6 calls to <a href="../../squidpony/squidmath/AbstractRNG.html#nextSignedInt-int-"><code>nextSignedInt(int)</code></a>, regardless of the data being randomized. It will get progressively less
- random as output gets larger.
+ it can, and then returns output. Will only use a given position in the given data at most once; uses a Feistel
+ Network to accomplish this without allocations. Internally, makes 2 calls to <a href="../../squidpony/squidmath/AbstractRNG.html#nextInt--"><code>nextInt()</code></a>, regardless of
+ the data being randomized.
  <br>
- Uses approximately the same code as <a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath"><code>SwapOrNotShuffler</code></a>, but without any object or array allocations.</div>
+ Uses approximately the same code as <a href="../../squidpony/squidmath/LowStorageShuffler.html" title="class in squidpony.squidmath"><code>LowStorageShuffler</code></a>, but without any object or array allocations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/IRNG.html#randomPortion-T:A-T:A-">randomPortion</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
@@ -1068,7 +1067,7 @@ implements <a href="../../squidpony/squidmath/IRNG.html" title="interface in squ
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public abstract&nbsp;<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.534">copy</a>()</pre>
+<pre>public abstract&nbsp;<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.539">copy</a>()</pre>
 <div class="block">Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
  IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not
  permit copying itself, it is suggested to either throw an <code>UnsupportedOperationException</code> or return a new
@@ -1091,7 +1090,7 @@ implements <a href="../../squidpony/squidmath/IRNG.html" title="interface in squ
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toSerializable</h4>
-<pre>public abstract&nbsp;java.io.Serializable&nbsp;<a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.548">toSerializable</a>()</pre>
+<pre>public abstract&nbsp;java.io.Serializable&nbsp;<a href="../../src-html/squidpony/squidmath/AbstractRNG.html#line.553">toSerializable</a>()</pre>
 <div class="block">Gets a view of this IRNG in a way that implements <code>Serializable</code>, which may simply be this IRNG if it
  implements Serializable as well as IRNG.
  <br>

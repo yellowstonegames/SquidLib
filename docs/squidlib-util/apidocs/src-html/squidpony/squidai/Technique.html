@@ -274,48 +274,43 @@
 <span class="sourceLineNo">266</span>     * @param resistanceMap a 2D double array where walls are 1.0 and other values are less; often produced by {@link DungeonUtility#generateSimpleResistances(char[][])}<a name="line.266"></a>
 <span class="sourceLineNo">267</span>     * @return all possible Coord values that can be used as targets for this Technique from the given starting Coord, as a GreasedRegion<a name="line.267"></a>
 <span class="sourceLineNo">268</span>     */<a name="line.268"></a>
-<span class="sourceLineNo">269</span>    public GreasedRegion possibleTargets(Coord user, double[][] resistanceMap)<a name="line.269"></a>
-<span class="sourceLineNo">270</span>    {<a name="line.270"></a>
-<span class="sourceLineNo">271</span>        if(aoe.getMaxRange() &lt;= 0) return new GreasedRegion(user, dungeon.length, dungeon[0].length);<a name="line.271"></a>
-<span class="sourceLineNo">272</span>        double[][] fovmap = new double[dungeon.length][dungeon[0].length];<a name="line.272"></a>
-<span class="sourceLineNo">273</span>        FOV.reuseFOV(resistanceMap, fovmap, user.x, user.y, aoe.getMaxRange(), aoe.getMetric());<a name="line.273"></a>
-<span class="sourceLineNo">274</span>        double rangeBound = 1.0001 - ((double) aoe.getMinRange() / aoe.getMaxRange());<a name="line.274"></a>
-<span class="sourceLineNo">275</span>        AimLimit limit = aoe.getLimitType();<a name="line.275"></a>
-<span class="sourceLineNo">276</span>        if(limit == null) limit = AimLimit.FREE;<a name="line.276"></a>
-<span class="sourceLineNo">277</span>        switch (limit)<a name="line.277"></a>
-<span class="sourceLineNo">278</span>        {<a name="line.278"></a>
-<span class="sourceLineNo">279</span>            case ORTHOGONAL:<a name="line.279"></a>
-<span class="sourceLineNo">280</span>                return new GreasedRegion(fovmap, 0.0001, rangeBound)<a name="line.280"></a>
-<span class="sourceLineNo">281</span>                        .removeRectangle(0, 0, user.x - 1, user.y - 1)<a name="line.281"></a>
-<span class="sourceLineNo">282</span>                        .removeRectangle(0, user.y + 1, user.x - 1, dungeon[0].length - user.y - 1)<a name="line.282"></a>
-<span class="sourceLineNo">283</span>                        .removeRectangle(user.x + 1, 0, dungeon.length - user.x - 1, user.y - 1)<a name="line.283"></a>
-<span class="sourceLineNo">284</span>                        .removeRectangle(user.x + 1, user.y + 1, dungeon.length - user.x - 1, dungeon[0].length - user.y - 1);<a name="line.284"></a>
-<span class="sourceLineNo">285</span>            case DIAGONAL:<a name="line.285"></a>
-<span class="sourceLineNo">286</span>            {<a name="line.286"></a>
-<span class="sourceLineNo">287</span>                GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                for(Coord c : all)<a name="line.288"></a>
-<span class="sourceLineNo">289</span>                {<a name="line.289"></a>
-<span class="sourceLineNo">290</span>                    if(Math.abs(c.x - user.x) == Math.abs(c.y - user.y))<a name="line.290"></a>
-<span class="sourceLineNo">291</span>                        used.insert(c);<a name="line.291"></a>
-<span class="sourceLineNo">292</span>                }<a name="line.292"></a>
-<span class="sourceLineNo">293</span>                return used;<a name="line.293"></a>
-<span class="sourceLineNo">294</span>            }<a name="line.294"></a>
-<span class="sourceLineNo">295</span>            case EIGHT_WAY:<a name="line.295"></a>
-<span class="sourceLineNo">296</span>            {<a name="line.296"></a>
-<span class="sourceLineNo">297</span>                GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                for(Coord c : all)<a name="line.298"></a>
-<span class="sourceLineNo">299</span>                {<a name="line.299"></a>
-<span class="sourceLineNo">300</span>                    if(Math.abs(c.x - user.x) == Math.abs(c.y - user.y) || c.x == user.x || c.y == user.y)<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                        used.insert(c);<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                }<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                return used;<a name="line.303"></a>
-<span class="sourceLineNo">304</span>            }<a name="line.304"></a>
-<span class="sourceLineNo">305</span>            default:<a name="line.305"></a>
-<span class="sourceLineNo">306</span>                return new GreasedRegion(fovmap, 0.0001, rangeBound);<a name="line.306"></a>
-<span class="sourceLineNo">307</span>        }<a name="line.307"></a>
-<span class="sourceLineNo">308</span><a name="line.308"></a>
-<span class="sourceLineNo">309</span>    }<a name="line.309"></a>
-<span class="sourceLineNo">310</span>}<a name="line.310"></a>
+<span class="sourceLineNo">269</span>    public GreasedRegion possibleTargets(Coord user, double[][] resistanceMap) {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        if (aoe.getMaxRange() &lt;= 0) return new GreasedRegion(user, dungeon.length, dungeon[0].length);<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        double[][] fovmap = new double[dungeon.length][dungeon[0].length];<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        FOV.reuseFOV(resistanceMap, fovmap, user.x, user.y, aoe.getMaxRange(), aoe.getMetric());<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        double rangeBound = 1.0001 - ((double) aoe.getMinRange() / aoe.getMaxRange());<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        AimLimit limit = aoe.getLimitType();<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        if (limit == null) limit = AimLimit.FREE;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        switch (limit) {<a name="line.276"></a>
+<span class="sourceLineNo">277</span>            case ORTHOGONAL: {<a name="line.277"></a>
+<span class="sourceLineNo">278</span>                // Thanks, SillyNameRandomNumber, for finding this fix<a name="line.278"></a>
+<span class="sourceLineNo">279</span>                return new GreasedRegion(fovmap, 0.0001, rangeBound)<a name="line.279"></a>
+<span class="sourceLineNo">280</span>                        .removeRectangle(0, 0, user.x, user.y)<a name="line.280"></a>
+<span class="sourceLineNo">281</span>                        .removeRectangle(0, user.y + 1, user.x, dungeon[0].length - user.y - 1)<a name="line.281"></a>
+<span class="sourceLineNo">282</span>                        .removeRectangle(user.x + 1, 0, dungeon.length - user.x - 1, user.y)<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                        .removeRectangle(user.x + 1, user.y + 1, dungeon.length - user.x - 1, dungeon[0].length - user.y - 1);<a name="line.283"></a>
+<span class="sourceLineNo">284</span>            }<a name="line.284"></a>
+<span class="sourceLineNo">285</span>            case DIAGONAL: {<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                for (Coord c : all) {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                    if (Math.abs(c.x - user.x) == Math.abs(c.y - user.y))<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                        used.insert(c);<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                }<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                return used;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>            }<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            case EIGHT_WAY: {<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                for (Coord c : all) {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                    if (Math.abs(c.x - user.x) == Math.abs(c.y - user.y) || c.x == user.x || c.y == user.y)<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                        used.insert(c);<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                }<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                return used;<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            }<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            default:<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                return new GreasedRegion(fovmap, 0.0001, rangeBound);<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        }<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    }<a name="line.304"></a>
+<span class="sourceLineNo">305</span>}<a name="line.305"></a>
 
 
 

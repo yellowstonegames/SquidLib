@@ -342,8 +342,6 @@
 <div class="block">Like <a href="../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-long-int-squidpony.squidmath.Noise.Noise6D-"><code>Noise.seamless3D(double[][][], long, int, Noise6D)</code></a>, but this doesn't precalculate noise into an array,
  instead calculating just one 3D point so that later calls with different x, y, or z will tile seamlessly.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BlueNoise.html#SEAMLESS_NOISE">SEAMLESS_NOISE</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/BlueNoise.html" title="class in squidpony.squidmath">BlueNoise</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#search-N-N-squidpony.squidai.astar.Heuristic-">search(N, N, Heuristic&lt;N&gt;)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#searchConnectionPath-N-N-squidpony.squidai.astar.Heuristic-java.util.List-">searchConnectionPath(N, N, Heuristic&lt;N&gt;, List&lt;Connection&lt;N&gt;&gt;)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
@@ -430,6 +428,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShuffledIntSequence.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ValueNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#seedA">seedA</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
 <dd>&nbsp;</dd>
@@ -1426,7 +1426,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#setState-int-int-">setState(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>
-<div class="block">Sets the current internal state of this SilkRNG with three ints, where stateA and stateB can each be any int.</div>
+<div class="block">Sets the current internal state of this SilkRNG with two ints, where stateA and stateB can each be any int.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>
@@ -2017,7 +2017,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#SilkRNG-int-int-">SilkRNG(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>
 <div class="block">Constructs this SilkRNG by calling <a href="../squidpony/squidmath/SilkRNG.html#setState-int-int-"><code>SilkRNG.setState(int, int)</code></a> on stateA and stateB as given; see that method
- for the specific details (stateA and stateB are kept as-is unless they are both 0).</div>
+ for the specific details (stateA and stateB are kept as-is).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#SilkRNG-java.lang.String-">SilkRNG(String)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>

@@ -27,207 +27,211 @@
 <span class="sourceLineNo">019</span> * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys<a name="line.19"></a>
 <span class="sourceLineNo">020</span> * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly<a name="line.20"></a>
 <span class="sourceLineNo">021</span> * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * randomness slightly. The {@link #round(int, int)} method used here acts like {@link Coord#hashCode()}, but with two<a name="line.22"></a>
-<span class="sourceLineNo">023</span> * small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this<a name="line.23"></a>
+<span class="sourceLineNo">022</span> * randomness slightly. The {@link #round(int, int)} method used here acts like an unbalanced, irreversible PRNG with<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * two states, and that turns out to be just fine for a Feistel network. Using 4 rounds turns out to be overkill in this<a name="line.23"></a>
 <span class="sourceLineNo">024</span> * case. This also uses a different seed for each round.<a name="line.24"></a>
 <span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
 <span class="sourceLineNo">026</span> * This class is extremely similar to {@link SwapOrNotShuffler}; both are optimized for usage on GWT but<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * SwapOrNotShuffler is meant to have higher quality in general. SwapOrNotShuffler also performs much better for some<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * values of bound; this class slows down drastically when bound is just slightly more than a power of 4, but can be<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * slightly faster when bound is equal to a power of 4. There's also {@link ShuffledIntSequence}, which extends this<a name="line.29"></a>
-<span class="sourceLineNo">030</span> * class and uses different behavior so it "re-shuffles" the results when all results have been produced, and<a name="line.30"></a>
-<span class="sourceLineNo">031</span> * {@link SNShuffledIntSequence}, which extends SwapOrNotShuffler but is otherwise like ShuffledIntSequence.<a name="line.31"></a>
-<span class="sourceLineNo">032</span> * SwapOrNotShuffler should usually be preferred over this class when the bound is unknown or known to be a problem for<a name="line.32"></a>
-<span class="sourceLineNo">033</span> * this class.<a name="line.33"></a>
-<span class="sourceLineNo">034</span> * &lt;br&gt;<a name="line.34"></a>
-<span class="sourceLineNo">035</span> * Created by Tommy Ettinger on 9/22/2018.<a name="line.35"></a>
-<span class="sourceLineNo">036</span> * @author Alan Wolfe<a name="line.36"></a>
-<span class="sourceLineNo">037</span> * @author Tommy Ettinger<a name="line.37"></a>
-<span class="sourceLineNo">038</span> */<a name="line.38"></a>
-<span class="sourceLineNo">039</span>public class LowStorageShuffler implements Serializable {<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    private static final long serialVersionUID = 1L;<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    public final int bound;<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    protected int index, pow4, halfBits, leftMask, rightMask;<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    protected int key0, key1;//, key2, key3;<a name="line.43"></a>
-<span class="sourceLineNo">044</span><a name="line.44"></a>
-<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
-<span class="sourceLineNo">046</span>     * Constructs a LowStorageShuffler with a random seed and a bound of 10.<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     */<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    public LowStorageShuffler(){<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        this(10);<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    /**<a name="line.51"></a>
-<span class="sourceLineNo">052</span>     * Constructs a LowStorageShuffler with the given exclusive upper bound and a random seed.<a name="line.52"></a>
-<span class="sourceLineNo">053</span>     * @param bound how many distinct ints this can return<a name="line.53"></a>
-<span class="sourceLineNo">054</span>     */<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    public LowStorageShuffler(int bound)<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    {<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        this(bound, (int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    }<a name="line.58"></a>
-<span class="sourceLineNo">059</span><a name="line.59"></a>
-<span class="sourceLineNo">060</span>    /**<a name="line.60"></a>
-<span class="sourceLineNo">061</span>     * Constructs a LowStorageShuffler with the given exclusive upper bound and int seed.<a name="line.61"></a>
-<span class="sourceLineNo">062</span>     * @param bound how many distinct ints this can return<a name="line.62"></a>
-<span class="sourceLineNo">063</span>     * @param seed any int; will be used to get several seeds used internally<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     */<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    public LowStorageShuffler(int bound, int seed)<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    {<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        // initialize our state<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        this.bound = bound;<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        restart(seed);<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        // calculate next power of 4.  Needed since the balanced Feistel network needs<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        // an even number of bits to work with<a name="line.71"></a>
-<span class="sourceLineNo">072</span>        pow4 = HashCommon.nextPowerOfTwo(bound);<a name="line.72"></a>
-<span class="sourceLineNo">073</span>        pow4 = ((pow4 | pow4 &lt;&lt; 1) &amp; 0x55555554) - 1;<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        // calculate our left and right masks to split our indices for the Feistel network<a name="line.74"></a>
-<span class="sourceLineNo">075</span>        halfBits = Integer.bitCount(pow4) &gt;&gt;&gt; 1;<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        rightMask = pow4 &gt;&gt;&gt; halfBits;<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        leftMask = pow4 ^ rightMask;<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    }<a name="line.78"></a>
-<span class="sourceLineNo">079</span><a name="line.79"></a>
-<span class="sourceLineNo">080</span>    /**<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     * Gets the next distinct int in the sequence, or -1 if all distinct ints have been returned that are non-negative<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * and less than {@link #bound}.<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     * @return the next item in the sequence, or -1 if the sequence has been exhausted<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     */<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    public int next()<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    {<a name="line.86"></a>
-<span class="sourceLineNo">087</span>        int shuffleIndex;<a name="line.87"></a>
-<span class="sourceLineNo">088</span>        // index is the index to start searching for the next number at<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        while (index &lt;= pow4)<a name="line.89"></a>
-<span class="sourceLineNo">090</span>        {<a name="line.90"></a>
-<span class="sourceLineNo">091</span>            // get the next number<a name="line.91"></a>
-<span class="sourceLineNo">092</span>            shuffleIndex = encode(index++);<a name="line.92"></a>
-<span class="sourceLineNo">093</span><a name="line.93"></a>
-<span class="sourceLineNo">094</span>            // if we found a valid index, return it!<a name="line.94"></a>
-<span class="sourceLineNo">095</span>            if (shuffleIndex &lt; bound)<a name="line.95"></a>
-<span class="sourceLineNo">096</span>                return shuffleIndex;<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        }<a name="line.97"></a>
-<span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>        // end of shuffled list if we got here.<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        return -1;<a name="line.100"></a>
-<span class="sourceLineNo">101</span>    }<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    /**<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     * Gets the previous returned int from the sequence (as yielded by {@link #next()}), or -1 if next() has never been<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     * called (or the LowStorageShuffler has reached the beginning from repeated calls to this method).<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * @return the previously-given item in the sequence, or -1 if this can't go earlier<a name="line.105"></a>
-<span class="sourceLineNo">106</span>     */<a name="line.106"></a>
-<span class="sourceLineNo">107</span>    public int previous()<a name="line.107"></a>
-<span class="sourceLineNo">108</span>    {<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        int shuffleIndex;<a name="line.109"></a>
-<span class="sourceLineNo">110</span>        // index is the index to start searching for the next number at<a name="line.110"></a>
-<span class="sourceLineNo">111</span>        while (index &gt; 0)<a name="line.111"></a>
-<span class="sourceLineNo">112</span>        {<a name="line.112"></a>
-<span class="sourceLineNo">113</span>            // get the next number<a name="line.113"></a>
-<span class="sourceLineNo">114</span>            shuffleIndex = encode(--index);<a name="line.114"></a>
-<span class="sourceLineNo">115</span><a name="line.115"></a>
-<span class="sourceLineNo">116</span>            // if we found a valid index, return success!<a name="line.116"></a>
-<span class="sourceLineNo">117</span>            if (shuffleIndex &lt; bound)<a name="line.117"></a>
-<span class="sourceLineNo">118</span>                return shuffleIndex;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        }<a name="line.119"></a>
+<span class="sourceLineNo">027</span> * SwapOrNotShuffler is meant to have higher quality in general, and performs many more rounds of encoding when the<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * bound is large (which is slow). There's also {@link ShuffledIntSequence}, which extends this class and uses different<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * behavior so it "re-shuffles" the results when all results have been produced.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;br&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * Created by Tommy Ettinger on 9/22/2018.<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * @author Alan Wolfe<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * @author Tommy Ettinger<a name="line.33"></a>
+<span class="sourceLineNo">034</span> */<a name="line.34"></a>
+<span class="sourceLineNo">035</span>public class LowStorageShuffler implements Serializable {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    private static final long serialVersionUID = 1L;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    public final int bound;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    protected int index, pow4, halfBits, leftMask, rightMask;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    protected int key0, key1;//, key2, key3;<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>    /**<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * Constructs a LowStorageShuffler with a random seed and a bound of 10.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     */<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    public LowStorageShuffler(){<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        this(10);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    }<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * Constructs a LowStorageShuffler with the given exclusive upper bound and a random seed.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * @param bound how many distinct ints this can return<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    public LowStorageShuffler(int bound)<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        this(bound, (int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    }<a name="line.54"></a>
+<span class="sourceLineNo">055</span><a name="line.55"></a>
+<span class="sourceLineNo">056</span>    /**<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * Constructs a LowStorageShuffler with the given exclusive upper bound and int seed.<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * @param bound how many distinct ints this can return<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * @param seed any int; will be used to get several seeds used internally<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     */<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    public LowStorageShuffler(int bound, int seed)<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        // initialize our state<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        this.bound = bound;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        restart(seed);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        // calculate next power of 4.  Needed since the balanced Feistel network needs<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        // an even number of bits to work with<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        pow4 = HashCommon.nextPowerOfTwo(bound);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        pow4 = ((pow4 | pow4 &lt;&lt; 1) &amp; 0x55555554) - 1;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        // calculate our left and right masks to split our indices for the Feistel network<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        halfBits = Integer.bitCount(pow4) &gt;&gt;&gt; 1;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        rightMask = pow4 &gt;&gt;&gt; halfBits;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        leftMask = pow4 ^ rightMask;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>    /**<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * Gets the next distinct int in the sequence, or -1 if all distinct ints have been returned that are non-negative<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * and less than {@link #bound}.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * @return the next item in the sequence, or -1 if the sequence has been exhausted<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    public int next()<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        int shuffleIndex;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        // index is the index to start searching for the next number at<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        while (index &lt;= pow4)<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>            // get the next number<a name="line.87"></a>
+<span class="sourceLineNo">088</span>            shuffleIndex = encode(index++);<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>            // if we found a valid index, return it!<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            if (shuffleIndex &lt; bound)<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                return shuffleIndex;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        }<a name="line.93"></a>
+<span class="sourceLineNo">094</span><a name="line.94"></a>
+<span class="sourceLineNo">095</span>        // end of shuffled list if we got here.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        return -1;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    /**<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * Gets the previous returned int from the sequence (as yielded by {@link #next()}), or -1 if next() has never been<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * called (or the LowStorageShuffler has reached the beginning from repeated calls to this method).<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * @return the previously-given item in the sequence, or -1 if this can't go earlier<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     */<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    public int previous()<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        int shuffleIndex;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        // index is the index to start searching for the next number at<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        while (index &gt; 0)<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            // get the next number<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            shuffleIndex = encode(--index);<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>            // if we found a valid index, return success!<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            if (shuffleIndex &lt; bound)<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                return shuffleIndex;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>        // end of shuffled list if we got here.<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        return -1;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    }<a name="line.119"></a>
 <span class="sourceLineNo">120</span><a name="line.120"></a>
-<span class="sourceLineNo">121</span>        // end of shuffled list if we got here.<a name="line.121"></a>
-<span class="sourceLineNo">122</span>        return -1;<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
-<span class="sourceLineNo">124</span><a name="line.124"></a>
-<span class="sourceLineNo">125</span>    /**<a name="line.125"></a>
-<span class="sourceLineNo">126</span>     * Starts the same sequence over from the beginning.<a name="line.126"></a>
-<span class="sourceLineNo">127</span>     */<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    public void restart()<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    {<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        index = 0;<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    }<a name="line.131"></a>
-<span class="sourceLineNo">132</span><a name="line.132"></a>
-<span class="sourceLineNo">133</span>    public static int determine(int z)<a name="line.133"></a>
-<span class="sourceLineNo">134</span>    {<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        return (z = ((z = ((z = ((z *= 0xBDEAD) ^ z &gt;&gt;&gt; 13) * 0x7FFFF) ^ z &gt;&gt;&gt; 12) * 0x1FFFF) ^ z &gt;&gt;&gt; 14) * 0x1FFF) ^ z &gt;&gt;&gt; 15;<a name="line.135"></a>
-<span class="sourceLineNo">136</span><a name="line.136"></a>
-<span class="sourceLineNo">137</span>    }    <a name="line.137"></a>
-<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
-<span class="sourceLineNo">139</span>     * Starts the sequence over, but can change the seed (completely changing the sequence). If {@code seed} is the same<a name="line.139"></a>
-<span class="sourceLineNo">140</span>     * as the seed given in the constructor, this will use the same sequence, acting like {@link #restart()}.<a name="line.140"></a>
-<span class="sourceLineNo">141</span>     * @param seed any int; will be used to get several seeds used internally<a name="line.141"></a>
-<span class="sourceLineNo">142</span>     */<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    public void restart(int seed)<a name="line.143"></a>
-<span class="sourceLineNo">144</span>    {<a name="line.144"></a>
-<span class="sourceLineNo">145</span>        index = 0;<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        key0 = determine(seed ^ 0xDE4D * ~bound);<a name="line.146"></a>
-<span class="sourceLineNo">147</span>        key1 = determine(key0 ^ 0xBA55 * bound);<a name="line.147"></a>
-<span class="sourceLineNo">148</span>        key0 ^= determine(~key1 ^ 0xBEEF * bound);<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        key1 ^= determine(~key0 ^ 0x1337 * bound);<a name="line.149"></a>
-<span class="sourceLineNo">150</span>    }<a name="line.150"></a>
-<span class="sourceLineNo">151</span><a name="line.151"></a>
-<span class="sourceLineNo">152</span>    /**<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * An irreversible mixing function that seems to give good results; GWT-compatible.<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * This is mostly the same as {@link Coord#hashCode()}, with data acting like x and seed acting like y, but also<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * includes two small multiplications (each by 16-bit numbers, which doesn't risk GWT safety). The algorithm is a<a name="line.155"></a>
-<span class="sourceLineNo">156</span>     * little complicated, and is much like the 32-bit xoroshiro variant used by {@link Lathe32RNG}, but changes any<a name="line.156"></a>
-<span class="sourceLineNo">157</span>     * additive operations to use XOR. Less involved schemes did not do well at all. There's four bitwise rotations and<a name="line.157"></a>
-<span class="sourceLineNo">158</span>     * two multiplications used here, plus several XOR and bitwise shift operations.<a name="line.158"></a>
+<span class="sourceLineNo">121</span>    /**<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * Starts the same sequence over from the beginning.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     */<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    public void restart()<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        index = 0;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    }<a name="line.127"></a>
+<span class="sourceLineNo">128</span><a name="line.128"></a>
+<span class="sourceLineNo">129</span>    /**<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * Used to rearrange the bits of seeds this is given in a way that should partly randomize them.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * A high-quality 32-bit input, 32-bit output unary hash is pretty hard to find.<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * @param z any int<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * @return a pseudo-random but deterministic change of z<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     */<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    public static int determine(int z)<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        return (z = ((z = ((z = (z ^ 0xC1C64E6D) * 0xDAB) ^ z &gt;&gt;&gt; 13 ^ 0x9E3779B9) * 0x7FFFF) ^ z &gt;&gt;&gt; 12) * 0x1FFFF) ^ z &gt;&gt;&gt; 15;<a name="line.137"></a>
+<span class="sourceLineNo">138</span><a name="line.138"></a>
+<span class="sourceLineNo">139</span>    }    <a name="line.139"></a>
+<span class="sourceLineNo">140</span>    /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * Starts the sequence over, but can change the seed (completely changing the sequence). If {@code seed} is the same<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * as the seed given in the constructor, this will use the same sequence, acting like {@link #restart()}.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @param seed any int; will be used to get several seeds used internally<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     */<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    public void restart(int seed)<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        index = 0;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        key0 = determine(seed ^ 0xDE4D * ~bound);<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        key1 = determine(key0 ^ 0xBA55 * bound);<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        key0 ^= determine(~key1 ^ 0xBEEF * bound);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        key1 ^= determine(~key0 ^ 0x1337 * bound);<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    }<a name="line.152"></a>
+<span class="sourceLineNo">153</span><a name="line.153"></a>
+<span class="sourceLineNo">154</span>    /**<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * An irreversible mixing function that seems to give good results; GWT-compatible.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * This is similar to {@link SilkRNG}'s way of combining two states, but because this doesn't need to be reversible<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * or even evenly distributed, it has been significantly simplified. It uses one int multiplication, two additions,<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * two subtractions, two XORs, two unsigned right shifts, and one signed right shift. <a name="line.158"></a>
 <span class="sourceLineNo">159</span>     * @param data the data being ciphered<a name="line.159"></a>
 <span class="sourceLineNo">160</span>     * @param seed the current seed<a name="line.160"></a>
 <span class="sourceLineNo">161</span>     * @return the ciphered data<a name="line.161"></a>
 <span class="sourceLineNo">162</span>     */<a name="line.162"></a>
-<span class="sourceLineNo">163</span>    public int round(int data, int seed)<a name="line.163"></a>
+<span class="sourceLineNo">163</span>    public static int round(int data, int seed)<a name="line.163"></a>
 <span class="sourceLineNo">164</span>    {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        <a name="line.165"></a>
-<span class="sourceLineNo">166</span>        seed ^= data * 0xBCFD;<a name="line.166"></a>
-<span class="sourceLineNo">167</span>        seed ^= (data &lt;&lt; 13 | data &gt;&gt;&gt; 19) ^ (seed &lt;&lt; 5) ^ (seed &lt;&lt; 28 | seed &gt;&gt;&gt; 4);<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        data ^= (seed &lt;&lt; 11 | seed &gt;&gt;&gt; 21) * 0xC6D5;<a name="line.168"></a>
-<span class="sourceLineNo">169</span>        return data ^ (data &lt;&lt; 25 | data &gt;&gt;&gt; 7);<a name="line.169"></a>
-<span class="sourceLineNo">170</span><a name="line.170"></a>
-<span class="sourceLineNo">171</span>//        seed ^= data * 0xC6D5 + 0xB531A935;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>//        data ^= seed * 0xBCFD + 0x41C64E6D;<a name="line.172"></a>
-<span class="sourceLineNo">173</span>//        seed ^= data * 0xACED;<a name="line.173"></a>
-<span class="sourceLineNo">174</span>//        data ^= seed * 0xBA55;<a name="line.174"></a>
-<span class="sourceLineNo">175</span>//        data += data &gt;&gt;&gt; 21;<a name="line.175"></a>
-<span class="sourceLineNo">176</span>//        seed += seed &gt;&gt;&gt; 22;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>//        data += data &lt;&lt; 8;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>//        seed += seed &lt;&lt; 5;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>//        return data ^ seed;<a name="line.179"></a>
-<span class="sourceLineNo">180</span><a name="line.180"></a>
-<span class="sourceLineNo">181</span>//        data += data &gt;&gt;&gt; 21;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>//        seed += seed &gt;&gt;&gt; 22;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>//        data += data &lt;&lt; 8;<a name="line.183"></a>
-<span class="sourceLineNo">184</span>//        seed += seed &lt;&lt; 5;<a name="line.184"></a>
-<span class="sourceLineNo">185</span>//        data += data &gt;&gt;&gt; 16;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>//        seed += seed &gt;&gt;&gt; 13;<a name="line.186"></a>
-<span class="sourceLineNo">187</span>//        data += data &lt;&lt; 9;<a name="line.187"></a>
-<span class="sourceLineNo">188</span>//        seed += seed &lt;&lt; 11;<a name="line.188"></a>
-<span class="sourceLineNo">189</span>//        return data ^ seed;<a name="line.189"></a>
-<span class="sourceLineNo">190</span>    }<a name="line.190"></a>
-<span class="sourceLineNo">191</span><a name="line.191"></a>
-<span class="sourceLineNo">192</span>    /**<a name="line.192"></a>
-<span class="sourceLineNo">193</span>     * Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method<a name="line.193"></a>
-<span class="sourceLineNo">194</span>     * to use more or less rounds, but there must always be an even number.<a name="line.194"></a>
-<span class="sourceLineNo">195</span>     * @param index the index to cipher; must be between 0 and {@link #pow4}, inclusive<a name="line.195"></a>
-<span class="sourceLineNo">196</span>     * @return the ciphered index, which might not be less than bound but will be less than or equal to {@link #pow4}<a name="line.196"></a>
-<span class="sourceLineNo">197</span>     */<a name="line.197"></a>
-<span class="sourceLineNo">198</span>    public int encode(int index)<a name="line.198"></a>
-<span class="sourceLineNo">199</span>    {<a name="line.199"></a>
-<span class="sourceLineNo">200</span>        // break our index into the left and right half<a name="line.200"></a>
-<span class="sourceLineNo">201</span>        int left = (index &amp; leftMask) &gt;&gt;&gt; halfBits;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>        int right = (index &amp; rightMask);<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        // do 2 Feistel rounds<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        int newRight = left ^ (round(right, key0) &amp; rightMask);<a name="line.204"></a>
-<span class="sourceLineNo">205</span>        left = right;<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        right = newRight;<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        newRight = left ^ (round(right, key1) &amp; rightMask);<a name="line.207"></a>
-<span class="sourceLineNo">208</span>//        left = right;<a name="line.208"></a>
-<span class="sourceLineNo">209</span>//        right = newRight;<a name="line.209"></a>
-<span class="sourceLineNo">210</span>//        newRight = left ^ (round(right, key2) &amp; rightMask);<a name="line.210"></a>
-<span class="sourceLineNo">211</span>//        left = right;<a name="line.211"></a>
-<span class="sourceLineNo">212</span>//        right = newRight;<a name="line.212"></a>
-<span class="sourceLineNo">213</span>//        newRight = left ^ (round(right, key3) &amp; rightMask);<a name="line.213"></a>
-<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">165</span>        final int s = seed + data;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        final int x = (s ^ s &gt;&gt;&gt; 17) * (seed - data + 0x9E3779BB &gt;&gt; 12) - s;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        return x ^ x &gt;&gt;&gt; 15;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        <a name="line.168"></a>
+<span class="sourceLineNo">169</span>        ////used earlier, similar to Coord.xoroHashCode(int, int)<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        //seed ^= data * 0xBCFD;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        //seed ^= (data &lt;&lt; 13 | data &gt;&gt;&gt; 19) ^ (seed &lt;&lt; 5) ^ (seed &lt;&lt; 28 | seed &gt;&gt;&gt; 4);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        //data ^= (seed &lt;&lt; 11 | seed &gt;&gt;&gt; 21) * 0xC6D5;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        //return data ^ (data &lt;&lt; 25 | data &gt;&gt;&gt; 7);<a name="line.173"></a>
+<span class="sourceLineNo">174</span><a name="line.174"></a>
+<span class="sourceLineNo">175</span>//        seed ^= data * 0xC6D5 + 0xB531A935;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>//        data ^= seed * 0xBCFD + 0x41C64E6D;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>//        seed ^= data * 0xACED;<a name="line.177"></a>
+<span class="sourceLineNo">178</span>//        data ^= seed * 0xBA55;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>//        data += data &gt;&gt;&gt; 21;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>//        seed += seed &gt;&gt;&gt; 22;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>//        data += data &lt;&lt; 8;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>//        seed += seed &lt;&lt; 5;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>//        return data ^ seed;<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>//        data += data &gt;&gt;&gt; 21;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>//        seed += seed &gt;&gt;&gt; 22;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>//        data += data &lt;&lt; 8;<a name="line.187"></a>
+<span class="sourceLineNo">188</span>//        seed += seed &lt;&lt; 5;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>//        data += data &gt;&gt;&gt; 16;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>//        seed += seed &gt;&gt;&gt; 13;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>//        data += data &lt;&lt; 9;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>//        seed += seed &lt;&lt; 11;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>//        return data ^ seed;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>    /**<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * to use more or less rounds, but there must always be an even number.<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * @param index the index to cipher; must be between 0 and {@link #pow4}, inclusive<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * @return the ciphered index, which might not be less than bound but will be less than or equal to {@link #pow4}<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     */<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    public int encode(int index)<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        // break our index into the left and right half<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        int left = (index &amp; leftMask) &gt;&gt;&gt; halfBits;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        int right = (index &amp; rightMask);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        // do 2 Feistel rounds<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        int newRight = left ^ (round(right, key0) &amp; rightMask);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>        left = right;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        right = newRight;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        newRight = left ^ (round(right, key1) &amp; rightMask);<a name="line.211"></a>
+<span class="sourceLineNo">212</span>//        left = right;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>//        right = newRight;<a name="line.213"></a>
+<span class="sourceLineNo">214</span>//        newRight = left ^ (round(right, key2) &amp; rightMask);<a name="line.214"></a>
 <span class="sourceLineNo">215</span>//        left = right;<a name="line.215"></a>
 <span class="sourceLineNo">216</span>//        right = newRight;<a name="line.216"></a>
-<span class="sourceLineNo">217</span><a name="line.217"></a>
-<span class="sourceLineNo">218</span>        // put the left and right back together to form the encrypted index<a name="line.218"></a>
-<span class="sourceLineNo">219</span>//        return left &lt;&lt; halfBits | right;<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        return right &lt;&lt; halfBits | newRight;<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    }<a name="line.221"></a>
-<span class="sourceLineNo">222</span>}<a name="line.222"></a>
+<span class="sourceLineNo">217</span>//        newRight = left ^ (round(right, key3) &amp; rightMask);<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>//        left = right;<a name="line.219"></a>
+<span class="sourceLineNo">220</span>//        right = newRight;<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>        // put the left and right back together to form the encrypted index<a name="line.222"></a>
+<span class="sourceLineNo">223</span>//        return left &lt;&lt; halfBits | right;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>        return right &lt;&lt; halfBits | newRight;<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    }<a name="line.225"></a>
+<span class="sourceLineNo">226</span>}<a name="line.226"></a>
 
 
 

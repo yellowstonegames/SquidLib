@@ -142,6 +142,12 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/ByteStringEncoding.html" title="class in squidpony">ByteStringEncoding</a></span></code>
+<div class="block">An experimental variant on LZSEncoding to encode byte arrays to compressed Strings, and decode them back.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/DamerauLevenshteinAlgorithm.html" title="class in squidpony">DamerauLevenshteinAlgorithm</a></span></code>
 <div class="block">The Damerau-Levenshtein Algorithm is an extension to the Levenshtein
  Algorithm which solves the edit distance problem between a source string and
@@ -160,46 +166,46 @@
  allowance for adjacent character swaps.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/MarkovChar.html" title="class in squidpony">MarkovChar</a></span></code>
 <div class="block">A simple Markov chain text generator; call <a href="../../../squidpony/MarkovChar.html#analyze-java.lang.CharSequence-"><code>MarkovChar.analyze(CharSequence)</code></a> once on a large sample text, then you can
  call <a href="../../../squidpony/MarkovChar.html#chain-long-"><code>MarkovChar.chain(long)</code></a> many times to get odd-sounding "remixes" of the sample text.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/MarkovObject.html" title="class in squidpony">MarkovObject</a>&lt;T&gt;</span></code>
 <div class="block">A simple Markov chain generator that works with Lists of some type instead of text like <a href="../../../squidpony/MarkovTextLimited.html" title="class in squidpony"><code>MarkovTextLimited</code></a>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/MarkovText.html" title="class in squidpony">MarkovText</a></span></code>
 <div class="block">A simple Markov chain text generator; call <a href="../../../squidpony/MarkovText.html#analyze-java.lang.CharSequence-"><code>MarkovText.analyze(CharSequence)</code></a> once on a large sample text, then you can
  call <a href="../../../squidpony/MarkovText.html#chain-long-"><code>MarkovText.chain(long)</code></a> many times to get odd-sounding "remixes" of the sample text.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/MarkovTextLimited.html" title="class in squidpony">MarkovTextLimited</a></span></code>
 <div class="block">A simple Markov chain text generator; it is called "Limited" because it only can be used as an order-1 Markov chain,
  meaning only one prior word is looked at.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/ObText.html" title="class in squidpony">ObText</a></span></code>
 <div class="block">A simple format parser for String-based configuration or data files where JSON is overkill.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a>&lt;T&gt;</span></code>
 <div class="block">Used to standardize conversion for a given type, <code>T</code>, to and from a serialized String format.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/WeightedLetterNamegen.html" title="class in squidpony">WeightedLetterNamegen</a></span></code>
 <div class="block">Based on work by Nolithius available at the following two sites
@@ -526,68 +532,79 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/FoamNoise.html" title="class in squidpony.squidmath">FoamNoise</a></span></code>
+<div class="block">An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, and
+ 4D.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span></code>
 <div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></span></code>
 <div class="block">"Classic Perlin" noise with jitter applied to the grid it operates on.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;A,B&gt;</span></code>
 <div class="block">An ordered bidirectional map-like data structure, with unique A keys and unique B keys updated together like a map
  that can be queried by A keys, B keys, or int indices.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></span></code>
 <div class="block">A Linear Feedback Shift Register that may be used like a StatefulRandomness but is not truly random.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></span></code>
 <div class="block">Really strange noise functions that typically produce curving black and white shapes when rendered.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></span></code>
 <div class="block">A high-quality StatefulRandomness based on <a href="../../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a> but modified to allow any odd number as a stream,
  instead of LinnormRNG's hardcoded stream of 1.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a></span></code>
 <div class="block">A different kind of noise that has spotted and striped areas, like a tabby cat.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/NeuralParticle.html" title="class in squidpony.squidmath">NeuralParticle</a></span></code>
 <div class="block">Creates a field of particles that tend to form a neuron image type
  distribution.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/NLFSR.html" title="class in squidpony.squidmath">NLFSR</a></span></code>
 <div class="block">A Non-Linear Feedback Shift Register that may be used like a StatefulRandomness but is not truly random.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrganizedMap.html" title="class in squidpony.squidmath">OrganizedMap</a>&lt;K,V&gt;</span></code>
 <div class="block">Work in progress Map that can be split up into separate or overlapping iteration orders; it's probably easier and
  more full-featured to manage an iteration order as an <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> of keys and fetch them from any kind of
  larger Map with the same type of keys.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -605,11 +622,17 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></span></code>
+<div class="block">A low-quality continuous noise generator with strong grid artifacts, this is nonetheless useful as a building block.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Voronoi.html" title="class in squidpony.squidmath">Voronoi</a></span></code>
 <div class="block">A Java implementation of both a 2D Delaunay triangulation algorithm and a Voronoi polygon data structure.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></span></code>
 <div class="block">Another experimental noise class.</div>

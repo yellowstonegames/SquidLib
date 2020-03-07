@@ -484,77 +484,82 @@
 <span class="sourceLineNo">476</span>    }<a name="line.476"></a>
 <span class="sourceLineNo">477</span>    /**<a name="line.477"></a>
 <span class="sourceLineNo">478</span>     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as<a name="line.478"></a>
-<span class="sourceLineNo">479</span>     * it can, and then returns output. Will only use a given position in the given data at most once; uses the<a name="line.479"></a>
-<span class="sourceLineNo">480</span>     * Swap-Or-Not Shuffle to accomplish this without allocations. Internally, makes 1 call to {@link #nextInt()} and<a name="line.480"></a>
-<span class="sourceLineNo">481</span>     * 6 calls to {@link #nextSignedInt(int)}, regardless of the data being randomized. It will get progressively less<a name="line.481"></a>
-<span class="sourceLineNo">482</span>     * random as output gets larger.<a name="line.482"></a>
-<span class="sourceLineNo">483</span>     * &lt;br&gt;<a name="line.483"></a>
-<span class="sourceLineNo">484</span>     * Uses approximately the same code as {@link SwapOrNotShuffler}, but without any object or array allocations.<a name="line.484"></a>
-<span class="sourceLineNo">485</span>     *<a name="line.485"></a>
-<span class="sourceLineNo">486</span>     * @param data   an array of T; will not be modified.<a name="line.486"></a>
-<span class="sourceLineNo">487</span>     * @param output an array of T that will be overwritten; should always be instantiated with the portion length<a name="line.487"></a>
-<span class="sourceLineNo">488</span>     * @param &lt;T&gt;    can be any non-primitive type.<a name="line.488"></a>
-<span class="sourceLineNo">489</span>     * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data<a name="line.489"></a>
-<span class="sourceLineNo">490</span>     */<a name="line.490"></a>
-<span class="sourceLineNo">491</span>    @Override<a name="line.491"></a>
-<span class="sourceLineNo">492</span>    public &lt;T&gt; T[] randomPortion(T[] data, T[] output) {<a name="line.492"></a>
-<span class="sourceLineNo">493</span>        final int length = data.length, n = Math.min(length, output.length),<a name="line.493"></a>
-<span class="sourceLineNo">494</span>                func = nextInt(),<a name="line.494"></a>
-<span class="sourceLineNo">495</span>                a = nextSignedInt(length), b = nextSignedInt(length), c = nextSignedInt(length),<a name="line.495"></a>
-<span class="sourceLineNo">496</span>                d = nextSignedInt(length), e = nextSignedInt(length), f = nextSignedInt(length);<a name="line.496"></a>
-<span class="sourceLineNo">497</span>        int key, index;<a name="line.497"></a>
-<span class="sourceLineNo">498</span>        for (int i = 0; i &lt; n; i++) {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>            index = i;<a name="line.499"></a>
-<span class="sourceLineNo">500</span>            key = a - index;<a name="line.500"></a>
-<span class="sourceLineNo">501</span>            key += (key &gt;&gt; 31 &amp; length);<a name="line.501"></a>
-<span class="sourceLineNo">502</span>            if(((func) + Math.max(index, key) &amp; 1) == 0) index = key;<a name="line.502"></a>
-<span class="sourceLineNo">503</span>            key = b - index;<a name="line.503"></a>
-<span class="sourceLineNo">504</span>            key += (key &gt;&gt; 31 &amp; length);<a name="line.504"></a>
-<span class="sourceLineNo">505</span>            if(((func &gt;&gt;&gt; 1) + Math.max(index, key) &amp; 1) == 0) index = key;<a name="line.505"></a>
-<span class="sourceLineNo">506</span>            key = c - index;<a name="line.506"></a>
-<span class="sourceLineNo">507</span>            key += (key &gt;&gt; 31 &amp; length);<a name="line.507"></a>
-<span class="sourceLineNo">508</span>            if(((func &gt;&gt;&gt; 2) + Math.max(index, key) &amp; 1) == 0) index = key;<a name="line.508"></a>
-<span class="sourceLineNo">509</span>            key = d - index;<a name="line.509"></a>
-<span class="sourceLineNo">510</span>            key += (key &gt;&gt; 31 &amp; length);<a name="line.510"></a>
-<span class="sourceLineNo">511</span>            if(((func &gt;&gt;&gt; 3) + Math.max(index, key) &amp; 1) == 0) index = key;<a name="line.511"></a>
-<span class="sourceLineNo">512</span>            key = e - index;<a name="line.512"></a>
-<span class="sourceLineNo">513</span>            key += (key &gt;&gt; 31 &amp; length);<a name="line.513"></a>
-<span class="sourceLineNo">514</span>            if(((func &gt;&gt;&gt; 4) + Math.max(index, key) &amp; 1) == 0) index = key;<a name="line.514"></a>
-<span class="sourceLineNo">515</span>            key = f - index;<a name="line.515"></a>
-<span class="sourceLineNo">516</span>            key += (key &gt;&gt; 31 &amp; length);<a name="line.516"></a>
-<span class="sourceLineNo">517</span>            if(((func &gt;&gt;&gt; 5) + Math.max(index, key) &amp; 1) == 0) index = key;<a name="line.517"></a>
+<span class="sourceLineNo">479</span>     * it can, and then returns output. Will only use a given position in the given data at most once; uses a Feistel<a name="line.479"></a>
+<span class="sourceLineNo">480</span>     * Network to accomplish this without allocations. Internally, makes 2 calls to {@link #nextInt()}, regardless of<a name="line.480"></a>
+<span class="sourceLineNo">481</span>     * the data being randomized.<a name="line.481"></a>
+<span class="sourceLineNo">482</span>     * &lt;br&gt;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>     * Uses approximately the same code as {@link LowStorageShuffler}, but without any object or array allocations.<a name="line.483"></a>
+<span class="sourceLineNo">484</span>     *<a name="line.484"></a>
+<span class="sourceLineNo">485</span>     * @param data   an array of T; will not be modified.<a name="line.485"></a>
+<span class="sourceLineNo">486</span>     * @param output an array of T that will be overwritten; should always be instantiated with the portion length<a name="line.486"></a>
+<span class="sourceLineNo">487</span>     * @param &lt;T&gt;    can be any non-primitive type.<a name="line.487"></a>
+<span class="sourceLineNo">488</span>     * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data<a name="line.488"></a>
+<span class="sourceLineNo">489</span>     */<a name="line.489"></a>
+<span class="sourceLineNo">490</span>    @Override<a name="line.490"></a>
+<span class="sourceLineNo">491</span>    public &lt;T&gt; T[] randomPortion(T[] data, T[] output) {<a name="line.491"></a>
+<span class="sourceLineNo">492</span>        final int length = data.length, n = Math.min(length, output.length);<a name="line.492"></a>
+<span class="sourceLineNo">493</span>        // calculate next power of 4.  Needed since the balanced Feistel network needs<a name="line.493"></a>
+<span class="sourceLineNo">494</span>        // an even number of bits to work with<a name="line.494"></a>
+<span class="sourceLineNo">495</span>        int pow4 = HashCommon.nextPowerOfTwo(length);<a name="line.495"></a>
+<span class="sourceLineNo">496</span>        pow4 = ((pow4 | pow4 &lt;&lt; 1) &amp; 0x55555554) - 1;<a name="line.496"></a>
+<span class="sourceLineNo">497</span>        // calculate our left and right masks to split our indices for the Feistel network<a name="line.497"></a>
+<span class="sourceLineNo">498</span>        final int halfBits = Integer.bitCount(pow4) &gt;&gt;&gt; 1;<a name="line.498"></a>
+<span class="sourceLineNo">499</span>        final int rightMask = pow4 &gt;&gt;&gt; halfBits;<a name="line.499"></a>
+<span class="sourceLineNo">500</span>        final int leftMask = pow4 ^ rightMask;<a name="line.500"></a>
+<span class="sourceLineNo">501</span>        final int key0 = nextInt(), key1 = nextInt();<a name="line.501"></a>
+<span class="sourceLineNo">502</span>        int index = 0;<a name="line.502"></a>
+<span class="sourceLineNo">503</span>        for (int i = 0; i &lt; n; i++) {<a name="line.503"></a>
+<span class="sourceLineNo">504</span>            int shuffleIndex;<a name="line.504"></a>
+<span class="sourceLineNo">505</span>            // index is the index to start searching for the next number at<a name="line.505"></a>
+<span class="sourceLineNo">506</span>            while (index &lt;= pow4)<a name="line.506"></a>
+<span class="sourceLineNo">507</span>            {<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                // break our index into the left and right half<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                int left = (index &amp; leftMask) &gt;&gt;&gt; halfBits;<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                int right = (index &amp; rightMask);<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                // do 2 Feistel rounds<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                int newRight = left ^ (LowStorageShuffler.round(right, key0) &amp; rightMask);<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                left = right;<a name="line.513"></a>
+<span class="sourceLineNo">514</span>                right = newRight;<a name="line.514"></a>
+<span class="sourceLineNo">515</span>                newRight = left ^ (LowStorageShuffler.round(right, key1) &amp; rightMask);<a name="line.515"></a>
+<span class="sourceLineNo">516</span>                shuffleIndex = right &lt;&lt; halfBits | newRight;<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                index++;<a name="line.517"></a>
 <span class="sourceLineNo">518</span><a name="line.518"></a>
-<span class="sourceLineNo">519</span>            output[i] = data[index];<a name="line.519"></a>
-<span class="sourceLineNo">520</span>        }<a name="line.520"></a>
-<span class="sourceLineNo">521</span>        return output;<a name="line.521"></a>
-<span class="sourceLineNo">522</span>    }<a name="line.522"></a>
-<span class="sourceLineNo">523</span><a name="line.523"></a>
-<span class="sourceLineNo">524</span>    /**<a name="line.524"></a>
-<span class="sourceLineNo">525</span>     * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this<a name="line.525"></a>
-<span class="sourceLineNo">526</span>     * IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not<a name="line.526"></a>
-<span class="sourceLineNo">527</span>     * permit copying itself, it is suggested to either throw an {@link UnsupportedOperationException} or return a new<a name="line.527"></a>
-<span class="sourceLineNo">528</span>     * IRNG of the same type but with a random seed, with the latter meant as a partial defense against cheating.<a name="line.528"></a>
-<span class="sourceLineNo">529</span>     * &lt;br&gt;<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * This is abstract because every implementation is likely to have different specifics for this.<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     * @return a copy of this IRNG<a name="line.531"></a>
-<span class="sourceLineNo">532</span>     */<a name="line.532"></a>
-<span class="sourceLineNo">533</span>    @Override<a name="line.533"></a>
-<span class="sourceLineNo">534</span>    public abstract IRNG copy();<a name="line.534"></a>
-<span class="sourceLineNo">535</span><a name="line.535"></a>
-<span class="sourceLineNo">536</span>    /**<a name="line.536"></a>
-<span class="sourceLineNo">537</span>     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it<a name="line.537"></a>
-<span class="sourceLineNo">538</span>     * implements Serializable as well as IRNG.<a name="line.538"></a>
-<span class="sourceLineNo">539</span>     * &lt;br&gt;<a name="line.539"></a>
-<span class="sourceLineNo">540</span>     * For implementors: It is suggested to return an {@link RNG} initialized by calling<a name="line.540"></a>
-<span class="sourceLineNo">541</span>     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the<a name="line.541"></a>
-<span class="sourceLineNo">542</span>     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,<a name="line.542"></a>
-<span class="sourceLineNo">543</span>     * however, so it is simply a last resort in case you don't want to throw an exception.<a name="line.543"></a>
-<span class="sourceLineNo">544</span>     *<a name="line.544"></a>
-<span class="sourceLineNo">545</span>     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}<a name="line.545"></a>
-<span class="sourceLineNo">546</span>     */<a name="line.546"></a>
-<span class="sourceLineNo">547</span>    @Override<a name="line.547"></a>
-<span class="sourceLineNo">548</span>    public abstract Serializable toSerializable();<a name="line.548"></a>
-<span class="sourceLineNo">549</span>}<a name="line.549"></a>
+<span class="sourceLineNo">519</span>                // if we found a valid index, return it!<a name="line.519"></a>
+<span class="sourceLineNo">520</span>                if (shuffleIndex &lt; length) {<a name="line.520"></a>
+<span class="sourceLineNo">521</span>                    output[i] = data[shuffleIndex];<a name="line.521"></a>
+<span class="sourceLineNo">522</span>                    break;<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                }<a name="line.523"></a>
+<span class="sourceLineNo">524</span>            }<a name="line.524"></a>
+<span class="sourceLineNo">525</span>        }<a name="line.525"></a>
+<span class="sourceLineNo">526</span>        return output;<a name="line.526"></a>
+<span class="sourceLineNo">527</span>    }<a name="line.527"></a>
+<span class="sourceLineNo">528</span><a name="line.528"></a>
+<span class="sourceLineNo">529</span>    /**<a name="line.529"></a>
+<span class="sourceLineNo">530</span>     * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     * IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not<a name="line.531"></a>
+<span class="sourceLineNo">532</span>     * permit copying itself, it is suggested to either throw an {@link UnsupportedOperationException} or return a new<a name="line.532"></a>
+<span class="sourceLineNo">533</span>     * IRNG of the same type but with a random seed, with the latter meant as a partial defense against cheating.<a name="line.533"></a>
+<span class="sourceLineNo">534</span>     * &lt;br&gt;<a name="line.534"></a>
+<span class="sourceLineNo">535</span>     * This is abstract because every implementation is likely to have different specifics for this.<a name="line.535"></a>
+<span class="sourceLineNo">536</span>     * @return a copy of this IRNG<a name="line.536"></a>
+<span class="sourceLineNo">537</span>     */<a name="line.537"></a>
+<span class="sourceLineNo">538</span>    @Override<a name="line.538"></a>
+<span class="sourceLineNo">539</span>    public abstract IRNG copy();<a name="line.539"></a>
+<span class="sourceLineNo">540</span><a name="line.540"></a>
+<span class="sourceLineNo">541</span>    /**<a name="line.541"></a>
+<span class="sourceLineNo">542</span>     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it<a name="line.542"></a>
+<span class="sourceLineNo">543</span>     * implements Serializable as well as IRNG.<a name="line.543"></a>
+<span class="sourceLineNo">544</span>     * &lt;br&gt;<a name="line.544"></a>
+<span class="sourceLineNo">545</span>     * For implementors: It is suggested to return an {@link RNG} initialized by calling<a name="line.545"></a>
+<span class="sourceLineNo">546</span>     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the<a name="line.546"></a>
+<span class="sourceLineNo">547</span>     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,<a name="line.547"></a>
+<span class="sourceLineNo">548</span>     * however, so it is simply a last resort in case you don't want to throw an exception.<a name="line.548"></a>
+<span class="sourceLineNo">549</span>     *<a name="line.549"></a>
+<span class="sourceLineNo">550</span>     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}<a name="line.550"></a>
+<span class="sourceLineNo">551</span>     */<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    @Override<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    public abstract Serializable toSerializable();<a name="line.553"></a>
+<span class="sourceLineNo">554</span>}<a name="line.554"></a>
 
 
 

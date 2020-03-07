@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -354,6 +354,11 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#wrapX-int-int-">wrapX</a></span>(int&nbsp;x,
+     int&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#wrapY-int-int-">wrapY</a></span>(int&nbsp;x,
      int&nbsp;y)</code>&nbsp;</td>
 </tr>
@@ -363,7 +368,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></h3>
-<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#codeHeight-double-">codeHeight</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeX-int-">decodeX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeY-int-">decodeY</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-double-double-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#project-double-double-">project</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#removeExcess-double-">removeExcess</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapX-int-int-">wrapX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></code></li>
+<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#codeHeight-double-">codeHeight</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeX-int-">decodeX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeY-int-">decodeY</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-double-double-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#project-double-double-">project</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#removeExcess-double-">removeExcess</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -758,13 +763,27 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="wrapX-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>wrapX</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#line.4705">wrapX</a>(int&nbsp;x,
+                 int&nbsp;y)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapX-int-int-">wrapX</a></code>&nbsp;in class&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="wrapY-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>wrapY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#line.4705">wrapY</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#line.4710">wrapY</a>(int&nbsp;x,
                  int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -778,7 +797,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockListLast">
 <li class="blockList">
 <h4>regenerate</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#line.4709">regenerate</a>(int&nbsp;startX,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#line.4714">regenerate</a>(int&nbsp;startX,
                           int&nbsp;startY,
                           int&nbsp;usedWidth,
                           int&nbsp;usedHeight,

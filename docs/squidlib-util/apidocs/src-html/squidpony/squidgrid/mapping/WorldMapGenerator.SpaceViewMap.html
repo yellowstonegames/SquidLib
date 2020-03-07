@@ -4710,476 +4710,481 @@
 <span class="sourceLineNo">4702</span>        }<a name="line.4702"></a>
 <span class="sourceLineNo">4703</span><a name="line.4703"></a>
 <span class="sourceLineNo">4704</span>        @Override<a name="line.4704"></a>
-<span class="sourceLineNo">4705</span>        public int wrapY(final int x, final int y)  {<a name="line.4705"></a>
-<span class="sourceLineNo">4706</span>            return Math.max(0, Math.min(y, height - 1));<a name="line.4706"></a>
+<span class="sourceLineNo">4705</span>        public int wrapX(final int x, final int y)  {<a name="line.4705"></a>
+<span class="sourceLineNo">4706</span>            return Math.max(0, Math.min(x, width - 1));<a name="line.4706"></a>
 <span class="sourceLineNo">4707</span>        }<a name="line.4707"></a>
-<span class="sourceLineNo">4708</span>        <a name="line.4708"></a>
-<span class="sourceLineNo">4709</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.4709"></a>
-<span class="sourceLineNo">4710</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.4710"></a>
-<span class="sourceLineNo">4711</span>        {<a name="line.4711"></a>
-<span class="sourceLineNo">4712</span>            boolean fresh = false;<a name="line.4712"></a>
-<span class="sourceLineNo">4713</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.4713"></a>
-<span class="sourceLineNo">4714</span>            {<a name="line.4714"></a>
-<span class="sourceLineNo">4715</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.4715"></a>
-<span class="sourceLineNo">4716</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.4716"></a>
-<span class="sourceLineNo">4717</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.4717"></a>
-<span class="sourceLineNo">4718</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.4718"></a>
-<span class="sourceLineNo">4719</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.4719"></a>
-<span class="sourceLineNo">4720</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.4720"></a>
-<span class="sourceLineNo">4721</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.4721"></a>
-<span class="sourceLineNo">4722</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.4722"></a>
-<span class="sourceLineNo">4723</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.4723"></a>
-<span class="sourceLineNo">4724</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.4724"></a>
-<span class="sourceLineNo">4725</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.4725"></a>
-<span class="sourceLineNo">4726</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.4726"></a>
-<span class="sourceLineNo">4727</span>                cacheA = stateA;<a name="line.4727"></a>
-<span class="sourceLineNo">4728</span>                cacheB = stateB;<a name="line.4728"></a>
-<span class="sourceLineNo">4729</span>                fresh = true;<a name="line.4729"></a>
-<span class="sourceLineNo">4730</span>            }<a name="line.4730"></a>
-<span class="sourceLineNo">4731</span>            rng.setState(stateA, stateB);<a name="line.4731"></a>
-<span class="sourceLineNo">4732</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.4732"></a>
-<span class="sourceLineNo">4733</span>            int t;<a name="line.4733"></a>
-<span class="sourceLineNo">4734</span><a name="line.4734"></a>
-<span class="sourceLineNo">4735</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.4735"></a>
-<span class="sourceLineNo">4736</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.4736"></a>
-<span class="sourceLineNo">4737</span><a name="line.4737"></a>
-<span class="sourceLineNo">4738</span>            double p,<a name="line.4738"></a>
-<span class="sourceLineNo">4739</span>                    ps, pc,<a name="line.4739"></a>
-<span class="sourceLineNo">4740</span>                    qs, qc,<a name="line.4740"></a>
-<span class="sourceLineNo">4741</span>                    h, temp,<a name="line.4741"></a>
-<span class="sourceLineNo">4742</span>                    i_w = 1.0 / width, i_h = 1.0 / (height),<a name="line.4742"></a>
-<span class="sourceLineNo">4743</span>                    i_uw = usedWidth * i_w * i_w, i_uh = usedHeight * i_h * i_h, xPos, yPos = startY * i_h;<a name="line.4743"></a>
-<span class="sourceLineNo">4744</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) { <a name="line.4744"></a>
-<span class="sourceLineNo">4745</span>                xPos = startX * i_w;<a name="line.4745"></a>
-<span class="sourceLineNo">4746</span>                for (int x = 0, xt = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.4746"></a>
-<span class="sourceLineNo">4747</span>                    xPositions[x][y] = (xPos - .5) * 2.0;<a name="line.4747"></a>
-<span class="sourceLineNo">4748</span>                    yPositions[x][y] = (yPos - .5) * 2.0;<a name="line.4748"></a>
-<span class="sourceLineNo">4749</span>                    zPositions[x][y] = 0.0;<a name="line.4749"></a>
-<span class="sourceLineNo">4750</span>                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(xPos +<a name="line.4750"></a>
-<span class="sourceLineNo">4751</span>                                    terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,<a name="line.4751"></a>
-<span class="sourceLineNo">4752</span>                            yPos, seedA) + landModifier - 1.0);<a name="line.4752"></a>
-<span class="sourceLineNo">4753</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos<a name="line.4753"></a>
-<span class="sourceLineNo">4754</span>                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),<a name="line.4754"></a>
-<span class="sourceLineNo">4755</span>                            seedB));<a name="line.4755"></a>
-<span class="sourceLineNo">4756</span>                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);<a name="line.4756"></a>
-<span class="sourceLineNo">4757</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));<a name="line.4757"></a>
-<span class="sourceLineNo">4758</span><a name="line.4758"></a>
-<span class="sourceLineNo">4759</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.4759"></a>
-<span class="sourceLineNo">4760</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.4760"></a>
-<span class="sourceLineNo">4761</span>                    if(fresh) {<a name="line.4761"></a>
-<span class="sourceLineNo">4762</span>                        minHeight = Math.min(minHeight, h);<a name="line.4762"></a>
-<span class="sourceLineNo">4763</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.4763"></a>
-<span class="sourceLineNo">4764</span><a name="line.4764"></a>
-<span class="sourceLineNo">4765</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.4765"></a>
-<span class="sourceLineNo">4766</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.4766"></a>
-<span class="sourceLineNo">4767</span><a name="line.4767"></a>
-<span class="sourceLineNo">4768</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.4768"></a>
-<span class="sourceLineNo">4769</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.4769"></a>
-<span class="sourceLineNo">4770</span>                    }<a name="line.4770"></a>
-<span class="sourceLineNo">4771</span>                }<a name="line.4771"></a>
-<span class="sourceLineNo">4772</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.4772"></a>
-<span class="sourceLineNo">4773</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.4773"></a>
-<span class="sourceLineNo">4774</span><a name="line.4774"></a>
-<span class="sourceLineNo">4775</span>            }<a name="line.4775"></a>
-<span class="sourceLineNo">4776</span>            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.4776"></a>
-<span class="sourceLineNo">4777</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.4777"></a>
-<span class="sourceLineNo">4778</span>                    hMod;<a name="line.4778"></a>
-<span class="sourceLineNo">4779</span>            yPos = startY * i_h + i_uh;<a name="line.4779"></a>
-<span class="sourceLineNo">4780</span>            ps = Double.POSITIVE_INFINITY;<a name="line.4780"></a>
-<span class="sourceLineNo">4781</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.4781"></a>
-<span class="sourceLineNo">4782</span><a name="line.4782"></a>
-<span class="sourceLineNo">4783</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.4783"></a>
-<span class="sourceLineNo">4784</span>                for (int x = 0; x &lt; width; x++) {<a name="line.4784"></a>
-<span class="sourceLineNo">4785</span>                    h = heightData[x][y];<a name="line.4785"></a>
-<span class="sourceLineNo">4786</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.4786"></a>
-<span class="sourceLineNo">4787</span>                    hMod = 1.0;<a name="line.4787"></a>
-<span class="sourceLineNo">4788</span>                    switch (t) {<a name="line.4788"></a>
-<span class="sourceLineNo">4789</span>                        case 0:<a name="line.4789"></a>
-<span class="sourceLineNo">4790</span>                        case 1:<a name="line.4790"></a>
-<span class="sourceLineNo">4791</span>                        case 2:<a name="line.4791"></a>
-<span class="sourceLineNo">4792</span>                        case 3:<a name="line.4792"></a>
-<span class="sourceLineNo">4793</span>                            h = 0.4;<a name="line.4793"></a>
-<span class="sourceLineNo">4794</span>                            hMod = 0.2;<a name="line.4794"></a>
-<span class="sourceLineNo">4795</span>                            break;<a name="line.4795"></a>
-<span class="sourceLineNo">4796</span>                        case 6:<a name="line.4796"></a>
-<span class="sourceLineNo">4797</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.4797"></a>
-<span class="sourceLineNo">4798</span>                            break;<a name="line.4798"></a>
-<span class="sourceLineNo">4799</span>                        case 7:<a name="line.4799"></a>
-<span class="sourceLineNo">4800</span>                            h *= -0.25;<a name="line.4800"></a>
-<span class="sourceLineNo">4801</span>                            break;<a name="line.4801"></a>
-<span class="sourceLineNo">4802</span>                        case 8:<a name="line.4802"></a>
-<span class="sourceLineNo">4803</span>                            h *= -0.4;<a name="line.4803"></a>
-<span class="sourceLineNo">4804</span>                            break;<a name="line.4804"></a>
-<span class="sourceLineNo">4805</span>                        default:<a name="line.4805"></a>
-<span class="sourceLineNo">4806</span>                            h *= 0.05;<a name="line.4806"></a>
-<span class="sourceLineNo">4807</span>                    }<a name="line.4807"></a>
-<span class="sourceLineNo">4808</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6);<a name="line.4808"></a>
-<span class="sourceLineNo">4809</span>                    if (fresh) {<a name="line.4809"></a>
-<span class="sourceLineNo">4810</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.4810"></a>
-<span class="sourceLineNo">4811</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.4811"></a>
+<span class="sourceLineNo">4708</span><a name="line.4708"></a>
+<span class="sourceLineNo">4709</span>        @Override<a name="line.4709"></a>
+<span class="sourceLineNo">4710</span>        public int wrapY(final int x, final int y)  {<a name="line.4710"></a>
+<span class="sourceLineNo">4711</span>            return Math.max(0, Math.min(y, height - 1));<a name="line.4711"></a>
+<span class="sourceLineNo">4712</span>        }<a name="line.4712"></a>
+<span class="sourceLineNo">4713</span>        <a name="line.4713"></a>
+<span class="sourceLineNo">4714</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.4714"></a>
+<span class="sourceLineNo">4715</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.4715"></a>
+<span class="sourceLineNo">4716</span>        {<a name="line.4716"></a>
+<span class="sourceLineNo">4717</span>            boolean fresh = false;<a name="line.4717"></a>
+<span class="sourceLineNo">4718</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.4718"></a>
+<span class="sourceLineNo">4719</span>            {<a name="line.4719"></a>
+<span class="sourceLineNo">4720</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.4720"></a>
+<span class="sourceLineNo">4721</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.4721"></a>
+<span class="sourceLineNo">4722</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.4722"></a>
+<span class="sourceLineNo">4723</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.4723"></a>
+<span class="sourceLineNo">4724</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.4724"></a>
+<span class="sourceLineNo">4725</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.4725"></a>
+<span class="sourceLineNo">4726</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.4726"></a>
+<span class="sourceLineNo">4727</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.4727"></a>
+<span class="sourceLineNo">4728</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.4728"></a>
+<span class="sourceLineNo">4729</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.4729"></a>
+<span class="sourceLineNo">4730</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.4730"></a>
+<span class="sourceLineNo">4731</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.4731"></a>
+<span class="sourceLineNo">4732</span>                cacheA = stateA;<a name="line.4732"></a>
+<span class="sourceLineNo">4733</span>                cacheB = stateB;<a name="line.4733"></a>
+<span class="sourceLineNo">4734</span>                fresh = true;<a name="line.4734"></a>
+<span class="sourceLineNo">4735</span>            }<a name="line.4735"></a>
+<span class="sourceLineNo">4736</span>            rng.setState(stateA, stateB);<a name="line.4736"></a>
+<span class="sourceLineNo">4737</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.4737"></a>
+<span class="sourceLineNo">4738</span>            int t;<a name="line.4738"></a>
+<span class="sourceLineNo">4739</span><a name="line.4739"></a>
+<span class="sourceLineNo">4740</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.4740"></a>
+<span class="sourceLineNo">4741</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.4741"></a>
+<span class="sourceLineNo">4742</span><a name="line.4742"></a>
+<span class="sourceLineNo">4743</span>            double p,<a name="line.4743"></a>
+<span class="sourceLineNo">4744</span>                    ps, pc,<a name="line.4744"></a>
+<span class="sourceLineNo">4745</span>                    qs, qc,<a name="line.4745"></a>
+<span class="sourceLineNo">4746</span>                    h, temp,<a name="line.4746"></a>
+<span class="sourceLineNo">4747</span>                    i_w = 1.0 / width, i_h = 1.0 / (height),  ii = Math.max(i_w, i_h),<a name="line.4747"></a>
+<span class="sourceLineNo">4748</span>                    i_uw = usedWidth * i_w * ii, i_uh = usedHeight * i_h * ii, xPos, yPos = startY * i_h;<a name="line.4748"></a>
+<span class="sourceLineNo">4749</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) { <a name="line.4749"></a>
+<span class="sourceLineNo">4750</span>                xPos = startX * i_w;<a name="line.4750"></a>
+<span class="sourceLineNo">4751</span>                for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.4751"></a>
+<span class="sourceLineNo">4752</span>                    xPositions[x][y] = xPos;<a name="line.4752"></a>
+<span class="sourceLineNo">4753</span>                    yPositions[x][y] = yPos;<a name="line.4753"></a>
+<span class="sourceLineNo">4754</span>                    zPositions[x][y] = 0.0;<a name="line.4754"></a>
+<span class="sourceLineNo">4755</span>                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(xPos +<a name="line.4755"></a>
+<span class="sourceLineNo">4756</span>                                    terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,<a name="line.4756"></a>
+<span class="sourceLineNo">4757</span>                            yPos, seedA) + landModifier - 1.0);<a name="line.4757"></a>
+<span class="sourceLineNo">4758</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos<a name="line.4758"></a>
+<span class="sourceLineNo">4759</span>                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),<a name="line.4759"></a>
+<span class="sourceLineNo">4760</span>                            seedB));<a name="line.4760"></a>
+<span class="sourceLineNo">4761</span>                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);<a name="line.4761"></a>
+<span class="sourceLineNo">4762</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));<a name="line.4762"></a>
+<span class="sourceLineNo">4763</span><a name="line.4763"></a>
+<span class="sourceLineNo">4764</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.4764"></a>
+<span class="sourceLineNo">4765</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.4765"></a>
+<span class="sourceLineNo">4766</span>                    if(fresh) {<a name="line.4766"></a>
+<span class="sourceLineNo">4767</span>                        minHeight = Math.min(minHeight, h);<a name="line.4767"></a>
+<span class="sourceLineNo">4768</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.4768"></a>
+<span class="sourceLineNo">4769</span><a name="line.4769"></a>
+<span class="sourceLineNo">4770</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.4770"></a>
+<span class="sourceLineNo">4771</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.4771"></a>
+<span class="sourceLineNo">4772</span><a name="line.4772"></a>
+<span class="sourceLineNo">4773</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.4773"></a>
+<span class="sourceLineNo">4774</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.4774"></a>
+<span class="sourceLineNo">4775</span>                    }<a name="line.4775"></a>
+<span class="sourceLineNo">4776</span>                }<a name="line.4776"></a>
+<span class="sourceLineNo">4777</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.4777"></a>
+<span class="sourceLineNo">4778</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.4778"></a>
+<span class="sourceLineNo">4779</span><a name="line.4779"></a>
+<span class="sourceLineNo">4780</span>            }<a name="line.4780"></a>
+<span class="sourceLineNo">4781</span>            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.4781"></a>
+<span class="sourceLineNo">4782</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.4782"></a>
+<span class="sourceLineNo">4783</span>                    hMod;<a name="line.4783"></a>
+<span class="sourceLineNo">4784</span>            yPos = startY * i_h + i_uh;<a name="line.4784"></a>
+<span class="sourceLineNo">4785</span>            ps = Double.POSITIVE_INFINITY;<a name="line.4785"></a>
+<span class="sourceLineNo">4786</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.4786"></a>
+<span class="sourceLineNo">4787</span><a name="line.4787"></a>
+<span class="sourceLineNo">4788</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.4788"></a>
+<span class="sourceLineNo">4789</span>                for (int x = 0; x &lt; width; x++) {<a name="line.4789"></a>
+<span class="sourceLineNo">4790</span>                    h = heightData[x][y];<a name="line.4790"></a>
+<span class="sourceLineNo">4791</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.4791"></a>
+<span class="sourceLineNo">4792</span>                    hMod = 1.0;<a name="line.4792"></a>
+<span class="sourceLineNo">4793</span>                    switch (t) {<a name="line.4793"></a>
+<span class="sourceLineNo">4794</span>                        case 0:<a name="line.4794"></a>
+<span class="sourceLineNo">4795</span>                        case 1:<a name="line.4795"></a>
+<span class="sourceLineNo">4796</span>                        case 2:<a name="line.4796"></a>
+<span class="sourceLineNo">4797</span>                        case 3:<a name="line.4797"></a>
+<span class="sourceLineNo">4798</span>                            h = 0.4;<a name="line.4798"></a>
+<span class="sourceLineNo">4799</span>                            hMod = 0.2;<a name="line.4799"></a>
+<span class="sourceLineNo">4800</span>                            break;<a name="line.4800"></a>
+<span class="sourceLineNo">4801</span>                        case 6:<a name="line.4801"></a>
+<span class="sourceLineNo">4802</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.4802"></a>
+<span class="sourceLineNo">4803</span>                            break;<a name="line.4803"></a>
+<span class="sourceLineNo">4804</span>                        case 7:<a name="line.4804"></a>
+<span class="sourceLineNo">4805</span>                            h *= -0.25;<a name="line.4805"></a>
+<span class="sourceLineNo">4806</span>                            break;<a name="line.4806"></a>
+<span class="sourceLineNo">4807</span>                        case 8:<a name="line.4807"></a>
+<span class="sourceLineNo">4808</span>                            h *= -0.4;<a name="line.4808"></a>
+<span class="sourceLineNo">4809</span>                            break;<a name="line.4809"></a>
+<span class="sourceLineNo">4810</span>                        default:<a name="line.4810"></a>
+<span class="sourceLineNo">4811</span>                            h *= 0.05;<a name="line.4811"></a>
 <span class="sourceLineNo">4812</span>                    }<a name="line.4812"></a>
-<span class="sourceLineNo">4813</span>                }<a name="line.4813"></a>
-<span class="sourceLineNo">4814</span>            }<a name="line.4814"></a>
-<span class="sourceLineNo">4815</span>            if(fresh)<a name="line.4815"></a>
-<span class="sourceLineNo">4816</span>            {<a name="line.4816"></a>
-<span class="sourceLineNo">4817</span>                minHeat1 = ps;<a name="line.4817"></a>
-<span class="sourceLineNo">4818</span>                maxHeat1 = pc;<a name="line.4818"></a>
+<span class="sourceLineNo">4813</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6);<a name="line.4813"></a>
+<span class="sourceLineNo">4814</span>                    if (fresh) {<a name="line.4814"></a>
+<span class="sourceLineNo">4815</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.4815"></a>
+<span class="sourceLineNo">4816</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.4816"></a>
+<span class="sourceLineNo">4817</span>                    }<a name="line.4817"></a>
+<span class="sourceLineNo">4818</span>                }<a name="line.4818"></a>
 <span class="sourceLineNo">4819</span>            }<a name="line.4819"></a>
-<span class="sourceLineNo">4820</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.4820"></a>
-<span class="sourceLineNo">4821</span>            qs = Double.POSITIVE_INFINITY;<a name="line.4821"></a>
-<span class="sourceLineNo">4822</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.4822"></a>
-<span class="sourceLineNo">4823</span>            ps = Double.POSITIVE_INFINITY;<a name="line.4823"></a>
-<span class="sourceLineNo">4824</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.4824"></a>
-<span class="sourceLineNo">4825</span><a name="line.4825"></a>
-<span class="sourceLineNo">4826</span><a name="line.4826"></a>
-<span class="sourceLineNo">4827</span>            for (int y = 0; y &lt; height; y++) {<a name="line.4827"></a>
-<span class="sourceLineNo">4828</span>                for (int x = 0; x &lt; width; x++) {<a name="line.4828"></a>
-<span class="sourceLineNo">4829</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.4829"></a>
-<span class="sourceLineNo">4830</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.4830"></a>
-<span class="sourceLineNo">4831</span>                    if (fresh) {<a name="line.4831"></a>
-<span class="sourceLineNo">4832</span>                        qs = Math.min(qs, h);<a name="line.4832"></a>
-<span class="sourceLineNo">4833</span>                        qc = Math.max(qc, h);<a name="line.4833"></a>
-<span class="sourceLineNo">4834</span>                        ps = Math.min(ps, temp);<a name="line.4834"></a>
-<span class="sourceLineNo">4835</span>                        pc = Math.max(pc, temp);<a name="line.4835"></a>
-<span class="sourceLineNo">4836</span>                    }<a name="line.4836"></a>
-<span class="sourceLineNo">4837</span>                }<a name="line.4837"></a>
-<span class="sourceLineNo">4838</span>            }<a name="line.4838"></a>
-<span class="sourceLineNo">4839</span>            if(fresh)<a name="line.4839"></a>
-<span class="sourceLineNo">4840</span>            {<a name="line.4840"></a>
-<span class="sourceLineNo">4841</span>                minHeat = qs;<a name="line.4841"></a>
-<span class="sourceLineNo">4842</span>                maxHeat = qc;<a name="line.4842"></a>
-<span class="sourceLineNo">4843</span>                minWet = ps;<a name="line.4843"></a>
-<span class="sourceLineNo">4844</span>                maxWet = pc;<a name="line.4844"></a>
-<span class="sourceLineNo">4845</span>            }<a name="line.4845"></a>
-<span class="sourceLineNo">4846</span>            landData.refill(heightCodeData, 4, 999);<a name="line.4846"></a>
-<span class="sourceLineNo">4847</span>        }<a name="line.4847"></a>
-<span class="sourceLineNo">4848</span>    }<a name="line.4848"></a>
-<span class="sourceLineNo">4849</span><a name="line.4849"></a>
-<span class="sourceLineNo">4850</span>    /**<a name="line.4850"></a>
-<span class="sourceLineNo">4851</span>     * An unusual map generator that imitates an existing local map (such as a map of Australia, which it can do by<a name="line.4851"></a>
-<span class="sourceLineNo">4852</span>     * default), without applying any projection or changing heat levels in the polar regions or equator.<a name="line.4852"></a>
-<span class="sourceLineNo">4853</span>     * &lt;a href="http://squidpony.github.io/SquidLib/LocalMimicMap.png" &gt;Example map, showing a variant on Australia&lt;/a&gt;<a name="line.4853"></a>
-<span class="sourceLineNo">4854</span>     */<a name="line.4854"></a>
-<span class="sourceLineNo">4855</span>    public static class LocalMimicMap extends LocalMap<a name="line.4855"></a>
-<span class="sourceLineNo">4856</span>    {<a name="line.4856"></a>
-<span class="sourceLineNo">4857</span>        public GreasedRegion earth;<a name="line.4857"></a>
-<span class="sourceLineNo">4858</span>        public GreasedRegion shallow;<a name="line.4858"></a>
-<span class="sourceLineNo">4859</span>        public GreasedRegion coast;<a name="line.4859"></a>
-<span class="sourceLineNo">4860</span>        public GreasedRegion earthOriginal;<a name="line.4860"></a>
-<span class="sourceLineNo">4861</span>        /**<a name="line.4861"></a>
-<span class="sourceLineNo">4862</span>         * Constructs a concrete WorldMapGenerator for a map that should look like Australia, without projecting the<a name="line.4862"></a>
-<span class="sourceLineNo">4863</span>         * land positions or changing heat by latitude. Always makes a 256x256 map.<a name="line.4863"></a>
-<span class="sourceLineNo">4864</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4864"></a>
-<span class="sourceLineNo">4865</span>         * If you were using {@link LocalMimicMap#LocalMimicMap(long, Noise2D, double)}, then this would be the<a name="line.4865"></a>
-<span class="sourceLineNo">4866</span>         * same as passing the parameters {@code 0x1337BABE1337D00DL, DEFAULT_NOISE, 1.0}.<a name="line.4866"></a>
-<span class="sourceLineNo">4867</span>         */<a name="line.4867"></a>
-<span class="sourceLineNo">4868</span>        public LocalMimicMap() {<a name="line.4868"></a>
-<span class="sourceLineNo">4869</span>            this(0x1337BABE1337D00DL<a name="line.4869"></a>
-<span class="sourceLineNo">4870</span>                    , DEFAULT_NOISE, 1.0);<a name="line.4870"></a>
-<span class="sourceLineNo">4871</span>        }<a name="line.4871"></a>
-<span class="sourceLineNo">4872</span><a name="line.4872"></a>
-<span class="sourceLineNo">4873</span>        /**<a name="line.4873"></a>
-<span class="sourceLineNo">4874</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4874"></a>
-<span class="sourceLineNo">4875</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4875"></a>
-<span class="sourceLineNo">4876</span>         * The initial seed is set to the same large long every time, and it's likely that you would set the seed when<a name="line.4876"></a>
-<span class="sourceLineNo">4877</span>         * you call {@link #generate(long)}. The width and height of the map cannot be changed after the fact.<a name="line.4877"></a>
-<span class="sourceLineNo">4878</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4878"></a>
-<span class="sourceLineNo">4879</span>         *<a name="line.4879"></a>
-<span class="sourceLineNo">4880</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4880"></a>
-<span class="sourceLineNo">4881</span>         */<a name="line.4881"></a>
-<span class="sourceLineNo">4882</span>        public LocalMimicMap(GreasedRegion toMimic) {<a name="line.4882"></a>
-<span class="sourceLineNo">4883</span>            this(0x1337BABE1337D00DL, toMimic,  DEFAULT_NOISE,1.0);<a name="line.4883"></a>
-<span class="sourceLineNo">4884</span>        }<a name="line.4884"></a>
-<span class="sourceLineNo">4885</span><a name="line.4885"></a>
-<span class="sourceLineNo">4886</span>        /**<a name="line.4886"></a>
-<span class="sourceLineNo">4887</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4887"></a>
-<span class="sourceLineNo">4888</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4888"></a>
-<span class="sourceLineNo">4889</span>         * Takes an initial seed and the GreasedRegion containing land positions. The {@code initialSeed}<a name="line.4889"></a>
-<span class="sourceLineNo">4890</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.4890"></a>
-<span class="sourceLineNo">4891</span>         * The width and height of the map cannot be changed after the fact.<a name="line.4891"></a>
-<span class="sourceLineNo">4892</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4892"></a>
-<span class="sourceLineNo">4893</span>         *<a name="line.4893"></a>
-<span class="sourceLineNo">4894</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4894"></a>
-<span class="sourceLineNo">4895</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4895"></a>
-<span class="sourceLineNo">4896</span>         */<a name="line.4896"></a>
-<span class="sourceLineNo">4897</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic) {<a name="line.4897"></a>
-<span class="sourceLineNo">4898</span>            this(initialSeed, toMimic, DEFAULT_NOISE, 1.0);<a name="line.4898"></a>
-<span class="sourceLineNo">4899</span>        }<a name="line.4899"></a>
-<span class="sourceLineNo">4900</span><a name="line.4900"></a>
-<span class="sourceLineNo">4901</span>        /**<a name="line.4901"></a>
-<span class="sourceLineNo">4902</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4902"></a>
-<span class="sourceLineNo">4903</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4903"></a>
-<span class="sourceLineNo">4904</span>         * Takes an initial seed, the GreasedRegion containing land positions, and a multiplier that affects the level<a name="line.4904"></a>
-<span class="sourceLineNo">4905</span>         * of detail by increasing or decreasing the number of octaves of noise used. The {@code initialSeed}<a name="line.4905"></a>
-<span class="sourceLineNo">4906</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.4906"></a>
-<span class="sourceLineNo">4907</span>         * The width and height of the map cannot be changed after the fact.<a name="line.4907"></a>
-<span class="sourceLineNo">4908</span>         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.<a name="line.4908"></a>
-<span class="sourceLineNo">4909</span>         *<a name="line.4909"></a>
-<span class="sourceLineNo">4910</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4910"></a>
-<span class="sourceLineNo">4911</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4911"></a>
-<span class="sourceLineNo">4912</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.4912"></a>
-<span class="sourceLineNo">4913</span>         */<a name="line.4913"></a>
-<span class="sourceLineNo">4914</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, double octaveMultiplier) {<a name="line.4914"></a>
-<span class="sourceLineNo">4915</span>            this(initialSeed, toMimic, DEFAULT_NOISE, octaveMultiplier);<a name="line.4915"></a>
-<span class="sourceLineNo">4916</span>        }<a name="line.4916"></a>
-<span class="sourceLineNo">4917</span><a name="line.4917"></a>
-<span class="sourceLineNo">4918</span>        /**<a name="line.4918"></a>
-<span class="sourceLineNo">4919</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4919"></a>
-<span class="sourceLineNo">4920</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4920"></a>
-<span class="sourceLineNo">4921</span>         * Takes an initial seed, the GreasedRegion containing land positions, and parameters for noise generation (a<a name="line.4921"></a>
-<span class="sourceLineNo">4922</span>         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}. The {@code initialSeed}<a name="line.4922"></a>
-<span class="sourceLineNo">4923</span>         * parameter may or may not be used, since you can specify the seed to use when you call<a name="line.4923"></a>
-<span class="sourceLineNo">4924</span>         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact. Both FastNoise<a name="line.4924"></a>
-<span class="sourceLineNo">4925</span>         * and FastNoise make sense to use for {@code noiseGenerator}, and the seed it's constructed with doesn't matter<a name="line.4925"></a>
-<span class="sourceLineNo">4926</span>         * because this will change the seed several times at different scales of noise (it's fine to use the static<a name="line.4926"></a>
-<span class="sourceLineNo">4927</span>         * {@link FastNoise#instance} or {@link FastNoise#instance} because they have no changing state between runs<a name="line.4927"></a>
-<span class="sourceLineNo">4928</span>         * of the program). Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4928"></a>
-<span class="sourceLineNo">4929</span>         *<a name="line.4929"></a>
-<span class="sourceLineNo">4930</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4930"></a>
-<span class="sourceLineNo">4931</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4931"></a>
-<span class="sourceLineNo">4932</span>         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}<a name="line.4932"></a>
-<span class="sourceLineNo">4933</span>         */<a name="line.4933"></a>
-<span class="sourceLineNo">4934</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, Noise2D noiseGenerator) {<a name="line.4934"></a>
-<span class="sourceLineNo">4935</span>            this(initialSeed, toMimic, noiseGenerator, 1.0);<a name="line.4935"></a>
-<span class="sourceLineNo">4936</span>        }<a name="line.4936"></a>
-<span class="sourceLineNo">4937</span><a name="line.4937"></a>
-<span class="sourceLineNo">4938</span>        /**<a name="line.4938"></a>
-<span class="sourceLineNo">4939</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4939"></a>
-<span class="sourceLineNo">4940</span>         * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).<a name="line.4940"></a>
-<span class="sourceLineNo">4941</span>         * Takes an initial seed, the GreasedRegion containing land positions, parameters for noise generation (a<a name="line.4941"></a>
-<span class="sourceLineNo">4942</span>         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a multiplier on how many<a name="line.4942"></a>
-<span class="sourceLineNo">4943</span>         * octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers producing even more<a name="line.4943"></a>
-<span class="sourceLineNo">4944</span>         * detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,<a name="line.4944"></a>
-<span class="sourceLineNo">4945</span>         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map<a name="line.4945"></a>
-<span class="sourceLineNo">4946</span>         * cannot be changed after the fact.  FastNoise will be the fastest 3D generator to use for<a name="line.4946"></a>
-<span class="sourceLineNo">4947</span>         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the<a name="line.4947"></a>
-<span class="sourceLineNo">4948</span>         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}<a name="line.4948"></a>
-<span class="sourceLineNo">4949</span>         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should<a name="line.4949"></a>
-<span class="sourceLineNo">4950</span>         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on<a name="line.4950"></a>
-<span class="sourceLineNo">4951</span>         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps<a name="line.4951"></a>
-<span class="sourceLineNo">4952</span>         * that don't require zooming.<a name="line.4952"></a>
-<span class="sourceLineNo">4953</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4953"></a>
-<span class="sourceLineNo">4954</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4954"></a>
-<span class="sourceLineNo">4955</span>         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}<a name="line.4955"></a>
-<span class="sourceLineNo">4956</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.4956"></a>
-<span class="sourceLineNo">4957</span>         */<a name="line.4957"></a>
-<span class="sourceLineNo">4958</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, Noise2D noiseGenerator, double octaveMultiplier) {<a name="line.4958"></a>
-<span class="sourceLineNo">4959</span>            super(initialSeed, toMimic.width, toMimic.height, noiseGenerator, octaveMultiplier);<a name="line.4959"></a>
-<span class="sourceLineNo">4960</span>            earth = toMimic;<a name="line.4960"></a>
-<span class="sourceLineNo">4961</span>            earthOriginal = earth.copy();<a name="line.4961"></a>
-<span class="sourceLineNo">4962</span>            coast   = earth.copy().not().fringe(2);<a name="line.4962"></a>
-<span class="sourceLineNo">4963</span>            shallow = earth.copy().fringe(2);<a name="line.4963"></a>
-<span class="sourceLineNo">4964</span>        }<a name="line.4964"></a>
-<span class="sourceLineNo">4965</span><a name="line.4965"></a>
-<span class="sourceLineNo">4966</span>        /**<a name="line.4966"></a>
-<span class="sourceLineNo">4967</span>         * Constructs a 256x256 unprojected local map that will use land forms with a similar shape to Australia.<a name="line.4967"></a>
-<span class="sourceLineNo">4968</span>         * @param initialSeed<a name="line.4968"></a>
-<span class="sourceLineNo">4969</span>         * @param noiseGenerator<a name="line.4969"></a>
-<span class="sourceLineNo">4970</span>         * @param octaveMultiplier<a name="line.4970"></a>
-<span class="sourceLineNo">4971</span>         */<a name="line.4971"></a>
-<span class="sourceLineNo">4972</span>        public LocalMimicMap(long initialSeed, Noise2D noiseGenerator, double octaveMultiplier)<a name="line.4972"></a>
-<span class="sourceLineNo">4973</span>        {<a name="line.4973"></a>
-<span class="sourceLineNo">4974</span>            this(initialSeed,<a name="line.4974"></a>
-<span class="sourceLineNo">4975</span>                    GreasedRegion.decompress(LZSPlus.decompress(<a name="line.4975"></a>
-<span class="sourceLineNo">4976</span>                            "Ƥ䒅⒐᮰囨䈢ħ䐤࠰ࠨ•Ⱙအ䎢ŘňÆ䴣ȢؤF䭠゠ᔤ∠偰ഀ\u0560₠ኼܨā᭮笁\u242AЦᇅ扰रࠦ吠䠪ࠦ䠧娮⠬䠬❁Ềក\u1CAA͠敠ἒ慽Ê䄄洡儠䋻䨡㈠䙬坈མŨྈ䞻䛊哚晪⁞倰h·䡂Ļæ抂㴢္\u082E搧䈠ᇩᒠ᩠ɀ༨ʨڤʃ奲ࢠ፠ᆙả䝆䮳りĩ(ॠી᧰྄e॑ᤙ䒠剠⁌ဥࠩФΝ䂂⢴ᑠ㺀ᢣ䗨dBqÚ扜冢\u0FE5\u0A62䐠劣ေ¯䂍䞀ၰ\u0E67ᐓ〈ᄠ塠Ѡ̀ာ⠤ᡤŒęጓ憒‱〿䌳℔ᐼ䊢⁚䤿ӣ◚㙀\u0C74Ӹ抠⣀ĨǊǸ䁃း₺Ý䂁ᜤ䢑V⁄樫焠\u0A60\u2E78⎲Ĉ䁎勯戡璠悈ᠥ嘡⩩‰ನ檨㡕䶪၁@恑ࠣ䘣ࢠᅀᡎ劰桠Өॢಸ熛փࢸ䀹ఽ䅠勖ਰ۴̄ጺಢ䈠ᙠᨭ\u2FE0焠Ӡܼ䇂䒠ᯀԨĠ愜᪅䦥㶐ୀ\u09C5Ƣ*䂕ॹ∠咠р\u0604У無~⁆Г椠痠\u1CA9Ⱓס㩖ᝋ司楠२ญⳘ䬣汤ǿã㱩ᖷ掠Àݒ㑁c‾䮴,\u2452僢ᰣ缠ɋ乨\u0378䁡绑ס傓䁔瀾ሺÑ䀤ो刡开烀\u0A76Ё䈠䈰״Áj⁑䠡戢碠㘀አ䃉㪙嘈ʂø⸪௰₈㐲暤ƩDᬿ䂖剙書\u0FE0㴢\u0089㘩Ĉ䰵掀栰杁4〡Ƞ⭀\u1AE0㠰㹨Zコത\u009E䂖ࠠⴠ縣吠ᆠʡ㡀䀧否䣝Ӧ愠Ⓚ\u1CA2ಠո*①ӈԥ獀խ@㟬箬㐱\u31BE簽Ɛᩆᇞ稯禚⟶⣑аβǚ㥎Ḇ⌢㑆 搡⁗ဣ刣\u0C45䑒8怺₵⤦a5ਵ㏰ᩄ猢ฦ䬞㐷䈠呠カ愠ۀ\u1C92傠ᅼ߃ᙊ䢨ၠླྀš亀ƴ̰刷ʼ墨愠  "<a name="line.4976"></a>
-<span class="sourceLineNo">4977</span>                    )),<a name="line.4977"></a>
-<span class="sourceLineNo">4978</span>                    noiseGenerator, octaveMultiplier);<a name="line.4978"></a>
-<span class="sourceLineNo">4979</span>        }<a name="line.4979"></a>
-<span class="sourceLineNo">4980</span><a name="line.4980"></a>
-<span class="sourceLineNo">4981</span>        /**<a name="line.4981"></a>
-<span class="sourceLineNo">4982</span>         * Copies the LocalMimicMap {@code other} to construct a new one that is exactly the same. References will only<a name="line.4982"></a>
-<span class="sourceLineNo">4983</span>         * be shared to Noise classes.<a name="line.4983"></a>
-<span class="sourceLineNo">4984</span>         * @param other a LocalMimicMap to copy<a name="line.4984"></a>
-<span class="sourceLineNo">4985</span>         */<a name="line.4985"></a>
-<span class="sourceLineNo">4986</span>        public LocalMimicMap(LocalMimicMap other)<a name="line.4986"></a>
-<span class="sourceLineNo">4987</span>        {<a name="line.4987"></a>
-<span class="sourceLineNo">4988</span>            super(other);<a name="line.4988"></a>
-<span class="sourceLineNo">4989</span>            earth = other.earth.copy();<a name="line.4989"></a>
-<span class="sourceLineNo">4990</span>            earthOriginal = other.earthOriginal.copy();<a name="line.4990"></a>
-<span class="sourceLineNo">4991</span>            coast   = other.coast.copy();<a name="line.4991"></a>
-<span class="sourceLineNo">4992</span>            shallow = other.shallow.copy();<a name="line.4992"></a>
-<span class="sourceLineNo">4993</span>        }<a name="line.4993"></a>
-<span class="sourceLineNo">4994</span><a name="line.4994"></a>
-<span class="sourceLineNo">4995</span><a name="line.4995"></a>
-<span class="sourceLineNo">4996</span><a name="line.4996"></a>
-<span class="sourceLineNo">4997</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.4997"></a>
-<span class="sourceLineNo">4998</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.4998"></a>
-<span class="sourceLineNo">4999</span>        {<a name="line.4999"></a>
-<span class="sourceLineNo">5000</span>            boolean fresh = false;<a name="line.5000"></a>
-<span class="sourceLineNo">5001</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.5001"></a>
-<span class="sourceLineNo">5002</span>            {<a name="line.5002"></a>
-<span class="sourceLineNo">5003</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.5003"></a>
-<span class="sourceLineNo">5004</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.5004"></a>
-<span class="sourceLineNo">5005</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.5005"></a>
-<span class="sourceLineNo">5006</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.5006"></a>
-<span class="sourceLineNo">5007</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.5007"></a>
-<span class="sourceLineNo">5008</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.5008"></a>
-<span class="sourceLineNo">5009</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.5009"></a>
-<span class="sourceLineNo">5010</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.5010"></a>
-<span class="sourceLineNo">5011</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.5011"></a>
-<span class="sourceLineNo">5012</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.5012"></a>
-<span class="sourceLineNo">5013</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.5013"></a>
-<span class="sourceLineNo">5014</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.5014"></a>
-<span class="sourceLineNo">5015</span>                cacheA = stateA;<a name="line.5015"></a>
-<span class="sourceLineNo">5016</span>                cacheB = stateB;<a name="line.5016"></a>
-<span class="sourceLineNo">5017</span>                fresh = true;<a name="line.5017"></a>
-<span class="sourceLineNo">5018</span>            }<a name="line.5018"></a>
-<span class="sourceLineNo">5019</span>            rng.setState(stateA, stateB);<a name="line.5019"></a>
-<span class="sourceLineNo">5020</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.5020"></a>
-<span class="sourceLineNo">5021</span>            int t;<a name="line.5021"></a>
-<span class="sourceLineNo">5022</span><a name="line.5022"></a>
-<span class="sourceLineNo">5023</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.5023"></a>
-<span class="sourceLineNo">5024</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.5024"></a>
-<span class="sourceLineNo">5025</span><a name="line.5025"></a>
-<span class="sourceLineNo">5026</span>            earth.remake(earthOriginal);<a name="line.5026"></a>
+<span class="sourceLineNo">4820</span>            if(fresh)<a name="line.4820"></a>
+<span class="sourceLineNo">4821</span>            {<a name="line.4821"></a>
+<span class="sourceLineNo">4822</span>                minHeat1 = ps;<a name="line.4822"></a>
+<span class="sourceLineNo">4823</span>                maxHeat1 = pc;<a name="line.4823"></a>
+<span class="sourceLineNo">4824</span>            }<a name="line.4824"></a>
+<span class="sourceLineNo">4825</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.4825"></a>
+<span class="sourceLineNo">4826</span>            qs = Double.POSITIVE_INFINITY;<a name="line.4826"></a>
+<span class="sourceLineNo">4827</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.4827"></a>
+<span class="sourceLineNo">4828</span>            ps = Double.POSITIVE_INFINITY;<a name="line.4828"></a>
+<span class="sourceLineNo">4829</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.4829"></a>
+<span class="sourceLineNo">4830</span><a name="line.4830"></a>
+<span class="sourceLineNo">4831</span><a name="line.4831"></a>
+<span class="sourceLineNo">4832</span>            for (int y = 0; y &lt; height; y++) {<a name="line.4832"></a>
+<span class="sourceLineNo">4833</span>                for (int x = 0; x &lt; width; x++) {<a name="line.4833"></a>
+<span class="sourceLineNo">4834</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.4834"></a>
+<span class="sourceLineNo">4835</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.4835"></a>
+<span class="sourceLineNo">4836</span>                    if (fresh) {<a name="line.4836"></a>
+<span class="sourceLineNo">4837</span>                        qs = Math.min(qs, h);<a name="line.4837"></a>
+<span class="sourceLineNo">4838</span>                        qc = Math.max(qc, h);<a name="line.4838"></a>
+<span class="sourceLineNo">4839</span>                        ps = Math.min(ps, temp);<a name="line.4839"></a>
+<span class="sourceLineNo">4840</span>                        pc = Math.max(pc, temp);<a name="line.4840"></a>
+<span class="sourceLineNo">4841</span>                    }<a name="line.4841"></a>
+<span class="sourceLineNo">4842</span>                }<a name="line.4842"></a>
+<span class="sourceLineNo">4843</span>            }<a name="line.4843"></a>
+<span class="sourceLineNo">4844</span>            if(fresh)<a name="line.4844"></a>
+<span class="sourceLineNo">4845</span>            {<a name="line.4845"></a>
+<span class="sourceLineNo">4846</span>                minHeat = qs;<a name="line.4846"></a>
+<span class="sourceLineNo">4847</span>                maxHeat = qc;<a name="line.4847"></a>
+<span class="sourceLineNo">4848</span>                minWet = ps;<a name="line.4848"></a>
+<span class="sourceLineNo">4849</span>                maxWet = pc;<a name="line.4849"></a>
+<span class="sourceLineNo">4850</span>            }<a name="line.4850"></a>
+<span class="sourceLineNo">4851</span>            landData.refill(heightCodeData, 4, 999);<a name="line.4851"></a>
+<span class="sourceLineNo">4852</span>        }<a name="line.4852"></a>
+<span class="sourceLineNo">4853</span>    }<a name="line.4853"></a>
+<span class="sourceLineNo">4854</span><a name="line.4854"></a>
+<span class="sourceLineNo">4855</span>    /**<a name="line.4855"></a>
+<span class="sourceLineNo">4856</span>     * An unusual map generator that imitates an existing local map (such as a map of Australia, which it can do by<a name="line.4856"></a>
+<span class="sourceLineNo">4857</span>     * default), without applying any projection or changing heat levels in the polar regions or equator.<a name="line.4857"></a>
+<span class="sourceLineNo">4858</span>     * &lt;a href="http://squidpony.github.io/SquidLib/LocalMimicMap.png" &gt;Example map, showing a variant on Australia&lt;/a&gt;<a name="line.4858"></a>
+<span class="sourceLineNo">4859</span>     */<a name="line.4859"></a>
+<span class="sourceLineNo">4860</span>    public static class LocalMimicMap extends LocalMap<a name="line.4860"></a>
+<span class="sourceLineNo">4861</span>    {<a name="line.4861"></a>
+<span class="sourceLineNo">4862</span>        public GreasedRegion earth;<a name="line.4862"></a>
+<span class="sourceLineNo">4863</span>        public GreasedRegion shallow;<a name="line.4863"></a>
+<span class="sourceLineNo">4864</span>        public GreasedRegion coast;<a name="line.4864"></a>
+<span class="sourceLineNo">4865</span>        public GreasedRegion earthOriginal;<a name="line.4865"></a>
+<span class="sourceLineNo">4866</span>        /**<a name="line.4866"></a>
+<span class="sourceLineNo">4867</span>         * Constructs a concrete WorldMapGenerator for a map that should look like Australia, without projecting the<a name="line.4867"></a>
+<span class="sourceLineNo">4868</span>         * land positions or changing heat by latitude. Always makes a 256x256 map.<a name="line.4868"></a>
+<span class="sourceLineNo">4869</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4869"></a>
+<span class="sourceLineNo">4870</span>         * If you were using {@link LocalMimicMap#LocalMimicMap(long, Noise2D, double)}, then this would be the<a name="line.4870"></a>
+<span class="sourceLineNo">4871</span>         * same as passing the parameters {@code 0x1337BABE1337D00DL, DEFAULT_NOISE, 1.0}.<a name="line.4871"></a>
+<span class="sourceLineNo">4872</span>         */<a name="line.4872"></a>
+<span class="sourceLineNo">4873</span>        public LocalMimicMap() {<a name="line.4873"></a>
+<span class="sourceLineNo">4874</span>            this(0x1337BABE1337D00DL<a name="line.4874"></a>
+<span class="sourceLineNo">4875</span>                    , DEFAULT_NOISE, 1.0);<a name="line.4875"></a>
+<span class="sourceLineNo">4876</span>        }<a name="line.4876"></a>
+<span class="sourceLineNo">4877</span><a name="line.4877"></a>
+<span class="sourceLineNo">4878</span>        /**<a name="line.4878"></a>
+<span class="sourceLineNo">4879</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4879"></a>
+<span class="sourceLineNo">4880</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4880"></a>
+<span class="sourceLineNo">4881</span>         * The initial seed is set to the same large long every time, and it's likely that you would set the seed when<a name="line.4881"></a>
+<span class="sourceLineNo">4882</span>         * you call {@link #generate(long)}. The width and height of the map cannot be changed after the fact.<a name="line.4882"></a>
+<span class="sourceLineNo">4883</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4883"></a>
+<span class="sourceLineNo">4884</span>         *<a name="line.4884"></a>
+<span class="sourceLineNo">4885</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4885"></a>
+<span class="sourceLineNo">4886</span>         */<a name="line.4886"></a>
+<span class="sourceLineNo">4887</span>        public LocalMimicMap(GreasedRegion toMimic) {<a name="line.4887"></a>
+<span class="sourceLineNo">4888</span>            this(0x1337BABE1337D00DL, toMimic,  DEFAULT_NOISE,1.0);<a name="line.4888"></a>
+<span class="sourceLineNo">4889</span>        }<a name="line.4889"></a>
+<span class="sourceLineNo">4890</span><a name="line.4890"></a>
+<span class="sourceLineNo">4891</span>        /**<a name="line.4891"></a>
+<span class="sourceLineNo">4892</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4892"></a>
+<span class="sourceLineNo">4893</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4893"></a>
+<span class="sourceLineNo">4894</span>         * Takes an initial seed and the GreasedRegion containing land positions. The {@code initialSeed}<a name="line.4894"></a>
+<span class="sourceLineNo">4895</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.4895"></a>
+<span class="sourceLineNo">4896</span>         * The width and height of the map cannot be changed after the fact.<a name="line.4896"></a>
+<span class="sourceLineNo">4897</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4897"></a>
+<span class="sourceLineNo">4898</span>         *<a name="line.4898"></a>
+<span class="sourceLineNo">4899</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4899"></a>
+<span class="sourceLineNo">4900</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4900"></a>
+<span class="sourceLineNo">4901</span>         */<a name="line.4901"></a>
+<span class="sourceLineNo">4902</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic) {<a name="line.4902"></a>
+<span class="sourceLineNo">4903</span>            this(initialSeed, toMimic, DEFAULT_NOISE, 1.0);<a name="line.4903"></a>
+<span class="sourceLineNo">4904</span>        }<a name="line.4904"></a>
+<span class="sourceLineNo">4905</span><a name="line.4905"></a>
+<span class="sourceLineNo">4906</span>        /**<a name="line.4906"></a>
+<span class="sourceLineNo">4907</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4907"></a>
+<span class="sourceLineNo">4908</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4908"></a>
+<span class="sourceLineNo">4909</span>         * Takes an initial seed, the GreasedRegion containing land positions, and a multiplier that affects the level<a name="line.4909"></a>
+<span class="sourceLineNo">4910</span>         * of detail by increasing or decreasing the number of octaves of noise used. The {@code initialSeed}<a name="line.4910"></a>
+<span class="sourceLineNo">4911</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.4911"></a>
+<span class="sourceLineNo">4912</span>         * The width and height of the map cannot be changed after the fact.<a name="line.4912"></a>
+<span class="sourceLineNo">4913</span>         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.<a name="line.4913"></a>
+<span class="sourceLineNo">4914</span>         *<a name="line.4914"></a>
+<span class="sourceLineNo">4915</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4915"></a>
+<span class="sourceLineNo">4916</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4916"></a>
+<span class="sourceLineNo">4917</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.4917"></a>
+<span class="sourceLineNo">4918</span>         */<a name="line.4918"></a>
+<span class="sourceLineNo">4919</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, double octaveMultiplier) {<a name="line.4919"></a>
+<span class="sourceLineNo">4920</span>            this(initialSeed, toMimic, DEFAULT_NOISE, octaveMultiplier);<a name="line.4920"></a>
+<span class="sourceLineNo">4921</span>        }<a name="line.4921"></a>
+<span class="sourceLineNo">4922</span><a name="line.4922"></a>
+<span class="sourceLineNo">4923</span>        /**<a name="line.4923"></a>
+<span class="sourceLineNo">4924</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4924"></a>
+<span class="sourceLineNo">4925</span>         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.<a name="line.4925"></a>
+<span class="sourceLineNo">4926</span>         * Takes an initial seed, the GreasedRegion containing land positions, and parameters for noise generation (a<a name="line.4926"></a>
+<span class="sourceLineNo">4927</span>         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}. The {@code initialSeed}<a name="line.4927"></a>
+<span class="sourceLineNo">4928</span>         * parameter may or may not be used, since you can specify the seed to use when you call<a name="line.4928"></a>
+<span class="sourceLineNo">4929</span>         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact. Both FastNoise<a name="line.4929"></a>
+<span class="sourceLineNo">4930</span>         * and FastNoise make sense to use for {@code noiseGenerator}, and the seed it's constructed with doesn't matter<a name="line.4930"></a>
+<span class="sourceLineNo">4931</span>         * because this will change the seed several times at different scales of noise (it's fine to use the static<a name="line.4931"></a>
+<span class="sourceLineNo">4932</span>         * {@link FastNoise#instance} or {@link FastNoise#instance} because they have no changing state between runs<a name="line.4932"></a>
+<span class="sourceLineNo">4933</span>         * of the program). Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.4933"></a>
+<span class="sourceLineNo">4934</span>         *<a name="line.4934"></a>
+<span class="sourceLineNo">4935</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4935"></a>
+<span class="sourceLineNo">4936</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4936"></a>
+<span class="sourceLineNo">4937</span>         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}<a name="line.4937"></a>
+<span class="sourceLineNo">4938</span>         */<a name="line.4938"></a>
+<span class="sourceLineNo">4939</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, Noise2D noiseGenerator) {<a name="line.4939"></a>
+<span class="sourceLineNo">4940</span>            this(initialSeed, toMimic, noiseGenerator, 1.0);<a name="line.4940"></a>
+<span class="sourceLineNo">4941</span>        }<a name="line.4941"></a>
+<span class="sourceLineNo">4942</span><a name="line.4942"></a>
+<span class="sourceLineNo">4943</span>        /**<a name="line.4943"></a>
+<span class="sourceLineNo">4944</span>         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the<a name="line.4944"></a>
+<span class="sourceLineNo">4945</span>         * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).<a name="line.4945"></a>
+<span class="sourceLineNo">4946</span>         * Takes an initial seed, the GreasedRegion containing land positions, parameters for noise generation (a<a name="line.4946"></a>
+<span class="sourceLineNo">4947</span>         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a multiplier on how many<a name="line.4947"></a>
+<span class="sourceLineNo">4948</span>         * octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers producing even more<a name="line.4948"></a>
+<span class="sourceLineNo">4949</span>         * detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,<a name="line.4949"></a>
+<span class="sourceLineNo">4950</span>         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map<a name="line.4950"></a>
+<span class="sourceLineNo">4951</span>         * cannot be changed after the fact.  FastNoise will be the fastest 3D generator to use for<a name="line.4951"></a>
+<span class="sourceLineNo">4952</span>         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the<a name="line.4952"></a>
+<span class="sourceLineNo">4953</span>         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}<a name="line.4953"></a>
+<span class="sourceLineNo">4954</span>         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should<a name="line.4954"></a>
+<span class="sourceLineNo">4955</span>         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on<a name="line.4955"></a>
+<span class="sourceLineNo">4956</span>         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps<a name="line.4956"></a>
+<span class="sourceLineNo">4957</span>         * that don't require zooming.<a name="line.4957"></a>
+<span class="sourceLineNo">4958</span>         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate<a name="line.4958"></a>
+<span class="sourceLineNo">4959</span>         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied<a name="line.4959"></a>
+<span class="sourceLineNo">4960</span>         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}<a name="line.4960"></a>
+<span class="sourceLineNo">4961</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.4961"></a>
+<span class="sourceLineNo">4962</span>         */<a name="line.4962"></a>
+<span class="sourceLineNo">4963</span>        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, Noise2D noiseGenerator, double octaveMultiplier) {<a name="line.4963"></a>
+<span class="sourceLineNo">4964</span>            super(initialSeed, toMimic.width, toMimic.height, noiseGenerator, octaveMultiplier);<a name="line.4964"></a>
+<span class="sourceLineNo">4965</span>            earth = toMimic;<a name="line.4965"></a>
+<span class="sourceLineNo">4966</span>            earthOriginal = earth.copy();<a name="line.4966"></a>
+<span class="sourceLineNo">4967</span>            coast   = earth.copy().not().fringe(2);<a name="line.4967"></a>
+<span class="sourceLineNo">4968</span>            shallow = earth.copy().fringe(2);<a name="line.4968"></a>
+<span class="sourceLineNo">4969</span>        }<a name="line.4969"></a>
+<span class="sourceLineNo">4970</span><a name="line.4970"></a>
+<span class="sourceLineNo">4971</span>        /**<a name="line.4971"></a>
+<span class="sourceLineNo">4972</span>         * Constructs a 256x256 unprojected local map that will use land forms with a similar shape to Australia.<a name="line.4972"></a>
+<span class="sourceLineNo">4973</span>         * @param initialSeed<a name="line.4973"></a>
+<span class="sourceLineNo">4974</span>         * @param noiseGenerator<a name="line.4974"></a>
+<span class="sourceLineNo">4975</span>         * @param octaveMultiplier<a name="line.4975"></a>
+<span class="sourceLineNo">4976</span>         */<a name="line.4976"></a>
+<span class="sourceLineNo">4977</span>        public LocalMimicMap(long initialSeed, Noise2D noiseGenerator, double octaveMultiplier)<a name="line.4977"></a>
+<span class="sourceLineNo">4978</span>        {<a name="line.4978"></a>
+<span class="sourceLineNo">4979</span>            this(initialSeed,<a name="line.4979"></a>
+<span class="sourceLineNo">4980</span>                    GreasedRegion.decompress(LZSPlus.decompress(<a name="line.4980"></a>
+<span class="sourceLineNo">4981</span>                            "Ƥ䒅⒐᮰囨䈢ħ䐤࠰ࠨ•Ⱙအ䎢ŘňÆ䴣ȢؤF䭠゠ᔤ∠偰ഀ\u0560₠ኼܨā᭮笁\u242AЦᇅ扰रࠦ吠䠪ࠦ䠧娮⠬䠬❁Ềក\u1CAA͠敠ἒ慽Ê䄄洡儠䋻䨡㈠䙬坈མŨྈ䞻䛊哚晪⁞倰h·䡂Ļæ抂㴢္\u082E搧䈠ᇩᒠ᩠ɀ༨ʨڤʃ奲ࢠ፠ᆙả䝆䮳りĩ(ॠી᧰྄e॑ᤙ䒠剠⁌ဥࠩФΝ䂂⢴ᑠ㺀ᢣ䗨dBqÚ扜冢\u0FE5\u0A62䐠劣ေ¯䂍䞀ၰ\u0E67ᐓ〈ᄠ塠Ѡ̀ာ⠤ᡤŒęጓ憒‱〿䌳℔ᐼ䊢⁚䤿ӣ◚㙀\u0C74Ӹ抠⣀ĨǊǸ䁃း₺Ý䂁ᜤ䢑V⁄樫焠\u0A60\u2E78⎲Ĉ䁎勯戡璠悈ᠥ嘡⩩‰ನ檨㡕䶪၁@恑ࠣ䘣ࢠᅀᡎ劰桠Өॢಸ熛փࢸ䀹ఽ䅠勖ਰ۴̄ጺಢ䈠ᙠᨭ\u2FE0焠Ӡܼ䇂䒠ᯀԨĠ愜᪅䦥㶐ୀ\u09C5Ƣ*䂕ॹ∠咠р\u0604У無~⁆Г椠痠\u1CA9Ⱓס㩖ᝋ司楠२ญⳘ䬣汤ǿã㱩ᖷ掠Àݒ㑁c‾䮴,\u2452僢ᰣ缠ɋ乨\u0378䁡绑ס傓䁔瀾ሺÑ䀤ो刡开烀\u0A76Ё䈠䈰״Áj⁑䠡戢碠㘀አ䃉㪙嘈ʂø⸪௰₈㐲暤ƩDᬿ䂖剙書\u0FE0㴢\u0089㘩Ĉ䰵掀栰杁4〡Ƞ⭀\u1AE0㠰㹨Zコത\u009E䂖ࠠⴠ縣吠ᆠʡ㡀䀧否䣝Ӧ愠Ⓚ\u1CA2ಠո*①ӈԥ獀խ@㟬箬㐱\u31BE簽Ɛᩆᇞ稯禚⟶⣑аβǚ㥎Ḇ⌢㑆 搡⁗ဣ刣\u0C45䑒8怺₵⤦a5ਵ㏰ᩄ猢ฦ䬞㐷䈠呠カ愠ۀ\u1C92傠ᅼ߃ᙊ䢨ၠླྀš亀ƴ̰刷ʼ墨愠  "<a name="line.4981"></a>
+<span class="sourceLineNo">4982</span>                    )),<a name="line.4982"></a>
+<span class="sourceLineNo">4983</span>                    noiseGenerator, octaveMultiplier);<a name="line.4983"></a>
+<span class="sourceLineNo">4984</span>        }<a name="line.4984"></a>
+<span class="sourceLineNo">4985</span><a name="line.4985"></a>
+<span class="sourceLineNo">4986</span>        /**<a name="line.4986"></a>
+<span class="sourceLineNo">4987</span>         * Copies the LocalMimicMap {@code other} to construct a new one that is exactly the same. References will only<a name="line.4987"></a>
+<span class="sourceLineNo">4988</span>         * be shared to Noise classes.<a name="line.4988"></a>
+<span class="sourceLineNo">4989</span>         * @param other a LocalMimicMap to copy<a name="line.4989"></a>
+<span class="sourceLineNo">4990</span>         */<a name="line.4990"></a>
+<span class="sourceLineNo">4991</span>        public LocalMimicMap(LocalMimicMap other)<a name="line.4991"></a>
+<span class="sourceLineNo">4992</span>        {<a name="line.4992"></a>
+<span class="sourceLineNo">4993</span>            super(other);<a name="line.4993"></a>
+<span class="sourceLineNo">4994</span>            earth = other.earth.copy();<a name="line.4994"></a>
+<span class="sourceLineNo">4995</span>            earthOriginal = other.earthOriginal.copy();<a name="line.4995"></a>
+<span class="sourceLineNo">4996</span>            coast   = other.coast.copy();<a name="line.4996"></a>
+<span class="sourceLineNo">4997</span>            shallow = other.shallow.copy();<a name="line.4997"></a>
+<span class="sourceLineNo">4998</span>        }<a name="line.4998"></a>
+<span class="sourceLineNo">4999</span><a name="line.4999"></a>
+<span class="sourceLineNo">5000</span><a name="line.5000"></a>
+<span class="sourceLineNo">5001</span><a name="line.5001"></a>
+<span class="sourceLineNo">5002</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.5002"></a>
+<span class="sourceLineNo">5003</span>                                  double landMod, double heatMod, int stateA, int stateB)<a name="line.5003"></a>
+<span class="sourceLineNo">5004</span>        {<a name="line.5004"></a>
+<span class="sourceLineNo">5005</span>            boolean fresh = false;<a name="line.5005"></a>
+<span class="sourceLineNo">5006</span>            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || heatMod != heatModifier)<a name="line.5006"></a>
+<span class="sourceLineNo">5007</span>            {<a name="line.5007"></a>
+<span class="sourceLineNo">5008</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.5008"></a>
+<span class="sourceLineNo">5009</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.5009"></a>
+<span class="sourceLineNo">5010</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.5010"></a>
+<span class="sourceLineNo">5011</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.5011"></a>
+<span class="sourceLineNo">5012</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.5012"></a>
+<span class="sourceLineNo">5013</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.5013"></a>
+<span class="sourceLineNo">5014</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.5014"></a>
+<span class="sourceLineNo">5015</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.5015"></a>
+<span class="sourceLineNo">5016</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.5016"></a>
+<span class="sourceLineNo">5017</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.5017"></a>
+<span class="sourceLineNo">5018</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.5018"></a>
+<span class="sourceLineNo">5019</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.5019"></a>
+<span class="sourceLineNo">5020</span>                cacheA = stateA;<a name="line.5020"></a>
+<span class="sourceLineNo">5021</span>                cacheB = stateB;<a name="line.5021"></a>
+<span class="sourceLineNo">5022</span>                fresh = true;<a name="line.5022"></a>
+<span class="sourceLineNo">5023</span>            }<a name="line.5023"></a>
+<span class="sourceLineNo">5024</span>            rng.setState(stateA, stateB);<a name="line.5024"></a>
+<span class="sourceLineNo">5025</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.5025"></a>
+<span class="sourceLineNo">5026</span>            int t;<a name="line.5026"></a>
 <span class="sourceLineNo">5027</span><a name="line.5027"></a>
-<span class="sourceLineNo">5028</span>            if(zoom &gt; 0)<a name="line.5028"></a>
-<span class="sourceLineNo">5029</span>            {<a name="line.5029"></a>
-<span class="sourceLineNo">5030</span>                int stx = Math.min(Math.max((zoomStartX - (width  &gt;&gt; 1)) / ((2 &lt;&lt; zoom) - 2), 0), width ),<a name="line.5030"></a>
-<span class="sourceLineNo">5031</span>                        sty = Math.min(Math.max((zoomStartY - (height &gt;&gt; 1)) / ((2 &lt;&lt; zoom) - 2), 0), height);<a name="line.5031"></a>
-<span class="sourceLineNo">5032</span>                for (int z = 0; z &lt; zoom; z++) {<a name="line.5032"></a>
-<span class="sourceLineNo">5033</span>                    earth.zoom(stx, sty).expand8way().fray(0.5).expand();<a name="line.5033"></a>
-<span class="sourceLineNo">5034</span>                }<a name="line.5034"></a>
-<span class="sourceLineNo">5035</span>                coast.remake(earth).not().fringe(2 &lt;&lt; zoom).expand().fray(0.5);<a name="line.5035"></a>
-<span class="sourceLineNo">5036</span>                shallow.remake(earth).fringe(2 &lt;&lt; zoom).expand().fray(0.5);<a name="line.5036"></a>
-<span class="sourceLineNo">5037</span>            }<a name="line.5037"></a>
-<span class="sourceLineNo">5038</span>            else<a name="line.5038"></a>
-<span class="sourceLineNo">5039</span>            {<a name="line.5039"></a>
-<span class="sourceLineNo">5040</span>                coast.remake(earth).not().fringe(2);<a name="line.5040"></a>
-<span class="sourceLineNo">5041</span>                shallow.remake(earth).fringe(2);<a name="line.5041"></a>
+<span class="sourceLineNo">5028</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.5028"></a>
+<span class="sourceLineNo">5029</span>            heatModifier = (heatMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : heatMod;<a name="line.5029"></a>
+<span class="sourceLineNo">5030</span><a name="line.5030"></a>
+<span class="sourceLineNo">5031</span>            earth.remake(earthOriginal);<a name="line.5031"></a>
+<span class="sourceLineNo">5032</span><a name="line.5032"></a>
+<span class="sourceLineNo">5033</span>            if(zoom &gt; 0)<a name="line.5033"></a>
+<span class="sourceLineNo">5034</span>            {<a name="line.5034"></a>
+<span class="sourceLineNo">5035</span>                int stx = Math.min(Math.max((zoomStartX - (width  &gt;&gt; 1)) / ((2 &lt;&lt; zoom) - 2), 0), width ),<a name="line.5035"></a>
+<span class="sourceLineNo">5036</span>                        sty = Math.min(Math.max((zoomStartY - (height &gt;&gt; 1)) / ((2 &lt;&lt; zoom) - 2), 0), height);<a name="line.5036"></a>
+<span class="sourceLineNo">5037</span>                for (int z = 0; z &lt; zoom; z++) {<a name="line.5037"></a>
+<span class="sourceLineNo">5038</span>                    earth.zoom(stx, sty).expand8way().fray(0.5).expand();<a name="line.5038"></a>
+<span class="sourceLineNo">5039</span>                }<a name="line.5039"></a>
+<span class="sourceLineNo">5040</span>                coast.remake(earth).not().fringe(2 &lt;&lt; zoom).expand().fray(0.5);<a name="line.5040"></a>
+<span class="sourceLineNo">5041</span>                shallow.remake(earth).fringe(2 &lt;&lt; zoom).expand().fray(0.5);<a name="line.5041"></a>
 <span class="sourceLineNo">5042</span>            }<a name="line.5042"></a>
-<span class="sourceLineNo">5043</span>            double p,<a name="line.5043"></a>
-<span class="sourceLineNo">5044</span>                    ps, pc,<a name="line.5044"></a>
-<span class="sourceLineNo">5045</span>                    qs, qc,<a name="line.5045"></a>
-<span class="sourceLineNo">5046</span>                    h, temp,<a name="line.5046"></a>
-<span class="sourceLineNo">5047</span>                    i_w = 1.0 / width, i_h = 1.0 / (height),<a name="line.5047"></a>
-<span class="sourceLineNo">5048</span>                    i_uw = usedWidth * i_w * i_w, i_uh = usedHeight * i_h * i_h, xPos, yPos = startY * i_h;<a name="line.5048"></a>
-<span class="sourceLineNo">5049</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.5049"></a>
-<span class="sourceLineNo">5050</span>                xPos = startX * i_w;<a name="line.5050"></a>
-<span class="sourceLineNo">5051</span>                for (int x = 0, xt = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.5051"></a>
-<span class="sourceLineNo">5052</span>                    xPositions[x][y] = (xPos - .5) * 2.0;<a name="line.5052"></a>
-<span class="sourceLineNo">5053</span>                    yPositions[x][y] = (yPos - .5) * 2.0;<a name="line.5053"></a>
-<span class="sourceLineNo">5054</span>                    zPositions[x][y] = 0.0;<a name="line.5054"></a>
-<span class="sourceLineNo">5055</span><a name="line.5055"></a>
-<span class="sourceLineNo">5056</span>                    if(earth.contains(x, y))<a name="line.5056"></a>
-<span class="sourceLineNo">5057</span>                    {<a name="line.5057"></a>
-<span class="sourceLineNo">5058</span>                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(xPos +<a name="line.5058"></a>
-<span class="sourceLineNo">5059</span>                                        terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,<a name="line.5059"></a>
-<span class="sourceLineNo">5060</span>                                yPos, seedA)) * 0.85;<a name="line.5060"></a>
-<span class="sourceLineNo">5061</span>                        if(coast.contains(x, y))<a name="line.5061"></a>
-<span class="sourceLineNo">5062</span>                            h += 0.05;<a name="line.5062"></a>
-<span class="sourceLineNo">5063</span>                        else<a name="line.5063"></a>
-<span class="sourceLineNo">5064</span>                            h += 0.15;<a name="line.5064"></a>
-<span class="sourceLineNo">5065</span>                    }<a name="line.5065"></a>
-<span class="sourceLineNo">5066</span>                    else<a name="line.5066"></a>
-<span class="sourceLineNo">5067</span>                    {<a name="line.5067"></a>
-<span class="sourceLineNo">5068</span>                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(xPos +<a name="line.5068"></a>
-<span class="sourceLineNo">5069</span>                                        terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,<a name="line.5069"></a>
-<span class="sourceLineNo">5070</span>                                yPos, seedA)) * -0.9;<a name="line.5070"></a>
-<span class="sourceLineNo">5071</span>                        if(shallow.contains(x, y))<a name="line.5071"></a>
-<span class="sourceLineNo">5072</span>                            h = (h - 0.08) * 0.375;<a name="line.5072"></a>
-<span class="sourceLineNo">5073</span>                        else<a name="line.5073"></a>
-<span class="sourceLineNo">5074</span>                            h = (h - 0.125) * 0.75;<a name="line.5074"></a>
-<span class="sourceLineNo">5075</span>                    }<a name="line.5075"></a>
-<span class="sourceLineNo">5076</span>                    //h += landModifier - 1.0;<a name="line.5076"></a>
-<span class="sourceLineNo">5077</span>                    heightData[x][y] = h;<a name="line.5077"></a>
-<span class="sourceLineNo">5078</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos<a name="line.5078"></a>
-<span class="sourceLineNo">5079</span>                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),<a name="line.5079"></a>
-<span class="sourceLineNo">5080</span>                            seedB));<a name="line.5080"></a>
-<span class="sourceLineNo">5081</span>                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);<a name="line.5081"></a>
-<span class="sourceLineNo">5082</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));<a name="line.5082"></a>
-<span class="sourceLineNo">5083</span><a name="line.5083"></a>
-<span class="sourceLineNo">5084</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.5084"></a>
-<span class="sourceLineNo">5085</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.5085"></a>
-<span class="sourceLineNo">5086</span>                    if(fresh) {<a name="line.5086"></a>
-<span class="sourceLineNo">5087</span>                        minHeight = Math.min(minHeight, h);<a name="line.5087"></a>
-<span class="sourceLineNo">5088</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.5088"></a>
-<span class="sourceLineNo">5089</span><a name="line.5089"></a>
-<span class="sourceLineNo">5090</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.5090"></a>
-<span class="sourceLineNo">5091</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.5091"></a>
-<span class="sourceLineNo">5092</span><a name="line.5092"></a>
-<span class="sourceLineNo">5093</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.5093"></a>
-<span class="sourceLineNo">5094</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.5094"></a>
-<span class="sourceLineNo">5095</span>                    }<a name="line.5095"></a>
-<span class="sourceLineNo">5096</span>                }<a name="line.5096"></a>
-<span class="sourceLineNo">5097</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.5097"></a>
-<span class="sourceLineNo">5098</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.5098"></a>
-<span class="sourceLineNo">5099</span><a name="line.5099"></a>
-<span class="sourceLineNo">5100</span>            }<a name="line.5100"></a>
-<span class="sourceLineNo">5101</span>            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.5101"></a>
-<span class="sourceLineNo">5102</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.5102"></a>
-<span class="sourceLineNo">5103</span>                    hMod;<a name="line.5103"></a>
-<span class="sourceLineNo">5104</span>            yPos = startY * i_h + i_uh;<a name="line.5104"></a>
-<span class="sourceLineNo">5105</span>            ps = Double.POSITIVE_INFINITY;<a name="line.5105"></a>
-<span class="sourceLineNo">5106</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.5106"></a>
-<span class="sourceLineNo">5107</span><a name="line.5107"></a>
-<span class="sourceLineNo">5108</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.5108"></a>
-<span class="sourceLineNo">5109</span>                for (int x = 0; x &lt; width; x++) {<a name="line.5109"></a>
-<span class="sourceLineNo">5110</span>                    h = heightData[x][y];<a name="line.5110"></a>
-<span class="sourceLineNo">5111</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.5111"></a>
-<span class="sourceLineNo">5112</span>                    hMod = 1.0;<a name="line.5112"></a>
-<span class="sourceLineNo">5113</span>                    switch (t) {<a name="line.5113"></a>
-<span class="sourceLineNo">5114</span>                        case 0:<a name="line.5114"></a>
-<span class="sourceLineNo">5115</span>                        case 1:<a name="line.5115"></a>
-<span class="sourceLineNo">5116</span>                        case 2:<a name="line.5116"></a>
-<span class="sourceLineNo">5117</span>                        case 3:<a name="line.5117"></a>
-<span class="sourceLineNo">5118</span>                            h = 0.4;<a name="line.5118"></a>
-<span class="sourceLineNo">5119</span>                            hMod = 0.2;<a name="line.5119"></a>
-<span class="sourceLineNo">5120</span>                            break;<a name="line.5120"></a>
-<span class="sourceLineNo">5121</span>                        case 6:<a name="line.5121"></a>
-<span class="sourceLineNo">5122</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.5122"></a>
-<span class="sourceLineNo">5123</span>                            break;<a name="line.5123"></a>
-<span class="sourceLineNo">5124</span>                        case 7:<a name="line.5124"></a>
-<span class="sourceLineNo">5125</span>                            h *= -0.25;<a name="line.5125"></a>
-<span class="sourceLineNo">5126</span>                            break;<a name="line.5126"></a>
-<span class="sourceLineNo">5127</span>                        case 8:<a name="line.5127"></a>
-<span class="sourceLineNo">5128</span>                            h *= -0.4;<a name="line.5128"></a>
-<span class="sourceLineNo">5129</span>                            break;<a name="line.5129"></a>
-<span class="sourceLineNo">5130</span>                        default:<a name="line.5130"></a>
-<span class="sourceLineNo">5131</span>                            h *= 0.05;<a name="line.5131"></a>
-<span class="sourceLineNo">5132</span>                    }<a name="line.5132"></a>
-<span class="sourceLineNo">5133</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6);<a name="line.5133"></a>
-<span class="sourceLineNo">5134</span>                    if (fresh) {<a name="line.5134"></a>
-<span class="sourceLineNo">5135</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.5135"></a>
-<span class="sourceLineNo">5136</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.5136"></a>
+<span class="sourceLineNo">5043</span>            else<a name="line.5043"></a>
+<span class="sourceLineNo">5044</span>            {<a name="line.5044"></a>
+<span class="sourceLineNo">5045</span>                coast.remake(earth).not().fringe(2);<a name="line.5045"></a>
+<span class="sourceLineNo">5046</span>                shallow.remake(earth).fringe(2);<a name="line.5046"></a>
+<span class="sourceLineNo">5047</span>            }<a name="line.5047"></a>
+<span class="sourceLineNo">5048</span>            double p,<a name="line.5048"></a>
+<span class="sourceLineNo">5049</span>                    ps, pc,<a name="line.5049"></a>
+<span class="sourceLineNo">5050</span>                    qs, qc,<a name="line.5050"></a>
+<span class="sourceLineNo">5051</span>                    h, temp,<a name="line.5051"></a>
+<span class="sourceLineNo">5052</span>                    i_w = 1.0 / width, i_h = 1.0 / (height),<a name="line.5052"></a>
+<span class="sourceLineNo">5053</span>                    i_uw = usedWidth * i_w * i_w, i_uh = usedHeight * i_h * i_h, xPos, yPos = startY * i_h;<a name="line.5053"></a>
+<span class="sourceLineNo">5054</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.5054"></a>
+<span class="sourceLineNo">5055</span>                xPos = startX * i_w;<a name="line.5055"></a>
+<span class="sourceLineNo">5056</span>                for (int x = 0, xt = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.5056"></a>
+<span class="sourceLineNo">5057</span>                    xPositions[x][y] = (xPos - .5) * 2.0;<a name="line.5057"></a>
+<span class="sourceLineNo">5058</span>                    yPositions[x][y] = (yPos - .5) * 2.0;<a name="line.5058"></a>
+<span class="sourceLineNo">5059</span>                    zPositions[x][y] = 0.0;<a name="line.5059"></a>
+<span class="sourceLineNo">5060</span><a name="line.5060"></a>
+<span class="sourceLineNo">5061</span>                    if(earth.contains(x, y))<a name="line.5061"></a>
+<span class="sourceLineNo">5062</span>                    {<a name="line.5062"></a>
+<span class="sourceLineNo">5063</span>                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(xPos +<a name="line.5063"></a>
+<span class="sourceLineNo">5064</span>                                        terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,<a name="line.5064"></a>
+<span class="sourceLineNo">5065</span>                                yPos, seedA)) * 0.85;<a name="line.5065"></a>
+<span class="sourceLineNo">5066</span>                        if(coast.contains(x, y))<a name="line.5066"></a>
+<span class="sourceLineNo">5067</span>                            h += 0.05;<a name="line.5067"></a>
+<span class="sourceLineNo">5068</span>                        else<a name="line.5068"></a>
+<span class="sourceLineNo">5069</span>                            h += 0.15;<a name="line.5069"></a>
+<span class="sourceLineNo">5070</span>                    }<a name="line.5070"></a>
+<span class="sourceLineNo">5071</span>                    else<a name="line.5071"></a>
+<span class="sourceLineNo">5072</span>                    {<a name="line.5072"></a>
+<span class="sourceLineNo">5073</span>                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(xPos +<a name="line.5073"></a>
+<span class="sourceLineNo">5074</span>                                        terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,<a name="line.5074"></a>
+<span class="sourceLineNo">5075</span>                                yPos, seedA)) * -0.9;<a name="line.5075"></a>
+<span class="sourceLineNo">5076</span>                        if(shallow.contains(x, y))<a name="line.5076"></a>
+<span class="sourceLineNo">5077</span>                            h = (h - 0.08) * 0.375;<a name="line.5077"></a>
+<span class="sourceLineNo">5078</span>                        else<a name="line.5078"></a>
+<span class="sourceLineNo">5079</span>                            h = (h - 0.125) * 0.75;<a name="line.5079"></a>
+<span class="sourceLineNo">5080</span>                    }<a name="line.5080"></a>
+<span class="sourceLineNo">5081</span>                    //h += landModifier - 1.0;<a name="line.5081"></a>
+<span class="sourceLineNo">5082</span>                    heightData[x][y] = h;<a name="line.5082"></a>
+<span class="sourceLineNo">5083</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos<a name="line.5083"></a>
+<span class="sourceLineNo">5084</span>                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),<a name="line.5084"></a>
+<span class="sourceLineNo">5085</span>                            seedB));<a name="line.5085"></a>
+<span class="sourceLineNo">5086</span>                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);<a name="line.5086"></a>
+<span class="sourceLineNo">5087</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));<a name="line.5087"></a>
+<span class="sourceLineNo">5088</span><a name="line.5088"></a>
+<span class="sourceLineNo">5089</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.5089"></a>
+<span class="sourceLineNo">5090</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.5090"></a>
+<span class="sourceLineNo">5091</span>                    if(fresh) {<a name="line.5091"></a>
+<span class="sourceLineNo">5092</span>                        minHeight = Math.min(minHeight, h);<a name="line.5092"></a>
+<span class="sourceLineNo">5093</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.5093"></a>
+<span class="sourceLineNo">5094</span><a name="line.5094"></a>
+<span class="sourceLineNo">5095</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.5095"></a>
+<span class="sourceLineNo">5096</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.5096"></a>
+<span class="sourceLineNo">5097</span><a name="line.5097"></a>
+<span class="sourceLineNo">5098</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.5098"></a>
+<span class="sourceLineNo">5099</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.5099"></a>
+<span class="sourceLineNo">5100</span>                    }<a name="line.5100"></a>
+<span class="sourceLineNo">5101</span>                }<a name="line.5101"></a>
+<span class="sourceLineNo">5102</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.5102"></a>
+<span class="sourceLineNo">5103</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.5103"></a>
+<span class="sourceLineNo">5104</span><a name="line.5104"></a>
+<span class="sourceLineNo">5105</span>            }<a name="line.5105"></a>
+<span class="sourceLineNo">5106</span>            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.5106"></a>
+<span class="sourceLineNo">5107</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.5107"></a>
+<span class="sourceLineNo">5108</span>                    hMod;<a name="line.5108"></a>
+<span class="sourceLineNo">5109</span>            yPos = startY * i_h + i_uh;<a name="line.5109"></a>
+<span class="sourceLineNo">5110</span>            ps = Double.POSITIVE_INFINITY;<a name="line.5110"></a>
+<span class="sourceLineNo">5111</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.5111"></a>
+<span class="sourceLineNo">5112</span><a name="line.5112"></a>
+<span class="sourceLineNo">5113</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.5113"></a>
+<span class="sourceLineNo">5114</span>                for (int x = 0; x &lt; width; x++) {<a name="line.5114"></a>
+<span class="sourceLineNo">5115</span>                    h = heightData[x][y];<a name="line.5115"></a>
+<span class="sourceLineNo">5116</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.5116"></a>
+<span class="sourceLineNo">5117</span>                    hMod = 1.0;<a name="line.5117"></a>
+<span class="sourceLineNo">5118</span>                    switch (t) {<a name="line.5118"></a>
+<span class="sourceLineNo">5119</span>                        case 0:<a name="line.5119"></a>
+<span class="sourceLineNo">5120</span>                        case 1:<a name="line.5120"></a>
+<span class="sourceLineNo">5121</span>                        case 2:<a name="line.5121"></a>
+<span class="sourceLineNo">5122</span>                        case 3:<a name="line.5122"></a>
+<span class="sourceLineNo">5123</span>                            h = 0.4;<a name="line.5123"></a>
+<span class="sourceLineNo">5124</span>                            hMod = 0.2;<a name="line.5124"></a>
+<span class="sourceLineNo">5125</span>                            break;<a name="line.5125"></a>
+<span class="sourceLineNo">5126</span>                        case 6:<a name="line.5126"></a>
+<span class="sourceLineNo">5127</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.5127"></a>
+<span class="sourceLineNo">5128</span>                            break;<a name="line.5128"></a>
+<span class="sourceLineNo">5129</span>                        case 7:<a name="line.5129"></a>
+<span class="sourceLineNo">5130</span>                            h *= -0.25;<a name="line.5130"></a>
+<span class="sourceLineNo">5131</span>                            break;<a name="line.5131"></a>
+<span class="sourceLineNo">5132</span>                        case 8:<a name="line.5132"></a>
+<span class="sourceLineNo">5133</span>                            h *= -0.4;<a name="line.5133"></a>
+<span class="sourceLineNo">5134</span>                            break;<a name="line.5134"></a>
+<span class="sourceLineNo">5135</span>                        default:<a name="line.5135"></a>
+<span class="sourceLineNo">5136</span>                            h *= 0.05;<a name="line.5136"></a>
 <span class="sourceLineNo">5137</span>                    }<a name="line.5137"></a>
-<span class="sourceLineNo">5138</span>                }<a name="line.5138"></a>
-<span class="sourceLineNo">5139</span>            }<a name="line.5139"></a>
-<span class="sourceLineNo">5140</span>            if(fresh)<a name="line.5140"></a>
-<span class="sourceLineNo">5141</span>            {<a name="line.5141"></a>
-<span class="sourceLineNo">5142</span>                minHeat1 = ps;<a name="line.5142"></a>
-<span class="sourceLineNo">5143</span>                maxHeat1 = pc;<a name="line.5143"></a>
+<span class="sourceLineNo">5138</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6);<a name="line.5138"></a>
+<span class="sourceLineNo">5139</span>                    if (fresh) {<a name="line.5139"></a>
+<span class="sourceLineNo">5140</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.5140"></a>
+<span class="sourceLineNo">5141</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.5141"></a>
+<span class="sourceLineNo">5142</span>                    }<a name="line.5142"></a>
+<span class="sourceLineNo">5143</span>                }<a name="line.5143"></a>
 <span class="sourceLineNo">5144</span>            }<a name="line.5144"></a>
-<span class="sourceLineNo">5145</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.5145"></a>
-<span class="sourceLineNo">5146</span>            qs = Double.POSITIVE_INFINITY;<a name="line.5146"></a>
-<span class="sourceLineNo">5147</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.5147"></a>
-<span class="sourceLineNo">5148</span>            ps = Double.POSITIVE_INFINITY;<a name="line.5148"></a>
-<span class="sourceLineNo">5149</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.5149"></a>
-<span class="sourceLineNo">5150</span><a name="line.5150"></a>
-<span class="sourceLineNo">5151</span><a name="line.5151"></a>
-<span class="sourceLineNo">5152</span>            for (int y = 0; y &lt; height; y++) {<a name="line.5152"></a>
-<span class="sourceLineNo">5153</span>                for (int x = 0; x &lt; width; x++) {<a name="line.5153"></a>
-<span class="sourceLineNo">5154</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.5154"></a>
-<span class="sourceLineNo">5155</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.5155"></a>
-<span class="sourceLineNo">5156</span>                    if (fresh) {<a name="line.5156"></a>
-<span class="sourceLineNo">5157</span>                        qs = Math.min(qs, h);<a name="line.5157"></a>
-<span class="sourceLineNo">5158</span>                        qc = Math.max(qc, h);<a name="line.5158"></a>
-<span class="sourceLineNo">5159</span>                        ps = Math.min(ps, temp);<a name="line.5159"></a>
-<span class="sourceLineNo">5160</span>                        pc = Math.max(pc, temp);<a name="line.5160"></a>
-<span class="sourceLineNo">5161</span>                    }<a name="line.5161"></a>
-<span class="sourceLineNo">5162</span>                }<a name="line.5162"></a>
-<span class="sourceLineNo">5163</span>            }<a name="line.5163"></a>
-<span class="sourceLineNo">5164</span>            if(fresh)<a name="line.5164"></a>
-<span class="sourceLineNo">5165</span>            {<a name="line.5165"></a>
-<span class="sourceLineNo">5166</span>                minHeat = qs;<a name="line.5166"></a>
-<span class="sourceLineNo">5167</span>                maxHeat = qc;<a name="line.5167"></a>
-<span class="sourceLineNo">5168</span>                minWet = ps;<a name="line.5168"></a>
-<span class="sourceLineNo">5169</span>                maxWet = pc;<a name="line.5169"></a>
-<span class="sourceLineNo">5170</span>            }<a name="line.5170"></a>
-<span class="sourceLineNo">5171</span>            landData.refill(heightCodeData, 4, 999);<a name="line.5171"></a>
-<span class="sourceLineNo">5172</span>        }<a name="line.5172"></a>
-<span class="sourceLineNo">5173</span>    }<a name="line.5173"></a>
-<span class="sourceLineNo">5174</span>}<a name="line.5174"></a>
+<span class="sourceLineNo">5145</span>            if(fresh)<a name="line.5145"></a>
+<span class="sourceLineNo">5146</span>            {<a name="line.5146"></a>
+<span class="sourceLineNo">5147</span>                minHeat1 = ps;<a name="line.5147"></a>
+<span class="sourceLineNo">5148</span>                maxHeat1 = pc;<a name="line.5148"></a>
+<span class="sourceLineNo">5149</span>            }<a name="line.5149"></a>
+<span class="sourceLineNo">5150</span>            heatDiff = heatModifier / (maxHeat1 - minHeat1);<a name="line.5150"></a>
+<span class="sourceLineNo">5151</span>            qs = Double.POSITIVE_INFINITY;<a name="line.5151"></a>
+<span class="sourceLineNo">5152</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.5152"></a>
+<span class="sourceLineNo">5153</span>            ps = Double.POSITIVE_INFINITY;<a name="line.5153"></a>
+<span class="sourceLineNo">5154</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.5154"></a>
+<span class="sourceLineNo">5155</span><a name="line.5155"></a>
+<span class="sourceLineNo">5156</span><a name="line.5156"></a>
+<span class="sourceLineNo">5157</span>            for (int y = 0; y &lt; height; y++) {<a name="line.5157"></a>
+<span class="sourceLineNo">5158</span>                for (int x = 0; x &lt; width; x++) {<a name="line.5158"></a>
+<span class="sourceLineNo">5159</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.5159"></a>
+<span class="sourceLineNo">5160</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.5160"></a>
+<span class="sourceLineNo">5161</span>                    if (fresh) {<a name="line.5161"></a>
+<span class="sourceLineNo">5162</span>                        qs = Math.min(qs, h);<a name="line.5162"></a>
+<span class="sourceLineNo">5163</span>                        qc = Math.max(qc, h);<a name="line.5163"></a>
+<span class="sourceLineNo">5164</span>                        ps = Math.min(ps, temp);<a name="line.5164"></a>
+<span class="sourceLineNo">5165</span>                        pc = Math.max(pc, temp);<a name="line.5165"></a>
+<span class="sourceLineNo">5166</span>                    }<a name="line.5166"></a>
+<span class="sourceLineNo">5167</span>                }<a name="line.5167"></a>
+<span class="sourceLineNo">5168</span>            }<a name="line.5168"></a>
+<span class="sourceLineNo">5169</span>            if(fresh)<a name="line.5169"></a>
+<span class="sourceLineNo">5170</span>            {<a name="line.5170"></a>
+<span class="sourceLineNo">5171</span>                minHeat = qs;<a name="line.5171"></a>
+<span class="sourceLineNo">5172</span>                maxHeat = qc;<a name="line.5172"></a>
+<span class="sourceLineNo">5173</span>                minWet = ps;<a name="line.5173"></a>
+<span class="sourceLineNo">5174</span>                maxWet = pc;<a name="line.5174"></a>
+<span class="sourceLineNo">5175</span>            }<a name="line.5175"></a>
+<span class="sourceLineNo">5176</span>            landData.refill(heightCodeData, 4, 999);<a name="line.5176"></a>
+<span class="sourceLineNo">5177</span>        }<a name="line.5177"></a>
+<span class="sourceLineNo">5178</span>    }<a name="line.5178"></a>
+<span class="sourceLineNo">5179</span>}<a name="line.5179"></a>
 
 
 

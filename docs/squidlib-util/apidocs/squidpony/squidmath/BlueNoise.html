@@ -168,10 +168,6 @@ extends java.lang.Object</pre>
 <div class="block">The raw data this class uses, as a 1D byte array.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static byte[][]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BlueNoise.html#SEAMLESS_NOISE">SEAMLESS_NOISE</a></span></code>&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -227,30 +223,29 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static byte</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BlueNoise.html#getSeededScratchy-int-int-int-">getSeededScratchy</a></span>(int&nbsp;x,
-                 int&nbsp;y,
-                 int&nbsp;seed)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BlueNoise.html#getSeeded-int-int-int-">getSeeded</a></span>(int&nbsp;x,
+         int&nbsp;y,
+         int&nbsp;seed)</code>
 <div class="block">Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
  patterns are much less noticeable.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static byte</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BlueNoise.html#getSeededScratchy-int-int-int-byte:A-">getSeededScratchy</a></span>(int&nbsp;x,
-                 int&nbsp;y,
-                 int&nbsp;seed,
-                 byte[]&nbsp;noiseData)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BlueNoise.html#getSeeded-int-int-int-byte:A-">getSeeded</a></span>(int&nbsp;x,
+         int&nbsp;y,
+         int&nbsp;seed,
+         byte[]&nbsp;noiseData)</code>
 <div class="block">Gets a modified byte from some raw noise data in an array of at least 4096 bytes, using seed to adjust repeated
  sections of noise so patterns are much less noticeable.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static byte</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BlueNoise.html#getSeededSeamless-int-int-int-">getSeededSeamless</a></span>(int&nbsp;x,
-                 int&nbsp;y,
-                 int&nbsp;seed)</code>
-<div class="block">Gets a byte from one of 16 blue noise textures, choosing which one based on the given x,y position in a way that
- can almost-seamlessly tile the plane non-periodically.</div>
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BlueNoise.html#indexedBlueNoisePoint-double:A-int-double-">indexedBlueNoisePoint</a></span>(double[]&nbsp;dest,
+                     int&nbsp;index,
+                     double&nbsp;strength)</code>
+<div class="block">Implements http://extremelearning.com.au/a-simple-method-to-construct-isotropic-quasirandom-blue-noise-point-sequences/ .</div>
 </td>
 </tr>
 </table>
@@ -283,19 +278,10 @@ extends java.lang.Object</pre>
 <h4>ALT_NOISE</h4>
 <pre>public static final&nbsp;byte[][] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.33">ALT_NOISE</a></pre>
 <div class="block">Raw data this class uses, as 64 1D byte arrays. Any of the 1D arrays this holds can be passed to
- <a href="../../squidpony/squidmath/BlueNoise.html#get-int-int-byte:A-"><code>get(int, int, byte[])</code></a> or <a href="../../squidpony/squidmath/BlueNoise.html#getSeededScratchy-int-int-int-byte:A-"><code>getSeededScratchy(int, int, int, byte[])</code></a> as their noiseData parameter. This
+ <a href="../../squidpony/squidmath/BlueNoise.html#get-int-int-byte:A-"><code>get(int, int, byte[])</code></a> or <a href="../../squidpony/squidmath/BlueNoise.html#getSeeded-int-int-int-byte:A-"><code>getSeeded(int, int, int, byte[])</code></a> as their noiseData parameter. This
  group of byte arrays is static, which is probably OK even on Android as long as no one writes to it, and uses
  <code>StandardCharsets</code> to decode itself from a String, which only works on GWT 2.8.2 and newer.
  Each byte array can be considered [x][y] indexed or [y][x] indexed; the original images were [y][x] indexed.</div>
-</li>
-</ul>
-<a name="SEAMLESS_NOISE">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>SEAMLESS_NOISE</h4>
-<pre>public static final&nbsp;byte[][] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.100">SEAMLESS_NOISE</a></pre>
 </li>
 </ul>
 <a name="RAW_NOISE">
@@ -304,7 +290,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>RAW_NOISE</h4>
-<pre>public static final&nbsp;byte[] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.126">RAW_NOISE</a></pre>
+<pre>public static final&nbsp;byte[] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.106">RAW_NOISE</a></pre>
 <div class="block">The raw data this class uses, as a 1D byte array. You probably don't want to use this field, but you might, so it
  is public... but don't write to it. It's static, which is probably OK even on Android as long as no one changes
  it, and uses <code>StandardCharsets</code> to decode itself from a String, which only works on GWT 2.8.2 and newer.
@@ -317,7 +303,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>RAW_2D</h4>
-<pre>public static final&nbsp;byte[][] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.132">RAW_2D</a></pre>
+<pre>public static final&nbsp;byte[][] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.112">RAW_2D</a></pre>
 <div class="block">Stores the same values as <a href="../../squidpony/squidmath/BlueNoise.html#RAW_NOISE"><code>RAW_NOISE</code></a> if considered [x][y] indexed; available for convenient usage by
  GreasedRegion and other classes that can use 2D byte arrays.</div>
 </li>
@@ -328,7 +314,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LEVELS</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.139">LEVELS</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[] <a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.211">LEVELS</a></pre>
 <div class="block">A 256-element array of <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a>s, each 64x64, where the first GreasedRegion has an impossibly strict
  threshold on what points to include (it is empty), but the second has some points far apart, the third has more,
  and so on until the last element includes almost all points.</div>
@@ -348,7 +334,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.161">get</a>(int&nbsp;x,
+<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.130">get</a>(int&nbsp;x,
                        int&nbsp;y)</pre>
 <div class="block">Gets a byte from the raw data this stores, treating it as an infinite 2D plane of tiling 64x64 regions. You can
  interpret the blue noise in many ways, but it is meant to be used with a threshold to select mostly widely-spaced
@@ -369,7 +355,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.174">get</a>(int&nbsp;x,
+<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.143">get</a>(int&nbsp;x,
                        int&nbsp;y,
                        byte[]&nbsp;noiseData)</pre>
 <div class="block">Gets a byte from some raw data at least 4096 bytes in length, treating it as an infinite 2D plane
@@ -384,15 +370,15 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getSeededScratchy-int-int-int-">
+<a name="getSeeded-int-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSeededScratchy</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.190">getSeededScratchy</a>(int&nbsp;x,
-                                     int&nbsp;y,
-                                     int&nbsp;seed)</pre>
+<h4>getSeeded</h4>
+<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.159">getSeeded</a>(int&nbsp;x,
+                             int&nbsp;y,
+                             int&nbsp;seed)</pre>
 <div class="block">Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
  patterns are much less noticeable. Unlike <a href="../../squidpony/squidmath/BlueNoise.html#get-int-int-"><code>get(int, int)</code></a>, this won't repeat every 64 cells on x or y, but
  it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in places, like TV static.
@@ -408,21 +394,21 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getSeededScratchy-int-int-int-byte:A-">
+<a name="getSeeded-int-int-int-byte:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSeededScratchy</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.212">getSeededScratchy</a>(int&nbsp;x,
-                                     int&nbsp;y,
-                                     int&nbsp;seed,
-                                     byte[]&nbsp;noiseData)</pre>
+<h4>getSeeded</h4>
+<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.200">getSeeded</a>(int&nbsp;x,
+                             int&nbsp;y,
+                             int&nbsp;seed,
+                             byte[]&nbsp;noiseData)</pre>
 <div class="block">Gets a modified byte from some raw noise data in an array of at least 4096 bytes, using seed to adjust repeated
  sections of noise so patterns are much less noticeable. Unlike <a href="../../squidpony/squidmath/BlueNoise.html#get-int-int-"><code>get(int, int)</code></a>, this won't repeat every 64
  cells on x or y, but it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in
  places, like TV static. You probably want to get the noiseData from an element of <a href="../../squidpony/squidmath/BlueNoise.html#ALT_NOISE"><code>ALT_NOISE</code></a>; unlike
- <a href="../../squidpony/squidmath/BlueNoise.html#getSeededScratchy-int-int-int-"><code>getSeededScratchy(int, int, int)</code></a>, this won't choose a different byte array, and will always use the
+ <a href="../../squidpony/squidmath/BlueNoise.html#getSeeded-int-int-int-"><code>getSeeded(int, int, int)</code></a>, this won't choose a different byte array, and will always use the
  given <code>noiseData</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -435,45 +421,13 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="getSeededSeamless-int-int-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getSeededSeamless</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.238">getSeededSeamless</a>(int&nbsp;x,
-                                     int&nbsp;y,
-                                     int&nbsp;seed)</pre>
-<div class="block">Gets a byte from one of 16 blue noise textures, choosing which one based on the given x,y position in a way that
- can almost-seamlessly tile the plane non-periodically. The 16 textures are each 64 by 64 cells, so if you give
- this x and y that are always between 0 and 63 inclusive, it will only choose from one texture. Otherwise, it will
- probably sample from two, chosen so that there is the least-noticeable edge between the two. Sometimes edges or
- corners are visible, but this isn't too serious, especially if you use thresholds to get only points above or
- below some value.
- <br>
- Major thanks to Alan Wolfe for making his blue noise generation code available and documenting the process. The
- code that generated this blue noise is almost entirely Alan Wolfe's work, with some small changes for the "sigma"
- (effectively, how coarse small clusters of similar pixels are allowed to be) and just as importantly, for the
- initial pattern that is filled in to create blue noise (normal generation uses low-density white noise as a
- basis, but this used arranged and repeated chunks of two different Halton sequences, which already have
- blue-noise-like properties).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - x position, can be any int; results will not repeat for a very long time</dd>
-<dd><code>y</code> - y position, can be any int; results will not repeat for a very long time</dd>
-<dd><code>seed</code> - seed value, can be any int; should be the same for all calls that should be from the same 2D plane</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a byte that should get close to a 2D blue-noise distribution</dd>
-</dl>
-</li>
-</ul>
 <a name="blueSpill-int-int-int-squidpony.squidmath.IRNG-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>blueSpill</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.270">blueSpill</a>(int&nbsp;width,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.230">blueSpill</a>(int&nbsp;width,
                                 int&nbsp;height,
                                 int&nbsp;spillerLimit,
                                 <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
@@ -495,10 +449,10 @@ extends java.lang.Object</pre>
 <a name="blueSpill-int:A:A-int-squidpony.squidmath.IRNG-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>blueSpill</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.283">blueSpill</a>(int[][]&nbsp;toFill,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.243">blueSpill</a>(int[][]&nbsp;toFill,
                                 int&nbsp;spillerLimit,
                                 <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 <div class="block">Modifies <code>toFill</code> in-place by filling it with the (seeded variant) blue noise of this class, finding any
@@ -511,6 +465,24 @@ extends java.lang.Object</pre>
 <dd><code>rng</code> - any IRNG to generate random values during expansion, such as <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a> or <a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd><code>toFill</code>, after modifications</dd>
+</dl>
+</li>
+</ul>
+<a name="indexedBlueNoisePoint-double:A-int-double-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>indexedBlueNoisePoint</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BlueNoise.html#line.322">indexedBlueNoisePoint</a>(double[]&nbsp;dest,
+                                         int&nbsp;index,
+                                         double&nbsp;strength)</pre>
+<div class="block">Implements http://extremelearning.com.au/a-simple-method-to-construct-isotropic-quasirandom-blue-noise-point-sequences/ .</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>dest</code> - will be modified and must have at least 2 length; the first element will store x, the second y</dd>
+<dd><code>index</code> - which point to generate; must be non-negative</dd>
+<dd><code>strength</code> - typically 1.0; can be smaller to produce less jitter and weaker blue-noise properties</dd>
 </dl>
 </li>
 </ul>

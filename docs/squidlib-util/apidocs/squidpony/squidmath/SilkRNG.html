@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.30">SilkRNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.35">SilkRNG</a>
 extends <a href="../../squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a>
 implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>, java.io.Serializable</pre>
 <div class="block">An IStatefulRNG implementation that is meant to provide random numbers very quickly when targeting GWT but also to
@@ -139,6 +139,11 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
  this implementation's high speed.
  <br>
  The name comes from spider silk, used in a web, and how this is optimized for Google Web Toolkit.
+ <br>
+ This was changed on February 29, 2020 to reduce correlation between very similar generators with the same stateA but
+ different stateB; it still passes 32TB of PractRand without anomalies, but may be slightly slower. The reasoning here
+ is that users may want to initialize their RNGs in varied ways, and none of those ways should be unexpectedly flawed.
+ A similar change was applied to TangleRNG, which is much like a 64-bit simplified version of SilkRNG, 4 days later. 
  <br>
  Written in 2019 by Tommy Ettinger.</div>
 <dl>
@@ -202,7 +207,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SilkRNG.html#SilkRNG-int-int-">SilkRNG</a></span>(int&nbsp;stateA,
        int&nbsp;stateB)</code>
 <div class="block">Constructs this SilkRNG by calling <a href="../../squidpony/squidmath/SilkRNG.html#setState-int-int-"><code>setState(int, int)</code></a> on stateA and stateB as given; see that method
- for the specific details (stateA and stateB are kept as-is unless they are both 0).</div>
+ for the specific details (stateA and stateB are kept as-is).</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -353,7 +358,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SilkRNG.html#setState-int-int-">setState</a></span>(int&nbsp;stateA,
         int&nbsp;stateB)</code>
-<div class="block">Sets the current internal state of this SilkRNG with three ints, where stateA and stateB can each be any int.</div>
+<div class="block">Sets the current internal state of this SilkRNG with two ints, where stateA and stateB can each be any int.</div>
 </td>
 </tr>
 <tr id="i20" class="altColor">
@@ -426,7 +431,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>stateA</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.33">stateA</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.38">stateA</a></pre>
 </li>
 </ul>
 <a name="stateB">
@@ -435,7 +440,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>stateB</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.33">stateB</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.38">stateB</a></pre>
 </li>
 </ul>
 </li>
@@ -452,7 +457,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>SilkRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.38">SilkRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.43">SilkRNG</a>()</pre>
 <div class="block">Creates a new generator seeded using two calls to Math.random().</div>
 </li>
 </ul>
@@ -462,7 +467,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>SilkRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.47">SilkRNG</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.52">SilkRNG</a>(int&nbsp;seed)</pre>
 <div class="block">Constructs this SilkRNG by dispersing the bits of seed using <a href="../../squidpony/squidmath/SilkRNG.html#setSeed-int-"><code>setSeed(int)</code></a> across the two parts of state
  this has.</div>
 <dl>
@@ -477,7 +482,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>SilkRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.55">SilkRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.60">SilkRNG</a>(long&nbsp;seed)</pre>
 <div class="block">Constructs this SilkRNG by splitting the given seed across the two parts of state this has with
  <a href="../../squidpony/squidmath/SilkRNG.html#setState-long-"><code>setState(long)</code></a>.</div>
 <dl>
@@ -492,10 +497,10 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>SilkRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.64">SilkRNG</a>(int&nbsp;stateA,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.69">SilkRNG</a>(int&nbsp;stateA,
                int&nbsp;stateB)</pre>
 <div class="block">Constructs this SilkRNG by calling <a href="../../squidpony/squidmath/SilkRNG.html#setState-int-int-"><code>setState(int, int)</code></a> on stateA and stateB as given; see that method
- for the specific details (stateA and stateB are kept as-is unless they are both 0).</div>
+ for the specific details (stateA and stateB are kept as-is).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>stateA</code> - the number to use as the first part of the state</dd>
@@ -509,7 +514,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SilkRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.74">SilkRNG</a>(java.lang.String&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.79">SilkRNG</a>(java.lang.String&nbsp;seed)</pre>
 <div class="block">Hashes <code>seed</code> using both <a href="../../squidpony/squidmath/CrossHash.html#hash-java.lang.CharSequence-"><code>CrossHash.hash(CharSequence)</code></a> and <code>String.hashCode()</code> and uses those
  two results as the two states with <a href="../../squidpony/squidmath/SilkRNG.html#setState-int-int-"><code>setState(int, int)</code></a>. If seed is null, this won't call
  String.hashCode() on it and will instead use 0 as that state.</div>
@@ -533,7 +538,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.86">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.91">next</a>(int&nbsp;bits)</pre>
 <div class="block">Get up to 32 bits (inclusive) of random output; the int this produces
  will not require more than <code>bits</code> bits to represent.</div>
 <dl>
@@ -556,7 +561,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.99">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.105">nextInt</a>()</pre>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -574,7 +579,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.113">nextInt</a>(int&nbsp;bound)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.120">nextInt</a>(int&nbsp;bound)</pre>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
  negative.</div>
 <dl>
@@ -595,7 +600,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.126">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.134">nextLong</a>()</pre>
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -615,10 +620,9 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBoolean</h4>
-<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.145">nextBoolean</a>()</pre>
+<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.154">nextBoolean</a>()</pre>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
- This implementation uses a sign check as a safeguard, since its algorithm is based on (but is not equivalent to)
- xoroshiro, which recommends a sign check instead of using the least significant bit.</div>
+ This implementation uses a sign check as an optimization.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/IRNG.html#nextBoolean--">nextBoolean</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></code></dd>
@@ -635,7 +639,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.158">nextDouble</a>()</pre>
+<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.167">nextDouble</a>()</pre>
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.
  This returns a maximum of 0.9999999999999999 because that is the largest double value that is less than 1.0 .</div>
 <dl>
@@ -654,7 +658,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextFloat</h4>
-<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.177">nextFloat</a>()</pre>
+<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.188">nextFloat</a>()</pre>
 <div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.
  This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .</div>
 <dl>
@@ -673,7 +677,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.191">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.203">copy</a>()</pre>
 <div class="block">Creates a copy of this SilkRNG; it will generate the same random numbers, given the same calls in order, as this
  SilkRNG at the point copy() is called. The copy will not share references with this SilkRNG.</div>
 <dl>
@@ -696,7 +700,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>toSerializable</h4>
-<pre>public&nbsp;java.io.Serializable&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.200">toSerializable</a>()</pre>
+<pre>public&nbsp;java.io.Serializable&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.212">toSerializable</a>()</pre>
 <div class="block">Gets a view of this IRNG in a way that implements <code>Serializable</code>, which is simply this IRNG.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -714,7 +718,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.208">setSeed</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.220">setSeed</a>(int&nbsp;seed)</pre>
 <div class="block">Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get 
  two ints. If the states would both be 0, state A is assigned 1 instead.</div>
 <dl>
@@ -729,7 +733,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateA</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.221">getStateA</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.233">getStateA</a>()</pre>
 </li>
 </ul>
 <a name="setStateA-int-">
@@ -738,7 +742,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateA</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.230">setStateA</a>(int&nbsp;stateA)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.242">setStateA</a>(int&nbsp;stateA)</pre>
 <div class="block">Sets the first part of the state to the given int.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -752,7 +756,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateB</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.234">getStateB</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.246">getStateB</a>()</pre>
 </li>
 </ul>
 <a name="setStateB-int-">
@@ -761,7 +765,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateB</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.243">setStateB</a>(int&nbsp;stateB)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.255">setStateB</a>(int&nbsp;stateB)</pre>
 <div class="block">Sets the second part of the state to the given int.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -775,9 +779,9 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.253">setState</a>(int&nbsp;stateA,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.265">setState</a>(int&nbsp;stateA,
                      int&nbsp;stateB)</pre>
-<div class="block">Sets the current internal state of this SilkRNG with three ints, where stateA and stateB can each be any int.</div>
+<div class="block">Sets the current internal state of this SilkRNG with two ints, where stateA and stateB can each be any int.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>stateA</code> - any int</dd>
@@ -791,7 +795,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.265">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.277">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -807,7 +811,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.275">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.287">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -823,7 +827,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.281">equals</a>(java.lang.Object&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.293">equals</a>(java.lang.Object&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -836,7 +840,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.292">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.304">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -849,7 +853,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.297">toString</a>()</pre>
+<pre>public&nbsp;java.lang.String&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.309">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -862,7 +866,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>determineInt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.310">determineInt</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.322">determineInt</a>(int&nbsp;state)</pre>
 <div class="block">A deterministic random int generator that, given one int <code>state</code> as input, irreversibly returns an 
  almost-always-different int as a result. Unlike the rest of SilkRNG, this will not produce all possible ints given
  all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with
@@ -882,7 +886,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.325">determineBounded</a>(int&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.337">determineBounded</a>(int&nbsp;state,
                                    int&nbsp;bound)</pre>
 <div class="block">A deterministic random int generator that, given one int <code>state</code> and an outer int <code>bound</code> as input,
  returns an int between 0 (inclusive) and <code>bound</code> (exclusive) as a result, which should have no noticeable
@@ -905,7 +909,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.338">determine</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.350">determine</a>(int&nbsp;state)</pre>
 <div class="block">A deterministic random long generator that, given one int <code>state</code> as input, returns an 
  almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there
  are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should
@@ -925,7 +929,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>determineFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.354">determineFloat</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.366">determineFloat</a>(int&nbsp;state)</pre>
 <div class="block">A deterministic random float generator that, given one int <code>state</code> as input, returns an 
  almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of SilkRNG, this might not
  produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.
@@ -946,7 +950,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>determineDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.367">determineDouble</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SilkRNG.html#line.379">determineDouble</a>(int&nbsp;state)</pre>
 <div class="block">A deterministic random double generator that, given one int <code>state</code> as input, returns an 
  almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of
  all possible doubles because the input is 32 bits and at least 53 bits are needed to represent most doubles from
