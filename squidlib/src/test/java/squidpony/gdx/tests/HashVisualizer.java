@@ -69,7 +69,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 50, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
@@ -171,18 +171,23 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Sway2D sway2D = new Noise.Sway2D();
     private final Noise.Layered2D layeredSway2D = new Noise.Layered2D(new Noise.Sway2D(123L), 5, 5.0);
 
-    private final Noise.Layered2D classic2_2D = new Noise.Layered2D(CosmicNumbering.instance, 2, 2f);
-    private final Noise.Layered2D classic3_2D = new Noise.Layered2D(CosmicNumbering.instance, 3, 2f);
+    private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 2f);
+    private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 2f);
 
     private final FastNoise fast2_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 2);
-    private final FastNoise fast3_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
+    private final FastNoise fast3_2D = new FastNoise(1337, 1f, FastNoise.SIMPLEX_FRACTAL, 3);
 
-    private final Noise.Layered2D classic2_lf_2D = new Noise.Layered2D(CosmicNumbering.instance, 2, 1.3f);
-    private final Noise.Layered2D classic3_lf_2D = new Noise.Layered2D(CosmicNumbering.instance, 3, 1.3f);
+    private final Noise.Ridged2D classic1_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 1, 2f);
+    private final Noise.Ridged2D classic3_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 3, 2f);
+//    private final Noise.Layered2D classic1_lf_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 1.3f);
+//    private final Noise.Layered2D classic3_lf_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 1.3f);
 
-    private final FastNoise fast2_lf_2D = new FastNoise(1337, 0.01125f, FastNoise.SIMPLEX_FRACTAL, 2);
-    private final FastNoise fast3_lf_2D = new FastNoise(1337, 0.01125f, FastNoise.SIMPLEX_FRACTAL, 3);
-
+    private final FastNoise fast1_lf_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
+    private final FastNoise fast3_lf_2D = new FastNoise(1337, 1f, FastNoise.SIMPLEX_FRACTAL, 3);
+    {
+        fast1_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
+        fast3_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
+    }
 //    {
 //        fast2_2D.setFractalType(FastNoise.RIDGED_MULTI);
 //        fast3_2D.setFractalType(FastNoise.RIDGED_MULTI);
@@ -190,16 +195,16 @@ public class HashVisualizer extends ApplicationAdapter {
 //        fast3_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
 //    }
 
-    private final Noise.Layered3D classic2_3D = new Noise.Layered3D(CosmicNumbering.instance, 2, 2);
-    private final Noise.Layered3D classic3_3D = new Noise.Layered3D(CosmicNumbering.instance, 3, 2);
+    private final Noise.Layered3D classic1_3D = new Noise.Layered3D(ClassicNoise.instance, 1, 2);
+    private final Noise.Layered3D classic3_3D = new Noise.Layered3D(ClassicNoise.instance, 3, 2);
 
     private final FastNoise fast2_3D = fast2_2D;
     private final FastNoise fast3_3D = fast3_2D;
 
-    private final Noise.Layered3D classic2_lf_3D = new Noise.Layered3D(CosmicNumbering.instance, 2, 1.3);
-    private final Noise.Layered3D classic3_lf_3D = new Noise.Layered3D(CosmicNumbering.instance, 3, 1.3);
+    private final Noise.Layered3D classic1_lf_3D = new Noise.Layered3D(ClassicNoise.instance, 1, 1.3);
+    private final Noise.Layered3D classic3_lf_3D = new Noise.Layered3D(ClassicNoise.instance, 3, 1.3);
 
-    private final FastNoise fast2_lf_3D = fast2_lf_2D;
+    private final FastNoise fast2_lf_3D = fast1_lf_2D;
     private final FastNoise fast3_lf_3D = fast3_lf_2D;
 
     private final long
@@ -6024,7 +6029,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic2_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(classic1_2D.getNoise(xx * 0.025, yy * 0.025));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6037,7 +6042,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic2_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(classic1_lf_2D.getNoise(xx * 0.025, yy * 0.025));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6090,7 +6095,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fast2_lf_2D.getConfiguredNoise(xx, yy));
+                                bright = basicPrepare(fast1_lf_2D.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6128,7 +6133,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic2_3D.getNoise(s0, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(classic1_3D.getNoise(s0, y * 0.025, ctr * 0.025));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6140,7 +6145,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic2_lf_3D.getNoise(s0, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(classic1_lf_3D.getNoise(s0, y * 0.025, ctr * 0.025));
                                 back[x][y] = getGray(bright);
                             }
                         }
