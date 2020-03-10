@@ -54,15 +54,26 @@ public final class Fft {
 	private static double[] cosTable;
 	private static double[] sinTable;
 	
-	public static void loadTables(final int halfN) {
-		if (cosTable == null || sinTable == null || cosTable.length != halfN || sinTable.length != halfN) {
-			cosTable = new double[halfN];
-			sinTable = new double[halfN];
-			for (int i = 0; i < halfN; i++) {
-				cosTable[i] = Math.cos(Math.PI * i / halfN);
-				sinTable[i] = Math.sin(Math.PI * i / halfN);
+	public static void loadTables(final int n) {
+		if (cosTable == null || sinTable == null || cosTable.length != n || sinTable.length != n) {
+			cosTable = new double[n];
+			sinTable = new double[n];
+			for (int i = 0; i < n; i++) {
+				cosTable[i] = Math.cos(i * Math.PI * 2.0 / n);
+				sinTable[i] = Math.sin(i * Math.PI * 2.0 / n);
 			}
-
+		}
+	}
+	
+	public static void loadTablesBluestein(final int n){
+		if (cosTable == null || sinTable == null || cosTable.length != n || sinTable.length != n) {
+			cosTable = new double[n];
+			sinTable = new double[n];
+			for (int i = 0, mask = n + n; i < n; i++) {
+				int j = (i * i) % mask;
+				cosTable[i] = Math.cos(Math.PI * j / n);
+				sinTable[i] = Math.sin(Math.PI * j / n);
+			}
 		}
 	}
 	/* 
@@ -77,7 +88,8 @@ public final class Fft {
 		int levels = 31 - Integer.numberOfLeadingZeros(n);  // Equal to floor(log2(n))
 		if (1 << levels != n)
 			throw new IllegalArgumentException("Length is not a power of 2");
-		loadTables(n / 2);
+		loadTables(n);
+		
 		// Bit-reversed addressing permutation
 		for (int i = 0; i < n; i++) {
 			int j = Integer.reverse(i) >>> (32 - levels);
@@ -113,6 +125,17 @@ public final class Fft {
 	
 	public static void transform2D(double[][] real, double[][] imag){
 		final int n = real.length;
+		loadTables(n);
+		// window function
+		for (int i = 0; i < n; i++) {
+			double im = 0.5 * (1.0 - cosTable[i]);
+			for (int j = 0; j < n; j++) {
+				double jm = 0.5 * (1.0 - cosTable[j]);
+				real[i][j] *= im * jm;
+				imag[i][j] *= im * jm;
+			}
+		}
+
 		for (int x = 0; x < n; x++) {
 			transformRadix2(real[x], imag[x]);
 		}
@@ -137,9 +160,11 @@ public final class Fft {
 		double max = 0.0, mag, r, i;
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < n; y++) {
+//				r = real[x][y];
+//				i = imag[x][y];
 				r = real[x + half & mask][y + half & mask];
 				i = imag[x + half & mask][y + half & mask];
-				mag = (r * r + i * i);
+				mag = Math.sqrt(r * r + i * i);
 				max = Math.max(mag, max);
 				background[x][y] = (float) mag;
 			}
@@ -170,15 +195,7 @@ public final class Fft {
 			throw new IllegalArgumentException("Array too large");
 		int m = Integer.highestOneBit(n) * 4;
 		
-		// Trignometric tables
-		double[] cosTable = new double[n];
-		double[] sinTable = new double[n];
-		for (int i = 0; i < n; i++) {
-			int j = (int)((long)i * i % (n * 2));  // This is more accurate than j = i * i
-			cosTable[i] = Math.cos(Math.PI * j / n);
-			sinTable[i] = Math.sin(Math.PI * j / n);
-		}
-		
+		loadTablesBluestein(n);
 		// Temporary vectors and preprocessing
 		double[] areal = new double[m];
 		double[] aimag = new double[m];
