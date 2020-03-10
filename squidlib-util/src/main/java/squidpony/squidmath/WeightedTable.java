@@ -41,13 +41,13 @@ public class WeightedTable implements Serializable {
      * convenience. The weights can be any positive non-zero doubles, but should usually not be so large or small that
      * precision loss is risked. Each weight will be used to determine the likelihood of that weight's index being
      * returned by {@link #random(long)}.
-     * @param prob an array or varargs of positive doubles representing the weights for their own indices
+     * @param probabilities an array or varargs of positive doubles representing the weights for their own indices
      */
-    public WeightedTable(double... prob) {
+    public WeightedTable(double... probabilities) {
         /* Begin by doing basic structural checks on the inputs. */
-        if (prob == null)
+        if (probabilities == null)
             throw new NullPointerException("Array 'probabilities' given to WeightedTable cannot be null");
-        if ((size = prob.length) == 0)
+        if ((size = probabilities.length) == 0)
             throw new IllegalArgumentException("Array 'probabilities' given to WeightedTable must be nonempty.");
 
         mixed = new int[size<<1];
@@ -57,10 +57,10 @@ public class WeightedTable implements Serializable {
         /* Make a copy of the probabilities array, since we will be making
          * changes to it.
          */
-        double[] probabilities = new double[size];
+        double[] probs = new double[size];
         for (int i = 0; i < size; ++i) {
-            if(prob[i] <= 0) continue;
-            sum += (probabilities[i] = prob[i]);
+            if(probabilities[i] <= 0) continue;
+            sum += (probs[i] = probabilities[i]);
         }
         if(sum <= 0)
             throw new IllegalArgumentException("At least one probability must be positive");
@@ -75,7 +75,7 @@ public class WeightedTable implements Serializable {
             /* If the probability is below the average probability, then we add
              * it to the small list; otherwise we add it to the large list.
              */
-            if (probabilities[i] >= average)
+            if (probs[i] >= average)
                 large.add(i);
             else
                 small.add(i);
@@ -95,12 +95,12 @@ public class WeightedTable implements Serializable {
             /* These probabilities have not yet been scaled up to be such that
              * sum/n is given weight 1.0.  We do this here instead.
              */
-            mixed[less2] = (int)(0x7FFFFFFF * (probabilities[less] * invAverage));
+            mixed[less2] = (int)(0x7FFFFFFF * (probs[less] * invAverage));
             mixed[less2|1] = more;
 
-            probabilities[more] += probabilities[less] - average;
+            probs[more] += probs[less] - average;
 
-            if (probabilities[more] >= average)
+            if (probs[more] >= average)
                 large.add(more);
             else
                 small.add(more);
