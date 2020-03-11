@@ -182,8 +182,8 @@ public class FFTVisualizer extends ApplicationAdapter {
                         for (int y = 0; y < height; y++) {
                             yy = y * 0x1p-4f;
                             bright = basicPrepare(noise.getConfiguredNoise(
-                                    c + xx, x + c, y - c,
-                                    c - yy, x + yy, y - xx));
+                                    c + xx, xx + c, yy - c,
+                                    c - yy, xx + yy, yy - xx));
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -218,7 +218,6 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
                 case 2:
-                case 3:
                     for (int x = 0; x < width; x++) {
                         xx = x * nf;
                         for (int y = 0; y < height; y++) {
@@ -230,20 +229,20 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
-//                case 3:
-//                    for (int x = 0; x < width; x++) {
-//                        xx = x * nf;
-//                        for (int y = 0; y < height; y++) {
-//                            yy = y * nf;
-//                            bright = (float) (db = basicPrepare(noise.getConfiguredNoise(
-//                                    c + xx, xx + c, yy - c,
-//                                    c - yy, xx + yy, yy - xx)));
-//                            real[x][y] = db;
-//                            renderer.color(bright, bright, bright, 1f);
-//                            renderer.vertex(x, y, 0);
-//                        }
-//                    }
-//                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        xx = x * nf;
+                        for (int y = 0; y < height; y++) {
+                            yy = y * nf;
+                            bright = (float) (db = basicPrepare(foam.getNoise(
+                                    c + xx, xx + c, yy - c,
+                                    c - yy, xx + yy, yy - xx)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
             }
         }
         Fft.transform2D(real, imag);
