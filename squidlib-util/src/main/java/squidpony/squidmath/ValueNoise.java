@@ -61,7 +61,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     //y should be premultiplied by 0xABC99
     private static int hashPart1024(final int x, final int y, int s) {
         s += x ^ y;
-        return (s >>> 3 ^ s >>> 10) & 0x3FF;
+        return x + y + (s >>> 3 ^ s >>> 10) & 0x3FF;
     }
 
     public static double valueNoise(int seed, double x, double y, double z)
@@ -95,7 +95,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     //z should be premultiplied by 0xA0F2F
     private static int hashPart1024(final int x, final int y, final int z, int s) {
         s += x ^ y ^ z;
-        return (s >>> 3 ^ s >>> 10) & 0x3FF;
+        return x + y + z + (s >>> 3 ^ s >>> 10) & 0x3FF;
     }
 
     public static double valueNoise(int seed, double x, double y, double z, double w)
@@ -142,7 +142,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     //w should be premultiplied by 0x9A695
     private static int hashPart1024(final int x, final int y, final int z, final int w, int s) {
         s += x ^ y ^ z ^ w;
-        return (s >>> 3 ^ s >>> 10) & 0x3FF;
+        return x + y + z + w + (s >>> 3 ^ s >>> 10) & 0x3FF;
     }
 
     public static double valueNoise(int seed, double x, double y, double z, double w, double u, double v)
@@ -251,7 +251,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     //v should be premultiplied by 0x92E85
     private static int hashPart1024(final int x, final int y, final int z, final int w, final int u, final int v, int s) {
         s += x ^ y ^ z ^ w ^ u ^ v;
-        return (s >>> 3 ^ s >>> 10) & 0x3FF;
+        return x + y + z + w + u + v + (s >>> 3 ^ s >>> 10) & 0x3FF;
     }
     
     @Override

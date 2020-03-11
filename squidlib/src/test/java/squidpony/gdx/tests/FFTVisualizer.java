@@ -178,11 +178,11 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
                 case 3:
                     for (int x = 0; x < width; x++) {
-                        xx = x * 0x1p-4f;
+                        xx = x * 0.5f;
                         for (int y = 0; y < height; y++) {
-                            yy = y * 0x1p-4f;
+                            yy = y * 0.5f;
                             bright = basicPrepare(noise.getConfiguredNoise(
-                                    c + xx, xx + c, yy - c,
+                                    c + xx, xx - c, yy - c,
                                     c - yy, xx + yy, yy - xx));
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
@@ -192,6 +192,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
             }
         } else{
+            c *= nf;
             switch (dim) {
                 case 0:
                     for (int x = 0; x < width; x++) {
@@ -230,12 +231,13 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
                 case 3:
+                    nf *= 0.5;
                     for (int x = 0; x < width; x++) {
                         xx = x * nf;
                         for (int y = 0; y < height; y++) {
                             yy = y * nf;
                             bright = (float) (db = basicPrepare(foam.getNoise(
-                                    c + xx, xx + c, yy - c,
+                                    c + xx, xx - c, yy - c,
                                     c - yy, xx + yy, yy - xx)));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
