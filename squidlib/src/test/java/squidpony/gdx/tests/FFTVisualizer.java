@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
 import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.FoamNoise;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -21,9 +22,10 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
-    private static final int MODE_LIMIT = 1;
+    private FoamNoise foam = new FoamNoise(1234567890L);
+    private static final int MODE_LIMIT = 2;
     private int mode = 0;
-    private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
+    private int dim = 0; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private boolean inverse = false;
@@ -36,11 +38,15 @@ public class FFTVisualizer extends ApplicationAdapter {
     
     private Viewport view;
     private int ctr = -128;
-    private boolean keepGoing = true;
 
     public static float basicPrepare(float n)
     {
         return n * 0.5f + 0.5f;
+    }
+
+    public static double basicPrepare(double n)
+    {
+        return n * 0.5 + 0.5;
     }
 
     @Override
@@ -55,13 +61,10 @@ public class FFTVisualizer extends ApplicationAdapter {
                     case MINUS:
                         mode = (mode + MODE_LIMIT - 1) % MODE_LIMIT;
                         break;
-                    case U:
-                    case ENTER:
-                        if (keycode == ENTER) {
-                            mode++;
-                            mode %= MODE_LIMIT;
-                            ctr = -256;
-                        }
+                    case EQUALS:                         
+                        mode++;
+                        mode %= MODE_LIMIT;
+                        ctr = -256;
                         Gdx.graphics.requestRendering();
                         break;
                     case C:
@@ -69,17 +72,25 @@ public class FFTVisualizer extends ApplicationAdapter {
                         Gdx.graphics.requestRendering();
                         break;
                     case E: //earlier seed
-                        noise.setSeed(noise.getSeed() - 1);
+                        if(mode == 0) 
+                            noise.setSeed(noise.getSeed() - 1);
+                        else if(mode == 1)
+                            foam.seed -= 0x9E3779B9;
                         Gdx.graphics.requestRendering();
                         break;
                     case S: //seed
-                        noise.setSeed(noise.getSeed() + 1);
+                        if(mode == 0)
+                            noise.setSeed(noise.getSeed() + 1);
+                        else if(mode == 1)
+                            foam.seed += 0x9E3779B9;
                         Gdx.graphics.requestRendering();
                         break;
                     case N: // noise type
-                        noise.setNoiseType((noise.getNoiseType() + 1) % 10);
+                        if(mode == 0) 
+                            noise.setNoiseType((noise.getNoiseType() + 1) % 10);
                         Gdx.graphics.requestRendering();
                         break;
+                    case ENTER:
                     case D: //dimension
                         dim = (dim + 1) & 3;
                         Gdx.graphics.requestRendering();
@@ -130,54 +141,110 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     public void putMap() {
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        float bright, c = ctr * 0x1p-5f / noise.getFrequency();
+        float bright, nf = noise.getFrequency(), c = ctr * 0x1p-4f / nf, xx, yy;
+        double db;
         ArrayTools.fill(imag, 0.0);
-        switch (dim) {
-            case 0:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bright = basicPrepare(noise.getConfiguredNoise(x + c, y + c));
-                        real[x][y] = bright;
-                        renderer.color(bright, bright, bright, 1f);
-                        renderer.vertex(x, y, 0);
+        if(mode == 0) {
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x + c, y + c));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
-            case 1:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bright = basicPrepare(noise.getConfiguredNoise(x, y, c));
-                        real[x][y] = bright;
-                        renderer.color(bright, bright, bright, 1f);
-                        renderer.vertex(x, y, 0);
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x, y, c));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
-            case 2:
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < height; y++) {
-                        bright = basicPrepare(noise.getConfiguredNoise(x, y, c, 0x1p-4f * (x + y - c)));
-                        real[x][y] = bright;
-                        renderer.color(bright, bright, bright, 1f);
-                        renderer.vertex(x, y, 0);
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = basicPrepare(noise.getConfiguredNoise(x, y, c, 0x1p-4f * (x + y - c)));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
-            case 3:
-                float xx, yy;
-                for (int x = 0; x < width; x++) {
-                    xx = x * 0x1p-4f;
-                    for (int y = 0; y < height; y++) {
-                        yy = y * 0x1p-4f;
-                        bright = basicPrepare(noise.getConfiguredNoise(
-                                c + xx, x + c, y - c,
-                                c - yy, x +  yy, y - xx));
-                        real[x][y] = bright;
-                        renderer.color(bright, bright, bright, 1f);
-                        renderer.vertex(x, y, 0);
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        xx = x * 0x1p-4f;
+                        for (int y = 0; y < height; y++) {
+                            yy = y * 0x1p-4f;
+                            bright = basicPrepare(noise.getConfiguredNoise(
+                                    c + xx, x + c, y - c,
+                                    c - yy, x + yy, y - xx));
+                            real[x][y] = bright;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
                     }
-                }
-                break;
+                    break;
+            }
+        } else{
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        xx = x * nf;
+                        for (int y = 0; y < height; y++) {
+                            yy = y * nf;
+                            bright = (float) (db = basicPrepare(foam.getNoise(xx + c, yy + c)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        xx = x * nf;
+                        for (int y = 0; y < height; y++) {
+                            yy = y * nf;
+                            bright = (float) (db = basicPrepare(foam.getNoise(xx, yy, c)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        xx = x * nf;
+                        for (int y = 0; y < height; y++) {
+                            yy = y * nf;
+                            bright = (float) (db = basicPrepare(foam.getNoise(xx, yy, c, 0x1p-4f * (xx + yy - c))));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+//                case 3:
+//                    for (int x = 0; x < width; x++) {
+//                        xx = x * nf;
+//                        for (int y = 0; y < height; y++) {
+//                            yy = y * nf;
+//                            bright = (float) (db = basicPrepare(noise.getConfiguredNoise(
+//                                    c + xx, xx + c, yy - c,
+//                                    c - yy, xx + yy, yy - xx)));
+//                            real[x][y] = db;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
+            }
         }
         Fft.transform2D(real, imag);
         Fft.getColors(real, imag, colors);

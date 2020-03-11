@@ -56,9 +56,9 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
         final double p0 = x;
         final double p1 = x * -0.5 + y * 0.8660254037844386;
         final double p2 = x * -0.5 + y * -0.8660254037844387;
-        
+
         double xin = p1;
-        double yin = p2;        
+        double yin = p2;
         //double xin = x * 0.540302 + y * 0.841471; // sin and cos of 1
         //double yin = x * -0.841471 + y * 0.540302;
         final double a = valueNoise(seed, xin, yin);
@@ -79,7 +79,10 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
         //yin = x * 0.958924 + y * 0.283662;
         final double c = valueNoise(seed, xin + b, yin);
         final double result = a * 0.3125 + (b + c) * 0.34375;
-        return result * result * (6.0 - 4.0 * result) - 1.0;
+//        return result * result * (6.0 - 4.0 * result) - 1.0;
+        return (result <= 0.5)
+                ? Math.pow(result * 2, 2.0) - 1.0
+                : 1.0 - Math.pow((result - 1) * 2, 2.0);
     }
     
     /*
@@ -146,7 +149,10 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double d = valueNoise(seed, xin + c, yin, zin);
 
         final double result = (a + b + c + d) * 0.25;
-        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+//        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+        return (result <= 0.5)
+                ? Math.pow(result * 2, 3.0) - 1.0
+                : Math.pow((result - 1) * 2, 3.0) + 1.0;
     }
 
     public static double foamNoise(final double x, final double y, final double z, final double w, int seed) {
@@ -207,7 +213,11 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double e = valueNoise(seed, xin + d, yin, zin, win);
 
         final double result = (a + b + c + d + e) * 0.2;
-        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+        return (result <= 0.5)
+                ? Math.pow(result * 2, 4.0) - 1.0
+                : 1.0 - Math.pow((result - 1) * 2, 4.0);
+
+//        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 
     @Override
