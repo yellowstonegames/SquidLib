@@ -43,6 +43,7 @@ public class PhantomNoise {
         hashFloors = new int[dim+1];
         yolk = new CrossHash.Yolk(seed);
         inverse = 1.0 / (dim + 1.0);
+//        printDebugInfo();
     }
 
     public double valueNoise()

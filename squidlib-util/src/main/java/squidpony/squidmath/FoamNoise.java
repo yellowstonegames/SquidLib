@@ -37,7 +37,7 @@ import static squidpony.squidmath.ValueNoise.valueNoise;
  * <a href="https://i.imgur.com/ktCTiIK.jpg">World map made using FoamNoise</a>.
  */
 @Beta
-public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
+public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     public static final FoamNoise instance = new FoamNoise();
     
     public int seed = 0xD1CEBEEF;
@@ -81,8 +81,8 @@ public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
         final double result = a * 0.3125 + (b + c) * 0.34375;
 //        return result * result * (6.0 - 4.0 * result) - 1.0;
         return (result <= 0.5)
-                ? Math.pow(result * 2, 2.0) - 1.0
-                : 1.0 - Math.pow((result - 1) * 2, 2.0);
+                ? (result * result * 4.0) - 1.0
+                : 1.0 - ((result - 1.0) * (result - 1.0) * 4.0);
     }
     
     /*
@@ -161,6 +161,7 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double p2 = x * -0.25 + y * -0.3227486121839514 + z * 0.9128709291752769;
         final double p3 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * 0.7905694150420949;
         final double p4 = x * -0.25 + y * -0.3227486121839514 + z * -0.45643546458763834 + w * -0.7905694150420947;
+////orthogonal 5-cell, like a right triangle; probably incorrect
         //final double p0 = (x + y + z + w);
         //final double p1 = x - (y + z + w);
         //final double p2 = y - (x + z + w);
@@ -219,6 +220,93 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
 
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
+    public static double foamNoise(final double x, final double y, final double z,
+                                   final double w, final double u, final double v, int seed) {
+        final double p0 = x;
+        final double p1 = x * -0.16666666666666666 + y * 0.9860132971832694;
+        final double p2 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * 0.9660917830792959;
+        final double p3 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * 0.9354143466934853;
+        final double p4 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * 0.8819171036881969;
+        final double p5 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * -0.4409585518440984 + v * 0.7637626158259734;
+        final double p6 = x * -0.16666666666666666 + y * -0.19720265943665383 + z * -0.24152294576982394 + w * -0.31180478223116176 + u * -0.4409585518440984 + v * -0.7637626158259732;
+        double xin = p1;
+        double yin = p2;
+        double zin = p3;
+        double win = p4;
+        double uin = p5;
+        double vin = p6;
+        final double a = valueNoise(seed, xin, yin, zin, win, uin, vin);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p2;
+        zin = p3;
+        win = p4;
+        uin = p5;
+        vin = p6;
+        final double b = valueNoise(seed, xin + a, yin, zin, win, uin, vin);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p3;
+        win = p4;
+        uin = p5;
+        vin = p6;
+        final double c = valueNoise(seed, xin + b, yin, zin, win, uin, vin);
+        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p4;
+        uin = p5;
+        vin = p6;
+        final double d = valueNoise(seed, xin + c, yin, zin, win, uin, vin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        uin = p5;
+        vin = p6;
+        final double e = valueNoise(seed, xin + d, yin, zin, win, uin, vin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        uin = p4;
+        vin = p6;
+        final double f = valueNoise(seed, xin + e, yin, zin, win, uin, vin);
+        seed += 0x9E3779BD;
+        seed = (seed ^ seed >>> 12) * 0xDAB;
+        seed ^= seed >>> 14;
+        xin = p0;
+        yin = p1;
+        zin = p2;
+        win = p3;
+        uin = p4;
+        vin = p5;
+        final double g = valueNoise(seed, xin + f, yin, zin, win, uin, vin);
+
+        final double result = (a + b + c + d + e + f + g) * 0.14285714285714285;
+        return (result <= 0.5)
+                ? Math.pow(result * 2, 6.0) - 1.0
+                : 1.0 - Math.pow((result - 1) * 2, 6.0);
+
+//        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+    }
 
     @Override
     public double getNoise(double x, double y) {
@@ -230,18 +318,26 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
     }
     @Override
     public double getNoise(double x, double y, double z) {
-        return foamNoise(x * 0.5, y * 0.5, z * 0.5, seed);
+        return foamNoise(x, y, z, seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
-        return foamNoise(x * 0.5, y * 0.5, z * 0.5, (int) (seed ^ seed >>> 32));
+        return foamNoise(x, y, z, (int) (seed ^ seed >>> 32));
     }
     @Override
     public double getNoise(double x, double y, double z, double w) {
-        return foamNoise(x * 0.5, y * 0.5, z * 0.5, w * 0.5, seed);
+        return foamNoise(x, y, z, w, seed);
     }
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-        return foamNoise(x * 0.5, y * 0.5, z * 0.5, w * 0.5, (int) (seed ^ seed >>> 32));
+        return foamNoise(x, y, z, w, (int) (seed ^ seed >>> 32));
+    }
+    @Override
+    public double getNoise(double x, double y, double z, double w, double u, double v) {
+        return foamNoise(x, y, z, w, u, v, seed);
+    }
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
+        return foamNoise(x, y, z, w, u, v, (int) (seed ^ seed >>> 32));
     }
 }
