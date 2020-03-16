@@ -3698,7 +3698,6 @@ public class Noise {
                     cubicSway(alter1 - x * alter4)) * 0.25f;
         }
     }
-
     public static class Sway1D implements Noise1D
     {
         public static final Sway1D instance = new Sway1D();
@@ -3831,6 +3830,38 @@ public class Noise {
 ////            y0 = (1.0 - ySmall) * start + ySmall * end;
 //////            y1 = (1.0 - ySmall) * start2 + ySmall * end2;
 ////            return NumberTools.sway(x0 + y0 + 0.5);
+        }
+    }
+
+    /**
+     * A hybrid between value and gradient noise that may be faster for 1D noise. Every integer value of x given to this
+     * will produce a result of 0. This only hashes one coordinate per noise call, unlike most value noise that needs 2
+     * hashes in 1D and many more in higher dimensions. Based on <a href="https://www.shadertoy.com/view/3sd3Rs">Inigo
+     * Quilez' "Basic Noise"</a>.
+     */
+    public static class Quilez1D implements Noise1D {
+        
+        public Quilez1D() {
+        }
+        @Override
+        public double getNoise(double x) { 
+            long seed = x >= 0.0 ? (long) x : (long) x - 1, rise = 1 - (longFloor(x * 2.0) & 2);
+            x -= seed;
+            seed = (seed ^ seed << 7 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L;
+            seed = (seed ^ seed >>> 41 ^ seed >>> 23) * (seed ^ seed >> 25 | 1) >>> 32;
+            final double h = seed * 0x1p-28 - 4.0;
+            return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, long seed) {
+            x += ((seed & 0xFFFFFFFFL) - (seed >>> 32)) * 0x1p-30;
+            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1, rise = 1 - (longFloor(x * 2.0) & 2);
+            x -= xFloor;
+            seed = (seed ^ xFloor ^ xFloor << 7 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L;
+            seed = (seed ^ seed >>> 41 ^ seed >>> 23) * (seed ^ seed >> 25 | 1) >>> 32;
+            final double h = seed * 0x1p-28 - 4.0;//((seed >> 63 | 1) << 2);
+            return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
         }
     }
 }
