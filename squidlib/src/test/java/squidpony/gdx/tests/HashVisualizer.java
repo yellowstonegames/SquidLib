@@ -172,19 +172,19 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Quilez1D quilez1D = new Noise.Quilez1D();
     private final Noise.Layered1D layeredQuilez1D = new Noise.Layered1D(new Noise.Quilez1D(), 5, 5.0);
 
-    private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 2f);
-    private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 2f);
+    private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 0.03125f);
+    private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 0.03125f);
 
-    private final FastNoise fast2_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 2);
-    private final FastNoise fast3_2D = new FastNoise(1337, 1f, FastNoise.SIMPLEX_FRACTAL, 3);
+    private final FastNoise fast1_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
+    private final FastNoise fast3_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
 
-    private final Noise.Ridged2D classic1_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 1, 2f);
-    private final Noise.Ridged2D classic3_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 3, 2f);
+    private final Noise.Ridged2D classic1_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 1, 0.03125f);
+    private final Noise.Ridged2D classic3_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 3, 0.03125f);
 //    private final Noise.Layered2D classic1_lf_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 1.3f);
 //    private final Noise.Layered2D classic3_lf_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 1.3f);
 
     private final FastNoise fast1_lf_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
-    private final FastNoise fast3_lf_2D = new FastNoise(1337, 1f, FastNoise.SIMPLEX_FRACTAL, 3);
+    private final FastNoise fast3_lf_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
     {
         fast1_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
         fast3_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
@@ -196,17 +196,23 @@ public class HashVisualizer extends ApplicationAdapter {
 //        fast3_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
 //    }
 
-    private final Noise.Layered3D classic1_3D = new Noise.Layered3D(ClassicNoise.instance, 1, 2);
-    private final Noise.Layered3D classic3_3D = new Noise.Layered3D(ClassicNoise.instance, 3, 2);
+    private final Noise.Layered3D classic1_3D = new Noise.Layered3D(ClassicNoise.instance, 1, 0.03125f);
+    private final Noise.Layered3D classic3_3D = new Noise.Layered3D(ClassicNoise.instance, 3, 0.03125f);
 
-    private final FastNoise fast2_3D = fast2_2D;
+    private final FastNoise fast1_3D = fast1_2D;
     private final FastNoise fast3_3D = fast3_2D;
 
-    private final Noise.Layered3D classic1_lf_3D = new Noise.Layered3D(ClassicNoise.instance, 1, 1.3);
-    private final Noise.Layered3D classic3_lf_3D = new Noise.Layered3D(ClassicNoise.instance, 3, 1.3);
+    private final Noise.Ridged3D classic1_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 1, 0.03125f);
+    private final Noise.Ridged3D classic3_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 0.03125f);
 
-    private final FastNoise fast2_lf_3D = fast1_lf_2D;
+    private final FastNoise fast1_lf_3D = fast1_lf_2D;
     private final FastNoise fast3_lf_3D = fast3_lf_2D;
+    
+    private final FastNoise fast1_4D = fast1_2D;
+    private final FastNoise fast3_4D = fast3_2D;
+
+    private final FastNoise fast1_lf_4D = fast1_lf_2D;
+    private final FastNoise fast3_lf_4D = fast3_lf_2D;
 
     private final long
             seedX0 = linnorm.nextLong(), seedX1 = linnorm.nextLong(), seedX2 = linnorm.nextLong(), seedX3 = linnorm.nextLong(),
@@ -1499,7 +1505,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 hashMode = (hashMode + 27) % 28;
                                 break;
                             default:
-                                otherMode = (otherMode + 16) % 17;
+                                otherMode = (otherMode + 20) % 21;
                                 break;
                         }
                         break;
@@ -1669,7 +1675,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 hashMode %= 28;
                             default:
                                 otherMode++;
-                                otherMode %= 17;
+                                otherMode %= 21;
                                 if (otherMode == 0) {
                                     ArrayTools.fill(back, FLOAT_WHITE);
                                     //ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
@@ -6050,7 +6056,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic1_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(classic1_2D.getNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6063,7 +6069,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic1_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(classic1_lf_2D.getNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6076,7 +6082,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic3_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(classic3_2D.getNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6089,7 +6095,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic3_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(classic3_lf_2D.getNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6103,7 +6109,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fast2_2D.getConfiguredNoise(xx, yy));
+                                bright = basicPrepare(fast1_2D.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6129,7 +6135,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fast3_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
+                                bright = basicPrepare(fast3_2D.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6142,7 +6148,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fast3_lf_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
+                                bright = basicPrepare(fast3_lf_2D.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6152,9 +6158,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Classic 3D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic1_3D.getNoise(s0, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(classic1_3D.getNoise(x, y, ctr * 0.25f));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6164,9 +6169,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Classic 3D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic1_lf_3D.getNoise(s0, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(classic1_lf_3D.getNoise(x, y, ctr * 0.25f));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6176,9 +6180,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Classic 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic3_3D.getNoise(s0, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(classic3_3D.getNoise(x, y, ctr * 0.25f));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6188,9 +6191,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Classic 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic3_lf_3D.getNoise(s0, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(classic3_lf_3D.getNoise(x, y, ctr * 0.25));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6201,9 +6203,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Fast 3D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast2_3D.getConfiguredNoise(s0, y * 0.025f, ctr * 0.025f));
+                                bright = basicPrepare(fast1_3D.getConfiguredNoise(x, y, ctr * 0.25f));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6213,9 +6214,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Fast 3D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast2_lf_3D.getConfiguredNoise(s0, y * 0.025f, ctr * 0.025f));
+                                bright = basicPrepare(fast1_lf_3D.getConfiguredNoise(x, y, ctr * 0.25f));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6225,9 +6225,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Fast 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast3_3D.getConfiguredNoise(s0, y * 0.025f, ctr * 0.025f));
+                                bright = basicPrepare(fast3_3D.getConfiguredNoise(x, y, ctr * 0.25f));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6237,9 +6236,74 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     {
                         Gdx.graphics.setTitle("Fast 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = x * 0.025f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast3_lf_3D.getConfiguredNoise(s0, y * 0.025f, ctr * 0.025f));
+                                bright = basicPrepare(fast3_lf_3D.getConfiguredNoise(x, y, ctr * 0.25f));
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                    }
+                    break;
+
+
+                    case 17:
+                    {
+                        Gdx.graphics.setTitle("Fast 4D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr * 0.25f;
+                        for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(fast1_4D.getConfiguredNoise(s0, s1, 
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                    }
+                    break;
+                    case 18:
+                    {
+                        Gdx.graphics.setTitle("Fast 4D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr * 0.25f;
+                        for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(fast1_lf_4D.getConfiguredNoise(s0, s1,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                    }
+                    break;
+                    case 19:
+                    {
+                        Gdx.graphics.setTitle("Fast 4D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr * 0.25f;
+                        for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(fast3_4D.getConfiguredNoise(s0, s1,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                    }
+                    break;
+                    case 20:
+                    {
+                        Gdx.graphics.setTitle("Fast 4D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr * 0.25f;
+                        for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(fast3_lf_4D.getConfiguredNoise(s0, s1,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
                                 back[x][y] = getGray(bright);
                             }
                         }
