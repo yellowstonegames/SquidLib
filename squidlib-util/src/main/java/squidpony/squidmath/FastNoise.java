@@ -3094,18 +3094,23 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         final int[] SIMPLEX_4D = FastNoise.SIMPLEX_4D;
         final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
-        final int i1 = SIMPLEX_4D[c] >>> 2,
-                j1 = SIMPLEX_4D[c | 1] >>> 2,
-                k1 = SIMPLEX_4D[c | 2] >>> 2,
-                l1 = SIMPLEX_4D[c | 3] >>> 2,
-                i2 = SIMPLEX_4D[c] >>> 1 & 1,
-                j2 = SIMPLEX_4D[c | 1] >>> 1 & 1,
-                k2 = SIMPLEX_4D[c | 2] >>> 1 & 1,
-                l2 = SIMPLEX_4D[c | 3] >>> 1 & 1,
-                i3 = SIMPLEX_4D[c] & 1,
-                j3 = SIMPLEX_4D[c | 1] & 1,
-                k3 = SIMPLEX_4D[c | 2] & 1,
-                l3 = SIMPLEX_4D[c | 3] & 1;
+        final int ip = SIMPLEX_4D[c];
+        final int jp = SIMPLEX_4D[c + 1];
+        final int kp = SIMPLEX_4D[c + 2];
+        final int lp = SIMPLEX_4D[c + 3];
+
+        final int i1 = ip >> 2;
+        final int i2 = ip >> 1 & 1;
+        final int i3 = ip & 1;
+        final int j1 = jp >> 2;
+        final int j2 = jp >> 1 & 1;
+        final int j3 = jp & 1;
+        final int k1 = kp >> 2;
+        final int k2 = kp >> 1 & 1;
+        final int k3 = kp & 1;
+        final int l1 = lp >> 2;
+        final int l2 = lp >> 1 & 1;
+        final int l3 = lp & 1;
 
         final float x1 = x0 - i1 + G4;
         final float y1 = y0 - j1 + G4;
@@ -3124,33 +3129,33 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float z4 = z0 - 1 + 4 * G4;
         final float w4 = w0 - 1 + 4 * G4;
 
-        t = 0.62f - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+        t = 0.75f - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
         if (t > 0) {
             t *= t;
             n = t * t * gradCoord4D(seed, i, j, k, l, x0, y0, z0, w0);
         }
-        t = 0.62f - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+        t = 0.75f - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
         if (t > 0) {
             t *= t;
             n += t * t * gradCoord4D(seed, i + i1, j + j1, k + k1, l + l1, x1, y1, z1, w1);
         }
-        t = 0.62f - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+        t = 0.75f - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
         if (t > 0) {
             t *= t;
             n += t * t * gradCoord4D(seed, i + i2, j + j2, k + k2, l + l2, x2, y2, z2, w2);
         }
-        t = 0.62f - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+        t = 0.75f - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
         if (t > 0) {
             t *= t;
             n += t * t * gradCoord4D(seed, i + i3, j + j3, k + k3, l + l3, x3, y3, z3, w3);
         }
-        t = 0.62f - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+        t = 0.75f - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
         if (t > 0) {
             t *= t;
             n += t * t * gradCoord4D(seed, i + 1, j + 1, k + 1, l + 1, x4, y4, z4, w4);
         }
 
-        return 14.75f * n;
+        return 4.9f * n;
     }
 
     // Simplex Noise
