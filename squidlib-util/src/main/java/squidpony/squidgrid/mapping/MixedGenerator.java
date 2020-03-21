@@ -502,7 +502,7 @@ public class MixedGenerator implements IDungeonGenerator {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if(fixedRooms[x][y])
-                    markPiercingRoom(x, y);
+                    markPiercingCave(Coord.get(x, y)); // this is only used by LanesMapGenerator, where caves make sense
             }
         }
         store();
@@ -665,7 +665,7 @@ public class MixedGenerator implements IDungeonGenerator {
         }
     }
     /**
-     * Internal use. Marks a point to be made into floor.
+     * Internal use. Marks a point to be considered a hard wall.
      * @param x x position to mark
      * @param y y position to mark
      */
@@ -710,7 +710,7 @@ public class MixedGenerator implements IDungeonGenerator {
     protected void markPiercingRoom(int x, int y)
     {
         markPiercing(x, y);
-        markEnvironmentCave(x, y);
+        markEnvironmentRoom(x, y);
     }
 
     /**
