@@ -58,7 +58,7 @@ import java.util.zip.DeflaterOutputStream;
 
 // If you're porting this into libGDX, remove the GwtIncompatible annotation and exclude this from GWT reflection.
 // You'll also need to include the PaletteReducer class, which only depends on libGDX and the JDK, and does not need to
-// be excluded from GWT in any way. The ChunkReducer class this depends on is a static inner class in libGDX's PixmapIO;
+// be excluded from GWT in any way. The ChunkBuffer class this depends on is a static inner class in libGDX's PixmapIO;
 // it is package-private so it is duplicated here.
 @GwtIncompatible
 public class PNG8 implements Disposable {
