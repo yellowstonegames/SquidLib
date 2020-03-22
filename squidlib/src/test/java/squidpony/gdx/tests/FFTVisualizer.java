@@ -16,6 +16,7 @@ import squidpony.squidmath.FoamNoise;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
+import static squidpony.squidmath.Noise.IntPointHash.hash256;
 
 /**
  */
@@ -23,7 +24,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
     private FoamNoise foam = new FoamNoise(1234567890L);
-    private static final int MODE_LIMIT = 2;
+    private static final int MODE_LIMIT = 3;
     private int mode = 0;
     private int dim = 0; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
@@ -74,14 +75,14 @@ public class FFTVisualizer extends ApplicationAdapter {
                     case E: //earlier seed
                         if(mode == 0) 
                             noise.setSeed(noise.getSeed() - 1);
-                        else if(mode == 1)
+                        else
                             foam.seed -= 0x9E3779B9;
                         Gdx.graphics.requestRendering();
                         break;
                     case S: //seed
                         if(mode == 0)
                             noise.setSeed(noise.getSeed() + 1);
-                        else if(mode == 1)
+                        else
                             foam.seed += 0x9E3779B9;
                         Gdx.graphics.requestRendering();
                         break;
@@ -191,7 +192,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
-        } else{
+        } else if(mode == 1) {
             c *= nf;
             switch (dim) {
                 case 0:
@@ -239,6 +240,50 @@ public class FFTVisualizer extends ApplicationAdapter {
                             bright = (float) (db = basicPrepare(foam.getNoise(
                                     c + xx, xx - c, yy - c,
                                     c - yy, xx + yy, yy - xx)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+            }
+        } else {
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * hash256(x, y, foam.seed));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * hash256(x, y, ctr, foam.seed));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * hash256(x, y, ctr, x + y - ctr, foam.seed));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * hash256(ctr + x, x - ctr, y - ctr, 
+                                    ctr - y, x + y, y - x, foam.seed));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
