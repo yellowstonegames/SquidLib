@@ -11,8 +11,10 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
+import squidpony.squidmath.BlueNoise;
 import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.FoamNoise;
+import squidpony.squidmath.Noise;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -24,7 +26,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
     private FoamNoise foam = new FoamNoise(1234567890L);
-    private static final int MODE_LIMIT = 3;
+    private static final int MODE_LIMIT = 4;
     private int mode = 0;
     private int dim = 0; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
@@ -61,6 +63,8 @@ public class FFTVisualizer extends ApplicationAdapter {
                 switch (keycode) {
                     case MINUS:
                         mode = (mode + MODE_LIMIT - 1) % MODE_LIMIT;
+                        ctr = -256;
+                        Gdx.graphics.requestRendering();
                         break;
                     case EQUALS:                         
                         mode++;
@@ -247,7 +251,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
-        } else {
+        } else if(mode == 2){
             switch (dim) {
                 case 0:
                     for (int x = 0; x < width; x++) {
@@ -292,6 +296,31 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
             }
         }
+        else{
+            switch (dim & 1){
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (getBlue(x, y, foam.seed) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getSeeded(x, y, foam.seed) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+            }
+        }
         Fft.transform2D(real, imag);
         Fft.getColors(real, imag, colors);
         for (int x = 0; x < width; x++) {
@@ -301,6 +330,18 @@ public class FFTVisualizer extends ApplicationAdapter {
             }
         }
         renderer.end();
+    }
+    
+    public static byte getBlue(int x, int y, int s){
+        final int m = Integer.bitCount(BlueNoise.ALT_NOISE[(x + 23 >>> 6) + (y + 41 >>> 6) + (s >>> 6) & 63][(x + 23 << 6 & 0xFC0) | (y + 41 & 0x3F)] + 128) 
+                * Integer.bitCount(BlueNoise.ALT_NOISE[(y + 17 >>> 6) - (x + 47 >>> 7) + (s >>> 12) & 63][(y + 17 << 6 & 0xFC0) | (x + 47 & 0x3F)] + 128)
+                * Integer.bitCount(BlueNoise.ALT_NOISE[(y + 33 >>> 7) + (x - 31 >>> 6) + (s >>> 18) & 63][(y + 33 << 6 & 0xFC0) | (x - 31 & 0x3F)] + 128)
+                >>> 1;
+        final int n = Integer.bitCount(BlueNoise.ALT_NOISE[(x + 53 >>> 6) - (y + 11 >>> 6) + (s >>> 9) & 63][(x + 53 << 6 & 0xFC0) | (y + 11 & 0x3F)] + 128)
+                * Integer.bitCount(BlueNoise.ALT_NOISE[(y - 27 >>> 6) + (x - 37 >>> 7) + (s >>> 15) & 63][(y - 27 << 6 & 0xFC0) | (x - 37 & 0x3F)] + 128)
+                * Integer.bitCount(BlueNoise.ALT_NOISE[-(x + 35 >>> 6) - (y - 29 >>> 7) + (s >>> 21) & 63][(x + 35 << 6 & 0xFC0) | (y - 29 & 0x3F)] + 128)
+                >>> 1;
+        return (byte) (BlueNoise.ALT_NOISE[s & 63][(y + (m >>> 7) - (n >>> 7) << 6 & 0xFC0) | (x + (n >>> 7) - (m >>> 7) & 0x3F)] ^ (m ^ n));
     }
 
     @Override
