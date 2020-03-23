@@ -69,13 +69,13 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 106, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 110, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
     private TextCellFactory tcf;
-//    private static final int width = 512, height = 512;
-    private static final int width = 256, height = 256;
+    private static final int width = 512, height = 512;
+//    private static final int width = 256, height = 256;
     private static final int almost = width - 1, half = width >> 1;
     private static final float[][] back = new float[width][height];
 
@@ -4763,16 +4763,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
 //                                bright = basicPrepare(beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f)); //0.61803398875
-                                bright = (float) (ValueNoise.valueNoise(-999999, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f));
+                                bright = (float) (ValueNoise.valueNoise(0, (x + ctr) * 0.03125f, (y + ctr) * 0.03125f));
                                 back[x][y] = getGray(bright);
                             }
                         }
                         break;
                     case 112:
-                        Gdx.graphics.setTitle("Whirling 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Value Noise 3D, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredWhirling.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.03125f, 123456)); // , 1.5f
+                                bright = (float) (ValueNoise.valueNoise(0, x * 0.03125f, y * 0.03125f, ctr * 0.03125f)); // , 1.5f
                                 back[x][y] = getGray(bright);
                             }
                         }
