@@ -297,11 +297,11 @@ public class FFTVisualizer extends ApplicationAdapter {
             }
         }
         else{
-            switch (dim & 1){
+            switch (dim){
                 case 0:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (getBlue(x, y, foam.seed) + 128));
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.get(x, y, BlueNoise.ALT_NOISE[foam.seed & 63]) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -309,7 +309,6 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
                 case 1:
-
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
                             bright = (float) (db = 0x1p-8 * (BlueNoise.getSeeded(x, y, foam.seed) + 128));
@@ -319,6 +318,27 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                     }
                     break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (getBlue(x, y, foam.seed) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-8 * (blueChoice(x, y, foam.seed) + 128));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+
             }
         }
         Fft.transform2D(real, imag);
@@ -342,6 +362,14 @@ public class FFTVisualizer extends ApplicationAdapter {
                 * Integer.bitCount(BlueNoise.ALT_NOISE[-(x + 35 >>> 6) - (y - 29 >>> 7) + (s >>> 21) & 63][(x + 35 << 6 & 0xFC0) | (y - 29 & 0x3F)] + 128)
                 >>> 1;
         return (byte) (BlueNoise.ALT_NOISE[s & 63][(y + (m >>> 7) - (n >>> 7) << 6 & 0xFC0) | (x + (n >>> 7) - (m >>> 7) & 0x3F)] ^ (m ^ n));
+    }
+    
+    public static byte blueChoice(int x, int y, int s){
+        final int xc = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(x >>> 6, y >>> 6, s ^ 0x9E3779B9)][(y << 6 & 0xFC0) | (x & 0x3F)];
+        final int yc = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(x >>> 6, y >>> 6, s ^ 0x7F4A7C15)][(y << 6 & 0xFC0) | (x & 0x3F)];
+        final int ax = (xc * (xc+1) < ((x & 0x3F) - 32) * ((x & 0x3F) - 31) >> 1) ? x - 32 : x + 32;
+        final int ay = (yc * (yc+1) < ((y & 0x3F) - 32) * ((y & 0x3F) - 31) >> 1) ? y - 32 : y + 32;
+        return BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, s)][(ay + (s) << 6 & 0xFC0) | (ax + (s >>> 6) & 0x3F)];
     }
 
     @Override
