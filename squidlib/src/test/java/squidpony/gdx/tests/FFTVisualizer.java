@@ -34,7 +34,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     private boolean inverse = false;
     private ImmediateModeRenderer20 renderer;
     
-    private static final int width = 256, height = 256;
+    private static final int width = 512, height = 512;
+//    private static final int width = 256, height = 256;
     private final double[][] real = new double[width][height], imag = new double[width][height];
     private final float[][] colors = new float[width][height];
     private InputAdapter input;
@@ -80,14 +81,14 @@ public class FFTVisualizer extends ApplicationAdapter {
                         if(mode == 0) 
                             noise.setSeed(noise.getSeed() - 1);
                         else
-                            foam.seed -= 0x9E3779B9;
+                            foam.seed--;//foam.seed -= 0x9E3779B9;
                         Gdx.graphics.requestRendering();
                         break;
                     case S: //seed
                         if(mode == 0)
                             noise.setSeed(noise.getSeed() + 1);
                         else
-                            foam.seed += 0x9E3779B9;
+                            foam.seed++;//foam.seed += 0x9E3779B9;
                         Gdx.graphics.requestRendering();
                         break;
                     case N: // noise type
@@ -365,11 +366,17 @@ public class FFTVisualizer extends ApplicationAdapter {
     }
     
     public static byte blueChoice(int x, int y, int s){
-        final int xc = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(x >>> 6, y >>> 6, s ^ 0x9E3779B9)][(y << 6 & 0xFC0) | (x & 0x3F)];
-        final int yc = BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(x >>> 6, y >>> 6, s ^ 0x7F4A7C15)][(y << 6 & 0xFC0) | (x & 0x3F)];
-        final int ax = (xc * (xc+1) < ((x & 0x3F) - 32) * ((x & 0x3F) - 31) >> 1) ? x - 32 : x + 32;
-        final int ay = (yc * (yc+1) < ((y & 0x3F) - 32) * ((y & 0x3F) - 31) >> 1) ? y - 32 : y + 32;
-        return BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, s)][(ay + (s) << 6 & 0xFC0) | (ax + (s >>> 6) & 0x3F)];
+        // hash for a 64x64 tile on the "normal grid"
+        final int h = Noise.IntPointHash.hashAll(x >>> 6, y >>> 6, s);
+        // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
+        final int xc = BlueNoise.ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+        // likely to be a different noise tile, and the x,y position is transposed
+        final int yc = BlueNoise.ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
+        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
+        final int ax = ((xc) * (xc+1) << 4 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
+        final int ay = ((yc) * (yc+1) << 4 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
+        // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
+        return BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(ay << 6 & 0xFC0) | (ax & 0x3F)];
     }
 
     @Override
