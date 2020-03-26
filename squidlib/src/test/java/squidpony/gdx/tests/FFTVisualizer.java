@@ -93,7 +93,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         break;
                     case N: // noise type
                         if(mode == 0) 
-                            noise.setNoiseType((noise.getNoiseType() + 1) % 10);
+                            noise.setNoiseType((noise.getNoiseType() + 1) % 12);
                         Gdx.graphics.requestRendering();
                         break;
                     case ENTER:

@@ -1029,7 +1029,11 @@ public class Thesaurus implements Serializable{
     private static final String[] plantTerms = new String[]{
             "@'s color`adj`\tleaf`noun`",
             "@'s tree`noun`",
+            "@'s color`adj` tree`noun`",
             "@'s flower`noun`",
+            "@'s shape`adj` flower`noun`",
+            "@'s color`adj` flower`noun`",
+            "flower`noun` of @",
             "leaf`noun` of @",
             "@'s ground`noun`\tleaf`noun`",
             "ground`noun`\tleaf`noun` of @",
@@ -1038,7 +1042,9 @@ public class Thesaurus implements Serializable{
             "color`adj` flower`noun` of @",
             "@'s sensory`adj`-leaf`noun`",
             "ground`noun`\tleaf`noun`",
-            "ground`noun`\tflower`noun`",
+
+            "shape`adj` flower`noun`",
+            "color`adj` flower`noun`",
             "flavor`noun`\tleaf`noun` tree`noun`",
             "flavor`adj` fruit`noun` tree`noun`",
             "flavor`adj` nut`noun` tree`noun`",
@@ -1052,6 +1058,7 @@ public class Thesaurus implements Serializable{
             "shape`adj`-leaf`noun` flower`noun`",
             "sensory`adj` flower`noun`-flower`noun`",
             "sensory`adj`-leaf`noun` flower`noun`",
+            "ground`noun`\tflower`noun`",
     };
     private static final String[] fruitTerms = new String[]{
             "fruit`noun` of @",
@@ -1063,19 +1070,29 @@ public class Thesaurus implements Serializable{
     };
     private static final String[] nutTerms = new String[]{
             "nut`noun` of @",
+            "color`adj` nut`noun` of @",
             "@'s nut`noun`",
             "@'s flavor`adj` nut`noun`",
             "@'s color`adj` nut`noun`",
             "flavor`adj` nut`noun`",
             "color`adj` nut`noun`",
+            "sensory`adj` nut`noun`",
     };
     private static final String[] flowerTerms = new String[]{
             "flower`noun` of @",
+            "sensory`adj` flower`noun` of @",
+            "color`adj` flower`noun` of @",
             "@'s flower`noun`",
             "@'s shape`adj` flower`noun`",
             "@'s color`adj` flower`noun`",
             "shape`adj` flower`noun`",
             "color`adj` flower`noun`",
+            "color`adj`-leaf`noun` flower`noun`",
+            "shape`adj`-leaf`noun` flower`noun`",
+            "sensory`adj` flower`noun`-flower`noun`",
+            "sensory`adj`-leaf`noun` flower`noun`",
+            "ground`noun`\tflower`noun`",
+
     };
     private static final String[] potionTerms = new String[]{
             "a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`",
@@ -1232,7 +1249,7 @@ public class Thesaurus implements Serializable{
             "lake`noun`",
             makeList("puddle", "pond", "lake", "sea", "swamp", "bog", "fen", "glade"),
             "leaf`noun`",
-            makeList("leaf", "bark", "root", "thorn", "seed", "branch", "twig", "wort", "cress", "flower", "wood", "vine", "sap"),
+            makeList("leaf", "bark", "root", "thorn", "seed", "branch", "twig", "wort", "cress", "flower", "wood", "vine", "sap", "bud", "blossom", "shoot", "stalk", "stem"),
             "fruit`noun`",
             makeList("fruit", "berry", "apple", "peach", "cherry", "melon", "lime", "fig", "date", "mango", "banana", "juniper", "grape", "papaya", "pear", "quince"),
             "nut`noun`",
