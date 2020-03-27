@@ -16,10 +16,7 @@ import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.DiverRNG;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.SeededNoise;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import static squidpony.squidgrid.gui.gdx.SColor.*;
 
@@ -397,7 +394,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.MimicMap(seed, FastNoise.instance, 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, SeededNoise.instance, 0.7);
+        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, new FastNoise(rng.nextInt(), 2f, FastNoise.FOAM_FRACTAL, 2, 2.5f, 0.4f), 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, CosmicNumbering.instance, 0.7, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);

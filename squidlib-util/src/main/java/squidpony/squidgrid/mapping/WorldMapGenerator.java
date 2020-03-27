@@ -2155,7 +2155,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     h, temp, yPos, xPos,
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
-                    th, thx, thy, lon, lat, ipi = 1.0 / Math.PI,
+                    th, thx, thy, lon, lat, ipi = 0.99999 / Math.PI,
                     rx = width * 0.25, irx = 1.0 / rx, hw = width * 0.5,
                     ry = height * 0.5, iry = 1.0 / ry;
 
@@ -2457,7 +2457,7 @@ public abstract class WorldMapGenerator implements Serializable {
             int width = rectangular.width, height = rectangular.height;
             GreasedRegion t = new GreasedRegion(width, height);
             double yPos, xPos,
-                    th, thx, thy, lon, lat, ipi = 1.0 / Math.PI,
+                    th, thx, thy, lon, lat, ipi = 0.99999 / Math.PI,
                     rx = width * 0.25, irx = 1.0 / rx, hw = width * 0.5,
                     ry = height * 0.5, iry = 1.0 / ry;
     
@@ -2546,7 +2546,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     h, temp, yPos, xPos,
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
-                    th, thx, thy, lon, lat, ipi = 1.0 / Math.PI,
+                    th, thx, thy, lon, lat, ipi = 0.99999 / Math.PI,
                     rx = width * 0.25, irx = 1.0 / rx, hw = width * 0.5,
                     ry = height * 0.5, iry = 1.0 / ry;
             yPos = startY - ry;
@@ -2575,7 +2575,6 @@ public abstract class WorldMapGenerator implements Serializable {
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-//                    th += centerLongitude;
                     ps = NumberTools.sin(th) * qc;
                     pc = NumberTools.cos(th) * qc;
                     xPositions[x][y] = pc;
@@ -2599,7 +2598,6 @@ public abstract class WorldMapGenerator implements Serializable {
                         else
                             h = (h - 0.125) * 0.75;
                     }
-                    //h += landModifier - 1.0;
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
