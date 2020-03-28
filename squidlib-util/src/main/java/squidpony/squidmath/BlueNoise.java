@@ -227,10 +227,11 @@ public class BlueNoise {
         // likely to be a different noise tile, and the x,y position is transposed
         final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
         // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
-        final int ax = ((xc) * (xc+1) << 4 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
-        final int ay = ((yc) * (yc+1) << 4 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
+        final int ax = ((xc) * (xc+1) << 6 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
+        final int ay = ((yc) * (yc+1) << 6 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
         // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
-        return ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(ay << 6 & 0xFC0) | (ax & 0x3F)];
+        // this transposes x and y again, it seems to help with the particular blue noise textures we have
+        return ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(x << 6 & 0xFC0) | (y & 0x3F)];
     }
 
 
