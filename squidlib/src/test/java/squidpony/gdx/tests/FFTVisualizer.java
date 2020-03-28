@@ -16,6 +16,7 @@ import squidpony.squidmath.Noise;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
+import static squidpony.squidmath.BlueNoise.ALT_NOISE;
 import static squidpony.squidmath.Noise.IntPointHash.hash256;
 
 /**
@@ -230,7 +231,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 0:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.get(x, y, BlueNoise.ALT_NOISE[noise.getSeed() & 63]) + 128));
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -260,7 +261,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -275,7 +276,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 0:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8f * (BlueNoise.get(x, y, BlueNoise.ALT_NOISE[noise.getSeed() & 63]) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8f * (BlueNoise.get(x, y, ALT_NOISE[noise.getSeed() & 63]) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -305,7 +306,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -327,29 +328,32 @@ public class FFTVisualizer extends ApplicationAdapter {
     }
     
     public static byte getBlue(int x, int y, int s){
-        final int m = Integer.bitCount(BlueNoise.ALT_NOISE[(x + 23 >>> 6) + (y + 41 >>> 6) + (s >>> 6) & 63][(x + 23 << 6 & 0xFC0) | (y + 41 & 0x3F)] + 128) 
-                * Integer.bitCount(BlueNoise.ALT_NOISE[(y + 17 >>> 6) - (x + 47 >>> 7) + (s >>> 12) & 63][(y + 17 << 6 & 0xFC0) | (x + 47 & 0x3F)] + 128)
-                * Integer.bitCount(BlueNoise.ALT_NOISE[(y + 33 >>> 7) + (x - 31 >>> 6) + (s >>> 18) & 63][(y + 33 << 6 & 0xFC0) | (x - 31 & 0x3F)] + 128)
+        final int m = Integer.bitCount(ALT_NOISE[(x + 23 >>> 6) + (y + 41 >>> 6) + (s >>> 6) & 63][(x + 23 << 6 & 0xFC0) | (y + 41 & 0x3F)] + 128) 
+                * Integer.bitCount(ALT_NOISE[(y + 17 >>> 6) - (x + 47 >>> 7) + (s >>> 12) & 63][(y + 17 << 6 & 0xFC0) | (x + 47 & 0x3F)] + 128)
+                * Integer.bitCount(ALT_NOISE[(y + 33 >>> 7) + (x - 31 >>> 6) + (s >>> 18) & 63][(y + 33 << 6 & 0xFC0) | (x - 31 & 0x3F)] + 128)
                 >>> 1;
-        final int n = Integer.bitCount(BlueNoise.ALT_NOISE[(x + 53 >>> 6) - (y + 11 >>> 6) + (s >>> 9) & 63][(x + 53 << 6 & 0xFC0) | (y + 11 & 0x3F)] + 128)
-                * Integer.bitCount(BlueNoise.ALT_NOISE[(y - 27 >>> 6) + (x - 37 >>> 7) + (s >>> 15) & 63][(y - 27 << 6 & 0xFC0) | (x - 37 & 0x3F)] + 128)
-                * Integer.bitCount(BlueNoise.ALT_NOISE[-(x + 35 >>> 6) - (y - 29 >>> 7) + (s >>> 21) & 63][(x + 35 << 6 & 0xFC0) | (y - 29 & 0x3F)] + 128)
+        final int n = Integer.bitCount(ALT_NOISE[(x + 53 >>> 6) - (y + 11 >>> 6) + (s >>> 9) & 63][(x + 53 << 6 & 0xFC0) | (y + 11 & 0x3F)] + 128)
+                * Integer.bitCount(ALT_NOISE[(y - 27 >>> 6) + (x - 37 >>> 7) + (s >>> 15) & 63][(y - 27 << 6 & 0xFC0) | (x - 37 & 0x3F)] + 128)
+                * Integer.bitCount(ALT_NOISE[-(x + 35 >>> 6) - (y - 29 >>> 7) + (s >>> 21) & 63][(x + 35 << 6 & 0xFC0) | (y - 29 & 0x3F)] + 128)
                 >>> 1;
-        return (byte) (BlueNoise.ALT_NOISE[s & 63][(y + (m >>> 7) - (n >>> 7) << 6 & 0xFC0) | (x + (n >>> 7) - (m >>> 7) & 0x3F)] ^ (m ^ n));
+        return (byte) (ALT_NOISE[s & 63][(y + (m >>> 7) - (n >>> 7) << 6 & 0xFC0) | (x + (n >>> 7) - (m >>> 7) & 0x3F)] ^ (m ^ n));
     }
-    
-    public static byte blueChoice(int x, int y, int s){
+
+    public static byte getChosen(int x, int y, int seed){
         // hash for a 64x64 tile on the "normal grid"
-        final int h = Noise.IntPointHash.hashAll(x >>> 6, y >>> 6, s);
+        final int h = Noise.IntPointHash.hashAll(x >>> 6, y >>> 6, seed);
         // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
-        final int xc = BlueNoise.ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+        //final int xc = x * 0xC13FA9A9 >>> 24;
+        //final int yc = y * 0x91E10DA5 >>> 24;
+        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
         // likely to be a different noise tile, and the x,y position is transposed
-        final int yc = BlueNoise.ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
+        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
         // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
-        final int ax = ((xc) * (xc+1) << 4 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
-        final int ay = ((yc) * (yc+1) << 4 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
+        final int ax = ((xc) * (xc+1) * 47 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
+        final int ay = ((yc) * (yc+1) * 47 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
         // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
-        return BlueNoise.ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(ay << 6 & 0xFC0) | (ax & 0x3F)];
+        // this transposes x and y again, it seems to help with the particular blue noise textures we have
+        return ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(x << 6 & 0xFC0) | (y & 0x3F)];
     }
 
     @Override
