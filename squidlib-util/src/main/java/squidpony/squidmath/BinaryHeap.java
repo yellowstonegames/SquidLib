@@ -181,6 +181,17 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 			}
 		}
 
+		while (index > 0) {
+			int parentIndex = (index - 1) >> 1;
+			Node parent = nodes[parentIndex];
+			if (value < parent.value ^ isMaxHeap) {
+				nodes[index] = parent;
+				parent.index = index;
+				index = parentIndex;
+			} else
+				break;
+		}
+
 		nodes[index] = node;
 		node.index = index;
 	}
