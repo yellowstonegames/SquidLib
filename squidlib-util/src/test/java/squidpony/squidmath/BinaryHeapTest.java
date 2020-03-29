@@ -273,6 +273,6 @@ public class BinaryHeapTest {
         // this is incorrect, but I'm not sure at what point in the test it became incorrect.
         float popped = h.pop().value;
 //        if(popped == 700.856f) throw new RuntimeException("Incorrect result! Should NOT be 700.856, should be 610.04565 .");
-        if(popped != 610.04565f) throw new RuntimeException("Should be 610.04565");
+        if(popped != 610.04565f) throw new RuntimeException("Should be 610.04565, but is " + popped);
     }
 }
