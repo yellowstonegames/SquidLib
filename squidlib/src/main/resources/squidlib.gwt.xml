@@ -8,7 +8,14 @@
      <inherits name="squidlib" />
   -->
 <module>
-    <inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
+    <inherits name="com.badlogic.gdx.backends.gdx_backends_gwt" />
+    <source path="com/badlogic/gdx">
+        <include name="utils/Align.java"/>
+        <!-- Thanks mgsx-dev!
+        https://github.com/libgdx/libgdx/issues/5820#issuecomment-605991717 
+        This source block should be removed when we update to 1.9.11, when it's released. 
+        -->
+    </source>
     <inherits name="regexodus"/>
     <inherits name="squidlib-util"/>
     <source path="squidpony/squidgrid/gui/gdx"/>
