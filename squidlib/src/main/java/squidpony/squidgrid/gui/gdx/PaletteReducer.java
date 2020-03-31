@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.NumberUtils;
+import squidpony.squidmath.IRNG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -796,7 +797,9 @@ public class PaletteReducer {
      * Floyd-Steinberg dithering, with input for the pseudo-random state obtained by the non-transparent color values as
      * they are encountered. Very oddly, this tends to produce less random-seeming dither than
      * {@link #reduceBurkes(Pixmap)}, with this method often returning regular checkerboards where Burkes may produce
-     * splotches of color. If you want to reduce the colors in a Pixmap based on what it currently contains, call
+     * splotches of color. Unfortunately, even though Hu et al did a lot of work here, Floyd-Steinberg dithering without
+     * noise usually looks better on mid-to-large-size palettes; to get that use {@link #reduceFloydSteinberg(Pixmap)}.
+     * If you want to reduce the colors in a Pixmap based on what it currently contains, call
      * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
      * Pixmap. You may instead want to use a known palette instead of one computed from a Pixmap;
      * {@link #exact(int[])} is the tool for that job.
@@ -1038,32 +1041,103 @@ public class PaletteReducer {
         return pixmap;
     }
 
-//    /**
-//     * Retrieves a random non-0 color index for the palette this would reduce to, with a higher likelihood for colors
-//     * that are used more often in reductions (those with few similar colors). The index is returned as a byte that,
-//     * when masked with 255 as with {@code (palette.randomColorIndex(random) & 255)}, can be used as an index into a
-//     * palette array with 256 or less elements that should have been used with {@link #exact(int[])} before to set the
-//     * palette this uses.
-//     * @param random an IRNG instance, such as a GWTRNG or RNG
-//     * @return a randomly selected color index from this palette with a non-uniform distribution, can be any byte but 0
-//     */
-//    public byte randomColorIndex(IRNG random)
-//    {
-//        return paletteMapping[random.next(15)];
-//    }
-//
-//    /**
-//     * Retrieves a random non-transparent color from the palette this would reduce to, with a higher likelihood for
-//     * colors that are used more often in reductions (those with few similar colors). The color is returned as an
-//     * RGBA8888 int; you can assign one of these into a Color with {@link Color#rgba8888ToColor(Color, int)} or
-//     * {@link Color#set(int)}.
-//     * @param random an IRNG instance, such as a GWTRNG or RNG
-//     * @return a randomly selected color from this palette with a non-uniform distribution
-//     */
-//    public int randomColor(IRNG random)
-//    {
-//        return paletteArray[paletteMapping[random.next(15)] & 255];
-//    }
+    /**
+     * Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can using the
+     * Jorge Jimenez' Interleaved Gradient Noise technique, which is relatively commonly-used in shader code. If you
+     * want to reduce the colors in a Pixmap based on what it currently contains, call {@link #analyze(Pixmap)} with
+     * {@code pixmap} as its argument, then call this method with the same Pixmap. You may instead want to use a known
+     * palette instead of one computed from a Pixmap; {@link #exact(int[])} is the tool for that job.
+     * <p>
+     * This method usually has the second-highest quality of the various dithering algorithms, and can sometimes look a
+     * little better than {@link #reduceFloydSteinberg(Pixmap)} (this usually has more random clumping or dotted lines
+     * that may detract from the final appearance). It might not be incredibly fast because of the
+     * extra calculations it has to do for dithering, but if you can compute the PaletteReducer once and reuse it, that
+     * will save some time. This method should be fairly fast; it needs 5 multiplications and a Math.sqrt() call per
+     * pixel, but doesn't do anything too outrageous. It's meant to have similar output when ported to a GLSL shader.
+     * @param pixmap a Pixmap that will be modified in place
+     * @return the given Pixmap, for chaining
+     */
+    public Pixmap reduceJimenez(Pixmap pixmap) {
+        boolean hasTransparent = (paletteArray[0] == 0);
+        final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
+        Pixmap.Blending blending = pixmap.getBlending();
+        pixmap.setBlending(Pixmap.Blending.None);
+        int color, used;
+        float pos;
+        double adj;
+//        final float strength = 0x1.4p-10f * ditherStrength;
+        final float strength = ditherStrength * 3.25f;
+        for (int y = 0; y < h; y++) {
+            for (int px = 0; px < lineLen; px++) {
+                color = pixmap.getPixel(px, y) & 0xF8F8F880;
+                if ((color & 0x80) == 0 && hasTransparent)
+                    pixmap.drawPixel(px, y, 0);
+                else {
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+                    int rr = ((color >>> 24)       );
+                    int gg = ((color >>> 16) & 0xFF);
+                    int bb = ((color >>> 8)  & 0xFF);
+                    //float len = (rr * 5 + gg * 9 + bb * 2) * strength + 1f;
+                    //adj = fract(52.9829189 * fract(dot(vec2(0.06711056, 0.00583715), gl_FragCoord.xy))) * len - len * 0.5;
+                    //adj = asin(fract(52.9829189 * fract(dot(vec2(0.06711056, 0.00583715), gl_FragCoord.xy))) * 0.875 
+                    //         - fract(dot(vec2(0.7548776662466927, 0.5698402909980532), gl_FragCoord.xy)) * 0.5);
+                    //adj = 2.0 * sin(fract(52.9829189 * fract(dot(vec2(0.06711056, 0.00583715), gl_FragCoord.xy))) * 1.44 - 0.72);
+                    used = paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF];
+                    pos = (px * 0.06711056f + y * 0.00583715f);
+                    pos -= (int)pos;
+                    pos *= 52.9829189f;
+                    pos -= (int)pos;
+                    adj = (Math.sqrt(pos) * pos - 0.3125) * strength;
+//                    adj = TrigTools.sin(pos * 1.44f - 0.72f) * strength;
+
+//                    pos *= 0.875f;
+//                    adj = (px * 0.7548776662466927f + y * 0.5698402909980532f);
+//                    adj -= (int)adj;
+//                    adj = TrigTools.asin((pos - adj * 0.3125f) * strength) * 1.25f;
+                    rr = MathUtils.clamp((int) (rr + (adj * ((rr - (used >>> 24))))), 0, 0xFF); //  * 17 >> 4
+                    gg = MathUtils.clamp((int) (gg + (adj * ((gg - (used >>> 16 & 0xFF))))), 0, 0xFF); //  * 23 >> 4
+                    bb = MathUtils.clamp((int) (bb + (adj * ((bb - (used >>> 8 & 0xFF))))), 0, 0xFF); // * 5 >> 4
+                    pixmap.drawPixel(px, y, paletteArray[paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF]);
+                }
+            }
+
+        }
+        pixmap.setBlending(blending);
+        return pixmap;
+    }
+
+
+//// remove randomColorIndex() and randomColor() if porting out of SquidLib
+    /**
+     * Retrieves a random non-0 color index for the palette this would reduce to, with a higher likelihood for colors
+     * that are used more often in reductions (those with few similar colors). The index is returned as a byte that,
+     * when masked with 255 as with {@code (palette.randomColorIndex(random) & 255)}, can be used as an index into a
+     * palette array with 256 or less elements that should have been used with {@link #exact(int[])} before to set the
+     * palette this uses.
+     * @param random an IRNG instance, such as a GWTRNG or RNG
+     * @return a randomly selected color index from this palette with a non-uniform distribution, can be any byte but 0
+     */
+    public byte randomColorIndex(IRNG random)
+    {
+        return paletteMapping[random.next(15)];
+    }
+
+    /**
+     * Retrieves a random non-transparent color from the palette this would reduce to, with a higher likelihood for
+     * colors that are used more often in reductions (those with few similar colors). The color is returned as an
+     * RGBA8888 int; you can assign one of these into a Color with {@link Color#rgba8888ToColor(Color, int)} or
+     * {@link Color#set(int)}.
+     * @param random an IRNG instance, such as a GWTRNG or RNG
+     * @return a randomly selected color from this palette with a non-uniform distribution
+     */
+    public int randomColor(IRNG random)
+    {
+        return paletteArray[paletteMapping[random.next(15)] & 255];
+    }
 
     /**
      * Looks up {@code color} as if it was part of an image being color-reduced and finds the closest color to it in the

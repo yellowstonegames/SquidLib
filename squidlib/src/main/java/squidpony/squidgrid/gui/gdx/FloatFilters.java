@@ -20,6 +20,7 @@ public final class FloatFilters {
     /**
      * Wraps the functionality of {@link SColor#toEditedFloat(float, float, float, float, float)} so it can be called as
      * a FloatFilter, adding values to hue, saturation, and value (clamping saturation and value and wrapping hue).
+     * Hue is in the 0.0 to 1.0 range, as SquidLib handles it, instead of libGDX's 0 to 360 range.
      */
     public static class HSVFilter extends FloatFilter {
         public float hueAddend, saturationAddend, valueAddend;
