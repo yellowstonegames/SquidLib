@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -17,7 +16,6 @@ import squidpony.squidmath.Noise;
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static squidpony.squidmath.BlueNoise.ALT_NOISE;
-import static squidpony.squidmath.Noise.IntPointHash.hash256;
 
 /**
  */
@@ -186,7 +184,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 0:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * hash256(x, y, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * Noise.IntPointHash.hash256(x, y, noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -196,7 +194,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 1:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * hash256(x, y, ctr, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * Noise.PointHash.hash256(x, y, noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -206,7 +204,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * hash256(x, y, ctr, x + y - ctr, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * Noise.HastyPointHash.hash256(x, y, noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -216,14 +214,44 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * hash256(ctr + x, x - ctr, y - ctr, 
-                                    ctr - y, x + y, y - x, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * castle256(x, y, noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
                         }
                     }
                     break;
+//                case 1:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = (float) (db = 0x1p-8 * hash256(x, y, ctr, noise.getSeed()));
+//                            real[x][y] = db;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
+//                case 2:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = (float) (db = 0x1p-8 * hash256(x, y, ctr, x + y - ctr, noise.getSeed()));
+//                            real[x][y] = db;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
+//                case 3:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = (float) (db = 0x1p-8 * hash256(ctr + x, x - ctr, y - ctr, 
+//                                    ctr - y, x + y, y - x, noise.getSeed()));
+//                            real[x][y] = db;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
             }
         }
         else if(mode == 2){
@@ -326,7 +354,25 @@ public class FFTVisualizer extends ApplicationAdapter {
         }
         renderer.end();
     }
-    
+
+    /**
+     * For whatever reason, this makes output that looks like castles, kinda.
+     * @param x
+     * @param y
+     * @param s
+     * @return
+     */
+    private double castle256(long x, long y, long s) {
+//        x *= 0xD1B54A32D192ED03L;
+//        y *= 0xABC98388FB8FAC03L;
+//        s *= 0x8CB92BA72F3D8DD7L;
+        x = (x + 0x8CB92BA72F3D8DD7L ^ x) * (s ^ s >>> 31) + y;
+        y = (y + 0xD1B54A32D192ED03L ^ y) * (x ^ x >>> 31) + s;
+        s = (s + 0xABC98388FB8FAC03L ^ s) * (y ^ y >>> 31) + x;
+        return s >>> 56;
+//        return (s ^ s >>> 25) & 0xFF;
+    }
+
     public static byte getBlue(int x, int y, int s){
         final int m = Integer.bitCount(ALT_NOISE[(x + 23 >>> 6) + (y + 41 >>> 6) + (s >>> 6) & 63][(x + 23 << 6 & 0xFC0) | (y + 41 & 0x3F)] + 128) 
                 * Integer.bitCount(ALT_NOISE[(y + 17 >>> 6) - (x + 47 >>> 7) + (s >>> 12) & 63][(y + 17 << 6 & 0xFC0) | (x + 47 & 0x3F)] + 128)
@@ -360,7 +406,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     public void render() {
         // not sure if this is always needed...
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        Gdx.graphics.setTitle(String.valueOf(Gdx.graphics.getFramesPerSecond()));
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS on mode " + mode + ", dim " + dim);
             // standard clear the background routine for libGDX
             Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
