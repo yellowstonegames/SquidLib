@@ -363,15 +363,15 @@ public class FFTVisualizer extends ApplicationAdapter {
      * @return
      */
     private double castle256(long x, long y, long s) {
-//        x *= 0xD1B54A32D192ED03L;
-//        y *= 0xABC98388FB8FAC03L;
-//        s *= 0x8CB92BA72F3D8DD7L;
         x = (x + 0x8CB92BA72F3D8DD7L ^ x) * (s ^ s >>> 31) + y;
         y = (y + 0xD1B54A32D192ED03L ^ y) * (x ^ x >>> 31) + s;
         s = (s + 0xABC98388FB8FAC03L ^ s) * (y ^ y >>> 31) + x;
         return s >>> 56;
-//        return (s ^ s >>> 25) & 0xFF;
     }
+//        x *= 0xD1B54A32D192ED03L;
+//        y *= 0xABC98388FB8FAC03L;
+//        s *= 0x8CB92BA72F3D8DD7L;
+//        return (s ^ s >>> 25) & 0xFF;
 
     public static byte getBlue(int x, int y, int s){
         final int m = Integer.bitCount(ALT_NOISE[(x + 23 >>> 6) + (y + 41 >>> 6) + (s >>> 6) & 63][(x + 23 << 6 & 0xFC0) | (y + 41 & 0x3F)] + 128) 
