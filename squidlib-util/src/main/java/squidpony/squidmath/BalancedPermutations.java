@@ -96,7 +96,7 @@ public class BalancedPermutations {
 					int t = items[i - 1] + d;
 					if (t >= 0 && t < size && targets[t] != -1) {
 						items[i] = t;
-						targets[t - 1] = -1;
+						targets[t] = -1;
 						delta[j] = 0;
 						break;
 					} else d = 0;
@@ -112,32 +112,56 @@ public class BalancedPermutations {
 		}
 	}
 	
-	public GreasedRegion rotatedGrid(int sizeRoot){
-		int size = sizeRoot * sizeRoot;
-		GreasedRegion region = new GreasedRegion(size, size);
+	public GreasedRegion rotatedGrid(){
+		int size2 = size * size;
+		GreasedRegion region = new GreasedRegion(size2, size2);
 		int px, py = 0;
-		for (int x = 0; x < sizeRoot; x++) {
-			px = sizeRoot - 1 + x * sizeRoot;
-			for (int y = 0; y < sizeRoot; y++) {
-				region.insert(px--, py + y * sizeRoot);
+		for (int x = 0; x < size; x++) {
+			px = size - 1 + x * size;
+			for (int y = 0; y < size; y++) {
+				region.insert(px--, py + y * size);
 			}
 			py++;
 		}
 		return region;
 	}
-	
-	public GreasedRegion shuffledGrid(int sizeRoot){
-		int[] xPerm = new int[sizeRoot], yPerm = new int[sizeRoot];
+
+	public GreasedRegion shuffledGrid(){
+		int[] xPerm = new int[size], yPerm = new int[size];
 		fill(xPerm);
 		fill(yPerm);
-		int size = sizeRoot * sizeRoot;
-		GreasedRegion region = new GreasedRegion(size, size);
+		int size2 = size * size;
+		GreasedRegion region = new GreasedRegion(size2, size2);
 		int px, py;
-		for (int x = 0; x < sizeRoot; x++) {
-			px = sizeRoot - 1;
+		for (int x = 0; x < size; x++) {
+			px = size - 1;
 			py = yPerm[x];
-			for (int y = 0; y < sizeRoot; y++) {
-				region.insert(px - xPerm[y] + xPerm[x] * sizeRoot, py + yPerm[y] * sizeRoot);
+			for (int y = 0; y < size; y++) {
+				region.insert(px - xPerm[y] + xPerm[x] * size, py + yPerm[y] * size);
+			}
+		}
+		return region;
+	}
+
+	public GreasedRegion shuffledGridMultiple(int repeats){
+		int[] xPerm = new int[size], yPerm = new int[size], rxPerm = new int[size], ryPerm = new int[size];
+		repeats = (repeats + size - 1) % size;
+		fill(xPerm);
+		fill(yPerm);
+		fill(rxPerm);
+		fill(ryPerm);
+		int size2 = size * size;
+		GreasedRegion region = new GreasedRegion(size2, size2);
+		int px, py, rx, ry;
+		for (int r = 0; r <= repeats; r++) {
+			rx = rxPerm[r];
+			ry = ryPerm[r];
+			for (int x = 0; x < size; x++) {
+				px = size - 1;
+				py = yPerm[x];
+				for (int y = 0; y < size; y++) {
+					region.insert(px - xPerm[y] + xPerm[(x + rx) % size] * size, py + yPerm[(y + ry) % size] * size);
+				}
 			}
 		}
 		return region;

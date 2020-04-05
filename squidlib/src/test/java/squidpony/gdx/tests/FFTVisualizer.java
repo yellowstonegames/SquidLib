@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.squidmath.BlueNoise;
-import squidpony.squidmath.FastNoise;
-import squidpony.squidmath.FoamNoise;
-import squidpony.squidmath.Noise;
+import squidpony.squidmath.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -23,6 +20,8 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
     private FoamNoise foam = new FoamNoise(1234567890L);
+    private BalancedPermutations perm = new BalancedPermutations(16, 123456789L, 987654321L);
+    private GreasedRegion region;
     private static final int MODE_LIMIT = 4;
     private int mode = 0;
     private int dim = 0; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
@@ -32,8 +31,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     private boolean inverse = false;
     private ImmediateModeRenderer20 renderer;
     
-    private static final int width = 512, height = 512;
-//    private static final int width = 256, height = 256;
+//    private static final int width = 512, height = 512;
+    private static final int width = 256, height = 256;
     private final double[][] real = new double[width][height], imag = new double[width][height];
     private final float[][] colors = new float[width][height];
     private InputAdapter input;
@@ -55,6 +54,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height * 2, false, true, 0);
         view = new ScreenViewport();
+        region = perm.shuffledGridMultiple(15);
         input = new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
@@ -108,6 +108,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         break;
                     case K: // sKip
                         ctr += 1000;
+                        region = perm.shuffledGridMultiple(15);
                         break;
                     case Q:
                     case ESCAPE: {
@@ -324,7 +325,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (getBlue(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -334,14 +335,13 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = region.contains(x, y) ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
                         }
                     }
                     break;
-
             }
         }
         Fft.transform2D(real, imag);
