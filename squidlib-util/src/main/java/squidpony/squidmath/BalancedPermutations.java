@@ -15,11 +15,11 @@ public class BalancedPermutations {
 	/**
 	 * Can be any long.
 	 */
-	private long stateA = 12345678987654321L; //System.nanoTime();
+	private long stateA;
 	/**
 	 * Must be odd.
 	 */
-	private long stateB = 0x1337DEADBEEFL;
+	private long stateB;
 
 	public BalancedPermutations(){
 		this(16,
@@ -110,5 +110,36 @@ public class BalancedPermutations {
 				}
 			}
 		}
+	}
+	
+	public GreasedRegion rotatedGrid(int sizeRoot){
+		int size = sizeRoot * sizeRoot;
+		GreasedRegion region = new GreasedRegion(size, size);
+		int px, py = 0;
+		for (int x = 0; x < sizeRoot; x++) {
+			px = sizeRoot - 1 + x * sizeRoot;
+			for (int y = 0; y < sizeRoot; y++) {
+				region.insert(px--, py + y * sizeRoot);
+			}
+			py++;
+		}
+		return region;
+	}
+	
+	public GreasedRegion shuffledGrid(int sizeRoot){
+		int[] xPerm = new int[sizeRoot], yPerm = new int[sizeRoot];
+		fill(xPerm);
+		fill(yPerm);
+		int size = sizeRoot * sizeRoot;
+		GreasedRegion region = new GreasedRegion(size, size);
+		int px, py;
+		for (int x = 0; x < sizeRoot; x++) {
+			px = sizeRoot - 1;
+			py = yPerm[x];
+			for (int y = 0; y < sizeRoot; y++) {
+				region.insert(px - xPerm[y] + xPerm[x] * sizeRoot, py + yPerm[y] * sizeRoot);
+			}
+		}
+		return region;
 	}
 }
