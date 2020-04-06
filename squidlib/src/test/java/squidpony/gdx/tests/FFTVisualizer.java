@@ -54,7 +54,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height * 2, false, true, 0);
         view = new ScreenViewport();
-        region = perm.shuffledGridMultiple(15);
+        region = perm.shuffledGrid();
         input = new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
@@ -108,7 +108,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         break;
                     case K: // sKip
                         ctr += 1000;
-                        region = perm.shuffledGridMultiple(15);
+                        region = perm.shuffledGrid();
                         break;
                     case Q:
                     case ESCAPE: {

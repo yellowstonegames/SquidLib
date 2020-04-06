@@ -14,7 +14,13 @@ import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A text generator for producing sentences and/or words in nonsense languages that fit a theme. This does not use an
@@ -78,7 +84,7 @@ public class FakeLanguageGen implements Serializable {
     //аеёийоуъыэюябвгдклпрстфхцжмнзчшщ
     //АЕЁИЙОУЪЫЭЮЯБВГДКЛПРСТФХЦЖМНЗЧШЩ
 
-    static final Pattern[]
+    private static final Pattern[]
             vulgarChecks = new Pattern[]
             {
                     //17 is REFlags.UNICODE | REFlags.IGNORE_CASE
@@ -155,14 +161,14 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("(.)\\1\\1"),
                             Pattern.compile("-[^aeiou](?:[^aeiou]|$)"),
                     };
-    static final Replacer[]
+    private static final Replacer[]
             accentFinders = new Replacer[]
             {
-                    Pattern.compile("[àáâãäåāăąǻ]").replacer("a"),
-                    Pattern.compile("[èéêëēĕėęě]").replacer("e"),
-                    Pattern.compile("[ìíîïĩīĭįı]").replacer("i"),
-                    Pattern.compile("[òóôõöøōŏőǿ]").replacer("o"),
-                    Pattern.compile("[ùúûüũūŭůűų]").replacer("u"),
+                    Pattern.compile("[àáâäăāãåąǻ]").replacer("a"),
+                    Pattern.compile("[èéêëĕēėęě]").replacer("e"),
+                    Pattern.compile("[ìíîïĭīĩįı]").replacer("i"),
+                    Pattern.compile("[òóôöŏōõøőǿ]").replacer("o"),
+                    Pattern.compile("[ùúûüŭūũůűų]").replacer("u"),
                     Pattern.compile("[æǽ]").replacer("ae"),
                     Pattern.compile("œ").replacer("oe"),
                     Pattern.compile("[ÀÁÂÃÄÅĀĂĄǺ]").replacer("A"),
@@ -208,21 +214,11 @@ public class FakeLanguageGen implements Serializable {
             };
 
     static final char[][] accentedVowels = new char[][]{
-            new char[]{
-                    'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'ą', 'ǻ'
-            },
-            new char[]{
-                    'e', 'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'
-            },
-            new char[]{
-                    'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ı',
-            },
-            new char[]{
-                    'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'ǿ'
-            },
-            new char[]{
-                    'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ų'
-            }
+            new char[]{'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'ą', 'ǻ'},
+            new char[]{'e', 'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'},
+            new char[]{'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ı',},
+            new char[]{'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'ǿ'},
+            new char[]{'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ų'}
     },
             accentedConsonants = new char[][]
                     {
@@ -2970,6 +2966,108 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen CHEROKEE_ROMANIZED = cherokee().register("Cherokee Romanized");
 
+    private static final FakeLanguageGen vietnamese() {
+        return new FakeLanguageGen(new String[]{
+                "a", "à", "á", "â", "ä", "ā", "ă",
+                "e", "è", "é", "ê", "ë", "ē", "ĕ",
+                "i", "ì", "í", "î", "ï", "ī", "ĭ",
+                "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                "u", "ù", "ú", "û", "ü", "ū", "ŭ",
+        },
+                new String[]{
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "e", "è", "é", "ê", "ë", "ē", "ĕ",
+                        "i", "ì", "í", "î", "ï", "ī", "ĭ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "u", "ù", "ú", "û", "ü", "ū", "ŭ",
+
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "e", "è", "é", "ê", "ë", "ē", "ĕ",
+                        "i", "ì", "í", "î", "ï", "ī", "ĭ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "u", "ù", "ú", "û", "ü", "ū", "ŭ",
+
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "a", "à", "á", "â", "ä", "ā", "ă",
+                        "e", "è", "é", "ê", "ë", "ē", "ĕ",
+                        "i", "ì", "í", "î", "ï", "ī", "ĭ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "o", "ò", "ó", "ô", "ö", "ō", "ŏ",
+                        "u", "ù", "ú", "û", "ü", "ū", "ŭ",
+
+                        "ua", "uà", "uá", "uâ", "uä", "uā", "uă",
+                        "ie", "iè", "ié", "iê", "ië", "iē", "iĕ",
+                        "ie", "iè", "ié", "iê", "ië", "iē", "iĕ",
+                        "ie", "ìe", "íe", "îe", "ïe", "īe", "ĭe",
+                        "iu", "ìu", "íu", "îu", "ïu", "īu", "ĭu",
+                        "oi", "òi", "ói", "ôi", "öi", "ōi", "ŏi",
+                        "uo", "ùo", "úo", "ûo", "üo", "ūo", "ŭo",
+                        "uo", "ùo", "úo", "ûo", "üo", "ūo", "ŭo",
+
+                        "y", "y", "y", "y", "y", "y", "y",
+                        "ye", "yè", "yé", "yê", "yë", "yē", "yĕ",
+                },
+                new String[]{
+                        "b", "c", "ch", "d", "ð", "g", "h", "k", "kh", "l", "m", "n", "ng", "nh", "p", "ph", "qu", "r",
+                        "s", "t", "th", "tr", "v", "x",
+                        "b", "c", "d", "ð", "h", "l", "m", "n", "ng", "p", "ph", "t", "th", "tr", "v",
+                        "b", "c", "d", "ð", "h", "l", "m", "n", "ng", "p", "ph", "t", "th", "tr", "v",
+                        "b", "c", "d", "h", "l", "m", "n", "ng", "p", "ph", "t", "th", "tr", "v",
+                        "b", "c", "d", "l", "n", "ng", "p", "ph", "th", "tr",
+                        "b", "c", "d", "l", "n", "ng", "p", "ph", "th", "tr",
+                        "b", "c", "d", "l", "n", "ng", "p",
+                        "b", "c", "d", "l", "n", "ng", "p",
+                        "b", "c", "d", "l", "n", "ng", "p",
+                }, new String[]{
+                "b", "c", "ch", "d", "ð", "g", "h", "k", "kh", "l", "m", "n", "ng", "nh", "p", "ph", "qu", "r",
+                "s", "t", "th", "tr", "v", "x",
+                "b", "c", "d", "ð", "h", "l", "m", "n", "ng", "p", "ph", "t", "th", "tr", "v",
+                "b", "c", "d", "ð", "h", "l", "m", "n", "ng", "p", "ph", "t", "th", "tr", "v",
+                "b", "c", "d", "h", "l", "m", "n", "ng", "p", "ph", "t", "th", "tr", "v",
+                "b", "c", "d", "l", "n", "ng", "p", "ph", "t", "th", "tr",
+                "b", "c", "d", "l", "n", "ng", "p", "ph", "t", "th", "tr",
+                "b", "c", "d", "l", "n", "ng", "p", "t",
+                "b", "c", "d", "l", "n", "ng", "p", "t",
+                "b", "c", "d", "l", "n", "ng", "p",
+        },
+                new String[]{
+                        "b", "c", "ch", "d", "ð", "g", "h", "k", "kh", "m", "m", "n", "ng", "nh", "p", "ch", "r",
+                        "s", "t", "x",
+                        "b", "c", "d", "ð", "h", "m", "m", "n", "ng", "p", "n", "t", "nh", "ng", "c",
+                        "b", "c", "d", "ð", "h", "m", "m", "n", "ng", "p", "n", "t", "nh", "ng", "c",
+                        "b", "c", "d", "h", "m", "m", "n", "ng", "p", "n", "t", "nh", "ng", "c",
+                        "b", "c", "d", "m", "n", "ng", "p", "n", "t", "nh", "ng",
+                        "b", "c", "d", "m", "n", "ng", "p", "n", "t", "nh", "ng",
+                        "b", "c", "d", "m", "n", "ng", "p", "t",
+                        "b", "c", "d", "m", "n", "ng", "p", "t",
+                        "b", "c", "d", "m", "n", "ng", "p",
+                }, new String[]{}, new String[]{}, new int[]{1, 2, 3}, new double[]{37.0, 3.0, 1.0},
+                0.04, 0.4, 0.0, 0.0, genericSanityChecks, true);
+    }
+    /**
+     * A very rough imitation of the Vietnamese language, without using the accurate characters Vietnamese really uses
+     * but that are rare in fonts. Since so many letters in correct Vietnamese aren't available in most fonts, this
+     * can't represent most of the accented vowels in the language, but it tries, with 6 accents for each of a, e, i, o,
+     * and u, though none for y. It also uses 'ð' from Icelandic in place of the correct d with bar. This could also
+     * maybe be used as an approximation of (badly) Romanized Thai, since Thai normally uses its own script but also has
+     * many tones (which would be indicated by the accents here).
+     * <br>
+     * Bach trich, nŏ ngiukh nga cä tran ngonh... 
+     */
+    public static final FakeLanguageGen VIETNAMESE = vietnamese().register("Vietnamese");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
@@ -3029,7 +3127,7 @@ public class FakeLanguageGen implements Serializable {
     public static final FakeLanguageGen[] romanizedHumanLanguages = {
             ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE_SIMPLIFIED, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH,
             MAORI, GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI, CROW, 
-            ANCIENT_EGYPTIAN, MALAY, CHINESE_ROMANIZED, CHEROKEE_ROMANIZED
+            ANCIENT_EGYPTIAN, MALAY, CHINESE_ROMANIZED, CHEROKEE_ROMANIZED, VIETNAMESE
     };
 
     /**
