@@ -367,8 +367,8 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     public static long determine(int state)
     {
         int r = (state ^ 0xD1B54A35) * 0x102473;
-        r = (r = (r ^ r >>> 11 ^ r >>> 21) * (r | 0xFFE00001)) ^ r >>> 13 ^ r >>> 19;
-        return ((long) r << 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL);
+        return ((long) ((r = (r ^ r >>> 11 ^ r >>> 21) * (r | 0xFFE00001)) ^ r >>> 13 ^ r >>> 19) << 32) 
+                | (((state = ((state = (r ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL);
     }
     /**
      * A deterministic random float generator that, given one int {@code state} as input, returns an 
