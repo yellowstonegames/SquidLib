@@ -13,6 +13,7 @@ import squidpony.squidmath.*;
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static squidpony.squidmath.BlueNoise.ALT_NOISE;
+import static squidpony.squidmath.BlueNoise.getChosen;
 
 /**
  */
@@ -384,23 +385,23 @@ public class FFTVisualizer extends ApplicationAdapter {
                 >>> 1;
         return (byte) (ALT_NOISE[s & 63][(y + (m >>> 7) - (n >>> 7) << 6 & 0xFC0) | (x + (n >>> 7) - (m >>> 7) & 0x3F)] ^ (m ^ n));
     }
-
-    public static byte getChosen(int x, int y, int seed){
-        // hash for a 64x64 tile on the "normal grid"
-        final int h = Noise.IntPointHash.hashAll(x >>> 6, y >>> 6, seed);
-        // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
-        //final int xc = x * 0xC13FA9A9 >>> 24;
-        //final int yc = y * 0x91E10DA5 >>> 24;
-        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
-        // likely to be a different noise tile, and the x,y position is transposed
-        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
-        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
-        final int ax = ((xc) * (xc+1) * 47 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
-        final int ay = ((yc) * (yc+1) * 47 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
-        // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
-        // this transposes x and y again, it seems to help with the particular blue noise textures we have
-        return ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(x << 6 & 0xFC0) | (y & 0x3F)];
-    }
+//
+//    public static byte getChosen(int x, int y, int seed){
+//        // hash for a 64x64 tile on the "normal grid"
+//        final int h = Noise.IntPointHash.hashAll(x >>> 6, y >>> 6, seed);
+//        // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
+//        //final int xc = x * 0xC13FA9A9 >>> 24;
+//        //final int yc = y * 0x91E10DA5 >>> 24;
+//        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+//        // likely to be a different noise tile, and the x,y position is transposed
+//        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
+//        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
+//        final int ax = ((xc) * (xc+1) * 47 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
+//        final int ay = ((yc) * (yc+1) * 47 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
+//        // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
+//        // this transposes x and y again, it seems to help with the particular blue noise textures we have
+//        return ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(x << 6 & 0xFC0) | (y & 0x3F)];
+//    }
 
     @Override
     public void render() {

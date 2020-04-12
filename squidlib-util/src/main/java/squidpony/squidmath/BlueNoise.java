@@ -134,6 +134,25 @@ public class BlueNoise {
     }
 
     /**
+     * Gets a byte from the raw data this stores, treating it as an infinite 3D space of tiling 64x64x64 regions. You
+     * can interpret the blue noise in many ways, but it is meant to be used with a threshold to select mostly
+     * widely-spaced points when the threshold requires values greater than 100 or less than -100, or irregularly-shaped
+     * patterns of points when the threshold is in the middle, like for values less than 0. This tiles extremely well,
+     * or at least it appears so for a human; computers can detect the repetitive nature of this blue noise quite 
+     * easily. The blue noise property is only really preserved for slices of noise with the same z; changing z can be
+     * used to select a 2D noise plane as well.
+     * <a href="https://i.imgur.com/VHtsR7X.png">Blue noise at left, magnitude histogram at right.</a>
+     *
+     * @param x x position, can be any int; results will repeat every 64 cells
+     * @param y y position, can be any int; results will repeat every 64 cells
+     * @param z z position, can be any int; results will repeat every 64 cells, but this is different from x and y
+     * @return a byte that obeys a blue-noise distribution, so a value is only next to a similar value very rarely
+     */
+    public static byte get(final int x, final int y, final int z) {
+        return ALT_NOISE[z & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+    }
+
+    /**
      * Gets a byte from some raw data at least 4096 bytes in length, treating it as an infinite 2D plane
      * of tiling 64x64 regions. You probably want to get the noiseData from an element of {@link #ALT_NOISE}.
      *
@@ -145,6 +164,36 @@ public class BlueNoise {
     public static byte get(final int x, final int y, final byte[] noiseData) {
         return noiseData[(y << 6 & 0xFC0) | (x & 0x3F)];
     }
+    /**
+     * A mix of white noise and blue noise that has very few patterns detectable in frequency space, though it has some
+     * artifacts detectable to the human eye. <a href="https://i.imgur.com/Wm6RyXN.png">Blue noise at left, magnitude
+     * histogram at right.</a> This works by choosing from one of four nearby blue noise tiles and using it as-is, with
+     * the choice determined by an initial blue noise sample from a non-tiling blue noise tile, weighted heavily based
+     * on how close a pixel is to a border between the four noise tiles. Compared to {@link #getSeeded(int, int, int)},
+     * the "progressive" quality of the blue noise this uses is preserved better, meaning if you get the set of points
+     * with values under or over a certain value, that set is still usually blue noise. (Keeping this quality is quite
+     * hard for blue noise textures generated from combining existing tiles!)
+     * @param x      x position, can be any int; results will not repeat for a very long time
+     * @param y      y position, can be any int; results will not repeat for a very long time
+     * @param seed   seed value, can be any int; should be the same for all calls that should be from the same 2D plane
+     * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
+     */
+    public static byte getChosen(int x, int y, int seed){
+        seed ^= (x >>> 6) * 0x1827F5 ^ (y >>> 6) * 0x123C21;
+        // hash for a 64x64 tile on the "normal grid"
+        int h = (seed = (seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493) ^ seed >>> 11;
+        // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
+        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+        // likely to be a different noise tile, and the x,y position is transposed
+        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
+        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
+        final int ax = ((xc) * (xc+1) << 6 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
+        final int ay = ((yc) * (yc+1) << 6 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
+        // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
+        // this transposes x and y again, it seems to help with the particular blue noise textures we have
+        h ^= (ax >>> 6) * 0x1827F5 ^ (ay >>> 6) * 0x123C21;
+        return ALT_NOISE[(h ^ (h << 19 | h >>> 13) ^ (h << 5 | h >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26][(x << 6 & 0xFC0) | (y & 0x3F)];
+    }
 
     /**
      * Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
@@ -152,7 +201,8 @@ public class BlueNoise {
      * it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in places, like TV static.
      * This chooses a sub-array from {@link #ALT_NOISE} based on the seed, and the same seed will use the same sub-array
      * in all locations. This tends to look less scratchy than {@link #getChosen(int, int, int)}, but has worse measured
-     * repetitive qualities.
+     * repetitive qualities. The "progressive" quality of the blue noise this uses is not well-preserved, meaning if you
+     * get the set of points with values under or over a certain value, that set doesn't usually resemble blue noise.
      * <a href="https://i.imgur.com/jBc8TNK.png">Blue noise at left, magnitude histogram at right.</a>
      *
      * @param x    x position, can be any int; results will not repeat for a very long time
@@ -192,8 +242,9 @@ public class BlueNoise {
      * sections of noise so patterns are much less noticeable. Unlike {@link #get(int, int)}, this won't repeat every 64
      * cells on x or y, but it isn't as correct at matching blue-noise frequencies, and tends to look "scratchy" in
      * places, like TV static. You probably want to get the noiseData from an element of {@link #ALT_NOISE}; unlike
-     * {@link #getSeeded(int, int, int)}, this won't choose a different byte array, and will always use the
-     * given {@code noiseData}.
+     * {@link #getSeeded(int, int, int)}, this won't choose a different byte array, and will always use the given
+     * {@code noiseData}. The "progressive" quality of the blue noise this uses is not well-preserved, meaning if you
+     * get the set of points with values under or over a certain value, that set doesn't usually resemble blue noise.
      *
      * @param x         x position, can be any int; results will not repeat for a very long time
      * @param y         y position, can be any int; results will not repeat for a very long time
@@ -207,33 +258,6 @@ public class BlueNoise {
                 ((seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 15 & 63)
                 ^ (x + x + y >> 2 & 0x3F) ^ (x - y - y >> 2 & 0x3F));
     }
-
-    /**
-     * A mix of white noise and blue noise that has very few patterns detectable in frequency space, though it has some
-     * artifacts detectable to the human eye. <a href="https://i.imgur.com/Wm6RyXN.png">Blue noise at left, magnitude
-     * histogram at right.</a> This works by choosing from one of four nearby blue noise tiles and using it as-is, with
-     * the choice determined by an initial blue noise sample from a non-tiling blue noise tile, weighted heavily based
-     * on how close a pixel is to a border between the four noise tiles.
-     * @param x      x position, can be any int; results will not repeat for a very long time
-     * @param y      y position, can be any int; results will not repeat for a very long time
-     * @param seed   seed value, can be any int; should be the same for all calls that should be from the same 2D plane
-     * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
-     */
-    public static byte getChosen(int x, int y, int seed){
-        // hash for a 64x64 tile on the "normal grid"
-        final int h = Noise.IntPointHash.hashAll(x >>> 6, y >>> 6, seed);
-        // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
-        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
-        // likely to be a different noise tile, and the x,y position is transposed
-        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
-        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
-        final int ax = ((xc) * (xc+1) << 6 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
-        final int ay = ((yc) * (yc+1) << 6 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
-        // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
-        // this transposes x and y again, it seems to help with the particular blue noise textures we have
-        return ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(x << 6 & 0xFC0) | (y & 0x3F)];
-    }
-
 
     /**
      * A 256-element array of {@link GreasedRegion}s, each 64x64, where the first GreasedRegion has an impossibly strict
@@ -282,7 +306,7 @@ public class BlueNoise {
         int t, rx, ry, ctr;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                toFill[x][y] = (getSeeded(x + xOffset, y, seed0) + getSeeded(x, y + yOffset, seed1) + 256) >> 1;
+                toFill[x][y] = (getChosen(x + xOffset, y, seed0) - getChosen(x, y + yOffset, seed1) + 256) >> 1;
             }
         }
         int[] ox = new int[width], oy = new int[height];
