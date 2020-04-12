@@ -3457,10 +3457,10 @@ public class CrossHash {
                     c = 0xAD55190966BDE20BL, d = 0x59C2CEA6AE94403L;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                a = (data[i-3] ^ a) * b1; a = (a << 23 | a >>> 41) * b3;
-                b = (data[i-2] ^ b) * b2; b = (b << 25 | b >>> 39) * b4;
-                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35) * b5;
-                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33) * b1;
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
                 seed += a + b + c + d;
             }
             seed += b5;
