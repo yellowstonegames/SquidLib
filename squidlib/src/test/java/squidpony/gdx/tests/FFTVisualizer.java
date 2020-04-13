@@ -357,16 +357,20 @@ public class FFTVisualizer extends ApplicationAdapter {
     }
 
     /**
-     * For whatever reason, this makes output that looks like castles, kinda.
-     * @param x
-     * @param y
-     * @param s
-     * @return
+     * For whatever reason, this makes output that looks like castles or carpets, kinda.
+     * The explanation seems to be that each input is XORed with a large constant plus itself.
+     * The constant does not seem to matter; here we use the golden ratio times 2 to the 64,
+     * but earlier versions used 3 different numbers. Without the xor-by-constant-plus-itself,
+     * this is an ordinary point hash, though not the highest quality.
+     * @param x x position, as any long
+     * @param y y position, as any long
+     * @param s seed, as any long
+     * @return a highly artifact-laden hash from 0 to 255, both inclusive
      */
-    private double castle256(long x, long y, long s) {
-        x = (x + 0x8CB92BA72F3D8DD7L ^ x) * (s ^ s >>> 31) + y;
-        y = (y + 0xD1B54A32D192ED03L ^ y) * (x ^ x >>> 31) + s;
-        s = (s + 0xABC98388FB8FAC03L ^ s) * (y ^ y >>> 31) + x;
+    public static long castle256(long x, long y, long s) {
+        x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + y);
+        y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+        s = (s + 0x9E3779B97F4A7C15L ^ s) * (y + x);
         return s >>> 56;
     }
 //        x *= 0xD1B54A32D192ED03L;
