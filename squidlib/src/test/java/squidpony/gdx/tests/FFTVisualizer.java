@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -204,9 +205,17 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
                 case 2:
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = (float) (db = 0x1p-8 * Noise.HastyPointHash.hash256(x, y, noise.getSeed()));
+//                            real[x][y] = db;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * Noise.HastyPointHash.hash256(x, y, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * fancy256(x - (width >>> 1), y - (height >>> 1), noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -372,6 +381,29 @@ public class FFTVisualizer extends ApplicationAdapter {
         y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
         s = (s + 0x9E3779B97F4A7C15L ^ s) * (y + x);
         return s >>> 56;
+    }
+    public static int fancy256(int x, int y, int s) {
+//        s ^= (x >> 6) * 0xD1B5;
+//        s ^= (y >> 6) * 0xABC9;
+//        x *= x;
+//        y *= y;
+//        x = x >>> 1 & 63;
+//        y = y >>> 1 & 63;
+        x = Math.abs(x);
+        y = Math.abs(y);
+        int a, b;
+        if(x > y){
+            a = x;// * x + y;
+            b = y;// * y + x;
+        }
+        else {
+            a = y;// * y + x;
+            b = x;// * x + y;
+        }
+        a = (a + 0x9E3779B9 ^ a) * (s ^ b);
+        b = (b + 0x9E3779B9 ^ b) * (a ^ s);
+        s = (s + 0x9E3779B9 ^ s) * (b ^ a);
+        return s >>> 24;
     }
 //        x *= 0xD1B54A32D192ED03L;
 //        y *= 0xABC98388FB8FAC03L;
