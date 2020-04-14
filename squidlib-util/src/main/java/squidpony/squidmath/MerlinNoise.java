@@ -160,8 +160,8 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
                 x0y0 = (x0 * y0 ^ x0 - y0) >>> resolution, x1y0 = (x1 * y0 ^ x1 - y0) >>> resolution,
                 x0y1 = (x0 * y1 ^ x0 - y1) >>> resolution, x1y1 = (x1 * y1 ^ x1 - y1) >>> resolution;
 
-//                x0y0 = Noise.LongPointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.LongPointHash.hashAll(xb + 1, yb, state) >> resolution,
-//                x0y1 = Noise.LongPointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.LongPointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
+//                x0y0 = Noise.PointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.PointHash.hashAll(xb + 1, yb, state) >> resolution,
+//                x0y1 = Noise.PointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.PointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
 
 //                x0y0 = (x0y0b >> 2) + (ThrustAltRNG.determine(x0y0b + 1) >> 2)
 //                        + (ThrustAltRNG.determine(x0y0b + 2) >> 2) + (ThrustAltRNG.determine(x0y0b + 3) >> 2),
@@ -197,10 +197,10 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
                 x0y0z1 = (x0 * y0 * z1 ^ x0 - y0 + (z1 - x0 << 32 | y0 - z1 >>> 32)) >>> resolution, x1y0z1 = (x1 * y0 * z1 ^ x1 - y0 + (z1 - x1 << 32 | y0 - z1 >>> 32)) >>> resolution,
                 x0y1z1 = (x0 * y1 * z1 ^ x0 - y1 + (z1 - x0 << 32 | y1 - z1 >>> 32)) >>> resolution, x1y1z1 = (x1 * y1 * z1 ^ x1 - y1 + (z1 - x1 << 32 | y1 - z1 >>> 32)) >>> resolution;
 
-//                x0y0z0 = Noise.LongPointHash.hashAll(xb, yb, zb, state) >> resolution, x1y0z0 = Noise.LongPointHash.hashAll(xb + 1, yb, zb, state) >> resolution,
-//                x0y1z0 = Noise.LongPointHash.hashAll(xb, yb + 1, zb, state) >> resolution, x1y1z0 = Noise.LongPointHash.hashAll(xb + 1, yb + 1, zb, state) >> resolution,
-//                x0y0z1 = Noise.LongPointHash.hashAll(xb, yb, zb + 1, state) >> resolution, x1y0z1 = Noise.LongPointHash.hashAll(xb + 1, yb, zb + 1, state) >> resolution,
-//                x0y1z1 = Noise.LongPointHash.hashAll(xb, yb + 1, zb + 1, state) >> resolution, x1y1z1 = Noise.LongPointHash.hashAll(xb + 1, yb + 1, zb + 1, state) >> resolution;
+//                x0y0z0 = Noise.PointHash.hashAll(xb, yb, zb, state) >> resolution, x1y0z0 = Noise.PointHash.hashAll(xb + 1, yb, zb, state) >> resolution,
+//                x0y1z0 = Noise.PointHash.hashAll(xb, yb + 1, zb, state) >> resolution, x1y1z0 = Noise.PointHash.hashAll(xb + 1, yb + 1, zb, state) >> resolution,
+//                x0y0z1 = Noise.PointHash.hashAll(xb, yb, zb + 1, state) >> resolution, x1y0z1 = Noise.PointHash.hashAll(xb + 1, yb, zb + 1, state) >> resolution,
+//                x0y1z1 = Noise.PointHash.hashAll(xb, yb + 1, zb + 1, state) >> resolution, x1y1z1 = Noise.PointHash.hashAll(xb + 1, yb + 1, zb + 1, state) >> resolution;
 
 //                x0y0z0 = (x0y0z0b >> 2) + (ThrustAltRNG.determine(x0y0z0b + 1) >> 2)
 //                        + (ThrustAltRNG.determine(x0y0z0b + 2) >> 2) + (ThrustAltRNG.determine(x0y0z0b + 3) >> 2),
@@ -288,8 +288,8 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
 //            for (int x = 0; x < 10; x++) {
 //                for (int y = 0; y < 10; y++) {
 //                    long xb = x >>> resolution, yb = y >>> resolution, xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
-//                            x0y0 = Noise.LongPointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.LongPointHash.hashAll(xb + 1, yb, state) >> resolution,
-//                            x0y1 = Noise.LongPointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.LongPointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
+//                            x0y0 = Noise.PointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.PointHash.hashAll(xb + 1, yb, state) >> resolution,
+//                            x0y1 = Noise.PointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.PointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
 //                    long xly0 = lorp(x0y0, x1y0, xr, resolution), xly1 = lorp(x0y1, x1y1, xr, resolution),
 //                            yl = lorp(xly0, xly1, yr, resolution);
 //                    System.out.printf("x: %d, y: %d, r: %d = %08X\n", x, y, resolution, yl);// >> (- bits - resolution & 63));

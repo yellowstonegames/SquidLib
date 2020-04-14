@@ -1152,7 +1152,7 @@ public class MathVisualizer extends ApplicationAdapter {
                         yy = y + ctr;
                         //amounts[(int)((((seed = (((1234567L * (0x632BE59BD9B4E019L + (xx << 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (yy << 23)))) ^ seed >>> 27 ^ xx + yy) * 0xAEF17502108EF2D9L)
                         //        >>> 55)]++;
-                        amounts[Noise.HastyPointHash.hash256(xx, yy, seed)]++;
+                        amounts[HastyPointHash.hash256(xx, yy, seed)]++;
                         //amounts[((int) (((seed = 1234567L ^ 0xB4C4D * xx ^ 0xEE2C3 * yy) ^ seed >>> 13) * seed) >>> 24)]++;
                     }
                 }

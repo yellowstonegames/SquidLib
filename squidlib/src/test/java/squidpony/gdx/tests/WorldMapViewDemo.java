@@ -177,7 +177,7 @@ public class WorldMapViewDemo extends ApplicationAdapter {
         long startTime = System.nanoTime();
 //        noiseCalls = 0;
 //        world.zoomIn(1, zoomX, zoomY);
-        inner.rng.setState(Noise.HastyPointHash.hashAll(zoomX, zoomY, world.rng.getState()));
+        inner.rng.setState(HastyPointHash.hashAll(zoomX, zoomY, world.rng.getState()));
         float[][] colors = wmv.getColorMap();
         wmv.match(colors[zoomX][zoomY],
                 colors[(zoomX + 2) % colors.length][zoomY],

@@ -196,7 +196,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 1:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * Noise.LongPointHash.hash256(x, y, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * PointHash.hash256(x, y, noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);

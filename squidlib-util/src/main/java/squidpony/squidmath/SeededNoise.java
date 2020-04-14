@@ -47,7 +47,7 @@
  */
 package squidpony.squidmath;
 
-import static squidpony.squidmath.Noise.HastyPointHash.hash256;
+import static squidpony.squidmath.HastyPointHash.hash256;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
@@ -490,7 +490,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @return a double between -1.2571 and 1.2571, exclusive
      */
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
-        final int hash = Noise.HastyPointHash.hash32(x, y, z, seed) * 3;
+        final int hash = HastyPointHash.hash32(x, y, z, seed) * 3;
         return xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2];
     }
 
