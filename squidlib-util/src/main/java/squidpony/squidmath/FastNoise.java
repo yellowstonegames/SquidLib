@@ -31,7 +31,7 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.IntPointHash.*;
+import static squidpony.squidmath.IntPointHash.*;
 
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's

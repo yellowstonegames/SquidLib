@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -187,7 +186,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 0:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * Noise.IntPointHash.hash256(x, y, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * IntPointHash.hash256(x, y, noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -197,7 +196,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 1:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * Noise.PointHash.hash256(x, y, noise.getSeed()));
+                            bright = (float) (db = 0x1p-8 * Noise.LongPointHash.hash256(x, y, noise.getSeed()));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);

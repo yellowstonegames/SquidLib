@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import static squidpony.squidgrid.gui.gdx.SColor.*;
-import static squidpony.squidmath.Noise.PointHash.hashAll;
 import static squidpony.squidmath.NumberTools.swayTight;
 
 /**
@@ -1134,38 +1133,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return s >>> 10 & 0x3FF;
     }
 
-//        return 0xC13FB * x + 0x91E11 * y >>> 12 & 0xFF;
-//        s += 0xD1B55 * x ^ 0xABC99 * y ^ 0x8CB93 * s;
-
-    public static float beachNoise(final long seed, final float xin, final float yin, final float zin)
-    {
-        final float
-                x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.3125f - zin * 0.78125f) * 0.5f,
-                y = yin + NumberTools.swayRandomized(seed + 999999L, zin * 0.3125f - xin * 0.78125f) * 0.5f,
-                z = zin + NumberTools.swayRandomized(seed + 99999999L, xin * 0.3125f - yin * 0.78125f) * 0.5f;
-        final long floorx = Noise.longFloor(x), floory = Noise.longFloor(y), floorz = Noise.longFloor(z);
-        final float x0y0z0 = (hashAll(floorx, floory, floorz, seed)) * 0x0.ffffffbp-63f,
-                x1y0z0 = (hashAll(floorx + 1L, floory, floorz, seed)) * 0x0.ffffffbp-63f,
-                x0y1z0 = (hashAll(floorx, floory + 1, floorz, seed)) * 0x0.ffffffbp-63f,
-                x1y1z0 = (hashAll(floorx + 1L, floory + 1L, floorz, seed)) * 0x0.ffffffbp-63f,
-                x0y0z1 = (hashAll(floorx, floory, floorz + 1, seed)) * 0x0.ffffffbp-63f,
-                x1y0z1 = (hashAll(floorx + 1L, floory, floorz + 1, seed)) * 0x0.ffffffbp-63f,
-                x0y1z1 = (hashAll(floorx, floory + 1, floorz + 1, seed)) * 0x0.ffffffbp-63f,
-                x1y1z1 = (hashAll(floorx + 1L, floory + 1L, floorz + 1, seed)) * 0x0.ffffffbp-63f;
-        float ax = x - floorx, ay = y - floory, az = z - floorz;
-        ax *= ax * (3f - 2f * ax);
-        ay *= ay * (3f - 2f * ay);
-        az *= az * (3f - 2f * az);
-//        ax *= ax * ax * (ax * (ax * 6.0 - 15.0) + 10.0);
-//        ay *= ay * ay * (ay * (ay * 6.0 - 15.0) + 10.0);
-        return (1f - az) *
-                ((1f - ay) * ((1f - ax) * x0y0z0 + ax * x1y0z0) + ay * ((1f - ax) * x0y1z0 + ax * x1y1z0))
-                + az * ((1f - ay) * ((1f - ax) * x0y0z1 + ax * x1y0z1) + ay * ((1f - ax) * x0y1z1 + ax * x1y1z1));
-    }
-
-//        final float start = ((seed + floor * 0x9E377 ^ 0xD1B54A35) * 0x1D2473) * 0x0.ffffffp-31f,
-//                end = ((seed + (floor + 1) * 0x9E377 ^ 0xD1B54A35) * 0x1D2473) * 0x0.ffffffp-31f;
-
     public static float baseSway(int seed, float value)
     {
         //int fast floor
@@ -1200,17 +1167,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return a * 0.375f + b * 0.3125f + c * 0.1875f + d * 0.125f;
     }
 
-    public static double swayRandomized2(final long seed, final double xin, final double yin)
-    {
-        final double x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.75) * 0.375,
-                y = yin + NumberTools.swayRandomized(seed + 999999L, xin * 0.75) * 0.375;
-        final long floorX = Noise.longFloor(x), floorY = Noise.longFloor(y);
-        final double x0y0 = Noise.PointHash.hashAll(floorX, floorY, seed) * 0x0.fffffffffffffbp-63,
-                x1y0 = Noise.PointHash.hashAll(floorX + 1, floorY, seed) * 0x0.fffffffffffffbp-63,
-                x0y1 = Noise.PointHash.hashAll(floorX, floorY + 1, seed) * 0x0.fffffffffffffbp-63,
-                x1y1 = Noise.PointHash.hashAll(floorX + 1, floorY + 1, seed) * 0x0.fffffffffffffbp-63;
-        return Noise.cerp(Noise.cerp(x0y0, x1y0, x - floorX), Noise.cerp(x0y1, x1y1, x - floorX), y - floorY);
-    }
     public static float randomWobbleTight(float value, float alter1, float alter2, float alter3, float alter4)
     {
         return (swayTight(1.125f + value * alter1) +
@@ -1814,10 +1770,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Szudzik Hash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                //code = -(Noise.PointHash.hashAll(x, y, 123L) >>> extra & 1L) | 255L;
 //                                code = szudzikHash2D(x, y) & 0xFFFFFF00L | 255L;
                                 back[x][y] = (szudzikHash2D(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-//                                back[x][y] = (Noise.PointHash.hashAll(x, y, 123L) >>> extra & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
 //                                back[x][y] = BOLD[szudzikHash2D(x, y)];
                             }
                         }
@@ -1846,22 +1800,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 5:
-                        Gdx.graphics.setTitle("PointHash on length 1, low bits");
+                        Gdx.graphics.setTitle("LongPointHash on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                //code = -(Noise.PointHash.hashAll((x << 9) | y, 0L, 123L) & 1L) | 255L;
-                                //code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
-                                back[x][y] = (Noise.PointHash.hashAll(x << 9 | y, 0L, 123L) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                back[x][y] = (Noise.LongPointHash.hashAll(x << 9 | y, 0L, 123L) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("PointHash on length 1, high bits");
+                        Gdx.graphics.setTitle("LongPointHash on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                //code = Noise.PointHash.hashAll((x << 9) | y, 0L, 123L) >> 63 | 255L;
-                                //code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
-                                back[x][y] = Noise.PointHash.hashAll(x << 9 | y, 0L, 123L) < 0L ? FLOAT_WHITE : FLOAT_BLACK;//floatGet(code);
+                                //code = Noise.LongPointHash.hashAll((x << 9) | y, 0L, 123L) >> 63 | 255L;
+                                //code = Noise.LongPointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
+                                back[x][y] = Noise.LongPointHash.hashAll(x << 9 | y, 0L, 123L) < 0L ? FLOAT_WHITE : FLOAT_BLACK;//floatGet(code);
                             }
                         }
                         break;
@@ -1896,12 +1848,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 10:
-                        Gdx.graphics.setTitle("PointHash on length 2, low bits");
+                        Gdx.graphics.setTitle("LongPointHash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                //code = -(Noise.PointHash.hashAll(x, y, 123L) & 1L) | 255L;
-                                //code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
-                                back[x][y] = (Noise.PointHash.hashAll(x, y, 123L) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                //code = -(Noise.LongPointHash.hashAll(x, y, 123L) & 1L) | 255L;
+                                //code = Noise.LongPointHash.hashAll(x, y, 123L) >>> 24 | 255L;
+                                back[x][y] = (Noise.LongPointHash.hashAll(x, y, 123L) & 1L) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;
@@ -1917,12 +1869,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 12:
-                        Gdx.graphics.setTitle("PointHash on length 3, low bits");
+                        Gdx.graphics.setTitle("LongPointHash on length 3, low bits");
                         extra = System.nanoTime() >>> 30;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                //code = Noise.PointHash.hashAll(x, y, extra, 123L) >>> 24 | 255L;
-                                back[x][y] = (Noise.PointHash.hashAll(x, y, extra, 123L) & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                //code = Noise.LongPointHash.hashAll(x, y, extra, 123L) >>> 24 | 255L;
+                                back[x][y] = (Noise.LongPointHash.hashAll(x, y, extra, 123L) & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
                             }
                         }
                         break;
@@ -1948,19 +1900,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("PointHash on length 2, low bits");
+                        Gdx.graphics.setTitle("LongPointHash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll(x, y, 123L) << 8 | 255L;
+                                code = Noise.LongPointHash.hashAll(x, y, 123L) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
                         break;
                     case 16:
-                        Gdx.graphics.setTitle("PointHash on length 2, high bits");
+                        Gdx.graphics.setTitle("LongPointHash on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll(x, y, 123L) | 255L;
+                                code = Noise.LongPointHash.hashAll(x, y, 123L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2003,10 +1955,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 20:
-                        Gdx.graphics.setTitle("PointHash on length 1, high bits");
+                        Gdx.graphics.setTitle("LongPointHash on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) | 255L;
+                                code = Noise.LongPointHash.hashAll((x << 9) | y, 0, 123L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2041,10 +1993,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 23:
-                        Gdx.graphics.setTitle("PointHash 64 on length 2, high bits");
+                        Gdx.graphics.setTitle("LongPointHash 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll(x, y, 123L) >>> 32 | 255L;
+                                code = Noise.LongPointHash.hashAll(x, y, 123L) >>> 32 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2079,10 +2031,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 26:
-                        Gdx.graphics.setTitle("PointHash 64 on length 1, high bits");
+                        Gdx.graphics.setTitle("LongPointHash 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) >>> 32 | 255L;
+                                code = Noise.LongPointHash.hashAll((x << 9) | y, 0, 123L) >>> 32 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -5678,20 +5630,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         extra = System.nanoTime();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = floatGet(Noise.PointHash.hashAll(x, y, extra) >>> 32 | 255);
+                                back[x][y] = floatGet(Noise.LongPointHash.hashAll(x, y, extra) >>> 32 | 255);
                             }
                         }
-                        Gdx.graphics.setTitle("PointHash color (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LongPointHash color (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 47:
                         extra = System.nanoTime();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = Noise.PointHash.hash256(x, y, extra);
+                                iBright = Noise.LongPointHash.hash256(x, y, extra);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("PointHash gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LongPointHash gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 48:
                         for (int x = 0; x < width; x++) {

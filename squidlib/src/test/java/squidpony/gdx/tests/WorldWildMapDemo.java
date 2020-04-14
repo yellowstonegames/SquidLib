@@ -16,10 +16,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.PoliticalMapper;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.Noise;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 /**
  * Map generator that uses text to show features at a location as well as color.
@@ -191,7 +188,7 @@ public class WorldWildMapDemo extends ApplicationAdapter {
                     nextPosition.set(MathUtils.round(nextPosition.x), MathUtils.round(nextPosition.y), nextPosition.z);
                     position.set(cellWidth * 0.5f * shownWidth, cellHeight * (bigHeight - 0.5f * shownHeight), position.z);
                     zoomed = true;
-                    final int hash = Noise.IntPointHash.hashAll(screenX, screenY, 0x13579BDF);
+                    final int hash = IntPointHash.hashAll(screenX, screenY, 0x13579BDF);
 //                    wildView.setWildMap(new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth), (int) (bigHeight - nextPosition.y / cellHeight)), hash, ~hash));
                     wildView.setWildMap(new WildMap.MixedWildMap(
                             new WildMap(shownWidth, shownHeight, wmv.getBiomeMapper().getBiomeCode((int)(nextPosition.x / cellWidth)+1, (int) (bigHeight - nextPosition.y / cellHeight)-1), hash, ~hash),

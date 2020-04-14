@@ -1064,7 +1064,7 @@ public class HashQualityTest {
                                         continue;
                                     }
                                     points.add(c);
-                                    colliderBase.put(Noise.IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict, 0.0);//((int) Noise.PointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
+                                    colliderBase.put(IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict, 0.0);//((int) Noise.LongPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
                                     colliderPelo.put(peloton3D(x, y, z) & restrict, 0.0);
                                     colliderSzud.put(szudzikCoord(z, szudzikCoord(x, y)) & restrict, 0.0);
                                     colliderCant.put(cantorCoord(z, cantorCoord(x, y)) & restrict, 0.0);

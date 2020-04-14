@@ -236,7 +236,6 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         double uin = p5;
         double vin = p6;
         final double a = valueNoise(seed, xin, yin, zin, win, uin, vin);
-        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
         seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
@@ -247,7 +246,6 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         uin = p5;
         vin = p6;
         final double b = valueNoise(seed, xin + a, yin, zin, win, uin, vin);
-        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
         seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
@@ -258,7 +256,6 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         uin = p5;
         vin = p6;
         final double c = valueNoise(seed, xin + b, yin, zin, win, uin, vin);
-        //seed = (seed ^ 0x9E3779BD) * 0xDAB;
         seed += 0x9E3779BD;
         seed = (seed ^ seed >>> 12) * 0xDAB;
         seed ^= seed >>> 14;
@@ -303,9 +300,7 @@ x * -0.776796 + y * 0.628752 + z * -0.035464;
         final double result = (a + b + c + d + e + f + g) * 0.14285714285714285;
         return (result <= 0.5)
                 ? Math.pow(result * 2, 6.0) - 1.0
-                : 1.0 - Math.pow((result - 1) * 2, 6.0);
-
-//        return  (result * result * (6.0 - 4.0 * result) - 1.0);
+                : 1.0 - Math.pow((result - 1) * 2, 6.0); 
     }
 
     @Override
