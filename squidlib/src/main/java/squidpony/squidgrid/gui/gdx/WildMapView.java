@@ -5,7 +5,7 @@ import squidpony.ArrayTools;
 import squidpony.squidgrid.gui.gdx.ICellVisible.Basic;
 import squidpony.squidgrid.mapping.WildMap;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.Noise;
+import squidpony.squidmath.IntPointHash;
 import squidpony.squidmath.SilkRNG;
 
 import java.util.HashMap;
@@ -283,7 +283,7 @@ public class WildMapView {
         ICellVisible icv;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                change = h += Noise.IntPointHash.hashAll(x, y, 
+                change = h += IntPointHash.hashAll(x, y, 
                         seed);
                 if((icv = viewer.get(wildMap.floorTypes.get(wildMap.floors[x][y]))) != null) 
                     colorMap[x][y] = SColor.toEditedFloat(icv.getPackedColor(),

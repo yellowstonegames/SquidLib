@@ -4,7 +4,7 @@ import squidpony.squidmath.FastNoise;
 import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.NumberTools;
 
-import static squidpony.squidmath.Noise.IntPointHash.hashAll;
+import static squidpony.squidmath.IntPointHash.hashAll;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
