@@ -2,11 +2,11 @@ package squidpony.squidmath;
 
 /**
  * A group of similar methods for getting hashes of points based on int coordinates in 2, 3, 4, or 6 dimensions and
- * an int for state; the code is similar to {@link Noise.HastyPointHash} but will be much faster on GWT. This
+ * an int for state; the code is similar to {@link HastyPointHash} but will be much faster on GWT. This
  * implementation has high enough quality to be useful as a source of random numbers based on positions, but would
  * likely not be a good option in a hash table (or at least not as good as the tailored implementation of
  * {@link Coord#hashCode()}; it is still better than {@link java.util.Objects#hash(Object...)}). Even on a desktop
- * JVM, this class is faster than {@link Noise.LongPointHash} or {@link Noise.HastyPointHash}. The technique used here
+ * JVM, this class is faster than {@link PointHash} or {@link HastyPointHash}. The technique used here
  * owes credit to Pelle Evensen for finding the significant quality increase from using multiple bitwise rotations XORed
  * together, and Martin Roberts for discovering the connection between higher dimensional ranks and the appropriate
  * numbers to gain similar qualities to adding the golden ratio mod 1 in 1D, using what had already been named
@@ -20,7 +20,7 @@ package squidpony.squidmath;
  * <a href="https://i.imgur.com/RSdUnSY.png">a diagram of the frequency magnitude of white noise</a>. This shows
  * there are effectively no significant structural artifacts in the noise when interpreted as a float.
  */
-public final class IntPointHash extends PointHash.IntImpl {
+public final class IntPointHash extends IPointHash.IntImpl {
 
     @Override
     public int hashWithState(int x, int y, int state) {

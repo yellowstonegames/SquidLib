@@ -4,7 +4,6 @@ import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.HastyPointHash.*;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
