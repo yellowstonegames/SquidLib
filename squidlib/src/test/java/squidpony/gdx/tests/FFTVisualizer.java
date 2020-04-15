@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -21,9 +22,11 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
     private FoamNoise foam = new FoamNoise(1234567890L);
+    private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1234567890L);
+    private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1234567890L);
     private BalancedPermutations perm = new BalancedPermutations(16, 123456789L, 987654321L);
     private GreasedRegion region;
-    private static final int MODE_LIMIT = 4;
+    private static final int MODE_LIMIT =6;
     private int mode = 0;
     private int dim = 0; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
@@ -39,7 +42,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     private InputAdapter input;
     
     private Viewport view;
-    private int ctr = -128;
+    private long ctr = -128, startTime = 0L;
 
     public static float basicPrepare(float n)
     {
@@ -53,30 +56,36 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     @Override
     public void create() {
+        startTime = TimeUtils.millis();
         renderer = new ImmediateModeRenderer20(width * height * 2, false, true, 0);
         view = new ScreenViewport();
         region = perm.shuffledGrid();
         input = new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
+                int s;
                 switch (keycode) {
                     case MINUS:
                         mode = (mode + MODE_LIMIT - 1) % MODE_LIMIT;
-                        ctr = -256;
                         break;
                     case EQUALS:                         
                         mode++;
                         mode %= MODE_LIMIT;
-                        ctr = -256;
                         break;
                     case C:
-                        ctr++;
+                        startTime--;
                         break;
                     case E: //earlier seed
-                        noise.setSeed(noise.getSeed() - 1);
+                        s = noise.getSeed() - 1;
+                        noise.setSeed(s);
+                        rug.setState(s);
+                        quilt.setState(s);
                         break;
-                    case S: //seed
-                        noise.setSeed(noise.getSeed() + 1);
+                    case S: //seed after
+                        s = noise.getSeed() + 1;
+                        noise.setSeed(s);
+                        rug.setState(s);
+                        quilt.setState(s);
                         break;
                     case N: // noise type
                         if(mode == 0) 
@@ -108,7 +117,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case K: // sKip
-                        ctr += 1000;
+                        startTime -= 1000000L;
                         region = perm.shuffledGrid();
                         break;
                     case Q:
@@ -131,7 +140,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 //// specific thresholds: 32, 96, 160, 224
 //        threshold = (TimeUtils.millis() >>> 10 & 3) * 0x40p-8f + 0x20p-8f;
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        float bright, nf = noise.getFrequency(), c = ctr * 0x1p-4f / nf, xx, yy;
+        float bright, nf = noise.getFrequency(), c = TimeUtils.timeSinceMillis(startTime) * 0x1p-9f / nf, xx, yy;
         double db;
         ArrayTools.fill(imag, 0.0);
         if(mode == 0) {
@@ -309,7 +318,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 
             }
         }
-        else {
+        else if(mode == 3){
             switch (dim){
                 case 0:
                     for (int x = 0; x < width; x++) {
@@ -352,15 +361,103 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
-        }
-        Fft.transform2D(real, imag);
-        Fft.getColors(real, imag, colors);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                renderer.color(colors[x][y]);
-                renderer.vertex(x + width, y, 0);
+        } else if(mode == 4) {
+            int ct = (int)(TimeUtils.timeSinceMillis(startTime) >>> 5);
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & rug.hash(x + ct, y + ct)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & rug.hash(x, y, ct)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & rug.hash(x, y, ct, 1)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & rug.hash(x, y, ct, 1, 11, 111)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+            }
+        } else if(mode == 5) {
+            int ct = (int)(TimeUtils.timeSinceMillis(startTime) >>> 5);
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & quilt.hash(x + ct, y + ct)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & quilt.hash(x, y, ct)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & quilt.hash(x, y, ct, 1)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * (0xFFFFFFFFL & quilt.hash(x, y, ct, 1, 11, 111)));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
             }
         }
+//        Fft.transform2D(real, imag);
+//        Fft.getColors(real, imag, colors);
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                renderer.color(colors[x][y]);
+//                renderer.vertex(x + width, y, 0);
+//            }
+//        }
         renderer.end();
     }
 
@@ -382,22 +479,22 @@ public class FFTVisualizer extends ApplicationAdapter {
         return s >>> 56;
     }
     public static int fancy256(int x, int y, int s) {
-//        s ^= (x >> 6) * 0xD1B5;
-//        s ^= (y >> 6) * 0xABC9;
-//        x *= x;
-//        y *= y;
-//        x = x >>> 1 & 63;
-//        y = y >>> 1 & 63;
-        x = Math.abs(x);
-        y = Math.abs(y);
+//        x = Math.abs(x);
+//        y = Math.abs(y);
+        s ^= (x >> 6) * 0xD1B5;
+        s ^= (y >> 6) * 0xABC9;
+        x *= x;
+        y *= y;
+        x = x >>> 1 & 63;
+        y = y >>> 1 & 63;
         int a, b;
         if(x > y){
-            a = x;// * x + y;
-            b = y;// * y + x;
+            a = x;
+            b = y;
         }
         else {
-            a = y;// * y + x;
-            b = x;// * x + y;
+            a = y;
+            b = x;
         }
         a = (a + 0x9E3779B9 ^ a) * (s ^ b);
         b = (b + 0x9E3779B9 ^ b) * (a ^ s);
@@ -460,10 +557,11 @@ public class FFTVisualizer extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: FFT Visualization";
-        config.width = width << 1;
+//        config.width = width << 1;
+        config.width = width;
         config.height = height;
-        config.foregroundFPS = 32;
-        config.backgroundFPS = 32;
+        config.foregroundFPS = 0;
+        config.backgroundFPS = 0;
         config.vSyncEnabled = false;
         config.resizable = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
