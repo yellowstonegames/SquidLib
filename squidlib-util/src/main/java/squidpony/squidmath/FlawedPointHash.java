@@ -198,6 +198,45 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
             return (int)(hashLongs(x, y, z, w, u, v, state) >>> 32);
         }
+    }
 
+    /**
+     * FNV32a is OK as a hash for bytes when used in some hash tables, but it has major issues on its low-order bits
+     * when used as a point hash (the high bits aren't much better). Unfortunately, it is not aesthetically pleasing as
+     * a point hash. Some usages might be able to use it to apply a grimy, glitchy effect.
+     */
+    class FNVHash extends IntImpl implements FlawedPointHash {
+
+        public FNVHash() {
+            super();
+        }
+
+        public FNVHash(int state) {
+            super(state);
+        }
+
+        public int getState() {
+            return state;
+        }
+        @Override
+        public int hashWithState(int x, int y, int state) {
+            return ((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193;
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int state) {
+            return (((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193;
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int state) {
+            return ((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193 ^ w) * 0x1000193;
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+            return ((((((state ^ 0x811c9dc5 ^ x) * 0x1000193 ^ y) * 0x1000193 ^ z) * 0x1000193
+                    ^ w) * 0x1000193 ^ u) * 0x1000193 ^ v) * 0x1000193;
+        }
     }
 }
