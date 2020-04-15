@@ -117,8 +117,8 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
             s ^= (y >> size) * 0x91E10DA5C79E7B1DL;
             x *= x;
             y *= y;
-            x &= mask;
-            y &= mask;
+            x = x >>> 1 & mask;
+            y = y >>> 1 & mask;
             long t;
             if (x < y) {
                 t = x;
