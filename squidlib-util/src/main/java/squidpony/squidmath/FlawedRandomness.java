@@ -3,11 +3,12 @@ package squidpony.squidmath;
 /**
  * An interface to indicate a {@link RandomnessSource} that is intentionally flawed to create output patterns where a
  * truly random sequence would have none. All FlawedRandomness implementations are static inner classes inside this
- * interface, hopefully to avoid confusion with ones that are meant for general use.
+ * interface, hopefully to avoid confusion with ones that are meant for general use. This implements {@link IFlawed} as
+ * well, to mark that it isn't for general-purpose use.
  * <br>
  * Created by Tommy Ettinger on 11/10/2019.
  */
-public interface FlawedRandomness extends RandomnessSource {
+public interface FlawedRandomness extends RandomnessSource, IFlawed {
     /**
      * A flawed randomness source that depends almost entirely on its starting state for any random-seeming results in
      * its output. Simply outputs a number that starts with the initial seed and increases by {@code 0x1111111111111111}
