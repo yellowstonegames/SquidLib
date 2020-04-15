@@ -80,6 +80,9 @@ public interface IPointHash {
         public LongImpl(int state){
             setState(state);
         }
+        public LongImpl(long state){
+            setState(state);
+        }
 
         @Override
         public void setState(int state) {
