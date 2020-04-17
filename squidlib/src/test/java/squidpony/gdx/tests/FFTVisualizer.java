@@ -22,9 +22,12 @@ public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
     private FoamNoise foam = new FoamNoise(1);
+    private IntPointHash iph = new IntPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
+    private IPointHash[] pointHashes = new IPointHash[] {iph, fnv, rug, quilt};
+    private int hashIndex = 0;
     private BalancedPermutations perm = new BalancedPermutations(16, 123456789L, 987654321L);
     private GreasedRegion region;
     private static final int MODE_LIMIT = 7;
@@ -36,8 +39,9 @@ public class FFTVisualizer extends ApplicationAdapter {
     private boolean inverse = false;
     private ImmediateModeRenderer20 renderer;
     
+    private static final int width = 400, height = 400;
 //    private static final int width = 512, height = 512;
-    private static final int width = 256, height = 256;
+//    private static final int width = 256, height = 256;
     private final double[][] real = new double[width][height], imag = new double[width][height];
     private final float[][] colors = new float[width][height];
     private InputAdapter input;
@@ -101,6 +105,9 @@ public class FFTVisualizer extends ApplicationAdapter {
                         break;
                     case R: // fRactal type
                         noise.setFractalType((noise.getFractalType() + 1) % 3);
+                        break;
+                    case G: // Glitch!
+                        noise.setPointHash(pointHashes[hashIndex = hashIndex + 1 & 3]);
                         break;
                     case H: // higher octaves
                         noise.setFractalOctaves((octaves = octaves + 1 & 7) + 1);
@@ -495,14 +502,14 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
             }
         }
-        Fft.transform2D(real, imag);
-        Fft.getColors(real, imag, colors);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                renderer.color(colors[x][y]);
-                renderer.vertex(x + width, y, 0);
-            }
-        }
+//        Fft.transform2D(real, imag);
+//        Fft.getColors(real, imag, colors);
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                renderer.color(colors[x][y]);
+//                renderer.vertex(x + width, y, 0);
+//            }
+//        }
         renderer.end();
     }
 
@@ -602,8 +609,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: FFT Visualization";
-        config.width = width << 1;
-//        config.width = width;
+//        config.width = width << 1;
+        config.width = width;
         config.height = height;
         config.foregroundFPS = 0;
         config.backgroundFPS = 0;

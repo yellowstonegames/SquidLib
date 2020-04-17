@@ -21,7 +21,7 @@ public class ColorNoise extends FastNoise {
 
     public static int bounce256(final int s) { return (s ^ -((s & 0x100) >> 8)) & 0xff; }
 
-    public static float colorNoise(final double noise)
+    public float colorNoise(final double noise)
     {
         return SColor.floatGetHSV(NumberTools.zigzag((float) (noise * 16.0)), 0.75f + (float) NumberTools.zigzag(noise * 9.0) * 0.25f, 0.7f + (float) NumberTools.zigzag(noise * 7.0 + 0.5) * 0.3f, 1f);
 //        return NumberTools.intBitsToFloat(0xfe000000 |
@@ -38,7 +38,7 @@ public class ColorNoise extends FastNoise {
      * @param seed a seed that will change how and when any colors will be produced
      * @return noise in the form of a packed float color
      */
-    public static float colorNoise(final float xin, final float yin, final int seed) {
+    public float colorNoise(final float xin, final float yin, final int seed) {
         float noise0, noise1, noise2; // from the three corners
         // Skew the input space to figure out which simplex cell we're in
         float skew = (xin + yin) * F2f; // Hairy factor for 2D
@@ -176,7 +176,7 @@ public class ColorNoise extends FastNoise {
      * @param seed a seed that will change how and when any colors will be produced
      * @return noise in the form of a packed float color
      */
-    public static float colorNoise(final float xin, final float yin, final float zin, final int seed) {
+    public float colorNoise(final float xin, final float yin, final float zin, final int seed) {
         float n0, n1, n2, n3; // Noise contributions from the four corners
         // Skew the input space to figure out which simplex cell we're in
         float s = (xin + yin + zin) * F3f; // Very nice and simple skew
