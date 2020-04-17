@@ -117,9 +117,9 @@ public class MixedGenerator implements IDungeonGenerator {
      * Note that one of the dungeons in that gist was produced as a fallback by {@link DungeonGenerator} with no
      * arguments (using DEFAULT_DUNGEON as the dungeon style), because the map this method produced in one case had too
      * few floor cells to be used.
-     * @param width dungeon width in cells
-     * @param height dungeon height in cells
-     * @param rng rng to use
+     * @param width dungeon width in cells; must be at least 3 because the edges will be walls
+     * @param height dungeon height in cells; must be at least 3 because the edges will be walls
+     * @param rng IRNG to use, such as an RNG, StatefulRNG, or GWTRNG
      * @return erratically-positioned but generally separated Coord points to pass to a MixedGenerator constructor
      * @see VanDerCorputQRNG used to get separated positions
      */
@@ -128,16 +128,19 @@ public class MixedGenerator implements IDungeonGenerator {
         width -= 2;
         height -= 2;
         //float mx = rng.nextFloat() * 0.2f, my = rng.nextFloat() * 0.2f;
-        int blocks = width * height / 640, sz = blocks * 5, index = 0,
-                seed = rng.nextInt()|1, seed2 = rng.nextInt()|1;
+        int sz = width * height * 3 + 255 >>> 8,
+                seed = rng.next(9);
         //System.out.println("mx: " + mx + ", my: " + my + ", index: " + index);
         List<Coord> list = new ArrayList<>(sz);
-        for (int i = 0; i < blocks; i++) {
-            Coord area = VanDerCorputQRNG.haltoid(seed, width * 3 >> 2, height * 3 >> 2, 1, 1, i);
-            for (int j = 0; j < 5; j++) {
-                list.add(VanDerCorputQRNG.haltoid(seed2, width >> 2, height >> 2, area.x, area.y, index++));
-            }
+        for (int i = 0; i < sz; i++) {
+            list.add(VanDerCorputQRNG.roberts(width, height, 1, 1, i + seed));
         }
+//        for (int i = 0; i < blocks; i++) {
+//            Coord area = VanDerCorputQRNG.roberts(width * 3 >> 2, height * 3 >> 2, 1, 1, i + seed);
+//            for (int j = 0; j < 5; j++) {
+//                list.add(VanDerCorputQRNG.roberts(width >> 2, height >> 2, area.x, area.y, index++ + seed2));
+//            }
+//        }
         return list;
     }
 
