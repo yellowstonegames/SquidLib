@@ -21,12 +21,13 @@ import static squidpony.squidmath.BlueNoise.getChosen;
 public class FFTVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1);
-    private FoamNoise foam = new FoamNoise(1234567890L);
-    private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1234567890L);
-    private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1234567890L);
+    private FoamNoise foam = new FoamNoise(1);
+    private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
+    private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1);
+    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private BalancedPermutations perm = new BalancedPermutations(16, 123456789L, 987654321L);
     private GreasedRegion region;
-    private static final int MODE_LIMIT =6;
+    private static final int MODE_LIMIT = 7;
     private int mode = 0;
     private int dim = 0; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
@@ -449,15 +450,59 @@ public class FFTVisualizer extends ApplicationAdapter {
                     }
                     break;
             }
+        } else if(mode == 6) {
+            int ct = (int)(TimeUtils.timeSinceMillis(startTime) >>> 5);
+            switch (dim) {
+                case 0:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * ((fnv.hash(x + ct, y + ct))&0xFFFFFFFFL));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * ((fnv.hash(x, y, ct))&0xFFFFFFFFL));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * ((fnv.hash(x, y, ct, 1))&0xFFFFFFFFL));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            bright = (float) (db = 0x1p-32 * ((fnv.hash(x, y, ct, 1, 11, 111))&0xFFFFFFFFL));
+                            real[x][y] = db;
+                            renderer.color(bright, bright, bright, 1f);
+                            renderer.vertex(x, y, 0);
+                        }
+                    }
+                    break;
+            }
         }
-//        Fft.transform2D(real, imag);
-//        Fft.getColors(real, imag, colors);
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                renderer.color(colors[x][y]);
-//                renderer.vertex(x + width, y, 0);
-//            }
-//        }
+        Fft.transform2D(real, imag);
+        Fft.getColors(real, imag, colors);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                renderer.color(colors[x][y]);
+                renderer.vertex(x + width, y, 0);
+            }
+        }
         renderer.end();
     }
 
@@ -557,8 +602,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: FFT Visualization";
-//        config.width = width << 1;
-        config.width = width;
+        config.width = width << 1;
+//        config.width = width;
         config.height = height;
         config.foregroundFPS = 0;
         config.backgroundFPS = 0;

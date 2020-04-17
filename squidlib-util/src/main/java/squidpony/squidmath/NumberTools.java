@@ -1284,10 +1284,9 @@ if y < 0 then r := -r
 //    }
     /**
      * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.
-     * This method is usually much faster than {@link Math#asin(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
-     * performance regression, but not likely that the JDK's Math.asin() will speed up by 30x (Math.sin() has sped up,
-     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
+     * This method is usually much faster than {@link Math#asin(double)}, but is somewhat less precise than Math's
+     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
+     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.
      * @param n an input to the inverse sine function, from -1 to 1 inclusive
      * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.
      */
@@ -1322,10 +1321,9 @@ if y < 0 then r := -r
 
     /**
      * Arc sine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.
-     * This method is usually much faster than {@link Math#asin(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
-     * performance regression, but not likely that the JDK's Math.asin() will speed up by 30x (Math.sin() has sped up,
-     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
+     * This method is usually much faster than {@link Math#asin(double)}, but is somewhat less precise than Math's
+     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
+     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.
      * @param n an input to the inverse sine function, from -1 to 1 inclusive
      * @return an output from the inverse sine function, from PI/-2.0 to PI/2.0 inclusive.
      */
@@ -1346,10 +1344,9 @@ if y < 0 then r := -r
     }
     /**
      * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(double, double)}.
-     * This method is usually much faster than {@link Math#acos(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
-     * performance regression, but not likely that the JDK's Math.acos() will speed up by 30x (Math.cos() has sped up,
-     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
+     * This method is usually much faster than {@link Math#acos(double)}, but is somewhat less precise than Math's
+     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
+     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.
      * @param n an input to the inverse cosine function, from -1 to 1 inclusive
      * @return an output from the inverse cosine function, from 0 to PI inclusive.
      */
@@ -1384,10 +1381,9 @@ if y < 0 then r := -r
 //
     /**
      * Arc cosine approximation with very low error, based on a simplified version of {@link #atan2(float, float)}.
-     * This method is usually much faster than {@link Math#acos(double)}, but on some versions of OpenJ9 it is slower
-     * (while also being less precise than Math's implementation). Nightly builds of OpenJ9 have already fixed that
-     * performance regression, but not likely that the JDK's Math.acos() will speed up by 30x (Math.cos() has sped up,
-     * though). This method is very fast on HotSpot, and on OpenJ9 version 0.18.0 it should be fairly fast too.
+     * This method is usually much faster than {@link Math#acos(double)}, but is somewhat less precise than Math's
+     * implementation). It is currently more precise than libGDX's approximation in their MathUtils, but this isn't
+     * quite as fast; the difference in precision is hard to spot but can be noticeable in some usage.
      * @param n an input to the inverse cosine function, from -1 to 1 inclusive
      * @return an output from the inverse cosine function, from 0 to PI inclusive.
      */
