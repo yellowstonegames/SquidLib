@@ -43,7 +43,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 //    private static final int width = 512, height = 512;
 //    private static final int width = 256, height = 256;
     private final double[][] real = new double[width][height], imag = new double[width][height];
-    private final float[][] colors = new float[width][height];
+//    private final float[][] colors = new float[width][height];
     private InputAdapter input;
     
     private Viewport view;
@@ -67,7 +67,7 @@ public class FFTVisualizer extends ApplicationAdapter {
         region = perm.shuffledGrid();
         input = new InputAdapter(){
             @Override
-            public boolean keyDown(int keycode) {
+            public boolean keyUp(int keycode) {
                 int s;
                 switch (keycode) {
                     case MINUS:
@@ -101,7 +101,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                         dim = (dim + 1) & 3;
                         break;
                     case F: // frequency
-                        noise.setFrequency((float) Math.sin(freq += 0.125f) * 0.25f + 0.25f + 0x1p-7f);
+                        noise.setFrequency((float) Math.sin(freq += 0.125f) * 0.05f + 0.06f);
                         break;
                     case R: // fRactal type
                         noise.setFractalType((noise.getFractalType() + 1) % 3);
@@ -148,7 +148,7 @@ public class FFTVisualizer extends ApplicationAdapter {
 //// specific thresholds: 32, 96, 160, 224
 //        threshold = (TimeUtils.millis() >>> 10 & 3) * 0x40p-8f + 0x20p-8f;
         renderer.begin(view.getCamera().combined, GL_POINTS);
-        float bright, nf = noise.getFrequency(), c = TimeUtils.timeSinceMillis(startTime) * 0x1p-9f / nf, xx, yy;
+        float bright, nf = noise.getFrequency(), c = TimeUtils.timeSinceMillis(startTime) * 0x1p-12f / nf, xx, yy;
         double db;
         ArrayTools.fill(imag, 0.0);
         if(mode == 0) {

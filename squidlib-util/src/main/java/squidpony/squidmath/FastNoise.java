@@ -2297,7 +2297,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         final float zf0 = lerp(yf00, yf10, zs);
         final float zf1 = lerp(yf01, yf11, zs);
-        return lerp(zf0, zf1, ws);
+        return lerp(zf0, zf1, ws) * 0.55f;
     }
     private float singlePerlinFractalFBM(float x, float y, float z, float w) {
         int seed = this.seed;
@@ -2588,7 +2588,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float uf0 = lerp(wf00, wf10, us);
         final float uf1 = lerp(wf01, wf11, us);
 
-        return lerp(uf0, uf1, vs);
+        return lerp(uf0, uf1, vs) * 1.75f;
     }
     private float singlePerlinFractalFBM(float x, float y, float z, float w, float u, float v) {
         int seed = this.seed;
