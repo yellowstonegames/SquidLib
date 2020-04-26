@@ -12342,7 +12342,7 @@ public class SColor extends Color implements Serializable {
      */
     public SColor(int r, int g, int b) {
         super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, 1.0f);
-        this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
+        this.calculatedFloat =  NumberTools.intBitsToFloat(0xfe000000 | (b << 16) | (g << 8) | r);
         name = super.toString();
     }
 
@@ -12356,7 +12356,7 @@ public class SColor extends Color implements Serializable {
      */
     public SColor(int r, int g, int b, int a) {
         super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, a * 0.003921569f);
-        this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
+        this.calculatedFloat =  NumberTools.intBitsToFloat((a << 24 & 0xfe000000) | (b << 16) | (g << 8) | r);
         name = super.toString();
     }
 
@@ -12372,7 +12372,7 @@ public class SColor extends Color implements Serializable {
     public SColor(int r, int g, int b, String name) {
         super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, 1.0f);
         this.name = name;
-        this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
+        this.calculatedFloat =  NumberTools.intBitsToFloat(0xfe000000 | (b << 16) | (g << 8) | r);
         Colors.put(name, this);
     }
 
@@ -12388,7 +12388,7 @@ public class SColor extends Color implements Serializable {
     public SColor(int r, int g, int b, int a, String name) {
         super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, a * 0.003921569f);
         this.name = name;
-        this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
+        this.calculatedFloat =  NumberTools.intBitsToFloat((a << 24 & 0xfe000000) | (b << 16) | (g << 8) | r);
         Colors.put(name, this);
     }
 
@@ -12398,7 +12398,8 @@ public class SColor extends Color implements Serializable {
      * should produce identical results. Alpha only keeps the most-significant 7 of 8 bits. You can also
      * look at the JavaDocs for almost all predefined SColor values to see what the packed float value is.
      * This currently uses a precalculated float instead of recalculating every time, which adds some overhead to
-     * functions that change an SColor, but these are generally used infrequently.
+     * functions that change an SColor, but these are generally used infrequently, while the conversion from a
+     * color to its corresponding float is done very often inside libGDX.
      * 
      * @return the packed color as a 32-bit float
      */
@@ -12420,9 +12421,8 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. The way to
-     * obtain value for libGDX Color objects is with {@link Color#toFloatBits()}, which uses ABGR order, so this
-     * does some quick work to convert that to RGBA order and assign that into changing.
+     * Modifies the color parameter {@code changing} so its value is the one encoded in {@code value}. This
+     * just delegates to {@link #argb8888ToColor(Color, int)} and returns {@code changing} after edits.
      *
      * @param changing a Color object that will be modified to have the given value
      * @param value    a value as a float that can be obtained by {@link Color#toFloatBits()}
