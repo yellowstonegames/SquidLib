@@ -166,35 +166,44 @@ public class BlueNoise {
     }
     /**
      * A mix of white noise and blue noise that has very few patterns detectable in frequency space, though it has some
-     * artifacts detectable to the human eye. <a href="https://i.imgur.com/Wm6RyXN.png">Blue noise at left, magnitude
+     * artifacts detectable to the human eye. <a href="https://i.imgur.com/iKhhbH2.png">Blue noise at left, magnitude
      * histogram at right.</a> This works by choosing from one of four nearby blue noise tiles and using it as-is, with
      * the choice determined by an initial blue noise sample from a non-tiling blue noise tile, weighted heavily based
      * on how close a pixel is to a border between the four noise tiles. Compared to {@link #getSeeded(int, int, int)},
      * the "progressive" quality of the blue noise this uses is preserved better, meaning if you get the set of points
      * with values under or over a certain value, that set is still usually blue noise. (Keeping this quality is quite
      * hard for blue noise textures generated from combining existing tiles!)
+     * <br>
+     * This was changed somewhat on April 28, 2020 to a version with softer line artifacts that don't persist as long.
+     * It tends to look like it has less artifacts to human observers now, and about the same to signal processing.
+     * Upon closer inspection, it actually has many more line artifacts, but they are small, irregularly-spaced, and
+     * blend easily into their surroundings. This seems to be a tradeoff with this kind of blue noise. You can make an
+     * obvious grid of badly-stitched-together blue noise textures, and the frequencies will be good, but it will look
+     * terrible to humans; you could instead improve the appearance to humans by using just one blue noise texture, but
+     * that gets detected immediately by a computer as a pattern.
      * @param x      x position, can be any int; results will not repeat for a very long time
      * @param y      y position, can be any int; results will not repeat for a very long time
      * @param seed   seed value, can be any int; should be the same for all calls that should be from the same 2D plane
      * @return a byte that obeys an almost-blue-noise distribution, so a value is only next to a similar value rarely
      */
     public static byte getChosen(int x, int y, int seed){
+        // hash the seed for a 64x64 tile on the "normal grid"
+        // quite possibly overkill.
         seed ^= (x >>> 6) * 0x1827F5 ^ (y >>> 6) * 0x123C21;
-        // hash for a 64x64 tile on the "normal grid"
-        int h = (seed = (seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493) ^ seed >>> 11;
+        seed = (seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493;
+        seed ^= seed >>> 11;
         // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
-        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+        final int xc = ALT_NOISE[seed & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
         // likely to be a different noise tile, and the x,y position is transposed
-        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
-        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
-        final int ax = ((xc) * (xc+1) << 6 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
-        final int ay = ((yc) * (yc+1) << 6 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
+        final int yc = ALT_NOISE[seed >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
+        // altering x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
+        x += (((xc) * (xc+1) << 6) - (((x & 0x3F) - 32) * ((x & 0x3F) - 31)) >> 31 | 1) * (288 - (x << 2 & 64));
+        y += (((yc) * (yc+1) << 6) - (((y & 0x3F) - 32) * ((y & 0x3F) - 31)) >> 31 | 1) * (288 - (y << 2 & 64));
         // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
-        // this transposes x and y again, it seems to help with the particular blue noise textures we have
-        h ^= (ax >>> 6) * 0x1827F5 ^ (ay >>> 6) * 0x123C21;
-        return ALT_NOISE[(h ^ (h << 19 | h >>> 13) ^ (h << 5 | h >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26][(x << 6 & 0xFC0) | (y & 0x3F)];
+        // this transposes x and y again (it seems to help with the particular blue noise textures we have).
+        return ALT_NOISE[(seed ^ (seed ^ x ^ y) >>> 6) & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
     }
-
+    
     /**
      * Gets a modified byte from the raw data this stores, using seed to adjust repeated sections of blue noise so
      * patterns are much less noticeable. Unlike {@link #get(int, int)}, this won't repeat every 64 cells on x or y, but
