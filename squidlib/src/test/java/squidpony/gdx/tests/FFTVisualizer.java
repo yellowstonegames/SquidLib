@@ -14,7 +14,7 @@ import squidpony.squidmath.*;
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
 import static squidpony.squidmath.BlueNoise.ALT_NOISE;
-import static squidpony.squidmath.BlueNoise.getChosen;
+//import static squidpony.squidmath.BlueNoise.getChosen;
 
 /**
  */
@@ -39,11 +39,11 @@ public class FFTVisualizer extends ApplicationAdapter {
     private boolean inverse = false;
     private ImmediateModeRenderer20 renderer;
     
-    private static final int width = 400, height = 400;
-//    private static final int width = 512, height = 512;
+//    private static final int width = 400, height = 400;
+    private static final int width = 512, height = 512;
 //    private static final int width = 256, height = 256;
     private final double[][] real = new double[width][height], imag = new double[width][height];
-//    private final float[][] colors = new float[width][height];
+    private final float[][] colors = new float[width][height];
     private InputAdapter input;
     
     private Viewport view;
@@ -306,7 +306,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = (float) (db = 0x1p-8 * (getBlue(x, y, noise.getSeed()) + 128));
+                            bright = (float) (db = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128));
                             real[x][y] = db;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -351,7 +351,7 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 2:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
+                            bright = 0x1p-8 * (BlueNoise.getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
@@ -361,13 +361,22 @@ public class FFTVisualizer extends ApplicationAdapter {
                 case 3:
                     for (int x = 0; x < width; x++) {
                         for (int y = 0; y < height; y++) {
-                            bright = region.contains(x, y) ? 1 : 0;
+                            bright = 0x1p-8 * (getChosen(x, y, noise.getSeed()) + 128) <= threshold ? 1 : 0;
                             real[x][y] = bright;
                             renderer.color(bright, bright, bright, 1f);
                             renderer.vertex(x, y, 0);
                         }
                     }
                     break;
+//                    for (int x = 0; x < width; x++) {
+//                        for (int y = 0; y < height; y++) {
+//                            bright = region.contains(x, y) ? 1 : 0;
+//                            real[x][y] = bright;
+//                            renderer.color(bright, bright, bright, 1f);
+//                            renderer.vertex(x, y, 0);
+//                        }
+//                    }
+//                    break;
             }
         } else if(mode == 4) {
             int ct = (int)(TimeUtils.timeSinceMillis(startTime) >>> 5);
@@ -502,14 +511,14 @@ public class FFTVisualizer extends ApplicationAdapter {
                     break;
             }
         }
-//        Fft.transform2D(real, imag);
-//        Fft.getColors(real, imag, colors);
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                renderer.color(colors[x][y]);
-//                renderer.vertex(x + width, y, 0);
-//            }
-//        }
+        Fft.transform2D(real, imag);
+        Fft.getColors(real, imag, colors);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                renderer.color(colors[x][y]);
+                renderer.vertex(x + width, y, 0);
+            }
+        }
         renderer.end();
     }
 
@@ -569,23 +578,23 @@ public class FFTVisualizer extends ApplicationAdapter {
                 >>> 1;
         return (byte) (ALT_NOISE[s & 63][(y + (m >>> 7) - (n >>> 7) << 6 & 0xFC0) | (x + (n >>> 7) - (m >>> 7) & 0x3F)] ^ (m ^ n));
     }
-//
-//    public static byte getChosen(int x, int y, int seed){
-//        // hash for a 64x64 tile on the "normal grid"
-//        final int h = Noise.IntPointHash.hashAll(x >>> 6, y >>> 6, seed);
-//        // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
-//        //final int xc = x * 0xC13FA9A9 >>> 24;
-//        //final int yc = y * 0x91E10DA5 >>> 24;
-//        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
-//        // likely to be a different noise tile, and the x,y position is transposed
-//        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
-//        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
-//        final int ax = ((xc) * (xc+1) * 47 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
-//        final int ay = ((yc) * (yc+1) * 47 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
-//        // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
-//        // this transposes x and y again, it seems to help with the particular blue noise textures we have
-//        return ALT_NOISE[Noise.IntPointHash.hash64(ax >>> 6, ay >>> 6, h)][(x << 6 & 0xFC0) | (y & 0x3F)];
-//    }
+
+    public static byte getChosen(int x, int y, int seed){
+        seed ^= (x >>> 6) * 0x1827F5 ^ (y >>> 6) * 0x123C21;
+        // hash for a 64x64 tile on the "normal grid"
+        int h = (seed = (seed ^ (seed << 19 | seed >>> 13) ^ (seed << 5 | seed >>> 27) ^ 0xD1B54A35) * 0x125493) ^ seed >>> 11;
+        // choose from 64 noise tiles in ALT_NOISE and get the exact pixel for our x,y in its 64x64 area
+        final int xc = ALT_NOISE[h & 0x3F][(y << 6 & 0xFC0) | (x & 0x3F)];
+        // likely to be a different noise tile, and the x,y position is transposed
+        final int yc = ALT_NOISE[h >>> 6 & 0x3F][(x << 6 & 0xFC0) | (y & 0x3F)];
+        // altered x/y; here we choose a start position for the "offset grid" based on the previously sampled noise
+        final int ax = ((xc) * (xc+1) << 6 < ((x & 0x3F) - 32) * ((x & 0x3F) - 31)) ? x - 32 : x + 32;
+        final int ay = ((yc) * (yc+1) << 6 < ((y & 0x3F) - 32) * ((y & 0x3F) - 31)) ? y - 32 : y + 32;
+        // get a tile based on the "offset grid" position we chose and the hash for the normal grid, then a pixel
+        // this transposes x and y again, it seems to help with the particular blue noise textures we have
+        h ^= (ax >>> 6) * 0x1827F5 ^ (ay >>> 6) * 0x123C21;
+        return ALT_NOISE[(h ^ (h << 19 | h >>> 13) ^ (h << 5 | h >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26][(x << 6 & 0xFC0) | (y & 0x3F)];
+    }
 
     @Override
     public void render() {
@@ -609,8 +618,8 @@ public class FFTVisualizer extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: FFT Visualization";
-//        config.width = width << 1;
-        config.width = width;
+        config.width = width << 1;
+//        config.width = width;
         config.height = height;
         config.foregroundFPS = 0;
         config.backgroundFPS = 0;
