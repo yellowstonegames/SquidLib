@@ -1140,7 +1140,7 @@ public abstract class WorldMapGenerator implements Serializable {
             final int[][] heightCodeData = world.heightCodeData;
             final double[][] heatData = world.heatData, moistureData = world.moistureData, heightData = world.heightData;
             int hc, mc, heightCode, bc;
-            double hot, moist, high, i_hot = 1.0 / world.maxHeat, fresh;
+            double hot, moist, high, i_hot = 1.0 / world.maxHeat;
             for (int x = 0; x < world.width; x++) {
                 for (int y = 0; y < world.height; y++) {
 
