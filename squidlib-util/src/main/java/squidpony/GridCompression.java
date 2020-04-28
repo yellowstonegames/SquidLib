@@ -22,6 +22,10 @@ import squidpony.squidmath.MathExtras;
 public class GridCompression {
     public static String compress(double[][] grid)
     {
+        return compress(doubleToByteGrid(grid));
+    }
+    public static String compress(byte[][] grid)
+    {
         CoordPacker.init();
         final int width = grid.length, height = grid[0].length;
         StringBuilder[] packs = new StringBuilder[8];
@@ -77,8 +81,8 @@ public class GridCompression {
                         continue;
                     }
                     ml++;
-                    code = MathExtras.clamp((int) (grid[baseX + hx][baseY + hy] * 256), 0, 255);
-                    code ^= code >>> 1;
+                    code = (grid[baseX + hx][baseY + hy] & 255);
+                    code ^= code >>> 1; // gray code; ensures only one bit changes between consecutive bytes
                     for (int p = 0; p < 8; p++) {
                         current = (code >>> p & 1) == 1;
                         if (current != on[p]) {
@@ -148,13 +152,29 @@ public class GridCompression {
         return target;
     }
     public static double[][] byteToDoubleGrid(byte[][] bytes) {
-        final int width = bytes.length, height = bytes[0].length;
-        double[][] doubles = new double[width][height];
+        return byteToDoubleGrid(bytes, new double[bytes.length][bytes[0].length]);
+    }
+    public static double[][] byteToDoubleGrid(byte[][] bytes, double[][] doubles) {
+        final int width = Math.min(bytes.length, doubles.length),
+                height = Math.min(bytes[0].length, doubles[0].length);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 doubles[x][y] = (bytes[x][y] & 0xFF) * 0x1p-8;
             }
         }
         return doubles;
+    }
+    public static byte[][] doubleToByteGrid(double[][] doubles) {
+        return doubleToByteGrid(doubles, new byte[doubles.length][doubles[0].length]);
+    }
+    public static byte[][] doubleToByteGrid(double[][] doubles, byte[][] bytes) {
+        final int width = Math.min(doubles.length, bytes.length),
+                height = Math.min(doubles[0].length, bytes[0].length);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bytes[x][y] = (byte) (doubles[x][y] * 256);
+            }
+        }
+        return bytes;
     }
 }
