@@ -1771,7 +1771,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         float high, changedX;
         int rndX, rndY;
         for (int dx = -radius; dx <= radius; ++dx) {
-            changedX = dx - 0.25f * Math.signum(dx);
+            changedX = dx - 0.25f * (dx >> 31 | -dx >>> 31); // project nayuki signum
             rndX = Math.round(changedX);
             high = (float) Math.sqrt(radius * radius - changedX * changedX);             
             insert(center.x + rndX, center.y);
@@ -2026,7 +2026,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         float high, changedX;
         int rndX, rndY;
         for (int dx = -radius; dx <= radius; ++dx) {
-            changedX = dx - 0.25f * Math.signum(dx);
+            changedX = dx - 0.25f * (dx >> 31 | -dx >>> 31); // project nayuki signum
             rndX = Math.round(changedX);
             high = (float) Math.sqrt(radius * radius - changedX * changedX);
             remove(center.x + rndX, center.y);

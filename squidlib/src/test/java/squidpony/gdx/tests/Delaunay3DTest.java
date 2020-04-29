@@ -118,7 +118,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
             public int compare(Color c1, Color c2) {
                 // sorts by hue
                 final int diff = NumberTools.floatToIntBits(SColor.hue(c1) - SColor.hue(c2));
-                return (diff >> 31) | ((-diff) >>> 31); // project nayuki signum
+                return (diff >> 31 | -diff >>> 31); // project nayuki signum
             }
         });
         imr = new ImmediateModeRenderer20(30000, false, true, 0);

@@ -509,7 +509,7 @@ public enum Radius {
                 float high, changedX;
                 int rndX, rndY;
                 for (int dx = -radiusLength; dx <= radiusLength; ++dx) {
-                    changedX = dx - 0.25f * Math.signum(dx);
+                    changedX = dx - 0.25f * (dx >> 31 | -dx >>> 31); // project nayuki signum
                     rndX = Math.round(changedX);
                     high = (float) Math.sqrt(radiusLength * radiusLength - changedX * changedX);
                     if (surpassEdges || !(centerX + rndX < 0||
