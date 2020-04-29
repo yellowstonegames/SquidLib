@@ -83,9 +83,9 @@ public class Bresenham {
         ay <<= 1;
         az <<= 1;
         
-        int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
-        int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
-        int signz = dz == 0 ? 0 : (dz >> 31 | 1); // signum with less converting to/from float
+        int signx = (dx >> 31 | -dx >>> 31); // project nayuki signum
+        int signy = (dy >> 31 | -dy >>> 31); // project nayuki signum
+        int signz = (dz >> 31 | -dz >>> 31); // project nayuki signum
 
         int x = startx;
         int y = starty;
@@ -219,8 +219,8 @@ public class Bresenham {
         ax <<= 1;
         ay <<= 1;
         
-        int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
-        int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
+        int signx = (dx >> 31 | -dx >>> 31); // project nayuki signum
+        int signy = (dy >> 31 | -dy >>> 31); // project nayuki signum
 
         int x = startx;
         int y = starty;
@@ -310,8 +310,8 @@ public class Bresenham {
         int dx = endx - startx;
         int dy = endy - starty;
 
-        int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
-        int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
+        int signx = (dx >> 31 | -dx >>> 31); // project nayuki signum
+        int signy = (dy >> 31 | -dy >>> 31); // project nayuki signum
 
         int ax = (dx = Math.abs(dx)) << 1;
         int ay = (dy = Math.abs(dy)) << 1;

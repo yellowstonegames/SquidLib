@@ -108,8 +108,8 @@ public enum Direction {
      */
     public static Direction getRoughDirection(int x, int y)
     {
-        x = x == 0 ? 0 : (x >> 31 | 1); // signum with less converting to/from float
-        y = y == 0 ? 0 : (y >> 31 | 1); // signum with less converting to/from float
+        x = (x >> 31 | -x >>> 31); // project nayuki signum
+        y = (y >> 31 | -y >>> 31); // project nayuki signum
         switch (x)
         {
             case -1:

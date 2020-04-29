@@ -71,7 +71,7 @@ public class DelaunayTest extends ApplicationAdapter {
             @Override
             public int compare(Color c1, Color c2) {
                 final int diff = NumberTools.floatToIntBits(SColor.hue(c1) - SColor.hue(c2));
-                return (diff >> 31) | ((-diff) >>> 31); // project nayuki signum
+                return (diff >> 31 | -diff >>> 31); // project nayuki signum
             }
         });
         startTime = TimeUtils.millis();
