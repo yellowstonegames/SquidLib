@@ -113,7 +113,7 @@ public class WobblyLine {
                     dy2 *= -1;
                 }
             }
-            dir = Direction.getCardinalDirection(dx2, -dy2);
+            dir = Direction.getCardinalDirection(dx2, dy2);
 
         }
         else
@@ -136,7 +136,7 @@ public class WobblyLine {
                 dx = 0;
                 dy *= -1;
             }
-            dir = Direction.getCardinalDirection(dx, -dy);
+            dir = Direction.getCardinalDirection(dx, dy);
         }
         if(currentX + dir.deltaX <= 0 || currentX + dir.deltaX >= width - 1) {
             if (currentY < targetY) dir = Direction.DOWN;

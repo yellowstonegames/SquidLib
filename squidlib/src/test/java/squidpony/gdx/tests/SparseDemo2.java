@@ -594,7 +594,7 @@ public class SparseDemo2 extends ApplicationAdapter {
             // A SparseLayers knows how to move a Glyph (like the one for the player, pg) out of its normal alignment
             // on the grid, and also how to move it back again. Using bump() will move pg quickly about a third of the
             // way into a wall, then back to its former position at normal speed.
-            display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
+            display.bump(pg, Direction.getDirection(xmod, ymod), 0.25f);
             float c = colors[newX][newY];
             if(SColor.redOfFloat(c) < SColor.greenOfFloat(c)) {
                 points++;
