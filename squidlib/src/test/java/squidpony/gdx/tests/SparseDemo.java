@@ -438,6 +438,34 @@ public class SparseDemo extends ApplicationAdapter {
                         awaitedMoves.add(player.translate(1, 0));
                         break;
                     }
+                    case SquidInput.UP_LEFT_ARROW:
+                    {
+                        toCursor.clear();
+                        //-1 is up on the screen
+                        awaitedMoves.add(player.translate(-1, -1));
+                        break;
+                    }
+                    case SquidInput.UP_RIGHT_ARROW:
+                    {
+                        toCursor.clear();
+                        //-1 is up on the screen
+                        awaitedMoves.add(player.translate(1, -1));
+                        break;
+                    }
+                    case SquidInput.DOWN_LEFT_ARROW:
+                    {
+                        toCursor.clear();
+                        //+1 is down on the screen
+                        awaitedMoves.add(player.translate(-1, 1));
+                        break;
+                    }
+                    case SquidInput.DOWN_RIGHT_ARROW:
+                    {
+                        toCursor.clear();
+                        //+1 is down on the screen
+                        awaitedMoves.add(player.translate(1, 1));
+                        break;
+                    }
                     case 'Q':
                     case 'q':
                     case SquidInput.ESCAPE:
@@ -575,9 +603,9 @@ public class SparseDemo extends ApplicationAdapter {
         {
             // A SparseLayers knows how to move a Glyph (like the one for the player, pg) out of its normal alignment
             // on the grid, and also how to move it back again. Using bump() will move pg quickly about a third of the
-            // way into a wall, then back to its former position at normal speed. Direction.getRoughDirection is a
-            // simple way to get which of the 8-way directions small xmod and ymod values point in.
-            display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
+            // way into a wall, then back to its former position at normal speed. Direction.getDirection is a
+            // simple way to get which of the 8-way directions xmod and ymod values point in.
+            display.bump(pg, Direction.getDirection(xmod, ymod), 0.25f);
             // PanelEffect (from SquidLib) is a type of Action (from libGDX) that can run on a SparseLayers.
             // This particular kind of PanelEffect creates a purple glow around the player when he bumps into a wall.
             // Other kinds can make explosions or projectiles appear.

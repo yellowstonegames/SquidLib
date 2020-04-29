@@ -414,7 +414,7 @@ public class MixedGenerator implements IDungeonGenerator {
                     dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
-                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                                : Direction.getCardinalDirection(0, dir.deltaY);
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
@@ -422,7 +422,7 @@ public class MixedGenerator implements IDungeonGenerator {
                         start = start.translate(dir);
                     }
                     markRectangle(start, 1, 1);
-                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    dir = Direction.getCardinalDirection(end.x - start.x, (end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
@@ -437,7 +437,7 @@ public class MixedGenerator implements IDungeonGenerator {
                     dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
-                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                                : Direction.getCardinalDirection(0, dir.deltaY);
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
@@ -445,7 +445,7 @@ public class MixedGenerator implements IDungeonGenerator {
                         start = start.translate(dir);
                     }
                     markRectangleWalled(start, 1, 1);
-                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    dir = Direction.getCardinalDirection(end.x - start.x, (end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
@@ -460,7 +460,7 @@ public class MixedGenerator implements IDungeonGenerator {
                     dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
-                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                                : Direction.getCardinalDirection(0, dir.deltaY);
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
@@ -468,7 +468,7 @@ public class MixedGenerator implements IDungeonGenerator {
                         start = start.translate(dir);
                     }
                     markCircle(start, 2);
-                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    dir = Direction.getCardinalDirection(end.x - start.x, (end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
@@ -483,7 +483,7 @@ public class MixedGenerator implements IDungeonGenerator {
                     dir = Direction.getDirection(end.x - start.x, end.y - start.y);
                     if(dir.isDiagonal())
                         dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
-                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                                : Direction.getCardinalDirection(0, dir.deltaY);
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
@@ -491,7 +491,7 @@ public class MixedGenerator implements IDungeonGenerator {
                         start = start.translate(dir);
                     }
                     markCircleWalled(start, 2);
-                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    dir = Direction.getCardinalDirection(end.x - start.x, (end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
@@ -923,7 +923,7 @@ public class MixedGenerator implements IDungeonGenerator {
                     dy2 *= -1;
                 }
             }
-            dir = Direction.getCardinalDirection(dx2, -dy2);
+            dir = Direction.getCardinalDirection(dx2, dy2);
 
         }
         else
@@ -946,7 +946,7 @@ public class MixedGenerator implements IDungeonGenerator {
                 dx = 0;
                 dy *= -1;
             }
-            dir = Direction.getCardinalDirection(dx, -dy);
+            dir = Direction.getCardinalDirection(dx, dy);
         }
         if(current.x + dir.deltaX <= 0 || current.x + dir.deltaX >= width - 1) {
             if (current.y < target.y) dir = Direction.DOWN;

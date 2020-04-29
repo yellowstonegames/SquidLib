@@ -53,45 +53,22 @@ public enum Direction {
     public final int deltaY;
 
     /**
-     * Returns the direction that most closely matches the input.
-     *
-     * This can be used to get the primary magnitude intercardinal direction
+     * Returns the direction that most closely matches the input. This can be any
+     * direction, including cardinal and diagonal directions as well as {@link #NONE}
+     * in the case that x and y are both 0.
+     * <br>
+     * This can be used to get the primary intercardinal direction
      * from an origin point to an event point, such as a mouse click on a grid.
-     *
      * If the point given is exactly on a boundary between directions then the
      * direction clockwise is returned.
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x the x position relative to the origin (0,0)
+     * @param y the y position relative to the origin (0,0)
+     * @return the closest matching Direction enum, which may be {@link #NONE}
      */
     public static Direction getDirection(int x, int y) {
-        if (x == 0 && y == 0) {
-            return NONE;
-        }
-
-        double degree = Math.toDegrees(NumberTools.atan2(y, x));
-        degree += 450;//rotate to all positive and 0 is up
-        degree %= 360;//normalize
-        if (degree < 22.5) {
-            return UP;
-        } else if (degree < 67.5) {
-            return UP_RIGHT;
-        } else if (degree < 112.5) {
-            return RIGHT;
-        } else if (degree < 157.5) {
-            return DOWN_RIGHT;
-        } else if (degree < 202.5) {
-            return DOWN;
-        } else if (degree < 247.5) {
-            return DOWN_LEFT;
-        } else if (degree < 292.5) {
-            return LEFT;
-        } else if (degree < 337.5) {
-            return UP_LEFT;
-        } else {
-            return UP;
-        }
+        if ((x | y) == 0) return NONE;
+        return CLOCKWISE[(int)(NumberTools.atan2_(y, x) * 8f + 2.5f) & 7];
     }
 
     /**
@@ -102,8 +79,8 @@ public enum Direction {
      * and y are both non-zero, this will always produce a diagonal, even if a cardinal direction should be more
      * accurate; this behavior may sometimes be desirable to detect when some position is even slightly off from a true
      * cardinal direction.
-     * @param x the relative x position to find the direction towards
-     * @param y the relative y position to find the direction towards
+     * @param x the x position relative to the origin (0,0)
+     * @param y the y position relative to the origin (0,0)
      * @return the Direction that x,y lies in, roughly; will always be accurate for arguments between -1 and 1 inclusive
      */
     public static Direction getRoughDirection(int x, int y)
@@ -138,46 +115,29 @@ public enum Direction {
 
     /**
      * Returns the direction that most closely matches the input.
-     *
-     * This can be used to get the primary magnitude cardinal direction from an
+     * This can be any of the four cardinal directions as well as {@link #NONE}
+     * in the case that x and y are both 0.
+     * <br>
+     * This can be used to get the primary cardinal direction from an
      * origin point to an event point, such as a mouse click on a grid.
-     *
      * If the point given is directly diagonal then the direction clockwise is
      * returned.
-     *
-     * @param x
-     * @param y
-     * @return
+     * <br>
+     * This method returned an incorrect value for several years (the bug was found on
+     * April 28, 2020 but the method hadn't been modified for a long time), and other
+     * code in SquidLib had workarounds in use before the bug was fixed. The nature of
+     * the bug was simply that {@link #UP} was returned when {@link #DOWN} should have
+     * been, and vice versa; the workaround used in various places was to negate y.
+     * Now you should no longer have to negate y or treat it differently than x, and
+     * earlier code should account for the vertical axis being corrected.
+     * 
+     * @param x the x position relative to the origin (0,0)
+     * @param y the y position relative to the origin (0,0)
+     * @return the closest matching cardinal Direction enum, which may also be {@link #NONE}
      */
     public static Direction getCardinalDirection(int x, int y) {
-        if (x == 0 && y == 0) {
-            return NONE;
-        }
-
-        int absx = Math.abs(x);
-
-        if (y > absx) {
-            return UP;
-        }
-
-        int absy = Math.abs(y);
-
-        if (absy > absx) {
-            return DOWN;
-        }
-
-        if (x > 0) {
-            if (-y == x) {//on diagonal
-                return DOWN;
-            }
-            return RIGHT;
-        }
-
-        if (y == x) {//on diagonal
-            return UP;
-        }
-        return LEFT;
-
+        if ((x | y) == 0) return NONE;
+        return CARDINALS_CLOCKWISE[(int)(NumberTools.atan2_(y, x) * 4f + 1.5f) & 3];
     }
 
 	/**
@@ -316,7 +276,7 @@ public enum Direction {
 		case RIGHT:
 			return false;
 		}
-		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
+		throw new IllegalStateException("Unmatched Direction: " + this);
 	}
 
 	/**
@@ -336,7 +296,7 @@ public enum Direction {
 		case UP_RIGHT:
 			return false;
 		}
-		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
+		throw new IllegalStateException("Unmatched Direction: " + this);
 	}
 
 	/**
@@ -356,7 +316,7 @@ public enum Direction {
 		case UP_RIGHT:
 			return false;
 		}
-		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
+		throw new IllegalStateException("Unmatched Direction: " + this);
 	}
 
 	/**
@@ -376,7 +336,7 @@ public enum Direction {
 		case UP_LEFT:
 			return false;
 		}
-		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
+		throw new IllegalStateException("Unmatched Direction: " + this);
 	}
 
     Direction(int x, int y) {
