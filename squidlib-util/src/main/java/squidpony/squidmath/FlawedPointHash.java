@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 /**
  * An interface for point hashes that are statistically biased, as well as a holder for inner classes that implement
  * this. The point hashes here are mostly chosen because they are aesthetically interesting, at least on some of their
@@ -7,6 +9,7 @@ package squidpony.squidmath;
  * <br>
  * Created by Tommy Ettinger on 4/14/2020.
  */
+@Beta
 public interface FlawedPointHash extends IPointHash, IFlawed {
     /**
      * Produces hashes that show strong bias on one axis (usually the later axes matter more) and have nice-looking
@@ -96,19 +99,19 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
 
         public QuiltHash(long state, int size) {
             super(state);
-            setSize(32 - Integer.numberOfLeadingZeros(size));
+            setSize(size);
         }
 
         public long getState() {
             return state;
         }
-        
+
         public int getSize() {
             return size;
         }
 
         public void setSize(int size) {
-            this.size = Math.max(1, size);
+            this.size = 32 - Integer.numberOfLeadingZeros(Math.max(1, size));
             mask = (1L << this.size) - 1L;
         }
 
@@ -169,6 +172,122 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
 //            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
 //            s = (s + 0x9E3779B97F4A7C15L ^ s) * (z + y);
 //            return (int) (s >>> 32);
+        }
+
+        public long hashLongs(long x, long y, long z, long w, long s) {
+            return hashLongs(x, hashLongs(y, hashLongs(z, w, s), s), s);
+        }
+
+        public long hashLongs(long x, long y, long z, long w, long u, long v, long s) {
+            return hashLongs(x, hashLongs(y, hashLongs(z, hashLongs(w, hashLongs(u, v, s), s), s), s), s);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int state) {
+            return (int)(hashLongs(x, y, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int state) {
+            return (int)(hashLongs(x, y, z, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int state) {
+            return (int)(hashLongs(x, y, z, w, state) >>> 32);
+        }
+
+        @Override
+        public int hashWithState(int x, int y, int z, int w, int u, int v, int state) {
+            return (int)(hashLongs(x, y, z, w, u, v, state) >>> 32);
+        }
+    }
+
+    /**
+     * Very similar to {@link QuiltHash}, but this doesn't change the pattern in different large squares, and instead
+     * repeats a square or cube of symmetric and patterned results over and over (so it can be tiled).
+     */
+    class CubeHash extends IPointHash.LongImpl implements FlawedPointHash {
+        private int size = 6;
+        private long mask = (1L << size) - 1L;
+        public CubeHash() {
+        }
+
+        public CubeHash(long state) {
+            super(state);
+        }
+
+        public CubeHash(long state, int size) {
+            super(state);
+            setSize(size);
+        }
+
+        public long getState() {
+            return state;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = 32 - Integer.numberOfLeadingZeros(Math.max(1, size));
+            mask = (1L << this.size) - 1L;
+        }
+
+        public long hashLongs(long x, long y, long s) {
+            x &= mask >>> 1;
+            y &= mask >>> 1;
+            x *= x * 0xC13FA9A902A6328FL;
+            y *= y * 0x91E10DA5C79E7B1DL;
+            x = x >>> 1 & mask;
+            y = y >>> 1 & mask;
+            long t;
+            if (x < y) {
+                t = x;
+                x = y;
+                y = t;
+            }
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + y);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (y + x);
+            return s;
+        }
+
+        public long hashLongs(long x, long y, long z, long s) {
+            x &= mask >>> 1;
+            y &= mask >>> 1;
+            z &= mask >>> 1;
+//            s ^= (x) * 0xD1B54A32D192ED03L;
+//            s ^= (y) * 0xABC98388FB8FAC03L;
+//            s ^= (z) * 0x8CB92BA72F3D8DD7L;
+            x *= x * 0xD1B54A32D192ED03L;
+            y *= y * 0xABC98388FB8FAC03L;
+            z *= z * 0x8CB92BA72F3D8DD7L;
+            x = x & mask >>> 1;
+            y = y & mask >>> 1;
+            z = z & mask >>> 1;
+            long t;
+            if (x < y) {
+                t = x;
+                x = y;
+                y = t;
+            }
+            if(x < z){
+                t = x;
+                x = z;
+                z = t;
+            }
+            if(y < z){
+                t = y;
+                y = z;
+                z = t;
+            }
+            x = (x + 0x9E3779B97F4A7C15L ^ x) * (s + z);
+            y = (y + 0x9E3779B97F4A7C15L ^ y) * (x + s);
+            z = (z + 0x9E3779B97F4A7C15L ^ z) * (y + x);
+            s = (s + 0x9E3779B97F4A7C15L ^ s) * (z + y);
+            return s;
         }
 
         public long hashLongs(long x, long y, long z, long w, long s) {
