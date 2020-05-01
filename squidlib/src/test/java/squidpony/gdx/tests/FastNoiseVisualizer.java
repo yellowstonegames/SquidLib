@@ -7,10 +7,16 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.squidgrid.gui.gdx.PNG8;
+import squidpony.squidgrid.gui.gdx.PaletteReducer;
 import squidpony.squidmath.*;
+
+import java.io.IOException;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -45,6 +51,9 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private Viewport view;
     private int ctr = -256;
     private boolean keepGoing = true;
+    
+    private PNG8 png8;
+    private Array<Pixmap> frames = new Array<>(64);
 
     public static float basicPrepare(float n)
     {
@@ -55,20 +64,58 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new ScreenViewport();
+        png8 = new PNG8();
+        png8.palette = new PaletteReducer(new int[] {
+                0x000000ff, 0x000033ff, 0x000066ff, 0x000099ff, 0x0000ccff, 0x0000ffff, 0x003300ff,
+                0x003333ff, 0x003366ff, 0x003399ff, 0x0033ccff, 0x0033ffff, 0x006600ff, 0x006633ff, 0x006666ff,
+                0x006699ff, 0x0066ccff, 0x0066ffff, 0x009900ff, 0x009933ff, 0x009966ff, 0x009999ff, 0x0099ccff,
+                0x0099ffff, 0x00cc00ff, 0x00cc33ff, 0x00cc66ff, 0x00cc99ff, 0x00ccccff, 0x00ccffff, 0x00ff00ff,
+                0x00ff33ff, 0x00ff66ff, 0x00ff99ff, 0x00ffccff, 0x00ffffff, 0x330000ff, 0x330033ff, 0x330066ff,
+                0x330099ff, 0x3300ccff, 0x3300ffff, 0x333300ff, 0x333333ff, 0x333366ff, 0x333399ff, 0x3333ccff,
+                0x3333ffff, 0x336600ff, 0x336633ff, 0x336666ff, 0x336699ff, 0x3366ccff, 0x3366ffff, 0x339900ff,
+                0x339933ff, 0x339966ff, 0x339999ff, 0x3399ccff, 0x3399ffff, 0x33cc00ff, 0x33cc33ff, 0x33cc66ff,
+                0x33cc99ff, 0x33ccccff, 0x33ccffff, 0x33ff00ff, 0x33ff33ff, 0x33ff66ff, 0x33ff99ff, 0x33ffccff,
+                0x33ffffff, 0x660000ff, 0x660033ff, 0x660066ff, 0x660099ff, 0x6600ccff, 0x6600ffff, 0x663300ff,
+                0x663333ff, 0x663366ff, 0x663399ff, 0x6633ccff, 0x6633ffff, 0x666600ff, 0x666633ff, 0x666666ff,
+                0x666699ff, 0x6666ccff, 0x6666ffff, 0x669900ff, 0x669933ff, 0x669966ff, 0x669999ff, 0x6699ccff,
+                0x6699ffff, 0x66cc00ff, 0x66cc33ff, 0x66cc66ff, 0x66cc99ff, 0x66ccccff, 0x66ccffff, 0x66ff00ff,
+                0x66ff33ff, 0x66ff66ff, 0x66ff99ff, 0x66ffccff, 0x66ffffff, 0x990000ff, 0x990033ff, 0x990066ff,
+                0x990099ff, 0x9900ccff, 0x9900ffff, 0x993300ff, 0x993333ff, 0x993366ff, 0x993399ff, 0x9933ccff,
+                0x9933ffff, 0x996600ff, 0x996633ff, 0x996666ff, 0x996699ff, 0x9966ccff, 0x9966ffff, 0x999900ff,
+                0x999933ff, 0x999966ff, 0x999999ff, 0x9999ccff, 0x9999ffff, 0x99cc00ff, 0x99cc33ff, 0x99cc66ff,
+                0x99cc99ff, 0x99ccccff, 0x99ccffff, 0x99ff00ff, 0x99ff33ff, 0x99ff66ff, 0x99ff99ff, 0x99ffccff,
+                0x99ffffff, 0xcc0000ff, 0xcc0033ff, 0xcc0066ff, 0xcc0099ff, 0xcc00ccff, 0xcc00ffff, 0xcc3300ff,
+                0xcc3333ff, 0xcc3366ff, 0xcc3399ff, 0xcc33ccff, 0xcc33ffff, 0xcc6600ff, 0xcc6633ff, 0xcc6666ff,
+                0xcc6699ff, 0xcc66ccff, 0xcc66ffff, 0xcc9900ff, 0xcc9933ff, 0xcc9966ff, 0xcc9999ff, 0xcc99ccff,
+                0xcc99ffff, 0xcccc00ff, 0xcccc33ff, 0xcccc66ff, 0xcccc99ff, 0xccccccff, 0xccccffff, 0xccff00ff,
+                0xccff33ff, 0xccff66ff, 0xccff99ff, 0xccffccff, 0xccffffff, 0xff0000ff, 0xff0033ff, 0xff0066ff,
+                0xff0099ff, 0xff00ccff, 0xff00ffff, 0xff3300ff, 0xff3333ff, 0xff3366ff, 0xff3399ff, 0xff33ccff,
+                0xff33ffff, 0xff6600ff, 0xff6633ff, 0xff6666ff, 0xff6699ff, 0xff66ccff, 0xff66ffff, 0xff9900ff,
+                0xff9933ff, 0xff9966ff, 0xff9999ff, 0xff99ccff, 0xff99ffff, 0xffcc00ff, 0xffcc33ff, 0xffcc66ff,
+                0xffcc99ff, 0xffccccff, 0xffccffff, 0xffff00ff, 0xffff33ff, 0xffff66ff, 0xffff99ff, 0xffffccff,
+                0xffffffff, });
 
         input = new InputAdapter(){
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
-                    case MINUS:
-                        mode = (mode + MODE_LIMIT - 1) % MODE_LIMIT;
-                        break;
-                    case U:
                     case ENTER:
-                        if (keycode == ENTER) {
-                            mode++;
-                            mode %= MODE_LIMIT;
-                            ctr = -256;
+                        frames.clear();
+                        for (int c = 0; c < 64; c++) {
+                            Pixmap p = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+                            for (int x = 0; x < width; x++) {
+                                for (int y = 0; y < height; y++) {
+                                    float color = basicPrepare(noise.getConfiguredNoise(x, y, c));
+                                    p.setColor(color, color, color, 1f);
+                                    p.drawPixel(x, y);
+                                }
+                            }
+                            frames.add(p);
+                        }
+                        try {
+                            png8.write(Gdx.files.local("noise.png"), frames, 16, true);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                         break;
                     case P: //pause
