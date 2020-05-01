@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -19,7 +19,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
  */
 public class FastNoiseVisualizer extends ApplicationAdapter {
 
-    private FastNoise noise = new FastNoise(1);
+    private FastNoise noise = new FastNoise(1, 0.25f, FastNoise.CUBIC_FRACTAL, 1);
     private static final int MODE_LIMIT = 1;
     private int mode = 0;
     private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
@@ -28,7 +28,17 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private boolean inverse = false;
     private ImmediateModeRenderer20 renderer;
     
-    private static final int width = 512, height = 512;
+    private int hashIndex = 4;
+    private PointHash ph = new PointHash();
+    private HastyPointHash hph = new HastyPointHash();
+    private IntPointHash iph = new IntPointHash();
+    private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
+    private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 32);
+    private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
+    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
+    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, rug, quilt, cube};
+
+    private static final int width = 64, height = 64;
 
     private InputAdapter input;
     
@@ -60,45 +70,39 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                             mode %= MODE_LIMIT;
                             ctr = -256;
                         }
-                        putMap();
                         break;
                     case P: //pause
                         keepGoing = !keepGoing;
                     case C:
                         ctr++;
-                        putMap();
                         break;
                     case E: //earlier seed
                         noise.setSeed(noise.getSeed() - 1);
-                        putMap();
                         break;
                     case S: //seed
                         noise.setSeed(noise.getSeed() + 1);
-                        putMap();
                         break;
                     case N: // noise type
                         noise.setNoiseType((noise.getNoiseType() + 1) % 10);
-                        putMap();
                         break;
                     case D: //dimension
                         dim = (dim + 1) & 3;
-                        putMap();
                         break;
                     case F: // frequency
-                        noise.setFrequency((float) Math.sin(freq += 0.125f) * 0.25f + 0.25f + 0x1p-7f);
-                        putMap();
+//                        noise.setFrequency(NumberTools.sin(freq += 0.125f) * 0.25f + 0.25f + 0x1p-7f);
+                        noise.setFrequency((float) Math.pow(2f, (System.currentTimeMillis() >>> 9 & 7) - 5));
                         break;
                     case R: // fRactal type
                         noise.setFractalType((noise.getFractalType() + 1) % 3);
-                        putMap();
+                        break;
+                    case G: // GLITCH!
+                        noise.setPointHash(pointHashes[hashIndex = (hashIndex + 1) % pointHashes.length]);
                         break;
                     case H: // higher octaves
                         noise.setFractalOctaves((octaves = octaves + 1 & 7) + 1);
-                        putMap();
                         break;
                     case L: // lower octaves
                         noise.setFractalOctaves((octaves = octaves + 7 & 7) + 1);
-                        putMap();
                         break;
                     case I: // inverse mode
                         if (inverse = !inverse) {
@@ -108,11 +112,9 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                             noise.setFractalLacunarity(2f);
                             noise.setFractalGain(0.5f);
                         }
-                        putMap();
                         break;
                     case K: // sKip
                         ctr += 1000;
-                        putMap();
                         break;
                     case Q:
                     case ESCAPE: {
@@ -130,8 +132,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         float bright;
         switch (dim) {
             case 0:
-                for (int x = 0; x < 512; x++) {
-                    for (int y = 0; y < 512; y++) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
                         bright = basicPrepare(noise.getConfiguredNoise(x + ctr, y + ctr));
                         renderer.color(bright, bright, bright, 1f);
                         renderer.vertex(x, y, 0);
@@ -139,8 +141,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 }
                 break;
             case 1:
-                for (int x = 0; x < 512; x++) {
-                    for (int y = 0; y < 512; y++) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
                         bright = basicPrepare(noise.getConfiguredNoise(x, y, ctr));
                         renderer.color(bright, bright, bright, 1f);
                         renderer.vertex(x, y, 0);
@@ -148,8 +150,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 }
                 break;
             case 2:
-                for (int x = 0; x < 512; x++) {
-                    for (int y = 0; y < 512; y++) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
                         bright = basicPrepare(noise.getConfiguredNoise(x, y, ctr, 0x1p-4f * (x + y - ctr)));
                         renderer.color(bright, bright, bright, 1f);
                         renderer.vertex(x, y, 0);
@@ -158,9 +160,9 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                 break;
             case 3:
                 float xx, yy;
-                for (int x = 0; x < 512; x++) {
+                for (int x = 0; x < width; x++) {
                     xx = x * 0x1p-4f;
-                    for (int y = 0; y < 512; y++) {
+                    for (int y = 0; y < height; y++) {
                         yy = y * 0x1p-4f;
                         bright = basicPrepare(noise.getConfiguredNoise(
                                 ctr + xx, x + ctr, y - ctr,
@@ -201,8 +203,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         config.title = "SquidLib Test: Hash Visualization";
         config.width = width;
         config.height = height;
-        config.foregroundFPS = 0;
-        config.vSyncEnabled = false;
+        config.foregroundFPS = 20;
+        config.vSyncEnabled = true;
         config.resizable = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
