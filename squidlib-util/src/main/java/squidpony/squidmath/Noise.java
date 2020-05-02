@@ -477,6 +477,7 @@ public class Noise {
             return n / ((1 << octaves) - 1.0);
         }
     }
+    
     public static class InverseLayered1D implements Noise1D {
         protected int octaves;
         protected Noise1D basis;
@@ -1860,6 +1861,146 @@ public class Noise {
         }
     }
 
+
+    public static class Exponential1D implements Noise1D {
+        protected Noise1D basis;
+        protected double sharpness, adjustment;
+        public Exponential1D() {
+            this(Basic1D.instance);
+        }
+
+        public Exponential1D(Noise1D basis) {
+            this(basis, 0.125);
+        }
+        public Exponential1D(Noise1D basis, double sharpness) {
+            this.basis = basis;
+            this.sharpness = sharpness - fastFloor(sharpness) - 1.0;
+            this.adjustment = 2.0 / Math.log1p(this.sharpness * 0.9999999999999999);
+            this.sharpness *= 0.5;
+        }
+
+
+        @Override
+        public double getNoise(double x) {
+            return Math.log(1.0 + sharpness * (basis.getNoise(x) + 1.0)) * adjustment - 1.0;
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, long seed) {
+            return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, seed) + 1.0)) * adjustment - 1.0;
+        }
+    }
+
+    public static class Exponential2D implements Noise2D {
+        protected Noise2D basis;
+        protected double sharpness, adjustment;
+        public Exponential2D() {
+            this(SeededNoise.instance);
+        }
+
+        public Exponential2D(Noise2D basis) {
+            this(basis, 0.125);
+        }
+        public Exponential2D(Noise2D basis, double sharpness) {
+            this.basis = basis;
+            this.sharpness = sharpness - fastFloor(sharpness) - 1.0;
+            this.adjustment = 2.0 / Math.log1p(this.sharpness * 0.9999999999999999);
+            this.sharpness *= 0.5;
+        }
+
+        @Override
+        public double getNoise(double x, double y) {
+            return Math.log(1.0 + sharpness * (basis.getNoise(x, y) + 1.0)) * adjustment - 1.0;
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, long seed) {
+            return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, y, seed) + 1.0)) * adjustment - 1.0;
+        }
+    }
+    public static class Exponential3D implements Noise3D {
+        protected Noise3D basis;
+        protected double sharpness, adjustment;
+        public Exponential3D() {
+            this(SeededNoise.instance);
+        }
+
+        public Exponential3D(Noise3D basis) {
+            this(basis, 0.125);
+        }
+        public Exponential3D(Noise3D basis, double sharpness) {
+            this.basis = basis;
+            this.sharpness = sharpness - fastFloor(sharpness) - 1.0;
+            this.adjustment = 2.0 / Math.log1p(this.sharpness * 0.9999999999999999);
+            this.sharpness *= 0.5;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z) {
+            return Math.log(1.0 + sharpness * (basis.getNoise(x, y, z) + 1.0)) * adjustment - 1.0;
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, long seed) {
+            return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, y, z, seed) + 1.0)) * adjustment - 1.0;
+        }
+    }
+    public static class Exponential4D implements Noise4D {
+        protected Noise4D basis;
+        protected double sharpness, adjustment;
+        public Exponential4D() {
+            this(SeededNoise.instance);
+        }
+
+        public Exponential4D(Noise4D basis) {
+            this(basis, 0.125);
+        }
+        public Exponential4D(Noise4D basis, double sharpness) {
+            this.basis = basis;
+            this.sharpness = sharpness - fastFloor(sharpness) - 1.0;
+            this.adjustment = 2.0 / Math.log1p(this.sharpness * 0.9999999999999999);
+            this.sharpness *= 0.5;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w) {
+            return Math.log(1.0 + sharpness * (basis.getNoise(x, y, z, w) + 1.0)) * adjustment - 1.0;
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
+            return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, y, z, w, seed) + 1.0)) * adjustment - 1.0;
+        }
+    }
+    public static class Exponential6D implements Noise6D {
+        protected Noise6D basis;
+        protected double sharpness, adjustment;
+        public Exponential6D() {
+            this(SeededNoise.instance);
+        }
+
+        public Exponential6D(Noise6D basis) {
+            this(basis, 0.125);
+        }
+        public Exponential6D(Noise6D basis, double sharpness) {
+            this.basis = basis;
+            this.sharpness = sharpness - fastFloor(sharpness) - 1.0;
+            this.adjustment = 2.0 / Math.log1p(this.sharpness * 0.9999999999999999);
+            this.sharpness *= 0.5;
+        }
+
+        @Override
+        public double getNoise(double x, double y, double z, double w, double u, double v) {
+            return Math.log(1.0 + sharpness * (basis.getNoise(x, y, z, w, u, v) + 1.0)) * adjustment - 1.0;
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
+            return Math.log(1.0 + sharpness * (basis.getNoiseWithSeed(x, y, z, w, u, v, seed) + 1.0)) * adjustment - 1.0;
+        }
+    }
+    
+    
     /**
      * Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.
      * Uses (x,y) order. Allows a seed to change the generated noise.

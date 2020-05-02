@@ -36,7 +36,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 2048, height = 1024; // mimic, elliptical
 //    private static final int width = 1000, height = 1000; // space view
 //    private static final int width = 1200, height = 400; // squat
-    private static final int LIMIT = 20;
+    private static final int LIMIT = 5;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -82,12 +82,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         date = DateFormat.getDateInstance().format(new Date());
 //        path = "out/worlds/" + date + "/Sphere/";
 //        path = "out/worlds/" + date + "/Ellipse/";
-        path = "out/worlds/" + date + "/EllipseFoam/";
+//        path = "out/worlds/" + date + "/EllipseExpo/";
 //        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
 //        path = "out/worlds/" + date + "/Hyperellipse/";
-//        path = "out/worlds/" + date + "/HyperellipseFoam/";
+        path = "out/worlds/" + date + "/HyperellipseExpo/";
+//        path = "out/worlds/" + date + "/HyperellipseQuilt/";
 //        path = "out/worlds/" + date + "/Tiling/";
 //        path = "out/worlds/" + date + "/RoundSide/";
 //        path = "out/worlds/" + date + "/Local/";
@@ -114,10 +115,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         seed = rng.getState();
         
         thesaurus = new Thesaurus(rng);
-
-        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.FOAM_FRACTAL);
-        WorldMapGenerator.DEFAULT_NOISE.setFrequency(2f);
-        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(3);
+        Noise.Noise3D noise = new Noise.Exponential3D(new FastNoise((int)seed, 2.5f, FastNoise.FOAM_FRACTAL, 2));
+//        FastNoise fn = new FastNoise((int)seed, 4f, FastNoise.CUBIC_FRACTAL, 1);
+//        fn.setPointHash(new FlawedPointHash.CubeHash(seed, 8192));
+//        Noise.Noise3D noise = new Noise.Exponential3D(fn);
+//        WorldMapGenerator.DEFAULT_NOISE.setNoiseType(FastNoise.FOAM_FRACTAL);
+//        WorldMapGenerator.DEFAULT_NOISE.setFrequency(2f);
+//        WorldMapGenerator.DEFAULT_NOISE.setFractalOctaves(3);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(2f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalGain(0.5f);
 //        WorldMapGenerator.DEFAULT_NOISE.setFractalLacunarity(0.2f);
@@ -127,7 +131,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
+//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, noise, 1.75);
 //        world = new WorldMapGenerator.MimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.RoundSideMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
@@ -136,14 +140,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 1.75);
 //        world = new WorldMapGenerator.LocalMap(seed, width, height, WorldMapGenerator.DEFAULT_NOISE, 0.8);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, WorldMapGenerator.DEFAULT_NOISE, 1.75);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, new Noise.Layered3D(FoamNoise.instance, 2, 3.125, 0.7), 0.6, 0.03125, 2.5);
-        //parameters used above:
-        //new Noise.Layered3D(FoamNoise.instance, 2, 3.125, 0.7)
-        // FoamNoise with default seed
-        // on top of the normal first octave, there's an extra octave with different frequency and amplitude
-        // frequency is higher; still lower than equivalent Simplex noise with FastNoise
-        // lacunarity is 0.7, which is a little high, and increases the contribution of the higher-frequency octave
-        // the octave modifier for HyperellipticalMap is 0.6, much lower than when using FastNoise, and can be lower
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, noise, 0.8, 0.03125, 2.5);
         wmv = new WorldMapView(world);
 
         //generate(seed);
@@ -165,9 +162,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         world.rng.setState(seed);
         world.seedA = world.rng.stateA;
         world.seedB = world.rng.stateB;
-        wmv.generate();
-//        wmv.generate(1.0 + NumberTools.formCurvedDouble((world.seedA ^ 0x123456789ABCDL) * 0x12345689ABL ^ world.seedB) * 0.25,
-//                DiverRNG.determineDouble(world.seedB * 0x12345L + 0x54321L ^ world.seedA) * 0.25 + 1.0);
+//        wmv.generate();
+        wmv.generate(
+                1.45,
+                //1.0 + NumberTools.formCurvedDouble(world.seedA * 0x123456789ABCDEFL ^ world.seedB) * 0.1875,
+                0.96875 + DiverRNG.determineDouble(world.seedB * 0x123456789ABL ^ world.seedA) * 0.3125);
         ttg = System.currentTimeMillis() - startTime;
     }
 
