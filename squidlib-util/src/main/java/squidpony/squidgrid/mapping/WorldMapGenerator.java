@@ -1714,8 +1714,8 @@ public abstract class WorldMapGenerator implements Serializable {
         // 0.7978845608028654 1.2533141373155001
         @Override
         public Coord project(double latitude, double longitude) {
-            int x = (int)((((longitude - getCenterLongitude()) * 0.7978845608028654 + 12.566370614359172) % 6.283185307179586) * 0.15915494309189535 * width),
-                    y = (int)((NumberTools.sin(latitude) * 0.6266570686577501 + 0.5) * height);
+            int x = (int)((((longitude - getCenterLongitude()) + 12.566370614359172) % 6.283185307179586) * 0.15915494309189535 * width),
+                    y = (int)((NumberTools.sin(latitude) * 0.5 + 0.5) * height);
             return Coord.get(
                     wrapX(x, y),
                     wrapY(x, y));
@@ -1784,8 +1784,8 @@ public abstract class WorldMapGenerator implements Serializable {
             for (int x = 0; x < width; x++, xPos += i_uw) {
                 p = xPos * i_w + centerLongitude;
                 // 0.7978845608028654 1.2533141373155001
-                trigTable[x<<1]   = NumberTools.sin(p) * 1.2533141373155001;
-                trigTable[x<<1|1] = NumberTools.cos(p) * 0.7978845608028654;
+                trigTable[x<<1]   = NumberTools.sin(p);// * 1.2533141373155001;
+                trigTable[x<<1|1] = NumberTools.cos(p);// * 0.7978845608028654;
             }
             yPos = startY * i_h + i_uh;
             for (int y = 0; y < height; y++, yPos += i_uh) {
