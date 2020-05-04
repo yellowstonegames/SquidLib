@@ -63,26 +63,32 @@ public class ThesaurusTest {
 //        System.out.println(Thesaurus.ORK.process(oz));
 //        System.out.println();
         thesaurus.addKnownCategories();
-        StringBuilder text = new StringBuilder("The elixir you desire is no simple matter to brew. I would require many ingredients, most rare or exotic, to even begin to craft this tonic. If you remain undaunted... I require ");
         thesaurus.refresh(thesaurus.rng.nextLong());
-        FakeLanguageGen lang = FakeLanguageGen.mixAll(FakeLanguageGen.GREEK_ROMANIZED, 4, FakeLanguageGen.SIMPLISH, 2, FakeLanguageGen.MALAY, 1);
+        thesaurus.defaultLanguage = FakeLanguageGen.mixAll(FakeLanguageGen.GREEK_ROMANIZED, 4, FakeLanguageGen.SIMPLISH, 2, FakeLanguageGen.MALAY, 1);
+        StringBuilder text = new StringBuilder("The elixir you desire is no simple matter to brew. " +
+                "I would require many ingredients, most rare or exotic, to even begin to craft this tonic. " +
+                "If you remain undaunted... I require ");
         for (int i = 0; i < 10; i++) {
-            text.append(thesaurus.lookup("leaf`noun`")).append(" of ").append(thesaurus.makePlantName(lang)).append(", ");
+            text.append("leaf`noun` of plant`term`, ");
+//            text.append(thesaurus.lookup("leaf`noun`")).append(" of ").append(thesaurus.makePlantName(lang)).append(", ");
         }
-        text.append("and ").append(thesaurus.lookup("leaf`noun`")).append(" of ").append(thesaurus.makePlantName(lang)).append(". Bring me this before the winter equinox and you shall have your potion.")
-//                .append(" Look for ").append(thesaurus.makePotionDescription()).append(", or maybe ")
-//                .append(thesaurus.makePotionDescription()).append(", if you're lucky.")
-                .append("\n...Oh, and could you also pick me up a ").append(thesaurus.makeFruitName(lang)).append(", maybe a ").append(thesaurus.makeFruitName(lang))
-                .append(", uh, a ").append(thesaurus.makeNutName(lang)).append(", a ").append(thesaurus.makeNutName(lang))
-                .append(", a ").append(thesaurus.makeFlowerName(lang)).append(", and maybe a ").append(thesaurus.makeFlowerName(lang)).append(", if it's not too much trouble.");
+        text.append("and leaf`noun` of plant`term`. Bring me this before the winter equinox and you shall have your potion." +
+                "\n...Oh, and could you also pick me up a fruit`term`, maybe a fruit`term`, uh, a nut`term`, a nut`term`, " +
+                "a flower`term`, and maybe a flower`term`, if it's not too much trouble.");
+//        text.append("and ").append(thesaurus.lookup("leaf`noun`")).append(" of ").append(thesaurus.makePlantName(lang))
+//                .append(". Bring me this before the winter equinox and you shall have your potion.")
+//                .append("\n...Oh, and could you also pick me up a ").append(thesaurus.makeFruitName(lang)).append(", maybe a ")
+//                .append(thesaurus.makeFruitName(lang))
+//                .append(", uh, a ").append(thesaurus.makeNutName(lang)).append(", a ").append(thesaurus.makeNutName(lang))
+//                .append(", a ").append(thesaurus.makeFlowerName(lang)).append(", and maybe a ").append(thesaurus.makeFlowerName(lang))
+//                .append(", if it's not too much trouble.");
 //        System.out.println(text);
-        text.append("\nYou have slain the ").append(FakeLanguageGen.DEMONIC.word(thesaurus.rng, true))
-                .append("!\nYou loot its body, and find ")
-                .append(thesaurus.makePotionDescription()).append(", ")
-                .append(thesaurus.makePotionDescription()).append(", ")
-                .append(thesaurus.makePotionDescription()).append(", and ")
-                .append(thesaurus.makePotionDescription()).append(".");
-        for(String s : StringKit.wrap(text, 80))
+        text.append('\n');
+        text.append("\nYou have slain the ").append(FakeLanguageGen.DEMONIC.word(thesaurus.rng, true, 1, 2))
+                .append("!\nYou loot its body, and find potion`term`, potion`term`, potion`term`, and potion`term`.");
+        text.append('\n');
+        text.append("For the emperor`noun`, and for ").append(thesaurus.makeNationName()).append('!');
+        for(String s : StringKit.wrap(thesaurus.process(text), 80))
         {
             System.out.println(s);
         }
