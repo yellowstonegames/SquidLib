@@ -81,13 +81,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
 //        path = "out/worlds/" + date + "/Sphere/";
+        path = "out/worlds/" + date + "/SphereQuilt/";
+//        path = "out/worlds/" + date + "/SphereExpo/";
 //        path = "out/worlds/" + date + "/Ellipse/";
 //        path = "out/worlds/" + date + "/EllipseExpo/";
 //        path = "out/worlds/" + date + "/Mimic/";
 //        path = "out/worlds/" + date + "/SpaceView/";
 //        path = "out/worlds/" + date + "/Sphere_Classic/";
-        path = "out/worlds/" + date + "/SphereQuilt/";
-//        path = "out/worlds/" + date + "/SphereExpo/";
 //        path = "out/worlds/" + date + "/Hyperellipse/";
 //        path = "out/worlds/" + date + "/HyperellipseExpo/";
 //        path = "out/worlds/" + date + "/HyperellipseQuilt/";

@@ -65,7 +65,9 @@ public class WorldMap3DDemo extends Game {
 		// material
 		Material material = new Material();
 		material.set(ColorAttribute.createDiffuse(Color.WHITE));
-		texture = new Texture(Gdx.files.internal("special/EquirectangularWorldMap.png"));
+//		texture = new Texture(Gdx.files.internal("special/GlitchEquirectangularWorldMap.png"));
+//		texture = new Texture(Gdx.files.internal("special/EquirectangularWorldMap.png"));
+		texture = new Texture(Gdx.files.internal("special/NASA_Earth_Map.jpg"));
 		material.set(TextureAttribute.createDiffuse(texture));
 		
 		// model
@@ -89,9 +91,9 @@ public class WorldMap3DDemo extends Game {
 	public void render() {
 		cameraController.update();
 		
-		ambientLight.color.set(Color.WHITE).mul(.2f);
-		sunLight.color.set(Color.WHITE).mul(.8f);
-		cameraLight.color.set(Color.WHITE).mul(.5f);
+		ambientLight.color.set(Color.WHITE).mul(.25f);
+		sunLight.color.set(Color.WHITE).mul(.75f);
+		cameraLight.color.set(Color.WHITE).mul(.5625f);
 		cameraLight.direction.set(camera.direction);
 		
 		Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -102,7 +104,7 @@ public class WorldMap3DDemo extends Game {
 	}
 	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "SquidLib Demo: Detailed World Map";
+		config.title = "SquidLib Demo: 3D World Map";
 		config.width = 960;
 		config.height = 540;
 		config.foregroundFPS = 60;
