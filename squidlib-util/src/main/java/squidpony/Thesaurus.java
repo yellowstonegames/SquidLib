@@ -18,7 +18,7 @@ import static squidpony.Maker.makeOM;
  */
 public class Thesaurus implements Serializable{
     private static final long serialVersionUID = 3387639905758074640L;
-    protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)"),
+    protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+|@)"),
             similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
     protected static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa]) (?=[AEIOUaeiou])"), "$1n ");
     public OrderedMap<CharSequence, GapShuffler<String>> mappings;
@@ -26,6 +26,7 @@ public class Thesaurus implements Serializable{
     public SilkRNG rng;
     public GapShuffler<String> plantTermShuffler, fruitTermShuffler, nutTermShuffler, flowerTermShuffler,
             potionTermShuffler;
+    public FakeLanguageGen defaultLanguage = FakeLanguageGen.SIMPLISH;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
     public transient String latestGenerated = "Nationia";
     /**
@@ -97,34 +98,6 @@ public class Thesaurus implements Serializable{
         flowerTermShuffler.setRNG(rng, true);
         potionTermShuffler.setRNG(rng, true);
     }
-    
-    /**
-     * Allows this Thesaurus to find the exact words in synonyms and, when requested, replace each occurrence with a
-     * different word from the same Collection. Each word in synonyms should have the same part of speech, so "demon"
-     * and "devils" should not be in the same list of synonyms (singular noun and plural noun), but "demon" and "devil"
-     * could be (each is a singular noun). The Strings in synonyms should all be lower-case, since case is picked up
-     * from the text as it is being replaced and not from the words themselves. Proper nouns should normally not be used
-     * as synonyms, since this could get very confusing if it changed occurrences of "Germany" to "France" at random and
-     * a character's name, like "Dorothy", to "Anne", "Emily", "Cynthia", etc. in the middle of a section about Dorothy.
-     * The word matching pattern this uses only matches all-letter words, not words that contain hyphens, apostrophes,
-     * or other punctuation.
-     * @param synonyms a Collection of lower-case Strings with similar meaning and the same part of speech
-     * @return this for chaining
-     */
-    public Thesaurus addSynonyms(Collection<String> synonyms)
-    {
-        if(synonyms.isEmpty())
-            return this;
-        //long prevState = rng.getState();
-        //rng.setState(prevState ^ CrossHash.hash64(synonyms));
-        GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng, true);
-        for(String syn : synonyms)
-        {
-            mappings.put(syn, shuffler);
-        }
-        //rng.setState(prevState);
-        return this;
-    }
 
     public Thesaurus addReplacement(CharSequence before, String after)
     {
@@ -133,11 +106,11 @@ public class Thesaurus implements Serializable{
     }
 
     /**
-     * Allows this Thesaurus to replace a specific keyword, typically containing multiple backtick characters ('`') so
-     * it can't be confused with a "real word," with one of the words in synonyms (chosen in shuffled order). The
-     * backtick is the only punctuation character that this class' word matcher considers part of a word, both for this
-     * reason and because it is rarely used in English text.
-     * @param keyword a word (typically containing backticks, '`') that will be replaced by a word from synonyms
+     * Allows this Thesaurus to replace a specific keyword, typically containing multiple backtick characters
+     * ({@code `}) so it can't be confused with a "real word," with one of the words in synonyms (chosen in shuffled
+     * order). The backtick is the only punctuation character that this class' word matcher considers part of a word,
+     * both for this reason and because it is rarely used in English text.
+     * @param keyword a word (typically containing backticks, {@code `}) that will be replaced by a word from synonyms
      * @param synonyms a Collection of lower-case Strings with similar meaning and the same part of speech
      * @return this for chaining
      */
@@ -236,6 +209,11 @@ public class Thesaurus implements Serializable{
         nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
         flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
         potionTermShuffler = new GapShuffler<>(potionTerms, rng, true);
+        mappings.put("plant`term`", plantTermShuffler);
+        mappings.put("fruit`term`", fruitTermShuffler);
+        mappings.put("nut`term`", nutTermShuffler);
+        mappings.put("flower`term`", flowerTermShuffler);
+        mappings.put("potion`term`", potionTermShuffler);
         return this;
     }
 
@@ -357,17 +335,41 @@ public class Thesaurus implements Serializable{
      */
     public String process(CharSequence text)
     {
-        Replacer rep = wordMatch.replacer(new SynonymSubstitution());
+//        Replacer rep = wordMatch.replacer(new SynonymSubstitution());
+        //String t = rep.replace(text);
+        Matcher m = wordMatch.matcher(text);
+        Substitution substitution = new SynonymSubstitution();
+        Replacer.StringBuilderBuffer dest = Replacer.wrap(new StringBuilder(text.length()));
+        while (m.find()) {
+            if (m.start() > 0) m.getGroup(MatchResult.PREFIX, dest);
+            substitution.appendSubstitution(m, dest);
+            m.setTarget(m, MatchResult.SUFFIX);
+        }
+        m.getGroup(MatchResult.TARGET, dest);
+
+        m.setTarget(dest.sb);
+        dest.sb.setLength(0);
+        while (m.find()) {
+            if (m.start() > 0) m.getGroup(MatchResult.PREFIX, dest);
+            substitution.appendSubstitution(m, dest);
+            m.setTarget(m, MatchResult.SUFFIX);
+        }
+        m.getGroup(MatchResult.TARGET, dest);
+
         if(alterations.isEmpty())
-            return rep.replace(text);
+            return StringKit.replace(anReplacer.replace(dest.sb), "\t", "");
         else
-            return modify(rep.replace(text)).toString();
+            return StringKit.replace(modify(anReplacer.replace(dest.sb)), "\t", "");
     }
 
     public String lookup(String word)
     {
         if(word.isEmpty())
             return word;
+        if("@".equals(word))
+        {
+            return defaultLanguage.word(rng, true, rng.between(2, 4));
+        }
         String word2 = word.toLowerCase();
         if(mappings.containsKey(word2))
         {
@@ -397,7 +399,7 @@ public class Thesaurus implements Serializable{
 
     private class SynonymSubstitution implements Substitution
     {
-        private StringBuilder temp = new StringBuilder(64);
+        private final StringBuilder temp = new StringBuilder(64);
         @Override
         public void appendSubstitution(MatchResult match, TextBuffer dest) {
             //dest.append(lookup(match.group(0)));
@@ -408,9 +410,14 @@ public class Thesaurus implements Serializable{
     }
 
     private void writeLookup(TextBuffer dest, StringBuilder word) {
-        if(word.length() <= 0)
+        if(word == null || word.length() <= 0)
             return;
-        if(mappings.containsKey(word))
+        if(word.charAt(0) == '@' && word.length() == 1)
+        {
+            dest.append(defaultLanguage.word(rng, true, rng.between(2, 4)));
+            return;
+        }
+        else if(mappings.containsKey(word))
         {
             String nx = mappings.get(word).next();
             if(nx.isEmpty())
