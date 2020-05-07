@@ -3,10 +3,7 @@ package squidpony.squidmath;
 import squidpony.Maker;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Meant to take a fixed-size set of items and produce a shuffled stream of them such that an element is never chosen in
@@ -248,4 +245,17 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
         this.rng = shareRNG ? rng : rng.copy();
         this.rng.shuffleInPlace(elements);
     }
+
+    /**
+     * The internal items used here are private, but you can still use this method to put a shallow copy of them into
+     * some other Collection. If the type {@code T} is mutable, changes to individual items will be reflected in this
+     * GapShuffler, so be careful in that case (if T is immutable, like if it is String, then there's nothing to need to
+     * be careful about). This copies each item in the GapShuffler's sequence once, in no particular order, but it may
+     * give a prediction of what items this will return in the future (or has already returned).
+     * @param coll a Collection that will have each of the possible items this can produce added into it, in no particular order
+     */
+    public void fillInto(Collection<T> coll) {
+        coll.addAll(elements);
+    }
+    
 }

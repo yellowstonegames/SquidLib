@@ -20,11 +20,10 @@ public class Thesaurus implements Serializable{
     private static final long serialVersionUID = 3387639905758074640L;
     protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+|@)"),
             similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
-    protected static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa]) (?=[AEIOUaeiou])"), "$1n ");
     public OrderedMap<CharSequence, GapShuffler<String>> mappings;
     public ArrayList<FakeLanguageGen.Alteration> alterations = new ArrayList<>(4);
     public SilkRNG rng;
-    public GapShuffler<String> plantTermShuffler, fruitTermShuffler, nutTermShuffler, flowerTermShuffler,
+    protected GapShuffler<String> plantTermShuffler, fruitTermShuffler, nutTermShuffler, flowerTermShuffler,
             potionTermShuffler;
     public FakeLanguageGen defaultLanguage = FakeLanguageGen.SIMPLISH;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
@@ -123,67 +122,134 @@ public class Thesaurus implements Serializable{
      * words with synonyms (only categories, which contain backticks in the name). The keywords this currently knows,
      * and the words it will replace those keywords with, are:
      * <br>
-     * (THIS IS OUT OF DATE, THERE ARE MORE KNOWN.)
-     * <br>
      * <ul>
-     *     <li>"calm`adj`": harmonious, peaceful, pleasant, serene, placid, tranquil, calm</li>
-     *     <li>"calm`noun`": harmony, peace, kindness, serenity, tranquility, calm</li>
-     *     <li>"org`noun`": fraternity, brotherhood, order, group, foundation, association, guild, fellowship, partnership</li>
-     *     <li>"org`nouns`": fraternities, brotherhoods, orders, groups, foundations, associations, guilds, fellowships, partnerships</li>
-     *     <li>"empire`adj`": imperial, prince's, king's, sultan's, regal, dynastic, royal, hegemonic, monarchic, ascendant, emir's, lordly</li>
-     *     <li>"empire`noun`": empire, emirate, kingdom, sultanate, dominion, dynasty, imperium, hegemony, triumvirate, ascendancy, monarchy, commonwealth</li>
-     *     <li>"empire`nouns`": empires, emirates, kingdoms, sultanates, dominions, dynasties, imperia, hegemonies, triumvirates, ascendancies, monarchies, commonwealths</li>
-     *     <li>"union`adj`": united, allied, people's, confederated, federated, congressional, independent, associated, unified, democratic</li>
-     *     <li>"union`noun`": union, alliance, coalition, confederation, federation, congress, confederacy, league, faction, republic</li>
-     *     <li>"union`nouns`": unions, alliances, coalitions, confederations, federations, congresses, confederacies, leagues, factions, republics</li>
-     *     <li>"militia`noun`": rebellion, resistance, militia, liberators, warriors, fighters, militants, front, irregulars</li>
-     *     <li>"militia`nouns`": rebellions, resistances, militias, liberators, warriors, fighters, militants, fronts, irregulars</li>
-     *     <li>"gang`noun`": gang, syndicate, mob, crew, posse, mafia, cartel</li>
-     *     <li>"gang`nouns`": gangs, syndicates, mobs, crews, posses, mafias, cartels</li>
-     *     <li>"duke`noun`": duke, earl, baron, fief, lord, shogun</li>
-     *     <li>"duke`nouns`": dukes, earls, barons, fiefs, lords, shoguns</li>
-     *     <li>"duchy`noun`": duchy, earldom, barony, fiefdom, lordship, shogunate</li>
-     *     <li>"duchy`nouns`": duchies, earldoms, baronies, fiefdoms, lordships, shogunates</li>
-     *     <li>"magical`adj`": arcane, enchanted, sorcerous, ensorcelled, magical, mystical</li>
-     *     <li>"holy`adj`": auspicious, divine, holy, sacred, prophetic, blessed, godly</li>
-     *     <li>"unholy`adj`": bewitched, occult, unholy, macabre, accursed, profane, vile</li>
-     *     <li>"forest`adj`": natural, primal, verdant, lush, fertile, bountiful</li>
-     *     <li>"forest`noun`": nature, forest, greenery, jungle, woodland, grove, copse</li>
-     *     <li>"fancy`adj`": grand, glorious, magnificent, magnanimous, majestic, great, powerful</li>
-     *     <li>"evil`adj`": heinous, scurrilous, terrible, horrible, debased, wicked, evil, malevolent, nefarious, vile</li>
-     *     <li>"good`adj`": righteous, moral, good, pure, compassionate, flawless, perfect</li>
-     *     <li>"sinister`adj`": shadowy, silent, lethal, deadly, fatal, venomous, cutthroat, murderous, bloodstained, stalking</li>
-     *     <li>"sinister`noun`": shadow, silence, assassin, ninja, venom, poison, snake, murder, blood, razor, tiger</li>
-     *     <li>"blade`noun`": blade, knife, sword, axe, stiletto, katana, scimitar, hatchet, spear, glaive, halberd,
-     *               hammer, maul, flail, mace, sickle, scythe, whip, lance, nunchaku, saber, cutlass, trident</li>
-     *     <li>"bow`noun`": bow, longbow, shortbow, crossbow, sling, atlatl, bolas, javelin, net, shuriken, dagger</li>
-     *     <li>"weapon`noun`": blade, knife, sword, axe, stiletto, katana, scimitar, hatchet, spear, glaive, halberd,
-     *               hammer, maul, flail, mace, sickle, scythe, whip, lance, nunchaku, saber, cutlass, trident,
-     *               bow, longbow, shortbow, crossbow, sling, atlatl, bolas, javelin, net, shuriken, dagger</li>
-     *     <li>"musket`noun`": arquebus, blunderbuss, musket, matchlock, flintlock, wheellock, cannon</li>
-     *     <li>"grenade`noun`": rocket, grenade, missile, bomb, warhead, explosive, flamethrower</li>
-     *     <li>"rifle`noun`": pistol, rifle, handgun, firearm, longarm, shotgun</li>
-     *     <li>"blade`nouns`": blades, knives, swords, axes, stilettos, katana, scimitars, hatchets, spears, glaives, halberds,
-     *               hammers, mauls, flails, maces, sickles, scythes, whips, lances, nunchaku, sabers, cutlasses, tridents</li>
-     *     <li>"bow`nouns`": bows, longbows, shortbows, crossbows, slings, atlatls, bolases, javelins, nets, shuriken, daggers</li>
-     *     <li>"weapon`nouns`": blades, knives, swords, axes, stilettos, katana, scimitars, hatchets, spears, glaives, halberds,
-     *               hammers, mauls, flails, maces, sickles, scythes, whips, lances, nunchaku, sabers, cutlasses, tridents,
-     *               bows, longbows, shortbows, crossbows, slings, atlatls, bolases, javelins, nets, shuriken, daggers</li>
-     *     <li>"musket`nouns`": arquebusses, blunderbusses, muskets, matchlocks, flintlocks, wheellocks, cannons</li>
-     *     <li>"grenade`nouns`": rockets, grenades, missiles, bombs, warheads, explosives, flamethrowers</li>
-     *     <li>"rifle`nouns`": pistols, rifles, handguns, firearms, longarms, shotguns</li>
-     *     <li>"tech`adj`": cyber, digital, electronic, techno, hacker, crypto, turbo, mechanical, servo</li>
-     *     <li>"sole`adj`": sole, true, singular, total, ultimate, final, last</li>
-     *     <li>"light`adj`": bright, glowing, solar, stellar, lunar, radiant, luminous, shimmering</li>
-     *     <li>"light`noun`": light, glow, sun, star, moon, radiance, dawn, torch</li>
-     *     <li>"light`nouns`": lights, glimmers, suns, stars, moons, torches</li>
-     *     <li>"smart`adj`": brilliant, smart, genius, wise, clever, cunning, mindful, aware</li>
-     *     <li>"smart`noun`": genius, wisdom, cunning, awareness, mindfulness, acumen, smarts, knowledge</li>
-     *     <li>"bandit`noun`": thief, raider, bandit, rogue, brigand, highwayman, pirate</li>
-     *     <li>"bandit`nouns`": thieves, raiders, bandits, rogues, brigands, highwaymen, pirates</li>
-     *     <li>"guard`noun`": protector, guardian, warden, defender, guard, shield, sentinel, watchman, knight</li>
-     *     <li>"guard`nouns`": protectors, guardians, wardens, defenders, guards, shields, sentinels, watchmen, knights</li>
-     *     <li>"rage`noun`": rage, fury, anger, wrath, frenzy, vengeance</li>
+     *     <li>calm`adj` : calm, harmonious, peaceful, placid, pleasant, serene, tranquil</li>
+     *     <li>calm`noun` : calm, harmony, kindness, peace, serenity, tranquility</li>
+     *     <li>org`noun` : association, brotherhood, fellowship, foundation, fraternity, group, guild, order, partnership</li>
+     *     <li>org`nouns` : associations, brotherhoods, fellowships, foundations, fraternities, groups, guilds, orders, partnerships</li>
+     *     <li>empire`adj` : ascendant, dynastic, emir's, hegemonic, imperial, king's, lordly, monarchic, prince's, regal, royal, sultan's</li>
+     *     <li>empire`noun` : ascendancy, commonwealth, dominion, dynasty, emirate, empire, hegemony, imperium, kingdom, monarchy, sultanate, triumvirate</li>
+     *     <li>empire`nouns` : ascendancies, commonwealths, dominions, dynasties, emirates, empires, hegemonies, imperia, kingdoms, monarchies, sultanates, triumvirates</li>
+     *     <li>emperor`noun` : emir, emperor, king, lord, pharaoh, ruler, sultan</li>
+     *     <li>emperor`nouns` : emirs, emperors, kings, lords, pharaohs, rulers, sultans</li>
+     *     <li>empress`noun` : emira, empress, lady, pharaoh, queen, ruler, sultana</li>
+     *     <li>empress`nouns` : emiras, empresses, ladies, pharaohs, queens, rulers, sultanas</li>
+     *     <li>union`adj` : allied, associated, confederated, congressional, democratic, federated, independent, people's, unified, united</li>
+     *     <li>union`noun` : alliance, coalition, confederacy, confederation, congress, faction, federation, league, republic, union</li>
+     *     <li>union`nouns` : alliances, coalitions, confederacies, confederations, congresses, factions, federations, leagues, republics, unions</li>
+     *     <li>militia`noun` : fighters, front, irregulars, liberators, militants, militia, rebellion, resistance, warriors</li>
+     *     <li>militia`nouns` : fighters, fronts, irregulars, liberators, militants, militias, rebellions, resistances, warriors</li>
+     *     <li>gang`noun` : cartel, crew, gang, mafia, mob, posse, syndicate</li>
+     *     <li>gang`nouns` : cartels, crews, gangs, mafias, mobs, posses, syndicates</li>
+     *     <li>duke`noun` : baron, duke, earl, fief, lord, shogun</li>
+     *     <li>duke`nouns` : barons, dukes, earls, fiefs, lords, shoguns</li>
+     *     <li>duchy`noun` : barony, duchy, earldom, fiefdom, lordship, shogunate</li>
+     *     <li>duchy`nouns` : baronies, duchies, earldoms, fiefdoms, lordships, shogunates</li>
+     *     <li>magical`adj` : arcane, enchanted, ensorcelled, magical, mystical, sorcerous</li>
+     *     <li>holy`adj` : auspicious, blessed, divine, godly, holy, prophetic, sacred, virtuous</li>
+     *     <li>priest`noun` : bishop, cardinal, chaplain, cleric, preacher, priest</li>
+     *     <li>priest`nouns` : bishops, cardinals, chaplains, clergy, preachers, priests</li>
+     *     <li>unholy`adj` : accursed, bewitched, macabre, occult, profane, unholy, vile</li>
+     *     <li>witch`noun` : cultist, defiler, necromancer, occultist, warlock, witch</li>
+     *     <li>witch`nouns` : cultists, defilers, necromancers, occultists, warlocks, witches</li>
+     *     <li>forest`adj` : bountiful, fertile, lush, natural, primal, verdant</li>
+     *     <li>forest`noun` : copse, forest, glen, greenery, grove, jungle, nature, woodland</li>
+     *     <li>shaman`noun` : animist, druid, shaman, warden</li>
+     *     <li>shaman`nouns` : animists, druids, shamans, wardens</li>
+     *     <li>fancy`adj` : glorious, grand, great, magnanimous, magnificent, majestic, powerful</li>
+     *     <li>evil`adj` : abhorrent, cruel, debased, evil, heinous, horrible, malevolent, nefarious, scurrilous, terrible, vile, wicked</li>
+     *     <li>villain`noun` : blasphemer, evildoer, killer, knave, monster, murderer, villain</li>
+     *     <li>villain`nouns` : blasphemers, evildoers, killers, knaves, monsters, murderers, villains</li>
+     *     <li>monster`noun` : abomination, beast, creature, demon, devil, fiend, ghoul, monster</li>
+     *     <li>monsters`nouns` : abominations, beasts, creatures, demons, devils, fiends, ghouls, monsters</li>
+     *     <li>good`adj` : compassionate, flawless, good, kind, moral, perfect, pure, righteous</li>
+     *     <li>lethal`adj` : bloodstained, cutthroat, deadly, fatal, lethal, murderous, poisonous, silent, stalking, venomous</li>
+     *     <li>lethal`noun` : assassin, blood, killer, murder, ninja, poison, razor, silence, slayer, snake, tiger, venom</li>
+     *     <li>blade`noun` : axe, blade, cutlass, flail, glaive, halberd, hammer, hatchet, katana, knife, lance, mace, maul, nunchaku, saber, scimitar, scythe, sickle, spear, stiletto, sword, trident, whip</li>
+     *     <li>bow`noun` : atlatl, bolas, bow, crossbow, dagger, javelin, longbow, net, shortbow, shuriken, sling</li>
+     *     <li>weapon`noun` : atlatl, axe, blade, bolas, bow, crossbow, cutlass, dagger, flail, glaive, halberd, hammer, hatchet, javelin, katana, knife, lance, longbow, mace, maul, net, nunchaku, saber, scimitar, scythe, shortbow, shuriken, sickle, sling, spear, stiletto, sword, trident, whip</li>
+     *     <li>musket`noun` : arquebus, blunderbuss, cannon, flintlock, matchlock, musket, wheellock</li>
+     *     <li>grenade`noun` : bomb, explosive, flamethrower, grenade, missile, rocket, warhead</li>
+     *     <li>rifle`noun` : firearm, handgun, longarm, pistol, rifle, shotgun</li>
+     *     <li>blade`nouns` : axes, blades, cutlasses, flails, glaives, halberds, hammers, hatchets, katana, knives, lances, maces, mauls, nunchaku, sabers, scimitars, scythes, sickles, spears, stilettos, swords, tridents, whips</li>
+     *     <li>bow`nouns` : atlatls, bolases, bows, crossbows, daggers, javelins, longbows, nets, shortbows, shuriken, slings</li>
+     *     <li>weapon`nouns` : atlatls, axes, blades, bolases, bows, crossbows, cutlasses, daggers, flails, glaives, halberds, hammers, hatchets, javelins, katana, knives, lances, longbows, maces, mauls, nets, nunchaku, sabers, scimitars, scythes, shortbows, shuriken, sickles, slings, spears, stilettos, swords, tridents, whips</li>
+     *     <li>musket`nouns` : arquebusses, blunderbusses, cannons, flintlocks, matchlocks, muskets, wheellocks</li>
+     *     <li>grenade`nouns` : bombs, explosives, flamethrowers, grenades, missiles, rockets, warheads</li>
+     *     <li>rifle`nouns` : firearms, handguns, longarms, pistols, rifles, shotguns</li>
+     *     <li>scifi`adj` : genetic, gravitational, laser, nanoscale, phase, photonic, plasma, quantum, tachyonic, warp</li>
+     *     <li>tech`adj` : crypto, cyber, digital, electronic, hacker, mechanical, servo, techno, turbo</li>
+     *     <li>sole`adj` : final, last, singular, sole, total, true, ultimate</li>
+     *     <li>light`adj` : bright, gleaming, glowing, luminous, lunar, radiant, shimmering, solar, stellar</li>
+     *     <li>light`noun` : dawn, gleam, glow, light, moon, radiance, shimmer, star, sun, torch</li>
+     *     <li>light`nouns` : glimmers, lights, moons, stars, suns, torches</li>
+     *     <li>shadow`noun` : blackness, darkness, gloom, murk, shadow, twilight</li>
+     *     <li>shadow`nouns` : blackness, darkness, gloom, murk, shadows, twilight</li>
+     *     <li>fire`noun` : blaze, conflagration, fire, flame, inferno, pyre</li>
+     *     <li>fire`nouns` : blazes, conflagrations, fires, flames, infernos, pyres</li>
+     *     <li>ice`noun` : blizzard, chill, cold, frost, ice, snow</li>
+     *     <li>ice`nouns` : blizzards, chills, cold, frosts, ice, snow</li>
+     *     <li>lightning`noun` : lightning, shock, spark, storm, thunder, thunderbolt</li>
+     *     <li>lightning`nouns` : lightning, shocks, sparks, storms, thunder, thunderbolts</li>
+     *     <li>ground`noun` : clay, dirt, earth, loam, mud, peat, sand, soil</li>
+     *     <li>lake`noun` : bog, fen, glade, lake, pond, puddle, sea, swamp</li>
+     *     <li>leaf`noun` : bark, blossom, branch, bud, cress, flower, leaf, root, sap, seed, shoot, stalk, stem, thorn, twig, vine, wood, wort</li>
+     *     <li>fruit`noun` : apple, banana, berry, cherry, date, fig, fruit, grape, juniper, lime, mango, melon, papaya, peach, pear, quince</li>
+     *     <li>nut`noun` : almond, bean, cashew, chestnut, hazelnut, nut, pea, peanut, pecan, walnut</li>
+     *     <li>flower`noun` : amaryllis, camellia, chrysanthemum, daisy, dandelion, flower, gardenia, hibiscus, jasmine, lantana, lilac, lily, lotus, mallow, oleander, orchid, peony, petunia, phlox, rose, tulip</li>
+     *     <li>tree`noun` : alder, beech, birch, cactus, cedar, elm, hazel, juniper, larch, magnolia, mangrove, maple, oak, palm, pine, tree, willow</li>
+     *     <li>flavor`noun` : acid, grease, herb, salt, smoke, spice, sugar</li>
+     *     <li>flavor`adj` : bitter, salty, savory, smoky, sour, spicy, sweet</li>
+     *     <li>color`adj` : black, blue, brown, gray, green, orange, red, violet, white, yellow</li>
+     *     <li>shape`adj` : delicate, drooping, fibrous, fragile, giant, hardy, hollow, long, miniature, spiny, stiff, stubby, sturdy, thorny, tufted, yielding</li>
+     *     <li>sensory`adj` : aromatic, fragrant, fuzzy, glossy, pungent, rough, rustling, smooth, soft, weeping</li>
+     *     <li>liquid`noun` : brew, broth, elixir, fluid, liquid, potion, serum, tonic</li>
+     *     <li>liquid`adj` : bubbling, congealing, effervescent, milky, murky, slimy, sloshing, swirling, thick</li>
+     *     <li>bottle`noun` : bottle, canister, flagon, flask, jug, phial, vial</li>
+     *     <li>bottle`adj` : brown glass, clear glass, curvaceous glass, dull pewter, fluted crystal, green glass, rough-cut glass, sharp-edged tin, shining silver, smoky glass, tarnished silver</li>
+     *     <li>calabash`adj` : calabash, hollow gourd, milk carton, waterskin, wineskin</li>
+     *     <li>smart`adj` : aware, brilliant, clever, cunning, genius, mindful, smart, wise</li>
+     *     <li>smart`noun` : acumen, awareness, cunning, genius, knowledge, mindfulness, smarts, wisdom</li>
+     *     <li>stupid`adj` : careless, complacent, dull, dumb, foolish, idiotic, moronic, reckless, sloppy, stupid</li>
+     *     <li>stupid`noun` : carelessness, complacency, foolishness, idiocy, recklessness, sloppiness, stupidity</li>
+     *     <li>bandit`noun` : bandit, brigand, highwayman, pirate, raider, rogue, thief</li>
+     *     <li>bandit`nouns` : bandits, brigands, highwaymen, pirates, raiders, rogues, thieves</li>
+     *     <li>soldier`noun` : combatant, fighter, mercenary, soldier, trooper, warrior</li>
+     *     <li>soldier`nouns` : combatants, fighters, mercenaries, soldiers, troops, warriors</li>
+     *     <li>guard`noun` : defender, guard, guardian, knight, paladin, protector, sentinel, shield, templar, warden, watchman</li>
+     *     <li>guard`nouns` : defenders, guardians, guards, knights, paladins, protectors, sentinels, shields, templars, wardens, watchmen</li>
+     *     <li>hunter`noun` : hunter, poacher, stalker, tracker, trapper, warden</li>
+     *     <li>explorer`noun` : explorer, nomad, pathfinder, questant, seeker, wanderer</li>
+     *     <li>hunter`nouns` : hunters, poachers, stalkers, trackers, trappers, wardens</li>
+     *     <li>explorer`nouns` : explorers, nomads, pathfinders, questants, seekers, wanderers</li>
+     *     <li>rage`noun` : anger, frenzy, fury, rage, vengeance, wrath</li>
+     *     <li>ominous`adj` : baleful, fateful, foreboding, ominous, portentous</li>
+     *     <li>many`adj` : countless, infinite, manifold, many, myriad, thousandfold, unlimited</li>
+     *     <li>impossible`adj` : abominable, forbidden, impossible, incomprehensible, indescribable, ineffable, unearthly, unspeakable</li>
+     *     <li>gaze`noun` : eye, gaze, observation, purveyance, stare, watch</li>
+     *     <li>pain`noun` : agony, excruciation, misery, pain, torture</li>
+     *     <li>god`noun` : deity, father, god, king, lord, lordship, ruler</li>
+     *     <li>goddess`noun` : deity, goddess, lady, ladyship, mother, queen, ruler</li>
+     *     <li>hero`noun` : champion, crusader, hero, knight, savior</li>
+     *     <li>heroes`nouns` : champions, crusaders, heroes, knights, saviors</li>
+     *     <li>heroine`noun` : champion, crusader, heroine, knight, maiden, savior</li>
+     *     <li>heroines`nouns` : champions, crusaders, heroines, knights, maidens, saviors</li>
+     *     <li>popular`adj` : adored, beloved, revered, worshipped</li>
+     *     <li>unpopular`adj` : despised, hated, loathed, reviled</li>
+     *     <li>glyph`noun` : glyph, mark, seal, sigil, sign, symbol</li>
+     *     <li>glyph`nouns` : glyphs, marks, seals, sigils, signs, symbols</li>
+     *     <li>power`noun` : authority, dominance, force, potency, power, strength</li>
+     *     <li>power`adj` : authoritative, dominant, forceful, potent, powerful, strong</li>
+     * </ul>
+     * There are also terms, which typically produce multiple words procedurally and may use {@link #defaultLanguage}.
+     * See {@link #makePlantName()}, {@link #makeFruitName()}, {@link #makeNutName()}, {@link #makeFlowerName()}, and
+     * {@link #makePotionDescription()} for more info and examples.
+     * <li>
+     *     <li>plant`term` : @'s color`adj`	leaf`noun`, @'s color`adj` flower`noun`, @'s color`adj` tree`noun`, @'s flower`noun`, @'s ground`noun`	leaf`noun`, @'s sensory`adj`-leaf`noun`, @'s shape`adj` flower`noun`, @'s tree`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj` fruit`noun` tree`noun`, color`adj` nut`noun` tree`noun`, color`adj`-leaf`noun` flower`noun`, flavor`adj` fruit`noun` tree`noun`, flavor`adj` nut`noun` tree`noun`, flavor`noun`	leaf`noun` tree`noun`, flower`noun` of @, ground`noun`	flower`noun`, ground`noun`	leaf`noun`, ground`noun`	leaf`noun` of @, leaf`noun` of @, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj` tree`noun` of @, sensory`adj` tree`noun`-tree`noun`, sensory`adj`-leaf`noun` flower`noun`, sensory`adj`-leaf`noun` tree`noun`, shape`adj` flower`noun`, shape`adj`-fruit`noun` tree`noun`, shape`adj`-leaf`noun` flower`noun`, shape`adj`-leaf`noun` tree`noun`</li>
+     *     <li>fruit`term` : @'s color`adj` fruit`noun`, @'s flavor`adj` fruit`noun`, @'s fruit`noun`, color`adj` fruit`noun`-fruit`noun`, flavor`adj` fruit`noun`-fruit`noun`, fruit`noun` of @</li>
+     *     <li>nut`term` : @'s color`adj` nut`noun`, @'s flavor`adj` nut`noun`, @'s nut`noun`, color`adj` nut`noun`, color`adj` nut`noun` of @, flavor`adj` nut`noun`, nut`noun` of @, sensory`adj` nut`noun`</li>
+     *     <li>flower`term` : @'s color`adj` flower`noun`, @'s flower`noun`, @'s shape`adj` flower`noun`, color`adj` flower`noun`, color`adj` flower`noun` of @, color`adj`-leaf`noun` flower`noun`, flower`noun` of @, ground`noun`	flower`noun`, sensory`adj` flower`noun` of @, sensory`adj` flower`noun`-flower`noun`, sensory`adj`-leaf`noun` flower`noun`, shape`adj` flower`noun`, shape`adj`-leaf`noun` flower`noun`</li>
+     *     <li>potion`term` : a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`, a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`, a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`, a calabash`adj` filled with a color`adj` liquid`noun`</li>
      * </ul>
      * Capitalizing the first letter in the keyword where it appears in text you call process() on will capitalize the
      * first letter of the produced fake word. Capitalizing the second letter will capitalize the whole produced fake
@@ -247,7 +313,7 @@ public class Thesaurus implements Serializable{
             for (int i = 0; i < 16; i++) {
                 words.add(kv.getValue().word(rng, false, rng.between(2, 4)));
             }
-            addCategory(StringKit.replace(kv.getKey(), "gen", "pre"), words);
+            addCategory(StringKit.replace(kv.getKey(), "`gen", "`pre"), words);
         }
         //rng.setState(state);
         return this;
@@ -324,9 +390,9 @@ public class Thesaurus implements Serializable{
         m.getGroup(MatchResult.TARGET, dest);
 
         if(alterations.isEmpty())
-            return StringKit.replace(anReplacer.replace(dest.sb), "\t", "");
+            return StringKit.replace(StringKit.correctABeforeVowel(dest.sb), "\t", "");
         else
-            return StringKit.replace(modify(anReplacer.replace(dest.sb)), "\t", "");
+            return StringKit.replace(modify(StringKit.correctABeforeVowel(dest.sb)), "\t", "");
     }
 
     public String lookup(String word)
@@ -867,7 +933,7 @@ public class Thesaurus implements Serializable{
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
             working = process(potionTermShuffler.next());
-        return anReplacer.replace(working);
+        return StringKit.correctABeforeVowel(working);
     }
 
     /**

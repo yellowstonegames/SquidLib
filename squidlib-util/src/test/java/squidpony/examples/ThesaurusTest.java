@@ -4,15 +4,23 @@ import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
 
+import java.util.TreeSet;
+
 /**
  * Created by Tommy Ettinger on 5/23/2016.
  */
 public class ThesaurusTest {
     public static void main(String[] args) {
-        for(String line : StringKit.wrap('"' + StringKit.join("\", \"", Thesaurus.languages.keySet()) + '"', 75))
-            System.out.println(line);
-        System.out.println();
         Thesaurus thesaurus  = new Thesaurus("SQUID! LIB!");
+        TreeSet<String> synonyms = new TreeSet<>();
+        int len = thesaurus.mappings.size();
+        for (int i = 0; i < len; i++) {
+            System.out.print(thesaurus.mappings.keyAt(i) + " : ");
+            synonyms.clear();
+            thesaurus.mappings.getAt(i).fillInto(synonyms);
+            System.out.println(StringKit.join(", ", synonyms));
+        }
+        System.out.println();
 //        for (int i = 0; i < 10; i++) {
 //            System.out.println(thesaurus.makeNationName(FakeLanguageGen.JAPANESE_ROMANIZED));
 //            System.out.println(thesaurus.makeNationName(FakeLanguageGen.FRENCH)            );
