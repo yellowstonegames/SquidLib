@@ -1,7 +1,9 @@
 package squidpony;
 
+import regexodus.Category;
 import regexodus.Matcher;
 import regexodus.Pattern;
+import regexodus.Replacer;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.NumberTools;
 
@@ -11,11 +13,18 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Various utility functions for dealing with Strings, CharSequences, and char[]s; mostly converting numbers.
+ * Various utility functions for dealing with Strings, CharSequences, and char[]s; this has lots of methods to convert
+ * to and from Strings and numbers, but also has tools to wrap long CharSequences to fit in a maximum width, join arrays
+ * of various items into long Strings, split/search/count occurrences of literal char arrays or CharSequences without
+ * using any regex, and generally tidy up generated text. This last step includes padding left and right (including a
+ * "strict" option that truncates Strings that are longer than the padded size), Capitalizing Each Word, Capitalizing
+ * the first word in a sentence, replacing "a improper usage of a" with "an improved replacement using an," etc. This
+ * also has a lot of predefined categories of chars that are considered widely enough supported in fonts, like
+ * {@link #COMMON_PUNCTUATION} and {@link #LATIN_LETTERS_UPPER}.
+ * <br>
  * Created by Tommy Ettinger on 3/21/2016.
  */
 public class StringKit {
-
     /**
      * Searches text for the exact contents of the char array search; returns true if text contains search.
      * @param text a CharSequence, such as a String or StringBuilder, that might contain search
@@ -27,10 +36,32 @@ public class StringKit {
                 && containsPart(text, search, "", "") == search.length;
     }
 
+    /**
+     * Tries to find as much of the char array {@code search} in the CharSequence {@code text}, always starting from the
+     * beginning of search (if the beginning isn't found, then it finds nothing), and returns the length of the found
+     * part of search (0 if not found).
+     * @param text a CharSequence to search in
+     * @param search a char array to look for
+     * @return the length of the searched-for char array that was found
+     */
     public static int containsPart(CharSequence text, char[] search)
     {
         return containsPart(text, search, "", "");
     }
+
+    /**
+     * Tries to find as much of the sequence {@code prefix search suffix} as it can in text, where prefix and suffix are
+     * CharSequences for some reason and search is a char array. Returns the length of the sequence it was able to
+     * match, up to {@code prefix.length() + search.length + suffix.length()}, or 0 if no part of the looked-for
+     * sequence could be found.
+     * <br>
+     * This is almost certainly too specific to be useful outside of a handful of cases.
+     * @param text a CharSequence to search in
+     * @param search a char array to look for, surrounded by prefix and suffix
+     * @param prefix a mandatory prefix before search, separated for some weird optimization reason
+     * @param suffix a mandatory suffix after search, separated for some weird optimization reason
+     * @return the length of the searched-for prefix+search+suffix that was found
+     */
     public static int containsPart(CharSequence text, char[] search, CharSequence prefix, CharSequence suffix)
     {
         if(prefix == null) prefix = "";
@@ -378,7 +409,7 @@ public class StringKit {
                     62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 64, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
                     0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0};
 
-    private static StringBuilder hexBuilder = new StringBuilder(16).append("0000000000000000");
+    private static final StringBuilder hexBuilder = new StringBuilder(16).append("0000000000000000");
     public static String hex(long number) {
         for (int i = 0; i < 16; i++) {
             hexBuilder.setCharAt(15 - i, hexDigits[(int)(number >> (i << 2) & 15)]);
@@ -1507,6 +1538,117 @@ public class StringKit {
         return receiving;
     }
 
+    public static String replace(CharSequence text, String before, String after) {
+        if(text instanceof String)
+        {
+            return ((String)text).replace(before, after);
+        }
+        String t = text.toString();
+        return t.replace(before, after);
+    }
+
+    public static final Pattern whitespacePattern = Pattern.compile("\\s+"),
+            nonSpacePattern = Pattern.compile("\\S+");
+    private static final Matcher matcher = new Matcher(whitespacePattern);
+    public static int indexOf(CharSequence text, Pattern regex, int beginIndex)
+    {
+        matcher.setPattern(regex);
+        matcher.setTarget(text);
+        matcher.setPosition(beginIndex);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, String regex, int beginIndex)
+    {
+        matcher.setPattern(Pattern.compile(regex));
+        matcher.setTarget(text);
+        matcher.setPosition(beginIndex);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, Pattern regex)
+    {
+        matcher.setPattern(regex);
+        matcher.setTarget(text);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, String regex)
+    {
+        matcher.setPattern(Pattern.compile(regex));
+        matcher.setTarget(text);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    private static final Matcher capitalizeMatcher = Pattern.compile("(?<!\\pL)(\\pL)(\\pL*)(\\PL*)").matcher();
+    private static final StringBuilder sb = new StringBuilder(64);
+
+    /**
+     * Capitalizes Each Word In The Parameter {@code original}, Returning A New String.
+     * @param original a CharSequence, such as a StringBuilder or String, which could have CrAzY capitalization
+     * @return A String With Each Word Capitalized At The Start And The Rest In Lower Case 
+     */
+    public static String capitalize(final CharSequence original) {
+        if (original == null || original.length() <= 0) {
+            return "";
+        }
+        sb.setLength(0);
+        capitalizeMatcher.setTarget(original);
+        while (capitalizeMatcher.find()) {
+            sb.append(capitalizeMatcher.group(1).toUpperCase());
+            capitalizeMatcher.getGroup(2, sb, 1); // mode 1 is case-insensitive, which lower-cases result
+            capitalizeMatcher.getGroup(3, sb);
+        }
+        return sb.toString();
+    }
+    private static final Matcher sentenceMatcher = Pattern.compile("(\\PL*)((\\pL)([^.?!]*)($|[.?!]+))(\\PL*)").matcher();
+    // group 1 before letters, group 2 whole sentence, group 3 first letter, group 4 rest of sentence, group 5 closing punctuation, group 6 remainder of non-letters 
+
+    /**
+     * Attempts to scan for sentences in {@code original}, capitalizes the first letter of each sentence, and otherwise
+     * leaves the CharSequence untouched as it returns it as a String. Sentences are detected with a crude heuristic of
+     * "does it have periods, exclamation marks, or question marks at the end, or does it reach the end of input? If
+     * yes, it's a sentence."
+     * @param original a CharSequence that is expected to contain sentence-like data that needs capitalization; existing upper-case letters will stay upper-case.
+     * @return a String where the first letter of each sentence (detected as best this can) is capitalized.
+     */
+    public static String sentenceCase(final CharSequence original) {
+        if (original == null || original.length() <= 0) {
+            return "";
+        }
+        sb.setLength(0);
+        sentenceMatcher.setTarget(original);
+        while (sentenceMatcher.find()) {
+            sentenceMatcher.getGroup(1, sb);
+            sb.append(sentenceMatcher.group(3).toUpperCase());
+            sentenceMatcher.getGroup(4, sb); // use getGroup(4, sb, 1) if this should lower-case the rest
+            sentenceMatcher.getGroup(5, sb);
+            sentenceMatcher.getGroup(6, sb);
+        }
+        return sb.toString();
+    }
+    private static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa])(\\pG+)(?="+FakeLanguageGen.anyVowel+")", Pattern.IGNORE_CASE | Pattern.UNICODE), "$1n$2");
+
+    /**
+     * A simple method that looks for any occurrences of the word 'a' followed by some non-zero amount of whitespace and
+     * then any vowel starting the following word (such as 'a item'), then replaces each such improper 'a' with 'an'
+     * (such as 'an item'). The regex used here isn't bulletproof, but it should be fairly robust, handling when you
+     * have multiple whitespace chars, different whitespace chars (like carriage return and newline), accented vowels in
+     * the following word (but not in the initial 'a', which is expected to use English spelling rules), and the case of
+     * the initial 'a' or 'A'.
+     * <br>
+     * Gotta love Regexodus; this is a two-liner that uses features specific to that regular expression library.
+     * @param text the (probably generated English) multi-word text to search for 'a' in and possibly replace with 'an'
+     * @return a new String with every improper 'a' replaced
+     */
+    public static String correctABeforeVowel(final CharSequence text){
+        return anReplacer.replace(text);
+    }
+
     /**
      * Constant storing the 16 hexadecimal digits, as char values, in order.
      */
@@ -1596,98 +1738,4 @@ public class StringKit {
     public static final String LETTERS_LOWER = LATIN_LETTERS_LOWER + GREEK_LETTERS_LOWER + CYRILLIC_LETTERS_LOWER;
     public static final String LETTERS = LETTERS_UPPER + LETTERS_LOWER;
     public static final String LETTERS_AND_NUMBERS = LETTERS + DIGITS;
-
-    public static String replace(CharSequence text, String before, String after) {
-        if(text instanceof String)
-        {
-            return ((String)text).replace(before, after);
-        }
-        String t = text.toString();
-        return t.replace(before, after);
-    }
-    public static final Pattern whitespacePattern = Pattern.compile("\\s+"),
-            nonSpacePattern = Pattern.compile("\\S+");
-    private static final Matcher matcher = new Matcher(whitespacePattern);
-    public static int indexOf(CharSequence text, Pattern regex, int beginIndex)
-    {
-        matcher.setPattern(regex);
-        matcher.setTarget(text);
-        matcher.setPosition(beginIndex);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
-    public static int indexOf(CharSequence text, String regex, int beginIndex)
-    {
-        matcher.setPattern(Pattern.compile(regex));
-        matcher.setTarget(text);
-        matcher.setPosition(beginIndex);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
-    public static int indexOf(CharSequence text, Pattern regex)
-    {
-        matcher.setPattern(regex);
-        matcher.setTarget(text);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
-    public static int indexOf(CharSequence text, String regex)
-    {
-        matcher.setPattern(Pattern.compile(regex));
-        matcher.setTarget(text);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
-    private static final Matcher capitalizeMatcher = Pattern.compile("(?<!\\pL)(\\pL)(\\pL*)(\\PL*)").matcher();
-    private static final StringBuilder sb = new StringBuilder(64);
-
-    /**
-     * Capitalizes Each Word In The Parameter {@code original}, Returning A New String.
-     * @param original a CharSequence, such as a StringBuilder or String, which could have CrAzY capitalization
-     * @return A String With Each Word Capitalized At The Start And The Rest In Lower Case 
-     */
-    public static String capitalize(final CharSequence original) {
-        if (original == null || original.length() <= 0) {
-            return "";
-        }
-        sb.setLength(0);
-        capitalizeMatcher.setTarget(original);
-        while (capitalizeMatcher.find()) {
-            sb.append(capitalizeMatcher.group(1).toUpperCase());
-            capitalizeMatcher.getGroup(2, sb, 1); // mode 1 is case-insensitive, which lower-cases result
-            capitalizeMatcher.getGroup(3, sb);
-        }
-        return sb.toString();
-    }
-    private static final Matcher sentenceMatcher = Pattern.compile("(\\PL*)((\\pL)([^.?!]*)($|[.?!]+))(\\PL*)").matcher();
-    // group 1 before letters, group 2 whole sentence, group 3 first letter, group 4 rest of sentence, group 5 closing punctuation, group 6 remainder of non-letters 
-
-    /**
-     * Attempts to scan for sentences in {@code original}, capitalizes the first letter of each sentence, and otherwise
-     * leaves the CharSequence untouched as it returns it as a String. Sentences are detected with a crude heuristic of
-     * "does it have periods, exclamation marks, or question marks at the end, or does it reach the end of input? If
-     * yes, it's a sentence."
-     * @param original a CharSequence that is expected to contain sentence-like data that needs capitalization; existing upper-case letters will stay upper-case.
-     * @return a String where the first letter of each sentence (detected as best this can) is capitalized.
-     */
-    public static String sentenceCase(final CharSequence original) {
-        if (original == null || original.length() <= 0) {
-            return "";
-        }
-        sb.setLength(0);
-        sentenceMatcher.setTarget(original);
-        while (sentenceMatcher.find()) {
-            sentenceMatcher.getGroup(1, sb);
-            sb.append(sentenceMatcher.group(3).toUpperCase());
-            sentenceMatcher.getGroup(4, sb); // use getGroup(4, sb, 1) if this should lower-case the rest
-            sentenceMatcher.getGroup(5, sb);
-            sentenceMatcher.getGroup(6, sb);
-        }
-        return sb.toString();
-    }
-
 }
