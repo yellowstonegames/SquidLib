@@ -5,13 +5,7 @@ import regexodus.Matcher;
 import regexodus.Pattern;
 import regexodus.REFlags;
 import regexodus.Replacer;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.GWTRNG;
-import squidpony.squidmath.IRNG;
-import squidpony.squidmath.IStatefulRNG;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,7 +37,7 @@ public class FakeLanguageGen implements Serializable {
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final GWTRNG srng = new GWTRNG();
-    private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64);
+    private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64, Hashers.caseInsensitiveStringHasher);
     protected String summary = null;
     private String name = "Nameless Language";
     private static transient StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12),

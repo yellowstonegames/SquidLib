@@ -75,19 +75,16 @@ public class ProceduralMessaging {
     public ProceduralMessaging() {
         thesaurus = new Thesaurus();
         language = new NaturalLanguageCipher(FakeLanguageGen.FANTASY_NAME);
-        thesaurus.addKnownCategories();
     }
     public ProceduralMessaging(long seed)
     {
         thesaurus = new Thesaurus(seed);
-        language = new NaturalLanguageCipher(FakeLanguageGen.FANTASY_NAME);
-        thesaurus.addKnownCategories();
+        language = new NaturalLanguageCipher(FakeLanguageGen.FANTASY_NAME); 
     }
     public ProceduralMessaging(long seed, FakeLanguageGen nameLanguage)
     {
         thesaurus = new Thesaurus(seed);
         language = new NaturalLanguageCipher(nameLanguage == null ? FakeLanguageGen.FANTASY_NAME : nameLanguage);
-        thesaurus.addKnownCategories();
     }
     public ProceduralMessaging(Thesaurus existingThesaurus, NaturalLanguageCipher existingLanguage)
     {
@@ -97,7 +94,6 @@ public class ProceduralMessaging {
         language = (existingLanguage == null)
                 ? new NaturalLanguageCipher(FakeLanguageGen.FANTASY_NAME)
                 : existingLanguage;
-        thesaurus.addKnownCategories();
     }
     public String transform(CharSequence message, String userName, Messaging.NounTrait userTrait, String targetName, Messaging.NounTrait targetTrait)
     {

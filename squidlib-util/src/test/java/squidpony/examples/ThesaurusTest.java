@@ -9,35 +9,10 @@ import squidpony.Thesaurus;
  */
 public class ThesaurusTest {
     public static void main(String[] args) {
+        for(String line : StringKit.wrap('"' + StringKit.join("\", \"", Thesaurus.languages.keySet()) + '"', 75))
+            System.out.println(line);
+        System.out.println();
         Thesaurus thesaurus  = new Thesaurus("SQUID! LIB!");
-//        Thesaurus thesaurus = new Thesaurus();
-//        thesaurus.addSynonyms(makeList("devil", "fiend", "demon", "horror", "abomination", "terror", "hellspawn"));
-//        thesaurus.addSynonyms(makeList("despoiler", "defiler", "blighter", "poisoner"));
-//        thesaurus.addKnownCategories().addFakeWords();
-//        for (int i = 0; i < 12; i++) {
-//            //System.out.println(
-//            //        thesaurus.process("You fiend! You demon! You despoiler of creation; devil made flesh!"));
-//            //System.out.println(
-//            //        thesaurus.process("The small state of Ru`gen` in the Empire`noun` of Fr`gen`, ruled by Duke`noun` So`mod`gen`."));
-//            System.out.println(
-//                    thesaurus.process("Calm`adj` Org`noun`\n"+
-//                            "Fancy`adj` Fr`gen` Empire`noun`\n"+
-//                            "Ar`jp`gen` Militia`noun`\n"+
-//                            "Lethal`noun` Blade`noun`\n"+
-//                            "Sole`adj` Empire`noun`\n"+
-//                            "Bandit`nouns`\n"+
-//                            "Forest`adj` Org`noun` of Sw`gr`gen`\n"+
-//                            "People's Union`noun` of Ru`so`gen`\n"+
-//                            "Holy`adj` En`hi`gen` Empire`noun`\n"+
-//                            "Fancy`adj` Militia`noun`\n"+
-//                            "Rage`noun` of Gr`gen`\n"+
-//                            "En`jp`gen` Union`noun`\n"+
-//                            "Tech`adj` Guard`nouns`\n"+
-//                            "New Bandit`nouns` of So`mod`gen`\n"+
-//                            "Light`noun` of Smart`noun`")
-//            );
-//        }
-//        System.out.println();
 //        for (int i = 0; i < 10; i++) {
 //            System.out.println(thesaurus.makeNationName(FakeLanguageGen.JAPANESE_ROMANIZED));
 //            System.out.println(thesaurus.makeNationName(FakeLanguageGen.FRENCH)            );
@@ -62,7 +37,6 @@ public class ThesaurusTest {
 //        String oz = StringKit.join("", ozzes);
 //        System.out.println(Thesaurus.ORK.process(oz));
 //        System.out.println();
-        thesaurus.addKnownCategories();
         thesaurus.refresh(thesaurus.rng.nextLong());
         thesaurus.defaultLanguage = FakeLanguageGen.mixAll(FakeLanguageGen.GREEK_ROMANIZED, 4, FakeLanguageGen.SIMPLISH, 2, FakeLanguageGen.MALAY, 1);
         StringBuilder text = new StringBuilder("The elixir you desire is no simple matter to brew. " +

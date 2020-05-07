@@ -250,8 +250,7 @@ public class SpillWorldMap {
             atlas.put('%', "Wilderness");
             if(factionCount > 0) {
                 Thesaurus th = new Thesaurus(rng.nextLong());
-                th.addKnownCategories();
-                for (int i = 0; i < factionCount && i < 256; i++) {
+                for (int i = 0; i < factionCount; i++) {
                     atlas.put(letters[i], th.makeNationName());
                 }
             }

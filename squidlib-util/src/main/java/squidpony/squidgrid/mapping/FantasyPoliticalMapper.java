@@ -374,7 +374,6 @@ public class FantasyPoliticalMapper implements Serializable {
         rng.setState(seed);
         factionCount = Math.abs(factionCount % 254);
         Thesaurus th = new Thesaurus(rng.nextLong());
-        th.addKnownCategories();
         ArrayList<Faction> fact = factions == null ? new ArrayList<Faction>() : rng.shuffle(factions);
         for (int i = fact.size(); i < factionCount; i++) {
             String name = th.makeNationName(), shortName = th.latestGenerated;
