@@ -146,8 +146,7 @@ public class PoliticalMapper {
 
         if (factionCount > 0) {
             Thesaurus th = new Thesaurus(rng.nextLong());
-            th.addKnownCategories();
-            for (int i = 0; i < factionCount && i < 256; i++) {
+            for (int i = 0; i < factionCount; i++) {
                 atlas.put(letters[i], th.makeNationName());
                 briefAtlas.put(letters[i], th.latestGenerated);
                 if(th.randomLanguages == null || th.randomLanguages.isEmpty())
@@ -283,7 +282,6 @@ public class PoliticalMapper {
         spokenLanguages.clear();
 
         Thesaurus th = new Thesaurus(rng.nextLong());
-        th.addKnownCategories();
         FakeLanguageGen flg;
         if((flg = atlasLanguages.get('~')) == null) {
             atlas.put('~', "Ocean");
