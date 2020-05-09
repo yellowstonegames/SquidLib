@@ -40,23 +40,23 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     }
     protected static double gradCoord2D(long seed, int x, int y,
                                               double xd, double yd) {
-        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed >>> 13) * (seed)));
+        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed >>> 13) * (seed))) >>> 24;
         //final int hash = (int)((((seed = (((seed * (0x632BE59BD9B4E019L + (x << 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (y << 23)))) ^ seed >>> 27 ^ x + y) * 0xAEF17502108EF2D9L) >>> 56);
-        final double[] grad = phiGrad2[hash >>> 24], jitter = phiGrad2[hash >>> 16 & 0xFF];
+        final double[] grad = phiGrad2[hash], jitter = phiGrad2[255 - hash];
         return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];
     }
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
-        final int hash = (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * (seed)),
-                idx = (hash >>> 27) * 3, jitter = (hash >>> 22 & 0x1F) * 3;
-        return ((xd+grad3d[jitter]*0.5) * grad3d[idx]
-                + (yd+grad3d[jitter+1]*0.5) * grad3d[idx + 1]
-                + (zd+grad3d[jitter+2]*0.5) * grad3d[idx + 2]);
+        final int idx = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * (seed)) >>> 27) * 3,
+                jitter = 93 - idx;
+        return ((xd+grad3d[jitter]*0.25) * grad3d[idx]
+                + (yd+grad3d[jitter+1]*0.25) * grad3d[idx + 1]
+                + (zd+grad3d[jitter+2]*0.25) * grad3d[idx + 2]);
     }
     protected static double gradCoord4D(long seed, int x, int y, int z, int w,
                                         double xd, double yd, double zd, double wd) {
         final int hash =
                 (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed >>> 13) * (seed)),
-                        idx = (hash >>> 24) & 0xFC, jitter = (hash >>> 18) & 0xFC;
+                        idx = (hash >>> 24) & 0xFC, jitter = 0xFC - idx;
         return ((xd+ grad4d[jitter]*0.25) * grad4d[idx]
                 + (yd+ grad4d[jitter + 1]*0.25) * grad4d[idx + 1]
                 + (zd+ grad4d[jitter + 2]*0.25) * grad4d[idx + 2]
@@ -64,14 +64,14 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     }
     protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,
                                         double xd, double yd, double zd, double wd, double ud, double vd) {
-        final int hash = (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)
-                        ^ seed >>> 13) * (seed)), idx = (hash >>> 24) * 6, jitter = (hash >>> 16 & 0xFF) * 6;
-        return (  (xd+gradient6DLUT[jitter]*0.3) * gradient6DLUT[idx]
-                + (yd+gradient6DLUT[jitter+1]*0.3) * gradient6DLUT[idx+1]
-                + (zd+gradient6DLUT[jitter+2]*0.3) * gradient6DLUT[idx+2]
-                + (wd+gradient6DLUT[jitter+3]*0.3) * gradient6DLUT[idx+3]
-                + (ud+gradient6DLUT[jitter+4]*0.3) * gradient6DLUT[idx+4]
-                + (vd+gradient6DLUT[jitter+5]*0.3) * gradient6DLUT[idx+5]);
+        final int idx = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)
+                        ^ seed >>> 13) * (seed)) >>> 24) * 6, jitter = 1530 - idx;
+        return (  (xd+gradient6DLUT[jitter]*0.5) * gradient6DLUT[idx]
+                + (yd+gradient6DLUT[jitter+1]*0.5) * gradient6DLUT[idx+1]
+                + (zd+gradient6DLUT[jitter+2]*0.5) * gradient6DLUT[idx+2]
+                + (wd+gradient6DLUT[jitter+3]*0.5) * gradient6DLUT[idx+3]
+                + (ud+gradient6DLUT[jitter+4]*0.5) * gradient6DLUT[idx+4]
+                + (vd+gradient6DLUT[jitter+5]*0.5) * gradient6DLUT[idx+5]);
     }
 
     @Override

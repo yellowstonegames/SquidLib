@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 110, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 118, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
@@ -241,7 +241,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private CellularAutomaton ca = new CellularAutomaton(width, height);
     
     private ArrayList<Color> gradient;
-    private final float[] gradientF = new float[256];
+    private final float[] gradientF = new float[256], bumpF = new float[256];
     
     private int ctr = -256;
     private boolean keepGoing = true;
@@ -1306,8 +1306,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     private float getGray(float brightness) {
-        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
-//        return gradientF[(int)(brightness * 255)];
+//        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
+//        return gradientF[(int)(brightness * 255.99)];
+        return bumpF[(int)(brightness * 255.9999)];
     }
 
 //    public static class Dunes implements Noise.Noise2D {
@@ -1405,6 +1406,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
         for (int i = 0; i < 256; i++) {
             gradientF[i] = gradient.get(i).toFloatBits();
+            final float cos = NumberTools.cos_(i * 0x1p-8f);
+            bumpF[i] = SColor.floatGetYCbCr(cos * 0.5f + 0.5f, -0.125f - cos * 0.1f, -0.25f, 1f);
         }
         
         yolkA = CrossHash.Yolk.andromalius;
@@ -3807,6 +3810,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 bright = (float)(
                                         slick2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
                                         123456) * 0.5 + 0.5);
+                                if(bright > 1f)
+                                    bright = 1f;
+                                else if(bright < 0f)
+                                    bright = 0f;
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -5138,13 +5145,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                //slice2D(point4D, x, y, ctr);
-                                point4D[0] = x * 0.02625;
-                                point4D[1] = y * 0.02625;
-                                point4D[2] = ctr * 0.13125;
-//                                point4D[3] = fn.getCubic(x, y, ctr) * 16.0;
-                                point4D[3] = fn.ridged3D(-y, -x, -ctr, 1337, 3, 0.0023125f, 3f) * 16.0;
-//                                point4D[3] = fn.getCubic(x * 0.03125f, y * 0.03125f, ctr * 0.13125f);
+                                slice2D(point4D, x, y, ctr);
+//                                point4D[0] = x * 0.02625;
+//                                point4D[1] = y * 0.02625;
+//                                point4D[2] = ctr * 0.13125;
+////                                point4D[3] = fn.getCubic(x, y, ctr) * 16.0;
+//                                point4D[3] = fn.ridged3D(-y, -x, -ctr, 1337, 3, 0.0023125f, 3f) * 16.0;
+////                                point4D[3] = fn.getCubic(x * 0.03125f, y * 0.03125f, ctr * 0.13125f);
                                 bright =
                                         basicPrepare(phantom4D.getNoise(point4D)
                                         );

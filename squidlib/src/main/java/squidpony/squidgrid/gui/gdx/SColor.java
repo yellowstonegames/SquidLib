@@ -13554,7 +13554,7 @@ public class SColor extends Color implements Serializable {
      * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
      * @return an int encoding a color with the given properties as RGBA8888
      */
-    public static float intGetHSV(float hue, float saturation, float value, float opacity) {
+    public static int intGetHSV(float hue, float saturation, float value, float opacity) {
         if (value <= 0.0039f) {
             return (int) (opacity * 255f + 0.5f);
         } else if (saturation <= 0.0039f) {
