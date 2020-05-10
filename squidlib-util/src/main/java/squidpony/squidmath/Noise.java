@@ -2292,18 +2292,17 @@ public class Noise {
         public Basic1D(long seed)
         {
             lastSeed = seed;
-            alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-            alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-            alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-            alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+            alter1 = (DiverRNG.determine(seed) >> 11) * 0x1.8p-54;
+            alter2 = (DiverRNG.determine(seed + 11111) >> 11) * 0x1p-53;
+            alter3 = (DiverRNG.determine(seed + 22222) >> 11) * 0x1.8p-53;
+            alter4 = (DiverRNG.determine(seed + 33333) >> 11) * 0x1p-52;
         }
         @Override
         public double getNoise(double x) {
-
-            return (cubicSway(alter2 + x * alter1) +
-                    cubicSway(alter3 - x * alter2) +
-                    cubicSway(alter4 + x * alter3) +
-                    cubicSway(alter1 - x * alter4)) * 0.25f;
+            return (cubicSway(x * alter1) * 0.4375f +
+                    cubicSway(x * alter2) * 0.3125f +
+                    cubicSway(x * alter3) * 0.1875f +
+                    cubicSway(x * alter4) * 0.0625f);
         }
 
         @Override
@@ -2311,15 +2310,15 @@ public class Noise {
             if(lastSeed != seed)
             {
                 lastSeed = seed;
-                alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-                alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-                alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-                alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+                alter1 = (DiverRNG.determine(seed) >> 11) * 0x1.8p-54;
+                alter2 = (DiverRNG.determine(seed + 11111) >> 11) * 0x1p-53;
+                alter3 = (DiverRNG.determine(seed + 22222) >> 11) * 0x1.8p-53;
+                alter4 = (DiverRNG.determine(seed + 33333) >> 11) * 0x1p-52;
             }
-            return (cubicSway(alter2 + x * alter1) +
-                    cubicSway(alter3 - x * alter2) +
-                    cubicSway(alter4 + x * alter3) +
-                    cubicSway(alter1 - x * alter4)) * 0.25f;
+            return (cubicSway(x * alter1) * 0.4375f +
+                    cubicSway(x * alter2) * 0.3125f +
+                    cubicSway(x * alter3) * 0.1875f +
+                    cubicSway(x * alter4) * 0.0625f);
         }
         public static double cubicSway(double value)
         {
@@ -2330,14 +2329,15 @@ public class Noise {
         }
 
         public static double noise(double x, long seed) {
-            final double alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
-                    alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
-            return (cubicSway(alter2 + x * alter1) +
-                    cubicSway(alter3 - x * alter2) +
-                    cubicSway(alter4 + x * alter3) +
-                    cubicSway(alter1 - x * alter4)) * 0.25f;
+            final double
+                    alter1 = (DiverRNG.determine(seed) >> 11) * 0x1.8p-54, 
+                    alter2 = (DiverRNG.determine(seed + 11111) >> 11) * 0x1p-53, 
+                    alter3 = (DiverRNG.determine(seed + 22222) >> 11) * 0x1.8p-53, 
+                    alter4 = (DiverRNG.determine(seed + 33333) >> 11) * 0x1p-52;
+            return (cubicSway(x * alter1) * 0.4375f +
+                    cubicSway(x * alter2) * 0.3125f +
+                    cubicSway(x * alter3) * 0.1875f +
+                    cubicSway(x * alter4) * 0.0625f);
         }
     }
     public static class Sway1D implements Noise1D
@@ -2487,22 +2487,43 @@ public class Noise {
         }
         @Override
         public double getNoise(double x) { 
-            long seed = x >= 0.0 ? (long) x : (long) x - 1, rise = 1 - (longFloor(x * 2.0) & 2);
-            x -= seed;
-            seed = (seed ^ seed << 7 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L;
-            seed = (seed ^ seed >>> 41 ^ seed >>> 23) * (seed ^ seed >> 25 | 1) >>> 32;
-            final double h = seed * 0x1p-28 - 4.0;
+            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1,
+                    rise = 1L - ((x >= 0.0 ? (long) (x * 2.0) : (long) (x * 2.0) - 1) & 2L);
+            x -= xFloor;
+            final double h = NumberTools.longBitsToDouble((xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
             return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
         }
+//            xFloor = (xFloor ^ xFloor << 7 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L;
+//            xFloor = (xFloor ^ xFloor >>> 41 ^ xFloor >>> 23) * (xFloor ^ xFloor >> 25 | 1) >>> 32;
+//            final double h = xFloor * 0x1p-28 - 4.0;
+//            seed = (seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L; // XLCG, helps randomize upper bits
+//            // this next 'h' part finishes randomizing (not amazing quality, but fast), uses only the upper bits,
+//            // and reduces it to a double between -8.0 and almost 8.0.
+//            final double h = ((seed ^ seed >>> 26) * (seed | 0xA529) >>> 32) * 0x1p-28 - 8.0;
 
         @Override
-        public double getNoiseWithSeed(double x, long seed) {
-            x += ((seed & 0xFFFFFFFFL) - (seed >>> 32)) * 0x1p-30;
-            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1, rise = 1 - (longFloor(x * 2.0) & 2);
+        public double getNoiseWithSeed(double x, final long seed) {
+            x += ((seed & 0xFFFFFFFFL) ^ (seed >>> 32)) * 0x1p-24; // offset x by between 0.0 and almost 256.0
+            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1, // floor of x as a long
+                    rise = 1L - ((x >= 0.0 ? (long) (x * 2.0) : (long) (x * 2.0) - 1) & 2L); // either 1 or -1
             x -= xFloor;
-            seed = (seed ^ xFloor ^ xFloor << 7 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L;
-            seed = (seed ^ seed >>> 41 ^ seed >>> 23) * (seed ^ seed >> 25 | 1) >>> 32;
-            final double h = seed * 0x1p-28 - 4.0;//((seed >> 63 | 1) << 2);
+            // and now we flip the switch from "magic" to "more magic..."
+            // this directly sets the bits that describe a double. this might seem like it should be slow; it is not.
+            // seed and xFloor are XORed to roughly mix them together; adding would work too probably.
+            // the two huge longs don't really matter except for their last digits:
+            // the one that uses ^ must end in 5 or D (both hex) 
+            // the one that uses * must end in 3 or B (both hex)
+            // and that makes this a valid "XLCG," a cousin of the commonly used LCG random number generator.
+            // it improves the randomness in the upper bits more than the lower ones, where the upper bits will become
+            // more significant decimal places in the resulting double.
+            // we unsigned-right-shift by 12, which puts the random bits all in the double's mantissa (which is how far
+            // it is between the previous power of two and next power of two, roughly).
+            // we bitwise OR with 0x4030000000000000L, which is the exponent section for a double between 16.0 and 32.0.
+            // we work our magic and convert the bits to double.
+            // subtracting 24.0 takes the range to -8.0 to 8.0, where we want it.
+            final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
+            // Quilez' quartic curve; uses the "rise" calculated earlier to determine if this is on the rising or
+            // the falling side. Uses that complicated "h" as the height of the peak or valley in the middle.
             return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
         }
     }

@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 118, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 104, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
@@ -169,7 +169,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Layered1D layeredSway1D = new Noise.Layered1D(new Noise.Sway1D(123L), 5, 5.0);
 
     private final Noise.Quilez1D quilez1D = new Noise.Quilez1D();
-    private final Noise.Layered1D layeredQuilez1D = new Noise.Layered1D(new Noise.Quilez1D(), 5, 5.0);
+    private final Noise.Layered1D layeredQuilez1D = new Noise.Layered1D(new Noise.Quilez1D(), 4, 3.0);
 
     private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 0.03125f);
     private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 0.03125f);
@@ -4590,7 +4590,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                     break;
                     case 108:
-                        Gdx.graphics.setTitle("Quilez1D Noise, 5 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Quilez1D Noise, 4 octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < width - 1; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, width);
                         Arrays.fill(back[width - 1], FLOAT_WHITE);
