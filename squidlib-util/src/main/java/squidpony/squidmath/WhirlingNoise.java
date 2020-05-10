@@ -588,8 +588,8 @@ public static final int[]
             noise2 = t2 * t2 * FastNoise.dotf(FastNoise.phiGrad2f[gi2], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to return values in the interval [-1,1].
-        return 9.125f * (noise0 + noise1 + noise2);
+        // The result is clamped to return values in the interval [-1,1].
+        return Math.max(-1f, Math.min(1f, 9.125f * (noise0 + noise1 + noise2)));
     }
 
     /**
@@ -770,8 +770,8 @@ public static final int[]
             n3 = t3 * t3 * dotf(grad3f[gi3], x3, y3, z3);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to stay just inside [-1,1]
-        return  31.5f * (n0 + n1 + n2 + n3);
+        // The result is clamped to stay just inside [-1,1]
+        return Math.max(-1f, Math.min(1f, 31.5f * (n0 + n1 + n2 + n3)));
     }
 
 }
