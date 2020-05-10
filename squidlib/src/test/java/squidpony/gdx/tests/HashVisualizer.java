@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 10, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 108, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
@@ -168,8 +168,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Sway1D sway1D = new Noise.Sway1D();
     private final Noise.Layered1D layeredSway1D = new Noise.Layered1D(new Noise.Sway1D(123L), 5, 5.0);
 
-    private final Noise.Quilez1D quilez1D = new Noise.Quilez1D();
-    private final Noise.Layered1D layeredQuilez1D = new Noise.Layered1D(new Noise.Quilez1D(), 4, 3.0);
+    private final Noise.QuilezNoise quilez1D = new Noise.QuilezNoise();
+    private final Noise.Layered1D layeredQuilez1D = new Noise.Layered1D(new Noise.QuilezNoise(), 4, 3.0);
+    private final Noise.Layered2D layeredQuilez2D = new Noise.Layered2D(new Noise.QuilezNoise(), 3, 6.0);
 
     private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 0.03125f);
     private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 0.03125f);
@@ -4668,33 +4669,43 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
 //                        break;
                     case 109:
-                        Gdx.graphics.setTitle("Hilbert Curve on swayRandomizedTight(), at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < 256; x++) {
-                            for (int y = 0; y < 256; y++) {
-                                bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * ((CoordPacker.hilbertDistances[x | y << 8] & 0xFFFF)));
+                        Gdx.graphics.setTitle("Quilez2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(
+                                        layeredQuilez2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                                12345678987654321L) * 0.5 + 0.5);
                                 back[x][y] = getGray(bright);
                             }
                         }
-                        if(width >= 512) {
-                            for (int x = 0; x < 256; x++) {
-                                for (int y = 0; y < 256; y++) {
-                                    bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x10000 + (CoordPacker.hilbertDistances[y | x << 8] & 0xFFFF)));
-                                    back[x][y + 256] = getGray(bright);
-                                }
-                            }
-                            for (int x = 0; x < 256; x++) {
-                                for (int y = 0; y < 256; y++) {
-                                    bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x20000 + (CoordPacker.hilbertDistances[y | x << 8] & 0xFFFF)));
-                                    back[x + 256][y + 256] = getGray(bright);
-                                }
-                            }
-                            for (int x = 0; x < 256; x++) {
-                                for (int y = 0; y < 256; y++) {
-                                    bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x30000 + (CoordPacker.hilbertDistances[255 - x | 255 - y << 8] & 0xFFFF)));
-                                    back[x + 256][y] = getGray(bright);
-                                }
-                            }
-                        }
+
+//                        Gdx.graphics.setTitle("Hilbert Curve on swayRandomizedTight(), at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < 256; x++) {
+//                            for (int y = 0; y < 256; y++) {
+//                                bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * ((CoordPacker.hilbertDistances[x | y << 8] & 0xFFFF)));
+//                                back[x][y] = getGray(bright);
+//                            }
+//                        }
+//                        if(width >= 512) {
+//                            for (int x = 0; x < 256; x++) {
+//                                for (int y = 0; y < 256; y++) {
+//                                    bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x10000 + (CoordPacker.hilbertDistances[y | x << 8] & 0xFFFF)));
+//                                    back[x][y + 256] = getGray(bright);
+//                                }
+//                            }
+//                            for (int x = 0; x < 256; x++) {
+//                                for (int y = 0; y < 256; y++) {
+//                                    bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x20000 + (CoordPacker.hilbertDistances[y | x << 8] & 0xFFFF)));
+//                                    back[x + 256][y + 256] = getGray(bright);
+//                                }
+//                            }
+//                            for (int x = 0; x < 256; x++) {
+//                                for (int y = 0; y < 256; y++) {
+//                                    bright = swayRandomizedTight(1337L, ctr * 0.05f + 0.0131415f * (0x30000 + (CoordPacker.hilbertDistances[255 - x | 255 - y << 8] & 0xFFFF)));
+//                                    back[x + 256][y] = getGray(bright);
+//                                }
+//                            }
+//                        }
                         break;
 //                        Gdx.graphics.setTitle("Merlin Rivers 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        for (int x = 0; x < width; x++) {
