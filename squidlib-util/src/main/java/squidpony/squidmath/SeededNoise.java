@@ -1079,7 +1079,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
              */
             ;
     //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
-
+    
     public static double noise(final double x, final double y, final long seed) {
         final double s = (x + y) * F2;
         final int i = fastFloor(x + s),
@@ -1107,12 +1107,11 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 gi0 = hash256(i, j, seed),
                 gi1 = hash256(i + i1, j + j1, seed),
                 gi2 = hash256(i + 1, j + 1, seed);
-        // Calculate the contribution from the three corners
+        // Calculate the contribution from the three corners for 2D gradient
         double t0 = 0.75 - x0 * x0 - y0 * y0;
         if (t0 > 0) {
             t0 *= t0;
             n += t0 * t0 * (phiGrad2[gi0][0] * x0 + phiGrad2[gi0][1] * y0);
-            // for 2D gradient
         }
         double t1 = 0.75 - x1 * x1 - y1 * y1;
         if (t1 > 0) {
@@ -1125,8 +1124,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n += t2 * t2 * (phiGrad2[gi2][0] * x2 + phiGrad2[gi2][1] * y2);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to return values in the interval [-1,1].
-        return  9.125 * (n);
+        // The result is clamped to return values in the interval [-1,1].
+        return Math.max(-1.0, Math.min(1.0, 9.125f * n));
 
 //        double n0, n1, n2;
 //        double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -1247,8 +1246,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n += t3 * t3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
         }
         // Add contributions from each corner to get the final noise value.
-        // The result is scaled to stay just inside [-1,1]
-        return 31.5 * n;
+        // The result is clamped to stay just inside [-1,1]
+        return Math.max(-1.0, Math.min(1.0, 31.5 * n));
         //return (32.0 * n) * 1.25086885 + 0.0003194984;
     }
 
@@ -1326,7 +1325,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
         }
         //return NumberTools.bounce(5.0 + 41.0 * n);
-        return 14.75 * n;
+        return Math.max(-1.0, Math.min(1.0, 14.75 * n));
     }
 
     
@@ -1401,8 +1400,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             }
             skewOffset += G6;
         }
-        return 7.5 * n;
-
+        return Math.max(-1.0, Math.min(1.0, 7.5f * n));
     }
 
 }
