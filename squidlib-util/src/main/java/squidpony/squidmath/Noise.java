@@ -2481,17 +2481,19 @@ public class Noise {
      * hashes in 1D and many more in higher dimensions. Based on <a href="https://www.shadertoy.com/view/3sd3Rs">Inigo
      * Quilez' "Basic Noise"</a>.
      */
-    public static class Quilez1D implements Noise1D {
-        
-        public Quilez1D() {
+    public static class QuilezNoise implements Noise1D, Noise2D {
+
+        public long seed;
+        public QuilezNoise() {
+            this(0xB0BAFE77L);
+        }
+
+        public QuilezNoise(long seed) {
+            this.seed = seed;
         }
         @Override
         public double getNoise(double x) { 
-            final long xFloor = x >= 0.0 ? (long) x : (long) x - 1,
-                    rise = 1L - ((x >= 0.0 ? (long) (x * 2.0) : (long) (x * 2.0) - 1) & 2L);
-            x -= xFloor;
-            final double h = NumberTools.longBitsToDouble((xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
-            return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
+            return getNoiseWithSeed(x, seed);
         }
 //            xFloor = (xFloor ^ xFloor << 7 ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L;
 //            xFloor = (xFloor ^ xFloor >>> 41 ^ xFloor >>> 23) * (xFloor ^ xFloor >> 25 | 1) >>> 32;
@@ -2526,5 +2528,33 @@ public class Noise {
             // the falling side. Uses that complicated "h" as the height of the peak or valley in the middle.
             return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
         }
+
+        @Override
+        public double getNoise(double x, double y) {
+            return getNoiseWithSeed(x, y, seed);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, long seed) {
+            x += ((seed & 0x55555555L) | (seed >>> 32 & 0xAAAAAAAAL)) * 0x1p-24;
+            y += ((seed & 0xAAAAAAAAL) | (seed >>> 32 & 0x55555555L)) * 0x1p-24;
+            final long
+                    xFloor = x >= 0.0 ? (long) x : (long) x - 1,
+                    xRise = 1L - ((x >= 0.0 ? (long) (x * 2.0) : (long) (x * 2.0) - 1) & 2L),
+                    yFloor = y >= 0.0 ? (long) y : (long) y - 1,
+                    yRise = 1L - ((y >= 0.0 ? (long) (y * 2.0) : (long) (y * 2.0) - 1) & 2L);
+            x -= xFloor;
+            y -= yFloor;
+            final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
+            final double i = NumberTools.longBitsToDouble((~seed ^ yFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
+            return 
+//                    cerp(
+                    0.5 * (
+                            (xRise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0)) +
+                            (yRise * y * (y - 1.0) * (i * y * (y - 1.0) - 1.0)) );
+                            
+                            //0.5 + (y - x) * 0.5);
+        }
+
     }
 }
