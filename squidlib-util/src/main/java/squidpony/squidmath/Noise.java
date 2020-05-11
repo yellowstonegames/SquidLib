@@ -2522,8 +2522,10 @@ public class Noise {
             // it is between the previous power of two and next power of two, roughly).
             // we bitwise OR with 0x4030000000000000L, which is the exponent section for a double between 16.0 and 32.0.
             // we work our magic and convert the bits to double.
-            // subtracting 24.0 takes the range to -8.0 to 8.0, where we want it.
-            final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
+            // subtracting 24.0 takes the range to -4.0 to 12.0, where we want it (Quilez used this).
+            final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 
+                      0x4040000000000000L) - 52.0;
+//                    0x4030000000000000L) - 20.0;
             // Quilez' quartic curve; uses the "rise" calculated earlier to determine if this is on the rising or
             // the falling side. Uses that complicated "h" as the height of the peak or valley in the middle.
             return rise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0);
@@ -2536,24 +2538,30 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(double x, double y, long seed) {
-            x += ((seed & 0x55555555L) | (seed >>> 32 & 0xAAAAAAAAL)) * 0x1p-24;
-            y += ((seed & 0xAAAAAAAAL) | (seed >>> 32 & 0x55555555L)) * 0x1p-24;
-            final long
-                    xFloor = x >= 0.0 ? (long) x : (long) x - 1,
-                    xRise = 1L - ((x >= 0.0 ? (long) (x * 2.0) : (long) (x * 2.0) - 1) & 2L),
-                    yFloor = y >= 0.0 ? (long) y : (long) y - 1,
-                    yRise = 1L - ((y >= 0.0 ? (long) (y * 2.0) : (long) (y * 2.0) - 1) & 2L);
-            x -= xFloor;
-            y -= yFloor;
-            final double h = NumberTools.longBitsToDouble((seed ^ xFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
-            final double i = NumberTools.longBitsToDouble((~seed ^ yFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
-            return 
-//                    cerp(
-                    0.5 * (
-                            (xRise * x * (x - 1.0) * (h * x * (x - 1.0) - 1.0)) +
-                            (yRise * y * (y - 1.0) * (i * y * (y - 1.0) - 1.0)) );
-                            
-                            //0.5 + (y - x) * 0.5);
+            double n = 0.0;
+            for (int i = 0; i < 4; i++) {
+                seed += 0x9E3779B97F4A7C15L;
+                double xEdit = x += (((seed & 0x55555555L) | (seed >>> 32 & 0xAAAAAAAAL))) * 0x1p-29 + 0.5698402909980532;
+                double yEdit = y += (((seed & 0xAAAAAAAAL) | (seed >>> 32 & 0x55555555L))) * 0x1p-29 + 0.7548776662466927;
+                final long
+                        xFloor = xEdit >= 0.0 ? (long) xEdit : (long) xEdit - 1,
+                        yFloor = yEdit >= 0.0 ? (long) yEdit : (long) yEdit - 1;
+                xEdit -= xFloor;
+                yEdit -= yFloor;
+                xEdit *= (xEdit - 1.0);
+                yEdit *= (yEdit - 1.0);
+                final double m = (xEdit + yEdit) * 0.5;
+                final double h = NumberTools.longBitsToDouble(HastyPointHash.hashAll(xFloor, yFloor, seed) >>> 12 | 0x4040000000000000L) - 52.0;
+//            final double i = NumberTools.longBitsToDouble((~seed + yFloor ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L >>> 12 | 0x4030000000000000L) - 24.0;
+                n += (m * (h * m - 1.0));
+            }
+            return n * 0.25;
+////                    cerp(
+//                    0.5 * (
+//                            (xRise * m * (h * m - 1.0)) +
+//                            (yRise * m * (i * m - 1.0))
+//                    );
+//                            //, 0.5 + (y - x) * 0.5);
         }
 
     }
