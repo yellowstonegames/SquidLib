@@ -170,7 +170,7 @@ public class HashVisualizer extends ApplicationAdapter {
 
     private final Noise.QuilezNoise quilez1D = new Noise.QuilezNoise();
     private final Noise.Layered1D layeredQuilez1D = new Noise.Layered1D(new Noise.QuilezNoise(), 4, 3.0);
-    private final Noise.Layered2D layeredQuilez2D = new Noise.Layered2D(new Noise.QuilezNoise(), 3, 6.0);
+    private final Noise.Layered2D layeredQuilez2D = new Noise.Layered2D(new Noise.QuilezNoise(), 2, 4.0);
 
     private final Noise.Layered2D classic1_2D = new Noise.Layered2D(ClassicNoise.instance, 1, 0.03125f);
     private final Noise.Layered2D classic3_2D = new Noise.Layered2D(ClassicNoise.instance, 3, 0.03125f);
