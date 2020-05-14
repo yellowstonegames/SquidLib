@@ -12330,6 +12330,12 @@ public class SColor extends Color implements Serializable {
         this.name = name;
         this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
         Colors.put(name, this);
+        Colors.put(name + " (light)", new SColor(this).lerp(Color.WHITE, 0.125f));
+        Colors.put(name + " (lighter)", new SColor(this).lerp(Color.WHITE, 0.25f));
+        Colors.put(name + " (lightest)", new SColor(this).lerp(Color.WHITE, 0.375f));
+        Colors.put(name + " (dark)", new SColor(this).lerp(Color.BLACK, 0.125f));
+        Colors.put(name + " (darker)", new SColor(this).lerp(Color.BLACK, 0.25f));
+        Colors.put(name + " (darkest)", new SColor(this).lerp(Color.BLACK, 0.375f));
     }
 
     /**
@@ -14559,7 +14565,7 @@ B = t - Co;
 
     @Override
     public String toString() {
-        return name + " " + super.toString();
+        return name;
     }
 
     public String getName() {
