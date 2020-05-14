@@ -8,12 +8,12 @@ import squidpony.annotation.Beta;
 public class PhantomNoise {
     public static final PhantomNoise instance = new PhantomNoise();
     
-    private final CrossHash.Yolk yolk;
+    private final long[] coefficients;
     public final int dim;
     private final double inverse;
     private final double[] working, points;
     private final double[][] vertices;
-    private final int[] floors, hashFloors;
+    private final int[] floors;
     public PhantomNoise() {
         this(0xFEEDBEEF1337CAFEL, 3);
     }
@@ -40,15 +40,17 @@ public class PhantomNoise {
             }
         }
         floors = new int[dim+1];
-        hashFloors = new int[dim+1];
-        yolk = new CrossHash.Yolk(seed);
+        coefficients = new long[dim+1];
+        for (int i = 0; i <= dim; i++) {
+            coefficients[i] = DiverRNG.randomize(seed ^ i) | 1L;
+        }
         inverse = 1.0 / (dim + 1.0);
 //        printDebugInfo();
     }
 
-    public double valueNoise()
+    protected double valueNoise()
     {
-        hashFloors[dim] = NumberTools.doubleToMixedIntBits(working[dim]);
+        final long sd = coefficients[dim] * NumberTools.doubleToMixedIntBits(working[dim]);
         for (int i = 0; i < dim; i++) {
             floors[i] = working[i] >= 0.0 ? (int)working[i] : (int)working[i] - 1;
             working[i] -= floors[i];
@@ -59,12 +61,13 @@ public class PhantomNoise {
         int bit;
         for (int i = 0; i < limit; i++) {
             temp = 1.0;
+            long dot = sd;
             for (int j = 0; j < dim; j++) {
                 bit = (i >>> j & 1);
                 temp *= bit + (1|-bit) * working[j];
-                hashFloors[j] = floors[j] - bit;
+                dot += (floors[j] - bit) * coefficients[j];
             }
-            sum += temp * yolk.hash(hashFloors);
+            sum += temp * (int)(dot ^ dot >>> 23 ^ dot >>> 47);
         }
         return (sum * 0x1p-32 + 0.5);
     }
@@ -76,7 +79,7 @@ public class PhantomNoise {
                 points[v] += args[d] * vertices[v][d];
             }
         }
-        working[dim] = Math.PI;
+        working[dim] = 0.6180339887498949; // inverse golden ratio; irrational, so its bit representation nears random
         double result = 0.0, warp = 0.0;
         for (int i = 0; i <= dim; i++) {
             for (int j = 0, d = 0; j < dim; j++, d++) {
@@ -86,7 +89,7 @@ public class PhantomNoise {
             working[0] += warp;
             warp = valueNoise();
             result += warp;
-            working[dim] += Math.E;
+            working[dim] += -0.423310825130748; // e - pi
         }
         result *= inverse;
         return (result <= 0.5)
