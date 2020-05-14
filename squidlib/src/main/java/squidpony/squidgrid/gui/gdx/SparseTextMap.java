@@ -25,6 +25,7 @@ import squidpony.squidmath.HashCommon;
 import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.NumberTools;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -510,31 +511,12 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * Skips checks for existing keys.
      */
     private void putResize(int key, char charValue, float floatValue) {
-        if (key == 0) {
-            zeroChar = charValue;
-            zeroFloat = floatValue;
-            if (!hasZeroValue) {
-                hasZeroValue = true;
-                size++;
-            }
-            return;
-        }
-
-        int b = fibonacci(key);
-        final int[] keyTable = this.keyTable;
-        final char[] charValueTable = this.charValueTable;
-        final float[] floatValueTable = this.floatValueTable;
-
-        for (int i = b; ; i = (i + 1) & mask) {
-            // space is available so we insert and break
+        int[] keyTable = this.keyTable;
+        for (int i = fibonacci(key);; i = (i + 1) & mask) {
             if (keyTable[i] == 0) {
                 keyTable[i] = key;
                 charValueTable[i] = charValue;
                 floatValueTable[i] = floatValue;
- 
-                if (++size >= threshold) {
-                    resize(keyTable.length << 1);
-                }
                 return;
             }
         }
@@ -671,10 +653,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     public void clear() {
         if (size == 0) return;
         keys.clear();
-        final int[] keyTable = this.keyTable;
-        for (int i = keyTable.length; i > 0; ) {
-            keyTable[--i] = 0;
-        }
+        Arrays.fill(keyTable, 0);
         size = 0;
         hasZeroValue = false;
     }
@@ -763,14 +742,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         floatValueTable = new float[newSize];
         charValueTable = new char[newSize];
 
-        int oldSize = size;
-        size = 0;
-        hasZeroValue = false;
-        if (oldSize > 0) {
+        if (size > 0) {
             for (int i = 0; i < oldCapacity; i++) {
                 int key = oldKeyTable[i];
-                if (key != 0)
-                    putResize(key, oldChars[i], oldFloats[i]);
+                if (key != 0) putResize(key, oldChars[i], oldFloats[i]);
             }
         }
     }

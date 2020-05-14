@@ -40,8 +40,9 @@ public class TinyTest extends ApplicationAdapter {
         new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij01234567", SColor.RED).wrap(40, messages);
         new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789abcdefghij012345678", SColor.GREEN).wrap(40, messages);
         new IColoredString.Impl<Color>("ABCDEFGHIJ0123456789 abcdefghij01234567", SColor.CW_AZURE).wrap(40, messages);
-        GDXMarkup.instance.colorString("[CW Red]alpha[] [CW Apricot]beta [][CW Yellow]gamma [CW Jade]delta [CW Blue]epsilon [CW Purple]zeta[]...").wrap(40, messages);
+        GDXMarkup.instance.colorString("[CW Red (lighter)]alpha[] [CW Apricot (lighter)]beta [][CW Yellow (lighter)]gamma [CW Jade (lighter)]delta [CW Blue (lighter)]epsilon [CW Purple (lighter)]zeta[]...").wrap(40, messages);
         GDXMarkup.instance.colorString("[CW Red]alpha[] [CW Apricot]beta [][CW Yellow]gamma [CW Jade]delta [CW Blue]epsilon [CW Purple]zeta[] eta").wrap(40, messages);
+        GDXMarkup.instance.colorString("[CW Red (darker)]alpha[] [CW Apricot (darker)]beta [][CW Yellow (darker)]gamma [CW Jade (darker)]delta [CW Blue (darker)]epsilon [CW Purple (darker)]zeta[] eta!").wrap(40, messages);
         for (int i = 0; i < 25 && i < messages.size(); i++) {
             layers.put(0, i, messages.get(i));
         }

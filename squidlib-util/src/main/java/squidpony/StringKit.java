@@ -1631,7 +1631,7 @@ public class StringKit {
         }
         return sb.toString();
     }
-    private static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa])(\\pG+)(?="+FakeLanguageGen.anyVowel+")", Pattern.IGNORE_CASE | Pattern.UNICODE), "$1n$2");
+    private static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa])(\\p{G}+)(?="+FakeLanguageGen.anyVowel+")", Pattern.IGNORE_CASE | Pattern.UNICODE), "$1n$2");
 
     /**
      * A simple method that looks for any occurrences of the word 'a' followed by some non-zero amount of whitespace and
