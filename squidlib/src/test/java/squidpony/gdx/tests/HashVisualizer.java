@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 108, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 134, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
@@ -5158,7 +5158,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice2D(point4D, x, y, ctr);
+                                slice3D(point4D, x, y, ctr);
 //                                point4D[0] = x * 0.02625;
 //                                point4D[1] = y * 0.02625;
 //                                point4D[2] = ctr * 0.13125;
@@ -5177,7 +5177,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point5D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice2D(point5D, x, y, ctr);
+                                slice3D(point5D, x, y, ctr);
                                 bright =
                                         basicPrepare(phantom5D.getNoise(point5D)
                                         );
@@ -5190,7 +5190,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point6D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice2D(point6D, x, y, ctr);
+                                slice3D(point6D, x, y, ctr);
                                 bright =
                                         basicPrepare(phantom6D.getNoise(point6D)
                                         );
@@ -5203,7 +5203,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(point7D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                slice2D(point7D, x, y, ctr);
+                                slice3D(point7D, x, y, ctr);
                                 bright =
                                         basicPrepare(phantom7D.getNoise(point7D)
                                         );
@@ -6288,22 +6288,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
 
     private final double[]
-            point2D = new double[2],
-            point3D = new double[3],
-            point4D = new double[4],
-            point5D = new double[5],
-            point6D = new double[6],
-            point7D = new double[7];
-    private double[] slice2D(double[] points, int x, int y, int ctr) {
+            point2D = new double[]{12345.6789, 23451.6789},
+            point3D = new double[]{12345.6789, 23451.6789, 34512.6789},
+            point4D = new double[]{12345.6789, 23451.6789, 34512.6789, 45123.6789},
+            point5D = new double[]{12345.6789, 23451.6789, 34512.6789, 45123.6789, 51234.6789},
+            point6D = new double[]{12345.6789, 23451.6789, 34512.6789, 45123.6789, 51234.6789, 92345.6781},
+            point7D = new double[]{12345.6789, 23451.6789, 34512.6789, 45123.6789, 51234.6789, 92345.6781, 89345.6712};
+    private static void slice2D(double[] points, int x, int y, int ctr) {
         points[0]  = x * 0.03125 + ctr * 0.1375;
         points[1]  = y * 0.03125 - ctr * 0.1375;
-        return points;
     }
-    private double[] slice3D(double[] points, int x, int y, int ctr) {
-        points[0] = x * 0.3125;
-        points[1] = y * 0.3125;
-        points[2] = ctr * 0.375;
-        return points;
+    private static void slice3D(double[] points, int x, int y, int ctr) {
+        points[0] = x * 0.03125;
+        points[1] = y * 0.03125;
+        points[2] = ctr * 0.1375;
     }
     private double[] alter2D(int x, int y, int ctr) {
         point2D[0]  = x * 0.03125 + ctr * 0.1375;

@@ -793,6 +793,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         config.width = gridWidth * cellWidth;
         config.height = (gridHeight + bonusHeight) * cellHeight;
         config.vSyncEnabled = false;
+        config.forceExit = false;
         config.foregroundFPS = 0;
         config.backgroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
