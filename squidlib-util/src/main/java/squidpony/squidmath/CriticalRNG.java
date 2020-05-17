@@ -162,20 +162,6 @@ public class CriticalRNG extends RNG {
     }
 
     @Override
-    public short getRandomElement(ShortSet set) {
-        if (set.size <= 0) {
-            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");
-        }
-        int n = super.nextIntHasty(set.size);
-        short s = 0;
-        ShortSet.ShortSetIterator ssi = set.iterator();
-        while (n-- >= 0 && ssi.hasNext)
-            s = ssi.next();
-        ssi.reset();
-        return s;
-    }
-
-    @Override
     public <T> T getRandomElement(Collection<T> coll) {
         int n;
         if ((n = coll.size()) <= 0) {

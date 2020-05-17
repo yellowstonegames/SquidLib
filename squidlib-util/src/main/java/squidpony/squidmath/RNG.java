@@ -347,31 +347,6 @@ public class RNG implements Serializable, IRNG {
     }
 
     /**
-     * Returns a random element from the provided ShortSet. If the set is empty
-     * then an exception is thrown.
-     * <p>
-     * <p>
-     * Requires iterating through a random amount of the elements in set, so performance depends on the size of set but
-     * is likely to be decent. This is mostly meant for internal use, the same as ShortSet.
-     * </p>
-     *
-     * @param set the ShortSet to get an element from
-     * @return the randomly selected element
-     */
-    public short getRandomElement(ShortSet set) {
-        if (set.size <= 0) {
-            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");
-        }
-        int n = nextInt(set.size);
-        short s = 0;
-        ShortSet.ShortSetIterator ssi = set.iterator();
-        while (n-- >= 0 && ssi.hasNext)
-            s = ssi.next();
-        ssi.reset();
-        return s;
-    }
-
-    /**
      * Returns a random element from the provided Collection, which should have predictable iteration order if you want
      * predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
      * (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted

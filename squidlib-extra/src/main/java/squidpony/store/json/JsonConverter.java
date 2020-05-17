@@ -86,7 +86,6 @@ public class JsonConverter extends Json {
         json.addClassTag("#K2V1", K2V1.class);
         json.addClassTag("#IVLA", IntVLA.class);
         json.addClassTag("#SVLA", ShortVLA.class);
-        json.addClassTag("#SSet", ShortSet.class);
         json.addClassTag("#FNoi", FastNoise.class);
         json.addClassTag("#RNG", RNG.class);
         json.addClassTag("#SRNG", StatefulRNG.class);
