@@ -2278,11 +2278,11 @@ public class CoordPacker {
             }
             idx += packed[p] & 0xffff;
         }
-        int[] indices = vla.asInts();
-        if(indices.length < 1)
+        if(vla.size < 1)
             return ALL_WALL;
+        int[] indices = vla.asInts();
         Arrays.sort(indices);
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2349,7 +2349,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2425,7 +2425,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2497,7 +2497,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2573,7 +2573,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2653,7 +2653,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2738,7 +2738,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2840,7 +2840,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -2923,7 +2923,7 @@ public class CoordPacker {
             }
             Arrays.sort(indices);
 
-            vla = new ShortVLA(128);
+            vla.clear();
             int current, past = indices[0], skip = 0;
 
             vla.add((short) indices[0]);
@@ -3017,7 +3017,7 @@ public class CoordPacker {
             }
             Arrays.sort(indices);
 
-            vla = new ShortVLA(128);
+            vla.clear();
             int current, past = indices[0], skip = 0;
 
             vla.add((short) indices[0]);
@@ -3090,7 +3090,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -3210,7 +3210,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -3300,7 +3300,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -3393,7 +3393,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -3671,7 +3671,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
@@ -3818,7 +3818,7 @@ public class CoordPacker {
             return ALL_WALL;
         Arrays.sort(indices);
 
-        vla = new ShortVLA(128);
+        vla.clear();
         int current, past = indices[0], skip = 0;
 
         vla.add((short)indices[0]);
