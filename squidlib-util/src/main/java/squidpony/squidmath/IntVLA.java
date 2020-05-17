@@ -87,6 +87,10 @@ public class IntVLA implements Serializable, Cloneable {
             throw new IllegalArgumentException("offset + length must be <= size: " + offset + " + " + length + " <= " + array.size);
         addAll(array.items, offset, length);
     }
+    
+    public void addAll(IntSet set) {
+        set.appendInto(this);
+    }
 
     public void addAll (int... array) {
         addAll(array, 0, array.length);
