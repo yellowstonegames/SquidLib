@@ -48,7 +48,7 @@ public class ShortSet implements Serializable{
     private int stashCapacity;
     private int pushIterations;
     private int mask;
-    private static long rngState;
+    private static long rngState = 123456789L;
 
     private ShortSetIterator iterator1, iterator2;
 
@@ -71,9 +71,6 @@ public class ShortSet implements Serializable{
         if (initialCapacity > 1 << 30) throw new IllegalArgumentException("initialCapacity is too large: " + initialCapacity);
         capacity = nextPowerOfTwo(initialCapacity);
 
-        rngState = (long) ((Math.random() - 0.5) * 0x10000000000000L)
-                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L);
-
         if (loadFactor <= 0) throw new IllegalArgumentException("loadFactor must be > 0: " + loadFactor);
         this.loadFactor = loadFactor;
 
@@ -93,6 +90,7 @@ public class ShortSet implements Serializable{
         System.arraycopy(map.keyTable, 0, keyTable, 0, map.keyTable.length);
         size = map.size;
         hasZeroValue = map.hasZeroValue;
+        
     }
 
     /** Returns true if the key was not already in the set. */
