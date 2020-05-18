@@ -11,6 +11,7 @@ import squidpony.squidmath.*;
 
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.HashSet;
 import java.util.Objects;
 
 /**
@@ -314,12 +315,12 @@ public class HashQualityTest {
 
 
         int longHashLength = 0x80000, stringHashLength = 0xC0000;
-        IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(longHashLength, 0.75f),
-                colliderLit = new IntDoubleOrderedMap(longHashLength, 0.75f),
-                colliderSto = new IntDoubleOrderedMap(longHashLength, 0.75f),
-                colliderWis = new IntDoubleOrderedMap(longHashLength, 0.75f),
-                colliderWat = new IntDoubleOrderedMap(longHashLength, 0.75f),
-                colliderMis = new IntDoubleOrderedMap(longHashLength, 0.75f);
+        IntSet colliderJDK = new IntSet(longHashLength, 0.75f),
+                colliderLit = new IntSet(longHashLength, 0.75f),
+                colliderSto = new IntSet(longHashLength, 0.75f),
+                colliderWis = new IntSet(longHashLength, 0.75f),
+                colliderWat = new IntSet(longHashLength, 0.75f),
+                colliderMis = new IntSet(longHashLength, 0.75f);
         LongPeriodRNG lprng = new LongPeriodRNG();
 
         System.out.println("Long Hashing:");
@@ -329,19 +330,19 @@ public class HashQualityTest {
             lprng.reseed(0x66L);
             for (int i = 0; i < longHashLength; i++) {
                 lprng.nextLong();
-                colliderJDK.put(Arrays.hashCode(lprng.state) & mask, i);
-                colliderLit.put(CrossHash.Lightning.hash(lprng.state) & mask, i);
-                colliderSto.put(storm.hash(lprng.state) & mask, i);
-                colliderWis.put(CrossHash.Wisp.hash(lprng.state) & mask, i);
-                colliderWat.put(CrossHash.hash(lprng.state) & mask, i);
-                colliderMis.put(mist.hash(lprng.state) & mask, i);
+                colliderJDK.add(Arrays.hashCode(lprng.state) & mask);
+                colliderLit.add(CrossHash.Lightning.hash(lprng.state) & mask);
+                colliderSto.add(storm.hash(lprng.state) & mask);
+                colliderWis.add(CrossHash.Wisp.hash(lprng.state) & mask);
+                colliderWat.add(CrossHash.hash(lprng.state) & mask);
+                colliderMis.add(mist.hash(lprng.state) & mask);
             }
-            System.out.println("JDK collisions, " + bits + "-bit: " + (longHashLength - colliderJDK.size()));
-            System.out.println("Lit collisions, " + bits + "-bit: " + (longHashLength - colliderLit.size()));
-            System.out.println("Sto collisions, " + bits + "-bit: " + (longHashLength - colliderSto.size()));
-            System.out.println("Wis collisions, " + bits + "-bit: " + (longHashLength - colliderWis.size()));
-            System.out.println("Wat collisions, " + bits + "-bit: " + (longHashLength - colliderWat.size()));
-            System.out.println("Mis collisions, " + bits + "-bit: " + (longHashLength - colliderMis.size()));
+            System.out.println("JDK collisions, " + bits + "-bit: " + (longHashLength - colliderJDK.size));
+            System.out.println("Lit collisions, " + bits + "-bit: " + (longHashLength - colliderLit.size));
+            System.out.println("Sto collisions, " + bits + "-bit: " + (longHashLength - colliderSto.size));
+            System.out.println("Wis collisions, " + bits + "-bit: " + (longHashLength - colliderWis.size));
+            System.out.println("Wat collisions, " + bits + "-bit: " + (longHashLength - colliderWat.size));
+            System.out.println("Mis collisions, " + bits + "-bit: " + (longHashLength - colliderMis.size));
             System.out.println();
             colliderJDK.clear();
             colliderLit.clear();
@@ -365,22 +366,22 @@ public class HashQualityTest {
         massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
         langLength = massive.length;
         for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
-            colliderJDK.put(jdkHash(massive, s, s+e+32) & restrict, i);
-            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict, i);
-            colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
-            colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
-            colliderWat.put(CrossHash.hash(massive, s, s+e+32) & restrict, i);
-            colliderMis.put(mist.hash(massive, s, s+e+32) & restrict, i);
+            colliderJDK.add(jdkHash(massive, s, s+e+32) & restrict);
+            colliderLit.add(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict);
+            colliderSto.add(storm.hash(massive, s, s+e+32) & restrict);
+            colliderWis.add(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict);
+            colliderWat.add(CrossHash.hash(massive, s, s+e+32) & restrict);
+            colliderMis.add(mist.hash(massive, s, s+e+32) & restrict);
             if(e >= 0x1fd)
                 s += 7;
         }
 
-        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
-        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
-        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
-        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
-        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size()));
-        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size()));
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size));
+        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size));
+        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size));
+        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size));
+        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size));
         System.out.println();
         colliderJDK.clear();
         colliderLit.clear();
@@ -395,22 +396,22 @@ public class HashQualityTest {
         massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
         langLength = massive.length;
         for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
-            colliderJDK.put(jdkHash(massive, s, s+e+32) & restrict, i);
-            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict, i);
-            colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
-            colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
-            colliderWat.put(CrossHash.hash(massive, s, s+e+32) & restrict, i);
-            colliderMis.put(mist.hash(massive, s, s+e+32) & restrict, i);
+            colliderJDK.add(jdkHash(massive, s, s+e+32) & restrict);
+            colliderLit.add(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict);
+            colliderSto.add(storm.hash(massive, s, s+e+32) & restrict);
+            colliderWis.add(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict);
+            colliderWat.add(CrossHash.hash(massive, s, s+e+32) & restrict);
+            colliderMis.add(mist.hash(massive, s, s+e+32) & restrict);
             if(e >= 0x1fd)
                 s += 7;
         }
 
-        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
-        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
-        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
-        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
-        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size()));
-        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size()));
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size));
+        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size));
+        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size));
+        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size));
+        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size));
         System.out.println();
         colliderJDK.clear();
         colliderLit.clear();
@@ -426,22 +427,22 @@ public class HashQualityTest {
         massive = hugeSentence.toCharArray();
         langLength = massive.length;
         for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
-            colliderJDK.put(jdkHash(massive, s, s+e+32) & restrict, i);
-            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict, i);
-            colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
-            colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
-            colliderWat.put(CrossHash.hash(massive, s, s+e+32) & restrict, i);
-            colliderMis.put(mist.hash(massive, s, s+e+32) & restrict, i);
+            colliderJDK.add(jdkHash(massive, s, s+e+32) & restrict);
+            colliderLit.add(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict);
+            colliderSto.add(storm.hash(massive, s, s+e+32) & restrict);
+            colliderWis.add(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict);
+            colliderWat.add(CrossHash.hash(massive, s, s+e+32) & restrict);
+            colliderMis.add(mist.hash(massive, s, s+e+32) & restrict);
             if(e >= 0x1fd)
                 s += 7;
         }
 
-        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
-        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
-        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
-        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
-        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size()));
-        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size()));
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size));
+        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size));
+        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size));
+        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size));
+        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size));
         System.out.println();
         colliderJDK.clear();
         colliderLit.clear();
@@ -456,22 +457,22 @@ public class HashQualityTest {
         massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
         langLength = massive.length;
         for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
-            colliderJDK.put(jdkHash(massive, s, s+e+32) & restrict, i);
-            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict, i);
-            colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
-            colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
-            colliderWat.put(CrossHash.hash(massive, s, s+e+32) & restrict, i);
-            colliderMis.put(mist.hash(massive, s, s+e+32) & restrict, i);
+            colliderJDK.add(jdkHash(massive, s, s+e+32) & restrict);
+            colliderLit.add(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict);
+            colliderSto.add(storm.hash(massive, s, s+e+32) & restrict);
+            colliderWis.add(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict);
+            colliderWat.add(CrossHash.hash(massive, s, s+e+32) & restrict);
+            colliderMis.add(mist.hash(massive, s, s+e+32) & restrict);
             if(e >= 0x1fd)
                 s += 7;
         }
 
-        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
-        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
-        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
-        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
-        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size()));
-        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size()));
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size));
+        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size));
+        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size));
+        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size));
+        System.out.println("Mis collisions, 32-bit: " + (stringHashLength - colliderMis.size));
         System.out.println();
         colliderJDK.clear();
         colliderLit.clear();
@@ -486,20 +487,20 @@ public class HashQualityTest {
         langLength = massiveBytes.length;
         for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
             section = byteSection(massiveBytes, s, s+e+32);
-            colliderJDK.put(jdkHash(massive, s, s+e+32) & restrict, i);
-            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict, i);
-            colliderSto.put(storm.hash(massive, s, s+e+32) & restrict, i);
-            colliderWis.put(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict, i);
-            colliderWat.put(CrossHash.hash(massive, s, s+e+32) & restrict, i);
+            colliderJDK.add(jdkHash(massive, s, s+e+32) & restrict);
+            colliderLit.add(CrossHash.Lightning.hash(massive, s, s+e+32) & restrict);
+            colliderSto.add(storm.hash(massive, s, s+e+32) & restrict);
+            colliderWis.add(CrossHash.Wisp.hash(massive, s, s+e+32) & restrict);
+            colliderWat.add(CrossHash.hash(massive, s, s+e+32) & restrict);
             if(e >= 0x1fd)
                 s += 7;
         }
 
-        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
-        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
-        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size()));
-        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size()));
-        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size()));
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size));
+        System.out.println("Sto collisions, 32-bit: " + (stringHashLength - colliderSto.size));
+        System.out.println("Wis collisions, 32-bit: " + (stringHashLength - colliderWis.size));
+        System.out.println("Wat collisions, 32-bit: " + (stringHashLength - colliderWat.size));
         System.out.println();
         colliderJDK.clear();
         colliderLit.clear();
@@ -508,7 +509,7 @@ public class HashQualityTest {
         colliderWat.clear();
         */
     }
-    public static int slitherHash(final CharSequence data) {
+    public static int slitherHashOld(final CharSequence data) {
         if (data == null)
             return 0;
         //long result = 0x9E3779B97F4A7C80L, a = 0x632BE59BD9B4E019L;
@@ -595,7 +596,7 @@ public class HashQualityTest {
         //return (state = ((state = (((state * 0x62BD5) ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13) * 0xAF2D9) ^ state >>> 10;
 //        return ((state = ((state = ((state ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13) * 0x62BD5) << 22 | state >>> 10);
 //        return ((state = (state ^ 0xC74EAD55) * 0xA5CB3) ^ ((state << 20) | (state >>> 12)) ^ ((state << 9) | (state >>> 23)));
-        return (state = (state ^ (state << 20 | state >>> 12) ^ (state << 9 | state >>> 23) ^ 0xC74EAD55) * 0xA5CB3) + (state >>> 16);
+        return (state = (state ^ (state << 21 | state >>> 11) ^ (state << 9 | state >>> 23) ^ 0xC74EAD55) * 0xA5CB3) ^ (state >>> 16);
     }
     public static int xlxs(int state)
     {
@@ -628,7 +629,57 @@ public class HashQualityTest {
         return (h2 + (h1 << 24 | h1 >>> 8)) ^ h1;
     }
 
-    
+    public int slitherHash(int[] data){
+        if (data == null)
+            return 0;
+
+        long result = 0xC13FA9A902A6328FL;
+        int i = 0;
+        for (; i + 7 < data.length; i += 8) {
+            result = 0xEBEDEED9D803C815L * result
+                    + 0xD96EB1A810CAAF5FL * data[i]
+                    + 0xC862B36DAF790DD5L * data[i + 1]
+                    + 0xB8ACD90C142FE10BL * data[i + 2]
+                    + 0xAA324F90DED86B69L * data[i + 3]
+                    + 0x9CDA5E693FEA10AFL * data[i + 4]
+                    + 0x908E3D2C82567A73L * data[i + 5]
+                    + 0x8538ECB5BD456EA3L * data[i + 6]
+                    + data[i + 7]
+            ;
+        }
+        for (; i < data.length; i++) {
+            result = 0x9E3779B97F4A7C15L * result + data[i];
+        }
+        return (int) (result >>> 32);
+    }
+
+    public int slitherHash(CharSequence data){
+        if (data == null)
+            return 0;
+
+        long result = 0xC13FA9A902A6328FL ^ data.length() * 0x9E3779B97F4A7C15L;
+        int i = 0;
+        for (; i + 7 < data.length(); i += 8) {
+            result =  0xEBEDEED9D803C815L * result
+                    + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                    + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                    + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                    + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                    + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                    + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                    + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                    + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+            ;
+        }
+        for (; i < data.length(); i++) {
+            result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+        }
+        //Moremur, with initial multiply by the last multiplier in SplitMix64
+        return (int)((result = ((result = ((result *= 0x94D049BB133111EBL) ^ result >>> 27) * 0x3C79AC492BA7B653L) ^ result >>> 33) * 0x1C69B3F74AC4AE35L) ^ result >>> 27);
+    }
+
+
+
     public static int oldCoord(long x, long y)
     {
         x *= 0x9E3779B97F4A7C15L;
@@ -929,16 +980,16 @@ public class HashQualityTest {
                     int SIZE = WIDTH * HEIGHT;
                     int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
 
-                    IntDoubleOrderedMap colliderLath = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderPelo = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderSzud = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderCant = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderRoSt = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderGold = new IntDoubleOrderedMap(SIZE, 0.5f);
-//                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
+                    IntSet colliderLath = new IntSet(SIZE, 0.5f),
+                            colliderObje = new IntSet(SIZE, 0.5f),
+                            colliderPelo = new IntSet(SIZE, 0.5f),
+                            colliderSzud = new IntSet(SIZE, 0.5f),
+                            colliderCant = new IntSet(SIZE, 0.5f),
+                            colliderRoSt = new IntSet(SIZE, 0.5f),
+                            colliderGold = new IntSet(SIZE, 0.5f);
+//                    IntSet[] colliders = new IntSet[31];
 //                    for (int i = 0; i < 31; i++) {
-//                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                        colliders[i] = new IntSet(SIZE, 0.5f);
 //                    }
                     LightRNG rng = new LightRNG(1L);
                     SNShuffledIntSequence
@@ -956,46 +1007,46 @@ public class HashQualityTest {
                                 continue;
                             }
                             points.set(c);
-                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
-                            colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
-                            colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
-                            colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
-                            colliderRoSt.put(rosenbergStrongCoord(x, y) & restrict, 0.0);
-                            colliderGold.put(Coord.cantorHashCode(x, y) & restrict, 0.0);
-                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
+                            colliderLath.add(latheCoord(x, y) & restrict);
+                            colliderSzud.add(szudzikCoord(x, y) & restrict);
+                            colliderPelo.add(pelotonCoord(x, y) & restrict);
+                            colliderCant.add(cantorCoord(x, y) & restrict);
+                            colliderRoSt.add(rosenbergStrongCoord(x, y) & restrict);
+                            colliderGold.add(Coord.cantorHashCode(x, y) & restrict);
+                            colliderObje.add(Objects.hash(x, y) & restrict);
                             
 //                            for (int i = 0; i < 31; i++) {
-//                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
+//                                colliders[i].add(latheCoordConfig(x, y, i + 1) & restrict);
 //                            }
                         }
                     }
 //                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
-                    t = (SIZE - colliderLath.size()); lathBest = Math.min(t, lathBest); lathWorst = Math.max(t, lathWorst);
+                    t = (SIZE - colliderLath.size); lathBest = Math.min(t, lathBest); lathWorst = Math.max(t, lathWorst);
 //                    System.out.println("Lath collisions: " + t);
-                    t = (SIZE - colliderPelo.size()); peloBest = Math.min(t, peloBest); peloWorst = Math.max(t, peloWorst);
+                    t = (SIZE - colliderPelo.size); peloBest = Math.min(t, peloBest); peloWorst = Math.max(t, peloWorst);
 //                    System.out.println("Pelo collisions: " + t);
-                    t = (SIZE - colliderSzud.size()); szudBest = Math.min(t, szudBest); szudWorst = Math.max(t, szudWorst);
+                    t = (SIZE - colliderSzud.size); szudBest = Math.min(t, szudBest); szudWorst = Math.max(t, szudWorst);
 //                    System.out.println("Szud collisions: " + t);
-                    t = (SIZE - colliderCant.size()); cantBest = Math.min(t, cantBest); cantWorst = Math.max(t, cantWorst);
+                    t = (SIZE - colliderCant.size); cantBest = Math.min(t, cantBest); cantWorst = Math.max(t, cantWorst);
 //                    System.out.println("Cant collisions: " + t);
-                    t = (SIZE - colliderRoSt.size()); rostBest = Math.min(t, rostBest); rostWorst = Math.max(t, rostWorst);
+                    t = (SIZE - colliderRoSt.size); rostBest = Math.min(t, rostBest); rostWorst = Math.max(t, rostWorst);
 //                    System.out.println("RoSt collisions: " + t);
-                    t = (SIZE - colliderGold.size()); goldBest = Math.min(t, goldBest); goldWorst = Math.max(t, goldWorst);
+                    t = (SIZE - colliderGold.size); goldBest = Math.min(t, goldBest); goldWorst = Math.max(t, goldWorst);
 //                    System.out.println("Gold collisions: " + t);
-                    t = (SIZE - colliderObje.size()); objeBest = Math.min(t, objeBest); objeWorst = Math.max(t, objeWorst);
+                    t = (SIZE - colliderObje.size); objeBest = Math.min(t, objeBest); objeWorst = Math.max(t, objeWorst);
 //                    System.out.println("Obje collisions: " + t);
 
 //                    for (int i = 0; i < 31; i++) {
-//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
-//                        confTotals[i] += (SIZE - colliders[i].size());
+//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size));
+//                        confTotals[i] += (SIZE - colliders[i].size);
 //                    }
-                    lathTotal += (SIZE - colliderLath.size());
-                    peloTotal += (SIZE - colliderPelo.size());
-                    szudTotal += (SIZE - colliderSzud.size());
-                    cantTotal += (SIZE - colliderCant.size());
-                    rostTotal += (SIZE - colliderRoSt.size());
-                    goldTotal += (SIZE - colliderGold.size());
-                    objeTotal += (SIZE - colliderObje.size());
+                    lathTotal += (SIZE - colliderLath.size);
+                    peloTotal += (SIZE - colliderPelo.size);
+                    szudTotal += (SIZE - colliderSzud.size);
+                    cantTotal += (SIZE - colliderCant.size);
+                    rostTotal += (SIZE - colliderRoSt.size);
+                    goldTotal += (SIZE - colliderGold.size);
+                    objeTotal += (SIZE - colliderObje.size);
                     total += SIZE;
                 }
             }
@@ -1037,15 +1088,15 @@ public class HashQualityTest {
                         int SIZE = WIDTH * HEIGHT * DEPTH;
                         int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
 
-                        IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderPelo = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderSzud = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderCant = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderHast = new IntDoubleOrderedMap(SIZE, 0.5f);
-//                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
+                        IntSet colliderBase = new IntSet(SIZE, 0.5f),
+                                colliderObje = new IntSet(SIZE, 0.5f),
+                                colliderPelo = new IntSet(SIZE, 0.5f),
+                                colliderSzud = new IntSet(SIZE, 0.5f),
+                                colliderCant = new IntSet(SIZE, 0.5f),
+                                colliderHast = new IntSet(SIZE, 0.5f);
+//                    IntSet[] colliders = new IntSet[31];
 //                    for (int i = 0; i < 31; i++) {
-//                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                        colliders[i] = new IntSet(SIZE, 0.5f);
 //                    }
                         DiverRNG rng = new DiverRNG(1L);
                         SNShuffledIntSequence
@@ -1064,56 +1115,56 @@ public class HashQualityTest {
                                         continue;
                                     }
                                     points.add(c);
-                                    colliderBase.put(IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict, 0.0);//((int) Noise.PointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
-                                    colliderPelo.put(peloton3D(x, y, z) & restrict, 0.0);
-                                    colliderSzud.put(szudzikCoord(z, szudzikCoord(x, y)) & restrict, 0.0);
-                                    colliderCant.put(cantorCoord(z, cantorCoord(x, y)) & restrict, 0.0);
-                                    colliderHast.put(rosenbergStrong3D(x, y, z) & restrict, 0.0);
-//                                    colliderHast.put(rosenbergStrongCoord(z, rosenbergStrongCoord(x, y)) & restrict, 0.0);
-//                                    colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
-                                    colliderObje.put(Objects.hash(x, y, z) & restrict, 0.0);
+                                    colliderBase.add(IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict);
+                                    colliderPelo.add(peloton3D(x, y, z) & restrict);
+                                    colliderSzud.add(szudzikCoord(z, szudzikCoord(x, y)) & restrict);
+                                    colliderCant.add(cantorCoord(z, cantorCoord(x, y)) & restrict);
+                                    colliderHast.add(rosenbergStrong3D(x, y, z) & restrict);
+//                                    colliderHast.add(rosenbergStrongCoord(z, rosenbergStrongCoord(x, y)) & restrict);
+//                                    colliderHast.add((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict);
+                                    colliderObje.add(Objects.hash(x, y, z) & restrict);
 //                            for (int i = 0; i < 31; i++) {
-//                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
+//                                colliders[i].add(latheCoordConfig(x, y, i + 1) & restrict);
 //                            }
                                 }
                             }
                         }
 //                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
-                        t = (SIZE - colliderBase.size());
+                        t = (SIZE - colliderBase.size);
                         baseBest = Math.min(t, baseBest);
                         baseWorst = Math.max(t, baseWorst);
 //                    System.out.println("Base collisions: " + t);
-                        t = (SIZE - colliderPelo.size());
+                        t = (SIZE - colliderPelo.size);
                         peloBest = Math.min(t, peloBest);
                         peloWorst = Math.max(t, peloWorst);
 //                    System.out.println("Szu2 collisions: " + t);
-                        t = (SIZE - colliderSzud.size());
+                        t = (SIZE - colliderSzud.size);
                         szudBest = Math.min(t, szudBest);
                         szudWorst = Math.max(t, szudWorst);
 //                    System.out.println("Szud collisions: " + t);
-                        t = (SIZE - colliderCant.size());
+                        t = (SIZE - colliderCant.size);
                         cantBest = Math.min(t, cantBest);
                         cantWorst = Math.max(t, cantWorst);
 //                    System.out.println("Cant collisions: " + t);
-                        t = (SIZE - colliderHast.size());
+                        t = (SIZE - colliderHast.size);
                         hastBest = Math.min(t, hastBest);
                         hastWorst = Math.max(t, hastWorst);
 //                    System.out.println("Gold collisions: " + t);
-                        t = (SIZE - colliderObje.size());
+                        t = (SIZE - colliderObje.size);
                         objeBest = Math.min(t, objeBest);
                         objeWorst = Math.max(t, objeWorst);
 //                    System.out.println("Obje collisions: " + t);
 
 //                    for (int i = 0; i < 31; i++) {
-//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
-//                        confTotals[i] += (SIZE - colliders[i].size());
+//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size));
+//                        confTotals[i] += (SIZE - colliders[i].size);
 //                    }
-                        baseTotal += (SIZE - colliderBase.size());
-                        peloTotal += (SIZE - colliderPelo.size());
-                        szudTotal += (SIZE - colliderSzud.size());
-                        cantTotal += (SIZE - colliderCant.size());
-                        hastTotal += (SIZE - colliderHast.size());
-                        objeTotal += (SIZE - colliderObje.size());
+                        baseTotal += (SIZE - colliderBase.size);
+                        peloTotal += (SIZE - colliderPelo.size);
+                        szudTotal += (SIZE - colliderSzud.size);
+                        cantTotal += (SIZE - colliderCant.size);
+                        hastTotal += (SIZE - colliderHast.size);
+                        objeTotal += (SIZE - colliderObje.size);
                         total += SIZE;
                     }
                 }
@@ -1148,85 +1199,99 @@ public class HashQualityTest {
     @Test
     public void testLimited()
     {
-        int restrict = 0xFFFFF;
+        int restrict = 0xFFFF;
         MarkovTextLimited markovText = new MarkovTextLimited();
-        String theme = "dun dun dun, dun dundun, dun dundun, dun dun dun dun dundun dun dundun.";
-        String party = "party party party, I wanna have a party, we're gonna have a party, you better have a party!";
-        //markovText.analyze(party);//theme.replace("dun", "wiggle")
-        final int LIMIT = 0x100000;
-        UnorderedSet<String> strings = new UnorderedSet<>(LIMIT);
+//        String theme = "dun dun dun, dun dundun, dun dundun, dun dun dun dun dundun dun dundun.";
+        String party = "party party party, I wanna have a party, we're gonna have a party, you better have a party!" +
+                "Oh party party party, you're gonna party hearty, we're gonna have a party, or else you will be sorry!";
+        markovText.analyze(party);//theme.replace("dun", "wiggle")
+        final int LIMIT = restrict * 4 / 5;
+        HashSet<String> strings = new HashSet<>(LIMIT);
+        StringBuilder sb = new StringBuilder(LIMIT);
+        int permissible = StringKit.PERMISSIBLE_CHARS.length();
         for (int i = 0; i < (LIMIT << 2) && strings.size() < LIMIT; i++) {
             // usually not necessary
-            //strings.add(markovText.chain(DiverRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 100));
+//            strings.add(markovText.chain(DiverRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 170));
             // try changing length
-            //strings.add(markovText.chain(DiverRNG.determine(i + 0x1234567890L), 190));
-            strings.add(String.format("       %16s       ", Integer.toString(i, 5)));
-            //strings.add(FakeLanguageGen.JAPANESE_ROMANIZED.sentence(DiverRNG.determine(i + 0x12345678), 10, 10));
+//            strings.add(markovText.chain(DiverRNG.determine(i + 0x1234567890L), 175));
+//            strings.add(String.format("       %13s       ", Integer.toString(i, 4)));
+//            strings.add(StringKit.bin(DiverRNG.determine(i)));
+//            strings.add(StringKit.hex(i) + StringKit.bin(i));
+//            strings.add("        " + StringKit.hex(i) + "        ");
+            //// Wisp does extremely badly here.
+//            strings.add(StringKit.bin(i));
+//            strings.add("        " + StringKit.hex(DiverRNG.determine(i)) + "        ");
+//            strings.add(FakeLanguageGen.CHINESE_ROMANIZED.sentence(DiverRNG.determine(i + 0x12345678), 10, 10));
+//            strings.add(FakeLanguageGen.GREEK_AUTHENTIC.sentence(DiverRNG.determine(i + 0x12345678), 10, 10));
+            //// this is a pathologically bad case for String.hashCode(), but using '\u0000' is even worse
+            strings.add(sb.append(' ').toString());
+//            strings.add(sb.append(StringKit.PERMISSIBLE_CHARS.charAt(DiverRNG.determineBounded(i, permissible))).toString());
         }
         int stringHashLength = strings.size();
-        IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderLit = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderWis = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderSli = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderWat = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderJol = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderHiv = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderSpl = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderYur = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderBuz = new IntDoubleOrderedMap(stringHashLength, 0.5f);
+        IntSet colliderJDK = new IntSet(stringHashLength, 0.5f),
+                colliderLit = new IntSet(stringHashLength, 0.5f),
+                colliderWis = new IntSet(stringHashLength, 0.5f),
+                colliderSli = new IntSet(stringHashLength, 0.5f),
+                colliderWat = new IntSet(stringHashLength, 0.5f),
+                colliderJol = new IntSet(stringHashLength, 0.5f),
+                colliderHiv = new IntSet(stringHashLength, 0.5f),
+                colliderSpl = new IntSet(stringHashLength, 0.5f),
+                colliderYur = new IntSet(stringHashLength, 0.5f),
+                colliderBuz = new IntSet(stringHashLength, 0.5f);
 //        LightRNG rng1 = new LightRNG(DiverRNG.determine(System.nanoTime() * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L));
 //        DiverRNG rng2 = new DiverRNG(LightRNG.determine(System.nanoTime() * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L));
 //        final int SIZE = 1024;
 //        int[][] pairs = new int[SIZE][2];
-//        IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[SIZE];
+//        IntSet[] colliders = new IntSet[SIZE];
 //        for (int i = 0; i < SIZE; i++) {
-//            colliders[i] = new IntDoubleOrderedMap(stringHashLength, 0.65f);
+//            colliders[i] = new IntSet(stringHashLength, 0.65f);
 //            pairs[i][0] = rng1.next(20);
 //            pairs[i][1] = rng2.next(20);
 //        }
         for(String s : strings)
         {
-            colliderJDK.put(s.hashCode() & restrict, 1.0);
-            colliderLit.put(CrossHash.Lightning.hash(s) & restrict, 1.0);
-            colliderWis.put(CrossHash.Wisp.hash(s) & restrict, 1.0);
-            colliderSli.put(slitherHash(s) & restrict, 1.0);
-            colliderWat.put(CrossHash.hash(s) & restrict, 1.0);
-            colliderJol.put(joltHash(s) & restrict, 1.0);
-            colliderHiv.put(CrossHash.Hive.hash(s) & restrict, 1.0);
-            colliderSpl.put(lantern(s.hashCode()) & restrict, 1.0);
-            colliderYur.put(yuraHash(s, 0xC74EAD55) & restrict, 1.0);
-            colliderBuz.put(buzzHash(s) & restrict, 1.0);
+            colliderJDK.add(s.hashCode() & restrict);
+            colliderLit.add(CrossHash.Lightning.hash(s) & restrict);
+            colliderWis.add(CrossHash.Wisp.hash(s) & restrict);
+            colliderSli.add(slitherHash(s) & restrict);
+            colliderWat.add(CrossHash.hash(s) & restrict);
+            colliderJol.add(joltHash(s) & restrict);
+            colliderHiv.add(CrossHash.Hive.hash(s) & restrict);
+            colliderSpl.add(lantern(s.hashCode()) & restrict);
+            colliderYur.add(yuraHash(s, 0xC74EAD55) & restrict);
+            colliderBuz.add(buzzHash(s) & restrict);
 //            for (int i = 0; i < SIZE; i++) {
-//                colliders[i].put(slitherHashConfig(s, pairs[i][0], pairs[i][1]) & restrict, i);
+//                colliders[i].add(slitherHashConfig(s, pairs[i][0], pairs[i][1]) & restrict);
 //            }
 //            for (int i = 0; i < SIZE; i++) {
-//                colliders[i].put(buzzHashConfig(s, pairs[i][0], pairs[i][1]) & restrict, i);
+//                colliders[i].add(buzzHashConfig(s, pairs[i][0], pairs[i][1]) & restrict);
 //            }
         }
         System.out.println(strings.iterator().next());
         System.out.println("With " + stringHashLength + " distinct Strings:");
-        System.out.println("JDK collisions, 16-bit: " + (stringHashLength - colliderJDK.size()));
-        System.out.println("Lit collisions, 16-bit: " + (stringHashLength - colliderLit.size()));
-        System.out.println("Wis collisions, 16-bit: " + (stringHashLength - colliderWis.size()));
-        System.out.println("Sli collisions, 16-bit: " + (stringHashLength - colliderSli.size()));
-        System.out.println("Wat collisions, 16-bit: " + (stringHashLength - colliderWat.size()));
-        System.out.println("Jol collisions, 16-bit: " + (stringHashLength - colliderJol.size()));
-        System.out.println("Lan collisions, 16-bit: " + (stringHashLength - colliderSpl.size()));
-        System.out.println("Yur collisions, 16-bit: " + (stringHashLength - colliderYur.size()));
-        System.out.println("Buz collisions, 16-bit: " + (stringHashLength - colliderBuz.size()));
-        System.out.println("Hiv collisions, 16-bit: " + (stringHashLength - colliderHiv.size()));
-//        Arrays.sort(colliders, new Comparator<IntDoubleOrderedMap>() {
+        String bits = Integer.bitCount(restrict) + "-bit: ";
+        System.out.println("JDK collisions, " + bits + (stringHashLength - colliderJDK.size));
+        System.out.println("Lit collisions, " + bits + (stringHashLength - colliderLit.size));
+        System.out.println("Wis collisions, " + bits + (stringHashLength - colliderWis.size));
+        System.out.println("Sli collisions, " + bits + (stringHashLength - colliderSli.size));
+        System.out.println("Wat collisions, " + bits + (stringHashLength - colliderWat.size));
+        System.out.println("Jol collisions, " + bits + (stringHashLength - colliderJol.size));
+        System.out.println("Lan collisions, " + bits + (stringHashLength - colliderSpl.size));
+        System.out.println("Yur collisions, " + bits + (stringHashLength - colliderYur.size));
+        System.out.println("Buz collisions, " + bits + (stringHashLength - colliderBuz.size));
+        System.out.println("Hiv collisions, " + bits + (stringHashLength - colliderHiv.size));
+//        Arrays.sort(colliders, new Comparator<IntSet>() {
 //            @Override
-//            public int compare(IntDoubleOrderedMap o1, IntDoubleOrderedMap o2) {
-//                return o2.size() - o1.size();
+//            public int compare(IntSet o1, IntSet o2) {
+//                return o2.size - o1.size;
 //            }
 //        });
-//        IntDoubleOrderedMap idm;
+//        IntSet idm;
 //        int idx;
 //        for (int i = 0; i < 10; i++) {
 //            idm = colliders[i];
 //            idx = (int)idm.get(idm.firstIntKey());
-//            System.out.printf("0x%08X, 0x%08X : %d\n", pairs[idx][0], pairs[idx][1], (stringHashLength - idm.size()));
+//            System.out.printf("0x%08X, 0x%08X : %d\n", pairs[idx][0], pairs[idx][1], (stringHashLength - idm.size));
 //            idm.clear();
 //        }
         System.out.println();
@@ -1276,40 +1341,40 @@ public class HashQualityTest {
                     for (int SIZE : params) {
                         int restrict = (SIZE << INCREASE) - 1;
 
-                        IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderHaCo = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderLant = new IntDoubleOrderedMap(SIZE, 0.5f),
-                                colliderXLXS = new IntDoubleOrderedMap(SIZE, 0.5f);
-//                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
+                        IntSet colliderBase = new IntSet(SIZE, 0.5f),
+                                colliderHaCo = new IntSet(SIZE, 0.5f),
+                                colliderLant = new IntSet(SIZE, 0.5f),
+                                colliderXLXS = new IntSet(SIZE, 0.5f);
+//                    IntSet[] colliders = new IntSet[31];
 //                    for (int i = 0; i < 31; i++) {
-//                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                        colliders[i] = new IntSet(SIZE, 0.5f);
 //                    }
                         for (int y = 1; y <= SIZE; y++) {
 //                        int x = (ThrustAltRNG.determineInt(y));
 //                        int x = xs3(y*0x1FFFFFFF);
                             int x = Integer.rotateLeft(y * mul, r);
 //                        x = x << 16 | x >>> 16;
-                            colliderBase.put(x & restrict, 0.0);
-                            colliderLant.put(xs3(x) & restrict, 0.0);
-                            colliderXLXS.put(xlxs(x) & restrict, 0.0);
-                            colliderHaCo.put(HashCommon.mix(x) & restrict, 0.0);
+                            colliderBase.add(x & restrict);
+                            colliderLant.add(xs3(x) & restrict);
+                            colliderXLXS.add(xlxs(x) & restrict);
+                            colliderHaCo.add(HashCommon.mix(x) & restrict);
 //                            for (int i = 0; i < 31; i++) {
-//                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
+//                                colliders[i].add(latheCoordConfig(x, y, i + 1) & restrict);
 //                            }
                         }
 //                    System.out.println("INCREASE: " + INCREASE + ", SIZE: " + SIZE);
-//                    System.out.println("Base collisions: " + (SIZE - colliderBase.size()));
-//                    System.out.println("Lant collisions: " + (SIZE - colliderLant.size()));
-//                    System.out.println("XLXS collisions: " + (SIZE - colliderXLXS.size()));
-//                    System.out.println("HaCo collisions: " + (SIZE - colliderHaCo.size()));
+//                    System.out.println("Base collisions: " + (SIZE - colliderBase.size));
+//                    System.out.println("Lant collisions: " + (SIZE - colliderLant.size));
+//                    System.out.println("XLXS collisions: " + (SIZE - colliderXLXS.size));
+//                    System.out.println("HaCo collisions: " + (SIZE - colliderHaCo.size));
 //                    for (int i = 0; i < 31; i++) {
-//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
-//                        confTotals[i] += (SIZE - colliders[i].size());
+//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size));
+//                        confTotals[i] += (SIZE - colliders[i].size);
 //                    }
-                        baseTotal += (SIZE - colliderBase.size());
-                        lantTotal += (SIZE - colliderLant.size());
-                        xlxsTotal += (SIZE - colliderXLXS.size());
-                        hacoTotal += (SIZE - colliderHaCo.size());
+                        baseTotal += (SIZE - colliderBase.size);
+                        lantTotal += (SIZE - colliderLant.size);
+                        xlxsTotal += (SIZE - colliderXLXS.size);
+                        hacoTotal += (SIZE - colliderHaCo.size);
                         total += SIZE;
                     }
                 }
