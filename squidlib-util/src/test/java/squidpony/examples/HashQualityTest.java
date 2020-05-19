@@ -265,6 +265,7 @@ public class HashQualityTest {
             System.out.println("CrossHash shorts: " + CrossHash.hash(shorts[i]));
             System.out.println("CrossHash ints: " + CrossHash.hash(ints[i]));
             System.out.println("CrossHash longs: " + CrossHash.hash(longs[i]));
+            System.out.println("CrossHash objects: " + CrossHash.hash(objects[i]));
         }
 
         for (int i = 0; i < len; i++) {
@@ -633,7 +634,7 @@ public class HashQualityTest {
         if (data == null)
             return 0;
 
-        long result = 0xC13FA9A902A6328FL;
+        long result = 0xC13FA9A902A6328FL ^ data.length * 0x9E3779B97F4A7C15L;
         int i = 0;
         for (; i + 7 < data.length; i += 8) {
             result = 0xEBEDEED9D803C815L * result
@@ -644,13 +645,18 @@ public class HashQualityTest {
                     + 0x9CDA5E693FEA10AFL * data[i + 4]
                     + 0x908E3D2C82567A73L * data[i + 5]
                     + 0x8538ECB5BD456EA3L * data[i + 6]
-                    + data[i + 7]
+                    + 0xD1B54A32D192ED03L * data[i + 7]
             ;
         }
         for (; i < data.length; i++) {
             result = 0x9E3779B97F4A7C15L * result + data[i];
         }
-        return (int) (result >>> 32);
+        result *= 0x94D049BB133111EBL;
+        result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+        result *= 0x369DEA0F31A53F85L;
+        result ^= result >>> 31;
+        result *= 0xDB4F0B9175AE2165L;
+        return (int)(result ^ result >>> 28);
     }
 
     public int slitherHash(CharSequence data){
@@ -674,8 +680,12 @@ public class HashQualityTest {
         for (; i < data.length(); i++) {
             result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
         }
-        //Moremur, with initial multiply by the last multiplier in SplitMix64
-        return (int)((result = ((result = ((result *= 0x94D049BB133111EBL) ^ result >>> 27) * 0x3C79AC492BA7B653L) ^ result >>> 33) * 0x1C69B3F74AC4AE35L) ^ result >>> 27);
+        result *= 0x94D049BB133111EBL;
+        result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+        result *= 0x369DEA0F31A53F85L;
+        result ^= result >>> 31;
+        result *= 0xDB4F0B9175AE2165L;
+        return (int)(result ^ result >>> 28);
     }
 
 
@@ -1189,13 +1199,13 @@ public class HashQualityTest {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
 //        }
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     @Test
     public void testLimited()
     {
@@ -1305,6 +1315,88 @@ public class HashQualityTest {
         colliderSpl.clear();
         colliderYur.clear();
         colliderBuz.clear();
+    }
+
+    @Test
+    public void testInts()
+    {
+        int restrict = 0xFFFFF;
+        final int LIMIT = restrict * 4 / 5;
+        int[][] arrs = new int[LIMIT][34];
+        for (int i = 0; i < LIMIT; i++) {
+            long d = DiverRNG.randomize(i);
+//            arrs[i][(int)(d >>> 60) + 8] = (int) (d);
+            Arrays.fill(arrs[i], (int) d);
+        }
+        IntSet colliderJDK = new IntSet(LIMIT, 0.5f),
+                colliderLit = new IntSet(LIMIT, 0.5f),
+                colliderWis = new IntSet(LIMIT, 0.5f),
+                colliderSli = new IntSet(LIMIT, 0.5f),
+                colliderWat = new IntSet(LIMIT, 0.5f),
+                colliderMis = new IntSet(LIMIT, 0.5f),
+                colliderHiv = new IntSet(LIMIT, 0.5f),
+                colliderLan = new IntSet(LIMIT, 0.5f);
+//        LightRNG rng1 = new LightRNG(DiverRNG.determine(System.nanoTime() * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L));
+//        DiverRNG rng2 = new DiverRNG(LightRNG.determine(System.nanoTime() * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L));
+//        final int SIZE = 1024;
+//        int[][] pairs = new int[SIZE][2];
+//        IntSet[] colliders = new IntSet[SIZE];
+//        for (int i = 0; i < SIZE; i++) {
+//            colliders[i] = new IntSet(stringHashLength, 0.65f);
+//            pairs[i][0] = rng1.next(20);
+//            pairs[i][1] = rng2.next(20);
+//        }
+        for(int[] s : arrs)
+        {
+//            colliderJDK.add((int) (Arrays.hashCode(s) * 0x9E3779B97F4A7C15L >>> 32) & restrict);
+            colliderJDK.add(Arrays.hashCode(s) & restrict);
+            colliderLit.add(CrossHash.Lightning.hash(s) & restrict);
+            colliderWis.add(CrossHash.Wisp.hash(s) & restrict);
+            colliderSli.add(slitherHash(s) & restrict);
+            colliderWat.add(CrossHash.hash(s) & restrict);
+            colliderMis.add(CrossHash.Mist.alpha.hash(s) & restrict);
+            colliderHiv.add(CrossHash.Hive.hash(s) & restrict);
+            colliderLan.add(lantern(Arrays.hashCode(s)) & restrict);
+//            for (int i = 0; i < SIZE; i++) {
+//                colliders[i].add(slitherHashConfig(s, pairs[i][0], pairs[i][1]) & restrict);
+//            }
+//            for (int i = 0; i < SIZE; i++) {
+//                colliders[i].add(buzzHashConfig(s, pairs[i][0], pairs[i][1]) & restrict);
+//            }
+        }
+        System.out.println("With " + LIMIT + " distinct int arrays:");
+        String bits = Integer.bitCount(restrict) + "-bit: ";
+        System.out.println("JDK collisions, " + bits + (LIMIT - colliderJDK.size));
+        System.out.println("Lit collisions, " + bits + (LIMIT - colliderLit.size));
+        System.out.println("Wis collisions, " + bits + (LIMIT - colliderWis.size));
+        System.out.println("Sli collisions, " + bits + (LIMIT - colliderSli.size));
+        System.out.println("Wat collisions, " + bits + (LIMIT - colliderWat.size));
+        System.out.println("Mis collisions, " + bits + (LIMIT - colliderMis.size));
+        System.out.println("Lan collisions, " + bits + (LIMIT - colliderLan.size));
+        System.out.println("Hiv collisions, " + bits + (LIMIT - colliderHiv.size));
+//        Arrays.sort(colliders, new Comparator<IntSet>() {
+//            @Override
+//            public int compare(IntSet o1, IntSet o2) {
+//                return o2.size - o1.size;
+//            }
+//        });
+//        IntSet idm;
+//        int idx;
+//        for (int i = 0; i < 10; i++) {
+//            idm = colliders[i];
+//            idx = (int)idm.get(idm.firstIntKey());
+//            System.out.printf("0x%08X, 0x%08X : %d\n", pairs[idx][0], pairs[idx][1], (stringHashLength - idm.size));
+//            idm.clear();
+//        }
+        System.out.println();
+        colliderJDK.clear();
+        colliderLit.clear();
+        colliderWis.clear();
+        colliderSli.clear();
+        colliderWat.clear();
+        colliderMis.clear();
+        colliderHiv.clear();
+        colliderLan.clear();
     }
     /*
     0x2EF022689E573495L, 0x8628F680AFADEDABL : 629
