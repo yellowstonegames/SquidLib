@@ -177,4 +177,68 @@ public class GridCompression {
         }
         return bytes;
     }
+    public static byte[] doubleGridToByteArray(double[][] doubles) {
+        final int width = doubles.length, height = doubles[0].length;
+        byte[] bytes = new byte[width * height + 8];
+        bytes[0] = (byte) (width >>> 24);
+        bytes[1] = (byte) (width >>> 16);
+        bytes[2] = (byte) (width >>> 8);
+        bytes[3] = (byte) (width);
+        bytes[4] = (byte) (height >>> 24);
+        bytes[5] = (byte) (height >>> 16);
+        bytes[6] = (byte) (height >>> 8);
+        bytes[7] = (byte) (height);
+        int i = 8;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bytes[i++] = (byte)(doubles[x][y] * 256);
+            }
+        }
+        return bytes;
+    }
+    public static double[][] byteArrayToDoubleGrid(byte[] bytes) {
+        final int width = bytes[0] << 24 | (bytes[1] << 16 & 0xFF0000) | (bytes[2] << 8 & 0xFF00) | (bytes[3] & 0xFF),
+                height = bytes[4] << 24 | (bytes[5] << 16 & 0xFF0000) | (bytes[6] << 8 & 0xFF00) | (bytes[7] & 0xFF);
+        double[][] doubles = new double[width][height];
+        int i = 8;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                doubles[x][y] = (bytes[i++] & 0xFF) * 0x1p-8;
+            }
+        }
+        return doubles;
+    }
+
+    public static byte[] byteGridToByteArray(byte[][] grid) {
+        final int width = grid.length, height = grid[0].length;
+        byte[] bytes = new byte[width * height + 8];
+        bytes[0] = (byte) (width >>> 24);
+        bytes[1] = (byte) (width >>> 16);
+        bytes[2] = (byte) (width >>> 8);
+        bytes[3] = (byte) (width);
+        bytes[4] = (byte) (height >>> 24);
+        bytes[5] = (byte) (height >>> 16);
+        bytes[6] = (byte) (height >>> 8);
+        bytes[7] = (byte) (height);
+        int i = 8;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bytes[i++] = grid[x][y];
+            }
+        }
+        return bytes;
+    }
+    public static byte[][] byteArrayToByteGrid(byte[] bytes) {
+        final int width = bytes[0] << 24 | (bytes[1] << 16 & 0xFF0000) | (bytes[2] << 8 & 0xFF00) | (bytes[3] & 0xFF),
+                height = bytes[4] << 24 | (bytes[5] << 16 & 0xFF0000) | (bytes[6] << 8 & 0xFF00) | (bytes[7] & 0xFF);
+        byte[][] grid = new byte[width][height];
+        int i = 8;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                grid[x][y] = bytes[i++];
+            }
+        }
+        return grid;
+    }
+
 }

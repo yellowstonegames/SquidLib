@@ -18,7 +18,7 @@ import java.util.HashSet;
 public final class ByteStringEncoding {
     private ByteStringEncoding(){}
 
-    private static String compress(byte[] uncompressed) {
+    public static String compress(byte[] uncompressed) {
         if (uncompressed == null) return null;
         if (uncompressed.length == 0) return "";
         final int bitsPerChar = 15, offset = 32;
@@ -198,7 +198,7 @@ public final class ByteStringEncoding {
         return context_data.toString();
     }
 
-    private static byte[] decompress(String compressed) {
+    public static byte[] decompress(String compressed) {
         if (compressed == null)
             return null;
         if (compressed.isEmpty())
