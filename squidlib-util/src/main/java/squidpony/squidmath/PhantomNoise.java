@@ -6,7 +6,13 @@ import squidpony.annotation.Beta;
  */
 @Beta
 public class PhantomNoise {
-    public static final PhantomNoise instance = new PhantomNoise();
+    public static final PhantomNoise instance2D = new PhantomNoise(MummyNoise.goldenLong[2][0], 2);
+    public static final PhantomNoise instance3D = new PhantomNoise(MummyNoise.goldenLong[3][0], 3);
+    public static final PhantomNoise instance4D = new PhantomNoise(MummyNoise.goldenLong[4][0], 4);
+    public static final PhantomNoise instance5D = new PhantomNoise(MummyNoise.goldenLong[5][0], 5);
+    public static final PhantomNoise instance6D = new PhantomNoise(MummyNoise.goldenLong[6][0], 6);
+    public static final PhantomNoise instance7D = new PhantomNoise(MummyNoise.goldenLong[7][0], 7);
+    public static final PhantomNoise instance8D = new PhantomNoise(MummyNoise.goldenLong[8][0], 8);
     
     private final long[] coefficients;
     public final int dim;
@@ -39,10 +45,16 @@ public class PhantomNoise {
                 vertices[v][d] = t;
             }
         }
+        for (int v = 0; v <= dim; v++) {
+            final double theta = NumberTools.atan2(vertices[v][1], vertices[v][0]) + 0.6180339887498949,
+                    dist = Math.sqrt(vertices[v][1] * vertices[v][1] + vertices[v][0] * vertices[v][0]);
+            vertices[v][0] = NumberTools.cos(theta) * dist;
+            vertices[v][1] = NumberTools.sin(theta) * dist;
+        }
         floors = new int[dim+1];
-        coefficients = new long[dim+1];
+        coefficients = new long[dim + 1];
         for (int i = 0; i <= dim; i++) {
-            coefficients[i] = DiverRNG.randomize(seed ^ i) | 1L;
+            coefficients[i] = LightRNG.determine(seed ^ i) | 1L;
         }
         inverse = 1.0 / (dim + 1.0);
 //        printDebugInfo();
@@ -67,7 +79,7 @@ public class PhantomNoise {
                 temp *= bit + (1|-bit) * working[j];
                 dot += (floors[j] - bit) * coefficients[j];
             }
-            sum += temp * (int)(dot ^ dot >>> 23 ^ dot >>> 47);
+            sum += temp * (int)(dot ^ dot >>> 23 ^ dot >>> 43);
         }
         return (sum * 0x1p-32 + 0.5);
     }
@@ -101,7 +113,7 @@ public class PhantomNoise {
 //        return  (result * result * (6.0 - 4.0 * result) - 1.0);
     }
 
-    public double getNoise(double x, double y) {
+    public double getNoise2D(double x, double y) {
         points[0] = -0.4161468365471422 * x + 0.9092974268256818 * y;
         points[1] = -0.5794012529532914 * x + -0.8150424455671962 * y;
         points[2] = 0.9955480895004332 * x + -0.09425498125848553 * y;

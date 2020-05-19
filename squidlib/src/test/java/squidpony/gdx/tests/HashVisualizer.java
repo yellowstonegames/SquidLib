@@ -6302,6 +6302,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         points[0] = x * 0.03125;
         points[1] = y * 0.03125;
         points[2] = ctr * 0.1375;
+        for (int i = 3; i < points.length; i++) {
+            points[i] = -points[i - 3];
+        }
     }
     private double[] alter2D(int x, int y, int ctr) {
         point2D[0]  = x * 0.03125 + ctr * 0.1375;
