@@ -1313,6 +1313,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return n * 0.5f + 0.5f;
     }
 
+    public static float smoothPrepare(double n)
+    {
+        n = n * 0.5 + 0.5;
+        return (float)(n * n * (3 - 2 * n));
+    }
+
+    public static float smoothPrepare(float n)
+    {
+        n = n * 0.5f + 0.5f;
+        return (n * n * (3 - 2 * n));
+    }
+
     private float getGray(float brightness) {
 //        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
         return gradientF[(int)(brightness * 255.999)];
@@ -6035,7 +6047,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fastPerlin1.getConfiguredNoise(xx, yy));
+                                bright = smoothPrepare(fastPerlin1.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6048,7 +6060,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fastPerlinRidged1.getConfiguredNoise(xx, yy));
+                                bright = smoothPrepare(fastPerlinRidged1.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6061,7 +6073,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fastPerlin3.getConfiguredNoise(xx, yy));
+                                bright = smoothPrepare(fastPerlin3.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6074,7 +6086,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(fastPerlinRidged3.getConfiguredNoise(xx, yy));
+                                bright = smoothPrepare(fastPerlinRidged3.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6085,7 +6097,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 3D Noise, 1 normal octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlin1.getConfiguredNoise(x, y, ctr));
+                                bright = smoothPrepare(fastPerlin1.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6096,7 +6108,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 3D Noise, 1 ridged octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlinRidged1.getConfiguredNoise(x, y, ctr));
+                                bright = smoothPrepare(fastPerlinRidged1.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6107,7 +6119,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlin3.getConfiguredNoise(x, y, ctr));
+                                bright = smoothPrepare(fastPerlin3.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6118,7 +6130,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 3D Noise, 3 ridged octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlinRidged3.getConfiguredNoise(x, y, ctr));
+                                bright = smoothPrepare(fastPerlinRidged3.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6131,7 +6143,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlin1.getConfiguredNoise(s0, s1,
+                                bright = smoothPrepare(fastPerlin1.getConfiguredNoise(s0, s1,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
                                 ));
@@ -6147,7 +6159,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlinRidged1.getConfiguredNoise(s0, s1,
+                                bright = smoothPrepare(fastPerlinRidged1.getConfiguredNoise(s0, s1,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
                                 ));
@@ -6163,7 +6175,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlin3.getConfiguredNoise(s0, s1,
+                                bright = smoothPrepare(fastPerlin3.getConfiguredNoise(s0, s1,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
                                 ));
@@ -6179,7 +6191,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlinRidged3.getConfiguredNoise(s0, s1,
+                                bright = smoothPrepare(fastPerlinRidged3.getConfiguredNoise(s0, s1,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
                                         s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
                                 ));
@@ -6193,7 +6205,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 6D Noise, 1 normal octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlin1.getNoise(x, y, ctr, -x, -y, -ctr));
+                                bright = smoothPrepare(fastPerlin1.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6204,7 +6216,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 6D Noise, 1 ridged octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlinRidged1.getNoise(x, y, ctr, -x, -y, -ctr));
+                                bright = smoothPrepare(fastPerlinRidged1.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6215,7 +6227,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 6D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlin3.getNoise(x, y, ctr, -x, -y, -ctr));
+                                bright = smoothPrepare(fastPerlin3.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6226,7 +6238,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic Perlin 6D Noise, 3 ridged octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fastPerlinRidged3.getNoise(x, y, ctr, -x, -y, -ctr));
+                                bright = smoothPrepare(fastPerlinRidged3.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
