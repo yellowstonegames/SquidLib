@@ -185,9 +185,16 @@ public class HashVisualizer extends ApplicationAdapter {
 
     private final FastNoise fast1_lf_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 1);
     private final FastNoise fast3_lf_2D = new FastNoise(1337, 0.03125f, FastNoise.SIMPLEX_FRACTAL, 3);
+
+    private final FastNoise fastPerlin1 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 1);
+    private final FastNoise fastPerlin3 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 3);
+    private final FastNoise fastPerlinRidged1 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 1);
+    private final FastNoise fastPerlinRidged3 = new FastNoise(1337, 0.03125f, FastNoise.PERLIN_FRACTAL, 3);
     {
         fast1_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
         fast3_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
+        fastPerlinRidged1.setFractalType(FastNoise.RIDGED_MULTI);
+        fastPerlinRidged3.setFractalType(FastNoise.RIDGED_MULTI);
     }
 //    {
 //        fast2_2D.setFractalType(FastNoise.RIDGED_MULTI);
@@ -1637,7 +1644,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 hashMode %= 28;
                             default:
                                 otherMode++;
-                                otherMode %= 21;
+                                otherMode %= 17;
                                 if (otherMode == 0) {
                                     ArrayTools.fill(back, FLOAT_WHITE);
                                     //ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
@@ -6023,12 +6030,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 1:
                     {
-                        Gdx.graphics.setTitle("Classic 2D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 2D Noise, 1 normal octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic1_2D.getNoise(xx, yy));
+                                bright = basicPrepare(fastPerlin1.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6036,12 +6043,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 2:
                     {
-                        Gdx.graphics.setTitle("Classic 2D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 2D Noise, 1 ridged octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic1_lf_2D.getNoise(xx, yy));
+                                bright = basicPrepare(fastPerlinRidged1.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6049,12 +6056,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 3:
                     {
-                        Gdx.graphics.setTitle("Classic 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic3_2D.getNoise(xx, yy));
+                                bright = basicPrepare(fastPerlin3.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6062,26 +6069,23 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 4:
                     {
-                        Gdx.graphics.setTitle("Classic 2D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 2D Noise, 3 ridged octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(classic3_lf_2D.getNoise(xx, yy));
+                                bright = basicPrepare(fastPerlinRidged3.getConfiguredNoise(xx, yy));
                                 back[x][y] = getGray(bright);
                             }
                         }
                     }
                     break;
-
                     case 5:
                     {
-                        Gdx.graphics.setTitle("Fast 2D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 3D Noise, 1 normal octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
-                                bright = basicPrepare(fast1_2D.getConfiguredNoise(xx, yy));
+                                bright = basicPrepare(fastPerlin1.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6089,12 +6093,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 6:
                     {
-                        Gdx.graphics.setTitle("Fast 2D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 3D Noise, 1 ridged octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
-                                bright = basicPrepare(fast1_lf_2D.getConfiguredNoise(xx, yy));
+                                bright = basicPrepare(fastPerlinRidged1.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6102,12 +6104,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 7:
                     {
-                        Gdx.graphics.setTitle("Fast 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
-                                bright = basicPrepare(fast3_2D.getConfiguredNoise(xx, yy));
+                                bright = basicPrepare(fastPerlin3.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6115,12 +6115,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 8:
                     {
-                        Gdx.graphics.setTitle("Fast 2D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 3D Noise, 3 ridged octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
-                                bright = basicPrepare(fast3_lf_2D.getConfiguredNoise(xx, yy));
+                                bright = basicPrepare(fastPerlinRidged3.getConfiguredNoise(x, y, ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6128,10 +6126,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 9:
                     {
-                        Gdx.graphics.setTitle("Classic 3D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 4D Noise, 1 normal octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr;
                         for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic1_3D.getNoise(x, y, ctr));
+                                bright = basicPrepare(fastPerlin1.getConfiguredNoise(s0, s1,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6139,10 +6142,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 10:
                     {
-                        Gdx.graphics.setTitle("Classic 3D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 4D Noise, 1 ridged octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr;
                         for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic1_lf_3D.getNoise(x, y, ctr));
+                                bright = basicPrepare(fastPerlinRidged1.getConfiguredNoise(s0, s1,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6150,10 +6158,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 11:
                     {
-                        Gdx.graphics.setTitle("Classic 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 4D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr;
                         for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic3_3D.getNoise(x, y, ctr));
+                                bright = basicPrepare(fastPerlin3.getConfiguredNoise(s0, s1,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6161,22 +6174,26 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 12:
                     {
-                        Gdx.graphics.setTitle("Classic 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 4D Noise, 3 ridged octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = ctr;
                         for (int x = 0; x < width; x++) {
+                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(classic3_lf_3D.getNoise(x, y, ctr * 0.25));
+                                bright = basicPrepare(fastPerlinRidged3.getConfiguredNoise(s0, s1,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
+                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
+                                ));
                                 back[x][y] = getGray(bright);
                             }
                         }
                     }
                     break;
-
                     case 13:
                     {
-                        Gdx.graphics.setTitle("Fast 3D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 6D Noise, 1 normal octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast1_3D.getConfiguredNoise(x, y, ctr));
+                                bright = basicPrepare(fastPerlin1.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6184,10 +6201,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 14:
                     {
-                        Gdx.graphics.setTitle("Fast 3D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 6D Noise, 1 ridged octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast1_lf_3D.getConfiguredNoise(x, y, ctr));
+                                bright = basicPrepare(fastPerlinRidged1.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6195,10 +6212,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 15:
                     {
-                        Gdx.graphics.setTitle("Fast 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 6D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast3_3D.getConfiguredNoise(x, y, ctr));
+                                bright = basicPrepare(fastPerlin3.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
@@ -6206,82 +6223,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 16:
                     {
-                        Gdx.graphics.setTitle("Fast 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Classic Perlin 6D Noise, 3 ridged octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast3_lf_3D.getConfiguredNoise(x, y, ctr));
+                                bright = basicPrepare(fastPerlinRidged3.getNoise(x, y, ctr, -x, -y, -ctr));
                                 back[x][y] = getGray(bright);
                             }
                         }
                     }
                     break;
-
-
-                    case 17:
-                    {
-                        Gdx.graphics.setTitle("Fast 4D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = ctr;
-                        for (int x = 0; x < width; x++) {
-                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
-                            for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast1_4D.getConfiguredNoise(s0, s1, 
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
-                                ));
-                                back[x][y] = getGray(bright);
-                            }
-                        }
-                    }
-                    break;
-                    case 18:
-                    {
-                        Gdx.graphics.setTitle("Fast 4D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = ctr;
-                        for (int x = 0; x < width; x++) {
-                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
-                            for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast1_lf_4D.getConfiguredNoise(s0, s1,
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
-                                ));
-                                back[x][y] = getGray(bright);
-                            }
-                        }
-                    }
-                    break;
-                    case 19:
-                    {
-                        Gdx.graphics.setTitle("Fast 4D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = ctr;
-                        for (int x = 0; x < width; x++) {
-                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
-                            for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast3_4D.getConfiguredNoise(s0, s1,
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
-                                ));
-                                back[x][y] = getGray(bright);
-                            }
-                        }
-                    }
-                    break;
-                    case 20:
-                    {
-                        Gdx.graphics.setTitle("Fast 4D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = ctr;
-                        for (int x = 0; x < width; x++) {
-                            s1 = s0 * -0.3333333333333333f + x * 0.9428090415820634f;
-                            for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(fast3_lf_4D.getConfiguredNoise(s0, s1,
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * 0.816496580927726f,
-                                        s0 * -0.3333333333333333f + x * -0.4714045207910317f + y * -0.816496580927726f
-                                ));
-                                back[x][y] = getGray(bright);
-                            }
-                        }
-                    }
-                    break;
-
                 }
             }
         }
