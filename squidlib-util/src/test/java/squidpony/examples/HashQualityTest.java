@@ -689,7 +689,90 @@ public class HashQualityTest {
     }
 
 
-
+    /**
+     * Purely experimental; almost definitely won't be as fast as {@link #slitherHash(CharSequence)}.
+     * @param data a String or other CharSequence
+     * @return a hash code
+     */
+    public int slitherHash2(CharSequence data){
+        if (data == null)
+            return 0;
+        final int len = data.length();
+        long m = 0xCC62FCEB9202FAADL;//0xCB9C59B3F9F87D4DL;//0xCC62FCEB9202FAADL ^ len * 0x9E3779B97F4A7C16L;
+        long result = m * len + 0xD1B54A32D192ED03L;
+        int i = 0;
+//        final long m0 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m1 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m2 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m3 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m4 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m5 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m6 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m7 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m8 = (m * 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L;
+//        for (; i + 7 < len; i += 8) {
+//            result =  m0 * result
+//                    + m1 * data.charAt(i)
+//                    + m2 * data.charAt(i + 1)
+//                    + m3 * data.charAt(i + 2)
+//                    + m4 * data.charAt(i + 3)
+//                    + m5 * data.charAt(i + 4)
+//                    + m6 * data.charAt(i + 5)
+//                    + m7 * data.charAt(i + 6)
+//                    + m8 * data.charAt(i + 7)
+//            ;
+//        }
+        for (; i < len; i++) {
+            result = (m *= 0xCC62FCEB9202FAADL) * (result + data.charAt(i));
+        }
+        result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+        result *= 0x369DEA0F31A53F85L;
+        result ^= result >>> 31;
+        result *= 0xDB4F0B9175AE2165L;
+        return (int)(result ^ result >>> 28);
+//        return (int)(result>>>32); 
+    }
+    
+    public int slitherHash3(CharSequence data){
+        if (data == null)
+            return 0;
+        final int len = data.length();
+        long m = 0xCC62FCEB9202FAADL ^ len * 0x9E3779B97F4A7C16L;
+        long result = m * len + 0xD1B54A32D192ED03L;
+        int i = 0;
+//        final long m0 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m1 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m2 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m3 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m4 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m5 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m6 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m7 = ((m *= 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L);
+//        final long m8 = (m * 0xCC62FCEB9202FAADL) >>> 1 | 0x8000000000000001L;
+//        for (; i + 7 < len; i += 8) {
+//            result =  m0 * result
+//                    + m1 * data.charAt(i)
+//                    + m2 * data.charAt(i + 1)
+//                    + m3 * data.charAt(i + 2)
+//                    + m4 * data.charAt(i + 3)
+//                    + m5 * data.charAt(i + 4)
+//                    + m6 * data.charAt(i + 5)
+//                    + m7 * data.charAt(i + 6)
+//                    + m8 * data.charAt(i + 7)
+//            ;
+//        }
+        for (; i < len; i++) {
+            result = ((m *= 0xCB9C59B3F9F87D4DL) >>> 1 | 0x8000000000000001L) * (result + data.charAt(i));
+        }
+//        result *= 0x94D049BB133111EBL;
+        result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+        result *= 0x369DEA0F31A53F85L;
+        result ^= result >>> 31;
+        result *= 0xDB4F0B9175AE2165L;
+        return (int)(result ^ result >>> 28);
+//        return (int)(result>>>32); 
+    }
+    
     public static int oldCoord(long x, long y)
     {
         x *= 0x9E3779B97F4A7C15L;
@@ -1223,19 +1306,20 @@ public class HashQualityTest {
             // usually not necessary
 //            strings.add(markovText.chain(DiverRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 170));
             // try changing length
-//            strings.add(markovText.chain(DiverRNG.determine(i + 0x1234567890L), 175));
-//            strings.add(String.format("       %13s       ", Integer.toString(i, 4)));
+            strings.add(markovText.chain(i, 280));
+//            strings.add(String.format("       %s       ", Integer.toString(i, 4)));
 //            strings.add(StringKit.bin(DiverRNG.determine(i)));
 //            strings.add(StringKit.hex(i) + StringKit.bin(i));
 //            strings.add("        " + StringKit.hex(i) + "        ");
             //// Wisp does extremely badly here.
 //            strings.add(StringKit.bin(i));
-//            strings.add("        " + StringKit.hex(DiverRNG.determine(i)) + "        ");
+//            strings.add("        " + StringKit.bin(i) + "        ");
+//            strings.add(StringKit.bin(DiverRNG.randomize(i)) + StringKit.bin(DiverRNG.determine(i)));
 //            strings.add(FakeLanguageGen.CHINESE_ROMANIZED.sentence(DiverRNG.determine(i + 0x12345678), 10, 10));
 //            strings.add(FakeLanguageGen.GREEK_AUTHENTIC.sentence(DiverRNG.determine(i + 0x12345678), 10, 10));
             //// this is a pathologically bad case for String.hashCode(), but using '\u0000' is even worse
-            strings.add(sb.append(' ').toString());
-//            strings.add(sb.append(StringKit.PERMISSIBLE_CHARS.charAt(DiverRNG.determineBounded(i, permissible))).toString());
+//            strings.add(sb.append(' ').toString());
+//            strings.add(sb.append(ArrayTools.letterAt(i)).toString());
         }
         int stringHashLength = strings.size();
         IntSet colliderJDK = new IntSet(stringHashLength, 0.5f),
@@ -1263,7 +1347,7 @@ public class HashQualityTest {
             colliderJDK.add(s.hashCode() & restrict);
             colliderLit.add(CrossHash.Lightning.hash(s) & restrict);
             colliderWis.add(CrossHash.Wisp.hash(s) & restrict);
-            colliderSli.add(slitherHash(s) & restrict);
+            colliderSli.add(slitherHash2(s) & restrict);
             colliderWat.add(CrossHash.hash(s) & restrict);
             colliderJol.add(joltHash(s) & restrict);
             colliderHiv.add(CrossHash.Hive.hash(s) & restrict);
