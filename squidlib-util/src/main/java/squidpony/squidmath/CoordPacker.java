@@ -2078,17 +2078,17 @@ public class CoordPacker {
         ShortVLA vla = new ShortVLA(64);
         boolean on = false;
         int idx = 0;
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
                     int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
-                    if (ss.add((short) dist)) {
+                    if (ss.add(dist)) {
                         for (int xx = Math.max(0, x - minDistance); xx <= Math.min(255, x + minDistance); xx++) {
                             for (int yy = Math.max(0, y - minDistance); yy <= Math.min(255, y + minDistance); yy++) {
                                 dist = hilbertDistances[xx + (yy << 8)];
                                 if(dist >= i)
-                                    ss.add((short) dist);
+                                    ss.add(dist);
                             }
                         }
                         vla.add((short) i);
@@ -2123,14 +2123,14 @@ public class CoordPacker {
         ShortVLA vla = new ShortVLA(64);
         boolean on = false;
         int idx = 0;
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         int xx, yy;
         int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
                     int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
-                    if (ss.add((short) dist)) {
+                    if (ss.add(dist)) {
                         for (int d = 0; d < 4; d++) {
                             for (int e = 1; e <= minDistance; e++) {
                                 for (int e2 = 0; e2 < minDistance; e2++) {
@@ -2138,7 +2138,7 @@ public class CoordPacker {
                                     yy = Math.min(255, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
                                     dist = hilbertDistances[xx + (yy << 8)];
                                     if (dist >= i)
-                                        ss.add((short) dist);
+                                        ss.add(dist);
                                 }
                             }
                         }
@@ -2172,17 +2172,17 @@ public class CoordPacker {
         ShortVLA vla = new ShortVLA(64);
         boolean on = false;
         int idx = 0;
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
                     int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
-                    if (ss.add((short) dist)) {
+                    if (ss.add(dist)) {
                         for (int xx = Math.max(0, x - minDistance); xx <= Math.min(255, x + minDistance); xx++) {
                             for (int yy = Math.max(0, y - minDistance); yy <= Math.min(255, y + minDistance); yy++) {
                                 dist = hilbertDistances[xx + (yy << 8)];
                                 if(dist >= i)
-                                    ss.add((short) dist);
+                                    ss.add(dist);
                             }
                         }
                         vla.add((short) i);
@@ -2214,14 +2214,14 @@ public class CoordPacker {
         ShortVLA vla = new ShortVLA(64);
         boolean on = false;
         int idx = 0;
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         int xx, yy;
         int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
                     int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
-                    if (ss.add((short) dist)) {
+                    if (ss.add(dist)) {
                         for (int d = 0; d < 4; d++) {
                             for (int e = 1; e <= minDistance; e++) {
                                 for (int e2 = 0; e2 < minDistance; e2++) {
@@ -2229,7 +2229,7 @@ public class CoordPacker {
                                     yy = Math.min(255, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
                                     dist = hilbertDistances[xx + (yy << 8)];
                                     if (dist >= i)
-                                        ss.add((short) dist);
+                                        ss.add(dist);
                                 }
                             }
                         }
@@ -2323,7 +2323,7 @@ public class CoordPacker {
             return ALL_WALL;
         }
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         boolean on = false;
         int idx = 0, x, y;
         short dist;
@@ -2391,7 +2391,7 @@ public class CoordPacker {
             return ALL_WALL;
         }
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         boolean on = false;
         int idx = 0, x, y, j, k;
         short dist;
@@ -2618,14 +2618,14 @@ public class CoordPacker {
             return ALL_WALL;
         }
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         boolean on = false;
         int idx = 0;
         short x, y, dist;
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
-                    ss.add((short) i);
+                    ss.add(i);
                 }
             }
             idx += packed[p] & 0xffff;
@@ -2697,7 +2697,7 @@ public class CoordPacker {
             return ALL_WALL;
         }
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         boolean on = false;
         int idx = 0;
         short x, y, dist;
@@ -2705,7 +2705,7 @@ public class CoordPacker {
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
-                    ss.add((short) i);
+                    ss.add(i);
                 }
             }
             idx += packed[p] & 0xffff;
@@ -2784,7 +2784,7 @@ public class CoordPacker {
             return ALL_WALL;
         }
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         boolean on = false;
         int idx = 0;
         short x, y, dist;
@@ -2792,7 +2792,7 @@ public class CoordPacker {
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
-                    ss.add((short) i);
+                    ss.add(i);
                 }
             }
             idx += packed[p] & 0xffff;
@@ -2883,14 +2883,14 @@ public class CoordPacker {
             Arrays.fill(finished, ALL_WALL);
             return finished;
         }
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         boolean on = false;
         int idx = 0;
         short x, y, dist;
         for (int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
-                    ss.add((short) i);
+                    ss.add(i);
                 }
             }
             idx += packed[p] & 0xffff;
@@ -2972,7 +2972,7 @@ public class CoordPacker {
             Arrays.fill(finished, ALL_WALL);
             return finished;
         }
-        ShortSet ss = new ShortSet(256);
+        IntSet ss = new IntSet(256);
         boolean on = false;
         int idx = 0;
         short x, y, dist;
@@ -2980,7 +2980,7 @@ public class CoordPacker {
         for (int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
-                    ss.add((short) i);
+                    ss.add(i);
                 }
             }
             idx += packed[p] & 0xffff;
@@ -3253,7 +3253,7 @@ public class CoordPacker {
         }
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        IntSet ss = new IntSet(boundSize), quickBounds = new IntSet(boundSize);
         boolean on = false, justAdded;
         int idx = 0;
         short x, y, dist;
@@ -3347,7 +3347,7 @@ public class CoordPacker {
         }
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        IntSet ss = new IntSet(boundSize), quickBounds = new IntSet(boundSize);
         boolean on = false, justAdded;
         int idx = 0;
         short x, y, dist;
@@ -3442,7 +3442,7 @@ public class CoordPacker {
         }
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(boundSize), edge = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        IntSet ss = new IntSet(boundSize), edge = new IntSet(boundSize), quickBounds = new IntSet(boundSize);
         boolean on = false;
         int idx = 0;
         short x, y, dist;
@@ -3471,10 +3471,10 @@ public class CoordPacker {
         }
         int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
         for (int v = ct; v < volume; v++) {
-            short s = edge.random(rng);
+            int s = edge.random(rng);
 
             edge.remove(s);
-            vla.add(s);
+            vla.add((short)s);
             int i = s & 0xffff;
             x = hilbertX[i];
             y = hilbertY[i];
@@ -3520,7 +3520,7 @@ public class CoordPacker {
         return vla.toArray();
     }
 
-    private static void modifiedShadowFOV(int expansion, int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet storedSet, ShortVLA vla)
+    private static void modifiedShadowFOV(int expansion, int viewerX, int viewerY, Radius metric, IntSet bounds, IntSet storedSet, ShortVLA vla)
     {
         if(expansion < 1)
             return;
@@ -3535,7 +3535,7 @@ public class CoordPacker {
     }
 
     private static void modifiedShadowCast(int expansion, int row, double start, double end, int xx, int xy, int yx, int yy,
-                                     int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet storedSet, ShortVLA vla) {
+                                     int viewerX, int viewerY, Radius metric, IntSet bounds, IntSet storedSet, ShortVLA vla) {
         double newStart = 0;
         if (start < end) {
             return;
@@ -3645,14 +3645,14 @@ public class CoordPacker {
         }
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
-        ShortSet storedSet = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        IntSet storedSet = new IntSet(boundSize), quickBounds = new IntSet(boundSize);
         boolean on = false;
         int idx = 0, i;
         short x, y;
         for(int p = 0; p < bounds.length; p++, on = !on) {
             if (on) {
                 for (i = idx; i < idx + (bounds[p] & 0xffff); i++) {
-                    quickBounds.add((short) i);
+                    quickBounds.add(i);
                 }
             }
             idx += bounds[p] & 0xffff;
@@ -3743,14 +3743,14 @@ public class CoordPacker {
         }
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256), discard = new ShortVLA(128);
-        ShortSet storedSet = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        IntSet storedSet = new IntSet(boundSize), quickBounds = new IntSet(boundSize);
         boolean on = false;
         int idx = 0, i;
         short x, y;
         for(int p = 0; p < bounds.length; p++, on = !on) {
             if (on) {
                 for (i = idx; i < idx + (bounds[p] & 0xffff); i++) {
-                    quickBounds.add((short) i);
+                    quickBounds.add(i);
                 }
             }
             idx += bounds[p] & 0xffff;
@@ -3813,9 +3813,9 @@ public class CoordPacker {
                 }
             }
         }
-        int[] indices = vla.asInts();
-        if(indices.length < 1)
+        if(vla.size == 0)
             return ALL_WALL;
+        int[] indices = vla.asInts();
         Arrays.sort(indices);
 
         vla.clear();
