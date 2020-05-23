@@ -54,7 +54,7 @@ public class PhantomNoise {
         floors = new int[dim+1];
         coefficients = new long[dim + 1];
         for (int i = 0; i <= dim; i++) {
-            coefficients[i] = LightRNG.determine(seed ^ i) | 1L;
+            coefficients[i] = LightRNG.determine(seed ^ i) | 0x8000000000000001L;
         }
         inverse = 1.0 / (dim + 1.0);
 //        printDebugInfo();
@@ -79,7 +79,7 @@ public class PhantomNoise {
                 temp *= bit + (1|-bit) * working[j];
                 dot += (floors[j] - bit) * coefficients[j];
             }
-            sum += temp * (int)(dot ^ dot >>> 23 ^ dot >>> 43);
+            sum += temp * (int)(dot ^ dot >>> 23 ^ dot >>> 37);
         }
         return (sum * 0x1p-32 + 0.5);
     }

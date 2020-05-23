@@ -33,6 +33,11 @@ import java.util.NoSuchElementException;
  * hashing, instead of the more common power-of-two mask, to better distribute poor hashCodes (see <a href=
  * "https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">Malte
  * Skarupke's blog post</a>). Linear probing continues to work even when all hashCodes collide, just more slowly.
+ * <br>
+ * This class is based on libGDX 1.9.11-SNAPSHOT's IntSet class, and fully replaces the older ShortSet class within
+ * SquidLib's usage. Porting older code that uses ShortSet should be a little easier due to the {@link #addAll(short[])}
+ * and {@link #random(IRNG)} methods. ShortSet used the somewhat-problematic cuckoo-hashing technique, where this uses
+ * the more standard linear probing (like {@link OrderedSet}).
  * @author Nathan Sweet
  * @author Tommy Ettinger */
 public class IntSet implements Serializable {
@@ -163,6 +168,16 @@ public class IntSet implements Serializable {
 			add(array[i]);
 	}
 
+	public void addAll (short[] array) {
+		addAll(array, 0, array.length);
+	}
+
+	public void addAll (short[] array, int offset, int length) {
+		ensureCapacity(length);
+		for (int i = offset, n = i + length; i < n; i++)
+			add(array[i]);
+	}
+
 	public void addAll (IntSet set) {
 		ensureCapacity(set.size);
 		if (set.hasZeroValue) add(0);
@@ -259,6 +274,25 @@ public class IntSet implements Serializable {
 		for (int i = 0, n = keyTable.length; i < n; i++)
 			if (keyTable[i] != 0) return keyTable[i];
 		throw new IllegalStateException("IntSet is empty.");
+	}
+	/**
+	 * Gets a random int from this IntSet, using the given {@link IRNG} to generate random values.
+	 * If this IntSet is empty, throws an UnsupportedOperationException. This method operates in linear time, unlike
+	 * the random item retrieval methods in {@link OrderedSet} and {@link OrderedMap}, which take constant time.
+	 * @param rng an {@link IRNG}, such as {@link RNG} or {@link GWTRNG}
+	 * @return a random int from this IntSet
+	 */
+	public int random(IRNG rng) {
+		if (size <= 0) {
+			throw new UnsupportedOperationException("IntSet cannot be empty when getting a random element");
+		}
+		int n = rng.nextInt(size);
+		int i = 0;
+		IntSetIterator isi = iterator();
+		while (n-- >= 0 && isi.hasNext)
+			i = isi.next();
+		isi.reset();
+		return i;
 	}
 
 	/** Increases the size of the backing array to accommodate the specified number of additional items / loadFactor. Useful before

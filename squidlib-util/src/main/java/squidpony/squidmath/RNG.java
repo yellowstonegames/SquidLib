@@ -377,29 +377,7 @@ public class RNG implements Serializable, IRNG {
             t = it.next();
         return t;
     }
-
-	/*
-     * Returns a random elements from the provided queue. If the queue is empty
-	 * then null is returned.
-	 *
-	 * <p>
-	 * Requires iterating through a random amount of the elements in set, so
-	 * performance depends on the size of set but is likely to be decent. This
-	 * is mostly meant for internal use, the same as ShortSet.
-	 * </p>
-	 *
-	 * @param <T> the type of the returned object
-	 * @param list the list to get an element from
-	 * @return the randomly selected element
-	 */
-	/*
-	public <T> T getRandomElement(Queue<T> list) {
-		if (list.isEmpty()) {
-			return null;
-		}
-		return new ArrayList<>(list).get(nextInt(list.size()));
-	}*/
-
+    
     /**
      * Given a {@link List} l, this selects a random element of l to be the first value in the returned list l2. It
      * retains the order of elements in l after that random element and makes them follow the first element in l2, and

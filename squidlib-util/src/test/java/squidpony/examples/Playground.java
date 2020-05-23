@@ -313,7 +313,7 @@ public class Playground {
 
     private void attempt(int n1, long n2)
     {
-        ShortSet sset = new ShortSet(65536);
+        IntSet set = new IntSet(65536);
         short s;
         long mod = ThrustAltRNG.determine(n2 + n1) | 1L, state;
         for (int i = 0; i < 65536; i++) {
@@ -324,7 +324,7 @@ public class Playground {
             System.out.print((s & 0xFFFF) + " ");
             if((i & 31) == 31)
                 System.out.println();
-            if(!sset.add(s))
+            if(!set.add(s))
             {
                 //System.out.println("already contains " + s + " at index " + i);
                 return;
