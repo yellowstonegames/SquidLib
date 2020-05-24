@@ -167,8 +167,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedZOI.</span><code><span class="memberNameLink"><a href="../../squidai/GreasedZOI.html#calculate()">calculate</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Finds the zones of influence for each of the influences (inner arrays of Coord) this was constructed with, and
- returns them as packed data (using CoordPacker, which can also be used to unpack the data, merge zones, get
- shared borders, and all sorts of other tricks).</div>
+ returns all zones as a GreasedRegion array.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -209,12 +208,12 @@ double[][]&nbsp;resistanceMap)</code></th>
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>int[]</code></td>
+<td class="colFirst"><code><a href="../IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedZOI.</span><code><span class="memberNameLink"><a href="../../squidai/GreasedZOI.html#nearestInfluences(squidpony.squidmath.GreasedRegion%5B%5D,squidpony.squidmath.Coord)">nearestInfluences</a></span>&#8203;(<a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;zones,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
 <td class="colLast">
-<div class="block">Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all
- influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</div>
+<div class="block">Given the zones resulting from this class' <a href="../../squidai/GreasedZOI.html#calculate()"><code>GreasedZOI.calculate()</code></a> method and a Coord to check, finds the indices of
+ all influencing groups in zones that have the Coord in their area, and returns all such indices as an IntVLA.</div>
 </td>
 </tr>
 <tr class="rowColor">

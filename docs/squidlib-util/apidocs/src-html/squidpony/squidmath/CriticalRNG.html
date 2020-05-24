@@ -174,33 +174,19 @@
 <span class="sourceLineNo">162</span><a id="line.162">    }</a>
 <span class="sourceLineNo">163</span><a id="line.163"></a>
 <span class="sourceLineNo">164</span><a id="line.164">    @Override</a>
-<span class="sourceLineNo">165</span><a id="line.165">    public short getRandomElement(ShortSet set) {</a>
-<span class="sourceLineNo">166</span><a id="line.166">        if (set.size &lt;= 0) {</a>
-<span class="sourceLineNo">167</span><a id="line.167">            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");</a>
-<span class="sourceLineNo">168</span><a id="line.168">        }</a>
-<span class="sourceLineNo">169</span><a id="line.169">        int n = super.nextIntHasty(set.size);</a>
-<span class="sourceLineNo">170</span><a id="line.170">        short s = 0;</a>
-<span class="sourceLineNo">171</span><a id="line.171">        ShortSet.ShortSetIterator ssi = set.iterator();</a>
-<span class="sourceLineNo">172</span><a id="line.172">        while (n-- &gt;= 0 &amp;&amp; ssi.hasNext)</a>
-<span class="sourceLineNo">173</span><a id="line.173">            s = ssi.next();</a>
-<span class="sourceLineNo">174</span><a id="line.174">        ssi.reset();</a>
-<span class="sourceLineNo">175</span><a id="line.175">        return s;</a>
+<span class="sourceLineNo">165</span><a id="line.165">    public &lt;T&gt; T getRandomElement(Collection&lt;T&gt; coll) {</a>
+<span class="sourceLineNo">166</span><a id="line.166">        int n;</a>
+<span class="sourceLineNo">167</span><a id="line.167">        if ((n = coll.size()) &lt;= 0) {</a>
+<span class="sourceLineNo">168</span><a id="line.168">            return null;</a>
+<span class="sourceLineNo">169</span><a id="line.169">        }</a>
+<span class="sourceLineNo">170</span><a id="line.170">        n = super.nextIntHasty(n);</a>
+<span class="sourceLineNo">171</span><a id="line.171">        T t = null;</a>
+<span class="sourceLineNo">172</span><a id="line.172">        Iterator&lt;T&gt; it = coll.iterator();</a>
+<span class="sourceLineNo">173</span><a id="line.173">        while (n-- &gt;= 0 &amp;&amp; it.hasNext())</a>
+<span class="sourceLineNo">174</span><a id="line.174">            t = it.next();</a>
+<span class="sourceLineNo">175</span><a id="line.175">        return t;</a>
 <span class="sourceLineNo">176</span><a id="line.176">    }</a>
-<span class="sourceLineNo">177</span><a id="line.177"></a>
-<span class="sourceLineNo">178</span><a id="line.178">    @Override</a>
-<span class="sourceLineNo">179</span><a id="line.179">    public &lt;T&gt; T getRandomElement(Collection&lt;T&gt; coll) {</a>
-<span class="sourceLineNo">180</span><a id="line.180">        int n;</a>
-<span class="sourceLineNo">181</span><a id="line.181">        if ((n = coll.size()) &lt;= 0) {</a>
-<span class="sourceLineNo">182</span><a id="line.182">            return null;</a>
-<span class="sourceLineNo">183</span><a id="line.183">        }</a>
-<span class="sourceLineNo">184</span><a id="line.184">        n = super.nextIntHasty(n);</a>
-<span class="sourceLineNo">185</span><a id="line.185">        T t = null;</a>
-<span class="sourceLineNo">186</span><a id="line.186">        Iterator&lt;T&gt; it = coll.iterator();</a>
-<span class="sourceLineNo">187</span><a id="line.187">        while (n-- &gt;= 0 &amp;&amp; it.hasNext())</a>
-<span class="sourceLineNo">188</span><a id="line.188">            t = it.next();</a>
-<span class="sourceLineNo">189</span><a id="line.189">        return t;</a>
-<span class="sourceLineNo">190</span><a id="line.190">    }</a>
-<span class="sourceLineNo">191</span><a id="line.191">}</a>
+<span class="sourceLineNo">177</span><a id="line.177">}</a>
 
 
 

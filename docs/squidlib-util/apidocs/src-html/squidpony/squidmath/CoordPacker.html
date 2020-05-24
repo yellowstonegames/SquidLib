@@ -2090,17 +2090,17 @@
 <span class="sourceLineNo">2078</span><a id="line.2078">        ShortVLA vla = new ShortVLA(64);</a>
 <span class="sourceLineNo">2079</span><a id="line.2079">        boolean on = false;</a>
 <span class="sourceLineNo">2080</span><a id="line.2080">        int idx = 0;</a>
-<span class="sourceLineNo">2081</span><a id="line.2081">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2081</span><a id="line.2081">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2082</span><a id="line.2082">        for(int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2083</span><a id="line.2083">            if (on) {</a>
 <span class="sourceLineNo">2084</span><a id="line.2084">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
 <span class="sourceLineNo">2085</span><a id="line.2085">                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y &lt;&lt; 8)];</a>
-<span class="sourceLineNo">2086</span><a id="line.2086">                    if (ss.add((short) dist)) {</a>
+<span class="sourceLineNo">2086</span><a id="line.2086">                    if (ss.add(dist)) {</a>
 <span class="sourceLineNo">2087</span><a id="line.2087">                        for (int xx = Math.max(0, x - minDistance); xx &lt;= Math.min(255, x + minDistance); xx++) {</a>
 <span class="sourceLineNo">2088</span><a id="line.2088">                            for (int yy = Math.max(0, y - minDistance); yy &lt;= Math.min(255, y + minDistance); yy++) {</a>
 <span class="sourceLineNo">2089</span><a id="line.2089">                                dist = hilbertDistances[xx + (yy &lt;&lt; 8)];</a>
 <span class="sourceLineNo">2090</span><a id="line.2090">                                if(dist &gt;= i)</a>
-<span class="sourceLineNo">2091</span><a id="line.2091">                                    ss.add((short) dist);</a>
+<span class="sourceLineNo">2091</span><a id="line.2091">                                    ss.add(dist);</a>
 <span class="sourceLineNo">2092</span><a id="line.2092">                            }</a>
 <span class="sourceLineNo">2093</span><a id="line.2093">                        }</a>
 <span class="sourceLineNo">2094</span><a id="line.2094">                        vla.add((short) i);</a>
@@ -2135,14 +2135,14 @@
 <span class="sourceLineNo">2123</span><a id="line.2123">        ShortVLA vla = new ShortVLA(64);</a>
 <span class="sourceLineNo">2124</span><a id="line.2124">        boolean on = false;</a>
 <span class="sourceLineNo">2125</span><a id="line.2125">        int idx = 0;</a>
-<span class="sourceLineNo">2126</span><a id="line.2126">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2126</span><a id="line.2126">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2127</span><a id="line.2127">        int xx, yy;</a>
 <span class="sourceLineNo">2128</span><a id="line.2128">        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};</a>
 <span class="sourceLineNo">2129</span><a id="line.2129">        for(int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2130</span><a id="line.2130">            if (on) {</a>
 <span class="sourceLineNo">2131</span><a id="line.2131">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
 <span class="sourceLineNo">2132</span><a id="line.2132">                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y &lt;&lt; 8)];</a>
-<span class="sourceLineNo">2133</span><a id="line.2133">                    if (ss.add((short) dist)) {</a>
+<span class="sourceLineNo">2133</span><a id="line.2133">                    if (ss.add(dist)) {</a>
 <span class="sourceLineNo">2134</span><a id="line.2134">                        for (int d = 0; d &lt; 4; d++) {</a>
 <span class="sourceLineNo">2135</span><a id="line.2135">                            for (int e = 1; e &lt;= minDistance; e++) {</a>
 <span class="sourceLineNo">2136</span><a id="line.2136">                                for (int e2 = 0; e2 &lt; minDistance; e2++) {</a>
@@ -2150,7 +2150,7 @@
 <span class="sourceLineNo">2138</span><a id="line.2138">                                    yy = Math.min(255, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));</a>
 <span class="sourceLineNo">2139</span><a id="line.2139">                                    dist = hilbertDistances[xx + (yy &lt;&lt; 8)];</a>
 <span class="sourceLineNo">2140</span><a id="line.2140">                                    if (dist &gt;= i)</a>
-<span class="sourceLineNo">2141</span><a id="line.2141">                                        ss.add((short) dist);</a>
+<span class="sourceLineNo">2141</span><a id="line.2141">                                        ss.add(dist);</a>
 <span class="sourceLineNo">2142</span><a id="line.2142">                                }</a>
 <span class="sourceLineNo">2143</span><a id="line.2143">                            }</a>
 <span class="sourceLineNo">2144</span><a id="line.2144">                        }</a>
@@ -2184,17 +2184,17 @@
 <span class="sourceLineNo">2172</span><a id="line.2172">        ShortVLA vla = new ShortVLA(64);</a>
 <span class="sourceLineNo">2173</span><a id="line.2173">        boolean on = false;</a>
 <span class="sourceLineNo">2174</span><a id="line.2174">        int idx = 0;</a>
-<span class="sourceLineNo">2175</span><a id="line.2175">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2175</span><a id="line.2175">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2176</span><a id="line.2176">        for(int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2177</span><a id="line.2177">            if (on) {</a>
 <span class="sourceLineNo">2178</span><a id="line.2178">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
 <span class="sourceLineNo">2179</span><a id="line.2179">                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y &lt;&lt; 8)];</a>
-<span class="sourceLineNo">2180</span><a id="line.2180">                    if (ss.add((short) dist)) {</a>
+<span class="sourceLineNo">2180</span><a id="line.2180">                    if (ss.add(dist)) {</a>
 <span class="sourceLineNo">2181</span><a id="line.2181">                        for (int xx = Math.max(0, x - minDistance); xx &lt;= Math.min(255, x + minDistance); xx++) {</a>
 <span class="sourceLineNo">2182</span><a id="line.2182">                            for (int yy = Math.max(0, y - minDistance); yy &lt;= Math.min(255, y + minDistance); yy++) {</a>
 <span class="sourceLineNo">2183</span><a id="line.2183">                                dist = hilbertDistances[xx + (yy &lt;&lt; 8)];</a>
 <span class="sourceLineNo">2184</span><a id="line.2184">                                if(dist &gt;= i)</a>
-<span class="sourceLineNo">2185</span><a id="line.2185">                                    ss.add((short) dist);</a>
+<span class="sourceLineNo">2185</span><a id="line.2185">                                    ss.add(dist);</a>
 <span class="sourceLineNo">2186</span><a id="line.2186">                            }</a>
 <span class="sourceLineNo">2187</span><a id="line.2187">                        }</a>
 <span class="sourceLineNo">2188</span><a id="line.2188">                        vla.add((short) i);</a>
@@ -2226,14 +2226,14 @@
 <span class="sourceLineNo">2214</span><a id="line.2214">        ShortVLA vla = new ShortVLA(64);</a>
 <span class="sourceLineNo">2215</span><a id="line.2215">        boolean on = false;</a>
 <span class="sourceLineNo">2216</span><a id="line.2216">        int idx = 0;</a>
-<span class="sourceLineNo">2217</span><a id="line.2217">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2217</span><a id="line.2217">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2218</span><a id="line.2218">        int xx, yy;</a>
 <span class="sourceLineNo">2219</span><a id="line.2219">        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};</a>
 <span class="sourceLineNo">2220</span><a id="line.2220">        for(int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2221</span><a id="line.2221">            if (on) {</a>
 <span class="sourceLineNo">2222</span><a id="line.2222">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
 <span class="sourceLineNo">2223</span><a id="line.2223">                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y &lt;&lt; 8)];</a>
-<span class="sourceLineNo">2224</span><a id="line.2224">                    if (ss.add((short) dist)) {</a>
+<span class="sourceLineNo">2224</span><a id="line.2224">                    if (ss.add(dist)) {</a>
 <span class="sourceLineNo">2225</span><a id="line.2225">                        for (int d = 0; d &lt; 4; d++) {</a>
 <span class="sourceLineNo">2226</span><a id="line.2226">                            for (int e = 1; e &lt;= minDistance; e++) {</a>
 <span class="sourceLineNo">2227</span><a id="line.2227">                                for (int e2 = 0; e2 &lt; minDistance; e2++) {</a>
@@ -2241,7 +2241,7 @@
 <span class="sourceLineNo">2229</span><a id="line.2229">                                    yy = Math.min(255, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));</a>
 <span class="sourceLineNo">2230</span><a id="line.2230">                                    dist = hilbertDistances[xx + (yy &lt;&lt; 8)];</a>
 <span class="sourceLineNo">2231</span><a id="line.2231">                                    if (dist &gt;= i)</a>
-<span class="sourceLineNo">2232</span><a id="line.2232">                                        ss.add((short) dist);</a>
+<span class="sourceLineNo">2232</span><a id="line.2232">                                        ss.add(dist);</a>
 <span class="sourceLineNo">2233</span><a id="line.2233">                                }</a>
 <span class="sourceLineNo">2234</span><a id="line.2234">                            }</a>
 <span class="sourceLineNo">2235</span><a id="line.2235">                        }</a>
@@ -2290,11 +2290,11 @@
 <span class="sourceLineNo">2278</span><a id="line.2278">            }</a>
 <span class="sourceLineNo">2279</span><a id="line.2279">            idx += packed[p] &amp; 0xffff;</a>
 <span class="sourceLineNo">2280</span><a id="line.2280">        }</a>
-<span class="sourceLineNo">2281</span><a id="line.2281">        int[] indices = vla.asInts();</a>
-<span class="sourceLineNo">2282</span><a id="line.2282">        if(indices.length &lt; 1)</a>
-<span class="sourceLineNo">2283</span><a id="line.2283">            return ALL_WALL;</a>
+<span class="sourceLineNo">2281</span><a id="line.2281">        if(vla.size &lt; 1)</a>
+<span class="sourceLineNo">2282</span><a id="line.2282">            return ALL_WALL;</a>
+<span class="sourceLineNo">2283</span><a id="line.2283">        int[] indices = vla.asInts();</a>
 <span class="sourceLineNo">2284</span><a id="line.2284">        Arrays.sort(indices);</a>
-<span class="sourceLineNo">2285</span><a id="line.2285">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2285</span><a id="line.2285">        vla.clear();</a>
 <span class="sourceLineNo">2286</span><a id="line.2286">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2287</span><a id="line.2287"></a>
 <span class="sourceLineNo">2288</span><a id="line.2288">        vla.add((short)indices[0]);</a>
@@ -2335,7 +2335,7 @@
 <span class="sourceLineNo">2323</span><a id="line.2323">            return ALL_WALL;</a>
 <span class="sourceLineNo">2324</span><a id="line.2324">        }</a>
 <span class="sourceLineNo">2325</span><a id="line.2325">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">2326</span><a id="line.2326">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2326</span><a id="line.2326">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2327</span><a id="line.2327">        boolean on = false;</a>
 <span class="sourceLineNo">2328</span><a id="line.2328">        int idx = 0, x, y;</a>
 <span class="sourceLineNo">2329</span><a id="line.2329">        short dist;</a>
@@ -2361,7 +2361,7 @@
 <span class="sourceLineNo">2349</span><a id="line.2349">            return ALL_WALL;</a>
 <span class="sourceLineNo">2350</span><a id="line.2350">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">2351</span><a id="line.2351"></a>
-<span class="sourceLineNo">2352</span><a id="line.2352">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2352</span><a id="line.2352">        vla.clear();</a>
 <span class="sourceLineNo">2353</span><a id="line.2353">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2354</span><a id="line.2354"></a>
 <span class="sourceLineNo">2355</span><a id="line.2355">        vla.add((short)indices[0]);</a>
@@ -2403,7 +2403,7 @@
 <span class="sourceLineNo">2391</span><a id="line.2391">            return ALL_WALL;</a>
 <span class="sourceLineNo">2392</span><a id="line.2392">        }</a>
 <span class="sourceLineNo">2393</span><a id="line.2393">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">2394</span><a id="line.2394">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2394</span><a id="line.2394">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2395</span><a id="line.2395">        boolean on = false;</a>
 <span class="sourceLineNo">2396</span><a id="line.2396">        int idx = 0, x, y, j, k;</a>
 <span class="sourceLineNo">2397</span><a id="line.2397">        short dist;</a>
@@ -2437,7 +2437,7 @@
 <span class="sourceLineNo">2425</span><a id="line.2425">            return ALL_WALL;</a>
 <span class="sourceLineNo">2426</span><a id="line.2426">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">2427</span><a id="line.2427"></a>
-<span class="sourceLineNo">2428</span><a id="line.2428">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2428</span><a id="line.2428">        vla.clear();</a>
 <span class="sourceLineNo">2429</span><a id="line.2429">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2430</span><a id="line.2430"></a>
 <span class="sourceLineNo">2431</span><a id="line.2431">        vla.add((short)indices[0]);</a>
@@ -2509,7 +2509,7 @@
 <span class="sourceLineNo">2497</span><a id="line.2497">            return ALL_WALL;</a>
 <span class="sourceLineNo">2498</span><a id="line.2498">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">2499</span><a id="line.2499"></a>
-<span class="sourceLineNo">2500</span><a id="line.2500">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2500</span><a id="line.2500">        vla.clear();</a>
 <span class="sourceLineNo">2501</span><a id="line.2501">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2502</span><a id="line.2502"></a>
 <span class="sourceLineNo">2503</span><a id="line.2503">        vla.add((short)indices[0]);</a>
@@ -2585,7 +2585,7 @@
 <span class="sourceLineNo">2573</span><a id="line.2573">            return ALL_WALL;</a>
 <span class="sourceLineNo">2574</span><a id="line.2574">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">2575</span><a id="line.2575"></a>
-<span class="sourceLineNo">2576</span><a id="line.2576">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2576</span><a id="line.2576">        vla.clear();</a>
 <span class="sourceLineNo">2577</span><a id="line.2577">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2578</span><a id="line.2578"></a>
 <span class="sourceLineNo">2579</span><a id="line.2579">        vla.add((short)indices[0]);</a>
@@ -2630,14 +2630,14 @@
 <span class="sourceLineNo">2618</span><a id="line.2618">            return ALL_WALL;</a>
 <span class="sourceLineNo">2619</span><a id="line.2619">        }</a>
 <span class="sourceLineNo">2620</span><a id="line.2620">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">2621</span><a id="line.2621">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2621</span><a id="line.2621">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2622</span><a id="line.2622">        boolean on = false;</a>
 <span class="sourceLineNo">2623</span><a id="line.2623">        int idx = 0;</a>
 <span class="sourceLineNo">2624</span><a id="line.2624">        short x, y, dist;</a>
 <span class="sourceLineNo">2625</span><a id="line.2625">        for(int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2626</span><a id="line.2626">            if (on) {</a>
 <span class="sourceLineNo">2627</span><a id="line.2627">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
-<span class="sourceLineNo">2628</span><a id="line.2628">                    ss.add((short) i);</a>
+<span class="sourceLineNo">2628</span><a id="line.2628">                    ss.add(i);</a>
 <span class="sourceLineNo">2629</span><a id="line.2629">                }</a>
 <span class="sourceLineNo">2630</span><a id="line.2630">            }</a>
 <span class="sourceLineNo">2631</span><a id="line.2631">            idx += packed[p] &amp; 0xffff;</a>
@@ -2665,7 +2665,7 @@
 <span class="sourceLineNo">2653</span><a id="line.2653">            return ALL_WALL;</a>
 <span class="sourceLineNo">2654</span><a id="line.2654">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">2655</span><a id="line.2655"></a>
-<span class="sourceLineNo">2656</span><a id="line.2656">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2656</span><a id="line.2656">        vla.clear();</a>
 <span class="sourceLineNo">2657</span><a id="line.2657">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2658</span><a id="line.2658"></a>
 <span class="sourceLineNo">2659</span><a id="line.2659">        vla.add((short)indices[0]);</a>
@@ -2709,7 +2709,7 @@
 <span class="sourceLineNo">2697</span><a id="line.2697">            return ALL_WALL;</a>
 <span class="sourceLineNo">2698</span><a id="line.2698">        }</a>
 <span class="sourceLineNo">2699</span><a id="line.2699">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">2700</span><a id="line.2700">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2700</span><a id="line.2700">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2701</span><a id="line.2701">        boolean on = false;</a>
 <span class="sourceLineNo">2702</span><a id="line.2702">        int idx = 0;</a>
 <span class="sourceLineNo">2703</span><a id="line.2703">        short x, y, dist;</a>
@@ -2717,7 +2717,7 @@
 <span class="sourceLineNo">2705</span><a id="line.2705">        for(int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2706</span><a id="line.2706">            if (on) {</a>
 <span class="sourceLineNo">2707</span><a id="line.2707">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
-<span class="sourceLineNo">2708</span><a id="line.2708">                    ss.add((short) i);</a>
+<span class="sourceLineNo">2708</span><a id="line.2708">                    ss.add(i);</a>
 <span class="sourceLineNo">2709</span><a id="line.2709">                }</a>
 <span class="sourceLineNo">2710</span><a id="line.2710">            }</a>
 <span class="sourceLineNo">2711</span><a id="line.2711">            idx += packed[p] &amp; 0xffff;</a>
@@ -2750,7 +2750,7 @@
 <span class="sourceLineNo">2738</span><a id="line.2738">            return ALL_WALL;</a>
 <span class="sourceLineNo">2739</span><a id="line.2739">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">2740</span><a id="line.2740"></a>
-<span class="sourceLineNo">2741</span><a id="line.2741">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2741</span><a id="line.2741">        vla.clear();</a>
 <span class="sourceLineNo">2742</span><a id="line.2742">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2743</span><a id="line.2743"></a>
 <span class="sourceLineNo">2744</span><a id="line.2744">        vla.add((short)indices[0]);</a>
@@ -2796,7 +2796,7 @@
 <span class="sourceLineNo">2784</span><a id="line.2784">            return ALL_WALL;</a>
 <span class="sourceLineNo">2785</span><a id="line.2785">        }</a>
 <span class="sourceLineNo">2786</span><a id="line.2786">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">2787</span><a id="line.2787">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2787</span><a id="line.2787">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2788</span><a id="line.2788">        boolean on = false;</a>
 <span class="sourceLineNo">2789</span><a id="line.2789">        int idx = 0;</a>
 <span class="sourceLineNo">2790</span><a id="line.2790">        short x, y, dist;</a>
@@ -2804,7 +2804,7 @@
 <span class="sourceLineNo">2792</span><a id="line.2792">        for(int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2793</span><a id="line.2793">            if (on) {</a>
 <span class="sourceLineNo">2794</span><a id="line.2794">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
-<span class="sourceLineNo">2795</span><a id="line.2795">                    ss.add((short) i);</a>
+<span class="sourceLineNo">2795</span><a id="line.2795">                    ss.add(i);</a>
 <span class="sourceLineNo">2796</span><a id="line.2796">                }</a>
 <span class="sourceLineNo">2797</span><a id="line.2797">            }</a>
 <span class="sourceLineNo">2798</span><a id="line.2798">            idx += packed[p] &amp; 0xffff;</a>
@@ -2852,7 +2852,7 @@
 <span class="sourceLineNo">2840</span><a id="line.2840">            return ALL_WALL;</a>
 <span class="sourceLineNo">2841</span><a id="line.2841">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">2842</span><a id="line.2842"></a>
-<span class="sourceLineNo">2843</span><a id="line.2843">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2843</span><a id="line.2843">        vla.clear();</a>
 <span class="sourceLineNo">2844</span><a id="line.2844">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2845</span><a id="line.2845"></a>
 <span class="sourceLineNo">2846</span><a id="line.2846">        vla.add((short)indices[0]);</a>
@@ -2895,14 +2895,14 @@
 <span class="sourceLineNo">2883</span><a id="line.2883">            Arrays.fill(finished, ALL_WALL);</a>
 <span class="sourceLineNo">2884</span><a id="line.2884">            return finished;</a>
 <span class="sourceLineNo">2885</span><a id="line.2885">        }</a>
-<span class="sourceLineNo">2886</span><a id="line.2886">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2886</span><a id="line.2886">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2887</span><a id="line.2887">        boolean on = false;</a>
 <span class="sourceLineNo">2888</span><a id="line.2888">        int idx = 0;</a>
 <span class="sourceLineNo">2889</span><a id="line.2889">        short x, y, dist;</a>
 <span class="sourceLineNo">2890</span><a id="line.2890">        for (int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2891</span><a id="line.2891">            if (on) {</a>
 <span class="sourceLineNo">2892</span><a id="line.2892">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
-<span class="sourceLineNo">2893</span><a id="line.2893">                    ss.add((short) i);</a>
+<span class="sourceLineNo">2893</span><a id="line.2893">                    ss.add(i);</a>
 <span class="sourceLineNo">2894</span><a id="line.2894">                }</a>
 <span class="sourceLineNo">2895</span><a id="line.2895">            }</a>
 <span class="sourceLineNo">2896</span><a id="line.2896">            idx += packed[p] &amp; 0xffff;</a>
@@ -2935,7 +2935,7 @@
 <span class="sourceLineNo">2923</span><a id="line.2923">            }</a>
 <span class="sourceLineNo">2924</span><a id="line.2924">            Arrays.sort(indices);</a>
 <span class="sourceLineNo">2925</span><a id="line.2925"></a>
-<span class="sourceLineNo">2926</span><a id="line.2926">            vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">2926</span><a id="line.2926">            vla.clear();</a>
 <span class="sourceLineNo">2927</span><a id="line.2927">            int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">2928</span><a id="line.2928"></a>
 <span class="sourceLineNo">2929</span><a id="line.2929">            vla.add((short) indices[0]);</a>
@@ -2984,7 +2984,7 @@
 <span class="sourceLineNo">2972</span><a id="line.2972">            Arrays.fill(finished, ALL_WALL);</a>
 <span class="sourceLineNo">2973</span><a id="line.2973">            return finished;</a>
 <span class="sourceLineNo">2974</span><a id="line.2974">        }</a>
-<span class="sourceLineNo">2975</span><a id="line.2975">        ShortSet ss = new ShortSet(256);</a>
+<span class="sourceLineNo">2975</span><a id="line.2975">        IntSet ss = new IntSet(256);</a>
 <span class="sourceLineNo">2976</span><a id="line.2976">        boolean on = false;</a>
 <span class="sourceLineNo">2977</span><a id="line.2977">        int idx = 0;</a>
 <span class="sourceLineNo">2978</span><a id="line.2978">        short x, y, dist;</a>
@@ -2992,7 +2992,7 @@
 <span class="sourceLineNo">2980</span><a id="line.2980">        for (int p = 0; p &lt; packed.length; p++, on = !on) {</a>
 <span class="sourceLineNo">2981</span><a id="line.2981">            if (on) {</a>
 <span class="sourceLineNo">2982</span><a id="line.2982">                for (int i = idx; i &lt; idx + (packed[p] &amp; 0xffff); i++) {</a>
-<span class="sourceLineNo">2983</span><a id="line.2983">                    ss.add((short) i);</a>
+<span class="sourceLineNo">2983</span><a id="line.2983">                    ss.add(i);</a>
 <span class="sourceLineNo">2984</span><a id="line.2984">                }</a>
 <span class="sourceLineNo">2985</span><a id="line.2985">            }</a>
 <span class="sourceLineNo">2986</span><a id="line.2986">            idx += packed[p] &amp; 0xffff;</a>
@@ -3029,7 +3029,7 @@
 <span class="sourceLineNo">3017</span><a id="line.3017">            }</a>
 <span class="sourceLineNo">3018</span><a id="line.3018">            Arrays.sort(indices);</a>
 <span class="sourceLineNo">3019</span><a id="line.3019"></a>
-<span class="sourceLineNo">3020</span><a id="line.3020">            vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">3020</span><a id="line.3020">            vla.clear();</a>
 <span class="sourceLineNo">3021</span><a id="line.3021">            int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">3022</span><a id="line.3022"></a>
 <span class="sourceLineNo">3023</span><a id="line.3023">            vla.add((short) indices[0]);</a>
@@ -3102,7 +3102,7 @@
 <span class="sourceLineNo">3090</span><a id="line.3090">            return ALL_WALL;</a>
 <span class="sourceLineNo">3091</span><a id="line.3091">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">3092</span><a id="line.3092"></a>
-<span class="sourceLineNo">3093</span><a id="line.3093">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">3093</span><a id="line.3093">        vla.clear();</a>
 <span class="sourceLineNo">3094</span><a id="line.3094">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">3095</span><a id="line.3095"></a>
 <span class="sourceLineNo">3096</span><a id="line.3096">        vla.add((short)indices[0]);</a>
@@ -3222,7 +3222,7 @@
 <span class="sourceLineNo">3210</span><a id="line.3210">            return ALL_WALL;</a>
 <span class="sourceLineNo">3211</span><a id="line.3211">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">3212</span><a id="line.3212"></a>
-<span class="sourceLineNo">3213</span><a id="line.3213">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">3213</span><a id="line.3213">        vla.clear();</a>
 <span class="sourceLineNo">3214</span><a id="line.3214">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">3215</span><a id="line.3215"></a>
 <span class="sourceLineNo">3216</span><a id="line.3216">        vla.add((short)indices[0]);</a>
@@ -3265,7 +3265,7 @@
 <span class="sourceLineNo">3253</span><a id="line.3253">        }</a>
 <span class="sourceLineNo">3254</span><a id="line.3254">        int boundSize = count(bounds);</a>
 <span class="sourceLineNo">3255</span><a id="line.3255">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">3256</span><a id="line.3256">        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);</a>
+<span class="sourceLineNo">3256</span><a id="line.3256">        IntSet ss = new IntSet(boundSize), quickBounds = new IntSet(boundSize);</a>
 <span class="sourceLineNo">3257</span><a id="line.3257">        boolean on = false, justAdded;</a>
 <span class="sourceLineNo">3258</span><a id="line.3258">        int idx = 0;</a>
 <span class="sourceLineNo">3259</span><a id="line.3259">        short x, y, dist;</a>
@@ -3312,7 +3312,7 @@
 <span class="sourceLineNo">3300</span><a id="line.3300">            return ALL_WALL;</a>
 <span class="sourceLineNo">3301</span><a id="line.3301">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">3302</span><a id="line.3302"></a>
-<span class="sourceLineNo">3303</span><a id="line.3303">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">3303</span><a id="line.3303">        vla.clear();</a>
 <span class="sourceLineNo">3304</span><a id="line.3304">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">3305</span><a id="line.3305"></a>
 <span class="sourceLineNo">3306</span><a id="line.3306">        vla.add((short)indices[0]);</a>
@@ -3359,7 +3359,7 @@
 <span class="sourceLineNo">3347</span><a id="line.3347">        }</a>
 <span class="sourceLineNo">3348</span><a id="line.3348">        int boundSize = count(bounds);</a>
 <span class="sourceLineNo">3349</span><a id="line.3349">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">3350</span><a id="line.3350">        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);</a>
+<span class="sourceLineNo">3350</span><a id="line.3350">        IntSet ss = new IntSet(boundSize), quickBounds = new IntSet(boundSize);</a>
 <span class="sourceLineNo">3351</span><a id="line.3351">        boolean on = false, justAdded;</a>
 <span class="sourceLineNo">3352</span><a id="line.3352">        int idx = 0;</a>
 <span class="sourceLineNo">3353</span><a id="line.3353">        short x, y, dist;</a>
@@ -3405,7 +3405,7 @@
 <span class="sourceLineNo">3393</span><a id="line.3393">            return ALL_WALL;</a>
 <span class="sourceLineNo">3394</span><a id="line.3394">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">3395</span><a id="line.3395"></a>
-<span class="sourceLineNo">3396</span><a id="line.3396">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">3396</span><a id="line.3396">        vla.clear();</a>
 <span class="sourceLineNo">3397</span><a id="line.3397">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">3398</span><a id="line.3398"></a>
 <span class="sourceLineNo">3399</span><a id="line.3399">        vla.add((short)indices[0]);</a>
@@ -3454,7 +3454,7 @@
 <span class="sourceLineNo">3442</span><a id="line.3442">        }</a>
 <span class="sourceLineNo">3443</span><a id="line.3443">        int boundSize = count(bounds);</a>
 <span class="sourceLineNo">3444</span><a id="line.3444">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">3445</span><a id="line.3445">        ShortSet ss = new ShortSet(boundSize), edge = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);</a>
+<span class="sourceLineNo">3445</span><a id="line.3445">        IntSet ss = new IntSet(boundSize), edge = new IntSet(boundSize), quickBounds = new IntSet(boundSize);</a>
 <span class="sourceLineNo">3446</span><a id="line.3446">        boolean on = false;</a>
 <span class="sourceLineNo">3447</span><a id="line.3447">        int idx = 0;</a>
 <span class="sourceLineNo">3448</span><a id="line.3448">        short x, y, dist;</a>
@@ -3483,10 +3483,10 @@
 <span class="sourceLineNo">3471</span><a id="line.3471">        }</a>
 <span class="sourceLineNo">3472</span><a id="line.3472">        int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};</a>
 <span class="sourceLineNo">3473</span><a id="line.3473">        for (int v = ct; v &lt; volume; v++) {</a>
-<span class="sourceLineNo">3474</span><a id="line.3474">            short s = edge.random(rng);</a>
+<span class="sourceLineNo">3474</span><a id="line.3474">            int s = edge.random(rng);</a>
 <span class="sourceLineNo">3475</span><a id="line.3475"></a>
 <span class="sourceLineNo">3476</span><a id="line.3476">            edge.remove(s);</a>
-<span class="sourceLineNo">3477</span><a id="line.3477">            vla.add(s);</a>
+<span class="sourceLineNo">3477</span><a id="line.3477">            vla.add((short)s);</a>
 <span class="sourceLineNo">3478</span><a id="line.3478">            int i = s &amp; 0xffff;</a>
 <span class="sourceLineNo">3479</span><a id="line.3479">            x = hilbertX[i];</a>
 <span class="sourceLineNo">3480</span><a id="line.3480">            y = hilbertY[i];</a>
@@ -3532,7 +3532,7 @@
 <span class="sourceLineNo">3520</span><a id="line.3520">        return vla.toArray();</a>
 <span class="sourceLineNo">3521</span><a id="line.3521">    }</a>
 <span class="sourceLineNo">3522</span><a id="line.3522"></a>
-<span class="sourceLineNo">3523</span><a id="line.3523">    private static void modifiedShadowFOV(int expansion, int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet storedSet, ShortVLA vla)</a>
+<span class="sourceLineNo">3523</span><a id="line.3523">    private static void modifiedShadowFOV(int expansion, int viewerX, int viewerY, Radius metric, IntSet bounds, IntSet storedSet, ShortVLA vla)</a>
 <span class="sourceLineNo">3524</span><a id="line.3524">    {</a>
 <span class="sourceLineNo">3525</span><a id="line.3525">        if(expansion &lt; 1)</a>
 <span class="sourceLineNo">3526</span><a id="line.3526">            return;</a>
@@ -3547,7 +3547,7 @@
 <span class="sourceLineNo">3535</span><a id="line.3535">    }</a>
 <span class="sourceLineNo">3536</span><a id="line.3536"></a>
 <span class="sourceLineNo">3537</span><a id="line.3537">    private static void modifiedShadowCast(int expansion, int row, double start, double end, int xx, int xy, int yx, int yy,</a>
-<span class="sourceLineNo">3538</span><a id="line.3538">                                     int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet storedSet, ShortVLA vla) {</a>
+<span class="sourceLineNo">3538</span><a id="line.3538">                                     int viewerX, int viewerY, Radius metric, IntSet bounds, IntSet storedSet, ShortVLA vla) {</a>
 <span class="sourceLineNo">3539</span><a id="line.3539">        double newStart = 0;</a>
 <span class="sourceLineNo">3540</span><a id="line.3540">        if (start &lt; end) {</a>
 <span class="sourceLineNo">3541</span><a id="line.3541">            return;</a>
@@ -3657,14 +3657,14 @@
 <span class="sourceLineNo">3645</span><a id="line.3645">        }</a>
 <span class="sourceLineNo">3646</span><a id="line.3646">        int boundSize = count(bounds);</a>
 <span class="sourceLineNo">3647</span><a id="line.3647">        ShortVLA vla = new ShortVLA(256);</a>
-<span class="sourceLineNo">3648</span><a id="line.3648">        ShortSet storedSet = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);</a>
+<span class="sourceLineNo">3648</span><a id="line.3648">        IntSet storedSet = new IntSet(boundSize), quickBounds = new IntSet(boundSize);</a>
 <span class="sourceLineNo">3649</span><a id="line.3649">        boolean on = false;</a>
 <span class="sourceLineNo">3650</span><a id="line.3650">        int idx = 0, i;</a>
 <span class="sourceLineNo">3651</span><a id="line.3651">        short x, y;</a>
 <span class="sourceLineNo">3652</span><a id="line.3652">        for(int p = 0; p &lt; bounds.length; p++, on = !on) {</a>
 <span class="sourceLineNo">3653</span><a id="line.3653">            if (on) {</a>
 <span class="sourceLineNo">3654</span><a id="line.3654">                for (i = idx; i &lt; idx + (bounds[p] &amp; 0xffff); i++) {</a>
-<span class="sourceLineNo">3655</span><a id="line.3655">                    quickBounds.add((short) i);</a>
+<span class="sourceLineNo">3655</span><a id="line.3655">                    quickBounds.add(i);</a>
 <span class="sourceLineNo">3656</span><a id="line.3656">                }</a>
 <span class="sourceLineNo">3657</span><a id="line.3657">            }</a>
 <span class="sourceLineNo">3658</span><a id="line.3658">            idx += bounds[p] &amp; 0xffff;</a>
@@ -3683,7 +3683,7 @@
 <span class="sourceLineNo">3671</span><a id="line.3671">            return ALL_WALL;</a>
 <span class="sourceLineNo">3672</span><a id="line.3672">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">3673</span><a id="line.3673"></a>
-<span class="sourceLineNo">3674</span><a id="line.3674">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">3674</span><a id="line.3674">        vla.clear();</a>
 <span class="sourceLineNo">3675</span><a id="line.3675">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">3676</span><a id="line.3676"></a>
 <span class="sourceLineNo">3677</span><a id="line.3677">        vla.add((short)indices[0]);</a>
@@ -3755,14 +3755,14 @@
 <span class="sourceLineNo">3743</span><a id="line.3743">        }</a>
 <span class="sourceLineNo">3744</span><a id="line.3744">        int boundSize = count(bounds);</a>
 <span class="sourceLineNo">3745</span><a id="line.3745">        ShortVLA vla = new ShortVLA(256), discard = new ShortVLA(128);</a>
-<span class="sourceLineNo">3746</span><a id="line.3746">        ShortSet storedSet = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);</a>
+<span class="sourceLineNo">3746</span><a id="line.3746">        IntSet storedSet = new IntSet(boundSize), quickBounds = new IntSet(boundSize);</a>
 <span class="sourceLineNo">3747</span><a id="line.3747">        boolean on = false;</a>
 <span class="sourceLineNo">3748</span><a id="line.3748">        int idx = 0, i;</a>
 <span class="sourceLineNo">3749</span><a id="line.3749">        short x, y;</a>
 <span class="sourceLineNo">3750</span><a id="line.3750">        for(int p = 0; p &lt; bounds.length; p++, on = !on) {</a>
 <span class="sourceLineNo">3751</span><a id="line.3751">            if (on) {</a>
 <span class="sourceLineNo">3752</span><a id="line.3752">                for (i = idx; i &lt; idx + (bounds[p] &amp; 0xffff); i++) {</a>
-<span class="sourceLineNo">3753</span><a id="line.3753">                    quickBounds.add((short) i);</a>
+<span class="sourceLineNo">3753</span><a id="line.3753">                    quickBounds.add(i);</a>
 <span class="sourceLineNo">3754</span><a id="line.3754">                }</a>
 <span class="sourceLineNo">3755</span><a id="line.3755">            }</a>
 <span class="sourceLineNo">3756</span><a id="line.3756">            idx += bounds[p] &amp; 0xffff;</a>
@@ -3825,12 +3825,12 @@
 <span class="sourceLineNo">3813</span><a id="line.3813">                }</a>
 <span class="sourceLineNo">3814</span><a id="line.3814">            }</a>
 <span class="sourceLineNo">3815</span><a id="line.3815">        }</a>
-<span class="sourceLineNo">3816</span><a id="line.3816">        int[] indices = vla.asInts();</a>
-<span class="sourceLineNo">3817</span><a id="line.3817">        if(indices.length &lt; 1)</a>
-<span class="sourceLineNo">3818</span><a id="line.3818">            return ALL_WALL;</a>
+<span class="sourceLineNo">3816</span><a id="line.3816">        if(vla.size == 0)</a>
+<span class="sourceLineNo">3817</span><a id="line.3817">            return ALL_WALL;</a>
+<span class="sourceLineNo">3818</span><a id="line.3818">        int[] indices = vla.asInts();</a>
 <span class="sourceLineNo">3819</span><a id="line.3819">        Arrays.sort(indices);</a>
 <span class="sourceLineNo">3820</span><a id="line.3820"></a>
-<span class="sourceLineNo">3821</span><a id="line.3821">        vla = new ShortVLA(128);</a>
+<span class="sourceLineNo">3821</span><a id="line.3821">        vla.clear();</a>
 <span class="sourceLineNo">3822</span><a id="line.3822">        int current, past = indices[0], skip = 0;</a>
 <span class="sourceLineNo">3823</span><a id="line.3823"></a>
 <span class="sourceLineNo">3824</span><a id="line.3824">        vla.add((short)indices[0]);</a>

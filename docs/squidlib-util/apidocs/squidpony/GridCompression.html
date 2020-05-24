@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -159,37 +159,57 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
+<td class="colFirst"><code>static byte[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#byteArrayToByteGrid(byte%5B%5D)">byteArrayToByteGrid</a></span>&#8203;(byte[]&nbsp;bytes)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i1">
+<td class="colFirst"><code>static double[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#byteArrayToDoubleGrid(byte%5B%5D)">byteArrayToDoubleGrid</a></span>&#8203;(byte[]&nbsp;bytes)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor" id="i2">
+<td class="colFirst"><code>static byte[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#byteGridToByteArray(byte%5B%5D%5B%5D)">byteGridToByteArray</a></span>&#8203;(byte[][]&nbsp;grid)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i3">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#byteToDoubleGrid(byte%5B%5D%5B%5D)">byteToDoubleGrid</a></span>&#8203;(byte[][]&nbsp;bytes)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i1">
+<tr class="altColor" id="i4">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#byteToDoubleGrid(byte%5B%5D%5B%5D,double%5B%5D%5B%5D)">byteToDoubleGrid</a></span>&#8203;(byte[][]&nbsp;bytes,
 double[][]&nbsp;doubles)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i2">
+<tr class="rowColor" id="i5">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compress(byte%5B%5D%5B%5D)">compress</a></span>&#8203;(byte[][]&nbsp;grid)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i3">
+<tr class="altColor" id="i6">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compress(double%5B%5D%5B%5D)">compress</a></span>&#8203;(double[][]&nbsp;grid)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i4">
+<tr class="rowColor" id="i7">
 <td class="colFirst"><code>static byte[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decompress(java.lang.String)">decompress</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;compressed)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i5">
+<tr class="altColor" id="i8">
+<td class="colFirst"><code>static byte[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doubleGridToByteArray(double%5B%5D%5B%5D)">doubleGridToByteArray</a></span>&#8203;(double[][]&nbsp;doubles)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i9">
 <td class="colFirst"><code>static byte[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doubleToByteGrid(double%5B%5D%5B%5D)">doubleToByteGrid</a></span>&#8203;(double[][]&nbsp;doubles)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i6">
+<tr class="altColor" id="i10">
 <td class="colFirst"><code>static byte[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doubleToByteGrid(double%5B%5D%5B%5D,byte%5B%5D%5B%5D)">doubleToByteGrid</a></span>&#8203;(double[][]&nbsp;doubles,
 byte[][]&nbsp;bytes)</code></th>
@@ -275,6 +295,30 @@ double[][]&nbsp;doubles)</span></div>
 <h3><a id="doubleToByteGrid(double[][],byte[][])">doubleToByteGrid</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte[][]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/GridCompression.html#line.170">doubleToByteGrid</a></span>&#8203;(<span class="arguments">double[][]&nbsp;doubles,
 byte[][]&nbsp;bytes)</span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="doubleGridToByteArray(double[][])">doubleGridToByteArray</a></h3>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/GridCompression.html#line.180">doubleGridToByteArray</a></span>&#8203;(<span class="arguments">double[][]&nbsp;doubles)</span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="byteArrayToDoubleGrid(byte[])">byteArrayToDoubleGrid</a></h3>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/GridCompression.html#line.199">byteArrayToDoubleGrid</a></span>&#8203;(<span class="arguments">byte[]&nbsp;bytes)</span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="byteGridToByteArray(byte[][])">byteGridToByteArray</a></h3>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/GridCompression.html#line.212">byteGridToByteArray</a></span>&#8203;(<span class="arguments">byte[][]&nbsp;grid)</span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="byteArrayToByteGrid(byte[])">byteArrayToByteGrid</a></h3>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte[][]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/GridCompression.html#line.231">byteArrayToByteGrid</a></span>&#8203;(<span class="arguments">byte[]&nbsp;bytes)</span></div>
 </section>
 </li>
 </ul>

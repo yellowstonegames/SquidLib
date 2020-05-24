@@ -600,8 +600,8 @@
 <span class="sourceLineNo">588</span><a id="line.588">            noise2 = t2 * t2 * FastNoise.dotf(FastNoise.phiGrad2f[gi2], x2, y2);</a>
 <span class="sourceLineNo">589</span><a id="line.589">        }</a>
 <span class="sourceLineNo">590</span><a id="line.590">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">591</span><a id="line.591">        // The result is scaled to return values in the interval [-1,1].</a>
-<span class="sourceLineNo">592</span><a id="line.592">        return 9.125f * (noise0 + noise1 + noise2);</a>
+<span class="sourceLineNo">591</span><a id="line.591">        // The result is clamped to return values in the interval [-1,1].</a>
+<span class="sourceLineNo">592</span><a id="line.592">        return Math.max(-1f, Math.min(1f, 9.125f * (noise0 + noise1 + noise2)));</a>
 <span class="sourceLineNo">593</span><a id="line.593">    }</a>
 <span class="sourceLineNo">594</span><a id="line.594"></a>
 <span class="sourceLineNo">595</span><a id="line.595">    /**</a>
@@ -782,8 +782,8 @@
 <span class="sourceLineNo">770</span><a id="line.770">            n3 = t3 * t3 * dotf(grad3f[gi3], x3, y3, z3);</a>
 <span class="sourceLineNo">771</span><a id="line.771">        }</a>
 <span class="sourceLineNo">772</span><a id="line.772">        // Add contributions from each corner to get the final noise value.</a>
-<span class="sourceLineNo">773</span><a id="line.773">        // The result is scaled to stay just inside [-1,1]</a>
-<span class="sourceLineNo">774</span><a id="line.774">        return  31.5f * (n0 + n1 + n2 + n3);</a>
+<span class="sourceLineNo">773</span><a id="line.773">        // The result is clamped to stay just inside [-1,1]</a>
+<span class="sourceLineNo">774</span><a id="line.774">        return Math.max(-1f, Math.min(1f, 31.5f * (n0 + n1 + n2 + n3)));</a>
 <span class="sourceLineNo">775</span><a id="line.775">    }</a>
 <span class="sourceLineNo">776</span><a id="line.776"></a>
 <span class="sourceLineNo">777</span><a id="line.777">}</a>

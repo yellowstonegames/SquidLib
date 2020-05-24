@@ -155,9 +155,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Gets an index of one of the weights in this WeightedTable, with the choice determined deterministically by the
  given long, but higher weights will be returned by more possible inputs than lower weights.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#random(squidpony.squidmath.IRNG)">random(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#random(squidpony.squidmath.IRNG)">random(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
 <dd>
-<div class="block">Gets a random short from this ShortSet, using the given <a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a> to generate random values.</div>
+<div class="block">Gets a random int from this IntSet, using the given <a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a> to generate random values.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#randomA(squidpony.squidmath.IRNG)">randomA(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
@@ -1065,6 +1065,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.ValueIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">IntIntOrderedMap.ValueIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.IntSetIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.IntSetIterator.html" title="class in squidpony.squidmath">IntSet.IntSetIterator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.KeyIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.KeyIterator.html" title="class in squidpony.squidmath">OrderedMap.KeyIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.ValueIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.ValueIterator.html" title="class in squidpony.squidmath">OrderedMap.ValueIterator</a></dt>
@@ -1075,12 +1077,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.SharedValues.SharedValueIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.SharedValues.SharedValueIterator.html" title="class in squidpony.squidmath">OrganizedMap.SharedValues.SharedValueIterator</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#remove(int)">remove(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#remove(int)">remove(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#remove(int)">remove(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
+<dd>
+<div class="block">Returns true if the key was removed.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#remove(int,double)">remove(int, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>
 <div class="block">Removes the entry for the specified key only if it is currently
@@ -1097,10 +1101,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Takes another GreasedRegion, called other, with potentially different size and removes its "on" cells from this
  GreasedRegion at the given x,y offset, allowing negative x and/or y to remove only part of other in this.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#remove(short)">remove(short)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
-<dd>
-<div class="block">Returns true if the key was removed.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#remove(I)">remove(I)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>
@@ -1652,12 +1652,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Reset the combination generator.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.IntSetIterator.html#reset()">reset()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.IntSetIterator.html" title="class in squidpony.squidmath">IntSet.IntSetIterator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutationGenerator.html#reset()">reset()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutationGenerator.html" title="class in squidpony.squidmath">PermutationGenerator</a></dt>
 <dd>
 <div class="block">Resets the generator state.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#reset()">reset()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#resetAllVariants(double%5B%5D,int%5B%5D,double%5B%5D)">resetAllVariants(double[], int[], double[])</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#resetAllVariants(double%5B%5D,int%5B%5D,double%5B%5D,int)">resetAllVariants(double[], int[], double[], int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>

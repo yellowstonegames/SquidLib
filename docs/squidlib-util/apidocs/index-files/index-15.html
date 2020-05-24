@@ -176,11 +176,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Copies another NaturalLanguageCipher and constructs this one with the information in the other.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/GreasedZOI.html#nearestInfluences(short%5B%5D%5B%5D,squidpony.squidmath.Coord)">nearestInfluences(short[][], Coord)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/GreasedZOI.html" title="class in squidpony.squidai">GreasedZOI</a></dt>
-<dd>
-<div class="block">Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all
- influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/ZOI.html#nearestInfluences(short%5B%5D%5B%5D,squidpony.squidmath.Coord)">nearestInfluences(short[][], Coord)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/ZOI.html" title="class in squidpony.squidai">ZOI</a></dt>
 <dd>
 <div class="block">Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all
@@ -196,8 +191,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/GreasedZOI.html#nearestInfluences(squidpony.squidmath.GreasedRegion%5B%5D,squidpony.squidmath.Coord)">nearestInfluences(GreasedRegion[], Coord)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/GreasedZOI.html" title="class in squidpony.squidai">GreasedZOI</a></dt>
 <dd>
-<div class="block">Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all
- influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</div>
+<div class="block">Given the zones resulting from this class' <a href="../squidpony/squidai/GreasedZOI.html#calculate()"><code>GreasedZOI.calculate()</code></a> method and a Coord to check, finds the indices of
+ all influencing groups in zones that have the Coord in their area, and returns all such indices as an IntVLA.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#nearLight">nearLight</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>
@@ -307,6 +302,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.ValueIterator.html#next()">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">IntIntOrderedMap.ValueIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.IntSetIterator.html#next()">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.IntSetIterator.html" title="class in squidpony.squidmath">IntSet.IntSetIterator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LowStorageShuffler.html#next()">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LowStorageShuffler.html" title="class in squidpony.squidmath">LowStorageShuffler</a></dt>
 <dd>
 <div class="block">Gets the next distinct int in the sequence, or -1 if all distinct ints have been returned that are non-negative
@@ -321,8 +318,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.SharedKeySet.SharedKeyIterator.html#next()">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.SharedKeySet.SharedKeyIterator.html" title="class in squidpony.squidmath">OrganizedMap.SharedKeySet.SharedKeyIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.SharedValues.SharedValueIterator.html#next()">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.SharedValues.SharedValueIterator.html" title="class in squidpony.squidmath">OrganizedMap.SharedValues.SharedValueIterator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#next()">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShuffledIntSequence.html#next()">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></dt>
 <dd>
@@ -372,6 +367,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedRandomness.BigCounter.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedRandomness.BigCounter.html" title="class in squidpony.squidmath">FlawedRandomness.BigCounter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GearRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GearRNG.html" title="class in squidpony.squidmath">GearRNG</a></dt>
+<dd>
+<div class="block">Using this method, any algorithm that might use the built-in Java Random
+ can interface with this randomness source.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoatRNG.html#next(int)">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">GoatRNG</a></dt>
 <dd>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -1222,6 +1222,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoatRNG.html#nextLong()">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">GoatRNG</a></dt>
+<dd>
+<div class="block">Using this method, any algorithm that needs to efficiently generate more
+ than 32 bits of random data can interface with this randomness source.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#nextLong()">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
 <dd>
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
@@ -1662,7 +1667,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath"><span class="typeNameLink">Noise.Noise6D</span></a> - Interface in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="../squidpony/squidmath/Noise.Quilez1D.html" title="class in squidpony.squidmath"><span class="typeNameLink">Noise.Quilez1D</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dt><a href="../squidpony/squidmath/Noise.QuilezNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">Noise.QuilezNoise</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">A hybrid between value and gradient noise that may be faster for 1D noise.</div>
 </dd>
@@ -1799,6 +1804,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/BinaryHeap.html#notEmpty()">notEmpty()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BinaryHeap.html" title="class in squidpony.squidmath">BinaryHeap</a></dt>
 <dd>
 <div class="block">Returns true if the heap has one or more items.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#notEmpty()">notEmpty()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
+<dd>
+<div class="block">Returns true if the set has one or more items.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Mnemonic.html#noun">noun</a></span> - Variable in class squidpony.<a href="../squidpony/Mnemonic.html" title="class in squidpony">Mnemonic</a></dt>
 <dd>&nbsp;</dd>

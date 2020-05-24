@@ -1285,7 +1285,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h3>Class <a href="squidpony/squidai/GreasedZOI.html" title="class in squidpony.squidai">squidpony.squidai.GreasedZOI</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>1L</dd>
+<dd>2L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -1301,12 +1301,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre><a href="squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a> dijkstra</pre>
 </li>
 <li class="blockList">
-<h5>influences</h5>
-<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][] influences</pre>
+<h5>groups</h5>
+<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[] groups</pre>
 </li>
 <li class="blockList">
-<h5>packedGroups</h5>
-<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[] packedGroups</pre>
+<h5>influences</h5>
+<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][] influences</pre>
 </li>
 <li class="blockList">
 <h5>radius</h5>
@@ -4503,6 +4503,36 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </section>
 </li>
 <li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.GoatRNG">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.GoatRNG</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>stateA</h5>
+<pre>long stateA</pre>
+<div class="block">Can be any long value.</div>
+</li>
+<li class="blockList">
+<h5>stateB</h5>
+<pre>long stateB</pre>
+<div class="block">Can be any long value.</div>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
 <section class="serializedClassDetails"><a id="squidpony.squidmath.GreasedRegion">
 <!--   -->
 </a>
@@ -4971,6 +5001,73 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
 </dl>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.IntSet">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">squidpony.squidmath.IntSet</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>hasZeroValue</h5>
+<pre>boolean hasZeroValue</pre>
+</li>
+<li class="blockList">
+<h5>iterator1</h5>
+<pre><a href="squidpony/squidmath/IntSet.IntSetIterator.html" title="class in squidpony.squidmath">IntSet.IntSetIterator</a> iterator1</pre>
+</li>
+<li class="blockList">
+<h5>iterator2</h5>
+<pre><a href="squidpony/squidmath/IntSet.IntSetIterator.html" title="class in squidpony.squidmath">IntSet.IntSetIterator</a> iterator2</pre>
+</li>
+<li class="blockList">
+<h5>keyTable</h5>
+<pre>int[] keyTable</pre>
+</li>
+<li class="blockList">
+<h5>loadFactor</h5>
+<pre>float loadFactor</pre>
+</li>
+<li class="blockList">
+<h5>mask</h5>
+<pre>int mask</pre>
+<div class="block">A bitmask used to confine hashcodes to the size of the table. Must be all 1 bits in its low positions, ie a power of two
+ minus 1. If <a href="squidpony/squidmath/IntSet.html#place(int)"><code>IntSet.place(int)</code></a> is overriden, this can be used instead of <a href="squidpony/squidmath/IntSet.html#shift"><code>IntSet.shift</code></a> to isolate usable bits of a
+ hash.</div>
+</li>
+<li class="blockList">
+<h5>shift</h5>
+<pre>int shift</pre>
+<div class="block">Used by <a href="squidpony/squidmath/IntSet.html#place(int)"><code>IntSet.place(int)</code></a> to bit shift the upper bits of a <code>long</code> into a usable range (&gt;= 0 and &lt;=
+ <a href="squidpony/squidmath/IntSet.html#mask"><code>IntSet.mask</code></a>). The shift can be negative, which is convenient to match the number of bits in mask: if mask is a 7-bit
+ number, a shift of -7 shifts the upper 7 bits into the lowest 7 positions. This class sets the shift &gt; 32 and &lt; 64,
+ which if used with an int will still move the upper bits of an int to the lower bits due to Java's implicit modulus on
+ shifts.
+ <p>
+ <a href="squidpony/squidmath/IntSet.html#mask"><code>IntSet.mask</code></a> can also be used to mask the low bits of a number, which may be faster for some hashcodes, if
+ <a href="squidpony/squidmath/IntSet.html#place(int)"><code>IntSet.place(int)</code></a> is overridden.</div>
+</li>
+<li class="blockList">
+<h5>size</h5>
+<pre>int size</pre>
+</li>
+<li class="blockList">
+<h5>threshold</h5>
+<pre>int threshold</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
 </section>
 </li>
 <li class="blockList">
@@ -6299,78 +6396,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h5>randomnessSource</h5>
 <pre><a href="squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a> randomnessSource</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.ShortSet">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">squidpony.squidmath.ShortSet</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>-4390851800502156007L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>capacity</h5>
-<pre>int capacity</pre>
-</li>
-<li class="blockList">
-<h5>hashShift</h5>
-<pre>int hashShift</pre>
-</li>
-<li class="blockList">
-<h5>hasZeroValue</h5>
-<pre>boolean hasZeroValue</pre>
-</li>
-<li class="blockList">
-<h5>iterator1</h5>
-<pre><a href="squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a> iterator1</pre>
-</li>
-<li class="blockList">
-<h5>iterator2</h5>
-<pre><a href="squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a> iterator2</pre>
-</li>
-<li class="blockList">
-<h5>keyTable</h5>
-<pre>short[] keyTable</pre>
-</li>
-<li class="blockList">
-<h5>loadFactor</h5>
-<pre>float loadFactor</pre>
-</li>
-<li class="blockList">
-<h5>mask</h5>
-<pre>int mask</pre>
-</li>
-<li class="blockList">
-<h5>pushIterations</h5>
-<pre>int pushIterations</pre>
-</li>
-<li class="blockList">
-<h5>size</h5>
-<pre>int size</pre>
-</li>
-<li class="blockList">
-<h5>stashCapacity</h5>
-<pre>int stashCapacity</pre>
-</li>
-<li class="blockList">
-<h5>stashSize</h5>
-<pre>int stashSize</pre>
-</li>
-<li class="blockList">
-<h5>threshold</h5>
-<pre>int threshold</pre>
 </li>
 </ul>
 </section>

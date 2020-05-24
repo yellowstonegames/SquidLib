@@ -52,23 +52,23 @@
 <span class="sourceLineNo">040</span><a id="line.40">    }</a>
 <span class="sourceLineNo">041</span><a id="line.41">    protected static double gradCoord2D(long seed, int x, int y,</a>
 <span class="sourceLineNo">042</span><a id="line.42">                                              double xd, double yd) {</a>
-<span class="sourceLineNo">043</span><a id="line.43">        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed)));</a>
+<span class="sourceLineNo">043</span><a id="line.43">        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed))) &gt;&gt;&gt; 24;</a>
 <span class="sourceLineNo">044</span><a id="line.44">        //final int hash = (int)((((seed = (((seed * (0x632BE59BD9B4E019L + (x &lt;&lt; 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (y &lt;&lt; 23)))) ^ seed &gt;&gt;&gt; 27 ^ x + y) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 56);</a>
-<span class="sourceLineNo">045</span><a id="line.45">        final double[] grad = phiGrad2[hash &gt;&gt;&gt; 24], jitter = phiGrad2[hash &gt;&gt;&gt; 16 &amp; 0xFF];</a>
+<span class="sourceLineNo">045</span><a id="line.45">        final double[] grad = phiGrad2[hash], jitter = phiGrad2[255 - hash];</a>
 <span class="sourceLineNo">046</span><a id="line.46">        return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];</a>
 <span class="sourceLineNo">047</span><a id="line.47">    }</a>
 <span class="sourceLineNo">048</span><a id="line.48">    protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {</a>
-<span class="sourceLineNo">049</span><a id="line.49">        final int hash = (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed &gt;&gt;&gt; 13) * (seed)),</a>
-<span class="sourceLineNo">050</span><a id="line.50">                idx = (hash &gt;&gt;&gt; 27) * 3, jitter = (hash &gt;&gt;&gt; 22 &amp; 0x1F) * 3;</a>
-<span class="sourceLineNo">051</span><a id="line.51">        return ((xd+grad3d[jitter]*0.5) * grad3d[idx]</a>
-<span class="sourceLineNo">052</span><a id="line.52">                + (yd+grad3d[jitter+1]*0.5) * grad3d[idx + 1]</a>
-<span class="sourceLineNo">053</span><a id="line.53">                + (zd+grad3d[jitter+2]*0.5) * grad3d[idx + 2]);</a>
+<span class="sourceLineNo">049</span><a id="line.49">        final int idx = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed &gt;&gt;&gt; 13) * (seed)) &gt;&gt;&gt; 27) * 3,</a>
+<span class="sourceLineNo">050</span><a id="line.50">                jitter = 93 - idx;</a>
+<span class="sourceLineNo">051</span><a id="line.51">        return ((xd+grad3d[jitter]*0.25) * grad3d[idx]</a>
+<span class="sourceLineNo">052</span><a id="line.52">                + (yd+grad3d[jitter+1]*0.25) * grad3d[idx + 1]</a>
+<span class="sourceLineNo">053</span><a id="line.53">                + (zd+grad3d[jitter+2]*0.25) * grad3d[idx + 2]);</a>
 <span class="sourceLineNo">054</span><a id="line.54">    }</a>
 <span class="sourceLineNo">055</span><a id="line.55">    protected static double gradCoord4D(long seed, int x, int y, int z, int w,</a>
 <span class="sourceLineNo">056</span><a id="line.56">                                        double xd, double yd, double zd, double wd) {</a>
 <span class="sourceLineNo">057</span><a id="line.57">        final int hash =</a>
 <span class="sourceLineNo">058</span><a id="line.58">                (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed &gt;&gt;&gt; 13) * (seed)),</a>
-<span class="sourceLineNo">059</span><a id="line.59">                        idx = (hash &gt;&gt;&gt; 24) &amp; 0xFC, jitter = (hash &gt;&gt;&gt; 18) &amp; 0xFC;</a>
+<span class="sourceLineNo">059</span><a id="line.59">                        idx = (hash &gt;&gt;&gt; 24) &amp; 0xFC, jitter = 0xFC - idx;</a>
 <span class="sourceLineNo">060</span><a id="line.60">        return ((xd+ grad4d[jitter]*0.25) * grad4d[idx]</a>
 <span class="sourceLineNo">061</span><a id="line.61">                + (yd+ grad4d[jitter + 1]*0.25) * grad4d[idx + 1]</a>
 <span class="sourceLineNo">062</span><a id="line.62">                + (zd+ grad4d[jitter + 2]*0.25) * grad4d[idx + 2]</a>
@@ -76,14 +76,14 @@
 <span class="sourceLineNo">064</span><a id="line.64">    }</a>
 <span class="sourceLineNo">065</span><a id="line.65">    protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,</a>
 <span class="sourceLineNo">066</span><a id="line.66">                                        double xd, double yd, double zd, double wd, double ud, double vd) {</a>
-<span class="sourceLineNo">067</span><a id="line.67">        final int hash = (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)</a>
-<span class="sourceLineNo">068</span><a id="line.68">                        ^ seed &gt;&gt;&gt; 13) * (seed)), idx = (hash &gt;&gt;&gt; 24) * 6, jitter = (hash &gt;&gt;&gt; 16 &amp; 0xFF) * 6;</a>
-<span class="sourceLineNo">069</span><a id="line.69">        return (  (xd+gradient6DLUT[jitter]*0.3) * gradient6DLUT[idx]</a>
-<span class="sourceLineNo">070</span><a id="line.70">                + (yd+gradient6DLUT[jitter+1]*0.3) * gradient6DLUT[idx+1]</a>
-<span class="sourceLineNo">071</span><a id="line.71">                + (zd+gradient6DLUT[jitter+2]*0.3) * gradient6DLUT[idx+2]</a>
-<span class="sourceLineNo">072</span><a id="line.72">                + (wd+gradient6DLUT[jitter+3]*0.3) * gradient6DLUT[idx+3]</a>
-<span class="sourceLineNo">073</span><a id="line.73">                + (ud+gradient6DLUT[jitter+4]*0.3) * gradient6DLUT[idx+4]</a>
-<span class="sourceLineNo">074</span><a id="line.74">                + (vd+gradient6DLUT[jitter+5]*0.3) * gradient6DLUT[idx+5]);</a>
+<span class="sourceLineNo">067</span><a id="line.67">        final int idx = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)</a>
+<span class="sourceLineNo">068</span><a id="line.68">                        ^ seed &gt;&gt;&gt; 13) * (seed)) &gt;&gt;&gt; 24) * 6, jitter = 1530 - idx;</a>
+<span class="sourceLineNo">069</span><a id="line.69">        return (  (xd+gradient6DLUT[jitter]*0.5) * gradient6DLUT[idx]</a>
+<span class="sourceLineNo">070</span><a id="line.70">                + (yd+gradient6DLUT[jitter+1]*0.5) * gradient6DLUT[idx+1]</a>
+<span class="sourceLineNo">071</span><a id="line.71">                + (zd+gradient6DLUT[jitter+2]*0.5) * gradient6DLUT[idx+2]</a>
+<span class="sourceLineNo">072</span><a id="line.72">                + (wd+gradient6DLUT[jitter+3]*0.5) * gradient6DLUT[idx+3]</a>
+<span class="sourceLineNo">073</span><a id="line.73">                + (ud+gradient6DLUT[jitter+4]*0.5) * gradient6DLUT[idx+4]</a>
+<span class="sourceLineNo">074</span><a id="line.74">                + (vd+gradient6DLUT[jitter+5]*0.5) * gradient6DLUT[idx+5]);</a>
 <span class="sourceLineNo">075</span><a id="line.75">    }</a>
 <span class="sourceLineNo">076</span><a id="line.76"></a>
 <span class="sourceLineNo">077</span><a id="line.77">    @Override</a>

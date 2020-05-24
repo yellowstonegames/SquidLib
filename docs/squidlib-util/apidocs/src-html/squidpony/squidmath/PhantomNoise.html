@@ -18,143 +18,158 @@
 <span class="sourceLineNo">006</span><a id="line.6"> */</a>
 <span class="sourceLineNo">007</span><a id="line.7">@Beta</a>
 <span class="sourceLineNo">008</span><a id="line.8">public class PhantomNoise {</a>
-<span class="sourceLineNo">009</span><a id="line.9">    public static final PhantomNoise instance = new PhantomNoise();</a>
-<span class="sourceLineNo">010</span><a id="line.10">    </a>
-<span class="sourceLineNo">011</span><a id="line.11">    private final CrossHash.Yolk yolk;</a>
-<span class="sourceLineNo">012</span><a id="line.12">    public final int dim;</a>
-<span class="sourceLineNo">013</span><a id="line.13">    private final double inverse;</a>
-<span class="sourceLineNo">014</span><a id="line.14">    private final double[] working, points;</a>
-<span class="sourceLineNo">015</span><a id="line.15">    private final double[][] vertices;</a>
-<span class="sourceLineNo">016</span><a id="line.16">    private final int[] floors, hashFloors;</a>
-<span class="sourceLineNo">017</span><a id="line.17">    public PhantomNoise() {</a>
-<span class="sourceLineNo">018</span><a id="line.18">        this(0xFEEDBEEF1337CAFEL, 3);</a>
-<span class="sourceLineNo">019</span><a id="line.19">    }</a>
-<span class="sourceLineNo">020</span><a id="line.20"></a>
-<span class="sourceLineNo">021</span><a id="line.21">    public PhantomNoise(long seed, int dimension) {</a>
-<span class="sourceLineNo">022</span><a id="line.22">        dim = Math.max(2, dimension);</a>
-<span class="sourceLineNo">023</span><a id="line.23">        working = new double[dim+1];</a>
-<span class="sourceLineNo">024</span><a id="line.24">        points = new double[dim+1];</a>
-<span class="sourceLineNo">025</span><a id="line.25">        vertices = new double[dim+1][dim];</a>
-<span class="sourceLineNo">026</span><a id="line.26">        double id = -1.0 / dim;</a>
-<span class="sourceLineNo">027</span><a id="line.27">        vertices[0][0] = 1.0;</a>
-<span class="sourceLineNo">028</span><a id="line.28">        for (int v = 1; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">029</span><a id="line.29">            vertices[v][0] = id;</a>
-<span class="sourceLineNo">030</span><a id="line.30">        }</a>
-<span class="sourceLineNo">031</span><a id="line.31">        for (int d = 1; d &lt; dim; d++) {</a>
-<span class="sourceLineNo">032</span><a id="line.32">            double t = 0.0;</a>
-<span class="sourceLineNo">033</span><a id="line.33">            for (int i = 0; i &lt; d; i++) {</a>
-<span class="sourceLineNo">034</span><a id="line.34">                t += vertices[d][i] * vertices[d][i];</a>
-<span class="sourceLineNo">035</span><a id="line.35">            }</a>
-<span class="sourceLineNo">036</span><a id="line.36">            vertices[d][d] = Math.sqrt(1.0 - t);</a>
-<span class="sourceLineNo">037</span><a id="line.37">            t = (id - t) / vertices[d][d];</a>
-<span class="sourceLineNo">038</span><a id="line.38">            for (int v = d + 1; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">039</span><a id="line.39">                vertices[v][d] = t;</a>
-<span class="sourceLineNo">040</span><a id="line.40">            }</a>
-<span class="sourceLineNo">041</span><a id="line.41">        }</a>
-<span class="sourceLineNo">042</span><a id="line.42">        floors = new int[dim+1];</a>
-<span class="sourceLineNo">043</span><a id="line.43">        hashFloors = new int[dim+1];</a>
-<span class="sourceLineNo">044</span><a id="line.44">        yolk = new CrossHash.Yolk(seed);</a>
-<span class="sourceLineNo">045</span><a id="line.45">        inverse = 1.0 / (dim + 1.0);</a>
-<span class="sourceLineNo">046</span><a id="line.46">//        printDebugInfo();</a>
-<span class="sourceLineNo">047</span><a id="line.47">    }</a>
-<span class="sourceLineNo">048</span><a id="line.48"></a>
-<span class="sourceLineNo">049</span><a id="line.49">    public double valueNoise()</a>
-<span class="sourceLineNo">050</span><a id="line.50">    {</a>
-<span class="sourceLineNo">051</span><a id="line.51">        hashFloors[dim] = NumberTools.doubleToMixedIntBits(working[dim]);</a>
-<span class="sourceLineNo">052</span><a id="line.52">        for (int i = 0; i &lt; dim; i++) {</a>
-<span class="sourceLineNo">053</span><a id="line.53">            floors[i] = working[i] &gt;= 0.0 ? (int)working[i] : (int)working[i] - 1;</a>
-<span class="sourceLineNo">054</span><a id="line.54">            working[i] -= floors[i];</a>
-<span class="sourceLineNo">055</span><a id="line.55">            working[i] *= working[i] * (3.0 - 2.0 * working[i]);</a>
-<span class="sourceLineNo">056</span><a id="line.56">        }</a>
-<span class="sourceLineNo">057</span><a id="line.57">        double sum = 0.0, temp;</a>
-<span class="sourceLineNo">058</span><a id="line.58">        final int limit = 1 &lt;&lt; dim;</a>
-<span class="sourceLineNo">059</span><a id="line.59">        int bit;</a>
-<span class="sourceLineNo">060</span><a id="line.60">        for (int i = 0; i &lt; limit; i++) {</a>
-<span class="sourceLineNo">061</span><a id="line.61">            temp = 1.0;</a>
-<span class="sourceLineNo">062</span><a id="line.62">            for (int j = 0; j &lt; dim; j++) {</a>
-<span class="sourceLineNo">063</span><a id="line.63">                bit = (i &gt;&gt;&gt; j &amp; 1);</a>
-<span class="sourceLineNo">064</span><a id="line.64">                temp *= bit + (1|-bit) * working[j];</a>
-<span class="sourceLineNo">065</span><a id="line.65">                hashFloors[j] = floors[j] - bit;</a>
-<span class="sourceLineNo">066</span><a id="line.66">            }</a>
-<span class="sourceLineNo">067</span><a id="line.67">            sum += temp * yolk.hash(hashFloors);</a>
-<span class="sourceLineNo">068</span><a id="line.68">        }</a>
-<span class="sourceLineNo">069</span><a id="line.69">        return (sum * 0x1p-32 + 0.5);</a>
-<span class="sourceLineNo">070</span><a id="line.70">    }</a>
-<span class="sourceLineNo">071</span><a id="line.71"></a>
-<span class="sourceLineNo">072</span><a id="line.72">    public double getNoise(double... args) {</a>
-<span class="sourceLineNo">073</span><a id="line.73">        for (int v = 0; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">074</span><a id="line.74">            points[v] = 0.0;</a>
-<span class="sourceLineNo">075</span><a id="line.75">            for (int d = 0; d &lt; dim; d++) {</a>
-<span class="sourceLineNo">076</span><a id="line.76">                points[v] += args[d] * vertices[v][d];</a>
-<span class="sourceLineNo">077</span><a id="line.77">            }</a>
-<span class="sourceLineNo">078</span><a id="line.78">        }</a>
-<span class="sourceLineNo">079</span><a id="line.79">        working[dim] = Math.PI;</a>
-<span class="sourceLineNo">080</span><a id="line.80">        double result = 0.0, warp = 0.0;</a>
-<span class="sourceLineNo">081</span><a id="line.81">        for (int i = 0; i &lt;= dim; i++) {</a>
-<span class="sourceLineNo">082</span><a id="line.82">            for (int j = 0, d = 0; j &lt; dim; j++, d++) {</a>
-<span class="sourceLineNo">083</span><a id="line.83">                if(d == i) d++;</a>
-<span class="sourceLineNo">084</span><a id="line.84">                working[j] = points[d];</a>
-<span class="sourceLineNo">085</span><a id="line.85">            }</a>
-<span class="sourceLineNo">086</span><a id="line.86">            working[0] += warp;</a>
-<span class="sourceLineNo">087</span><a id="line.87">            warp = valueNoise();</a>
-<span class="sourceLineNo">088</span><a id="line.88">            result += warp;</a>
-<span class="sourceLineNo">089</span><a id="line.89">            working[dim] += Math.E;</a>
-<span class="sourceLineNo">090</span><a id="line.90">        }</a>
-<span class="sourceLineNo">091</span><a id="line.91">        result *= inverse;</a>
-<span class="sourceLineNo">092</span><a id="line.92">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">093</span><a id="line.93">                ? Math.pow(result * 2, dim) - 1.0</a>
-<span class="sourceLineNo">094</span><a id="line.94">                : Math.pow((result - 1) * 2, dim) * (((dim &amp; 1) &lt;&lt; 1) - 1) + 1.0;</a>
-<span class="sourceLineNo">095</span><a id="line.95">//        for (int i = 1; i &lt; dim; i++) {</a>
-<span class="sourceLineNo">096</span><a id="line.96">//            result *= result * (3.0 - 2.0 * result);</a>
-<span class="sourceLineNo">097</span><a id="line.97">//        }</a>
-<span class="sourceLineNo">098</span><a id="line.98">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
-<span class="sourceLineNo">099</span><a id="line.99">    }</a>
-<span class="sourceLineNo">100</span><a id="line.100"></a>
-<span class="sourceLineNo">101</span><a id="line.101">    public double getNoise(double x, double y) {</a>
-<span class="sourceLineNo">102</span><a id="line.102">        points[0] = -0.4161468365471422 * x + 0.9092974268256818 * y;</a>
-<span class="sourceLineNo">103</span><a id="line.103">        points[1] = -0.5794012529532914 * x + -0.8150424455671962 * y;</a>
-<span class="sourceLineNo">104</span><a id="line.104">        points[2] = 0.9955480895004332 * x + -0.09425498125848553 * y;</a>
-<span class="sourceLineNo">105</span><a id="line.105">        working[dim] = Math.PI;</a>
-<span class="sourceLineNo">106</span><a id="line.106">        double result = 0.0, warp = 0.0;</a>
-<span class="sourceLineNo">107</span><a id="line.107">        for (int i = 0; i &lt;= dim; i++) {</a>
-<span class="sourceLineNo">108</span><a id="line.108">            for (int j = 0, d = 0; j &lt; dim; j++, d++) {</a>
-<span class="sourceLineNo">109</span><a id="line.109">                if(d == i) d++;</a>
-<span class="sourceLineNo">110</span><a id="line.110">                working[j] = points[d] + warp;</a>
-<span class="sourceLineNo">111</span><a id="line.111">            }</a>
-<span class="sourceLineNo">112</span><a id="line.112">            warp = valueNoise();</a>
-<span class="sourceLineNo">113</span><a id="line.113">            result += warp;</a>
-<span class="sourceLineNo">114</span><a id="line.114">            working[dim] += Math.E;</a>
-<span class="sourceLineNo">115</span><a id="line.115">        }</a>
-<span class="sourceLineNo">116</span><a id="line.116">        result *= inverse;</a>
-<span class="sourceLineNo">117</span><a id="line.117">        return (result &lt;= 0.5)</a>
-<span class="sourceLineNo">118</span><a id="line.118">                ? (result * result * 4) - 1.0</a>
-<span class="sourceLineNo">119</span><a id="line.119">                : ((result - 1) * (result - 1) * -4) + 1.0;</a>
-<span class="sourceLineNo">120</span><a id="line.120"></a>
-<span class="sourceLineNo">121</span><a id="line.121">//        result *= result * (3.0 - 2.0 * result);</a>
-<span class="sourceLineNo">122</span><a id="line.122">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
-<span class="sourceLineNo">123</span><a id="line.123">    }</a>
-<span class="sourceLineNo">124</span><a id="line.124">    </a>
-<span class="sourceLineNo">125</span><a id="line.125">    void printDebugInfo(){         </a>
-<span class="sourceLineNo">126</span><a id="line.126">        System.out.println("PhantomNoise with Dimension " + dim + ":");</a>
-<span class="sourceLineNo">127</span><a id="line.127">        final String dimNames = "xyzwuvabcdefghijklmnopqrst";</a>
-<span class="sourceLineNo">128</span><a id="line.128">        for (int v = 0; v &lt;= dim; v++) {</a>
-<span class="sourceLineNo">129</span><a id="line.129">            System.out.print("points[" + v + "] = ");</a>
-<span class="sourceLineNo">130</span><a id="line.130">            for (int i = 0; i &lt; dim; i++) {</a>
-<span class="sourceLineNo">131</span><a id="line.131">                if(vertices[v][i] != 0.0) </a>
-<span class="sourceLineNo">132</span><a id="line.132">                {</a>
-<span class="sourceLineNo">133</span><a id="line.133">                    if(i &gt; 0)</a>
-<span class="sourceLineNo">134</span><a id="line.134">                        System.out.print(" + ");</a>
-<span class="sourceLineNo">135</span><a id="line.135">                    if(vertices[v][i] == 1.0)</a>
-<span class="sourceLineNo">136</span><a id="line.136">                        System.out.print(dimNames.charAt(i % dimNames.length()));</a>
-<span class="sourceLineNo">137</span><a id="line.137">                    else </a>
-<span class="sourceLineNo">138</span><a id="line.138">                        System.out.print(dimNames.charAt(i % dimNames.length()) + " * " + vertices[v][i]);</a>
-<span class="sourceLineNo">139</span><a id="line.139">                }</a>
-<span class="sourceLineNo">140</span><a id="line.140">            }</a>
-<span class="sourceLineNo">141</span><a id="line.141">            System.out.println(';');</a>
-<span class="sourceLineNo">142</span><a id="line.142">        }</a>
-<span class="sourceLineNo">143</span><a id="line.143"></a>
-<span class="sourceLineNo">144</span><a id="line.144">    }</a>
-<span class="sourceLineNo">145</span><a id="line.145">}</a>
+<span class="sourceLineNo">009</span><a id="line.9">    public static final PhantomNoise instance2D = new PhantomNoise(MummyNoise.goldenLong[2][0], 2);</a>
+<span class="sourceLineNo">010</span><a id="line.10">    public static final PhantomNoise instance3D = new PhantomNoise(MummyNoise.goldenLong[3][0], 3);</a>
+<span class="sourceLineNo">011</span><a id="line.11">    public static final PhantomNoise instance4D = new PhantomNoise(MummyNoise.goldenLong[4][0], 4);</a>
+<span class="sourceLineNo">012</span><a id="line.12">    public static final PhantomNoise instance5D = new PhantomNoise(MummyNoise.goldenLong[5][0], 5);</a>
+<span class="sourceLineNo">013</span><a id="line.13">    public static final PhantomNoise instance6D = new PhantomNoise(MummyNoise.goldenLong[6][0], 6);</a>
+<span class="sourceLineNo">014</span><a id="line.14">    public static final PhantomNoise instance7D = new PhantomNoise(MummyNoise.goldenLong[7][0], 7);</a>
+<span class="sourceLineNo">015</span><a id="line.15">    public static final PhantomNoise instance8D = new PhantomNoise(MummyNoise.goldenLong[8][0], 8);</a>
+<span class="sourceLineNo">016</span><a id="line.16">    </a>
+<span class="sourceLineNo">017</span><a id="line.17">    private final long[] coefficients;</a>
+<span class="sourceLineNo">018</span><a id="line.18">    public final int dim;</a>
+<span class="sourceLineNo">019</span><a id="line.19">    private final double inverse;</a>
+<span class="sourceLineNo">020</span><a id="line.20">    private final double[] working, points;</a>
+<span class="sourceLineNo">021</span><a id="line.21">    private final double[][] vertices;</a>
+<span class="sourceLineNo">022</span><a id="line.22">    private final int[] floors;</a>
+<span class="sourceLineNo">023</span><a id="line.23">    public PhantomNoise() {</a>
+<span class="sourceLineNo">024</span><a id="line.24">        this(0xFEEDBEEF1337CAFEL, 3);</a>
+<span class="sourceLineNo">025</span><a id="line.25">    }</a>
+<span class="sourceLineNo">026</span><a id="line.26"></a>
+<span class="sourceLineNo">027</span><a id="line.27">    public PhantomNoise(long seed, int dimension) {</a>
+<span class="sourceLineNo">028</span><a id="line.28">        dim = Math.max(2, dimension);</a>
+<span class="sourceLineNo">029</span><a id="line.29">        working = new double[dim+1];</a>
+<span class="sourceLineNo">030</span><a id="line.30">        points = new double[dim+1];</a>
+<span class="sourceLineNo">031</span><a id="line.31">        vertices = new double[dim+1][dim];</a>
+<span class="sourceLineNo">032</span><a id="line.32">        double id = -1.0 / dim;</a>
+<span class="sourceLineNo">033</span><a id="line.33">        vertices[0][0] = 1.0;</a>
+<span class="sourceLineNo">034</span><a id="line.34">        for (int v = 1; v &lt;= dim; v++) {</a>
+<span class="sourceLineNo">035</span><a id="line.35">            vertices[v][0] = id;</a>
+<span class="sourceLineNo">036</span><a id="line.36">        }</a>
+<span class="sourceLineNo">037</span><a id="line.37">        for (int d = 1; d &lt; dim; d++) {</a>
+<span class="sourceLineNo">038</span><a id="line.38">            double t = 0.0;</a>
+<span class="sourceLineNo">039</span><a id="line.39">            for (int i = 0; i &lt; d; i++) {</a>
+<span class="sourceLineNo">040</span><a id="line.40">                t += vertices[d][i] * vertices[d][i];</a>
+<span class="sourceLineNo">041</span><a id="line.41">            }</a>
+<span class="sourceLineNo">042</span><a id="line.42">            vertices[d][d] = Math.sqrt(1.0 - t);</a>
+<span class="sourceLineNo">043</span><a id="line.43">            t = (id - t) / vertices[d][d];</a>
+<span class="sourceLineNo">044</span><a id="line.44">            for (int v = d + 1; v &lt;= dim; v++) {</a>
+<span class="sourceLineNo">045</span><a id="line.45">                vertices[v][d] = t;</a>
+<span class="sourceLineNo">046</span><a id="line.46">            }</a>
+<span class="sourceLineNo">047</span><a id="line.47">        }</a>
+<span class="sourceLineNo">048</span><a id="line.48">        for (int v = 0; v &lt;= dim; v++) {</a>
+<span class="sourceLineNo">049</span><a id="line.49">            final double theta = NumberTools.atan2(vertices[v][1], vertices[v][0]) + 0.6180339887498949,</a>
+<span class="sourceLineNo">050</span><a id="line.50">                    dist = Math.sqrt(vertices[v][1] * vertices[v][1] + vertices[v][0] * vertices[v][0]);</a>
+<span class="sourceLineNo">051</span><a id="line.51">            vertices[v][0] = NumberTools.cos(theta) * dist;</a>
+<span class="sourceLineNo">052</span><a id="line.52">            vertices[v][1] = NumberTools.sin(theta) * dist;</a>
+<span class="sourceLineNo">053</span><a id="line.53">        }</a>
+<span class="sourceLineNo">054</span><a id="line.54">        floors = new int[dim+1];</a>
+<span class="sourceLineNo">055</span><a id="line.55">        coefficients = new long[dim + 1];</a>
+<span class="sourceLineNo">056</span><a id="line.56">        for (int i = 0; i &lt;= dim; i++) {</a>
+<span class="sourceLineNo">057</span><a id="line.57">            coefficients[i] = LightRNG.determine(seed ^ i) | 0x8000000000000001L;</a>
+<span class="sourceLineNo">058</span><a id="line.58">        }</a>
+<span class="sourceLineNo">059</span><a id="line.59">        inverse = 1.0 / (dim + 1.0);</a>
+<span class="sourceLineNo">060</span><a id="line.60">//        printDebugInfo();</a>
+<span class="sourceLineNo">061</span><a id="line.61">    }</a>
+<span class="sourceLineNo">062</span><a id="line.62"></a>
+<span class="sourceLineNo">063</span><a id="line.63">    protected double valueNoise()</a>
+<span class="sourceLineNo">064</span><a id="line.64">    {</a>
+<span class="sourceLineNo">065</span><a id="line.65">        final long sd = coefficients[dim] * NumberTools.doubleToMixedIntBits(working[dim]);</a>
+<span class="sourceLineNo">066</span><a id="line.66">        for (int i = 0; i &lt; dim; i++) {</a>
+<span class="sourceLineNo">067</span><a id="line.67">            floors[i] = working[i] &gt;= 0.0 ? (int)working[i] : (int)working[i] - 1;</a>
+<span class="sourceLineNo">068</span><a id="line.68">            working[i] -= floors[i];</a>
+<span class="sourceLineNo">069</span><a id="line.69">            working[i] *= working[i] * (3.0 - 2.0 * working[i]);</a>
+<span class="sourceLineNo">070</span><a id="line.70">        }</a>
+<span class="sourceLineNo">071</span><a id="line.71">        double sum = 0.0, temp;</a>
+<span class="sourceLineNo">072</span><a id="line.72">        final int limit = 1 &lt;&lt; dim;</a>
+<span class="sourceLineNo">073</span><a id="line.73">        int bit;</a>
+<span class="sourceLineNo">074</span><a id="line.74">        for (int i = 0; i &lt; limit; i++) {</a>
+<span class="sourceLineNo">075</span><a id="line.75">            temp = 1.0;</a>
+<span class="sourceLineNo">076</span><a id="line.76">            long dot = sd;</a>
+<span class="sourceLineNo">077</span><a id="line.77">            for (int j = 0; j &lt; dim; j++) {</a>
+<span class="sourceLineNo">078</span><a id="line.78">                bit = (i &gt;&gt;&gt; j &amp; 1);</a>
+<span class="sourceLineNo">079</span><a id="line.79">                temp *= bit + (1|-bit) * working[j];</a>
+<span class="sourceLineNo">080</span><a id="line.80">                dot += (floors[j] - bit) * coefficients[j];</a>
+<span class="sourceLineNo">081</span><a id="line.81">            }</a>
+<span class="sourceLineNo">082</span><a id="line.82">            sum += temp * (int)(dot ^ dot &gt;&gt;&gt; 23 ^ dot &gt;&gt;&gt; 37);</a>
+<span class="sourceLineNo">083</span><a id="line.83">        }</a>
+<span class="sourceLineNo">084</span><a id="line.84">        return (sum * 0x1p-32 + 0.5);</a>
+<span class="sourceLineNo">085</span><a id="line.85">    }</a>
+<span class="sourceLineNo">086</span><a id="line.86"></a>
+<span class="sourceLineNo">087</span><a id="line.87">    public double getNoise(double... args) {</a>
+<span class="sourceLineNo">088</span><a id="line.88">        for (int v = 0; v &lt;= dim; v++) {</a>
+<span class="sourceLineNo">089</span><a id="line.89">            points[v] = 0.0;</a>
+<span class="sourceLineNo">090</span><a id="line.90">            for (int d = 0; d &lt; dim; d++) {</a>
+<span class="sourceLineNo">091</span><a id="line.91">                points[v] += args[d] * vertices[v][d];</a>
+<span class="sourceLineNo">092</span><a id="line.92">            }</a>
+<span class="sourceLineNo">093</span><a id="line.93">        }</a>
+<span class="sourceLineNo">094</span><a id="line.94">        working[dim] = 0.6180339887498949; // inverse golden ratio; irrational, so its bit representation nears random</a>
+<span class="sourceLineNo">095</span><a id="line.95">        double result = 0.0, warp = 0.0;</a>
+<span class="sourceLineNo">096</span><a id="line.96">        for (int i = 0; i &lt;= dim; i++) {</a>
+<span class="sourceLineNo">097</span><a id="line.97">            for (int j = 0, d = 0; j &lt; dim; j++, d++) {</a>
+<span class="sourceLineNo">098</span><a id="line.98">                if(d == i) d++;</a>
+<span class="sourceLineNo">099</span><a id="line.99">                working[j] = points[d];</a>
+<span class="sourceLineNo">100</span><a id="line.100">            }</a>
+<span class="sourceLineNo">101</span><a id="line.101">            working[0] += warp;</a>
+<span class="sourceLineNo">102</span><a id="line.102">            warp = valueNoise();</a>
+<span class="sourceLineNo">103</span><a id="line.103">            result += warp;</a>
+<span class="sourceLineNo">104</span><a id="line.104">            working[dim] += -0.423310825130748; // e - pi</a>
+<span class="sourceLineNo">105</span><a id="line.105">        }</a>
+<span class="sourceLineNo">106</span><a id="line.106">        result *= inverse;</a>
+<span class="sourceLineNo">107</span><a id="line.107">        return (result &lt;= 0.5)</a>
+<span class="sourceLineNo">108</span><a id="line.108">                ? Math.pow(result * 2, dim) - 1.0</a>
+<span class="sourceLineNo">109</span><a id="line.109">                : Math.pow((result - 1) * 2, dim) * (((dim &amp; 1) &lt;&lt; 1) - 1) + 1.0;</a>
+<span class="sourceLineNo">110</span><a id="line.110">//        for (int i = 1; i &lt; dim; i++) {</a>
+<span class="sourceLineNo">111</span><a id="line.111">//            result *= result * (3.0 - 2.0 * result);</a>
+<span class="sourceLineNo">112</span><a id="line.112">//        }</a>
+<span class="sourceLineNo">113</span><a id="line.113">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
+<span class="sourceLineNo">114</span><a id="line.114">    }</a>
+<span class="sourceLineNo">115</span><a id="line.115"></a>
+<span class="sourceLineNo">116</span><a id="line.116">    public double getNoise2D(double x, double y) {</a>
+<span class="sourceLineNo">117</span><a id="line.117">        points[0] = -0.4161468365471422 * x + 0.9092974268256818 * y;</a>
+<span class="sourceLineNo">118</span><a id="line.118">        points[1] = -0.5794012529532914 * x + -0.8150424455671962 * y;</a>
+<span class="sourceLineNo">119</span><a id="line.119">        points[2] = 0.9955480895004332 * x + -0.09425498125848553 * y;</a>
+<span class="sourceLineNo">120</span><a id="line.120">        working[dim] = Math.PI;</a>
+<span class="sourceLineNo">121</span><a id="line.121">        double result = 0.0, warp = 0.0;</a>
+<span class="sourceLineNo">122</span><a id="line.122">        for (int i = 0; i &lt;= dim; i++) {</a>
+<span class="sourceLineNo">123</span><a id="line.123">            for (int j = 0, d = 0; j &lt; dim; j++, d++) {</a>
+<span class="sourceLineNo">124</span><a id="line.124">                if(d == i) d++;</a>
+<span class="sourceLineNo">125</span><a id="line.125">                working[j] = points[d] + warp;</a>
+<span class="sourceLineNo">126</span><a id="line.126">            }</a>
+<span class="sourceLineNo">127</span><a id="line.127">            warp = valueNoise();</a>
+<span class="sourceLineNo">128</span><a id="line.128">            result += warp;</a>
+<span class="sourceLineNo">129</span><a id="line.129">            working[dim] += Math.E;</a>
+<span class="sourceLineNo">130</span><a id="line.130">        }</a>
+<span class="sourceLineNo">131</span><a id="line.131">        result *= inverse;</a>
+<span class="sourceLineNo">132</span><a id="line.132">        return (result &lt;= 0.5)</a>
+<span class="sourceLineNo">133</span><a id="line.133">                ? (result * result * 4) - 1.0</a>
+<span class="sourceLineNo">134</span><a id="line.134">                : ((result - 1) * (result - 1) * -4) + 1.0;</a>
+<span class="sourceLineNo">135</span><a id="line.135"></a>
+<span class="sourceLineNo">136</span><a id="line.136">//        result *= result * (3.0 - 2.0 * result);</a>
+<span class="sourceLineNo">137</span><a id="line.137">//        return  (result * result * (6.0 - 4.0 * result) - 1.0);</a>
+<span class="sourceLineNo">138</span><a id="line.138">    }</a>
+<span class="sourceLineNo">139</span><a id="line.139">    </a>
+<span class="sourceLineNo">140</span><a id="line.140">    void printDebugInfo(){         </a>
+<span class="sourceLineNo">141</span><a id="line.141">        System.out.println("PhantomNoise with Dimension " + dim + ":");</a>
+<span class="sourceLineNo">142</span><a id="line.142">        final String dimNames = "xyzwuvabcdefghijklmnopqrst";</a>
+<span class="sourceLineNo">143</span><a id="line.143">        for (int v = 0; v &lt;= dim; v++) {</a>
+<span class="sourceLineNo">144</span><a id="line.144">            System.out.print("points[" + v + "] = ");</a>
+<span class="sourceLineNo">145</span><a id="line.145">            for (int i = 0; i &lt; dim; i++) {</a>
+<span class="sourceLineNo">146</span><a id="line.146">                if(vertices[v][i] != 0.0) </a>
+<span class="sourceLineNo">147</span><a id="line.147">                {</a>
+<span class="sourceLineNo">148</span><a id="line.148">                    if(i &gt; 0)</a>
+<span class="sourceLineNo">149</span><a id="line.149">                        System.out.print(" + ");</a>
+<span class="sourceLineNo">150</span><a id="line.150">                    if(vertices[v][i] == 1.0)</a>
+<span class="sourceLineNo">151</span><a id="line.151">                        System.out.print(dimNames.charAt(i % dimNames.length()));</a>
+<span class="sourceLineNo">152</span><a id="line.152">                    else </a>
+<span class="sourceLineNo">153</span><a id="line.153">                        System.out.print(dimNames.charAt(i % dimNames.length()) + " * " + vertices[v][i]);</a>
+<span class="sourceLineNo">154</span><a id="line.154">                }</a>
+<span class="sourceLineNo">155</span><a id="line.155">            }</a>
+<span class="sourceLineNo">156</span><a id="line.156">            System.out.println(';');</a>
+<span class="sourceLineNo">157</span><a id="line.157">        }</a>
+<span class="sourceLineNo">158</span><a id="line.158"></a>
+<span class="sourceLineNo">159</span><a id="line.159">    }</a>
+<span class="sourceLineNo">160</span><a id="line.160">}</a>
 
 
 

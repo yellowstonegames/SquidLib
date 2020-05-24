@@ -112,8 +112,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/GreasedZOI.html#calculate()">calculate()</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/GreasedZOI.html" title="class in squidpony.squidai">GreasedZOI</a></dt>
 <dd>
 <div class="block">Finds the zones of influence for each of the influences (inner arrays of Coord) this was constructed with, and
- returns them as packed data (using CoordPacker, which can also be used to unpack the data, merge zones, get
- shared borders, and all sorts of other tricks).</div>
+ returns all zones as a GreasedRegion array.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/ZOI.html#calculate()">calculate()</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/ZOI.html" title="class in squidpony.squidai">ZOI</a></dt>
 <dd>
@@ -695,6 +694,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.ValueCollection.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.ValueCollection.html" title="class in squidpony.squidmath">IntIntOrderedMap.ValueCollection</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
@@ -709,8 +710,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.html" title="class in squidpony.squidmath">OrganizedMap</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/UnorderedMap.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a></dt>
@@ -719,9 +718,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/UnorderedSet.html#clear()">clear()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#clear(int)">clear(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#clear(int)">clear(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
 <dd>
-<div class="block">Clears the map and reduces the size of the backing arrays to be the specified capacity if they are larger.</div>
+<div class="block">Clears the set and reduces the size of the backing arrays to be the specified capacity / loadFactor, if they are larger.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/ISquidPanel.html#clear(int,int)">clear(int, int)</a></span> - Method in interface squidpony.panel.<a href="../squidpony/panel/ISquidPanel.html" title="interface in squidpony.panel">ISquidPanel</a></dt>
 <dd>
@@ -795,6 +794,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets an exact copy of an array of Coord.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#CLOSED">CLOSED</a></span> - Static variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#closeDoors(char%5B%5D%5B%5D)">closeDoors(char[][])</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>
 <div class="block">When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and
@@ -961,6 +962,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.RotationAdjacency.html#composite(int,int,int,int)">composite(int, int, int, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.RotationAdjacency.html" title="class in squidpony.squidgrid">Adjacency.RotationAdjacency</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/ByteStringEncoding.html#compress(byte%5B%5D)">compress(byte[])</a></span> - Static method in class squidpony.<a href="../squidpony/ByteStringEncoding.html" title="class in squidpony">ByteStringEncoding</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/GridCompression.html#compress(byte%5B%5D%5B%5D)">compress(byte[][])</a></span> - Static method in class squidpony.<a href="../squidpony/GridCompression.html" title="class in squidpony">GridCompression</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/GridCompression.html#compress(double%5B%5D%5B%5D)">compress(double[][])</a></span> - Static method in class squidpony.<a href="../squidpony/GridCompression.html" title="class in squidpony">GridCompression</a></dt>
@@ -1074,6 +1077,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Checks if this contains the given identifying number.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#contains(int)">contains(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#contains(int)">contains(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html#contains(int,int)">contains(int, int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dt>
@@ -1091,8 +1096,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/Zone.Skeleton.html#contains(int,int)">contains(int, int)</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#contains(int,int)">contains(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#contains(short)">contains(short)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#contains(short)">contains(short)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
@@ -1636,6 +1639,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlawedRandomness.BigCounter.html#copy()">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlawedRandomness.BigCounter.html" title="class in squidpony.squidmath">FlawedRandomness.BigCounter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GearRNG.html#copy()">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GearRNG.html" title="class in squidpony.squidmath">GearRNG</a></dt>
+<dd>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoatRNG.html#copy()">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">GoatRNG</a></dt>
 <dd>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called.</div>

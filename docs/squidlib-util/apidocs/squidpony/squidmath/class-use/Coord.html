@@ -1455,31 +1455,22 @@ char[][]&nbsp;dungeon,
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int[]</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">GreasedZOI.</span><code><span class="memberNameLink"><a href="../../squidai/GreasedZOI.html#nearestInfluences(short%5B%5D%5B%5D,squidpony.squidmath.Coord)">nearestInfluences</a></span>&#8203;(short[][]&nbsp;zones,
-<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
-<td class="colLast">
-<div class="block">Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all
- influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="../IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedZOI.</span><code><span class="memberNameLink"><a href="../../squidai/GreasedZOI.html#nearestInfluences(squidpony.squidmath.Coord)">nearestInfluences</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">This can be given a Coord to check in the results of the latest calculate() call.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>int[]</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedZOI.</span><code><span class="memberNameLink"><a href="../../squidai/GreasedZOI.html#nearestInfluences(squidpony.squidmath.GreasedRegion%5B%5D,squidpony.squidmath.Coord)">nearestInfluences</a></span>&#8203;(<a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>[]&nbsp;zones,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
 <td class="colLast">
-<div class="block">Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all
- influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</div>
+<div class="block">Given the zones resulting from this class' <a href="../../squidai/GreasedZOI.html#calculate()"><code>GreasedZOI.calculate()</code></a> method and a Coord to check, finds the indices of
+ all influencing groups in zones that have the Coord in their area, and returns all such indices as an IntVLA.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ZOI.</span><code><span class="memberNameLink"><a href="../../squidai/ZOI.html#nearestInfluences(short%5B%5D%5B%5D,squidpony.squidmath.Coord)">nearestInfluences</a></span>&#8203;(short[][]&nbsp;zones,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
@@ -1488,14 +1479,14 @@ char[][]&nbsp;dungeon,
  influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ZOI.</span><code><span class="memberNameLink"><a href="../../squidai/ZOI.html#nearestInfluences(squidpony.squidmath.Coord)">nearestInfluences</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">This can be given a Coord to check in the results of the latest calculate() call.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#partialScan(int,squidpony.squidmath.Coord,java.util.Collection,int)">partialScan</a></span>&#8203;(int&nbsp;limit,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
@@ -1505,7 +1496,7 @@ int&nbsp;size)</code></th>
 <div class="block">Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#partialScan(squidpony.squidmath.Coord,int,java.util.Collection)">partialScan</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 int&nbsp;limit,
@@ -1514,7 +1505,7 @@ int&nbsp;limit,
 <div class="block">Recalculate the Dijkstra map up to a limit and return it.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#partialScan(squidpony.squidmath.Coord,int,java.util.Collection,boolean)">partialScan</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 int&nbsp;limit,
@@ -1524,7 +1515,7 @@ boolean&nbsp;nonZeroOptimum)</code></th>
 <div class="block">Recalculate the Dijkstra map up to a limit and return it.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Technique.</span><code><span class="memberNameLink"><a href="../../squidai/Technique.html#possibleTargets(squidpony.squidmath.Coord)">possibleTargets</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user)</code></th>
 <td class="colLast">
@@ -1532,7 +1523,7 @@ boolean&nbsp;nonZeroOptimum)</code></th>
  in a GreasedRegion.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Technique.</span><code><span class="memberNameLink"><a href="../../squidai/Technique.html#possibleTargets(squidpony.squidmath.Coord,double%5B%5D%5B%5D)">possibleTargets</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;user,
 double[][]&nbsp;resistanceMap)</code></th>
@@ -1541,14 +1532,14 @@ double[][]&nbsp;resistanceMap)</code></th>
  in a GreasedRegion.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#resetCell(squidpony.squidmath.Coord)">resetCell</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</code></th>
 <td class="colLast">
 <div class="block">Reverts a cell to the value stored in the original state of the level as known by physicalMap.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#scan(squidpony.squidmath.Coord,java.util.Collection)">scan</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</code></th>
@@ -1556,7 +1547,7 @@ double[][]&nbsp;resistanceMap)</code></th>
 <div class="block">Recalculate the Dijkstra map and return it.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#scan(squidpony.squidmath.Coord,java.util.Collection,boolean)">scan</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
@@ -1565,7 +1556,7 @@ boolean&nbsp;nonZeroOptimum)</code></th>
 <div class="block">Recalculate the Dijkstra map and return it.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#scan(squidpony.squidmath.Coord,java.util.Collection,int)">scan</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable,
@@ -1574,27 +1565,27 @@ int&nbsp;size)</code></th>
 <div class="block">Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BlastAOE.html#setCenter(squidpony.squidmath.Coord)">setCenter</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BurstAOE.html#setCenter(squidpony.squidmath.Coord)">setCenter</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../squidai/CloudAOE.html#setCenter(squidpony.squidmath.Coord)">setCenter</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../squidai/PointAOE.html#setCenter(squidpony.squidmath.Coord)">setCenter</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#setCost(squidpony.squidmath.Coord,double)">setCost</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt,
 double&nbsp;cost)</code></th>
@@ -1603,50 +1594,50 @@ double&nbsp;cost)</code></th>
  the cost to the value of the WALL field).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BeamAOE.html#setEnd(squidpony.squidmath.Coord)">setEnd</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../squidai/LineAOE.html#setEnd(squidpony.squidmath.Coord)">setEnd</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../squidai/ConeAOE.html#setEndCenter(squidpony.squidmath.Coord)">setEndCenter</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;endCenter)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#setGoal(squidpony.squidmath.Coord)">setGoal</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</code></th>
 <td class="colLast">
 <div class="block">Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DijkstraMap.</span><code><span class="memberNameLink"><a href="../../squidai/DijkstraMap.html#setGoals(squidpony.squidmath.Coord%5B%5D)">setGoals</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;pts)</code></th>
 <td class="colLast">
 <div class="block">Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedZOI.</span><code><span class="memberNameLink"><a href="../../squidai/GreasedZOI.html#setInfluences(squidpony.squidmath.Coord%5B%5D%5B%5D)">setInfluences</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>[][]&nbsp;influences)</code></th>
 <td class="colLast">
 <div class="block">Changes the influencing groups.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ZOI.</span><code><span class="memberNameLink"><a href="../../squidai/ZOI.html#setInfluences(squidpony.squidmath.Coord%5B%5D%5B%5D)">setInfluences</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>[][]&nbsp;influences)</code></th>
 <td class="colLast">
 <div class="block">Changes the influencing groups.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../squidai/AOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">
@@ -1656,42 +1647,42 @@ double&nbsp;cost)</code></th>
  have a maxRange at which they can deliver that effect).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BeamAOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BlastAOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BurstAOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../squidai/CloudAOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../squidai/ConeAOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../squidai/LineAOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../squidai/PointAOE.html#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../squidai/AOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">
@@ -1699,42 +1690,42 @@ double&nbsp;cost)</code></th>
  without changing any other properties of the AOE.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BeamAOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BlastAOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BurstAOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../squidai/CloudAOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../squidai/ConeAOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../squidai/LineAOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../squidai/PointAOE.html#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">AreaUtils.</span><code><span class="memberNameLink"><a href="../../squidai/AreaUtils.html#verifyLimit(squidpony.squidai.AimLimit,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">verifyLimit</a></span>&#8203;(<a href="../../squidai/AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;limit,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
@@ -1744,7 +1735,7 @@ double&nbsp;cost)</code></th>
  rules specified by limit.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">AreaUtils.</span><code><span class="memberNameLink"><a href="../../squidai/AreaUtils.html#verifyReach(squidpony.squidai.Reach,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">verifyReach</a></span>&#8203;(<a href="../../squidai/Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;reach,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
@@ -2616,6 +2607,27 @@ char[][]&nbsp;map,
 </tbody>
 </table>
 </div>
+<div class="useSummary">
+<table>
+<caption><span>Constructor parameters in <a href="../../squidai/package-summary.html">squidpony.squidai</a> with type arguments of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<thead>
+<tr>
+<th class="colFirst" scope="col">Constructor</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="altColor">
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../../squidai/GreasedZOI.html#%3Cinit%3E(java.util.Collection,char%5B%5D%5B%5D,squidpony.squidgrid.Radius)">GreasedZOI</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;influences,
+char[][]&nbsp;map,
+<a href="../../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement)</code></th>
+<td class="colLast">
+<div class="block">Constructs a Zone of Influence map.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </li>
 <li class="blockList">
@@ -2649,11 +2661,24 @@ char[][]&nbsp;map,
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#DIJKSTRA">DIJKSTRA</a></span></code></th>
+<td class="colLast">
+<div class="block">A predefined Heuristic for Coord nodes in a 2D plane where the heuristic is not used, and all cells are
+ considered equivalent regardless of actual distance.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#EUCLIDEAN">EUCLIDEAN</a></span></code></th>
 <td class="colLast">
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where all movement is calculated "as-the-crow-flies," using
  the standard Pythagorean formula for distance as in the real world.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#HEURISTICS">HEURISTICS</a></span></code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
@@ -2716,6 +2741,27 @@ char[][]&nbsp;map,
 <td class="colLast">
 <div class="block">Returns the unique index of the given node.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="useSummary">
+<table>
+<caption><span>Method parameters in <a href="../../squidai/astar/package-summary.html">squidpony.squidai.astar</a> with type arguments of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<thead>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#show(java.lang.StringBuilder,squidpony.squidai.astar.Pathfinder,squidpony.squidai.astar.Pathfinder.Metrics)">show</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;sb,
+<a href="../../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;pathfinder,
+<a href="../../squidai/astar/Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a>&nbsp;metrics)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
 </table>

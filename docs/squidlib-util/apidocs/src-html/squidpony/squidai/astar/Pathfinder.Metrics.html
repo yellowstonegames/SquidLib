@@ -67,9 +67,9 @@
 <span class="sourceLineNo">055</span><a id="line.55">        /** The unique ID for each search run. Used to mark nodes. */</a>
 <span class="sourceLineNo">056</span><a id="line.56">        private int searchId;</a>
 <span class="sourceLineNo">057</span><a id="line.57"></a>
-<span class="sourceLineNo">058</span><a id="line.58">        private static final int UNVISITED = 0;</a>
-<span class="sourceLineNo">059</span><a id="line.59">        private static final int OPEN = 1;</a>
-<span class="sourceLineNo">060</span><a id="line.60">        private static final int CLOSED = 2;</a>
+<span class="sourceLineNo">058</span><a id="line.58">        public static final int UNVISITED = 0;</a>
+<span class="sourceLineNo">059</span><a id="line.59">        public static final int OPEN = 1;</a>
+<span class="sourceLineNo">060</span><a id="line.60">        public static final int CLOSED = 2;</a>
 <span class="sourceLineNo">061</span><a id="line.61"></a>
 <span class="sourceLineNo">062</span><a id="line.62">        public Pathfinder(Graph&lt;N&gt; graph) {</a>
 <span class="sourceLineNo">063</span><a id="line.63">                this(graph, false);</a>
@@ -257,116 +257,120 @@
 <span class="sourceLineNo">245</span><a id="line.245"></a>
 <span class="sourceLineNo">246</span><a id="line.246">                        // Update node record's cost and connection</a>
 <span class="sourceLineNo">247</span><a id="line.247">                        nodeRecord.costSoFar = nodeCost;</a>
-<span class="sourceLineNo">248</span><a id="line.248">                        nodeRecord.connection = connection;</a>
-<span class="sourceLineNo">249</span><a id="line.249"></a>
-<span class="sourceLineNo">250</span><a id="line.250">                        // Add it to the open list with the estimated total cost</a>
-<span class="sourceLineNo">251</span><a id="line.251">                        addToOpenList(nodeRecord, nodeCost + nodeHeuristic);</a>
-<span class="sourceLineNo">252</span><a id="line.252">                }</a>
-<span class="sourceLineNo">253</span><a id="line.253"></a>
-<span class="sourceLineNo">254</span><a id="line.254">        }</a>
+<span class="sourceLineNo">248</span><a id="line.248">                        if(metrics != null)</a>
+<span class="sourceLineNo">249</span><a id="line.249">                                metrics.maxCost = Math.max(metrics.maxCost, nodeCost);</a>
+<span class="sourceLineNo">250</span><a id="line.250">                        nodeRecord.connection = connection;</a>
+<span class="sourceLineNo">251</span><a id="line.251"></a>
+<span class="sourceLineNo">252</span><a id="line.252">                        // Add it to the open list with the estimated total cost</a>
+<span class="sourceLineNo">253</span><a id="line.253">                        addToOpenList(nodeRecord, nodeCost + nodeHeuristic);</a>
+<span class="sourceLineNo">254</span><a id="line.254">                }</a>
 <span class="sourceLineNo">255</span><a id="line.255"></a>
-<span class="sourceLineNo">256</span><a id="line.256">        protected void generateConnectionPath (N startNode, List&lt;Connection&lt;N&gt;&gt; outPath) {</a>
+<span class="sourceLineNo">256</span><a id="line.256">        }</a>
 <span class="sourceLineNo">257</span><a id="line.257"></a>
-<span class="sourceLineNo">258</span><a id="line.258">                // Work back along the path, accumulating connections</a>
-<span class="sourceLineNo">259</span><a id="line.259">                // outPath.clear();</a>
-<span class="sourceLineNo">260</span><a id="line.260">                while (current.node != startNode) {</a>
-<span class="sourceLineNo">261</span><a id="line.261">                        outPath.add(current.connection);</a>
-<span class="sourceLineNo">262</span><a id="line.262">                        current = nodeRecords[graph.getIndex(current.connection.getFromNode())];</a>
-<span class="sourceLineNo">263</span><a id="line.263">                }</a>
-<span class="sourceLineNo">264</span><a id="line.264"></a>
-<span class="sourceLineNo">265</span><a id="line.265">                // Reverse the path</a>
-<span class="sourceLineNo">266</span><a id="line.266">                Collections.reverse(outPath);</a>
-<span class="sourceLineNo">267</span><a id="line.267">        }</a>
-<span class="sourceLineNo">268</span><a id="line.268"></a>
-<span class="sourceLineNo">269</span><a id="line.269">        protected void generateNodePath (N startNode, List&lt;N&gt; outPath) {</a>
+<span class="sourceLineNo">258</span><a id="line.258">        protected void generateConnectionPath (N startNode, List&lt;Connection&lt;N&gt;&gt; outPath) {</a>
+<span class="sourceLineNo">259</span><a id="line.259"></a>
+<span class="sourceLineNo">260</span><a id="line.260">                // Work back along the path, accumulating connections</a>
+<span class="sourceLineNo">261</span><a id="line.261">                // outPath.clear();</a>
+<span class="sourceLineNo">262</span><a id="line.262">                while (current.node != startNode) {</a>
+<span class="sourceLineNo">263</span><a id="line.263">                        outPath.add(current.connection);</a>
+<span class="sourceLineNo">264</span><a id="line.264">                        current = nodeRecords[graph.getIndex(current.connection.getFromNode())];</a>
+<span class="sourceLineNo">265</span><a id="line.265">                }</a>
+<span class="sourceLineNo">266</span><a id="line.266"></a>
+<span class="sourceLineNo">267</span><a id="line.267">                // Reverse the path</a>
+<span class="sourceLineNo">268</span><a id="line.268">                Collections.reverse(outPath);</a>
+<span class="sourceLineNo">269</span><a id="line.269">        }</a>
 <span class="sourceLineNo">270</span><a id="line.270"></a>
-<span class="sourceLineNo">271</span><a id="line.271">                // Work back along the path, accumulating nodes</a>
-<span class="sourceLineNo">272</span><a id="line.272">                // outPath.clear();</a>
-<span class="sourceLineNo">273</span><a id="line.273">                while (current.connection != null) {</a>
-<span class="sourceLineNo">274</span><a id="line.274">                        outPath.add(current.node);</a>
-<span class="sourceLineNo">275</span><a id="line.275">                        current = nodeRecords[graph.getIndex(current.connection.getFromNode())];</a>
-<span class="sourceLineNo">276</span><a id="line.276">                }</a>
-<span class="sourceLineNo">277</span><a id="line.277">                outPath.add(startNode);</a>
-<span class="sourceLineNo">278</span><a id="line.278"></a>
-<span class="sourceLineNo">279</span><a id="line.279">                // Reverse the path</a>
-<span class="sourceLineNo">280</span><a id="line.280">                Collections.reverse(outPath);</a>
-<span class="sourceLineNo">281</span><a id="line.281">        }</a>
-<span class="sourceLineNo">282</span><a id="line.282"></a>
-<span class="sourceLineNo">283</span><a id="line.283">        protected void addToOpenList (NodeRecord&lt;N&gt; nodeRecord, float estimatedTotalCost) {</a>
-<span class="sourceLineNo">284</span><a id="line.284">                openList.add(nodeRecord, estimatedTotalCost);</a>
-<span class="sourceLineNo">285</span><a id="line.285">                nodeRecord.category = OPEN;</a>
-<span class="sourceLineNo">286</span><a id="line.286">                if (metrics != null) {</a>
-<span class="sourceLineNo">287</span><a id="line.287">                        metrics.openListAdditions++;</a>
-<span class="sourceLineNo">288</span><a id="line.288">                        metrics.openListPeak = Math.max(metrics.openListPeak, openList.size);</a>
-<span class="sourceLineNo">289</span><a id="line.289">                }</a>
-<span class="sourceLineNo">290</span><a id="line.290">        }</a>
-<span class="sourceLineNo">291</span><a id="line.291"></a>
-<span class="sourceLineNo">292</span><a id="line.292">        protected NodeRecord&lt;N&gt; getNodeRecord (N node) {</a>
-<span class="sourceLineNo">293</span><a id="line.293">                int index = graph.getIndex(node);</a>
-<span class="sourceLineNo">294</span><a id="line.294">                NodeRecord&lt;N&gt; nr = nodeRecords[index];</a>
-<span class="sourceLineNo">295</span><a id="line.295">                if (nr != null) {</a>
-<span class="sourceLineNo">296</span><a id="line.296">                        if (nr.searchId != searchId) {</a>
-<span class="sourceLineNo">297</span><a id="line.297">                                nr.category = UNVISITED;</a>
-<span class="sourceLineNo">298</span><a id="line.298">                                nr.searchId = searchId;</a>
-<span class="sourceLineNo">299</span><a id="line.299">                        }</a>
-<span class="sourceLineNo">300</span><a id="line.300">                        return nr;</a>
-<span class="sourceLineNo">301</span><a id="line.301">                }</a>
-<span class="sourceLineNo">302</span><a id="line.302">                nr = nodeRecords[index] = new NodeRecord&lt;&gt;();</a>
-<span class="sourceLineNo">303</span><a id="line.303">                nr.node = node;</a>
-<span class="sourceLineNo">304</span><a id="line.304">                nr.searchId = searchId;</a>
-<span class="sourceLineNo">305</span><a id="line.305">                return nr;</a>
-<span class="sourceLineNo">306</span><a id="line.306">        }</a>
-<span class="sourceLineNo">307</span><a id="line.307"></a>
-<span class="sourceLineNo">308</span><a id="line.308">        /** This nested class is used to keep track of the information we need for each node during the search.</a>
-<span class="sourceLineNo">309</span><a id="line.309">         * </a>
-<span class="sourceLineNo">310</span><a id="line.310">         * @param &lt;N&gt; Type of node</a>
+<span class="sourceLineNo">271</span><a id="line.271">        protected void generateNodePath (N startNode, List&lt;N&gt; outPath) {</a>
+<span class="sourceLineNo">272</span><a id="line.272"></a>
+<span class="sourceLineNo">273</span><a id="line.273">                // Work back along the path, accumulating nodes</a>
+<span class="sourceLineNo">274</span><a id="line.274">                // outPath.clear();</a>
+<span class="sourceLineNo">275</span><a id="line.275">                while (current.connection != null) {</a>
+<span class="sourceLineNo">276</span><a id="line.276">                        outPath.add(current.node);</a>
+<span class="sourceLineNo">277</span><a id="line.277">                        current = nodeRecords[graph.getIndex(current.connection.getFromNode())];</a>
+<span class="sourceLineNo">278</span><a id="line.278">                }</a>
+<span class="sourceLineNo">279</span><a id="line.279">                outPath.add(startNode);</a>
+<span class="sourceLineNo">280</span><a id="line.280"></a>
+<span class="sourceLineNo">281</span><a id="line.281">                // Reverse the path</a>
+<span class="sourceLineNo">282</span><a id="line.282">                Collections.reverse(outPath);</a>
+<span class="sourceLineNo">283</span><a id="line.283">        }</a>
+<span class="sourceLineNo">284</span><a id="line.284"></a>
+<span class="sourceLineNo">285</span><a id="line.285">        protected void addToOpenList (NodeRecord&lt;N&gt; nodeRecord, float estimatedTotalCost) {</a>
+<span class="sourceLineNo">286</span><a id="line.286">                openList.add(nodeRecord, estimatedTotalCost);</a>
+<span class="sourceLineNo">287</span><a id="line.287">                nodeRecord.category = OPEN;</a>
+<span class="sourceLineNo">288</span><a id="line.288">                if (metrics != null) {</a>
+<span class="sourceLineNo">289</span><a id="line.289">                        metrics.openListAdditions++;</a>
+<span class="sourceLineNo">290</span><a id="line.290">                        metrics.openListPeak = Math.max(metrics.openListPeak, openList.size);</a>
+<span class="sourceLineNo">291</span><a id="line.291">                }</a>
+<span class="sourceLineNo">292</span><a id="line.292">        }</a>
+<span class="sourceLineNo">293</span><a id="line.293"></a>
+<span class="sourceLineNo">294</span><a id="line.294">        protected NodeRecord&lt;N&gt; getNodeRecord (N node) {</a>
+<span class="sourceLineNo">295</span><a id="line.295">                int index = graph.getIndex(node);</a>
+<span class="sourceLineNo">296</span><a id="line.296">                NodeRecord&lt;N&gt; nr = nodeRecords[index];</a>
+<span class="sourceLineNo">297</span><a id="line.297">                if (nr != null) {</a>
+<span class="sourceLineNo">298</span><a id="line.298">                        if (nr.searchId != searchId) {</a>
+<span class="sourceLineNo">299</span><a id="line.299">                                nr.category = UNVISITED;</a>
+<span class="sourceLineNo">300</span><a id="line.300">                                nr.searchId = searchId;</a>
+<span class="sourceLineNo">301</span><a id="line.301">                        }</a>
+<span class="sourceLineNo">302</span><a id="line.302">                        return nr;</a>
+<span class="sourceLineNo">303</span><a id="line.303">                }</a>
+<span class="sourceLineNo">304</span><a id="line.304">                nr = nodeRecords[index] = new NodeRecord&lt;&gt;();</a>
+<span class="sourceLineNo">305</span><a id="line.305">                nr.node = node;</a>
+<span class="sourceLineNo">306</span><a id="line.306">                nr.searchId = searchId;</a>
+<span class="sourceLineNo">307</span><a id="line.307">                return nr;</a>
+<span class="sourceLineNo">308</span><a id="line.308">        }</a>
+<span class="sourceLineNo">309</span><a id="line.309"></a>
+<span class="sourceLineNo">310</span><a id="line.310">        /** This nested class is used to keep track of the information we need for each node during the search.</a>
 <span class="sourceLineNo">311</span><a id="line.311">         * </a>
-<span class="sourceLineNo">312</span><a id="line.312">         * @author davebaol */</a>
-<span class="sourceLineNo">313</span><a id="line.313">        static class NodeRecord&lt;N&gt; extends BinaryHeap.Node {</a>
-<span class="sourceLineNo">314</span><a id="line.314">                /** The reference to the node. */</a>
-<span class="sourceLineNo">315</span><a id="line.315">                N node;</a>
-<span class="sourceLineNo">316</span><a id="line.316"></a>
-<span class="sourceLineNo">317</span><a id="line.317">                /** The incoming connection to the node */</a>
-<span class="sourceLineNo">318</span><a id="line.318">                Connection&lt;N&gt; connection;</a>
-<span class="sourceLineNo">319</span><a id="line.319"></a>
-<span class="sourceLineNo">320</span><a id="line.320">                /** The actual cost from the start node. */</a>
-<span class="sourceLineNo">321</span><a id="line.321">                float costSoFar;</a>
-<span class="sourceLineNo">322</span><a id="line.322"></a>
-<span class="sourceLineNo">323</span><a id="line.323">                /** The node category: {@link #UNVISITED}, {@link #OPEN} or {@link #CLOSED}. */</a>
-<span class="sourceLineNo">324</span><a id="line.324">                int category;</a>
-<span class="sourceLineNo">325</span><a id="line.325"></a>
-<span class="sourceLineNo">326</span><a id="line.326">                /** ID of the current search. */</a>
-<span class="sourceLineNo">327</span><a id="line.327">                int searchId;</a>
-<span class="sourceLineNo">328</span><a id="line.328"></a>
-<span class="sourceLineNo">329</span><a id="line.329">                /** Creates a {@code NodeRecord}. */</a>
-<span class="sourceLineNo">330</span><a id="line.330">                public NodeRecord () {</a>
-<span class="sourceLineNo">331</span><a id="line.331">                        super(0);</a>
-<span class="sourceLineNo">332</span><a id="line.332">                }</a>
-<span class="sourceLineNo">333</span><a id="line.333"></a>
-<span class="sourceLineNo">334</span><a id="line.334">                /** Returns the estimated total cost. */</a>
-<span class="sourceLineNo">335</span><a id="line.335">                public float getEstimatedTotalCost () {</a>
-<span class="sourceLineNo">336</span><a id="line.336">                        return getValue();</a>
-<span class="sourceLineNo">337</span><a id="line.337">                }</a>
-<span class="sourceLineNo">338</span><a id="line.338">        }</a>
-<span class="sourceLineNo">339</span><a id="line.339"></a>
-<span class="sourceLineNo">340</span><a id="line.340">        /** A class used by {@link Pathfinder} to collect search metrics.</a>
-<span class="sourceLineNo">341</span><a id="line.341">         * </a>
-<span class="sourceLineNo">342</span><a id="line.342">         * @author davebaol */</a>
-<span class="sourceLineNo">343</span><a id="line.343">        public static class Metrics {</a>
-<span class="sourceLineNo">344</span><a id="line.344">                public int visitedNodes;</a>
-<span class="sourceLineNo">345</span><a id="line.345">                public int openListAdditions;</a>
-<span class="sourceLineNo">346</span><a id="line.346">                public int openListPeak;</a>
-<span class="sourceLineNo">347</span><a id="line.347"></a>
-<span class="sourceLineNo">348</span><a id="line.348">                public Metrics () {</a>
-<span class="sourceLineNo">349</span><a id="line.349">                }</a>
+<span class="sourceLineNo">312</span><a id="line.312">         * @param &lt;N&gt; Type of node</a>
+<span class="sourceLineNo">313</span><a id="line.313">         * </a>
+<span class="sourceLineNo">314</span><a id="line.314">         * @author davebaol */</a>
+<span class="sourceLineNo">315</span><a id="line.315">        static class NodeRecord&lt;N&gt; extends BinaryHeap.Node {</a>
+<span class="sourceLineNo">316</span><a id="line.316">                /** The reference to the node. */</a>
+<span class="sourceLineNo">317</span><a id="line.317">                N node;</a>
+<span class="sourceLineNo">318</span><a id="line.318"></a>
+<span class="sourceLineNo">319</span><a id="line.319">                /** The incoming connection to the node */</a>
+<span class="sourceLineNo">320</span><a id="line.320">                Connection&lt;N&gt; connection;</a>
+<span class="sourceLineNo">321</span><a id="line.321"></a>
+<span class="sourceLineNo">322</span><a id="line.322">                /** The actual cost from the start node. */</a>
+<span class="sourceLineNo">323</span><a id="line.323">                float costSoFar;</a>
+<span class="sourceLineNo">324</span><a id="line.324"></a>
+<span class="sourceLineNo">325</span><a id="line.325">                /** The node category: {@link #UNVISITED}, {@link #OPEN} or {@link #CLOSED}. */</a>
+<span class="sourceLineNo">326</span><a id="line.326">                int category;</a>
+<span class="sourceLineNo">327</span><a id="line.327"></a>
+<span class="sourceLineNo">328</span><a id="line.328">                /** ID of the current search. */</a>
+<span class="sourceLineNo">329</span><a id="line.329">                int searchId;</a>
+<span class="sourceLineNo">330</span><a id="line.330"></a>
+<span class="sourceLineNo">331</span><a id="line.331">                /** Creates a {@code NodeRecord}. */</a>
+<span class="sourceLineNo">332</span><a id="line.332">                public NodeRecord () {</a>
+<span class="sourceLineNo">333</span><a id="line.333">                        super(0);</a>
+<span class="sourceLineNo">334</span><a id="line.334">                }</a>
+<span class="sourceLineNo">335</span><a id="line.335"></a>
+<span class="sourceLineNo">336</span><a id="line.336">                /** Returns the estimated total cost. */</a>
+<span class="sourceLineNo">337</span><a id="line.337">                public float getEstimatedTotalCost () {</a>
+<span class="sourceLineNo">338</span><a id="line.338">                        return getValue();</a>
+<span class="sourceLineNo">339</span><a id="line.339">                }</a>
+<span class="sourceLineNo">340</span><a id="line.340">        }</a>
+<span class="sourceLineNo">341</span><a id="line.341"></a>
+<span class="sourceLineNo">342</span><a id="line.342">        /** A class used by {@link Pathfinder} to collect search metrics.</a>
+<span class="sourceLineNo">343</span><a id="line.343">         * </a>
+<span class="sourceLineNo">344</span><a id="line.344">         * @author davebaol */</a>
+<span class="sourceLineNo">345</span><a id="line.345">        public static class Metrics {</a>
+<span class="sourceLineNo">346</span><a id="line.346">                public int visitedNodes;</a>
+<span class="sourceLineNo">347</span><a id="line.347">                public int openListAdditions;</a>
+<span class="sourceLineNo">348</span><a id="line.348">                public int openListPeak;</a>
+<span class="sourceLineNo">349</span><a id="line.349">                public float maxCost;</a>
 <span class="sourceLineNo">350</span><a id="line.350"></a>
-<span class="sourceLineNo">351</span><a id="line.351">                public void reset () {</a>
-<span class="sourceLineNo">352</span><a id="line.352">                        visitedNodes = 0;</a>
-<span class="sourceLineNo">353</span><a id="line.353">                        openListAdditions = 0;</a>
-<span class="sourceLineNo">354</span><a id="line.354">                        openListPeak = 0;</a>
-<span class="sourceLineNo">355</span><a id="line.355">                }</a>
-<span class="sourceLineNo">356</span><a id="line.356">        }</a>
-<span class="sourceLineNo">357</span><a id="line.357">}</a>
+<span class="sourceLineNo">351</span><a id="line.351">                public Metrics () {</a>
+<span class="sourceLineNo">352</span><a id="line.352">                }</a>
+<span class="sourceLineNo">353</span><a id="line.353"></a>
+<span class="sourceLineNo">354</span><a id="line.354">                public void reset () {</a>
+<span class="sourceLineNo">355</span><a id="line.355">                        visitedNodes = 0;</a>
+<span class="sourceLineNo">356</span><a id="line.356">                        openListAdditions = 0;</a>
+<span class="sourceLineNo">357</span><a id="line.357">                        openListPeak = 0;</a>
+<span class="sourceLineNo">358</span><a id="line.358">                        maxCost = 0f;</a>
+<span class="sourceLineNo">359</span><a id="line.359">                }</a>
+<span class="sourceLineNo">360</span><a id="line.360">        }</a>
+<span class="sourceLineNo">361</span><a id="line.361">}</a>
 
 
 

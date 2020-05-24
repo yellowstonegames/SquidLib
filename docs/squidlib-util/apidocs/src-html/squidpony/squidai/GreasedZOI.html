@@ -17,237 +17,247 @@
 <span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.*;</a>
 <span class="sourceLineNo">006</span><a id="line.6"></a>
 <span class="sourceLineNo">007</span><a id="line.7">import java.io.Serializable;</a>
-<span class="sourceLineNo">008</span><a id="line.8"></a>
-<span class="sourceLineNo">009</span><a id="line.9">/**</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * Uses GreasedRegion for faster storage and manipulation of zones; it's suggested if you use this class to be</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * somewhat familiar with the methods for manipulating data in that class, though a GreasedRegion can also be used just</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * like a Collection of Coord values. This class is very similar in API and implementation to {@link ZOI}, but should be</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * slightly faster on large maps at the expense of usually using more memory. The main reason to choose between ZOI and</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * GreasedZOI is whether your existing code uses GreasedRegions, like this class, or uses CoordPacker, like ZOI. If you</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * don't currently use either, GreasedZOI is probably preferable because the {@link #calculate()} method produces a</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * value that can be reasonably consumed by Collection-based APIs, while {@link ZOI#calculate()} produces a</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * harder-to-use {@code short[]} that must be read by CoordPacker; GreasedZOI is probably not significantly faster for</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * most applications, and the memory usage difference is probably under a megabyte.</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * &lt;br&gt;</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * Created by Tommy Ettinger on 1/14/2018.</a>
-<span class="sourceLineNo">022</span><a id="line.22"> */</a>
-<span class="sourceLineNo">023</span><a id="line.23">public class GreasedZOI implements Serializable {</a>
-<span class="sourceLineNo">024</span><a id="line.24">    private static final long serialVersionUID = 1L;</a>
-<span class="sourceLineNo">025</span><a id="line.25">    private DijkstraMap dijkstra;</a>
-<span class="sourceLineNo">026</span><a id="line.26">    private Coord[][] influences;</a>
-<span class="sourceLineNo">027</span><a id="line.27">    private GreasedRegion[] packedGroups;</a>
-<span class="sourceLineNo">028</span><a id="line.28">    private boolean completed = false;</a>
-<span class="sourceLineNo">029</span><a id="line.29">    private Radius radius;</a>
-<span class="sourceLineNo">030</span><a id="line.30">    /**</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * the elements of the outer array represent different groups of influencing "factions" or groups that exert control</a>
-<span class="sourceLineNo">033</span><a id="line.33">     * over nearby areas, and the Coord elements of the inner array represent individual spots that are part of those</a>
-<span class="sourceLineNo">034</span><a id="line.34">     * groups and share influence with all Coord in the same inner array. Also takes a char[][] for a map, which can be</a>
-<span class="sourceLineNo">035</span><a id="line.35">     * the simplified map with only '#' for walls and '.' for floors, or the final map (with chars like '~' for deep</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * water as well as walls and floors), and a Radius enum that will be used to determine how distance is calculated.</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * &lt;br&gt;</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * Call calculate() when you want information out of this.</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * @param influences an outer array containing influencing groups, each an array containing Coords that influence</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * @param map a char[][] that is used as a map; should be bounded</a>
-<span class="sourceLineNo">041</span><a id="line.41">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
-<span class="sourceLineNo">042</span><a id="line.42">     */</a>
-<span class="sourceLineNo">043</span><a id="line.43">    public GreasedZOI(Coord[][] influences, char[][] map, Radius measurement) {</a>
-<span class="sourceLineNo">044</span><a id="line.44">        this.influences = influences;</a>
-<span class="sourceLineNo">045</span><a id="line.45">        packedGroups = new GreasedRegion[influences.length];</a>
-<span class="sourceLineNo">046</span><a id="line.46">        radius = measurement;</a>
-<span class="sourceLineNo">047</span><a id="line.47">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
-<span class="sourceLineNo">048</span><a id="line.48">    }</a>
-<span class="sourceLineNo">049</span><a id="line.49">    /**</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * Constructs a Zone of Influence map. Takes an arrays of Coord influences, where each Coord is treated as both a</a>
-<span class="sourceLineNo">051</span><a id="line.51">     * one-element group of influencing "factions" or groups that exert control over nearby areas, and the individual</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * spot that makes up one of those groups and spreads influence. Also takes a char[][] for a map, which can be the</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * simplified map with only '#' for walls and '.' for floors, or the final map (with chars like '~' for deep water</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * as well as walls and floors), and a Radius enum that will be used to determine how distance is calculated.</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * &lt;br&gt;</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * Essentially, this is the same as constructing a ZOI with a Coord[][] where each inner array has only one element.</a>
+<span class="sourceLineNo">008</span><a id="line.8">import java.util.Collection;</a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10">/**</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * Uses GreasedRegion for faster storage and manipulation of zones; it's suggested if you use this class to be</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * somewhat familiar with the methods for manipulating data in that class, though a GreasedRegion can also be used just</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * like a Collection of Coord values. This class is very similar in API and implementation to {@link ZOI}, but should be</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * faster on large maps and produces much less garbage. The main reason to choose between ZOI and</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * GreasedZOI is whether your existing code uses GreasedRegions, like this class, or uses CoordPacker, like ZOI. If you</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * don't currently use either, GreasedZOI is probably preferable because the {@link #calculate()} method produces a</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * value that can be reasonably consumed by Collection-based APIs, while {@link ZOI#calculate()} produces a</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * harder-to-use {@code short[]} that must be read by CoordPacker. Repeated operations on CoordPacker's {@code short[]}</a>
+<span class="sourceLineNo">020</span><a id="line.20"> * data will have to keep allocating more arrays and temporary internal data structures, while a GreasedRegion can be</a>
+<span class="sourceLineNo">021</span><a id="line.21"> * reused many times and only rarely allocates more space.</a>
+<span class="sourceLineNo">022</span><a id="line.22"> * &lt;br&gt;</a>
+<span class="sourceLineNo">023</span><a id="line.23"> * Created by Tommy Ettinger on 1/14/2018.</a>
+<span class="sourceLineNo">024</span><a id="line.24"> */</a>
+<span class="sourceLineNo">025</span><a id="line.25">public class GreasedZOI implements Serializable {</a>
+<span class="sourceLineNo">026</span><a id="line.26">    private static final long serialVersionUID = 2L;</a>
+<span class="sourceLineNo">027</span><a id="line.27">    private DijkstraMap dijkstra;</a>
+<span class="sourceLineNo">028</span><a id="line.28">    private Coord[][] influences;</a>
+<span class="sourceLineNo">029</span><a id="line.29">    private GreasedRegion[] groups;</a>
+<span class="sourceLineNo">030</span><a id="line.30">    private boolean completed = false;</a>
+<span class="sourceLineNo">031</span><a id="line.31">    private Radius radius;</a>
+<span class="sourceLineNo">032</span><a id="line.32">    /**</a>
+<span class="sourceLineNo">033</span><a id="line.33">     * Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where</a>
+<span class="sourceLineNo">034</span><a id="line.34">     * the elements of the outer array represent different groups of influencing "factions" or groups that exert control</a>
+<span class="sourceLineNo">035</span><a id="line.35">     * over nearby areas, and the Coord elements of the inner array represent individual spots that are part of those</a>
+<span class="sourceLineNo">036</span><a id="line.36">     * groups and share influence with all Coord in the same inner array. Also takes a char[][] for a map, which can be</a>
+<span class="sourceLineNo">037</span><a id="line.37">     * the simplified map with only '#' for walls and '.' for floors, or the final map (with chars like '~' for deep</a>
+<span class="sourceLineNo">038</span><a id="line.38">     * water as well as walls and floors), and a Radius enum that will be used to determine how distance is calculated.</a>
+<span class="sourceLineNo">039</span><a id="line.39">     * &lt;br&gt;</a>
+<span class="sourceLineNo">040</span><a id="line.40">     * Call {@link #calculate()} when you want information out of this.</a>
+<span class="sourceLineNo">041</span><a id="line.41">     * @param influences an outer array containing influencing groups, each an array containing Coords that influence</a>
+<span class="sourceLineNo">042</span><a id="line.42">     * @param map a char[][] that is used as an area map; should be bounded</a>
+<span class="sourceLineNo">043</span><a id="line.43">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
+<span class="sourceLineNo">044</span><a id="line.44">     */</a>
+<span class="sourceLineNo">045</span><a id="line.45">    public GreasedZOI(Coord[][] influences, char[][] map, Radius measurement) {</a>
+<span class="sourceLineNo">046</span><a id="line.46">        this.influences = influences;</a>
+<span class="sourceLineNo">047</span><a id="line.47">        groups = new GreasedRegion[influences.length];</a>
+<span class="sourceLineNo">048</span><a id="line.48">        radius = measurement;</a>
+<span class="sourceLineNo">049</span><a id="line.49">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">050</span><a id="line.50">    }</a>
+<span class="sourceLineNo">051</span><a id="line.51">    /**</a>
+<span class="sourceLineNo">052</span><a id="line.52">     * Constructs a Zone of Influence map. Takes an arrays of Coord influences, where each Coord is treated as both a</a>
+<span class="sourceLineNo">053</span><a id="line.53">     * one-element group of influencing "factions" or groups that exert control over nearby areas, and the individual</a>
+<span class="sourceLineNo">054</span><a id="line.54">     * spot that makes up one of those groups and spreads influence. Also takes a char[][] for a map, which can be the</a>
+<span class="sourceLineNo">055</span><a id="line.55">     * simplified map with only '#' for walls and '.' for floors, or the final map (with chars like '~' for deep water</a>
+<span class="sourceLineNo">056</span><a id="line.56">     * as well as walls and floors), and a Radius enum that will be used to determine how distance is calculated.</a>
 <span class="sourceLineNo">057</span><a id="line.57">     * &lt;br&gt;</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * Call calculate() when you want information out of this.</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * @param influences an array containing Coords that each have their own independent influence</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * @param map a char[][] that is used as a map; should be bounded</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * @see squidpony.squidmath.PoissonDisk for a good way to generate evenly spaced Coords that can be used here</a>
-<span class="sourceLineNo">063</span><a id="line.63">     */</a>
-<span class="sourceLineNo">064</span><a id="line.64">    public GreasedZOI(Coord[] influences, char[][] map, Radius measurement) {</a>
-<span class="sourceLineNo">065</span><a id="line.65">        this.influences = new Coord[influences.length][];</a>
-<span class="sourceLineNo">066</span><a id="line.66">        for (int i = 0; i &lt; influences.length; i++) {</a>
-<span class="sourceLineNo">067</span><a id="line.67">            this.influences[i] = new Coord[] { influences[i] };</a>
-<span class="sourceLineNo">068</span><a id="line.68">        }</a>
-<span class="sourceLineNo">069</span><a id="line.69">        packedGroups = new GreasedRegion[influences.length];</a>
-<span class="sourceLineNo">070</span><a id="line.70">        radius = measurement;</a>
-<span class="sourceLineNo">071</span><a id="line.71">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
-<span class="sourceLineNo">072</span><a id="line.72">    }</a>
-<span class="sourceLineNo">073</span><a id="line.73"></a>
-<span class="sourceLineNo">074</span><a id="line.74">    /**</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * Finds the zones of influence for each of the influences (inner arrays of Coord) this was constructed with, and</a>
-<span class="sourceLineNo">076</span><a id="line.76">     * returns them as packed data (using CoordPacker, which can also be used to unpack the data, merge zones, get</a>
-<span class="sourceLineNo">077</span><a id="line.77">     * shared borders, and all sorts of other tricks). This has each zone of influence overlap with its neighbors; this</a>
-<span class="sourceLineNo">078</span><a id="line.78">     * is useful to find borders using CoordPacker.intersectPacked(), and borders are typically between 1 and 2 cells</a>
-<span class="sourceLineNo">079</span><a id="line.79">     * wide. You can get a different region as packed data if you want region A without the overlapping areas it shares</a>
-<span class="sourceLineNo">080</span><a id="line.80">     * with region B by using {@code short[] different = CoordPacker.differencePacked(A, B)}. Merging two zones A and B</a>
-<span class="sourceLineNo">081</span><a id="line.81">     * can be done with {@code short[] merged = CoordPacker.unionPacked(A, B)} . You can unpack the data</a>
-<span class="sourceLineNo">082</span><a id="line.82">     * into a boolean[][] easily with CoordPacker.unpack(), where true is contained in the zone and false is not.</a>
-<span class="sourceLineNo">083</span><a id="line.83">     * The CoordPacker methods fringe(), expand(), singleRandom(), randomSample(), and randomPortion() are also</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * potentially useful for this sort of data. You should save the short[][] for later use if you want to call</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * nearestInfluences() in this class.</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * &lt;br&gt;</a>
-<span class="sourceLineNo">087</span><a id="line.87">     * The first short[] in the returned short[][] will correspond to the area influenced by the first Coord[] in the</a>
-<span class="sourceLineNo">088</span><a id="line.88">     * nested array passed to the constructor (or the first Coord if a non-nested array was passed); the second will</a>
-<span class="sourceLineNo">089</span><a id="line.89">     * correspond to the second, and so on. The length of the short[][] this returns will equal the number of influence</a>
-<span class="sourceLineNo">090</span><a id="line.90">     * groups.</a>
-<span class="sourceLineNo">091</span><a id="line.91">     * @return an array of short[] storing the zones' areas; each can be used as packed data with CoordPacker</a>
-<span class="sourceLineNo">092</span><a id="line.92">     */</a>
-<span class="sourceLineNo">093</span><a id="line.93">    public GreasedRegion[] calculate()</a>
-<span class="sourceLineNo">094</span><a id="line.94">    {</a>
-<span class="sourceLineNo">095</span><a id="line.95">        for (int i = 0; i &lt; influences.length; i++) {</a>
-<span class="sourceLineNo">096</span><a id="line.96">            for (int j = 0; j &lt; influences[i].length; j++) {</a>
-<span class="sourceLineNo">097</span><a id="line.97">                dijkstra.setGoal(influences[i][j]);</a>
-<span class="sourceLineNo">098</span><a id="line.98">            }</a>
-<span class="sourceLineNo">099</span><a id="line.99">        }</a>
-<span class="sourceLineNo">100</span><a id="line.100">        dijkstra.scan(null, null);</a>
-<span class="sourceLineNo">101</span><a id="line.101">        final double[][] scannedAll = dijkstra.gradientMap;</a>
-<span class="sourceLineNo">102</span><a id="line.102"></a>
-<span class="sourceLineNo">103</span><a id="line.103">        for (int i = 0; i &lt; influences.length; i++) {</a>
-<span class="sourceLineNo">104</span><a id="line.104"></a>
-<span class="sourceLineNo">105</span><a id="line.105">            /*</a>
-<span class="sourceLineNo">106</span><a id="line.106">            dijkstra.clearGoals();</a>
-<span class="sourceLineNo">107</span><a id="line.107">            dijkstra.resetMap();</a>
-<span class="sourceLineNo">108</span><a id="line.108">            for (int j = 0; j &lt; influences[i].length; j++) {</a>
-<span class="sourceLineNo">109</span><a id="line.109">                dijkstra.setGoal(influences[i][j]);</a>
-<span class="sourceLineNo">110</span><a id="line.110">            }</a>
-<span class="sourceLineNo">111</span><a id="line.111">            double[][] factionScanned = dijkstra.scan(null);</a>
-<span class="sourceLineNo">112</span><a id="line.112">            for (int y = 0; y &lt; map[0].length; y++) {</a>
-<span class="sourceLineNo">113</span><a id="line.113">                for (int x = 0; x &lt; map.length; x++) {</a>
-<span class="sourceLineNo">114</span><a id="line.114">                    influenced[x][y] = (scannedAll[x][y] &lt; DijkstraMap.FLOOR) &amp;&amp;</a>
-<span class="sourceLineNo">115</span><a id="line.115">                            (factionScanned[x][y] - scannedAll[x][y] &lt;= 1);</a>
-<span class="sourceLineNo">116</span><a id="line.116">                }</a>
-<span class="sourceLineNo">117</span><a id="line.117">            }*/</a>
-<span class="sourceLineNo">118</span><a id="line.118">            packedGroups[i] = increasing(scannedAll, influences[i]);</a>
-<span class="sourceLineNo">119</span><a id="line.119">        }</a>
-<span class="sourceLineNo">120</span><a id="line.120">        completed = true;</a>
-<span class="sourceLineNo">121</span><a id="line.121">        return packedGroups;</a>
-<span class="sourceLineNo">122</span><a id="line.122">    }</a>
-<span class="sourceLineNo">123</span><a id="line.123">    protected GreasedRegion increasing(double[][] dm, Coord[] inf) {</a>
-<span class="sourceLineNo">124</span><a id="line.124">        OrderedSet&lt;Coord&gt; open = new OrderedSet&lt;&gt;(inf), fresh = new OrderedSet&lt;&gt;(64);</a>
-<span class="sourceLineNo">125</span><a id="line.125">        Direction[] dirs = (radius.equals2D(Radius.DIAMOND)) ? Direction.CARDINALS : Direction.OUTWARDS;</a>
-<span class="sourceLineNo">126</span><a id="line.126">        GreasedRegion influenced = new GreasedRegion(dijkstra.width, dijkstra.height);</a>
-<span class="sourceLineNo">127</span><a id="line.127">        final int width = dm.length;</a>
-<span class="sourceLineNo">128</span><a id="line.128">        final int height = width == 0 ? 0 : dm[0].length;</a>
+<span class="sourceLineNo">058</span><a id="line.58">     * Essentially, this is the same as constructing a ZOI with a Coord[][] where each inner array has only one element.</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * &lt;br&gt;</a>
+<span class="sourceLineNo">060</span><a id="line.60">     * Call {@link #calculate()} when you want information out of this.</a>
+<span class="sourceLineNo">061</span><a id="line.61">     * @param influences an array containing Coords that each have their own independent influence</a>
+<span class="sourceLineNo">062</span><a id="line.62">     * @param map a char[][] that is used as an area map; should be bounded</a>
+<span class="sourceLineNo">063</span><a id="line.63">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
+<span class="sourceLineNo">064</span><a id="line.64">     * @see squidpony.squidmath.PoissonDisk PoissonDisk provides a good way to generate evenly spaced Coords</a>
+<span class="sourceLineNo">065</span><a id="line.65">     */</a>
+<span class="sourceLineNo">066</span><a id="line.66">    public GreasedZOI(Coord[] influences, char[][] map, Radius measurement) {</a>
+<span class="sourceLineNo">067</span><a id="line.67">        this.influences = new Coord[influences.length][];</a>
+<span class="sourceLineNo">068</span><a id="line.68">        for (int i = 0; i &lt; influences.length; i++) {</a>
+<span class="sourceLineNo">069</span><a id="line.69">            this.influences[i] = new Coord[] { influences[i] };</a>
+<span class="sourceLineNo">070</span><a id="line.70">        }</a>
+<span class="sourceLineNo">071</span><a id="line.71">        groups = new GreasedRegion[influences.length];</a>
+<span class="sourceLineNo">072</span><a id="line.72">        radius = measurement;</a>
+<span class="sourceLineNo">073</span><a id="line.73">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">074</span><a id="line.74">    }</a>
+<span class="sourceLineNo">075</span><a id="line.75">    /**</a>
+<span class="sourceLineNo">076</span><a id="line.76">     * Constructs a Zone of Influence map. Takes a Collection of Coord influences, where each Coord is treated as both a</a>
+<span class="sourceLineNo">077</span><a id="line.77">     * one-element group of influencing "factions" or groups that exert control over nearby areas, and the individual</a>
+<span class="sourceLineNo">078</span><a id="line.78">     * spot that makes up one of those groups and spreads influence. Also takes a char[][] for a map, which can be the</a>
+<span class="sourceLineNo">079</span><a id="line.79">     * simplified map with only '#' for walls and '.' for floors, or the final map (with chars like '~' for deep water</a>
+<span class="sourceLineNo">080</span><a id="line.80">     * as well as walls and floors), and a Radius enum that will be used to determine how distance is calculated.</a>
+<span class="sourceLineNo">081</span><a id="line.81">     * &lt;br&gt;</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * Essentially, this is the same as constructing a ZOI with a Coord[][] where each inner array has only one element,</a>
+<span class="sourceLineNo">083</span><a id="line.83">     * drawn from a Collection. It often makes sense to use a GreasedRegion as the Collection of Coord.</a>
+<span class="sourceLineNo">084</span><a id="line.84">     * &lt;br&gt;</a>
+<span class="sourceLineNo">085</span><a id="line.85">     * Call {@link #calculate()} when you want information out of this.</a>
+<span class="sourceLineNo">086</span><a id="line.86">     * @param influences A Collection of Coord, such as a GreasedRegion, where each Coord has independent influence</a>
+<span class="sourceLineNo">087</span><a id="line.87">     * @param map a char[][] that is used as an area map; should be bounded</a>
+<span class="sourceLineNo">088</span><a id="line.88">     * @param measurement a Radius enum that corresponds to how distance should be measured</a>
+<span class="sourceLineNo">089</span><a id="line.89">     */</a>
+<span class="sourceLineNo">090</span><a id="line.90">    public GreasedZOI(Collection&lt;Coord&gt; influences, char[][] map, Radius measurement) {</a>
+<span class="sourceLineNo">091</span><a id="line.91">        this.influences = new Coord[influences.size()][];</a>
+<span class="sourceLineNo">092</span><a id="line.92">        int i = 0;</a>
+<span class="sourceLineNo">093</span><a id="line.93">        for(Coord c : influences) {</a>
+<span class="sourceLineNo">094</span><a id="line.94">            this.influences[i++] = new Coord[]{c};</a>
+<span class="sourceLineNo">095</span><a id="line.95">        }</a>
+<span class="sourceLineNo">096</span><a id="line.96">        groups = new GreasedRegion[this.influences.length];</a>
+<span class="sourceLineNo">097</span><a id="line.97">        radius = measurement;</a>
+<span class="sourceLineNo">098</span><a id="line.98">        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));</a>
+<span class="sourceLineNo">099</span><a id="line.99">    }</a>
+<span class="sourceLineNo">100</span><a id="line.100"></a>
+<span class="sourceLineNo">101</span><a id="line.101">    /**</a>
+<span class="sourceLineNo">102</span><a id="line.102">     * Finds the zones of influence for each of the influences (inner arrays of Coord) this was constructed with, and</a>
+<span class="sourceLineNo">103</span><a id="line.103">     * returns all zones as a GreasedRegion array. This has each zone of influence overlap with its neighbors; this</a>
+<span class="sourceLineNo">104</span><a id="line.104">     * is useful to find borders using {@link GreasedRegion#and(GreasedRegion)}, and borders are typically between 1 and</a>
+<span class="sourceLineNo">105</span><a id="line.105">     * 2 cells wide. You can get a different region if you want region A without the overlapping areas it shares with</a>
+<span class="sourceLineNo">106</span><a id="line.106">     * region B by using {@link GreasedRegion#andNot(GreasedRegion)}. Merging two zones A and B can be done with</a>
+<span class="sourceLineNo">107</span><a id="line.107">     * {@link GreasedRegion#or(GreasedRegion)}. You can transform the data into a boolean[][] easily with</a>
+<span class="sourceLineNo">108</span><a id="line.108">     * {@link GreasedRegion#decode()}, where true is contained in the zone and false is not. The methods</a>
+<span class="sourceLineNo">109</span><a id="line.109">     * {@link GreasedRegion#fringe()}, {@link GreasedRegion#expand()}, {@link GreasedRegion#singleRandom(IRNG)}, and</a>
+<span class="sourceLineNo">110</span><a id="line.110">     * {@link GreasedRegion#separatedBlue(double)} are also potentially useful for this sort of data. You should save</a>
+<span class="sourceLineNo">111</span><a id="line.111">     * the {@code GreasedRegion[]} for later use if you want to call</a>
+<span class="sourceLineNo">112</span><a id="line.112">     * {@link #nearestInfluences(GreasedRegion[], Coord)}.</a>
+<span class="sourceLineNo">113</span><a id="line.113">     * &lt;br&gt;</a>
+<span class="sourceLineNo">114</span><a id="line.114">     * The first GreasedRegion in the returned GreasedRegion[] will correspond to the area influenced by the first</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * Coord[] in the nested array passed to the constructor (or the first Coord if a non-nested array was passed); the</a>
+<span class="sourceLineNo">116</span><a id="line.116">     * second will correspond to the second, and so on. The length of the GreasedRegion[] this returns will equal the</a>
+<span class="sourceLineNo">117</span><a id="line.117">     * number of influence groups.</a>
+<span class="sourceLineNo">118</span><a id="line.118">     * @return a GreasedRegion array, with each item storing a zone's area</a>
+<span class="sourceLineNo">119</span><a id="line.119">     */</a>
+<span class="sourceLineNo">120</span><a id="line.120">    public GreasedRegion[] calculate()</a>
+<span class="sourceLineNo">121</span><a id="line.121">    {</a>
+<span class="sourceLineNo">122</span><a id="line.122">        for (int i = 0; i &lt; influences.length; i++) {</a>
+<span class="sourceLineNo">123</span><a id="line.123">            for (int j = 0; j &lt; influences[i].length; j++) {</a>
+<span class="sourceLineNo">124</span><a id="line.124">                dijkstra.setGoal(influences[i][j]);</a>
+<span class="sourceLineNo">125</span><a id="line.125">            }</a>
+<span class="sourceLineNo">126</span><a id="line.126">        }</a>
+<span class="sourceLineNo">127</span><a id="line.127">        dijkstra.scan(null, null);</a>
+<span class="sourceLineNo">128</span><a id="line.128">        final double[][] scannedAll = dijkstra.gradientMap;</a>
 <span class="sourceLineNo">129</span><a id="line.129"></a>
-<span class="sourceLineNo">130</span><a id="line.130">        int numAssigned = open.size();</a>
-<span class="sourceLineNo">131</span><a id="line.131">        double diff;</a>
-<span class="sourceLineNo">132</span><a id="line.132">        while (numAssigned &gt; 0) {</a>
-<span class="sourceLineNo">133</span><a id="line.133">            numAssigned = 0;</a>
-<span class="sourceLineNo">134</span><a id="line.134">            for (Coord cell : open) {</a>
-<span class="sourceLineNo">135</span><a id="line.135">                influenced.insert(cell);</a>
-<span class="sourceLineNo">136</span><a id="line.136">                for (int d = 0; d &lt; dirs.length; d++) {</a>
-<span class="sourceLineNo">137</span><a id="line.137">                    Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</a>
-<span class="sourceLineNo">138</span><a id="line.138">                    if (adj.x &lt; 0 || adj.y &lt; 0 || width &lt;= adj.x || height &lt;= adj.y)</a>
-<span class="sourceLineNo">139</span><a id="line.139">                        /* Outside the map */</a>
-<span class="sourceLineNo">140</span><a id="line.140">                        continue;</a>
-<span class="sourceLineNo">141</span><a id="line.141">                    if (!open.contains(adj) &amp;&amp; dm[adj.x][adj.y] &lt; DijkstraMap.FLOOR &amp;&amp; !influenced.contains(adj)) {</a>
-<span class="sourceLineNo">142</span><a id="line.142">                        //h = heuristic(dirs[d]);</a>
-<span class="sourceLineNo">143</span><a id="line.143">                        diff = dm[adj.x][adj.y] - dm[cell.x][cell.y];</a>
-<span class="sourceLineNo">144</span><a id="line.144">                        if (diff &lt;= 1.0 &amp;&amp; diff &gt;= 0) {</a>
-<span class="sourceLineNo">145</span><a id="line.145">                            fresh.add(adj);</a>
-<span class="sourceLineNo">146</span><a id="line.146">                            influenced.insert(adj);</a>
-<span class="sourceLineNo">147</span><a id="line.147">                            ++numAssigned;</a>
-<span class="sourceLineNo">148</span><a id="line.148">                        }</a>
-<span class="sourceLineNo">149</span><a id="line.149">                    }</a>
-<span class="sourceLineNo">150</span><a id="line.150">                }</a>
-<span class="sourceLineNo">151</span><a id="line.151">            }</a>
-<span class="sourceLineNo">152</span><a id="line.152"></a>
-<span class="sourceLineNo">153</span><a id="line.153">            open = new OrderedSet&lt;&gt;(fresh);</a>
-<span class="sourceLineNo">154</span><a id="line.154">            fresh.clear();</a>
-<span class="sourceLineNo">155</span><a id="line.155">        }</a>
+<span class="sourceLineNo">130</span><a id="line.130">        for (int i = 0; i &lt; influences.length; i++) {</a>
+<span class="sourceLineNo">131</span><a id="line.131"></a>
+<span class="sourceLineNo">132</span><a id="line.132">            /*</a>
+<span class="sourceLineNo">133</span><a id="line.133">            dijkstra.clearGoals();</a>
+<span class="sourceLineNo">134</span><a id="line.134">            dijkstra.resetMap();</a>
+<span class="sourceLineNo">135</span><a id="line.135">            for (int j = 0; j &lt; influences[i].length; j++) {</a>
+<span class="sourceLineNo">136</span><a id="line.136">                dijkstra.setGoal(influences[i][j]);</a>
+<span class="sourceLineNo">137</span><a id="line.137">            }</a>
+<span class="sourceLineNo">138</span><a id="line.138">            double[][] factionScanned = dijkstra.scan(null);</a>
+<span class="sourceLineNo">139</span><a id="line.139">            for (int y = 0; y &lt; map[0].length; y++) {</a>
+<span class="sourceLineNo">140</span><a id="line.140">                for (int x = 0; x &lt; map.length; x++) {</a>
+<span class="sourceLineNo">141</span><a id="line.141">                    influenced[x][y] = (scannedAll[x][y] &lt; DijkstraMap.FLOOR) &amp;&amp;</a>
+<span class="sourceLineNo">142</span><a id="line.142">                            (factionScanned[x][y] - scannedAll[x][y] &lt;= 1);</a>
+<span class="sourceLineNo">143</span><a id="line.143">                }</a>
+<span class="sourceLineNo">144</span><a id="line.144">            }*/</a>
+<span class="sourceLineNo">145</span><a id="line.145">            groups[i] = increasing(scannedAll, influences[i]);</a>
+<span class="sourceLineNo">146</span><a id="line.146">        }</a>
+<span class="sourceLineNo">147</span><a id="line.147">        completed = true;</a>
+<span class="sourceLineNo">148</span><a id="line.148">        return groups;</a>
+<span class="sourceLineNo">149</span><a id="line.149">    }</a>
+<span class="sourceLineNo">150</span><a id="line.150">    protected GreasedRegion increasing(double[][] dm, Coord[] inf) {</a>
+<span class="sourceLineNo">151</span><a id="line.151">        OrderedSet&lt;Coord&gt; open = new OrderedSet&lt;&gt;(inf), fresh = new OrderedSet&lt;&gt;(64);</a>
+<span class="sourceLineNo">152</span><a id="line.152">        Direction[] dirs = (radius.equals2D(Radius.DIAMOND)) ? Direction.CARDINALS : Direction.OUTWARDS;</a>
+<span class="sourceLineNo">153</span><a id="line.153">        GreasedRegion influenced = new GreasedRegion(dijkstra.width, dijkstra.height);</a>
+<span class="sourceLineNo">154</span><a id="line.154">        final int width = dm.length;</a>
+<span class="sourceLineNo">155</span><a id="line.155">        final int height = width == 0 ? 0 : dm[0].length;</a>
 <span class="sourceLineNo">156</span><a id="line.156"></a>
-<span class="sourceLineNo">157</span><a id="line.157">        return influenced;</a>
-<span class="sourceLineNo">158</span><a id="line.158">    }</a>
-<span class="sourceLineNo">159</span><a id="line.159"></a>
-<span class="sourceLineNo">160</span><a id="line.160">    /**</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</a>
-<span class="sourceLineNo">163</span><a id="line.163">     * @param zones a short[][] returned by calculate; not a multi-packed short[][] from CoordPacker !</a>
-<span class="sourceLineNo">164</span><a id="line.164">     * @param point the Coord to test</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * @return an int[] where each element is the index of an influencing group in zones</a>
-<span class="sourceLineNo">166</span><a id="line.166">     */</a>
-<span class="sourceLineNo">167</span><a id="line.167">    public int[] nearestInfluences(short[][] zones, Coord point)</a>
-<span class="sourceLineNo">168</span><a id="line.168">    {</a>
-<span class="sourceLineNo">169</span><a id="line.169">        ShortVLA found = new ShortVLA(4);</a>
-<span class="sourceLineNo">170</span><a id="line.170">        for (short i = 0; i &lt; zones.length; i++) {</a>
-<span class="sourceLineNo">171</span><a id="line.171">            if(CoordPacker.queryPacked(zones[i], point.x, point.y))</a>
-<span class="sourceLineNo">172</span><a id="line.172">                found.add(i);</a>
-<span class="sourceLineNo">173</span><a id="line.173">        }</a>
-<span class="sourceLineNo">174</span><a id="line.174">        return found.asInts();</a>
-<span class="sourceLineNo">175</span><a id="line.175">    }</a>
-<span class="sourceLineNo">176</span><a id="line.176"></a>
-<span class="sourceLineNo">177</span><a id="line.177">    /**</a>
-<span class="sourceLineNo">178</span><a id="line.178">     * Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all</a>
-<span class="sourceLineNo">179</span><a id="line.179">     * influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.</a>
-<span class="sourceLineNo">180</span><a id="line.180">     * @param zones a short[][] returned by calculate; not a multi-packed short[][] from CoordPacker !</a>
-<span class="sourceLineNo">181</span><a id="line.181">     * @param point the Coord to test</a>
-<span class="sourceLineNo">182</span><a id="line.182">     * @return an int[] where each element is the index of an influencing group in zones</a>
-<span class="sourceLineNo">183</span><a id="line.183">     */</a>
-<span class="sourceLineNo">184</span><a id="line.184">    public int[] nearestInfluences(GreasedRegion[] zones, Coord point)</a>
-<span class="sourceLineNo">185</span><a id="line.185">    {</a>
-<span class="sourceLineNo">186</span><a id="line.186">        IntVLA found = new IntVLA(4);</a>
-<span class="sourceLineNo">187</span><a id="line.187">        for (int i = 0; i &lt; zones.length; i++) {</a>
-<span class="sourceLineNo">188</span><a id="line.188">            if(zones[i].contains(point))</a>
-<span class="sourceLineNo">189</span><a id="line.189">                found.add(i);</a>
-<span class="sourceLineNo">190</span><a id="line.190">        }</a>
-<span class="sourceLineNo">191</span><a id="line.191">        return found.toArray();</a>
-<span class="sourceLineNo">192</span><a id="line.192">    }</a>
-<span class="sourceLineNo">193</span><a id="line.193">    /**</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * This can be given a Coord to check in the results of the latest calculate() call. Finds the indices of all</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * influencing groups in zones that have the Coord in their area, and returns all such indices as an {@link IntVLA}.</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * You can convert the IntVLA to an array with {@link IntVLA#toArray()} if you want to match ZOI's behavior.</a>
-<span class="sourceLineNo">197</span><a id="line.197">     *</a>
-<span class="sourceLineNo">198</span><a id="line.198">     * @param point the Coord to test</a>
-<span class="sourceLineNo">199</span><a id="line.199">     * @return an IntVLA where each element is the index of an influencing group in zones</a>
-<span class="sourceLineNo">200</span><a id="line.200">     */</a>
-<span class="sourceLineNo">201</span><a id="line.201">    public IntVLA nearestInfluences(Coord point)</a>
-<span class="sourceLineNo">202</span><a id="line.202">    {</a>
-<span class="sourceLineNo">203</span><a id="line.203">        if(!completed)</a>
-<span class="sourceLineNo">204</span><a id="line.204">            return new IntVLA(0);</a>
-<span class="sourceLineNo">205</span><a id="line.205">        IntVLA found = new IntVLA(4);</a>
-<span class="sourceLineNo">206</span><a id="line.206">        for (short i = 0; i &lt; packedGroups.length; i++) {</a>
-<span class="sourceLineNo">207</span><a id="line.207">            if(packedGroups[i].contains(point))</a>
-<span class="sourceLineNo">208</span><a id="line.208">                found.add(i);</a>
-<span class="sourceLineNo">209</span><a id="line.209">        }</a>
-<span class="sourceLineNo">210</span><a id="line.210">        return found;</a>
-<span class="sourceLineNo">211</span><a id="line.211">    }</a>
-<span class="sourceLineNo">212</span><a id="line.212"></a>
-<span class="sourceLineNo">213</span><a id="line.213">    /**</a>
-<span class="sourceLineNo">214</span><a id="line.214">     * Gets the influencing groups; ideally the result should not be changed without setting it back with setInfluences.</a>
-<span class="sourceLineNo">215</span><a id="line.215">     * @return influences a jagged array of Coord arrays, where the inner arrays are groups of influences</a>
-<span class="sourceLineNo">216</span><a id="line.216">     */</a>
-<span class="sourceLineNo">217</span><a id="line.217">    public Coord[][] getInfluences() {</a>
-<span class="sourceLineNo">218</span><a id="line.218">        return influences;</a>
-<span class="sourceLineNo">219</span><a id="line.219">    }</a>
-<span class="sourceLineNo">220</span><a id="line.220"></a>
-<span class="sourceLineNo">221</span><a id="line.221">    /**</a>
-<span class="sourceLineNo">222</span><a id="line.222">     * Changes the influencing groups. This also invalidates the last calculation for the purposes of nearestInfluences,</a>
-<span class="sourceLineNo">223</span><a id="line.223">     * at least for the overload that takes only a Coord.</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * @param influences a jagged array of Coord arrays, where the inner arrays are groups of influences</a>
-<span class="sourceLineNo">225</span><a id="line.225">     */</a>
-<span class="sourceLineNo">226</span><a id="line.226">    public void setInfluences(Coord[][] influences) {</a>
-<span class="sourceLineNo">227</span><a id="line.227">        if(packedGroups.length == influences.length)</a>
-<span class="sourceLineNo">228</span><a id="line.228">        {</a>
-<span class="sourceLineNo">229</span><a id="line.229">            for (int i = 0; i &lt; packedGroups.length; i++) {</a>
-<span class="sourceLineNo">230</span><a id="line.230">                packedGroups[i].clear();</a>
-<span class="sourceLineNo">231</span><a id="line.231">            }</a>
-<span class="sourceLineNo">232</span><a id="line.232">        }</a>
-<span class="sourceLineNo">233</span><a id="line.233">        else</a>
-<span class="sourceLineNo">234</span><a id="line.234">            packedGroups = new GreasedRegion[influences.length];</a>
-<span class="sourceLineNo">235</span><a id="line.235">        this.influences = influences;</a>
-<span class="sourceLineNo">236</span><a id="line.236">        completed = false;</a>
-<span class="sourceLineNo">237</span><a id="line.237">    }</a>
-<span class="sourceLineNo">238</span><a id="line.238">}</a>
+<span class="sourceLineNo">157</span><a id="line.157">        int numAssigned = open.size();</a>
+<span class="sourceLineNo">158</span><a id="line.158">        double diff;</a>
+<span class="sourceLineNo">159</span><a id="line.159">        while (numAssigned &gt; 0) {</a>
+<span class="sourceLineNo">160</span><a id="line.160">            numAssigned = 0;</a>
+<span class="sourceLineNo">161</span><a id="line.161">            for (Coord cell : open) {</a>
+<span class="sourceLineNo">162</span><a id="line.162">                influenced.insert(cell);</a>
+<span class="sourceLineNo">163</span><a id="line.163">                for (int d = 0; d &lt; dirs.length; d++) {</a>
+<span class="sourceLineNo">164</span><a id="line.164">                    Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);</a>
+<span class="sourceLineNo">165</span><a id="line.165">                    if (adj.x &lt; 0 || adj.y &lt; 0 || width &lt;= adj.x || height &lt;= adj.y)</a>
+<span class="sourceLineNo">166</span><a id="line.166">                        /* Outside the map */</a>
+<span class="sourceLineNo">167</span><a id="line.167">                        continue;</a>
+<span class="sourceLineNo">168</span><a id="line.168">                    if (!open.contains(adj) &amp;&amp; dm[adj.x][adj.y] &lt; DijkstraMap.FLOOR &amp;&amp; !influenced.contains(adj)) {</a>
+<span class="sourceLineNo">169</span><a id="line.169">                        //h = heuristic(dirs[d]);</a>
+<span class="sourceLineNo">170</span><a id="line.170">                        diff = dm[adj.x][adj.y] - dm[cell.x][cell.y];</a>
+<span class="sourceLineNo">171</span><a id="line.171">                        if (diff &lt;= 1.0 &amp;&amp; diff &gt;= 0) {</a>
+<span class="sourceLineNo">172</span><a id="line.172">                            fresh.add(adj);</a>
+<span class="sourceLineNo">173</span><a id="line.173">                            influenced.insert(adj);</a>
+<span class="sourceLineNo">174</span><a id="line.174">                            ++numAssigned;</a>
+<span class="sourceLineNo">175</span><a id="line.175">                        }</a>
+<span class="sourceLineNo">176</span><a id="line.176">                    }</a>
+<span class="sourceLineNo">177</span><a id="line.177">                }</a>
+<span class="sourceLineNo">178</span><a id="line.178">            }</a>
+<span class="sourceLineNo">179</span><a id="line.179"></a>
+<span class="sourceLineNo">180</span><a id="line.180">            open = new OrderedSet&lt;&gt;(fresh);</a>
+<span class="sourceLineNo">181</span><a id="line.181">            fresh.clear();</a>
+<span class="sourceLineNo">182</span><a id="line.182">        }</a>
+<span class="sourceLineNo">183</span><a id="line.183"></a>
+<span class="sourceLineNo">184</span><a id="line.184">        return influenced;</a>
+<span class="sourceLineNo">185</span><a id="line.185">    }</a>
+<span class="sourceLineNo">186</span><a id="line.186"></a>
+<span class="sourceLineNo">187</span><a id="line.187">    /**</a>
+<span class="sourceLineNo">188</span><a id="line.188">     * Given the zones resulting from this class' {@link #calculate()} method and a Coord to check, finds the indices of</a>
+<span class="sourceLineNo">189</span><a id="line.189">     * all influencing groups in zones that have the Coord in their area, and returns all such indices as an IntVLA.</a>
+<span class="sourceLineNo">190</span><a id="line.190">     * @param zones a GreasedRegion[] returned by calculate</a>
+<span class="sourceLineNo">191</span><a id="line.191">     * @param point the Coord to test</a>
+<span class="sourceLineNo">192</span><a id="line.192">     * @return an IntVLA where each element is the index of an influencing group in zones</a>
+<span class="sourceLineNo">193</span><a id="line.193">     */</a>
+<span class="sourceLineNo">194</span><a id="line.194">    public IntVLA nearestInfluences(GreasedRegion[] zones, Coord point)</a>
+<span class="sourceLineNo">195</span><a id="line.195">    {</a>
+<span class="sourceLineNo">196</span><a id="line.196">        IntVLA found = new IntVLA(4);</a>
+<span class="sourceLineNo">197</span><a id="line.197">        for (int i = 0; i &lt; zones.length; i++) {</a>
+<span class="sourceLineNo">198</span><a id="line.198">            if(zones[i].contains(point))</a>
+<span class="sourceLineNo">199</span><a id="line.199">                found.add(i);</a>
+<span class="sourceLineNo">200</span><a id="line.200">        }</a>
+<span class="sourceLineNo">201</span><a id="line.201">        return found;</a>
+<span class="sourceLineNo">202</span><a id="line.202">    }</a>
+<span class="sourceLineNo">203</span><a id="line.203">    /**</a>
+<span class="sourceLineNo">204</span><a id="line.204">     * This can be given a Coord to check in the results of the latest calculate() call. Finds the indices of all</a>
+<span class="sourceLineNo">205</span><a id="line.205">     * influencing groups in zones that have the Coord in their area, and returns all such indices as an {@link IntVLA}.</a>
+<span class="sourceLineNo">206</span><a id="line.206">     * You can convert the IntVLA to an array with {@link IntVLA#toArray()} if you want to match ZOI's behavior.</a>
+<span class="sourceLineNo">207</span><a id="line.207">     *</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * @param point the Coord to test</a>
+<span class="sourceLineNo">209</span><a id="line.209">     * @return an IntVLA where each element is the index of an influencing group in zones</a>
+<span class="sourceLineNo">210</span><a id="line.210">     */</a>
+<span class="sourceLineNo">211</span><a id="line.211">    public IntVLA nearestInfluences(Coord point)</a>
+<span class="sourceLineNo">212</span><a id="line.212">    {</a>
+<span class="sourceLineNo">213</span><a id="line.213">        if(!completed)</a>
+<span class="sourceLineNo">214</span><a id="line.214">            return new IntVLA(0);</a>
+<span class="sourceLineNo">215</span><a id="line.215">        IntVLA found = new IntVLA(4);</a>
+<span class="sourceLineNo">216</span><a id="line.216">        for (short i = 0; i &lt; groups.length; i++) {</a>
+<span class="sourceLineNo">217</span><a id="line.217">            if(groups[i].contains(point))</a>
+<span class="sourceLineNo">218</span><a id="line.218">                found.add(i);</a>
+<span class="sourceLineNo">219</span><a id="line.219">        }</a>
+<span class="sourceLineNo">220</span><a id="line.220">        return found;</a>
+<span class="sourceLineNo">221</span><a id="line.221">    }</a>
+<span class="sourceLineNo">222</span><a id="line.222"></a>
+<span class="sourceLineNo">223</span><a id="line.223">    /**</a>
+<span class="sourceLineNo">224</span><a id="line.224">     * Gets the influencing groups; ideally the result should not be changed without setting it back with setInfluences.</a>
+<span class="sourceLineNo">225</span><a id="line.225">     * @return influences a jagged array of Coord arrays, where the inner arrays are groups of influences</a>
+<span class="sourceLineNo">226</span><a id="line.226">     */</a>
+<span class="sourceLineNo">227</span><a id="line.227">    public Coord[][] getInfluences() {</a>
+<span class="sourceLineNo">228</span><a id="line.228">        return influences;</a>
+<span class="sourceLineNo">229</span><a id="line.229">    }</a>
+<span class="sourceLineNo">230</span><a id="line.230"></a>
+<span class="sourceLineNo">231</span><a id="line.231">    /**</a>
+<span class="sourceLineNo">232</span><a id="line.232">     * Changes the influencing groups. This also invalidates the last calculation for the purposes of nearestInfluences,</a>
+<span class="sourceLineNo">233</span><a id="line.233">     * at least for the overload that takes only a Coord.</a>
+<span class="sourceLineNo">234</span><a id="line.234">     * @param influences a jagged array of Coord arrays, where the inner arrays are groups of influences</a>
+<span class="sourceLineNo">235</span><a id="line.235">     */</a>
+<span class="sourceLineNo">236</span><a id="line.236">    public void setInfluences(Coord[][] influences) {</a>
+<span class="sourceLineNo">237</span><a id="line.237">        if(groups.length == influences.length)</a>
+<span class="sourceLineNo">238</span><a id="line.238">        {</a>
+<span class="sourceLineNo">239</span><a id="line.239">            for (int i = 0; i &lt; groups.length; i++) {</a>
+<span class="sourceLineNo">240</span><a id="line.240">                groups[i].clear();</a>
+<span class="sourceLineNo">241</span><a id="line.241">            }</a>
+<span class="sourceLineNo">242</span><a id="line.242">        }</a>
+<span class="sourceLineNo">243</span><a id="line.243">        else</a>
+<span class="sourceLineNo">244</span><a id="line.244">            groups = new GreasedRegion[influences.length];</a>
+<span class="sourceLineNo">245</span><a id="line.245">        this.influences = influences;</a>
+<span class="sourceLineNo">246</span><a id="line.246">        completed = false;</a>
+<span class="sourceLineNo">247</span><a id="line.247">    }</a>
+<span class="sourceLineNo">248</span><a id="line.248">}</a>
 
 
 

@@ -189,7 +189,71 @@
 <span class="sourceLineNo">177</span><a id="line.177">        }</a>
 <span class="sourceLineNo">178</span><a id="line.178">        return bytes;</a>
 <span class="sourceLineNo">179</span><a id="line.179">    }</a>
-<span class="sourceLineNo">180</span><a id="line.180">}</a>
+<span class="sourceLineNo">180</span><a id="line.180">    public static byte[] doubleGridToByteArray(double[][] doubles) {</a>
+<span class="sourceLineNo">181</span><a id="line.181">        final int width = doubles.length, height = doubles[0].length;</a>
+<span class="sourceLineNo">182</span><a id="line.182">        byte[] bytes = new byte[width * height + 8];</a>
+<span class="sourceLineNo">183</span><a id="line.183">        bytes[0] = (byte) (width &gt;&gt;&gt; 24);</a>
+<span class="sourceLineNo">184</span><a id="line.184">        bytes[1] = (byte) (width &gt;&gt;&gt; 16);</a>
+<span class="sourceLineNo">185</span><a id="line.185">        bytes[2] = (byte) (width &gt;&gt;&gt; 8);</a>
+<span class="sourceLineNo">186</span><a id="line.186">        bytes[3] = (byte) (width);</a>
+<span class="sourceLineNo">187</span><a id="line.187">        bytes[4] = (byte) (height &gt;&gt;&gt; 24);</a>
+<span class="sourceLineNo">188</span><a id="line.188">        bytes[5] = (byte) (height &gt;&gt;&gt; 16);</a>
+<span class="sourceLineNo">189</span><a id="line.189">        bytes[6] = (byte) (height &gt;&gt;&gt; 8);</a>
+<span class="sourceLineNo">190</span><a id="line.190">        bytes[7] = (byte) (height);</a>
+<span class="sourceLineNo">191</span><a id="line.191">        int i = 8;</a>
+<span class="sourceLineNo">192</span><a id="line.192">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">193</span><a id="line.193">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">194</span><a id="line.194">                bytes[i++] = (byte)(doubles[x][y] * 256);</a>
+<span class="sourceLineNo">195</span><a id="line.195">            }</a>
+<span class="sourceLineNo">196</span><a id="line.196">        }</a>
+<span class="sourceLineNo">197</span><a id="line.197">        return bytes;</a>
+<span class="sourceLineNo">198</span><a id="line.198">    }</a>
+<span class="sourceLineNo">199</span><a id="line.199">    public static double[][] byteArrayToDoubleGrid(byte[] bytes) {</a>
+<span class="sourceLineNo">200</span><a id="line.200">        final int width = bytes[0] &lt;&lt; 24 | (bytes[1] &lt;&lt; 16 &amp; 0xFF0000) | (bytes[2] &lt;&lt; 8 &amp; 0xFF00) | (bytes[3] &amp; 0xFF),</a>
+<span class="sourceLineNo">201</span><a id="line.201">                height = bytes[4] &lt;&lt; 24 | (bytes[5] &lt;&lt; 16 &amp; 0xFF0000) | (bytes[6] &lt;&lt; 8 &amp; 0xFF00) | (bytes[7] &amp; 0xFF);</a>
+<span class="sourceLineNo">202</span><a id="line.202">        double[][] doubles = new double[width][height];</a>
+<span class="sourceLineNo">203</span><a id="line.203">        int i = 8;</a>
+<span class="sourceLineNo">204</span><a id="line.204">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">205</span><a id="line.205">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">206</span><a id="line.206">                doubles[x][y] = (bytes[i++] &amp; 0xFF) * 0x1p-8;</a>
+<span class="sourceLineNo">207</span><a id="line.207">            }</a>
+<span class="sourceLineNo">208</span><a id="line.208">        }</a>
+<span class="sourceLineNo">209</span><a id="line.209">        return doubles;</a>
+<span class="sourceLineNo">210</span><a id="line.210">    }</a>
+<span class="sourceLineNo">211</span><a id="line.211"></a>
+<span class="sourceLineNo">212</span><a id="line.212">    public static byte[] byteGridToByteArray(byte[][] grid) {</a>
+<span class="sourceLineNo">213</span><a id="line.213">        final int width = grid.length, height = grid[0].length;</a>
+<span class="sourceLineNo">214</span><a id="line.214">        byte[] bytes = new byte[width * height + 8];</a>
+<span class="sourceLineNo">215</span><a id="line.215">        bytes[0] = (byte) (width &gt;&gt;&gt; 24);</a>
+<span class="sourceLineNo">216</span><a id="line.216">        bytes[1] = (byte) (width &gt;&gt;&gt; 16);</a>
+<span class="sourceLineNo">217</span><a id="line.217">        bytes[2] = (byte) (width &gt;&gt;&gt; 8);</a>
+<span class="sourceLineNo">218</span><a id="line.218">        bytes[3] = (byte) (width);</a>
+<span class="sourceLineNo">219</span><a id="line.219">        bytes[4] = (byte) (height &gt;&gt;&gt; 24);</a>
+<span class="sourceLineNo">220</span><a id="line.220">        bytes[5] = (byte) (height &gt;&gt;&gt; 16);</a>
+<span class="sourceLineNo">221</span><a id="line.221">        bytes[6] = (byte) (height &gt;&gt;&gt; 8);</a>
+<span class="sourceLineNo">222</span><a id="line.222">        bytes[7] = (byte) (height);</a>
+<span class="sourceLineNo">223</span><a id="line.223">        int i = 8;</a>
+<span class="sourceLineNo">224</span><a id="line.224">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">225</span><a id="line.225">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">226</span><a id="line.226">                bytes[i++] = grid[x][y];</a>
+<span class="sourceLineNo">227</span><a id="line.227">            }</a>
+<span class="sourceLineNo">228</span><a id="line.228">        }</a>
+<span class="sourceLineNo">229</span><a id="line.229">        return bytes;</a>
+<span class="sourceLineNo">230</span><a id="line.230">    }</a>
+<span class="sourceLineNo">231</span><a id="line.231">    public static byte[][] byteArrayToByteGrid(byte[] bytes) {</a>
+<span class="sourceLineNo">232</span><a id="line.232">        final int width = bytes[0] &lt;&lt; 24 | (bytes[1] &lt;&lt; 16 &amp; 0xFF0000) | (bytes[2] &lt;&lt; 8 &amp; 0xFF00) | (bytes[3] &amp; 0xFF),</a>
+<span class="sourceLineNo">233</span><a id="line.233">                height = bytes[4] &lt;&lt; 24 | (bytes[5] &lt;&lt; 16 &amp; 0xFF0000) | (bytes[6] &lt;&lt; 8 &amp; 0xFF00) | (bytes[7] &amp; 0xFF);</a>
+<span class="sourceLineNo">234</span><a id="line.234">        byte[][] grid = new byte[width][height];</a>
+<span class="sourceLineNo">235</span><a id="line.235">        int i = 8;</a>
+<span class="sourceLineNo">236</span><a id="line.236">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">237</span><a id="line.237">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">238</span><a id="line.238">                grid[x][y] = bytes[i++];</a>
+<span class="sourceLineNo">239</span><a id="line.239">            }</a>
+<span class="sourceLineNo">240</span><a id="line.240">        }</a>
+<span class="sourceLineNo">241</span><a id="line.241">        return grid;</a>
+<span class="sourceLineNo">242</span><a id="line.242">    }</a>
+<span class="sourceLineNo">243</span><a id="line.243"></a>
+<span class="sourceLineNo">244</span><a id="line.244">}</a>
 
 
 

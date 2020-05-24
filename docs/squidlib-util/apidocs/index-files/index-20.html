@@ -420,6 +420,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MitchellNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/MitchellNoise.html" title="class in squidpony.squidmath">MitchellNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.QuilezNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.QuilezNoise.html" title="class in squidpony.squidmath">Noise.QuilezNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway1D.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway1D.html" title="class in squidpony.squidmath">Noise.Sway1D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Sway2D.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Sway2D.html" title="class in squidpony.squidmath">Noise.Sway2D</a></dt>
@@ -1518,6 +1520,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Set the "A" part of the internal state with a long.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoatRNG.html#setStateA(long)">setStateA(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">GoatRNG</a></dt>
+<dd>
+<div class="block">Set the "A" part of the internal state with a long.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover64RNG.html#setStateA(long)">setStateA(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover64RNG.html" title="class in squidpony.squidmath">Mover64RNG</a></dt>
 <dd>
 <div class="block">Sets the "A" part of the state to any long, which may put the generator in a low-period subcycle.</div>
@@ -1561,6 +1567,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GearRNG.html#setStateB(long)">setStateB(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GearRNG.html" title="class in squidpony.squidmath">GearRNG</a></dt>
 <dd>
 <div class="block">Set the "B" part of the internal state with a long; the lowest bit is always discarded and replaced with 1.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoatRNG.html#setStateB(long)">setStateB(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">GoatRNG</a></dt>
+<dd>
+<div class="block">Set the "B" part of the internal state with a long.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover64RNG.html#setStateB(long)">setStateB(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover64RNG.html" title="class in squidpony.squidmath">Mover64RNG</a></dt>
 <dd>
@@ -1706,6 +1716,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/NaturalLanguageCipher.html#shift">shift</a></span> - Variable in class squidpony.<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#shift">shift</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
+<dd>
+<div class="block">Used by <a href="../squidpony/squidmath/IntSet.html#place(int)"><code>IntSet.place(int)</code></a> to bit shift the upper bits of a <code>long</code> into a usable range (&gt;= 0 and &lt;=
+ <a href="../squidpony/squidmath/IntSet.html#mask"><code>IntSet.mask</code></a>).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/AOE.html#shift(squidpony.squidmath.Coord)">shift(Coord)</a></span> - Method in interface squidpony.squidai.<a href="../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></dt>
 <dd>
 <div class="block">After an AOE has been constructed, it may need to have the affected area shifted over to a different position
@@ -1775,30 +1790,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/CoordPackerZone.html#shorts">shorts</a></span> - Variable in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/CoordPackerZone.html" title="class in squidpony.squidgrid.zone">CoordPackerZone</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath"><span class="typeNameLink">ShortSet</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
-<dd>
-<div class="block">An unordered set that uses short keys.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#%3Cinit%3E()">ShortSet()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
-<dd>
-<div class="block">Creates a new sets with an initial capacity of 32 and a load factor of 0.8.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#%3Cinit%3E(int)">ShortSet(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
-<dd>
-<div class="block">Creates a new set with a load factor of 0.8.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#%3Cinit%3E(int,float)">ShortSet(int, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
-<dd>
-<div class="block">Creates a new set with the specified initial capacity and load factor.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#%3Cinit%3E(squidpony.squidmath.ShortSet)">ShortSet(ShortSet)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
-<dd>
-<div class="block">Creates a new map identical to the specified map.</div>
-</dd>
-<dt><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath"><span class="typeNameLink">ShortSet.ShortSetIterator</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#%3Cinit%3E(squidpony.squidmath.ShortSet)">ShortSetIterator(ShortSet)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath"><span class="typeNameLink">ShortVLA</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">A resizable, ordered or unordered short variable-length array.</div>
@@ -1836,6 +1827,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#show(int)">show(int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#show(java.lang.StringBuilder,squidpony.squidai.astar.Pathfinder,squidpony.squidai.astar.Pathfinder.Metrics)">show(StringBuilder, Pathfinder&lt;Coord&gt;, Pathfinder.Metrics)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#showMap(int%5B%5D,int)">showMap(int[], int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#shrink()">shrink()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
@@ -1846,9 +1839,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Reduces the size of the backing array to the size of the actual items.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#shrink(int)">shrink(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#shrink(int)">shrink(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
 <dd>
-<div class="block">Reduces the size of the backing arrays to be the specified capacity or less.</div>
+<div class="block">Reduces the size of the backing arrays to be the specified capacity / loadFactor, or less.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html#shrink(squidpony.squidgrid.mapping.Rectangle)">shrink(Rectangle)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Utils.html" title="class in squidpony.squidgrid.mapping">Rectangle.Utils</a></dt>
 <dd>
@@ -2222,6 +2215,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Number of entries in the set (including the key zero, if present).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntSet.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/IntSet.html" title="class in squidpony.squidmath">IntSet</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
@@ -2232,8 +2227,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Number of entries in the set (including the key zero, if present).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.html" title="class in squidpony.squidmath">ShortSet</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/UnorderedMap.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a></dt>
@@ -3043,6 +3036,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoatRNG.html#stateA">stateA</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">GoatRNG</a></dt>
+<dd>
+<div class="block">Can be any long value.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#stateA">stateA</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrbitRNG.html#stateA">stateA</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/OrbitRNG.html" title="class in squidpony.squidmath">OrbitRNG</a></dt>
@@ -3051,6 +3048,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SilkRNG.html#stateA">stateA</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SilkRNG.html" title="class in squidpony.squidmath">SilkRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GoatRNG.html#stateB">stateB</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/GoatRNG.html" title="class in squidpony.squidmath">GoatRNG</a></dt>
+<dd>
+<div class="block">Can be any long value.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#stateB">stateB</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrbitRNG.html#stateB">stateB</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/OrbitRNG.html" title="class in squidpony.squidmath">OrbitRNG</a></dt>

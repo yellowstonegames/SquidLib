@@ -30,7 +30,7 @@
 <span class="sourceLineNo">018</span><a id="line.18">public final class ByteStringEncoding {</a>
 <span class="sourceLineNo">019</span><a id="line.19">    private ByteStringEncoding(){}</a>
 <span class="sourceLineNo">020</span><a id="line.20"></a>
-<span class="sourceLineNo">021</span><a id="line.21">    private static String compress(byte[] uncompressed) {</a>
+<span class="sourceLineNo">021</span><a id="line.21">    public static String compress(byte[] uncompressed) {</a>
 <span class="sourceLineNo">022</span><a id="line.22">        if (uncompressed == null) return null;</a>
 <span class="sourceLineNo">023</span><a id="line.23">        if (uncompressed.length == 0) return "";</a>
 <span class="sourceLineNo">024</span><a id="line.24">        final int bitsPerChar = 15, offset = 32;</a>
@@ -210,7 +210,7 @@
 <span class="sourceLineNo">198</span><a id="line.198">        return context_data.toString();</a>
 <span class="sourceLineNo">199</span><a id="line.199">    }</a>
 <span class="sourceLineNo">200</span><a id="line.200"></a>
-<span class="sourceLineNo">201</span><a id="line.201">    private static byte[] decompress(String compressed) {</a>
+<span class="sourceLineNo">201</span><a id="line.201">    public static byte[] decompress(String compressed) {</a>
 <span class="sourceLineNo">202</span><a id="line.202">        if (compressed == null)</a>
 <span class="sourceLineNo">203</span><a id="line.203">            return null;</a>
 <span class="sourceLineNo">204</span><a id="line.204">        if (compressed.isEmpty())</a>

@@ -1643,7 +1643,7 @@
 <span class="sourceLineNo">1631</span><a id="line.1631">        }</a>
 <span class="sourceLineNo">1632</span><a id="line.1632">        return sb.toString();</a>
 <span class="sourceLineNo">1633</span><a id="line.1633">    }</a>
-<span class="sourceLineNo">1634</span><a id="line.1634">    private static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa])(\\pG+)(?="+FakeLanguageGen.anyVowel+")", Pattern.IGNORE_CASE | Pattern.UNICODE), "$1n$2");</a>
+<span class="sourceLineNo">1634</span><a id="line.1634">    private static final Replacer anReplacer = new Replacer(Pattern.compile("\\b([Aa])(\\p{G}+)(?="+FakeLanguageGen.anyVowel+")", Pattern.IGNORE_CASE | Pattern.UNICODE), "$1n$2");</a>
 <span class="sourceLineNo">1635</span><a id="line.1635"></a>
 <span class="sourceLineNo">1636</span><a id="line.1636">    /**</a>
 <span class="sourceLineNo">1637</span><a id="line.1637">     * A simple method that looks for any occurrences of the word 'a' followed by some non-zero amount of whitespace and</a>
