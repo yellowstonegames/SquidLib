@@ -17,14 +17,15 @@ public class AStarDungeonTest {
             RNG rng = new RNG(lrng);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
             char[][] dun = dg.generate();
+            Coord[] floors = new GreasedRegion(dun, '.').asCoords();
             double[][] costMap = DungeonUtility.generateAStarCostMap(dun, Collections.<Character, Double>emptyMap(), 0);
             AStarSearch astar = new AStarSearch(costMap, st);
             System.out.println(dg);
 
-            Coord goal1 = dg.utility.randomFloor(dun),
-                    goal2 = dg.utility.randomFloor(dun), goal3 = dg.utility.randomFloor(dun),
-                    goal4 = dg.utility.randomFloor(dun), goal5 = dg.utility.randomFloor(dun),
-                    entry = dg.utility.randomFloor(dun);
+            Coord goal1 = rng.getRandomElement(floors),
+                    goal2 = rng.getRandomElement(floors), goal3 = rng.getRandomElement(floors),
+                    goal4 = rng.getRandomElement(floors), goal5 = rng.getRandomElement(floors),
+                    entry = rng.getRandomElement(floors);
 
             Queue<Coord> path1 = astar.path(entry, goal1);
             System.out.println(astar + "\n");

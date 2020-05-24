@@ -1,10 +1,12 @@
 package squidpony.squidai.astar;
 
+import squidpony.Maker;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.Coord;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DefaultGraph implements Graph<Coord> {
@@ -42,6 +44,18 @@ public class DefaultGraph implements Graph<Coord> {
             return (float) node.distance(endNode);
         }
     };
+    /**
+     * A predefined Heuristic for Coord nodes in a 2D plane where the heuristic is not used, and all cells are
+     * considered equivalent regardless of actual distance.
+     */
+    public static final Heuristic<Coord> DIJKSTRA = new Heuristic<Coord>() {
+        @Override
+        public float estimate(Coord node, Coord endNode) {
+            return 1f;
+        }
+    };
+
+    public static final List<Heuristic<Coord>> HEURISTICS = Collections.unmodifiableList(Maker.makeList(MANHATTAN, CHEBYSHEV, EUCLIDEAN, DIJKSTRA));
     
     public Arrangement<Coord> positions;
     public ArrayList<List<Connection<Coord>>> allConnections;

@@ -334,7 +334,6 @@ public class AStarSearch implements Serializable {
 
 	@Override
 	public String toString() {
-        final StringBuilder result = new StringBuilder(width * height);
         int maxLen = 0;
 		/*
 		 * First we compute the longest (String-wise) entry, so that we can
@@ -343,24 +342,28 @@ public class AStarSearch implements Serializable {
 		 */
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                final String output = String.valueOf(Math.round(map[x][y]));
-                final int locLen = output.length();
-                if (maxLen < locLen)
-                    maxLen = locLen;
+                int locLen;
+                if(gCache[x][y] < 0.0) locLen = 2; // for -1 only
+                else if(gCache[x][y] == 0.0) locLen = 1;
+                else locLen = (int)Math.log10(Math.round(gCache[x][y])); // maybe better than making a temp String?
+ 
+                maxLen = Math.max(maxLen, locLen);
             }
         }
+        ++maxLen;
+        final StringBuilder result = new StringBuilder((width * maxLen + 1) * height);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                final long v = Math.round(map[x][y]);
-                final String s = String.valueOf(v);
-                final int slen = s.length();
-                assert slen <= maxLen;
-                int diff = maxLen - slen;
-                while (0 < diff) {
-                    result.append(" ");
-                    diff--;
+                int targetLength = result.length() + maxLen;
+                if(start != null && start.distanceSq(x, y) == 0.0)
+                    result.append('@');
+                else if(target != null && target.distanceSq(x, y) == 0.0)
+                    result.append('!');
+                else 
+                    result.append(Math.round(gCache[x][y]));
+                while (result.length() < targetLength) {
+                    result.append(' ');
                 }
-                result.append(s);
             }
             if (y < height - 1)
                 result.append('\n');
