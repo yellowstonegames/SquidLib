@@ -55,9 +55,9 @@ public class Pathfinder<N> {
 	/** The unique ID for each search run. Used to mark nodes. */
 	private int searchId;
 
-	private static final int UNVISITED = 0;
-	private static final int OPEN = 1;
-	private static final int CLOSED = 2;
+	public static final int UNVISITED = 0;
+	public static final int OPEN = 1;
+	public static final int CLOSED = 2;
 
 	public Pathfinder(Graph<N> graph) {
 		this(graph, false);
@@ -245,6 +245,8 @@ public class Pathfinder<N> {
 
 			// Update node record's cost and connection
 			nodeRecord.costSoFar = nodeCost;
+			if(metrics != null)
+				metrics.maxCost = Math.max(metrics.maxCost, nodeCost);
 			nodeRecord.connection = connection;
 
 			// Add it to the open list with the estimated total cost
@@ -344,6 +346,7 @@ public class Pathfinder<N> {
 		public int visitedNodes;
 		public int openListAdditions;
 		public int openListPeak;
+		public float maxCost;
 
 		public Metrics () {
 		}
@@ -352,6 +355,7 @@ public class Pathfinder<N> {
 			visitedNodes = 0;
 			openListAdditions = 0;
 			openListPeak = 0;
+			maxCost = 0f;
 		}
 	}
 }
