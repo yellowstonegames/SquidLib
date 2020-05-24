@@ -59,6 +59,8 @@ public class DefaultGraph implements Graph<Coord> {
     
     public Arrangement<Coord> positions;
     public ArrayList<List<Connection<Coord>>> allConnections;
+    public int width;
+    public int height;
 
     /**
      * Creates an empty DefaultGraph with capacity 16; you must call {@link #init(char[][], boolean)} or
@@ -110,7 +112,8 @@ public class DefaultGraph implements Graph<Coord> {
      */
     public void init(char[][] map, boolean eightWay)
     {
-        final int width = map.length, height = map[0].length;
+        width = map.length;
+        height = map[0].length;
         Coord.expandPoolTo(width, height);
         positions.clear();
         allConnections.clear();
@@ -163,5 +166,42 @@ public class DefaultGraph implements Graph<Coord> {
     @Override
     public int getNodeCount() {
         return positions.size();
+    }
+    
+    public StringBuilder show(StringBuilder sb, Pathfinder<Coord> pathfinder, Pathfinder.Metrics metrics) {
+        int len = (int)Math.log10(Math.round(metrics.maxCost)) + 1;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) { 
+                Coord c = Coord.get(x, y);
+                int index = positions.getInt(c);
+                Pathfinder.NodeRecord<Coord> nr;
+                if(index < 0 || (nr = pathfinder.getNodeRecord(c)).category == Pathfinder.UNVISITED) {
+                    for (int i = 0; i < len; i++) {
+                        sb.append('#');
+                    }
+                }
+                else {
+                    int cost = Math.round(nr.costSoFar);
+                    if(cost == 0)
+                    {
+                        for (int i = 1; i < len; i++) {
+                            sb.append(' ');
+                        }
+                        sb.append('0');
+                    }
+                    else {
+                        int used = len - (int) Math.log10(cost) - 1;
+                        for (int i = 0; i < used; i++) {
+                            sb.append(' ');
+                        }
+                        sb.append(cost);
+                    }
+                }
+                sb.append(' ');
+            }
+            if(y + 1 < height) 
+                sb.append('\n');
+        }
+        return sb;
     }
 }
