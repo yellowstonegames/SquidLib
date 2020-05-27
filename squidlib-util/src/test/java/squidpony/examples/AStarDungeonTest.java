@@ -1,15 +1,20 @@
 package squidpony.examples;
 
+import squidpony.Maker;
 import squidpony.squidai.astar.DefaultGraph;
 import squidpony.squidai.astar.Heuristic;
 import squidpony.squidai.astar.Pathfinder;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidmath.AStarSearch;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.TangleRNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Queue;
+import java.util.HashMap;
 
 /**
  * Created by Tommy Ettinger on 4/5/2015.
@@ -22,7 +27,7 @@ public class AStarDungeonTest {
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
             char[][] dun = dg.generate();
             Coord[] floors = new GreasedRegion(dun, '.').asCoords();
-            double[][] costMap = DungeonUtility.generateAStarCostMap(dun, Collections.<Character, Double>emptyMap(), 0);
+            double[][] costMap = DungeonUtility.generateAStarCostMap(dun, new HashMap<Character, Double>(0), 1);
             AStarSearch astar = new AStarSearch(costMap, st);
             System.out.println(dg);
 
@@ -31,15 +36,15 @@ public class AStarDungeonTest {
                     goal4 = rng.getRandomElement(floors), goal5 = rng.getRandomElement(floors),
                     entry = rng.getRandomElement(floors);
 
-            Queue<Coord> path1 = astar.path(entry, goal1);
+            ArrayList<Coord> path1 = astar.path(entry, goal1);
             System.out.println(astar + "\n");
-            Queue<Coord> path2 = astar.path(goal1, goal2);
+            ArrayList<Coord> path2 = astar.path(goal1, goal2);
             System.out.println(astar + "\n");
-            Queue<Coord> path3 = astar.path(goal2, goal3);
+            ArrayList<Coord> path3 = astar.path(goal2, goal3);
             System.out.println(astar + "\n");
-            Queue<Coord> path4 = astar.path(goal3, goal4);
+            ArrayList<Coord> path4 = astar.path(goal3, goal4);
             System.out.println(astar + "\n");
-            Queue<Coord> path5 = astar.path(goal4, goal5);
+            ArrayList<Coord> path5 = astar.path(goal4, goal5);
             System.out.println(astar + "\n");
         }
         for(Heuristic<Coord> h : DefaultGraph.HEURISTICS) {
