@@ -216,9 +216,9 @@ public class Pathfinder<N> {
 
 			// Get the cost estimate for the node
 			N node = connection.getToNode();
-			float nodeCost = current.costSoFar + connection.getCost();
+			double nodeCost = current.costSoFar + connection.getCost();
 
-			float nodeHeuristic;
+			double nodeHeuristic;
 			NodeRecord<N> nodeRecord = getNodeRecord(node);
 			if (nodeRecord.category == CLOSED) { // The node is closed
 
@@ -285,7 +285,7 @@ public class Pathfinder<N> {
 		Collections.reverse(outPath);
 	}
 
-	protected void addToOpenList (NodeRecord<N> nodeRecord, float estimatedTotalCost) {
+	protected void addToOpenList (NodeRecord<N> nodeRecord, double estimatedTotalCost) {
 		openList.add(nodeRecord, estimatedTotalCost);
 		nodeRecord.category = OPEN;
 		if (metrics != null) {
@@ -323,7 +323,7 @@ public class Pathfinder<N> {
 		Connection<N> connection;
 
 		/** The actual cost from the start node. */
-		float costSoFar;
+		double costSoFar;
 
 		/** The node category: {@link #UNVISITED}, {@link #OPEN} or {@link #CLOSED}. */
 		int category;
@@ -337,7 +337,7 @@ public class Pathfinder<N> {
 		}
 
 		/** Returns the estimated total cost. */
-		public float getEstimatedTotalCost () {
+		public double getEstimatedTotalCost () {
 			return getValue();
 		}
 	}
@@ -349,7 +349,7 @@ public class Pathfinder<N> {
 		public int visitedNodes;
 		public int openListAdditions;
 		public int openListPeak;
-		public float maxCost;
+		public double maxCost;
 
 		public Metrics () {
 		}
@@ -358,7 +358,7 @@ public class Pathfinder<N> {
 			visitedNodes = 0;
 			openListAdditions = 0;
 			openListPeak = 0;
-			maxCost = 0f;
+			maxCost = 0.0;
 		}
 	}
 }

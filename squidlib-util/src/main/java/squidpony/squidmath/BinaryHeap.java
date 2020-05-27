@@ -18,8 +18,8 @@ package squidpony.squidmath;
 
 import java.util.Arrays;
 
-/** A binary heap that stores nodes which each have a float value and are sorted either lowest first or highest first. The
- * {@link Node} class can be extended to store additional information.
+/** A binary heap that stores nodes which each have a double value and are sorted either lowest first or highest first.
+ * The {@link Node} class can be extended to store additional information.
  * @author Nathan Sweet */
 public class BinaryHeap<T extends BinaryHeap.Node> {
 	public int size;
@@ -52,7 +52,7 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 	}
 
 	/** Sets the node's value and adds it to the heap. The node should not already be in the heap. */
-	public T add (T node, float value) {
+	public T add (T node, double value) {
 		node.value = value;
 		return add(node);
 	}
@@ -121,8 +121,8 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 	}
 
 	/** Changes the value of the node, which should already be in the heap. */
-	public void setValue (T node, float value) {
-		float oldValue = node.value;
+	public void setValue (T node, double value) {
+		double oldValue = node.value;
 		node.value = value;
 		if (value < oldValue ^ isMaxHeap)
 			up(node.index);
@@ -133,7 +133,7 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 	private void up (int index) {
 		Node[] nodes = this.nodes;
 		Node node = nodes[index];
-		float value = node.value;
+		double value = node.value;
 		while (index > 0) {
 			int parentIndex = (index - 1) >> 1;
 			Node parent = nodes[parentIndex];
@@ -153,7 +153,7 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 		int size = this.size;
 
 		Node node = nodes[index];
-		float value = node.value;
+		double value = node.value;
 
 		while (true) {
 			int leftIndex = 1 + (index << 1);
@@ -162,14 +162,14 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 
 			// Always has a left child.
 			Node leftNode = nodes[leftIndex];
-			float leftValue = leftNode.value;
+			double leftValue = leftNode.value;
 
 			// May have a right child.
 			Node rightNode;
-			float rightValue;
+			double rightValue;
 			if (rightIndex >= size) {
 				rightNode = null;
-				rightValue = isMaxHeap ? -Float.MAX_VALUE : Float.MAX_VALUE;
+				rightValue = isMaxHeap ? -Double.MAX_VALUE : Double.MAX_VALUE;
 			} else {
 				rightNode = nodes[rightIndex];
 				rightValue = rightNode.value;
@@ -218,7 +218,7 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 		int h = 1;
 		Node[] nodes = this.nodes;
 		for (int i = 0, n = size; i < n; i++)
-			h = h * 31 + Float.floatToIntBits(nodes[i].value);
+			h = h * 31 + NumberTools.doubleToMixedIntBits(nodes[i].value);
 		return h;
 	}
 
@@ -239,21 +239,21 @@ public class BinaryHeap<T extends BinaryHeap.Node> {
 	/** A binary heap node.
 	 * @author Nathan Sweet */
 	static public class Node {
-		public float value;
+		public double value;
 		public int index;
 
-		/** @param value The initial value for the node. To change the value, use {@link BinaryHeap#add(Node, float)} if the node is
-		 *           not in the heap, or {@link BinaryHeap#setValue(Node, float)} if the node is in the heap. */
-		public Node (float value) {
+		/** @param value The initial value for the node. To change the value, use {@link BinaryHeap#add(Node, double)} if the node is
+		 *           not in the heap, or {@link BinaryHeap#setValue(Node, double)} if the node is in the heap. */
+		public Node (double value) {
 			this.value = value;
 		}
 
-		public float getValue () {
+		public double getValue () {
 			return value;
 		}
 
 		public String toString () {
-			return Float.toString(value);
+			return Double.toString(value);
 		}
 	}
 }
