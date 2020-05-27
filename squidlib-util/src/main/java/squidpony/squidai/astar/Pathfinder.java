@@ -23,14 +23,17 @@ import java.util.List;
 
 /**
  * An indexed A* pathfinder that works with a Graph of nodes (generic type {@code N}). The path this returns is an
- * ArrayList of {@link Connection} items, which can be entered in order to handle movement.
+ * ArrayList of {@link Connection} items, which can be entered in order to handle movement. You can also receive an
+ * ArrayList of nodes instead, which may make more sense if the Connections always have the same cost. The node type is
+ * often {@link squidpony.squidmath.Coord}, and the Graph is often a {@link DefaultGraph} in that case.
  * <p>
- * This implementation is a common variation of the A* algorithm that is faster than the general A*.
+ * This implementation is a common variation of the A* algorithm that is faster than the general A*; it was originally
+ * from gdx-ai as IndexedAStarPathFinder.
  * <p>
  * In the general A* implementation, data are held for each node in the open or closed lists, and these data are held as a
  * NodeRecord instance. Records are created when a node is first considered and then moved between the open and closed lists, as
  * required. There is a key step in the algorithm where the lists are searched for a node record corresponding to a particular
- * node. This operation is something time-consuming.
+ * node. This operation is somewhat time-consuming.
  * <p>
  * The indexed A* algorithm improves execution speed by using an array of all the node records for every node in the graph. Nodes
  * must be numbered using sequential integers (see {@link Graph#getIndex(Object)}), so we don't need to search for a node in the

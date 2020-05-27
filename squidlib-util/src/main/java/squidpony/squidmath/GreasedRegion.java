@@ -727,11 +727,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Constructs this GreasedRegion using a double[][] (this was made for use inside
-     * {@link squidpony.squidgrid.BevelFOV}) that only stores two relevant states:  an "on" state for values between
-     * lowerBound (inclusive) and upperBound (exclusive), and an "off" state for anything else. This variant scales the
-     * input so each "on" position in map produces a 2x2 on area if scale is 2, a 3x3 area if scale is 3, and so on.
-     * @param map a double[][] that may relate in some way to BevelFOV
+     * Constructs this GreasedRegion using a double[][] that only stores two relevant states: an "on" state for values
+     * between lowerBound (inclusive) and upperBound (exclusive), and an "off" state for anything else. This variant
+     * scales the input so each "on" position in map produces a 2x2 on area if scale is 2, a 3x3 area if scale is 3, and
+     * so on.
+     * @param map a double[][]; depending on scale, the GreasedRegion may have different width and height
      * @param lowerBound lower inclusive; any double lower than this will be off, any equal to or greater than this,
      *                   but less than upper, will be on
      * @param upperBound upper exclusive; any double greater than or equal to this this will be off, any doubles both
@@ -770,7 +770,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * current values stored in this are always cleared, then cells are treated as on if they are greater than or equal
      * to lower and less than upper, or off otherwise, before considering scaling. This variant scales the input so each
      * "on" position in map produces a 2x2 on area if scale is 2, a 3x3 area if scale is 3, and so on.
-     * @param map a double[][] that may relate in some way to BevelFOV
+     * @param map a double[][]; depending on scale, the GreasedRegion may have different width and height
      * @param lowerBound lower inclusive; any double lower than this will be off, any equal to or greater than this,
      *                   but less than upper, will be on
      * @param upperBound upper exclusive; any double greater than or equal to this this will be off, any doubles both
