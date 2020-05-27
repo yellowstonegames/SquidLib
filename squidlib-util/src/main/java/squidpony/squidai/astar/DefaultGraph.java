@@ -8,6 +8,7 @@ import squidpony.squidmath.Coord;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A convenient implementation of {@link Graph} for {@link Coord} nodes; this also allows constructing a Graph with a
@@ -23,7 +24,7 @@ public class DefaultGraph implements Graph<Coord> {
      */
     public static final Heuristic<Coord> MANHATTAN = new Heuristic<Coord>() {
         @Override
-        public float estimate(Coord node, Coord endNode) {
+        public double estimate(Coord node, Coord endNode) {
             return Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
         }
     };
@@ -34,7 +35,7 @@ public class DefaultGraph implements Graph<Coord> {
      */
     public static final Heuristic<Coord> CHEBYSHEV = new Heuristic<Coord>() {
         @Override
-        public float estimate(Coord node, Coord endNode) {
+        public double estimate(Coord node, Coord endNode) {
             return Math.max(Math.abs(node.x - endNode.x), Math.abs(node.y - endNode.y));
         }
     };
@@ -46,8 +47,8 @@ public class DefaultGraph implements Graph<Coord> {
      */
     public static final Heuristic<Coord> EUCLIDEAN = new Heuristic<Coord>() {
         @Override
-        public float estimate(Coord node, Coord endNode) {
-            return (float) node.distance(endNode);
+        public double estimate(Coord node, Coord endNode) {
+            return node.distance(endNode);
         }
     };
     /**
@@ -56,8 +57,8 @@ public class DefaultGraph implements Graph<Coord> {
      */
     public static final Heuristic<Coord> DIJKSTRA = new Heuristic<Coord>() {
         @Override
-        public float estimate(Coord node, Coord endNode) {
-            return 1f;
+        public double estimate(Coord node, Coord endNode) {
+            return 1.0;
         }
     };
 
@@ -109,6 +110,27 @@ public class DefaultGraph implements Graph<Coord> {
     }
 
     /**
+     * Creates a DefaultGraph and immediately initializes it using {@link #init(double[][], boolean)}, with eightWay set
+     * to false (only orthogonal neighbors will be connected).
+     * @param costs a double[][] where negative values are blocked and any other values are the cost to enter that cell
+     */
+    public DefaultGraph(double[][] costs)
+    {
+        this(costs, false);
+    }
+
+    /**
+     * Creates a DefaultGraph and immediately initializes it using {@link #init(double[][], boolean)}.
+     * @param costs a double[][] where negative values are blocked and any other values are the cost to enter that cell
+     * @param eightWay if true, this will try to connect diagonals as well as orthogonally adjacent cells
+     */
+    public DefaultGraph(double[][] costs, boolean eightWay)
+    {
+        this(costs.length * costs[0].length * 3 >> 2); // 3/4 of the map could maybe be walkable; more is rare
+        init(costs, eightWay);
+    }
+
+    /**
      * Initializes or resets the nodes this knows about and their connections to their neighbors. This can be called
      * more than once on a DefaultGraph, typically when the map changes, and will forget its old nodes and only store
      * the ones in the latest map. The {@code map} should use {@code #} for walls and impassable areas; all other chars
@@ -138,12 +160,50 @@ public class DefaultGraph implements Graph<Coord> {
             {
                 Coord offset = c.translate(dir);
                 if(positions.containsKey(offset))
-                    list.add(new DefaultConnection<Coord>(c, offset));
+                    list.add(new DefaultConnection<>(c, offset));
             }
             allConnections.add(list);
         }
     }
-    
+
+    /**
+     * Initializes or resets the nodes this knows about and their connections to their neighbors. This can be called
+     * more than once on a DefaultGraph, typically when the map changes, and will forget its old nodes and only store
+     * the ones in the latest map. The double[][] {@code costs} stores the costs to enter cells; it is typically
+     * produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)}.
+     * Negative values in costs mark cells that cannot be entered (like walls); 1.0 is used for normal cells that can be
+     * entered easily, and higher values mark more challenging cells to enter.
+     * @param costs a double[][] where negative values are blocked and any other values are the cost to enter that cell
+     * @param eightWay if true, this will try to connect diagonals as well as orthogonally adjacent cells
+     */
+    public void init(double[][] costs, boolean eightWay)
+    {
+        width = costs.length;
+        height = costs[0].length;
+        Coord.expandPoolTo(width, height);
+        positions.clear();
+        allConnections.clear();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if(costs[i][j] >= 0.0)
+                    positions.add(Coord.get(i, j));
+            }
+        }
+        final Direction[] dirs = eightWay ? Direction.CLOCKWISE : Direction.CARDINALS_CLOCKWISE;
+        final int size = positions.size(), dirCount = dirs.length;
+        for (int i = 0; i < size; i++) {
+            Coord c = positions.keyAt(i);
+            ArrayList<Connection<Coord>> list = new ArrayList<>(dirCount);
+            for(Direction dir : dirs)
+            {
+                Coord offset = c.translate(dir);
+                if(positions.containsKey(offset))
+                    list.add(new CostlyConnection<>(c, offset, costs[offset.x][offset.y]));
+            }
+            allConnections.add(list);
+        }
+    }
+
     /**
      * Returns the connections outgoing from the given node.
      *
@@ -203,7 +263,7 @@ public class DefaultGraph implements Graph<Coord> {
                     }
                 }
                 else {
-                    int cost = Math.round(nr.costSoFar);
+                    int cost = (int)(nr.costSoFar + 0.5);
                     if(cost == 0)
                     {
                         for (int i = 1; i < len; i++) {

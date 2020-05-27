@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class BinaryHeapTest {
     private static class Node extends BinaryHeap.Node{
-        public Node(float value) {
+        public Node(double value) {
             super(value);
         }
 
@@ -15,7 +15,7 @@ public class BinaryHeapTest {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            return Float.compare(((Node) o).value, value) == 0;
+            return Double.compare(((Node) o).value, value) == 0;
         }
     }
     @Test
@@ -269,7 +269,7 @@ public class BinaryHeapTest {
         if(h.pop().value != 598.95935f) throw new RuntimeException("Should be 598.95935");
         h.add(m.get(1430.7216f));
         
-        float popped = h.pop().value;
+        double popped = h.pop().value;
 //        if(popped == 700.856f) throw new RuntimeException("Incorrect result! Should NOT be 700.856, should be 610.04565 .");
         if(popped != 610.04565f) throw new RuntimeException("Should be 610.04565, but is " + popped);
     }

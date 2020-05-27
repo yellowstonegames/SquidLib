@@ -16,25 +16,33 @@
 
 package squidpony.squidai.astar;
 
-/** A {@code DefaultConnection} is a {@link Connection} whose cost is 1.
+/** A {@code CostlyConnection} is a {@link Connection} that can have different costs for different instances.
  * These are often used on a {@link DefaultGraph} with {@link squidpony.squidmath.Coord} as {@code N}.
  * 
  * @param <N> Type of node
  * 
  * @author davebaol */
-public class DefaultConnection<N> implements Connection<N> {
+public class CostlyConnection<N> implements Connection<N> {
 
 	protected N fromNode;
 	protected N toNode;
+	protected double cost;
 
-	public DefaultConnection (N fromNode, N toNode) {
+	public CostlyConnection(N fromNode, N toNode) {
 		this.fromNode = fromNode;
 		this.toNode = toNode;
+		cost = 1.0;
+	}
+
+	public CostlyConnection(N fromNode, N toNode, double cost) {
+		this.fromNode = fromNode;
+		this.toNode = toNode;
+		this.cost = cost;
 	}
 
 	@Override
 	public double getCost () {
-		return 1.0;
+		return cost;
 	}
 
 	@Override
