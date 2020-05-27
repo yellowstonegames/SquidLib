@@ -16,12 +16,21 @@
 
 package squidpony.squidai.astar;
 
+import squidpony.squidmath.Coord;
+
+import java.util.ArrayList;
+
 /** A {@code Heuristic} generates estimates of the cost to move from a given node to the goal.
  * <p>
- * With a heuristic function pathfinding algorithms can choose the node that is most likely to lead to the optimal path. The
- * notion of "most likely" is controlled by a heuristic. If the heuristic is accurate, then the algorithm will be efficient. If
- * the heuristic is terrible, then it can perform even worse than other algorithms that don't use any heuristic function such as
- * Dijkstra.
+ * With a heuristic function pathfinding algorithms can choose the node that is most likely to lead to the optimal path.
+ * The notion of "most likely" is controlled by a heuristic. If the heuristic is accurate, then the algorithm will be
+ * efficient. If the heuristic is terrible, then it can perform even worse than other algorithms that don't use any
+ * heuristic function such as Dijkstra. SquidLib's {@link squidpony.squidai.DijkstraMap} is specialized for some cases
+ * that A* isn't, so there are reasons to prefer DijkstraMap when, for instance, you have multiple goals, or the goal is
+ * unchanging for some section of usage but the start point changes often (this is useful for mouse tracking when the
+ * path is reversed). The astar package should be significantly faster when paths are short and always have one goal,
+ * unless you compare it to DijkstraMap when it can reuse a scan and call
+ * {@link squidpony.squidai.DijkstraMap#findPathPreScanned(ArrayList, Coord)}.
  * 
  * @param <N> Type of node
  * 

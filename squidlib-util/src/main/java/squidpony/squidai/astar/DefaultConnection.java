@@ -17,6 +17,7 @@
 package squidpony.squidai.astar;
 
 /** A {@code DefaultConnection} is a {@link Connection} whose cost is 1.
+ * These are often used on a {@link DefaultGraph} with {@link squidpony.squidmath.Coord} as {@code N}.
  * 
  * @param <N> Type of node
  * 

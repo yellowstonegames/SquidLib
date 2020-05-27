@@ -21,6 +21,8 @@ import java.util.List;
 /**
  * A graph is a collection of nodes, each one having a collection of outgoing {@link Connection connections}.
  * Because this works with indexed A*, each node must also have a unique index.
+ * <br>
+ * Many users will be fine with {@link DefaultGraph} as the only kind of Graph they need to use.
  * 
  * @param <N> Type of node
  * 

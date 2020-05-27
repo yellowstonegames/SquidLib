@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A convenient implementation of {@link Graph} for {@link Coord} nodes; this also allows constructing a Graph with a
+ * 2D char array like those produced all over SquidLib. Some predefined heuristics are available as static constants
+ * here. You can "show" a DefaultGraph in conjunction with a {@link Pathfinder}, which appends a big grid of node costs
+ * matching the Pathfinder to a StringBuilder.
+ */
 public class DefaultGraph implements Graph<Coord> {
 
     /**
@@ -167,7 +173,23 @@ public class DefaultGraph implements Graph<Coord> {
     public int getNodeCount() {
         return positions.size();
     }
-    
+
+    /**
+     * Given a StringBuilder to append to, a Pathfinder with Coord nodes that has run and at least attempted to find a
+     * path, and the {@link Pathfinder#metrics} that the Pathfinder must have been configured to record, this makes a
+     * textual representation of the explored nodes and appends it to the StringBuilder. This shows the actual costs of
+     * all explored nodes in the Pathfinder for its latest path. If you intend to show a DefaultGraph like this, the
+     * Pathfinder must be constructed with {@link Pathfinder#Pathfinder(Graph, boolean)} where calculateMetrics is true
+     * (or where {@link Pathfinder#metrics} was assigned {@code new Pathfinder.Metrics()} before calculating a path).
+     * This will vary in displayed width based on the maximum width required to print any node, so if the
+     * longest-distance node costs 100 to enter, the displayed width will be longer than if the longest-distance node
+     * only cost 99. Any unvisited nodes, including walls and out-of-the-way areas, will be shown with some number of
+     * '#' chars. Spaces will separate nodes on the same line.
+     * @param sb a StringBuilder that will be appended to and returned
+     * @param pathfinder a Pathfinder that must have at least tried to find a path (and must have metrics, see below)
+     * @param metrics the Metrics for the above Pathfinder, which are required to be non-null when the path was tried
+     * @return the StringBuilder, after appending what is usually a lot of text in a grid
+     */
     public StringBuilder show(StringBuilder sb, Pathfinder<Coord> pathfinder, Pathfinder.Metrics metrics) {
         int len = (int)Math.log10(Math.round(metrics.maxCost)) + 1;
         for (int y = 0; y < height; y++) {
