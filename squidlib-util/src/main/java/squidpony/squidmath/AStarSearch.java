@@ -1,11 +1,12 @@
 package squidpony.squidmath;
 
-import squidpony.ArrayTools;
-import squidpony.squidgrid.Direction;
+import squidpony.squidai.astar.DefaultGraph;
+import squidpony.squidai.astar.Heuristic;
+import squidpony.squidai.astar.Pathfinder;
 
 import java.io.Serializable;
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Performs A* search.
@@ -14,31 +15,20 @@ import java.util.Queue;
  * value to reduce the total search space. If the heuristic is too large then
  * the optimal path is not guaranteed to be returned.
  * <br>
- * This implementation outperforms DijkstraMap (it can be about 8x faster) on relatively short
- * paths (8 or less cells), but when an especially long path is requested (20 or more cells),
- * this can be slower by a significant degree (it can be 10x slower for paths of 40-50 cells).
- * This replaces an earlier version of AStarSearch that was almost always slower than
- * DijkstraMap and had serious issues. One issue was recursion-related, and previously led to
- * very long paths taking 200x as much time as DijkstraMap instead of this version's comparably
- * modest 10x slowdown on the same paths. That recursion-related issue could have caused
- * StackOverflowExceptions to be thrown when finding very long paths, though that may not have
- * occurred "in the wild." The only caveat to the optimizations here is that an AStarSearch
- * object has slightly more state that it stores now, though it also reuses more state and
- * produces less garbage data to collect.
- * <br>
- * If you want pathfinding over an arbitrary graph or need really fast searches, you may want
- * to use gdx-ai's pathfinding code in its {@code com.badlogic.gdx.ai.pfa} package. Their
- * {@code IndexedAStarPathFinder} class outperforms all of the pathfinders in squidlib in all
- * cases tested, though it has less features than DijkstraMap. You would need a dependency on
- * gdx-ai and libGDX, which the squidlib-util module does not have, but if you use the squidlib
- * display module, then you already depend on libGDX.
+ * This implementation is a thin wrapper around {@link Pathfinder} and the other code in the
+ * {@code squidpony.squidai.astar} package; it replaces an older, much-less-efficient A* implementation with one based
+ * on GDX-AI's IndexedAStarPathFinder class. The only major change in the API is that this version returns an ArrayList
+ * of Coord instead of a Queue of Coord. Typical usage of this class involves
+ * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} to generate the cost
+ * map; if you used the old AStarSearch, then be advised that the default cost is now 1.0 instead of 0.0.
+ * @see squidpony.squidai.astar.Pathfinder the pathfinding class this is based on; Pathfinder can be used independently
  * @see squidpony.squidai.DijkstraMap a sometimes-faster pathfinding algorithm that can pathfind to multiple goals
  * @see squidpony.squidai.CustomDijkstraMap an alternative to DijkstraMap; faster and supports complex adjacency rules
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - optimized code
  */
 public class AStarSearch implements Serializable {
-    private static final long serialVersionUID = 1248976538417655312L;
+    private static final long serialVersionUID = 10L;
     /**
      * The type of heuristic to use.
      */
@@ -48,46 +38,41 @@ public class AStarSearch implements Serializable {
          * The distance it takes when only the four primary directions can be
          * moved in.
          */
-        MANHATTAN,
+        MANHATTAN(DefaultGraph.MANHATTAN),
         /**
          * The distance it takes when diagonal movement costs the same as
          * cardinal movement.
          */
-        CHEBYSHEV,
+        CHEBYSHEV(DefaultGraph.CHEBYSHEV),
         /**
          * The distance it takes as the crow flies.
          */
-        EUCLIDEAN,
+        EUCLIDEAN(DefaultGraph.EUCLIDEAN),
         /**
          * Full space search. Least efficient but guaranteed to return a path if
          * one exists. See also DijkstraMap class.
          */
-        DIJKSTRA
+        DIJKSTRA(DefaultGraph.DIJKSTRA);
+        Heuristic<Coord> heuristic;
+        SearchType(Heuristic<Coord> heuristic){
+            this.heuristic = heuristic;
+        }
     }
 
-    protected final double[][] map;
-    protected final OrderedSet<Coord> open = new OrderedSet<>();
     protected final int width, height;
-    protected byte[][] parent;
-    protected double[][] gCache;
-    protected transient Coord start, target;
+    protected Coord start, target;
     protected final SearchType type;
-    protected Direction[] dirs;
-
-    private int dirCount;
-    private transient Direction inner = Direction.DOWN;
-    private boolean[][] finished;
+    
+    protected DefaultGraph graph;
+    protected Pathfinder<Coord> pathfinder;
+    protected ArrayList<Coord> path;
+    
+    
     protected AStarSearch()
     {
         width = 0;
         height = 0;
         type = SearchType.MANHATTAN;
-        map = new double[width][height];
-        parent = new byte[width][height];
-        gCache = new double[width][height];
-        finished = new boolean[width][height];
-        dirs = Direction.CARDINALS;
-        dirCount = 4;
     }
     /**
      * Builds a pathing object to run searches on.
@@ -108,26 +93,12 @@ public class AStarSearch implements Serializable {
     public AStarSearch(double[][] map, SearchType type) {
         if (map == null)
             throw new NullPointerException("map should not be null when building an AStarSearch");
-        this.map = map;
         width = map.length;
         height = width == 0 ? 0 : map[0].length;
-        parent = new byte[width][height];
-        gCache = new double[width][height];
-        finished = new boolean[width][height];
-        this.type = type == null ? SearchType.DIJKSTRA : type;
-        switch (this.type) {
-            case MANHATTAN:
-                dirs = Direction.CARDINALS;
-                dirCount = 4;
-                break;
-            case CHEBYSHEV:
-            case EUCLIDEAN:
-            case DIJKSTRA:
-            default:
-                dirs = Direction.OUTWARDS;
-                dirCount = 8;
-                break;
-        }
+        this.type = type == null ? SearchType.DIJKSTRA : type;         
+        graph = new DefaultGraph(map, (this.type != SearchType.MANHATTAN));
+        pathfinder = new Pathfinder<>(graph, true);
+        path = new ArrayList<>(width + height);
     }
 
     /**
@@ -138,9 +109,9 @@ public class AStarSearch implements Serializable {
      * @param starty the y coordinate of the start location
      * @param targetx the x coordinate of the target location
      * @param targety the y coordinate of the target location
-     * @return the shortest path, or null
+     * @return the shortest path, or null if no path is possible
      */
-    public Queue<Coord> path(int startx, int starty, int targetx, int targety) {
+    public ArrayList<Coord> path(int startx, int starty, int targetx, int targety) {
         return path(Coord.get(startx, starty), Coord.get(targetx, targety));
     }
     /**
@@ -149,82 +120,17 @@ public class AStarSearch implements Serializable {
      *
      * @param start the start location
      * @param target the target location
-     * @return the shortest path, or null
+     * @return the shortest path, or null if no path is possible
      */
-    public Queue<Coord> path(Coord start, Coord target) {
+    public ArrayList<Coord> path(Coord start, Coord target) {
+        path.clear();
         this.start = start;
         this.target = target;
-        open.clear();
-        ArrayTools.fill(finished, false);
-        ArrayTools.fill(parent, (byte)-1);
-        ArrayTools.fill(gCache, -1.0);
-        gCache[start.x][start.y] = 0;
-
-
-        final ArrayDeque<Coord> deq = new ArrayDeque<>();
-
-        Coord p = start;
-        open.add(p);
-        Direction dir;
-        byte turn;
-        while (!p.equals(target)) {
-            finished[p.x][p.y] = true;
-            open.remove(p);
-            for (byte d = 0; d < dirCount; d++) {
-                dir = dirs[d];
-                int x = p.x + dir.deltaX;
-                if (x < 0 || x >= width) {
-                    continue;//out of bounds so skip ahead
-                }
-
-                int y = p.y + dir.deltaY;
-                if (y < 0 || y >= height) {
-                    continue;//out of bounds so skip ahead
-                }
-
-                if (!finished[x][y]) {
-                    Coord test = Coord.get(x, y);
-                    if (open.contains(test)) {
-                        turn = parent[x][y];
-                        if(turn < 0)
-                            continue;
-                        // look back and find what we had in gCache
-                        inner = dirs[turn];
-                        double parentG = g(x - inner.deltaX, y - inner.deltaY);
-                        //double parentG = g(parent[x][y].x, parent[x][y].y);
-                        if (parentG < 0) {
-                            continue;//not a valid point so skip ahead
-                        }
-                        double g = g(p.x, p.y);
-                        if (g < 0) {
-                            continue;//not a valid point so skip ahead
-                        }
-                        if (parentG > g) {
-                            parent[x][y] = d;
-                        }
-                    } else {
-                        open.add(test);
-                        parent[x][y] = d;
-                    }
-                }
-            }
-            p = smallestF();
-            if (p == null) {
-                return deq;//no path possible
-            }
-        }
-
-        while (!p.equals(start)) {
-            deq.addFirst(p);
-            inner = dirs[parent[p.x][p.y]];
-            p = p.translate(-inner.deltaX, -inner.deltaY);
-        }
-        return deq;
+        if(pathfinder.searchNodePath(start, target, type.heuristic, path)) 
+            return path;
+        else
+            return null;
     }
-
-	public void changeCellWeight(int x, int y, double d) {
-		map[x][y] = d;
-	}
 
 	public int getWidth() {
 		return width;
@@ -234,139 +140,14 @@ public class AStarSearch implements Serializable {
 		return height;
 	}
 
-    /**
-     * Finds the g value (start to current) for the given location.
-     *
-     * If the given location is not valid or not attached to the pathfinding
-     * then -1 is returned.
-     *
-     * @param x coordinate
-     * @param y coordinate
-     */
-    protected double g(int x, int y) {
-        if (x == start.x && y == start.y) {
-            gCache[x][y] = 0;
-            return 0;
-        }
-        if (x < 0 || y < 0 || x >= width || y >= height || map[x][y] < 0 || parent[x][y] < 0) {
-            gCache[x][y] = -1;
-            return -1;//not a valid location
-        }
-        inner = dirs[parent[x][y]];
-        double parentG = gCache[x - inner.deltaX][y - inner.deltaY];
-        //double parentG = g(parent[x][y].x, parent[x][y].y);
-        if (parentG < 0) {
-            gCache[x][y] = -1;
-            return -1;//if any part of the path is not valid, this part is not valid
-        }
-
-        return (gCache[x][y] = map[x][y] + parentG + 1);//follow path back to start
-    }
-
-    /**
-     * Returns the heuristic distance from the current cell to the goal location\
-     * using the current calculation type.
-     *
-     * @param x coordinate
-     * @param y coordinate
-     * @return distance
-     */
-    protected double h(int x, int y) {
-        switch (type) {
-            case MANHATTAN:
-                return Math.abs(x - target.x) + Math.abs(y - target.y);
-            case CHEBYSHEV:
-                return Math.max(Math.abs(x - target.x), Math.abs(y - target.y));
-            case EUCLIDEAN:
-                int xDist = Math.abs(x - target.x);
-                xDist *= xDist;
-                int yDist = Math.abs(y - target.y);
-                yDist *= yDist;
-                return Math.sqrt(xDist + yDist);
-            case DIJKSTRA:
-            default:
-                return 0;
-
-        }
-    }
-
-    /**
-     * Combines g and h to get the estimated distance from start to goal going on the current route.
-     * @param x coordinate
-     * @param y coordinate
-     * @return The current known shortest distance to the start position from
-     *         the given position. If the current position cannot reach the
-     *         start position or is invalid, -1 is returned.
-     */
-    protected double f(int x, int y) {
-        double foundG = g(x, y);
-        if (foundG < 0) {
-            return -1;
-        }
-        return h(x, y) + foundG;
-    }
-
-    /**
-     * @return the current open point with the smallest F
-     */
-    protected Coord smallestF() {
-        Coord smallest = null;
-        double smallF = Double.POSITIVE_INFINITY;
-        double f;
-        int sz = open.size();
-        Coord p;
-        for (int o = 0; o < sz; o++) {
-            p = open.getAt(o);
-            if(p == null)
-                continue;
-            f = f(p.x, p.y);
-            if (f < 0) {
-                continue;//current tested point is not valid so skip it
-            }
-            if (smallest == null || f < smallF) {
-                smallest = p;
-                smallF = f;
-            }
-        }
-
-        return smallest;
-    }
-
 	@Override
 	public String toString() {
-        int maxLen = 0;
-		/*
-		 * First we compute the longest (String-wise) entry, so that we can
-		 * "indent" shorter cells, so that the output looks good (and is hereby
-		 * readable).
-		 */
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int locLen;
-                if(gCache[x][y] < 0.0) locLen = 2; // for -1 only
-                else if(gCache[x][y] == 0.0) locLen = 1;
-                else locLen = (int)Math.log10(Math.round(gCache[x][y])); // maybe better than making a temp String?
- 
-                maxLen = Math.max(maxLen, locLen);
-            }
-        }
-        ++maxLen;
-        final StringBuilder result = new StringBuilder((width * maxLen + 1) * height);
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int targetLength = result.length() + maxLen;
-                if(start != null && start.distanceSq(x, y) == 0.0)
-                    result.append('@');
-                else if(target != null && target.distanceSq(x, y) == 0.0)
-                    result.append('!');
-                else 
-                    result.append(Math.round(gCache[x][y]));
-                while (result.length() < targetLength) {
-                    result.append(' ');
-                }
-            }
-            if (y < height - 1)
-                result.append('\n');
+        int cellSize = (int)Math.log10(Math.round(pathfinder.metrics.maxCost)) + 2;
+        StringBuilder result = new StringBuilder((width * cellSize + 1) * height);
+        graph.show(result, pathfinder, pathfinder.metrics);
+        for (int i = 0; i + 1 < cellSize; i++) {
+            result.setCharAt((width * cellSize + 1) * start.y + cellSize * start.x + i, '@');
+            result.setCharAt((width * cellSize + 1) * target.y + cellSize * target.x + i, '!');
         }
         return result.toString();
     }

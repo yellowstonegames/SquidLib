@@ -2,9 +2,20 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IStatefulRNG;
+import squidpony.squidmath.OrthoLine;
+import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.StatefulRNG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A static class that can be used to modify the char[][] dungeons that other generators produce.
@@ -1465,7 +1476,7 @@ public class DungeonUtility {
      * costs. If a char is used in the map but does not have a corresponding key in costs, it will be given the value of
      * the parameter defaultValue, which is typically 0 unless a creature is limited to only moving in some terrain.
      * <p/>
-     * The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 0 is the
+     * The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 1 is the
      * cost for a normal walkable tile, and higher numbers are harder to enter.
      * <p/>
      * An example use for this would be to make a creature unable to enter any non-water cell (like a fish),
