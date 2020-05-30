@@ -438,44 +438,59 @@ public class Coord implements Serializable {
 
     /**
      * Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
-     * generate, but instead uses a highly-specific technique based on Cantor's pairing function, xorshifts,
-     * xor-rotate-xor-rotate, and an XLCG step at the end. It manages to get extremely low collision rates under many
-     * circumstances, and very frequently manages to avoid colliding on more than 25% of Coords (making the load factor
-     * of most hash-based collections fine at a default of 0.75) while often having 0 collisions with some data sets.
-     * It tolerates negative x and y for Coords fairly well.
+     * generate, but instead uses a highly-specific technique based on the Rosenberg-Strong pairing function, a Gray
+     * code, and two XLCG steps at the end. It manages to get extremely low collision rates under many circumstances,
+     * and very frequently manages to avoid colliding on more than 25% of Coords (making the load factor of most
+     * hash-based collections fine at a default of 0.75) while often having 0 collisions with some data sets.
+     * It does much better when Coords are in the default pooled range of -3 or greater.
      * <br>
-     * This gets comparable collision rates to a previous version used by SquidLib, around 3% across a wide variety of
-     * rectangular areas, but has much better results when used for seeding procedural generation based on a Coord (a
-     * reasonable usage of this method). The previous method changed bits in large checkerboard patterns, leaving heavy
-     * square-shaped biases in generated results, while this version only has checkerboard-reminiscent patterns in the
-     * lowest 4 or 5 bits, and even then has some chaotic scattering.
+     * This gets slightly better collision rates than previous versions used by SquidLib, around 4% across a wide
+     * variety of rectangular areas (most earlier hashes got about-5%-range collision rates, and using
+     * {@link java.util.Objects#hash(Object...)} gives more than a 75% collision rate). The previous version, which is
+     * still available as {@link #cantorHashCode(int, int)}, has slightly better results when used for seeding
+     * procedural generation based on a Coord (a reasonable usage of this method), but both this hash code and the
+     * Cantor-based one have excellent randomness in the upper bits of the hash (so if you use a hashCode() result as a
+     * whole int, then it should be pretty good as a seed). The method before the Cantor-based one,
+     * {@link #xoroHashCode(int, int)} was structured a little like xoroshiro ({@link XoRoRNG} uses the 64-bit version
+     * of xoroshiro), and while it had pretty low collision rates (low 5% range), its hash codes changed bits in large
+     * checkerboard patterns, leaving heavy square-shaped biases in generated results.
      * <br>
-     * This changed at least six times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
+     * This changed at least 7 times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
      * same across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
      * unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
      * {@link OrderedSet} and {@link OrderedMap}; if you use the ordered kinds, then the only things that matter about
      * this hash code are that it's fast (it's fast enough), it's cross-platform compatible (this version avoids using
      * long values, which are slow on GWT, and is carefully written to behave the same on GWT as desktop) and that it
      * doesn't collide often (which is now much more accurate than in earlier versions of this method).
-     * @see #cantorHashCode(int, int) A static method that gets the same result as this method without involving a Coord
+     * @see #rosenbergStrongHashCode(int, int) A static method that gets the same result as this method without involving a Coord
      * @return an int that should, for most different Coord values, be significantly different from the other hash codes
      */
     @Override
     public int hashCode() {
-        int r = x, s = y;
-        r ^= r >> 31;
-        s ^= s >> 31;
-        s += ((r+s) * (r+s+1) >> 1);
-        s ^= s >>> 1 ^ s >>> 6;
-        return (s ^ (s << 15 | s >>> 17) ^ (s << 23 | s >>> 9)) * 0x125493 ^ 0xD1B54A35;
+        //// for Coord, since it can be as low as -3, and Rosenberg-Strong works only for positive integers
+        final int x = this.x + 3;
+        final int y = this.y + 3;
+        //// Rosenberg-Strong pairing function; has excellent traits for keeping the hash gap-less while the
+        //// inputs fit inside a square, and is still good for rectangles.
+        final int n = (x >= y ? x * (x + 2) - y : y * y + x);
+        //// Gray code, XLCG, XLCG (ending on a XOR to stay within int range on GWT).
+        //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
+        //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.
+        //// (recall from RNG class that an XLCG is a XOR by a constant, then a multiply by a constant, where
+        //// the XOR constant, mod 8, is 5, while the multiplier, mod 8, is 3; the order can be reversed too.)
+        //// ending on a XOR helps mostly for GWT.
+        return ((n ^ n >>> 1) * 0x9E373 ^ 0xD1B54A35) * 0x125493 ^ 0x91E10DA5;
     }
 
     /**
-     * A static version of the current {@link #hashCode()} method of this class, taking x and y as parameters instead of
-     * requiring a Coord object. Like the current hashCode() method, this involves the close-to-optimal mathematical
+     * A static version of an earlier {@link #hashCode()} method of this class, taking x and y as parameters instead of
+     * requiring a Coord object. Like the earlier hashCode() method, this involves the close-to-optimal mathematical
      * Cantor pairing function to distribute x and y without overlap until they get very large. Cantor's pairing
      * function can be written simply as {@code ((x + y) * (x + y + 1)) / 2 + y}; it produces sequential results for a
-     * sequence of positive points traveling in diagonal stripes away from the origin.
+     * sequence of positive points traveling in diagonal stripes away from the origin. The finalization steps this
+     * performs improve the randomness of the lower bits, but also worsen collision rates; most cases involving Coords
+     * will see lower collision rates from {@link #rosenbergStrongHashCode(int, int)}, but more random results from this
+     * method.
      * @param x the x coordinate of the "imaginary Coord" to hash
      * @param y the y coordinate of the "imaginary Coord" to hash
      * @return the equivalent to the hashCode() of an "imaginary Coord"
@@ -486,6 +501,35 @@ public class Coord implements Serializable {
         y += ((x + y) * (x + y + 1) >> 1);
         y ^= y >>> 1 ^ y >>> 6;
         return (y ^ (y << 15 | y >>> 17) ^ (y << 23 | y >>> 9)) * 0x125493 ^ 0xD1B54A35;
+    }
+    /**
+     * A static version of the current {@link #hashCode()} method of this class, taking x and y as parameters instead of
+     * requiring a Coord object. Like the current hashCode() method, this involves the close-to-optimal mathematical
+     * Rosenberg-Strong pairing function to distribute x and y without overlap until they get very large. The
+     * Rosenberg-Strong pairing function can be written simply as {@code ((x >= y) ? x * (x + 2) - y : y * y + x)}; it
+     * produces sequential results for a sequence of positive points traveling in square "shells" away from the origin.
+     * <a href="https://hbfs.wordpress.com/2018/08/07/moeud-deux/">the algorithm is discussed more here</a>; the only
+     * changes this makes are adding 3 to x and y (to account for the minimum of -3 in most cases for a Coord), and some
+     * finalizing steps that help randomize the upper bits of the hash code (the lower bits are quite non-random because
+     * they can't permit any gaps while optimizing collision rates).
+     * @param x the x coordinate of the "imaginary Coord" to hash
+     * @param y the y coordinate of the "imaginary Coord" to hash
+     * @return the equivalent to the hashCode() of an "imaginary Coord"
+     */
+    public static int rosenbergStrongHashCode(int x, int y) {
+        //// for Coord, since it can be as low as -3, and Rosenberg-Strong works only for positive integers
+        x += 3;
+        y += 3;
+        //// Rosenberg-Strong pairing function; has excellent traits for keeping the hash gap-less while the
+        //// inputs fit inside a square, and is still good for rectangles.
+        final int n = (x >= y ? x * (x + 2) - y : y * y + x);
+        //// Gray code, XLCG, XLCG (ending on a XOR to stay within int range on GWT).
+        //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
+        //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.
+        //// (recall from RNG class that an XLCG is a XOR by a constant, then a multiply by a constant, where
+        //// the XOR constant, mod 8, is 5, while the multiplier, mod 8, is 3; the order can be reversed too.)
+        //// ending on a XOR helps mostly for GWT.
+        return ((n ^ n >>> 1) * 0x9E373 ^ 0xD1B54A35) * 0x125493 ^ 0x91E10DA5;
     }
     /**
      * An earlier hashCode() implementation used by this class, now standalone in case you want to replicate the results

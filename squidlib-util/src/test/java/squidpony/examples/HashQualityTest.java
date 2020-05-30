@@ -1089,15 +1089,37 @@ public class HashQualityTest {
      * TOTAL Cant collisions: 28541456 (14.86091141225305%), BEST 0, WORST 27817
      * TOTAL Gold collisions: 38067211 (19.8207635371701%), BEST 2, WORST 33344
      * TOTAL Obje collisions: 112523166 (58.588349583575706%), BEST 1, WORST 99462
+     * <br>
+     * LightRNG(123)
+     * Running on sizes: 50, 63, 81, 97, 139, 140, 141, 146, 163, 167, 184, 203, 222, 269, 289, 298, 299, 327, 382, 384
+     * Number of Coords added: 73569142
+     * TOTAL Lath collisions: 4044041 (5.49692559959446%), BEST 0, WORST 18731
+     * TOTAL Szud collisions: 4700375 (6.389057792735982%), BEST 0, WORST 15880
+     * TOTAL Pelo collisions: 11855242 (16.11442199502612%), BEST 0, WORST 29064
+     * TOTAL Cant collisions: 4307949 (5.855646651418064%), BEST 3, WORST 14865
+     * TOTAL RoSt collisions: 2896004 (3.936438459483461%), BEST 0, WORST 14826
+     * TOTAL GoRo collisions: 16773892 (22.800173474906096%), BEST 10, WORST 46038
+     * TOTAL Obje collisions: 55388439 (75.2875968024746%), BEST 14, WORST 135199
+     * <br>
+     * GoatRNG(123456789, 987654321)
+     * Running on sizes: 8, 18, 41, 45, 60, 154, 157, 168, 202, 207, 245, 246, 308, 311, 335, 363, 387, 390, 391, 392
+     * Number of Coords added: 88148616
+     * TOTAL Lath collisions: 4100452 (4.651748587862117%), BEST 0, WORST 21861
+     * TOTAL Szud collisions: 4580116 (5.195902338387253%), BEST 0, WORST 17076
+     * TOTAL Pelo collisions: 12073632 (13.696904781806216%), BEST 0, WORST 31134
+     * TOTAL Cant collisions: 5122095 (5.810749201099198%), BEST 1, WORST 17782
+     * TOTAL RoSt collisions: 3055698 (3.466529752435364%), BEST 0, WORST 15972
+     * TOTAL GoRo collisions: 19922851 (22.60143369692838%), BEST 1, WORST 49420
+     * TOTAL Obje collisions: 69577617 (78.9321717768093%), BEST 0, WORST 141151
      */
     @Test
     public void testCoord() {
-//        RNG prng = new RNG(new LightRNG(123));
-//        final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
-//        System.arraycopy(prng.randomOrdering(400), 0, params, 0, params.length);
+        RNG prng = new RNG(new GoatRNG(123456789, 987654321));
+        final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
+        System.arraycopy(prng.randomOrdering(400), 0, params, 0, params.length);
+        Arrays.sort(params);
 //        final int[] params = new int[]{256+3};
-        final int[] params = new int[]{32+3, 64+3, 128+3, 256+3};
-//        Arrays.sort(params);
+//        final int[] params = new int[]{32+3, 64+3, 128+3, 256+3};
         System.out.println("Running on sizes: " + StringKit.join(", ", params));
         long lathTotal = 0L, objeTotal = 0L, peloTotal = 0L, rostTotal = 0L, szudTotal = 0L, cantTotal = 0L, xoroTotal = 0L, total = 0L,
                 lathBest = 1000000L,
@@ -1134,7 +1156,7 @@ public class HashQualityTest {
 //                    ShuffledIntSequence
 //                            xShuffle = new ShuffledIntSequence(WIDTH, 1),
 //                            yShuffle = new ShuffledIntSequence(HEIGHT, -1);
-                    BitSet points = new BitSet(WIDTH * HEIGHT + WIDTH + HEIGHT << 2);
+                    BitSet points = new BitSet(WIDTH * HEIGHT << 2);
 //                    UnorderedSet<Coord> points = new UnorderedSet<>(WIDTH * HEIGHT);
                     for (int i = 0; i < WIDTH; i++) {
                         for (int j = 0; j < HEIGHT; j++) {
@@ -1152,7 +1174,7 @@ public class HashQualityTest {
                             colliderSzud.add(szudzikCoord(x, y) & restrict);
                             colliderPelo.add(pelotonCoord(x, y) & restrict);
                             colliderCant.add(Coord.cantorHashCode(x, y) & restrict);
-                            colliderRoSt.add(rosenbergStrongCoord(x, y) & restrict);
+                            colliderRoSt.add(Coord.rosenbergStrongHashCode(x, y) & restrict);
                             colliderXoro.add(goRogueCoord(x, y) & restrict);
                             colliderObje.add(Objects.hash(x, y) & restrict);
                             
