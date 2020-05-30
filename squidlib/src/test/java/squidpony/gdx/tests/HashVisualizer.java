@@ -66,7 +66,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 146;
     private int hashMode = 0, rngMode = 0, noiseMode = 134, otherMode = 1;//74;//118;//82;
 
@@ -647,6 +647,37 @@ public class HashVisualizer extends ApplicationAdapter {
         y = y << 1 ^ y >> 31;
         x += ((x >= y ? x * x + x + x - y : y * y + x) ^ 0xD1B54A35) * 0x9E375 + y;
         return x ^ x >>> 11 ^ x << 15;
+    }
+    public static int rosenbergStrongCoord2(int x, int y)
+    {
+        int n = (x >= y ? x * (x + 2) - y : y * y + x);
+        ////boustrophedonic variant; winds in a serpentine, always-connected path
+//        int n;
+//        if(x >= y) {
+//            if((x & 1) == 1)
+//                n = x * x + y;
+//            else
+//                n = x * (x + 2) - y;
+//        }
+//        else {
+//            if((y & 1) == 1)
+//                n = y * (y + 2) - x;
+//            else
+//                n = y * y + x;
+//        }
+        //// Gray code, XLCG, XLCG, xor (to stay within int range on GWT).
+        //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
+        //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.
+        //// the last xor is just for GWT and could be omitted if not targeting JS Numbers.
+        return ((n ^ n >>> 1 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
+        
+        //// Other options:
+        
+        //// Bijective RRLL shift, XLCG, XLCG, xor (to stay within int range on GWT)
+//        return ((n ^ n >>> 11 ^ n >>> 23 ^ n << 7 ^ n << 23 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
+        
+        //// Bijective combination of bitwise shifts (only some such combinations work non-destructively) 
+//        return n ^ n << 7 ^ n << 23 ^ n >>> 11 ^ n >>> 23;
     }
 
 
@@ -1792,14 +1823,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 2:
                         extra = System.nanoTime() >>> 30 & 31;
-                        Gdx.graphics.setTitle("Szudzik Hash on length 2, bit " + extra);
+                        Gdx.graphics.setTitle("Alternate Rosenberg-Strong Hash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-//                                code = szudzikHash2D(x, y) & 0xFFFFFF00L | 255L;
-                                back[x][y] = (szudzikHash2D(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-//                                back[x][y] = BOLD[szudzikHash2D(x, y)];
+                                back[x][y] = (rosenbergStrongCoord2(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;
                             }
                         }
+//                        extra = System.nanoTime() >>> 30 & 31;
+//                        Gdx.graphics.setTitle("Szudzik Hash on length 2, bit " + extra);
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                back[x][y] = (szudzikHash2D(x, y) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;
+//                            }
+//                        }
                         break;
                     case 3:
                         extra = System.nanoTime() >>> 30 & 31;

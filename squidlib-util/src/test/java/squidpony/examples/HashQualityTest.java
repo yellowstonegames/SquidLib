@@ -827,8 +827,10 @@ public class HashQualityTest {
 
     public static int szudzikCoord(int x, int y)
     {
-        x = x << 1 ^ x >> 31;
-        y = y << 1 ^ y >> 31;
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+        x += 3;
+        y += 3;
         return (x >= y
                 ? x * x + x + y
                 : x + y * y);
@@ -836,12 +838,47 @@ public class HashQualityTest {
 
     public static int rosenbergStrongCoord(int x, int y)
     {
-        x = x << 1 ^ x >> 31;
-        y = y << 1 ^ y >> 31;
-        x += ((x >= y ? x * x + x + x - y : y * y + x) ^ 0xD1B54A35) * 0x9E375 + y;
-        return x ^ x >>> 11 ^ x << 15;
+        //// sorta a hack because Coord has an effective min of -3...
+        x += 3;
+        y += 3;
+        //// n is assigned the normal Rosenberg-Strong pairing function's result here.
+        int n = (x >= y ? x * (x + 2) - y : y * y + x);
+        ////boustrophedonic variant; winds in a serpentine, always-connected path
+//        int n;
+//        if(x >= y) {
+//            if((x & 1) == 1)
+//                n = x * x + y;
+//            else
+//                n = x * (x + 2) - y;
+//        }
+//        else {
+//            if((y & 1) == 1)
+//                n = y * (y + 2) - x;
+//            else
+//                n = y * y + x;
+//        }
+        //// Gray code, XLCG, XLCG, xor (to stay within int range on GWT).
+        //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
+        //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.
+        //// the last xor is just for GWT and could be omitted if not targeting JS Numbers.
+        return ((n ^ n >>> 1 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
+
+        //// Other options:
+
+        //// Bijective RRLL shift, XLCG, XLCG, xor (to stay within int range on GWT)
+//        return ((n ^ n >>> 11 ^ n >>> 23 ^ n << 7 ^ n << 23 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
+
+        //// Bijective combination of bitwise shifts (only some such combinations work non-destructively) 
+//        return n ^ n << 7 ^ n << 23 ^ n >>> 11 ^ n >>> 23;
     }
 
+
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+//        x += ((x >= y ? x * x + x + x - y : y * y + x) ^ 0xD1B54A35) * 0x9E375 + y;
+//        return x ^ x >>> 11 ^ x << 15;
+    
+    
     public static int rosenbergStrong3D(int x, int y, int z)
     {
 //        x = x << 1 ^ x >> 31;
@@ -1021,6 +1058,14 @@ public class HashQualityTest {
 
         //0xDB4F0B9175AE2165L, 0xBBE0563303A4615FL, 0xA0F2EC75A1FE1575L, 0x89E182857D9ED689L
     }
+    
+    public static int goRogueCoord(int x, int y){
+
+        x *= 0x9E3779B9;
+        y *= 0x632BE5AB;
+        return ((x ^ y) >>> ((x & 7) + (y & 7))) * 0x85157AF5;
+    }
+    
 //        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
 //        x ^= (y ^ 0xFB8FAC03) * 0x157931;
 //        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
@@ -1047,21 +1092,22 @@ public class HashQualityTest {
      */
     @Test
     public void testCoord() {
-        RNG prng = new RNG(new LightRNG(123));
-        final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
-        System.arraycopy(prng.randomOrdering(400), 0, params, 0, params.length);
-//        final int[] params = new int[]{64, 128, 256, 512};
-        Arrays.sort(params);
+//        RNG prng = new RNG(new LightRNG(123));
+//        final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
+//        System.arraycopy(prng.randomOrdering(400), 0, params, 0, params.length);
+//        final int[] params = new int[]{256+3};
+        final int[] params = new int[]{32+3, 64+3, 128+3, 256+3};
+//        Arrays.sort(params);
         System.out.println("Running on sizes: " + StringKit.join(", ", params));
-        long lathTotal = 0L, objeTotal = 0L, peloTotal = 0L, rostTotal = 0L, szudTotal = 0L, cantTotal = 0L, goldTotal = 0L, total = 0L,
+        long lathTotal = 0L, objeTotal = 0L, peloTotal = 0L, rostTotal = 0L, szudTotal = 0L, cantTotal = 0L, xoroTotal = 0L, total = 0L,
                 lathBest = 1000000L,
                 objeBest = 1000000L,
                 peloBest = 1000000L,
                 rostBest = 1000000L,
                 szudBest = 1000000L,
                 cantBest = 1000000L,
-                goldBest = 1000000L,
-                lathWorst = 0L, objeWorst = 0L, peloWorst = 0L, rostWorst = 0L, szudWorst = 0L, cantWorst = 0L, goldWorst = 0L, t;
+                xoroBest = 1000000L,
+                lathWorst = 0L, objeWorst = 0L, peloWorst = 0L, rostWorst = 0L, szudWorst = 0L, cantWorst = 0L, xoroWorst = 0L, t;
 //        long[] confTotals = new long[31];
         for (int reduction = 7; reduction >= 0; reduction--) {
             System.out.println("Running reduction level " + reduction);
@@ -1069,7 +1115,7 @@ public class HashQualityTest {
                 final int WIDTH = w;
                 for (int h : params) {
                     final int HEIGHT = h;
-                    Coord.expandPoolTo(WIDTH, HEIGHT);
+                    Coord.expandPoolTo(WIDTH-3, HEIGHT-3);
                     int SIZE = WIDTH * HEIGHT;
                     int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
 
@@ -1079,22 +1125,24 @@ public class HashQualityTest {
                             colliderSzud = new IntSet(SIZE, 0.5f),
                             colliderCant = new IntSet(SIZE, 0.5f),
                             colliderRoSt = new IntSet(SIZE, 0.5f),
-                            colliderGold = new IntSet(SIZE, 0.5f);
+                            colliderXoro = new IntSet(SIZE, 0.5f);
 //                    IntSet[] colliders = new IntSet[31];
 //                    for (int i = 0; i < 31; i++) {
 //                        colliders[i] = new IntSet(SIZE, 0.5f);
 //                    }
                     LightRNG rng = new LightRNG(1L);
-                    SNShuffledIntSequence
-                            xShuffle = new SNShuffledIntSequence(WIDTH, 1),
-                            yShuffle = new SNShuffledIntSequence(HEIGHT, -1);
+//                    ShuffledIntSequence
+//                            xShuffle = new ShuffledIntSequence(WIDTH, 1),
+//                            yShuffle = new ShuffledIntSequence(HEIGHT, -1);
                     BitSet points = new BitSet(WIDTH * HEIGHT + WIDTH + HEIGHT << 2);
 //                    UnorderedSet<Coord> points = new UnorderedSet<>(WIDTH * HEIGHT);
                     for (int i = 0; i < WIDTH; i++) {
                         for (int j = 0; j < HEIGHT; j++) {
 //                            int x = xShuffle.next(), y = yShuffle.next();
-                            int x = xShuffle.next() ^ -rng.next(1), y = yShuffle.next() ^ -rng.next(1);
-                            int c = x + WIDTH + 1 + (y + HEIGHT + 1) * WIDTH;
+//                            int x = xShuffle.next() ^ -rng.next(1), y = yShuffle.next() ^ -rng.next(1);
+//                            int c = x + WIDTH + 1 + (y + HEIGHT + 1) * WIDTH;
+                            int x = i - 3, y = j - 3;
+                            int c = i + j * WIDTH;
                             if (rng.next(3) > reduction || points.get(c)) {
                                 --SIZE;
                                 continue;
@@ -1103,9 +1151,9 @@ public class HashQualityTest {
                             colliderLath.add(latheCoord(x, y) & restrict);
                             colliderSzud.add(szudzikCoord(x, y) & restrict);
                             colliderPelo.add(pelotonCoord(x, y) & restrict);
-                            colliderCant.add(cantorCoord(x, y) & restrict);
+                            colliderCant.add(Coord.cantorHashCode(x, y) & restrict);
                             colliderRoSt.add(rosenbergStrongCoord(x, y) & restrict);
-                            colliderGold.add(Coord.cantorHashCode(x, y) & restrict);
+                            colliderXoro.add(goRogueCoord(x, y) & restrict);
                             colliderObje.add(Objects.hash(x, y) & restrict);
                             
 //                            for (int i = 0; i < 31; i++) {
@@ -1124,8 +1172,8 @@ public class HashQualityTest {
 //                    System.out.println("Cant collisions: " + t);
                     t = (SIZE - colliderRoSt.size); rostBest = Math.min(t, rostBest); rostWorst = Math.max(t, rostWorst);
 //                    System.out.println("RoSt collisions: " + t);
-                    t = (SIZE - colliderGold.size); goldBest = Math.min(t, goldBest); goldWorst = Math.max(t, goldWorst);
-//                    System.out.println("Gold collisions: " + t);
+                    t = (SIZE - colliderXoro.size); xoroBest = Math.min(t, xoroBest); xoroWorst = Math.max(t, xoroWorst);
+//                    System.out.println("xoro collisions: " + t);
                     t = (SIZE - colliderObje.size); objeBest = Math.min(t, objeBest); objeWorst = Math.max(t, objeWorst);
 //                    System.out.println("Obje collisions: " + t);
 
@@ -1138,7 +1186,7 @@ public class HashQualityTest {
                     szudTotal += (SIZE - colliderSzud.size);
                     cantTotal += (SIZE - colliderCant.size);
                     rostTotal += (SIZE - colliderRoSt.size);
-                    goldTotal += (SIZE - colliderGold.size);
+                    xoroTotal += (SIZE - colliderXoro.size);
                     objeTotal += (SIZE - colliderObje.size);
                     total += SIZE;
                 }
@@ -1150,7 +1198,7 @@ public class HashQualityTest {
         System.out.println("TOTAL Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
         System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
         System.out.println("TOTAL RoSt collisions: " + rostTotal + " (" + (rostTotal * 100.0 / total) + "%), BEST " + rostBest + ", WORST " + rostWorst);
-        System.out.println("TOTAL Cord collisions: " + goldTotal + " (" + (goldTotal * 100.0 / total) + "%), BEST " + goldBest + ", WORST " + goldWorst);
+        System.out.println("TOTAL GoRo collisions: " + xoroTotal + " (" + (xoroTotal * 100.0 / total) + "%), BEST " + xoroBest + ", WORST " + xoroWorst);
         System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
