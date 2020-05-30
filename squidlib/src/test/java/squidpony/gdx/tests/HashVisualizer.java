@@ -650,8 +650,22 @@ public class HashVisualizer extends ApplicationAdapter {
     }
     public static int rosenbergStrongCoord2(int x, int y)
     {
+        //// for Coord, since it can be as low as -3, and Rosenberg-Strong works only for positive integers
+        x += 3;
+        y += 3;
+        //// Rosenberg-Strong pairing function; has excellent traits for keeping the hash gap-less while the
+        //// inputs fit inside a square, and is still good for rectangles.
         int n = (x >= y ? x * (x + 2) - y : y * y + x);
+        //// Gray code, XLCG, XLCG (ending on a XOR to stay within int range on GWT).
+        //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
+        //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.
+        //// (recall from RNG class that an XLCG is a XOR by a constant, then a multiply by a constant, where
+        //// the XOR constant, mod 8, is 5, while the multiplier, mod 8, is 3.)
+        //// ending on a XOR helps mostly for GWT.
+        return ((n ^ n >>> 1) * 0x9E373 ^ 0xD1B54A35) * 0x125493 ^ 0x91E10DA5;
+        //// Other options:
         ////boustrophedonic variant; winds in a serpentine, always-connected path
+        //// see https://hbfs.wordpress.com/2018/08/07/moeud-deux/ for more
 //        int n;
 //        if(x >= y) {
 //            if((x & 1) == 1)
@@ -665,13 +679,9 @@ public class HashVisualizer extends ApplicationAdapter {
 //            else
 //                n = y * y + x;
 //        }
-        //// Gray code, XLCG, XLCG, xor (to stay within int range on GWT).
-        //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
-        //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.
-        //// the last xor is just for GWT and could be omitted if not targeting JS Numbers.
-        return ((n ^ n >>> 1 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
-        
-        //// Other options:
+
+        //// Just the Rosenberg-Strong result
+//        return n;
         
         //// Bijective RRLL shift, XLCG, XLCG, xor (to stay within int range on GWT)
 //        return ((n ^ n >>> 11 ^ n >>> 23 ^ n << 7 ^ n << 23 ^ 0xD1B54A35) * 0x9E373 ^ 0x7F4A7C15) * 0x125493 ^ 0x91E10DA5;
