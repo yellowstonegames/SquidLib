@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -13,89 +11,44 @@ import static squidpony.squidmath.NumberTools.doubleToMixedIntBits;
 import static squidpony.squidmath.NumberTools.floatToIntBits;
 
 /**
- * Simple hashing functions that we can rely on staying the same cross-platform.
- * The static methods of this class (not its inner classes) use a custom algorithm
- * designed for speed and general-purpose usability, but not cryptographic security;
- * this algorithm is sometimes referred to as Hive, and several other algorithms are
- * available in static inner classes, some of which have different goals, such as
- * reduced likelihood of successfully reversing a hash, or just providing another
- * choice. The hashes this returns are always 0 when given null to hash. Arrays with
+ * 64-bit and 32-bit hashing functions that we can rely on staying the same cross-platform.
+ * Several algorithms are present here, each with some tradeoffs for performance, quality,
+ * and extra features. Each algorithm was designed for speed and general-purpose usability,
+ * but not cryptographic security.
+ * <br>
+ * The hashes this returns are always 0 when given null to hash. Arrays with
  * identical elements of identical types will hash identically. Arrays with identical
  * numerical values but different types will sometimes hash differently. This class
- * always provides 64-bit hashes via hash64() and 32-bit hashes via hash(), and some
- * of the algorithms here may provide a hash32() method that matches older behavior
- * and uses only 32-bit math. The hash64() and hash() methods, at least in Wisp and
- * Mist, use 64-bit math even when producing 32-bit hashes, for GWT reasons. GWT
- * doesn't have the same behavior as desktop and Android applications when using ints
- * because it treats doubles mostly like ints, sometimes, due to it using JavaScript.
- * If we use mainly longs, though, GWT emulates the longs with a more complex
- * technique behind-the-scenes, that behaves the same on the web as it does on
- * desktop or on a phone. Since CrossHash is supposed to be stable cross-platform,
- * this is the way we need to go, despite it being slightly slower.
+ * always provides 64-bit hashes via hash64() and 32-bit hashes via hash(), and Wisp
+ * provides a hash32() method that matches older behavior and uses only 32-bit math.
+ * The hash64() and hash() methods, except in Hive, use 64-bit math even when producing
+ * 32-bit hashes, for GWT reasons. GWT doesn't have the same behavior as desktop and
+ * Android applications when using ints because it treats doubles mostly like ints,
+ * sometimes, due to it using JavaScript. If we use mainly longs, though, GWT emulates
+ * the longs with a more complex technique behind-the-scenes, that behaves the same on
+ * the web as it does on desktop or on a phone. Since CrossHash is supposed to be stable
+ * cross-platform, this is the way we need to go, despite it being slightly slower.
  * <br>
- * There are several static inner classes in CrossHash: Lightning, Falcon, and Mist,
- * each providing different hashing properties, as well as the inner IHasher interface and a
- * compatibility version of Wisp as a subclass. Older versions of SquidLib encouraged using a
- * subclass because the non-nested-class methods used a lousy implementation of the FNV-1a algorithm,
- * which was roughly 10x slower than the current methods in CrossHash and had poor correlation
- * properties. In the current version, you probably will be fine with the default functions in
- * CrossHash, using the Wisp algorithm. If you need a salt to alter the hash function,
- * using one of a large family of such functions instead of a single function like Wisp, then Mist
- * is a good choice. Lightning is mostly superseded by Wisp, but it can have better behavior on some
- * collections regarding collisions; Falcon is meant to be a faster version of Lightning.
+ * The static methods in CrossHash, like {@link #hash64(int[])}, delegate to the {@link Water}
+ * algorithm. This is a fairly fast and heavily-tested hash that developed from something like
+ * Wang Yi's wyhash algorithm, though only the constants and the general concept of a mum()
+ * function are shared with wyhash. There are several static inner classes in CrossHash
+ * {@link Water} (already mentioned), {@link Yolk} (which is very close to Water but allows a
+ * 64-bit salt or seed), {@link Curlup} (which is the fastest hash here for larger inputs, and
+ * also allows a 64-bit seed), {@link Mist} (which allows a 128-bit salt, but has mediocre
+ * quality), {@link Hive} (which is mostly here for compatibility, but has OK quality and good
+ * collision rates), and {@link Wisp} (which is fast for small inputs but has bad collision
+ * rates). There's also the inner IHasher interface, and the classes that implement it.
+ * Water, Yolk, and Curlup all pass the rigorous SMHasher test battery. The others don't pass
+ * it in full, or sometimes at all.
  * <br>
- * IHasher values are provided as static fields, and use Wisp to hash a specific type or fall
+ * IHasher values are provided as static fields, and use Water to hash a specific type or fall
  * back to Object.hashCode if given an object with the wrong type. IHasher values are optional
  * parts of OrderedMap, OrderedSet, Arrangement, and the various classes that use Arrangement
  * like K2 and K2V1, and allow arrays to be used as keys in those collections while keeping
  * hashing by value instead of the normal hashing by reference for arrays. You probably won't
  * ever need to make a class that implements IHasher yourself; for some cases you may want to
  * look at the {@link Hashers} class for additional functions.
- * <br>
- * The inner classes provide alternate, faster hashing algorithms. Lightning, Wisp, and Falcon
- * have no theoretical basis or grounds in any reason other than empirical testing for why they
- * do what they do, and this seems to be in line with many widely-used hashes (see: The Art of
- * Hashing, http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx ). That said, Wisp
- * performs very well, ahead of Arrays.hashCode (10.5 ms instead of 15 ms) for over a million
- * hashes of 16-element long arrays, not including overhead for generating them, while SipHash and
- * FNV-1a take approximately 80 ms and 135-155 ms, respectively, for the same data). Lightning and
- * Falcon perform less-well, with Lightning taking 17 ms instead of 15 ms for Arrays.hashCode, and
- * Falcon taking about 12.3 ms but slowing down somewhat if a 32-bit hash is requested from long
- * data. All of these have good, low, collision rates on Strings and long arrays. Sketch is only
- * slightly slower than Wisp, but offers little to no advantage over it yet.
- * <br>
- * Mist is a variant on Wisp with 128 bits for a salt-like modifier as a member variable, which can
- * make 2 to the 128 individual hashing functions from one set of code, and uses 64 bits for some other
- * hashes (only calls to hash() with data that doesn't involve long or double arrays). Mist has some
- * minor resemblance to a cryptographic hash, but is not recommended it for that usage. It is,
- * however ideal for situations that show up often in game development where end users may be able
- * to see and possibly alter some information that you don't want changed (i.e. save data stored on
- * a device or in the browser's LocalStorage). If you want a way to verify the data is what you
- * think it is, you can store a hash, using one of the many-possible hash functions this can
- * produce, somewhere else and verify that the saved data has the hash it did last time; if the
- * exact hashing function isn't known (or exact functions aren't known) by a tampering user,
- * then it is unlikely they can make the hash match even if they can edit it. Mist is slightly slower
- * than Wisp, at about 18 ms for Mist for the same data instead of Wisp's 10.5, but should never be
- * worse than twice as slow as Arrays.hashCode, and is still about three times faster than the similar
- * SipHash that SquidLib previously had here.
- * <br>
- * All of the hashes used here have about the same rate of collisions on identical data
- * (testing used Arrays.hashCode, all the hashes in here now, and the now-removed SipHash), with
- * any fluctuation within some small margin of error. Wisp (typically via the non-nested methods
- * in CrossHash) and Mist are the two most likely algorithms you might use here.
- * <br>
- * To help find patterns in hash output in a visual way, you can hash an x,y point, take the bottom 24 bits,
- * and use that as an RGB color for the pixel at that x,y point. On a 512x512 grid of points, the patterns
- * in Arrays.hashCode and the former default CrossHash algorithm (FNV-1a) are evident, and Sip (implementing
- * SipHash) did approximately as well as Lightning, with no clear patterns visible (Sip has been removed from
- * SquidLib because it needs a lot of code and is slower than all of the current hashes). The idea is from
- * <a href="http://www.clockandflame.com/media/Goulburn06.pdf">a technical report on visual uses for hashing (PDF)</a>.
- * <ul>
- * <li>{@link java.util.Arrays#hashCode(int[])}: http://i.imgur.com/S4Gh1sX.png</li>
- * <li>{@link CrossHash#hash(int[])}: http://i.imgur.com/x8SDqvL.png</li>
- * <li>(Former) CrossHash.Sip.hash(int[]): http://i.imgur.com/keSpIwm.png</li>
- * <li>{@link CrossHash.Lightning#hash(int[])}: http://i.imgur.com/afGJ9cA.png</li>
- * </ul>
  * <br>
  * Note: This class was formerly called StableHash, but since that refers to a specific
  * category of hashing algorithm that this is not, and since the goal is to be cross-
@@ -113,7 +66,8 @@ import static squidpony.squidmath.NumberTools.floatToIntBits;
  * structures that are simple but also very fast. Water is modeled after wyhash and uses the same constants
  * in its hash64() methods, but avoids the 128-bit multiplication that wyhash uses. Because both wyhash and
  * Water operate on 4 items at a time, they tend to be very fast on desktop platforms, but Water probably
- * won't be amazing at GWT performance.
+ * won't be amazing at GWT performance. Similarly, the recently-added Curlup performs very well due to SIMD
+ * optimizations that HotSpot performs, and probably won't do as well on GWT or Android.
  * <br>
  * Created by Tommy Ettinger on 1/16/2016.
  * @author Tommy Ettinger
@@ -741,7 +695,7 @@ public class CrossHash {
         @Override
         public boolean areEqual(Object left, Object right) {
             if(left == right) return true;
-            Class l = left.getClass(), r = right.getClass();
+            Class<?> l = left.getClass(), r = right.getClass();
             if(l == r)
             {
                 if(l.isArray())
@@ -859,7 +813,6 @@ public class CrossHash {
     // 0x C3246007A332C12AL
     // 0x CA1C479692B5C6ABL
     // 0x C6B5275692B5CC83 // untested so far
-    @SuppressWarnings("NumericOverflow")
     public static final class Lightning {
 
         public static long hash64(final boolean[] data) {
@@ -1272,8 +1225,10 @@ public class CrossHash {
      * SquidLib need a pretty good hash function to work at their best (they use linear-probing with open addressing,
      * which struggles when hashes are bad), 20% loss of speed during hashing to avoid slower
      * lookups/insertions/deletions from {@link OrderedMap}, {@link OrderedSet}, {@link UnorderedMap},
-     * {@link UnorderedSet}, {@link Arrangement}, and others is probably worth it; if you really need speed then Wisp is
-     * right here.
+     * {@link UnorderedSet}, {@link Arrangement}, and others is probably worth it; if you really need speed then you
+     * should first consider {@link Curlup}, which is faster than Wisp on moderately-long input arrays (with 20 or more
+     * items, usually), and only if you need a fast hash for small inputs, where collisions aren't a problem, should you
+     * turn to Wisp.
      */
     public static final class Wisp {
         public static long hash64(final boolean[] data) {
@@ -1387,7 +1342,7 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
@@ -1408,7 +1363,7 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0;
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i += step) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
@@ -1623,7 +1578,7 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
             int result = 0x9E3779B9, a = 0x632BE5AB;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i++) {
                 result += (a ^= 0x85157AF5 * data[i]);
             }
@@ -1834,7 +1789,7 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
@@ -1855,7 +1810,7 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0;
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i+= step) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
@@ -1964,7 +1919,8 @@ public class CrossHash {
      * to 128 bits of salt values that help to obscure what hashing function is actually being used. This class is
      * similar to the older Storm variety, but is somewhat faster and has many more possible salt "states" when using
      * the constructors that take two longs or a CharSequence. There isn't really any reason to use Storm, so Mist has
-     * now replaced Storm entirely. Code that used Storm should be able to just change any usage of "Storm" to "Mist".
+     * now replaced Storm entirely. Code that used Storm should be able to just change any usage of "Storm" to "Mist",
+     * or can instead use {@link Yolk} or {@link Curlup} for higher quality and speed but smaller salt size.
      * <br>
      * The salt fields are not serialized, so it is important that the same salt will be given by the
      * program when the same hash results are wanted for some inputs.
@@ -1977,11 +1933,10 @@ public class CrossHash {
      * multiple hashes of a single array or String as part of cuckoo hashing or similar techniques that need multiple
      * hashes for the same inputs.
      */
-    @Beta
     public static final class Mist implements Serializable {
         private static final long serialVersionUID = -1275284837479983271L;
 
-        private transient final long $l1, $l2;
+        private transient final long l1, l2;
 
         public Mist() {
             this(0x1234567876543210L, 0xEDCBA98789ABCDEFL);
@@ -2004,19 +1959,18 @@ public class CrossHash {
             l1 = alteration + permute(alteration);
             l1 = (l1 ^ (l1 >>> 30)) * 0xBF58476D1CE4E5B9L;
             l1 = (l1 ^ (l1 >>> 27)) * 0x94D049BB133111EBL;
-            $l1 = l1 ^ l1 >>> 31;
+            this.l1 = l1 ^ l1 >>> 31;
 
             l2 = alteration + 6 * 0x9E3779B97F4A7C15L;
             l2 = (l2 ^ (l2 >>> 30)) * 0xBF58476D1CE4E5B9L;
             l2 = (l2 ^ (l2 >>> 27)) * 0x94D049BB133111EBL;
-            $l2 = l2 ^ l2 >>> 31;
+            this.l2 = l2 ^ l2 >>> 31;
         }
 
-        @SuppressWarnings("NumericOverflow")
         public Mist(final long alteration1, long alteration2) {
             final int i1 = permute(alteration1);
-            $l1 = alteration1 + i1;
-            $l2 = alteration2 + permute(alteration2 + i1);
+            l1 = alteration1 + i1;
+            l2 = alteration2 + permute(alteration2 + i1);
         }
 
         /**
@@ -2030,7 +1984,7 @@ public class CrossHash {
         public Mist randomize()
         {
             long l1, l2;
-            l1 = $l2 + permute($l2 + 3 * 0x9E3779B97F4A7C15L);
+            l1 = this.l2 + permute(this.l2 + 3 * 0x9E3779B97F4A7C15L);
             l1 = (l1 ^ (l1 >>> 30)) * 0xBF58476D1CE4E5B9L;
             l1 = (l1 ^ (l1 >>> 27)) * 0x94D049BB133111EBL;
             l1 ^= l1 >>> 31;
@@ -2071,11 +2025,11 @@ public class CrossHash {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L)) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L)) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
 
@@ -2083,55 +2037,55 @@ public class CrossHash {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final short[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final char[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final int[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final long[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
 
@@ -2139,22 +2093,22 @@ public class CrossHash {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i])) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final double[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(data[i])) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         /**
@@ -2169,11 +2123,11 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = start; i < end && i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         /**
@@ -2190,106 +2144,106 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = start; i < end && i < len; i += step) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final CharSequence data) {
             if (data == null)
                 return 0;
             final int len = data.length();
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i)) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i)) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final char[][] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final long[][] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final CharSequence[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final Iterable<? extends CharSequence> data) {
             if (data == null)
                 return 0;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (CharSequence datum : data) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum)) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum)) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final CharSequence[]... data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final Object[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             Object o;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1 : o.hashCode())) ^ l2 * a + l1;
             }
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
 
         public long hash64(final Object data) {
             if (data == null)
                 return 0;
             final long a = 0x632BE59BD9B4E019L ^ 0x8329C6EB9E6AD3E3L * data.hashCode(),
-                    result = 0x9E3779B97F4A7C94L + $l2 + (a ^ $l2 * a + $l1);
-            return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
+                    result = 0x9E3779B97F4A7C94L + l2 + (a ^ l2 * a + l1);
+            return result * (a * l1 | 1L) ^ (result << 37 | result >>> 27);
         }
         public int hash(final boolean[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L)) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L)) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
 
@@ -2297,55 +2251,55 @@ public class CrossHash {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final short[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final char[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final int[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final long[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
 
@@ -2353,22 +2307,22 @@ public class CrossHash {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i])) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final double[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(data[i])) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         /**
@@ -2383,11 +2337,11 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = start; i < end && i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
         /**
          * Hashes only a subsection of the given data, starting at start (inclusive), ending before end (exclusive), and
@@ -2403,96 +2357,96 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = start; i < end && i < len; i += step) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final CharSequence data) {
             if (data == null)
                 return 0;
             final int len = data.length();
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i)) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i)) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final char[][] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final long[][] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final CharSequence[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final Iterable<? extends CharSequence> data) {
             if (data == null)
                 return 0;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (CharSequence datum : data) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum)) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum)) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final CharSequence[]... data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final Object[] data) {
             if (data == null)
                 return 0;
             final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
+            long result = 0x9E3779B97F4A7C94L + l2, a = 0x632BE59BD9B4E019L;
             Object o;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1 : o.hashCode())) ^ l2 * a + l1;
             }
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
 
         public int hash(final Object data) {
             if (data == null)
                 return 0;
             final long a = 0x632BE59BD9B4E019L ^ 0x8329C6EB9E6AD3E3L * data.hashCode(),
-                    result = 0x9E3779B97F4A7C94L + $l2 + (a ^ $l2 * a + $l1);
-            return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
+                    result = 0x9E3779B97F4A7C94L + l2 + (a ^ l2 * a + l1);
+            return (int)(result * (a * l1 | 1L) ^ (result << 37 | result >>> 27));
         }
     }
 
@@ -2530,7 +2484,6 @@ public class CrossHash {
      * Fire) and from the wide assortment of code that I had to employ to achieve a SMHasher successful run (which
      * turned out to be not-so-successful).
      */
-    @Beta
     public static final class Hive {
         public static long hash64(final CharSequence data) {
             if (data == null)
@@ -2672,7 +2625,7 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0L;
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i++) {
                 result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
                 result = (result << 54 | result >>> 10);
@@ -2694,7 +2647,7 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0L;
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-            final int len = end < data.length() ? end : data.length();
+            final int len = Math.min(end, data.length());
             for (int i = start; i < len; i++) {
                 result ^= (z += (data.charAt(i) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
                 result = (result << 54 | result >>> 10);
@@ -2718,7 +2671,7 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0L;
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i += step) {
                 result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
                 result = (result << 54 | result >>> 10);
@@ -2742,7 +2695,7 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0L;
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-            final int len = end < data.length() ? end : data.length();
+            final int len = Math.min(end, data.length());
             for (int i = start; i < len; i += step) {
                 result ^= (z += (data.charAt(i) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
                 result = (result << 54 | result >>> 10);
@@ -3021,7 +2974,7 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
             int result = 0x1A976FDF, z = 0x60642E25;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i++) {
                 result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);
                 z ^= (result = (result << 20 | result >>> 12));
@@ -3044,7 +2997,7 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
             int result = 0x1A976FDF, z = 0x60642E25;
-            final int len = end < data.length() ? end : data.length();
+            final int len = Math.min(end, data.length());
             for (int i = start; i < len; i++) {
                 result ^= (z += (data.charAt(i) ^ 0xC3564E95) * 0x9E375);
                 z ^= (result = (result << 20 | result >>> 12));
@@ -3069,7 +3022,7 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0;
             int result = 0x1A976FDF, z = 0x60642E25;
-            final int len = end < data.length ? end : data.length;
+            final int len = Math.min(end, data.length);
             for (int i = start; i < len; i += step) {
                 result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);
                 z ^= (result = (result << 20 | result >>> 12));
@@ -3094,7 +3047,7 @@ public class CrossHash {
             if (data == null || start >= end || step <= 0)
                 return 0;
             int result = 0x1A976FDF, z = 0x60642E25;
-            final int len = end < data.length() ? end : data.length();
+            final int len = Math.min(end, data.length());
             for (int i = start; i < len; i += step) {
                 result ^= (z += (data.charAt(i) ^ 0xC3564E95) * 0x9E375);
                 z ^= (result = (result << 20 | result >>> 12));
@@ -3234,18 +3187,21 @@ public class CrossHash {
         }
     }
 
+
     /**
      * A fairly fast hashing algorithm in general, Water performs especially well on large arrays, and passes SMHasher's
      * newest and most stringent version of tests. The int-hashing {@link #hash(int[])} method is almost twice as fast
-     * as {@link CrossHash#hash(int[])} and faster than {@link Arrays#hashCode(int[])}. Based on
-     * <a href="https://github.com/wangyi-fudan/wyhash">wyhash</a>, specifically
-     * <a href="https://github.com/tommyettinger/waterhash">the waterhash variant</a>. This version passes SMHasher for
-     * both the 32-bit output hash() methods and the 64-bit output hash64() methods (which use the slightly tweaked
-     * wheathash variant in the waterhash Git repo, or woothash for hashing long arrays). While an earlier version
-     * passed rurban/smhasher, it failed demerphq/smhasher (Yves' more stringent fork), so some minor tweaks allowed the
-     * latest code to pass Yves' test. Uses 64-bit math, so it won't be as fast on GWT. Currently, the methods that hash
-     * types other than int arrays aren't as fast as the int array hash, but they are usually faster than the former
-     * default Hive implementation, and unlike Hive, these pass SMHasher.
+     * as {@link Hive#hash(int[])} and faster than {@link Arrays#hashCode(int[])}; on longer arrays
+     * {@link Curlup#hash(int[])} is faster. Based on <a href="https://github.com/wangyi-fudan/wyhash">wyhash</a>,
+     * specifically <a href="https://github.com/tommyettinger/waterhash">the waterhash variant</a>. This version passes
+     * SMHasher for both the 32-bit output hash() methods and the 64-bit output hash64() methods (which use the slightly
+     * tweaked wheathash variant in the waterhash Git repo, or woothash for hashing long arrays). While an earlier
+     * version passed rurban/smhasher, it failed demerphq/smhasher (Yves' more stringent fork), so some minor tweaks
+     * allowed the latest code to pass Yves' test. Uses 64-bit math, so it won't be as fast on GWT. Currently, the
+     * methods that hash types other than int arrays aren't as fast as the int array hash, but they are usually faster
+     * than the former default Hive implementation, and unlike Hive, these pass SMHasher. If you want to have a seed the
+     * hash, so hashing the same data with a different seed produces different output, you can use {@link Yolk} or
+     * {@link Curlup}, preferring Curlup unless all of your data is in small arrays (under 20 length, give or take).
      * <br>
      * These hash functions are so fast because they operate in bulk on 4 items at a time, such as 4 ints (which is the
      * optimal case), 4 bytes, or 4 longs (which uses a different algorithm). This bulk operation usually entails 3
@@ -3258,7 +3214,6 @@ public class CrossHash {
      * multplying. It finishes with either code similar to mum() for 32-bit output hash() methods, or a somewhat more
      * rigorous method for 64-bit output hash64() methods (still similar to mum).
      */
-    @SuppressWarnings("NumericOverflow")
     public static final class Water {
         /**
          * Big constant 0.
@@ -3515,7 +3470,7 @@ public class CrossHash {
          * @param data  the char array to hash
          * @param start the start of the section to hash (inclusive)
          * @param end   the end of the section to hash (exclusive)
-         * @return a 32-bit hash code for the requested section of data
+         * @return a 64-bit hash code for the requested section of data
          */
         public static long hash64(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
@@ -3533,7 +3488,7 @@ public class CrossHash {
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
                 case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
-            return (int) mum(seed ^ seed << 16, len - start ^ b0);
+            return mum(seed ^ seed << 16, len - start ^ b0);
         }
 
         /**
@@ -3542,7 +3497,7 @@ public class CrossHash {
          * @param data  the String or other CharSequence to hash
          * @param start the start of the section to hash (inclusive)
          * @param end   the end of the section to hash (exclusive)
-         * @return a 32-bit hash code for the requested section of data
+         * @return a 64-bit hash code for the requested section of data
          */
         public static long hash64(final CharSequence data, final int start, final int end) {
             if (data == null || start >= end)
@@ -3560,7 +3515,7 @@ public class CrossHash {
                 case 2: seed = mum(seed ^ data.charAt(len-2), b3 ^ data.charAt(len-1)); break;
                 case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 16, b1 ^ data.charAt(len-1)); break;
             }
-            return (int) mum(seed ^ seed << 16, len - start ^ b0);
+            return mum(seed ^ seed << 16, len - start ^ b0);
         }
 
 
@@ -4125,25 +4080,19 @@ public class CrossHash {
 
     /**
      * Like Mist, this is a class for hash functors, each an object with a 64-bit long seed, but it uses about the same
-     * algorithm as {@link Water} instead of the older, less-robust style Mist uses. Has a lot of predefined functors
-     * (192, named after 24 Greek letters and 72 Goetic demons, see
+     * algorithm as {@link Water} instead of the older, less-robust style Mist uses. This can be faster than
+     * {@link Curlup}, but only for small arrays as input (20 length or less); it tends to be slower on larger arrays,
+     * though not by much, and should be the same for {@code long[]} since they share an implementation for that type.
+     * Normally you should prefer Curlup if you know some or all of your arrays will be of moderate size or larger.
+     * Has a lot of predefined functors (192, named after 24 Greek letters and 72 Goetic demons, see
      * <a href="https://en.wikipedia.org/wiki/Lesser_Key_of_Solomon#The_Seventy-Two_Demons">Wikipedia for the demons</a>,
      * in both lower case and lower case with a trailing underscore). You probably want to use {@link #predefined}
      * instead of wrangling demon names; you can always choose an element from predefined with a 7-bit number, and there
      * are 64 numbers outside that range so you can choose any of those when a functor must be different.
-     * <br>
-     * The seed a Yolk object is constructed with cannot change; it is expected to be reused at least a little bit, and
-     * it only performs a "scrambling" step on the seed once per Yolk (scramble, Yolk, get it?). If you want to have the
-     * flexibility to change seeds at-will, and you don't mind the reasonably-efficient scrambling step being performed
-     * every hash, you can use the static methods on this class, like {@link #hash64(long, CharSequence)} and
-     * {@link #hash(long, CharSequence)}. For these you can give any long seed as a first parameter, then the normal
-     * argument to hash. The static methods use the same algorithm as passing the seed to {@link #Yolk(long)} and
-     * calling the corresponding hash() or hash64() method on that Yolk object.
      */
-    @Beta
     public static final class Yolk {
         private final long seed;
-        
+
         public Yolk(){
             this.seed = 9069147967908697017L;
         }
@@ -4209,7 +4158,7 @@ public class CrossHash {
                 zagan_ = new Yolk("ZAGAN"), valac_ = new Yolk("VALAC"), andras_ = new Yolk("ANDRAS"), flauros_ = new Yolk("FLAUROS"),
                 andrealphus_ = new Yolk("ANDREALPHUS"), kimaris_ = new Yolk("KIMARIS"), amdusias_ = new Yolk("AMDUSIAS"), belial_ = new Yolk("BELIAL"),
                 decarabia_ = new Yolk("DECARABIA"), seere_ = new Yolk("SEERE"), dantalion_ = new Yolk("DANTALION"), andromalius_ = new Yolk("ANDROMALIUS")
-        ;
+                ;
         /**
          * Has a length of 192, which may be relevant if automatically choosing a predefined hash functor.
          */
@@ -4238,7 +4187,7 @@ public class CrossHash {
 
 
         public long hash64(final boolean[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;//seed = b1 ^ b1 >>> 29 ^ b1 >>> 43 ^ b1 << 7 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4256,7 +4205,7 @@ public class CrossHash {
             return seed - (seed >>> 31) + (seed << 33);
         }
         public long hash64(final byte[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4275,7 +4224,7 @@ public class CrossHash {
         }
 
         public long hash64(final short[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4294,7 +4243,7 @@ public class CrossHash {
         }
 
         public long hash64(final char[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4313,7 +4262,7 @@ public class CrossHash {
         }
 
         public long hash64(final CharSequence data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length();
             for (int i = 3; i < len; i+=4) {
@@ -4332,7 +4281,7 @@ public class CrossHash {
         }
 
         public long hash64(final int[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4351,7 +4300,7 @@ public class CrossHash {
         }
 
         public long hash64(final int[] data, final int length) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             for (int i = 3; i < length; i+=4) {
                 seed = mum(
@@ -4369,7 +4318,7 @@ public class CrossHash {
         }
 
         public long hash64(final long[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed, a = this.seed + b4, b = this.seed + b3, c = this.seed + b2, d = this.seed + b1;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4389,7 +4338,7 @@ public class CrossHash {
             return seed - (seed >>> 31) + (seed << 33);
         }
         public long hash64(final float[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4407,7 +4356,7 @@ public class CrossHash {
             return seed - (seed >>> 31) + (seed << 33);
         }
         public long hash64(final double[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4431,11 +4380,11 @@ public class CrossHash {
          * @param data  the char array to hash
          * @param start the start of the section to hash (inclusive)
          * @param end   the end of the section to hash (exclusive)
-         * @return a 32-bit hash code for the requested section of data
+         * @return a 64-bit hash code for the requested section of data
          */
         public long hash64(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
-                return 0L;
+                return 0;
             long seed = this.seed;
             final int len = Math.min(end, data.length);
             for (int i = start + 3; i < len; i+=4) {
@@ -4449,7 +4398,7 @@ public class CrossHash {
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
                 case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
-            return (int) mum(seed ^ seed << 16, len - start ^ b0);
+            return mum(seed ^ seed << 16, len - start ^ Water.b0);
         }
 
         /**
@@ -4458,11 +4407,11 @@ public class CrossHash {
          * @param data  the String or other CharSequence to hash
          * @param start the start of the section to hash (inclusive)
          * @param end   the end of the section to hash (exclusive)
-         * @return a 32-bit hash code for the requested section of data
+         * @return a 64-bit hash code for the requested section of data
          */
         public long hash64(final CharSequence data, final int start, final int end) {
             if (data == null || start >= end)
-                return 0L;
+                return 0;
             long seed = this.seed;
             final int len = Math.min(end, data.length());
             for (int i = start + 3; i < len; i+=4) {
@@ -4476,12 +4425,12 @@ public class CrossHash {
                 case 2: seed = mum(seed ^ data.charAt(len-2), b3 ^ data.charAt(len-1)); break;
                 case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 16, b1 ^ data.charAt(len-1)); break;
             }
-            return (int) mum(seed ^ seed << 16, len - start ^ b0);
+            return mum(seed ^ seed << 16, len - start ^ b0);
         }
 
 
         public long hash64(final char[][] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4501,7 +4450,7 @@ public class CrossHash {
         }
 
         public long hash64(final int[][] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4521,7 +4470,7 @@ public class CrossHash {
         }
 
         public long hash64(final long[][] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4541,7 +4490,7 @@ public class CrossHash {
         }
 
         public long hash64(final CharSequence[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4561,7 +4510,7 @@ public class CrossHash {
         }
 
         public long hash64(final CharSequence[]... data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4581,7 +4530,7 @@ public class CrossHash {
         }
 
         public long hash64(final Iterable<? extends CharSequence> data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final Iterator<? extends CharSequence> it = data.iterator();
             int len = 0;
@@ -4597,7 +4546,7 @@ public class CrossHash {
         }
 
         public long hash64(final List<? extends CharSequence> data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.size();
             for (int i = 3; i < len; i+=4) {
@@ -4618,7 +4567,7 @@ public class CrossHash {
         }
 
         public long hash64(final Object[] data) {
-            if (data == null) return 0L;
+            if (data == null) return 0;
             long seed = this.seed;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -4639,15 +4588,15 @@ public class CrossHash {
 
         public long hash64(final Object data) {
             if (data == null)
-                return 0L;
-            final long h = (data.hashCode() ^ seed) * 0x9E3779B97F4A7C15L;
-            return (h ^ h >>> 23 ^ h >>> 42);
+                return 0;
+            final long h = (data.hashCode() + seed) * 0x9E3779B97F4A7C15L;
+            return h - (h >>> 31) + (h << 33);
         }
 
 
         public int hash(final boolean[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4664,7 +4613,7 @@ public class CrossHash {
         }
         public int hash(final byte[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4682,7 +4631,7 @@ public class CrossHash {
 
         public int hash(final short[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4700,7 +4649,7 @@ public class CrossHash {
 
         public int hash(final char[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4718,7 +4667,7 @@ public class CrossHash {
 
         public int hash(final CharSequence data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length();
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4735,7 +4684,7 @@ public class CrossHash {
         }
         public int hash(final int[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4752,7 +4701,7 @@ public class CrossHash {
         }
         public int hash(final int[] data, final int length) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             for (int i = 3; i < length; i+=4) {
                 seed = mum(
                         mum(data[i-3] ^ b1, data[i-2] ^ b2) + seed,
@@ -4790,7 +4739,7 @@ public class CrossHash {
 
         public int hash(final float[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4807,7 +4756,7 @@ public class CrossHash {
         }
         public int hash(final double[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4834,7 +4783,7 @@ public class CrossHash {
         public int hash(final char[] data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = Math.min(end, data.length);
             for (int i = start + 3; i < len; i+=4) {
                 seed = mum(
@@ -4861,7 +4810,7 @@ public class CrossHash {
         public int hash(final CharSequence data, final int start, final int end) {
             if (data == null || start >= end)
                 return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = Math.min(end, data.length());
             for (int i = start + 3; i < len; i+=4) {
                 seed = mum(
@@ -4880,7 +4829,7 @@ public class CrossHash {
 
         public int hash(final char[][] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4899,7 +4848,7 @@ public class CrossHash {
 
         public int hash(final int[][] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4918,7 +4867,7 @@ public class CrossHash {
 
         public int hash(final long[][] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4937,7 +4886,7 @@ public class CrossHash {
 
         public int hash(final CharSequence[] data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4956,7 +4905,7 @@ public class CrossHash {
 
         public int hash(final CharSequence[]... data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -4990,7 +4939,7 @@ public class CrossHash {
 
         public int hash(final List<? extends CharSequence> data) {
             if (data == null) return 0;
-            long seed = this.seed;
+            long seed = this.seed;//b1 ^ b1 >>> 41 ^ b1 << 53;
             final int len = data.size();
             for (int i = 3; i < len; i+=4) {
                 seed = mum(
@@ -5027,84 +4976,9 @@ public class CrossHash {
         }
 
         public int hash(final Object data) {
-            if (data == null)
-                return 0;
-            final long h = (data.hashCode() ^ seed) * 0x9E3779B97F4A7C15L;
-            return (int) (h ^ h >>> 23 ^ h >>> 42);
+            if (data == null) return 0;
+            return (int)((data.hashCode() + seed) * 0x9E3779B97F4A7C15L >>> 32);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         public static long hash64(long seed, final boolean[] data) {
@@ -5320,7 +5194,7 @@ public class CrossHash {
                 case 2: seed = mum(seed ^ data[len-2], b3 ^ data[len-1]); break;
                 case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 16, b1 ^ data[len-1]); break;
             }
-            return (int) mum(seed ^ seed << 16, len - start ^ b0);
+            return mum(seed ^ seed << 16, len - start ^ b0);
         }
 
         /**
@@ -5347,7 +5221,7 @@ public class CrossHash {
                 case 2: seed = mum(seed ^ data.charAt(len-2), b3 ^ data.charAt(len-1)); break;
                 case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 16, b1 ^ data.charAt(len-1)); break;
             }
-            return (int) mum(seed ^ seed << 16, len - start ^ b0);
+            return mum(seed ^ seed << 16, len - start ^ b0);
         }
 
 
@@ -5510,10 +5384,10 @@ public class CrossHash {
 
         public static long hash64(long seed, final Object data) {
             if (data == null)
-                return 0L;
+                return 0;
             seed += b1; seed ^= seed >>> 23 ^ seed >>> 48 ^ seed << 7 ^ seed << 53;
-            final long h = (data.hashCode() ^ seed) * 0x9E3779B97F4A7C15L;
-            return (h ^ h >>> 23 ^ h >>> 42);
+            final long h = (data.hashCode() + seed) * 0x9E3779B97F4A7C15L;
+            return h - (h >>> 31) + (h << 33);
         }
 
 
@@ -5903,8 +5777,2380 @@ public class CrossHash {
             if (data == null)
                 return 0;
             seed += b1; seed ^= seed >>> 23 ^ seed >>> 48 ^ seed << 7 ^ seed << 53;
-            final long h = (data.hashCode() ^ seed) * 0x9E3779B97F4A7C15L;
-            return (int) (h ^ h >>> 23 ^ h >>> 42);
+            return (int)((data.hashCode() + seed) * 0x9E3779B97F4A7C15L >>> 32);
+        }
+
+
+    }
+
+    /**
+     * Like Yolk, this is a class for hash functors, each an object with a 64-bit long seed. It uses an odd-but-fast
+     * SIMD-friendly technique when hashing 32-bit items or smaller, and falls back to Yolk's algorithm when hashing
+     * long values. If you are mainly hashing int arrays, short arrays, or byte arrays, this is probably the fastest
+     * hash here unless the arrays are small (it outperforms all of the other hashes here on int arrays when those
+     * arrays have length 50, and probably is faster than some sooner than that). Notably, on arrays 50 or longer this
+     * runs in very close to half the time of {@link Arrays#hashCode(int[])}. This passes SMHasher for at least 64-bit
+     * output. Has a lot of predefined functors (192, named after 24 Greek letters and 72 Goetic demons, see
+     * <a href="https://en.wikipedia.org/wiki/Lesser_Key_of_Solomon#The_Seventy-Two_Demons">Wikipedia for the demons</a>,
+     * in both lower case and lower case with a trailing underscore). You probably want to use {@link #predefined}
+     * instead of wrangling demon names; you can always choose an element from predefined with a 7-bit number, and there
+     * are 64 numbers outside that range so you can choose any of those when a functor must be different.
+     * <br>
+     * This hash is much more effective with large inputs because it takes advantage of HotSpot's optimizations for code
+     * that looks like a dot product over part of an array. The general concept for this hash came from the "Unrolled"
+     * hash in <a href="https://richardstartin.github.io/posts/collecting-rocks-and-benchmarks">one of Richard Startin's
+     * blog posts</a>, which traces back to
+     * <a href="http://mail.openjdk.java.net/pipermail/core-libs-dev/2014-September/028898.html">Peter Levart posting a
+     * related improvement on String.hashCode()</a> in 2014. This isn't as fast as Startin's "Vectorized" hash, but this
+     * works on variable array lengths and also passes SMHasher.
+     * <br>
+     * The name curlup comes from an M.C. Escher painting of a creature, whose name translates to curl-up, that could
+     * walk on six legs to climb stairs, or roll at high speeds when the conditions were right.
+     */
+    public static final class Curlup {
+        private final long seed;
+
+        public Curlup(){
+            this.seed = 0xC4CEB9FE1A85EC53L;
+        }
+        public Curlup(long seed)
+        {
+            this.seed = randomize(seed);
+        }
+
+        /**
+         * Very similar to Pelican and related unary hashes; uses "xor rotate xor rotate" as an early step to mix any
+         * clustered bits all around the result, then the rest is like MurmurHash3's mixer.
+         * @param seed any long; there is no fix point at 0
+         * @return any long
+         */
+        public static long randomize(long seed) {
+            seed ^= (seed << 41 | seed >>> 23) ^ (seed << 17 | seed >>> 47) ^ 0xCB9C59B3F9F87D4DL;
+            seed *= 0x369DEA0F31A53F85L;
+            seed ^= seed >>> 31;
+            seed *= 0xDB4F0B9175AE2165L;
+            return seed ^ seed >>> 28;
+        }
+
+        public Curlup(final CharSequence seed)
+        {
+            this(Water.hash64(seed));
+        }
+
+        public static final Curlup alpha = new Curlup("alpha"), beta = new Curlup("beta"), gamma = new Curlup("gamma"),
+                delta = new Curlup("delta"), epsilon = new Curlup("epsilon"), zeta = new Curlup("zeta"),
+                eta = new Curlup("eta"), theta = new Curlup("theta"), iota = new Curlup("iota"),
+                kappa = new Curlup("kappa"), lambda = new Curlup("lambda"), mu = new Curlup("mu"),
+                nu = new Curlup("nu"), xi = new Curlup("xi"), omicron = new Curlup("omicron"), pi = new Curlup("pi"),
+                rho = new Curlup("rho"), sigma = new Curlup("sigma"), tau = new Curlup("tau"),
+                upsilon = new Curlup("upsilon"), phi = new Curlup("phi"), chi = new Curlup("chi"), psi = new Curlup("psi"),
+                omega = new Curlup("omega"),
+                alpha_ = new Curlup("ALPHA"), beta_ = new Curlup("BETA"), gamma_ = new Curlup("GAMMA"),
+                delta_ = new Curlup("DELTA"), epsilon_ = new Curlup("EPSILON"), zeta_ = new Curlup("ZETA"),
+                eta_ = new Curlup("ETA"), theta_ = new Curlup("THETA"), iota_ = new Curlup("IOTA"),
+                kappa_ = new Curlup("KAPPA"), lambda_ = new Curlup("LAMBDA"), mu_ = new Curlup("MU"),
+                nu_ = new Curlup("NU"), xi_ = new Curlup("XI"), omicron_ = new Curlup("OMICRON"), pi_ = new Curlup("PI"),
+                rho_ = new Curlup("RHO"), sigma_ = new Curlup("SIGMA"), tau_ = new Curlup("TAU"),
+                upsilon_ = new Curlup("UPSILON"), phi_ = new Curlup("PHI"), chi_ = new Curlup("CHI"), psi_ = new Curlup("PSI"),
+                omega_ = new Curlup("OMEGA"),
+                baal = new Curlup("baal"), agares = new Curlup("agares"), vassago = new Curlup("vassago"), samigina = new Curlup("samigina"),
+                marbas = new Curlup("marbas"), valefor = new Curlup("valefor"), amon = new Curlup("amon"), barbatos = new Curlup("barbatos"),
+                paimon = new Curlup("paimon"), buer = new Curlup("buer"), gusion = new Curlup("gusion"), sitri = new Curlup("sitri"),
+                beleth = new Curlup("beleth"), leraje = new Curlup("leraje"), eligos = new Curlup("eligos"), zepar = new Curlup("zepar"),
+                botis = new Curlup("botis"), bathin = new Curlup("bathin"), sallos = new Curlup("sallos"), purson = new Curlup("purson"),
+                marax = new Curlup("marax"), ipos = new Curlup("ipos"), aim = new Curlup("aim"), naberius = new Curlup("naberius"),
+                glasya_labolas = new Curlup("glasya_labolas"), bune = new Curlup("bune"), ronove = new Curlup("ronove"), berith = new Curlup("berith"),
+                astaroth = new Curlup("astaroth"), forneus = new Curlup("forneus"), foras = new Curlup("foras"), asmoday = new Curlup("asmoday"),
+                gaap = new Curlup("gaap"), furfur = new Curlup("furfur"), marchosias = new Curlup("marchosias"), stolas = new Curlup("stolas"),
+                phenex = new Curlup("phenex"), halphas = new Curlup("halphas"), malphas = new Curlup("malphas"), raum = new Curlup("raum"),
+                focalor = new Curlup("focalor"), vepar = new Curlup("vepar"), sabnock = new Curlup("sabnock"), shax = new Curlup("shax"),
+                vine = new Curlup("vine"), bifrons = new Curlup("bifrons"), vual = new Curlup("vual"), haagenti = new Curlup("haagenti"),
+                crocell = new Curlup("crocell"), furcas = new Curlup("furcas"), balam = new Curlup("balam"), alloces = new Curlup("alloces"),
+                caim = new Curlup("caim"), murmur = new Curlup("murmur"), orobas = new Curlup("orobas"), gremory = new Curlup("gremory"),
+                ose = new Curlup("ose"), amy = new Curlup("amy"), orias = new Curlup("orias"), vapula = new Curlup("vapula"),
+                zagan = new Curlup("zagan"), valac = new Curlup("valac"), andras = new Curlup("andras"), flauros = new Curlup("flauros"),
+                andrealphus = new Curlup("andrealphus"), kimaris = new Curlup("kimaris"), amdusias = new Curlup("amdusias"), belial = new Curlup("belial"),
+                decarabia = new Curlup("decarabia"), seere = new Curlup("seere"), dantalion = new Curlup("dantalion"), andromalius = new Curlup("andromalius"),
+                baal_ = new Curlup("BAAL"), agares_ = new Curlup("AGARES"), vassago_ = new Curlup("VASSAGO"), samigina_ = new Curlup("SAMIGINA"),
+                marbas_ = new Curlup("MARBAS"), valefor_ = new Curlup("VALEFOR"), amon_ = new Curlup("AMON"), barbatos_ = new Curlup("BARBATOS"),
+                paimon_ = new Curlup("PAIMON"), buer_ = new Curlup("BUER"), gusion_ = new Curlup("GUSION"), sitri_ = new Curlup("SITRI"),
+                beleth_ = new Curlup("BELETH"), leraje_ = new Curlup("LERAJE"), eligos_ = new Curlup("ELIGOS"), zepar_ = new Curlup("ZEPAR"),
+                botis_ = new Curlup("BOTIS"), bathin_ = new Curlup("BATHIN"), sallos_ = new Curlup("SALLOS"), purson_ = new Curlup("PURSON"),
+                marax_ = new Curlup("MARAX"), ipos_ = new Curlup("IPOS"), aim_ = new Curlup("AIM"), naberius_ = new Curlup("NABERIUS"),
+                glasya_labolas_ = new Curlup("GLASYA_LABOLAS"), bune_ = new Curlup("BUNE"), ronove_ = new Curlup("RONOVE"), berith_ = new Curlup("BERITH"),
+                astaroth_ = new Curlup("ASTAROTH"), forneus_ = new Curlup("FORNEUS"), foras_ = new Curlup("FORAS"), asmoday_ = new Curlup("ASMODAY"),
+                gaap_ = new Curlup("GAAP"), furfur_ = new Curlup("FURFUR"), marchosias_ = new Curlup("MARCHOSIAS"), stolas_ = new Curlup("STOLAS"),
+                phenex_ = new Curlup("PHENEX"), halphas_ = new Curlup("HALPHAS"), malphas_ = new Curlup("MALPHAS"), raum_ = new Curlup("RAUM"),
+                focalor_ = new Curlup("FOCALOR"), vepar_ = new Curlup("VEPAR"), sabnock_ = new Curlup("SABNOCK"), shax_ = new Curlup("SHAX"),
+                vine_ = new Curlup("VINE"), bifrons_ = new Curlup("BIFRONS"), vual_ = new Curlup("VUAL"), haagenti_ = new Curlup("HAAGENTI"),
+                crocell_ = new Curlup("CROCELL"), furcas_ = new Curlup("FURCAS"), balam_ = new Curlup("BALAM"), alloces_ = new Curlup("ALLOCES"),
+                caim_ = new Curlup("CAIM"), murmur_ = new Curlup("MURMUR"), orobas_ = new Curlup("OROBAS"), gremory_ = new Curlup("GREMORY"),
+                ose_ = new Curlup("OSE"), amy_ = new Curlup("AMY"), orias_ = new Curlup("ORIAS"), vapula_ = new Curlup("VAPULA"),
+                zagan_ = new Curlup("ZAGAN"), valac_ = new Curlup("VALAC"), andras_ = new Curlup("ANDRAS"), flauros_ = new Curlup("FLAUROS"),
+                andrealphus_ = new Curlup("ANDREALPHUS"), kimaris_ = new Curlup("KIMARIS"), amdusias_ = new Curlup("AMDUSIAS"), belial_ = new Curlup("BELIAL"),
+                decarabia_ = new Curlup("DECARABIA"), seere_ = new Curlup("SEERE"), dantalion_ = new Curlup("DANTALION"), andromalius_ = new Curlup("ANDROMALIUS")
+                ;
+        /**
+         * Has a length of 192, which may be relevant if automatically choosing a predefined hash functor.
+         */
+        public static final Curlup[] predefined = new Curlup[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,
+                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega,
+                alpha_, beta_, gamma_, delta_, epsilon_, zeta_, eta_, theta_, iota_,
+                kappa_, lambda_, mu_, nu_, xi_, omicron_, pi_, rho_, sigma_, tau_, upsilon_, phi_, chi_, psi_, omega_,
+                baal, agares, vassago, samigina, marbas, valefor, amon, barbatos,
+                paimon, buer, gusion, sitri, beleth, leraje, eligos, zepar,
+                botis, bathin, sallos, purson, marax, ipos, aim, naberius,
+                glasya_labolas, bune, ronove, berith, astaroth, forneus, foras, asmoday,
+                gaap, furfur, marchosias, stolas, phenex, halphas, malphas, raum,
+                focalor, vepar, sabnock, shax, vine, bifrons, vual, haagenti,
+                crocell, furcas, balam, alloces, caim, murmur, orobas, gremory,
+                ose, amy, orias, vapula, zagan, valac, andras, flauros,
+                andrealphus, kimaris, amdusias, belial, decarabia, seere, dantalion, andromalius,
+                baal_, agares_, vassago_, samigina_, marbas_, valefor_, amon_, barbatos_,
+                paimon_, buer_, gusion_, sitri_, beleth_, leraje_, eligos_, zepar_,
+                botis_, bathin_, sallos_, purson_, marax_, ipos_, aim_, naberius_,
+                glasya_labolas_, bune_, ronove_, berith_, astaroth_, forneus_, foras_, asmoday_,
+                gaap_, furfur_, marchosias_, stolas_, phenex_, halphas_, malphas_, raum_,
+                focalor_, vepar_, sabnock_, shax_, vine_, bifrons_, vual_, haagenti_,
+                crocell_, furcas_, balam_, alloces_, caim_, murmur_, orobas_, gremory_,
+                ose_, amy_, orias_, vapula_, zagan_, valac_, andras_, flauros_,
+                andrealphus_, kimaris_, amdusias_, belial_, decarabia_, seere_, dantalion_, andromalius_};
+
+
+        public long hash64(final boolean[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  result      * 0xEBEDEED9D803C815L
+                        + (data[i]     ? 0xD96EB1A810CAAF5FL : 0xCAAF5FD96EB1A810L)
+                        + (data[i + 1] ? 0xC862B36DAF790DD5L : 0x790DD5C862B36DAFL)
+                        + (data[i + 2] ? 0xB8ACD90C142FE10BL : 0x2FE10BB8ACD90C14L)
+                        + (data[i + 3] ? 0xAA324F90DED86B69L : 0xD86B69AA324F90DEL)
+                        + (data[i + 4] ? 0x9CDA5E693FEA10AFL : 0xEA10AF9CDA5E693FL)
+                        + (data[i + 5] ? 0x908E3D2C82567A73L : 0x567A73908E3D2C82L)
+                        + (data[i + 6] ? 0x8538ECB5BD456EA3L : 0x456EA38538ECB5BDL)
+                        + (data[i + 7] ? 0xD1B54A32D192ED03L : 0x92ED03D1B54A32D1L)
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + (data[i] ? 0xEBEDEED9D803C815L : 0xD9D803C815EBEDEEL);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+        public long hash64(final byte[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final short[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final char[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final CharSequence data) {
+            if (data == null) return 0;
+            final int length = data.length();
+            long result = seed ^ length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final int[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final int[] data, final int length) {
+            if (data == null) return 0;
+            final int len = Math.min(length, data.length);
+            long result = seed ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final long[] data) {
+            if (data == null) return 0;
+            long seed = this.seed, a = this.seed + b4, b = this.seed + b3, c = this.seed + b2, d = this.seed + b1;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
+                seed += a + b + c + d;
+            }
+            seed += b5;
+            switch (len & 3) {
+                case 1: seed = wow(seed, b1 ^ data[len-1]); break;
+                case 2: seed = wow(seed + data[len-2], b2 + data[len-1]); break;
+                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + data[len-1], seed ^ b3); break;
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0 ^ seed >>> 32);
+            return seed - (seed >>> 31) + (seed << 33);
+        }
+        public long hash64(final float[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * floatToIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * floatToIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * floatToIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * floatToIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * floatToIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * floatToIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * floatToIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * floatToIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + floatToIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+        public long hash64(final double[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * doubleToMixedIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * doubleToMixedIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * doubleToMixedIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * doubleToMixedIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * doubleToMixedIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * doubleToMixedIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * doubleToMixedIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * doubleToMixedIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + doubleToMixedIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the char array to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public long hash64(final char[] data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length);
+
+            long result = seed ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the String or other CharSequence to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public long hash64(final CharSequence data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length());
+
+            long result = seed ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+
+        public long hash64(final char[][] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final int[][] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final long[][] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final CharSequence[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final CharSequence[]... data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final Iterable<? extends CharSequence> data) {
+            if (data == null) return 0;
+            long seed = this.seed;
+            final Iterator<? extends CharSequence> it = data.iterator();
+            int len = 0;
+            while (it.hasNext())
+            {
+                ++len;
+                seed = mum(
+                        mum(hash(it.next()) ^ b1, (it.hasNext() ? hash(it.next()) ^ b2 ^ ++len : b2)) + seed,
+                        mum((it.hasNext() ? hash(it.next()) ^ b3 ^ ++len : b3), (it.hasNext() ? hash(it.next()) ^ b4 ^ ++len : b4)));
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0);
+            return seed - (seed >>> 31) + (seed << 33);
+        }
+
+        public long hash64(final List<? extends CharSequence> data) {
+            if (data == null) return 0;
+            final int len = data.size();
+            long result = seed ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data.get(i))
+                        + 0xC862B36DAF790DD5L * hash(data.get(i + 1))
+                        + 0xB8ACD90C142FE10BL * hash(data.get(i + 2))
+                        + 0xAA324F90DED86B69L * hash(data.get(i + 3))
+                        + 0x9CDA5E693FEA10AFL * hash(data.get(i + 4))
+                        + 0x908E3D2C82567A73L * hash(data.get(i + 5))
+                        + 0x8538ECB5BD456EA3L * hash(data.get(i + 6))
+                        + 0xD1B54A32D192ED03L * hash(data.get(i + 7))
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data.get(i));
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+
+        }
+
+        public long hash64(final Object[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public long hash64(final Object data) {
+            if (data == null)
+                return 0;
+            final long h = (data.hashCode() + seed) * 0x9E3779B97F4A7C15L;
+            return h - (h >>> 31) + (h << 33);
+        }
+
+        public int hash(final boolean[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  result      * 0xEBEDEED9D803C815L
+                        + (data[i]     ? 0xD96EB1A810CAAF5FL : 0xCAAF5FD96EB1A810L)
+                        + (data[i + 1] ? 0xC862B36DAF790DD5L : 0x790DD5C862B36DAFL)
+                        + (data[i + 2] ? 0xB8ACD90C142FE10BL : 0x2FE10BB8ACD90C14L)
+                        + (data[i + 3] ? 0xAA324F90DED86B69L : 0xD86B69AA324F90DEL)
+                        + (data[i + 4] ? 0x9CDA5E693FEA10AFL : 0xEA10AF9CDA5E693FL)
+                        + (data[i + 5] ? 0x908E3D2C82567A73L : 0x567A73908E3D2C82L)
+                        + (data[i + 6] ? 0x8538ECB5BD456EA3L : 0x456EA38538ECB5BDL)
+                        + (data[i + 7] ? 0xD1B54A32D192ED03L : 0x92ED03D1B54A32D1L)
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + (data[i] ? 0xEBEDEED9D803C815L : 0xD9D803C815EBEDEEL);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+        public int hash(final byte[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final short[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final char[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final CharSequence data) {
+            if (data == null) return 0;
+            final int length = data.length();
+            long result = seed ^ length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final int[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final int[] data, final int length) {
+            if (data == null) return 0;
+            final int len = Math.min(length, data.length);
+            long result = seed ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final long[] data) {
+            if (data == null) return 0;
+            long seed = this.seed, a = this.seed + b4, b = this.seed + b3, c = this.seed + b2, d = this.seed + b1;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
+                seed += a + b + c + d;
+            }
+            seed += b5;
+            switch (len & 3) {
+                case 1: seed = wow(seed, b1 ^ data[len-1]); break;
+                case 2: seed = wow(seed + data[len-2], b2 + data[len-1]); break;
+                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + data[len-1], seed ^ b3); break;
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0 ^ seed >>> 32);
+            return (int)(seed - (seed >>> 32));
+        }
+
+        public int hash(final float[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * floatToIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * floatToIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * floatToIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * floatToIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * floatToIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * floatToIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * floatToIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * floatToIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + floatToIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+        public int hash(final double[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * doubleToMixedIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * doubleToMixedIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * doubleToMixedIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * doubleToMixedIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * doubleToMixedIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * doubleToMixedIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * doubleToMixedIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * doubleToMixedIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + doubleToMixedIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the char array to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public int hash(final char[] data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length);
+
+            long result = seed ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the String or other CharSequence to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public int hash(final CharSequence data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length());
+
+            long result = seed ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+
+        public int hash(final char[][] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final int[][] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final long[][] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final CharSequence[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final CharSequence[]... data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final Iterable<? extends CharSequence> data) {
+            if (data == null) return 0;
+            long seed = this.seed;
+            final Iterator<? extends CharSequence> it = data.iterator();
+            int len = 0;
+            while (it.hasNext())
+            {
+                ++len;
+                seed = mum(
+                        mum(hash(it.next()) ^ b1, (it.hasNext() ? hash(it.next()) ^ b2 ^ ++len : b2)) + seed,
+                        mum((it.hasNext() ? hash(it.next()) ^ b3 ^ ++len : b3), (it.hasNext() ? hash(it.next()) ^ b4 ^ ++len : b4)));
+            }
+            return (int) mum(seed ^ seed << 16, len ^ b0);
+        }
+
+        public int hash(final List<? extends CharSequence> data) {
+            if (data == null) return 0;
+            final int len = data.size();
+            long result = seed ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data.get(i))
+                        + 0xC862B36DAF790DD5L * hash(data.get(i + 1))
+                        + 0xB8ACD90C142FE10BL * hash(data.get(i + 2))
+                        + 0xAA324F90DED86B69L * hash(data.get(i + 3))
+                        + 0x9CDA5E693FEA10AFL * hash(data.get(i + 4))
+                        + 0x908E3D2C82567A73L * hash(data.get(i + 5))
+                        + 0x8538ECB5BD456EA3L * hash(data.get(i + 6))
+                        + 0xD1B54A32D192ED03L * hash(data.get(i + 7))
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data.get(i));
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+
+        }
+
+        public int hash(final Object[] data) {
+            if (data == null) return 0;
+            long result = seed ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(data[i])
+                        + 0xC862B36DAF790DD5L * hash(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public int hash(final Object data) {
+            if (data == null) return 0;
+            return (int)((data.hashCode() + seed) * 0x9E3779B97F4A7C15L >>> 32);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public static long hash64(final long seed, final boolean[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  result      * 0xEBEDEED9D803C815L
+                        + (data[i]     ? 0xD96EB1A810CAAF5FL : 0xCAAF5FD96EB1A810L)
+                        + (data[i + 1] ? 0xC862B36DAF790DD5L : 0x790DD5C862B36DAFL)
+                        + (data[i + 2] ? 0xB8ACD90C142FE10BL : 0x2FE10BB8ACD90C14L)
+                        + (data[i + 3] ? 0xAA324F90DED86B69L : 0xD86B69AA324F90DEL)
+                        + (data[i + 4] ? 0x9CDA5E693FEA10AFL : 0xEA10AF9CDA5E693FL)
+                        + (data[i + 5] ? 0x908E3D2C82567A73L : 0x567A73908E3D2C82L)
+                        + (data[i + 6] ? 0x8538ECB5BD456EA3L : 0x456EA38538ECB5BDL)
+                        + (data[i + 7] ? 0xD1B54A32D192ED03L : 0x92ED03D1B54A32D1L)
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + (data[i] ? 0xEBEDEED9D803C815L : 0xD9D803C815EBEDEEL);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+        public static long hash64(final long seed, final byte[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final short[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final char[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final CharSequence data) {
+            if (data == null) return 0;
+            final int length = data.length();
+            long result = randomize(seed) ^ length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final int[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final int[] data, final int length) {
+            if (data == null) return 0;
+            final int len = Math.min(length, data.length);
+            long result = randomize(seed) ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final long[] data) {
+            if (data == null) return 0;
+            long s = randomize(seed), a = s + b4, b = s + b3, c = s + b2, d = s + b1;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
+                s += a + b + c + d;
+            }
+            s += b5;
+            switch (len & 3) {
+                case 1: s = wow(s, b1 ^ data[len-1]); break;
+                case 2: s = wow(s + data[len-2], b2 + data[len-1]); break;
+                case 3: s = wow(s + data[len-3], b2 + data[len-2]) ^ wow(s + data[len-1], s ^ b3); break;
+            }
+            s = (s ^ s << 16) * (len ^ b0 ^ s >>> 32);
+            return s - (s >>> 31) + (s << 33);
+        }
+        public static long hash64(final long seed, final float[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * floatToIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * floatToIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * floatToIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * floatToIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * floatToIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * floatToIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * floatToIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * floatToIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + floatToIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+        public static long hash64(final long seed, final double[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * doubleToMixedIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * doubleToMixedIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * doubleToMixedIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * doubleToMixedIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * doubleToMixedIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * doubleToMixedIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * doubleToMixedIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * doubleToMixedIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + doubleToMixedIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the char array to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public static long hash64(final long seed, final char[] data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length);
+
+            long result = randomize(seed) ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the String or other CharSequence to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public static long hash64(final long seed, final CharSequence data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length());
+
+            long result = randomize(seed) ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+
+        public static long hash64(final long seed, final char[][] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final int[][] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final long[][] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final CharSequence[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final CharSequence[]... data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final Iterable<? extends CharSequence> data) {
+            if (data == null) return 0;
+            long s = randomize(seed);
+            final Iterator<? extends CharSequence> it = data.iterator();
+            int len = 0;
+            while (it.hasNext())
+            {
+                ++len;
+                s = mum(
+                        mum(hash(seed, it.next()) ^ b1, (it.hasNext() ? hash(seed, it.next()) ^ b2 ^ ++len : b2)) + s,
+                        mum((it.hasNext() ? hash(seed, it.next()) ^ b3 ^ ++len : b3), (it.hasNext() ? hash(seed, it.next()) ^ b4 ^ ++len : b4)));
+            }
+            s = (s ^ s << 16) * (len ^ b0);
+            return s - (s >>> 31) + (s << 33);
+        }
+
+        public static long hash64(final long seed, final List<? extends CharSequence> data) {
+            if (data == null) return 0;
+            final int len = data.size();
+            long result = randomize(seed) ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data.get(i))
+                        + 0xC862B36DAF790DD5L * hash(seed, data.get(i + 1))
+                        + 0xB8ACD90C142FE10BL * hash(seed, data.get(i + 2))
+                        + 0xAA324F90DED86B69L * hash(seed, data.get(i + 3))
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data.get(i + 4))
+                        + 0x908E3D2C82567A73L * hash(seed, data.get(i + 5))
+                        + 0x8538ECB5BD456EA3L * hash(seed, data.get(i + 6))
+                        + 0xD1B54A32D192ED03L * hash(seed, data.get(i + 7))
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data.get(i));
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+
+        }
+
+        public static long hash64(final long seed, final Object[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (result ^ result >>> 28);
+        }
+
+        public static long hash64(final long seed, final Object data) {
+            if (data == null)
+                return 0;
+            final long h = (data.hashCode() + randomize(seed)) * 0x9E3779B97F4A7C15L;
+            return h - (h >>> 31) + (h << 33);
+        }
+
+        public static int hash(final long seed, final boolean[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  result      * 0xEBEDEED9D803C815L
+                        + (data[i]     ? 0xD96EB1A810CAAF5FL : 0xCAAF5FD96EB1A810L)
+                        + (data[i + 1] ? 0xC862B36DAF790DD5L : 0x790DD5C862B36DAFL)
+                        + (data[i + 2] ? 0xB8ACD90C142FE10BL : 0x2FE10BB8ACD90C14L)
+                        + (data[i + 3] ? 0xAA324F90DED86B69L : 0xD86B69AA324F90DEL)
+                        + (data[i + 4] ? 0x9CDA5E693FEA10AFL : 0xEA10AF9CDA5E693FL)
+                        + (data[i + 5] ? 0x908E3D2C82567A73L : 0x567A73908E3D2C82L)
+                        + (data[i + 6] ? 0x8538ECB5BD456EA3L : 0x456EA38538ECB5BDL)
+                        + (data[i + 7] ? 0xD1B54A32D192ED03L : 0x92ED03D1B54A32D1L)
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + (data[i] ? 0xEBEDEED9D803C815L : 0xD9D803C815EBEDEEL);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+        public static int hash(final long seed, final byte[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final short[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final char[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final CharSequence data) {
+            if (data == null) return 0;
+            final int length = data.length();
+            long result = randomize(seed) ^ length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final int[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final int[] data, final int length) {
+            if (data == null) return 0;
+            final int len = Math.min(length, data.length);
+            long result = randomize(seed) ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final long[] data) {
+            if (data == null) return 0;
+            long s = randomize(seed), a = s + b4, b = s + b3, c = s + b2, d = s + b1;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                a ^= data[i-3] * b1; a = (a << 23 | a >>> 41) * b3;
+                b ^= data[i-2] * b2; b = (b << 25 | b >>> 39) * b4;
+                c ^= data[i-1] * b3; c = (c << 29 | c >>> 35) * b5;
+                d ^= data[i  ] * b4; d = (d << 31 | d >>> 33) * b1;
+                s += a + b + c + d;
+            }
+            s += b5;
+            switch (len & 3) {
+                case 1: s = wow(s, b1 ^ data[len-1]); break;
+                case 2: s = wow(s + data[len-2], b2 + data[len-1]); break;
+                case 3: s = wow(s + data[len-3], b2 + data[len-2]) ^ wow(s + data[len-1], s ^ b3); break;
+            }
+            s = (s ^ s << 16) * (len ^ b0 ^ s >>> 32);
+            return (int)(s - (s >>> 32));
+        }
+
+        public static int hash(final long seed, final float[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * floatToIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * floatToIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * floatToIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * floatToIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * floatToIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * floatToIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * floatToIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * floatToIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + floatToIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+        public static int hash(final long seed, final double[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * doubleToMixedIntBits(data[i])
+                        + 0xC862B36DAF790DD5L * doubleToMixedIntBits(data[i + 1])
+                        + 0xB8ACD90C142FE10BL * doubleToMixedIntBits(data[i + 2])
+                        + 0xAA324F90DED86B69L * doubleToMixedIntBits(data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * doubleToMixedIntBits(data[i + 4])
+                        + 0x908E3D2C82567A73L * doubleToMixedIntBits(data[i + 5])
+                        + 0x8538ECB5BD456EA3L * doubleToMixedIntBits(data[i + 6])
+                        + 0xD1B54A32D192ED03L * doubleToMixedIntBits(data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + doubleToMixedIntBits(data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the char array to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public static int hash(final long seed, final char[] data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length);
+
+            long result = randomize(seed) ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data[i]
+                        + 0xC862B36DAF790DD5L * data[i + 1]
+                        + 0xB8ACD90C142FE10BL * data[i + 2]
+                        + 0xAA324F90DED86B69L * data[i + 3]
+                        + 0x9CDA5E693FEA10AFL * data[i + 4]
+                        + 0x908E3D2C82567A73L * data[i + 5]
+                        + 0x8538ECB5BD456EA3L * data[i + 6]
+                        + 0xD1B54A32D192ED03L * data[i + 7]
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data[i];
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the String or other CharSequence to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 64-bit hash code for the requested section of data
+         */
+        public static int hash(final long seed, final CharSequence data, final int start, final int end) {
+            if (data == null || start >= end) return 0;
+            final int len = Math.min(end, data.length());
+
+            long result = randomize(seed) ^ (len - start) * 0x9E3779B97F4A7C15L;
+            int i = start;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * data.charAt(i)
+                        + 0xC862B36DAF790DD5L * data.charAt(i + 1)
+                        + 0xB8ACD90C142FE10BL * data.charAt(i + 2)
+                        + 0xAA324F90DED86B69L * data.charAt(i + 3)
+                        + 0x9CDA5E693FEA10AFL * data.charAt(i + 4)
+                        + 0x908E3D2C82567A73L * data.charAt(i + 5)
+                        + 0x8538ECB5BD456EA3L * data.charAt(i + 6)
+                        + 0xD1B54A32D192ED03L * data.charAt(i + 7)
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + data.charAt(i);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+
+        public static int hash(final long seed, final char[][] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final int[][] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final long[][] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final CharSequence[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final CharSequence[]... data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final Iterable<? extends CharSequence> data) {
+            if (data == null) return 0;
+            long s = randomize(seed);
+            final Iterator<? extends CharSequence> it = data.iterator();
+            int len = 0;
+            while (it.hasNext())
+            {
+                ++len;
+                s = mum(
+                        mum(hash(seed, it.next()) ^ b1, (it.hasNext() ? hash(seed, it.next()) ^ b2 ^ ++len : b2)) + s,
+                        mum((it.hasNext() ? hash(seed, it.next()) ^ b3 ^ ++len : b3), (it.hasNext() ? hash(seed, it.next()) ^ b4 ^ ++len : b4)));
+            }
+            return (int) mum(s ^ s << 16, len ^ b0);
+        }
+
+        public static int hash(final long seed, final List<? extends CharSequence> data) {
+            if (data == null) return 0;
+            final int len = data.size();
+            long result = randomize(seed) ^ len * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < len; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data.get(i))
+                        + 0xC862B36DAF790DD5L * hash(seed, data.get(i + 1))
+                        + 0xB8ACD90C142FE10BL * hash(seed, data.get(i + 2))
+                        + 0xAA324F90DED86B69L * hash(seed, data.get(i + 3))
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data.get(i + 4))
+                        + 0x908E3D2C82567A73L * hash(seed, data.get(i + 5))
+                        + 0x8538ECB5BD456EA3L * hash(seed, data.get(i + 6))
+                        + 0xD1B54A32D192ED03L * hash(seed, data.get(i + 7))
+                ;
+            }
+            for (; i < len; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data.get(i));
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+
+        }
+
+        public static int hash(final long seed, final Object[] data) {
+            if (data == null) return 0;
+            long result = randomize(seed) ^ data.length * 0x9E3779B97F4A7C15L;
+            int i = 0;
+            for (; i + 7 < data.length; i += 8) {
+                result =  0xEBEDEED9D803C815L * result
+                        + 0xD96EB1A810CAAF5FL * hash(seed, data[i])
+                        + 0xC862B36DAF790DD5L * hash(seed, data[i + 1])
+                        + 0xB8ACD90C142FE10BL * hash(seed, data[i + 2])
+                        + 0xAA324F90DED86B69L * hash(seed, data[i + 3])
+                        + 0x9CDA5E693FEA10AFL * hash(seed, data[i + 4])
+                        + 0x908E3D2C82567A73L * hash(seed, data[i + 5])
+                        + 0x8538ECB5BD456EA3L * hash(seed, data[i + 6])
+                        + 0xD1B54A32D192ED03L * hash(seed, data[i + 7])
+                ;
+            }
+            for (; i < data.length; i++) {
+                result = 0x9E3779B97F4A7C15L * result + hash(seed, data[i]);
+            }
+            result *= 0x94D049BB133111EBL;
+            result ^= (result << 41 | result >>> 23) ^ (result << 17 | result >>> 47);
+            result *= 0x369DEA0F31A53F85L;
+            result ^= result >>> 31;
+            result *= 0xDB4F0B9175AE2165L;
+            return (int)(result ^ result >>> 28);
+        }
+
+        public static int hash(final long seed, final Object data) {
+            if (data == null) return 0;
+            return (int)((data.hashCode() + randomize(seed)) * 0x9E3779B97F4A7C15L >>> 32);
         }
 
     }
