@@ -22,8 +22,6 @@
 
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,11 +32,11 @@ import java.util.ListIterator;
  * A Java implementation of an incremental 2D Delaunay triangulation algorithm.
  * This is a port of <a href="https://github.com/jdiemke/delaunay-triangulator">Johannes Diemke's code</a>, with
  * some substantial non-algorithmic changes to better work in SquidLib and to reduce allocations. You should consider
- * using the {@code com.badlogic.gdx.math.DelaunayTriangulator} class if you use libGDX, which allocates fewer objects.
+ * using the {@code com.badlogic.gdx.math.DelaunayTriangulator} class if you use libGDX, which allocates fewer objects,
+ * or {@link IndexedDelaunayTriangulator} for a version of that libGDX class ported to use doubles. 
  * @author Johannes Diemke
  * @author Tommy Ettinger
  */
-@Beta
 public class DelaunayTriangulator implements Serializable {
     private static final long serialVersionUID = 1L;
 

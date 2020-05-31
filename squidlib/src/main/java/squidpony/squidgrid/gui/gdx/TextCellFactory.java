@@ -19,7 +19,6 @@ import regexodus.ds.CharCharMap;
 import squidpony.IColorCenter;
 import squidpony.Maker;
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
 
@@ -1391,7 +1390,6 @@ public class TextCellFactory implements Disposable {
      * @param pixmap a non-null Pixmap that will be modified
      * @param encodedColors a 2D float array that must be non-null and non-empty, and contains packed colors
      */
-    @Beta
     public void draw(Pixmap pixmap, float[][] encodedColors)
     {
         final int w = Math.min(pixmap.getWidth(), encodedColors.length), h = Math.min(pixmap.getHeight(), encodedColors[0].length);

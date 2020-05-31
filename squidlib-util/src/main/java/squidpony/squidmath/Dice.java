@@ -3,7 +3,6 @@ package squidpony.squidmath;
 import regexodus.Matcher;
 import regexodus.Pattern;
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
@@ -12,6 +11,8 @@ import java.io.Serializable;
  * Supports rolling multiple virtual dice of arbitrary size, summing all, the highest <i>n</i>, or the lowest <i>n</i>
  * dice, treating dice as "exploding" as in some tabletop games (where the max result is rolled again and added),
  * getting value from inside a range, and applying simple arithmetic modifiers to the result (like adding a number).
+ * Typically you'll want to use the {@link #roll(String)} method if you have a String like {@code "2d8+6"}, or the
+ * various other methods if you have int variables for things like "number of dice to roll" and "sides on each die."
  * <br>
  * Based on code from the Blacken library.
  *
@@ -19,11 +20,11 @@ import java.io.Serializable;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  */
-@Beta
 public class Dice implements Serializable {
 
     private static final long serialVersionUID = -488902743486431146L;
 
+    // The Creature.
     private static final Matcher mat = Pattern.compile("\\s*(?:(?:(-?\\d+)?\\s*(?:([:><])\\s*(\\d+))?\\s*(?:([d:!])\\s*(\\d+))?)|([+/*-]))\\s*").matcher();
     private IRNG rng;
     private transient IntVLA temp = new IntVLA(20);

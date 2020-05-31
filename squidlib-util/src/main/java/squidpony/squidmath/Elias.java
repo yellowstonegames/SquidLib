@@ -1,8 +1,5 @@
 package squidpony.squidmath;
 
-
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -18,7 +15,6 @@ import java.util.ArrayList;
  * based on work by Wu.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-@Beta
 public class Elias implements Serializable {
 
     private static final long serialVersionUID = 5290834334572814012L;

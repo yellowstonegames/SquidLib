@@ -1,11 +1,10 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 
 import static squidpony.squidmath.Noise.emphasizeSigned;
-import static squidpony.squidmath.NumberTools.*;
+import static squidpony.squidmath.NumberTools.sway;
+import static squidpony.squidmath.NumberTools.swayRandomized;
 
 /**
  * Like a kind of RNG, but fully deterministic in a way that depends on a "connected" double array.
@@ -16,11 +15,14 @@ import static squidpony.squidmath.NumberTools.*;
  * produce ints and doubles, and does not produce a different output unless its input is changed (usually by altering a
  * shared reference to {@code connections}). Also implements the various {@link Noise} interfaces, which this doesn't
  * do perfectly but is at least different (it may yield large spans of high or low results, which Simplex and Perlin
- * noise cannot actually do).
+ * noise cannot actually do). <a href="https://i.imgur.com/BrTVlj1.gifv">Here's a short clip of this in motion</a>.
+ * <br>
+ * If you're using this as an arbitrary-dimensional noise algorithm, you may want to also consider {@link PhantomNoise},
+ * which has output that looks more like Perlin or Simplex noise but scales to arbitrary dimensions.
+ * <a href="https://i.imgur.com/rmwXwO5.gifv">Here's a short clip of PhantomNoise in motion</a>.
  * <br>
  * Created by Tommy Ettinger on 5/18/2017.
  */
-@Beta
 public class CosmicNumbering implements Serializable, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     private static final long serialVersionUID = 0L;
     public static final CosmicNumbering instance = new CosmicNumbering(0x1337BEEFL, new double[]{1.618, 3.14});

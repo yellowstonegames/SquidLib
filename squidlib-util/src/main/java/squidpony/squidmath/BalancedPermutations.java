@@ -1,13 +1,9 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 /**
  * Based on <a href="http://extremelearning.com.au/isotropic-blue-noise-point-sets/">Martin Roberts' blog post about
  * blue noise point sets</a>, this class generates "balanced" permutations of a specific size with good performance.
- * It may be added to later to include the rest of that blog post.
  */
-@Beta
 public class BalancedPermutations {
 	public final int size;
 	private final int halfSize;

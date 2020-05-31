@@ -1,8 +1,12 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.Beta;
-import squidpony.squidmath.*;
+
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IntIntOrderedMap;
+import squidpony.squidmath.IntVLA;
 
 /**
  * A room placing algorithm developed by Rayvolution for his game Fail To Hero, this was simple to implement but
@@ -76,7 +80,6 @@ import squidpony.squidmath.*;
  * <br>
  * Created by Tommy Ettinger on 5/7/2019.
  */
-@Beta
 public class ConnectingMapGenerator implements IDungeonGenerator {
     
     public int width;

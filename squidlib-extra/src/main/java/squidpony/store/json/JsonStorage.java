@@ -5,7 +5,6 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.LZSPlus;
 import squidpony.StringStringMap;
-import squidpony.annotation.Beta;
 import squidpony.Garbler;
 
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.Map;
  * Helps games store information in libGDX's Preferences class as Strings, then get it back out.
  * Created by Tommy Ettinger on 9/16/2016.
  */
-@Beta
 public class JsonStorage {
     public final Preferences preferences;
     public final String storageName;

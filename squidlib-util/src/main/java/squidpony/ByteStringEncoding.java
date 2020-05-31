@@ -12,6 +12,9 @@ import java.util.HashSet;
  * uses UTF-16-safe encoding, which means it does not use half of all possible chars in the compressed Strings but makes
  * sure the Strings are valid UTF-16 (so they can be written to and read from file more safely).
  * <br>
+ * This class does work, since it can read back what it writes, but it still hasn't been strenuously tested, and it
+ * could probably be optimized a lot.
+ * <br>
  * Created by Tommy Ettinger on 1/11/2020.
  */
 @Beta

@@ -2,7 +2,6 @@ package squidpony.store.text;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import squidpony.*;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.mapping.PoliticalMapper;
 import squidpony.squidgrid.mapping.SpillWorldMap;
 import squidpony.squidmath.*;
@@ -14,7 +13,6 @@ import static squidpony.Converters.*;
 /**
  * Created by Tommy Ettinger on 4/22/2017.
  */
-@Beta
 @SuppressWarnings("unchecked")
 public class BonusConverters {
     public static final StringConvert<OrderedMap<Character, String>> convertMapCharString =

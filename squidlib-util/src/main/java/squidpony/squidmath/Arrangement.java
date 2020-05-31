@@ -16,7 +16,6 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -57,7 +56,6 @@ import java.util.*;
  * @author Sebastiano Vigna (responsible for all the hard parts)
  * @author Tommy Ettinger (mostly responsible for squashing several layers of parent classes into one monster class)
  */
-@Beta
 public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     /**

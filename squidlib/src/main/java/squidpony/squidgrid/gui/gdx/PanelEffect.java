@@ -6,10 +6,14 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import squidpony.ArrayTools;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Bresenham;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.DiverRNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.SeededNoise;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +32,6 @@ import java.util.List;
  * <br>
  * Created by Tommy Ettinger on 5/24/2017.
  */
-@Beta
 public abstract class PanelEffect extends TemporalAction{
     public IPackedColorPanel target;
     public GreasedRegion validCells;
@@ -50,7 +53,6 @@ public abstract class PanelEffect extends TemporalAction{
         setDuration(duration);
         validCells = valid;
     }
-    @Beta
     public static class ExplosionEffect extends PanelEffect
     {
         /**
@@ -317,7 +319,6 @@ public abstract class PanelEffect extends TemporalAction{
         }
 
     }
-    @Beta
     public static class GibberishEffect extends ExplosionEffect
     {
         /**
@@ -553,7 +554,7 @@ public abstract class PanelEffect extends TemporalAction{
             Coord c;
             float f, color;
             int idx, seed = System.identityHashCode(this), clen = choices.length;
-            final long tick = ThrustAltRNG.determine((System.currentTimeMillis() >>> 7) * seed);
+            final long tick = DiverRNG.determine((System.currentTimeMillis() >>> 7) * seed);
             for (int i = 0; i < len; i++) {
                 c = affected.get(i);
                 if(lightMap[c.x][c.y] <= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
@@ -567,12 +568,11 @@ public abstract class PanelEffect extends TemporalAction{
                     color = SColor.lerpFloatColors(colors[colors.length-1], NumberTools.setSelectedByte(colors[colors.length-1], 3, (byte)0), (Math.min(0.99f, f) * colors.length) % 1f);
                 else
                     color = SColor.lerpFloatColors(colors[idx], colors[idx+1], (f * colors.length) % 1f);
-                target.put(c.x, c.y, choices[ThrustAltRNG.determineBounded(tick + i, clen)], color);
+                target.put(c.x, c.y, choices[DiverRNG.determineBounded(tick + i, clen)], color);
             }
         }
 
     }
-    @Beta
     public static class PulseEffect extends ExplosionEffect
     {
         public PulseEffect(IPackedColorPanel targeting, Coord center, int radius) {
@@ -625,7 +625,6 @@ public abstract class PanelEffect extends TemporalAction{
             }
         }
     }
-    @Beta
     public static class ProjectileEffect extends PanelEffect
     {
         /**
@@ -781,7 +780,6 @@ public abstract class PanelEffect extends TemporalAction{
      * whole effect will vary based on the Chebyshev distance between the start and end points. The speed the projectile
      * travels at is also dependent on the size and aspect ratio of cells it travels over.
      */
-    @Beta
     public static class SteadyProjectileEffect extends ProjectileEffect
     {
 
@@ -856,7 +854,6 @@ public abstract class PanelEffect extends TemporalAction{
         }
     }
     
-    @Beta
     public static class GlowBallEffect extends PanelEffect
     {
         /**
@@ -877,14 +874,14 @@ public abstract class PanelEffect extends TemporalAction{
          */
         public float color = SColor.CW_AZURE.toFloatBits();
         /**
-         * The internal representation of how affected each cell is by the explosion, based on proximity to center.
+         * The internal representation of how affected each cell is by the glow, based on proximity to center.
          * This always has 16 light maps, but many will be identical and only calculated once.
          */
         public double[][][] lightMaps = new double[16][][];
         private double[][] resMap;
         /**
-         * The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to
-         * show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as
+         * The raw list of Coords that might be affected by the glow; may include some cells that aren't going to
+         * show as glowing (it usually has some false positives), but shouldn't exclude any cells that should show as
          * such (no false negatives). You can edit this if you need to, but it isn't recommended.
          */
         public List<Coord> affected;
