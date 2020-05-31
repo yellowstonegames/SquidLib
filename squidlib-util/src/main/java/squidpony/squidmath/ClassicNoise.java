@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import static squidpony.squidmath.Noise.cerp;
 import static squidpony.squidmath.Noise.fastFloor;
 import static squidpony.squidmath.SeededNoise.phiGrad2;
@@ -21,11 +19,11 @@ import static squidpony.squidmath.SeededNoise.grad4d;
  * at least most of the time. This uses different gradient vectors than what was recommended in the "Improved Perlin
  * Noise" paper, since the ones this uses avoid 45-degree angular artifacts in all dimensions implemented.
  * <br>
- * ClassicNoise is recommended for most usage in {@link squidpony.squidgrid.mapping.WorldMapGenerator} that needs a
+ * ClassicNoise is a good choice with parts of {@link squidpony.squidgrid.mapping.WorldMapGenerator} that need a
  * Noise3D implementation, and it tends to about as fast as {@link WhirlingNoise} in 3D. It is not recommended for 2D
- * use; prefer {@link JitterNoise} or {@link WhirlingNoise} for that.
+ * use; prefer {@link JitterNoise} or {@link WhirlingNoise} for that. You can also use {@link FastNoise} with
+ * {@link FastNoise#PERLIN_FRACTAL} as the noiseType if you primarily want to use float input and get float output.
  */
-@Beta
 public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     public static final ClassicNoise instance = new ClassicNoise();
     public long seed;

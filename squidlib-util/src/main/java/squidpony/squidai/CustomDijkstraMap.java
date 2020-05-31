@@ -1,6 +1,5 @@
 package squidpony.squidai;
 
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Adjacency.BasicAdjacency;
@@ -26,7 +25,6 @@ import java.io.Serializable;
  * If you can't remember how to spell this, just remember: Does It Just Know Stuff? That's Really Awesome!
  * Created by Tommy Ettinger on 4/4/2015.
  */
-@Beta
 public class CustomDijkstraMap implements Serializable {
     private static final long serialVersionUID = -2456306898212944440L;
 

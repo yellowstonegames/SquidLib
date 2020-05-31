@@ -12,7 +12,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.TimeUtils;
 import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidmath.*;
+import squidpony.squidmath.IndexedDelaunayTriangulator;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.VanDerCorputQRNG;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -23,7 +27,6 @@ import java.util.Comparator;
 public class Delaunay3DTest extends ApplicationAdapter {
     private static final int SIZE = 1024;
     private IndexedDelaunayTriangulator tri;
-//    private ArrayList<Delaunay3D.Triangle> tris;
     private OrderedSet<? extends Color> palette;
     private ImmediateModeRenderer20 imr;
     private Matrix4 proj;
@@ -47,9 +50,6 @@ public class Delaunay3DTest extends ApplicationAdapter {
         float[] lon_clat = new float[SIZE * 2];
 //        short[] links = new short[SIZE * 3];
         for (int i = 0; i < SIZE; i++) {
-//            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
-//            points.add(new CoordDouble(386.4973651183067 * (i + 1) % 500.0 + rng.nextDouble(12.0),
-//                    291.75822899100325 * (i + 1) % 500.0 + rng.nextDouble(12.0)));
             double lon = (VanDerCorputQRNG.determine2(i) * Math.PI * 2.0);
             double lat = ((VanDerCorputQRNG.determine(3, i) - 0.5) * Math.PI);
 //            lon_lat[i * 2] = lon;
@@ -65,8 +65,6 @@ public class Delaunay3DTest extends ApplicationAdapter {
             pairs[i * 2 + 1] = y / (1.0 - z);
         }
 
-//        tri = new Delaunay3D(points);
-//        tris = tri.triangulate();
         tri = new IndexedDelaunayTriangulator();
         IntVLA triangles = tri.computeTriangles(pairs, false);
         int[] triangleArray = triangles.items;
@@ -98,15 +96,6 @@ public class Delaunay3DTest extends ApplicationAdapter {
                 }
             }
         }
-//        Collections.sort(tris, new Comparator<Delaunay3D.Triangle>() {
-//            @Override
-//            public int compare(Delaunay3D.Triangle t1, Delaunay3D.Triangle t2) {
-//                return Double.compare(
-//                        t1.a.flat.distanceSq(0.0, 0.0) + t1.b.flat.distanceSq(0.0, 0.0) + t1.c.flat.distanceSq(0.0, 0.0),
-//                        t2.a.flat.distanceSq(0.0, 0.0) + t2.b.flat.distanceSq(0.0, 0.0) + t2.c.flat.distanceSq(0.0, 0.0)
-//                );
-//            }
-//        });
         palette = new OrderedSet<>(SColor.FULL_PALETTE);
         for (int i = palette.size() - 1; i >= 0; i--) {
             Color color = palette.getAt(i);
@@ -124,26 +113,6 @@ public class Delaunay3DTest extends ApplicationAdapter {
         imr = new ImmediateModeRenderer20(30000, false, true, 0);
         proj = new Matrix4();
         
-//        tris = Maker.makeList(new Delaunay3D.Triangle(new Delaunay3D.MultiCoord(2.0, -1.0, 1.0),
-//                new Delaunay3D.MultiCoord(-2.0, 0.0, 0.0),
-//                new Delaunay3D.MultiCoord(1.0, 2.0, 0.0)));
-        
-//        vertices = new float[tris.size() * 12];
-//        for (int i = 0; i < tris.size(); i++) {
-//            float c = palette.getAt(i % palette.size()).toFloatBits();
-//            vertices[i * 12 + 0] = (float) tris.get(i).a.x * 256f;
-//            vertices[i * 12 + 1] = (float) tris.get(i).a.y * 256f;
-//            vertices[i * 12 + 2] = (float) tris.get(i).a.z * 256f;
-//            vertices[i * 12 + 3] = c;
-//            vertices[i * 12 + 4] = (float) tris.get(i).b.x * 256f;
-//            vertices[i * 12 + 5] = (float) tris.get(i).b.y * 256f;
-//            vertices[i * 12 + 6] = (float) tris.get(i).b.z * 256f;
-//            vertices[i * 12 + 7] = c;
-//            vertices[i * 12 + 8] = (float) tris.get(i).c.x * 256f;
-//            vertices[i * 12 + 9] = (float) tris.get(i).c.y * 256f;
-//            vertices[i * 12 + 10] = (float) tris.get(i).c.z * 256f;
-//            vertices[i * 12 + 11] = c;
-//        }
         vertices = new float[(triangles.size / 3) * 10];
         int idx;
         for (int t = 2, i = 0; t < triangles.size; t+=3) {

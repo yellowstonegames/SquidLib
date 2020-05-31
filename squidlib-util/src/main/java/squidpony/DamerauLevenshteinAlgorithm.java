@@ -1,7 +1,5 @@
 package squidpony;
 
-import squidpony.annotation.Beta;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,11 +29,11 @@ import java.util.Map;
  *
  * The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is
  * the length of the source string and m is the length of the target string.
- * This implementation consumes O(n*m) space.
+ * This implementation consumes O(n*m) space, none of which is cached for
+ * future executions. Heavy usage may be taxing on the garbage collector.
  * 
 * @author Kevin L. Stern
  */
-@Beta
 public class DamerauLevenshteinAlgorithm {
 
     private final int deleteCost, insertCost, replaceCost, swapCost;

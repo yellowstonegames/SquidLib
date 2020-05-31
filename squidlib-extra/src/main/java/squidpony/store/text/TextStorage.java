@@ -5,7 +5,6 @@ import com.badlogic.gdx.Preferences;
 import squidpony.Converters;
 import squidpony.LZSPlus;
 import squidpony.StringConvert;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.OrderedMap;
 import squidpony.Garbler;
 
@@ -16,7 +15,6 @@ import java.util.Map;
  * instead using a customized and customizable manual serialization style based around {@link StringConvert}.
  * Created by Tommy Ettinger on 9/16/2016.
  */
-@Beta
 public class TextStorage {
     public final Preferences preferences;
     public final String storageName;

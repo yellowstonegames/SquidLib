@@ -1,13 +1,11 @@
 package squidpony;
 
-import squidpony.annotation.Beta;
 import squidpony.store.json.JsonStorage;
 
 /**
  * Helps games store information in libGDX's Preferences class as Strings, then get it back out.
  * Created by Tommy Ettinger on 9/16/2016.
  */
-@Beta
 public class SquidStorage extends JsonStorage {
     /**
      * Please don't use this constructor if possible; it simply calls {@link #SquidStorage(String)} with the constant

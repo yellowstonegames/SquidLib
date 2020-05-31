@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.Beta;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +28,6 @@ import java.util.SortedSet;
  * <br>
  * Created by Tommy Ettinger on 4/26/2017.
  */
-@Beta
 public class BundleBiMap<E, S>
 {
     private Arrangement<E> elements;

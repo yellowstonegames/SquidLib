@@ -66,9 +66,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 134, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
@@ -1368,9 +1368,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     private float getGray(float brightness) {
 //        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
-        return gradientF[(int)(brightness * 255.999)];
+//        return gradientF[(int)(brightness * 255.999)];
 //        return bumpF[(int)(brightness * 255.999)];
-//        return grayscaleF[(int)(brightness * 255.999)];
+        return grayscaleF[(int)(brightness * 255.999)];
     }
 
 //    public static class Dunes implements Noise.Noise2D {
@@ -4233,12 +4233,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 81:
                         Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, ctr * 0x5p-10f - 1.1f) * 0.015f;
-                        c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, ctr * 0x5p-10f - 1.1f) * 0.015f;
-                        s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, ctr * 0x5p-10f + 1.41f) * 0.015f;
-                        c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, ctr * 0x5p-10f + 1.41f) * 0.015f;
-                        s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, ctr * 0x5p-10f + 2.61f) * 0.015f;
-                        c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, ctr * 0x5p-10f + 2.61f) * 0.015f;
+                        bright = ctr * 0x5p-8f;
+                        s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                        c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                        s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                        c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                        s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
+                        c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 connections[0] = ctr * 0.007 + x * c0 - y * s0;

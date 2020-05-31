@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.Beta;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,7 +17,6 @@ import java.util.SortedSet;
  * do nothing if the array or varargs passed to it has a different length than the {@link #keyCount} of the MultiKey.
  * Created by Tommy Ettinger on 10/23/2016.
  */
-@Beta
 @SuppressWarnings("unchecked")
 public class MultiKey {
     public final int keyCount;
