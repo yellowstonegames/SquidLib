@@ -1,7 +1,6 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.*;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
 
@@ -16,13 +15,16 @@ import java.util.HashSet;
  * factions, where each faction may be hand-made and may consist of humans or some fantasy species, such as goblins,
  * elves, or demons. This can assign contiguous areas of land to various factions, while acknowledging any preferences
  * some species may have for specific types of land (elves may strongly prefer forest terrain, or flying demons may be
- * the ideal residents for difficult mountainous terrain). This needs both a {@link WorldMapGenerator}, preferably
- * {@link squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap} or
- * {@link squidpony.squidgrid.mapping.WorldMapGenerator.EllipticalMap} because they distribute area equally across the
- * map, and a {@link squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper} to allocate biomes and height/moisture
- * info.
+ * the ideal residents for difficult mountainous terrain). This needs both a {@link WorldMapGenerator} and a
+ * {@link squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper} to allocate biomes and height/moisture info.
+ * The WorldMapGenerator is commonly a {@link squidpony.squidgrid.mapping.WorldMapGenerator.SphereMap} or a
+ * {@link squidpony.squidgrid.mapping.WorldMapGenerator.EllipticalMap} for a world map because they are fairly familiar
+ * map projections ({@link squidpony.squidgrid.mapping.WorldMapGenerator.HyperellipticalMap} can look better if
+ * important areas are in the corners of the rectangular area, but it's less familiar). If you're making a political map
+ * for an island or isolated area, then you may want {@link squidpony.squidgrid.mapping.WorldMapGenerator.LocalMap} or
+ * {@link squidpony.squidgrid.mapping.WorldMapGenerator.LocalMimicMap} instead, which don't have world-scale features
+ * like polar ice caps or a warm equator.
  */
-@Beta
 public class FantasyPoliticalMapper implements Serializable {
     private static final long serialVersionUID = 0L;
 
@@ -40,12 +42,12 @@ public class FantasyPoliticalMapper implements Serializable {
         public String name, shortName;
         public FakeLanguageGen language;
         /**
-         * An UnorderedSet of String keys, where each key is the name of a biome this Faction wants to occupy.
+         * A HashSet of String keys, where each key is the name of a biome this Faction wants to occupy.
          * May be null if no biomes are specifically preferred.
          */
         public HashSet<String> preferredBiomes;
         /**
-         * An UnorderedSet of String keys, where each key is the name of a biome this Faction will never occupy.
+         * A HashSet of String keys, where each key is the name of a biome this Faction will never occupy.
          * May be null if all biomes are available, but unless this is specified in a constructor, the default will be
          * to consider "Ocean" blocked.
          */
@@ -78,7 +80,7 @@ public class FantasyPoliticalMapper implements Serializable {
                     (long) ((Math.random() - 0.5) * 0x10000000000000L)
                             ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
             shortName = name = language.word(true);
-            this.blockedBiomes = new HashSet<>(1, 0.375f);
+            this.blockedBiomes = new HashSet<>(1, 0.75f);
             blockedBiomes.add("Ocean");
         }
 
@@ -91,7 +93,7 @@ public class FantasyPoliticalMapper implements Serializable {
         {
             this.language = language;
             shortName = name = language.word(true);
-            this.blockedBiomes = new HashSet<>(1, 0.375f);
+            this.blockedBiomes = new HashSet<>(1, 0.75f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -104,7 +106,7 @@ public class FantasyPoliticalMapper implements Serializable {
         {
             this.language = language;
             shortName = this.name = name;
-            this.blockedBiomes = new HashSet<>(1, 0.375f);
+            this.blockedBiomes = new HashSet<>(1, 0.75f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -119,7 +121,7 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.blockedBiomes = new HashSet<>(1, 0.375f);
+            this.blockedBiomes = new HashSet<>(1, 0.75f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -138,9 +140,9 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.75f);
             Collections.addAll(this.preferredBiomes, preferredBiomes);
-            this.blockedBiomes = new HashSet<>(1, 0.375f);
+            this.blockedBiomes = new HashSet<>(1, 0.75f);
             blockedBiomes.add("Ocean");
         }
         /**
@@ -160,9 +162,9 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.75f);
             Collections.addAll(this.preferredBiomes, preferredBiomes);
-            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.75f);
             Collections.addAll(this.blockedBiomes, blockedBiomes);
         }
         /**
@@ -184,9 +186,9 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.75f);
             Collections.addAll(this.preferredBiomes, preferredBiomes);
-            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.75f);
             Collections.addAll(this.blockedBiomes, blockedBiomes);
             this.preferredHeight = preferredHeight;
         }
@@ -214,9 +216,9 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.75f);
             Collections.addAll(this.preferredBiomes, preferredBiomes);
-            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.75f);
             Collections.addAll(this.blockedBiomes, blockedBiomes);
             this.preferredHeight = preferredHeight;
             this.preferredHeat = preferredHeat;
@@ -246,9 +248,9 @@ public class FantasyPoliticalMapper implements Serializable {
             this.language = language;
             this.name = name;
             this.shortName = shortName;
-            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.375f);
+            this.preferredBiomes = new HashSet<>(preferredBiomes.length, 0.75f);
             Collections.addAll(this.preferredBiomes, preferredBiomes);
-            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.375f);
+            this.blockedBiomes = new HashSet<>(blockedBiomes.length, 0.75f);
             Collections.addAll(this.blockedBiomes, blockedBiomes);
             this.preferredHeight = preferredHeight;
             this.preferredHeat = preferredHeat;
