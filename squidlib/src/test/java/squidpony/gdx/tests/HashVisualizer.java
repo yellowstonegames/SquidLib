@@ -67,8 +67,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 146;
-    private int hashMode = 0, rngMode = 0, noiseMode = 140, otherMode = 1;//74;//118;//82;
+    private static final int NOISE_LIMIT = 148;
+    private int hashMode = 0, rngMode = 0, noiseMode = 134, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     
@@ -118,12 +118,14 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.InverseLayered3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
     private final Noise.InverseLayered4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
     //private final Noise.Noise6D layered6D = new Noise.Layered6D(WhirlingNoise.instance, 3, 1.75);
-    private final Noise.Noise2D foam2D_1 = new Noise.Layered2D(FoamNoise.instance, 1, 0x1p-4);
-    private final Noise.Noise2D foam2D_2 = new Noise.Layered2D(FoamNoise.instance, 2, 0x1p-4);
-    private final Noise.Noise3D foam3D_1 = new Noise.Layered3D(FoamNoise.instance, 1, 0x1p-4);
-    private final Noise.Noise3D foam3D_2 = new Noise.Layered3D(FoamNoise.instance, 2, 0x1p-4);
-    private final Noise.Noise4D foam4D_1 = new Noise.Layered4D(FoamNoise.instance, 1, 0x1p-4);
-    private final Noise.Noise4D foam4D_2 = new Noise.Layered4D(FoamNoise.instance, 2, 0x1p-4);
+    private final Noise.Noise2D foam2D_1 = new Noise.Layered2D(FoamNoise.instance, 1, 0x1p-0);
+    private final Noise.Noise2D foam2D_2 = new Noise.Layered2D(FoamNoise.instance, 2, 0x1p-0);
+    private final Noise.Noise3D foam3D_1 = new Noise.Layered3D(FoamNoise.instance, 1, 0x1p-0);
+    private final Noise.Noise3D foam3D_2 = new Noise.Layered3D(FoamNoise.instance, 2, 0x1p-0);
+    private final Noise.Noise4D foam4D_1 = new Noise.Layered4D(FoamNoise.instance, 1, 0x1p-0);
+    private final Noise.Noise4D foam4D_2 = new Noise.Layered4D(FoamNoise.instance, 2, 0x1p-0);
+    private final Noise.Noise6D foam6D_1 = new Noise.Layered6D(FoamNoise.instance, 1, 0x1p-0);
+    private final Noise.Noise6D foam6D_2 = new Noise.Layered6D(FoamNoise.instance, 2, 0x1p-0);
     private final PhantomNoise phantom2D = new PhantomNoise(0x1337BEEF, 2);
     private final PhantomNoise phantom3D = new PhantomNoise(0x1337BEEF, 3);
     private final PhantomNoise phantom4D = new PhantomNoise(0x1337BEEF, 4);
@@ -1368,9 +1370,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     private float getGray(float brightness) {
 //        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
-//        return gradientF[(int)(brightness * 255.999)];
+        return gradientF[(int)(brightness * 255.999)];
 //        return bumpF[(int)(brightness * 255.999)];
-        return grayscaleF[(int)(brightness * 255.999)];
+//        return grayscaleF[(int)(brightness * 255.999)];
     }
 
 //    public static class Dunes implements Noise.Noise2D {
@@ -5128,11 +5130,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 134:
                         Gdx.graphics.setTitle("Foam 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
+                                alter2D(x, y, ctr);
                                 bright =
-                                        basicPrepare(foam2D_1.getNoise(xx, yy)
+                                        basicPrepare(foam2D_1.getNoise(point2D[0], point2D[1])
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5141,11 +5142,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 135:
                         Gdx.graphics.setTitle("Foam 2D Noise, unprocessed, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
+                                alter2D(x, y, ctr);
                                 bright =
-                                        basicPrepare(foam2D_2.getNoise(xx, yy)
+                                        basicPrepare(foam2D_2.getNoise(point2D[0], point2D[1])
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5155,8 +5155,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Foam 3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                alter3D(x, y, ctr);
                                 bright =
-                                        basicPrepare(foam3D_1.getNoise(x, y, ctr)
+                                        basicPrepare(foam3D_1.getNoise(point3D[0], point3D[1], point3D[2])
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5166,8 +5167,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Foam3D Noise, unprocessed, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                alter3D(x, y, ctr);
                                 bright =
-                                        basicPrepare(foam3D_2.getNoise(x, y, ctr)
+                                        basicPrepare(foam3D_2.getNoise(point3D[0], point3D[1], point3D[2])
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5175,10 +5177,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 138:
                         Gdx.graphics.setTitle("Foam 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                slice3D(point4D, x, y, ctr);
                                 bright =
-                                        basicPrepare(foam4D_1.getNoise(x, y, ctr, foam3D_1.getNoise(ctr, x, y))
+                                        basicPrepare(foam4D_1.getNoise(point4D[0], point4D[1], point4D[2], point4D[3])
                                         );
                                 back[x][y] = getGray(bright);
                             }
@@ -5186,16 +5190,44 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 139:
                         Gdx.graphics.setTitle("Foam 4D Noise, unprocessed, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
+                                slice3D(point4D, x, y, ctr);
                                 bright =
-                                        basicPrepare(foam4D_2.getNoise(x, y, ctr, foam3D_1.getNoise(ctr, x, y))
+                                        basicPrepare(foam4D_2.getNoise(point4D[0], point4D[1], point4D[2], point4D[3])
                                         );
                                 back[x][y] = getGray(bright);
                             }
                         }
                         break;
                     case 140:
+                        Gdx.graphics.setTitle("Foam 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point6D, 0);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                slice3D(point6D, x, y, ctr);
+                                bright =
+                                        basicPrepare(foam6D_1.getNoise(point6D[0], point6D[1], point6D[2], point6D[3], point6D[4], point6D[5])
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 141:
+                        Gdx.graphics.setTitle("Foam 6D Noise, unprocessed, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Arrays.fill(point6D, 0);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                slice3D(point6D, x, y, ctr);
+                                bright =
+                                        basicPrepare(foam6D_2.getNoise(point6D[0], point6D[1], point6D[2], point6D[3], point6D[4], point6D[5])
+                                        );
+                                back[x][y] = getGray(bright);
+                            }
+                        }
+                        break;
+                    case 142:
                         Gdx.graphics.setTitle("Phantom 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -5208,7 +5240,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 141:
+                    case 143:
                         Gdx.graphics.setTitle("Phantom 3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -5219,7 +5251,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 142:
+                    case 144:
                         Gdx.graphics.setTitle("Phantom 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         Arrays.fill(point4D, 0);
                         for (int x = 0; x < width; x++) {
@@ -5238,7 +5270,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 143:
+                    case 145:
                         Gdx.graphics.setTitle("Phantom 5D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         Arrays.fill(point5D, 0);
                         for (int x = 0; x < width; x++) {
@@ -5251,7 +5283,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 144:
+                    case 146:
                         Gdx.graphics.setTitle("Phantom 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         Arrays.fill(point6D, 0);
                         for (int x = 0; x < width; x++) {
@@ -5264,7 +5296,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 145:
+                    case 147:
                         Gdx.graphics.setTitle("Phantom 7D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         Arrays.fill(point7D, 0);
                         for (int x = 0; x < width; x++) {

@@ -1,42 +1,43 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import static squidpony.squidmath.ValueNoise.valueNoise;
 
 /**
- * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, and
- * 4D. Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs about a third as many octaves as the
- * Simplex option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. A useful
- * property of FoamNoise is how its visual "character" doesn't change much as dimensions are added; whereas 4D simplex
- * noise tends to separate into "surflets" separated by spans of 0, and higher dimensions of simplex only have larger
- * such spans, FoamNoise seems to stay approximately as coherent in 2D, 3D, and 4D. Verifying this claim about FoamNoise
- * is not easy, but it makes sense intuitively because of how this generator works. Simplex noise in N dimensions relies
- * on a lattice of N-simplices (such as triangles in 2D or tetrahedra in 3D) and evaluates the noise at a point by
- * hashing each of the N+1 vertices, looking up a gradient vector for each vertex, and combining the gradient vectors
- * based on proximity of the evaluated point to each vertex. FoamNoise in N dimensions is not nearly as complex; it
- * relies on making N+1 averaged calls to N-dimensional value noise, each call using a rotated (and potentially skewed)
- * set of axes, with each call's result also affecting the inputs to the next call (domain warping). Value noise uses a
- * cubic lattice or its hypercube equivalent in higher dimensions, which seems to be more "stable" as dimensionality
- * increases, and the number of value noise calls increases at the same rate as simplex noise adds gradient vectors.
- * Averaging more calls causes the distribution of the noise to gradually approach Gaussian, but the effect of this
- * approach gets less pronounced past 3 calls.
+ * An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, 4D
+ * and 6D. Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs fewer octaves than the Simplex
+ * option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. A useful property
+ * of FoamNoise is how its visual "character" doesn't change much as dimensions are added; whereas 6D simplex noise
+ * tends to separate into "surflets" separated by spans of 0, and higher dimensions of simplex only have larger such
+ * spans, FoamNoise seems to stay approximately as coherent in 2D, 3D, and 4D. Verifying this claim about FoamNoise is
+ * not easy, but it makes sense intuitively because of how this generator works. Simplex noise in N dimensions relies on
+ * a lattice of N-simplices (such as triangles in 2D or tetrahedra in 3D) and evaluates the noise at a point by hashing
+ * each of the N+1 vertices, looking up a gradient vector for each vertex from a pre-calculated array, and combining the
+ * gradient vectors based on proximity of the evaluated point to each vertex. FoamNoise in N dimensions is not nearly as
+ * complex; it relies on making N+1 averaged calls to N-dimensional value noise, each call using a rotated (and
+ * potentially skewed) set of axes, with each call's result also affecting the inputs to the next call (domain warping).
+ * Value noise uses a cubic lattice or its hypercube equivalent in higher dimensions, which seems to be more "stable" as
+ * dimensionality increases, and the number of value noise calls increases at the same rate as simplex noise adds
+ * gradient vectors. Averaging more calls causes the distribution of the noise to gradually approach Gaussian (biased
+ * toward results in the center of the range), but adjustments this does at the end counteract this well enough. 
  * <br>
- * It's strongly encouraged to experiment with the lacunarity parameter in {@link Noise.Layered3D} and similar classes
- * if you use one of those variants, which also probably needs adjustments to frequency. Changing lacunarity with
- * multiple octaves can be useful to edit how tightly the noise clumps together.
+ * It's encouraged to experiment with the lacunarity parameter in {@link Noise.Layered3D} and similar classes if you use
+ * one of those variants, which also probably needs adjustments to frequency. Changing lacunarity wit multiple octaves
+ * can be useful to edit how tightly the noise clumps together. FoamNoise tends to look about the same with 3 octaves as
+ * it does with 4 octaves; for perceived quality, the returns seem to diminish quickly from added octaves. This isn't
+ * accurate for all frequencies, so you should definitely run through your options for what kinds of noise look good for
+ * a particular scenario. Mixing Simplex and Foam noise can produce a good water effect when applied to grid cells.
  * <br>
  * <a href="https://i.imgur.com/WpUz1xP.png">2D FoamNoise, one octave</a>,
- * <a href="https://i.imgur.com/39Brm9Y.png">2D FoamNoise, one octave colorized</a>,
- * <a href="https://i.imgur.com/ytKe4MW.png">2D FoamNoise, two octaves colorized</a> (note fewer peaks and valleys),
- * <a href="https://i.imgur.com/5FTjEIR.gifv">3D FoamNoise animated over time, one octave</a>,
- * <a href="https://i.imgur.com/su9naGx.gifv">3D FoamNoise animated over time, one octave colorized</a>,
- * <a href="https://i.imgur.com/nr4TROD.gifv">3D FoamNoise animated over time, two octaves colorized</a>,
- * <a href="https://i.imgur.com/r5cx6im.gifv">4D FoamNoise animated over time, one octave colorized</a>,
- * <a href="https://i.imgur.com/jEbUdun.gifv">4D FoamNoise animated over time, two octaves colorized</a>,
+ * <a href="https://i.imgur.com/CDXcQRW.png">2D FoamNoise, one octave colorized</a>,
+ * <a href="https://i.imgur.com/XYUN8y4.png">2D FoamNoise, two octaves colorized</a> (note fewer peaks and valleys),
+ * <a href="https://i.imgur.com/cSiXzgW.gifv">3D FoamNoise animated over time, one octave colorized</a>,
+ * <a href="https://i.imgur.com/a2xO1Tb.gifv">3D FoamNoise animated over time, two octaves colorized</a>,
+ * <a href="https://i.imgur.com/MMnPn8C.gifv">4D FoamNoise animated over time, one octave colorized</a>,
+ * <a href="https://i.imgur.com/0ZHicDs.gifv">4D FoamNoise animated over time, two octaves colorized</a>,
+ * <a href="https://i.imgur.com/pjuFork.gifv">6D FoamNoise animated over time, one octave colorized</a>,
+ * <a href="https://i.imgur.com/CvWFFyI.gifv">6D FoamNoise animated over time, two octaves colorized</a>,
  * <a href="https://i.imgur.com/ktCTiIK.jpg">World map made using FoamNoise</a>.
  */
-@Beta
 public class FoamNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     public static final FoamNoise instance = new FoamNoise();
     
