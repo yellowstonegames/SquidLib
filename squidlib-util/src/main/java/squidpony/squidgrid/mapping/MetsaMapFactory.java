@@ -116,7 +116,7 @@ public class MetsaMapFactory {
             if (c.equals(point)) {
                 continue;//skip the one being tested for
             }
-            newdist = Math.pow(point.x - c.x, 2) + Math.pow(point.y - c.y, 2);
+            newdist = point.distanceSq(c);
             if (newdist < dist) {
                 dist = newdist;
                 closest = c;
