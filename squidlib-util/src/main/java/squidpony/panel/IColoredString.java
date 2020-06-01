@@ -1,9 +1,12 @@
 package squidpony.panel;
 
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 /**
  * A {@link String} divided in chunks of different colors. Use the
@@ -14,7 +17,6 @@ import java.util.*;
  * @param <T>
  *            The type of colors;
  */
-@Beta
 public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 
 	/**

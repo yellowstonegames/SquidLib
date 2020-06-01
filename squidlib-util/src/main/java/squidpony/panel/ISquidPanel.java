@@ -13,8 +13,6 @@ import squidpony.annotation.Beta;
  * @param <T>
  *            The type of colors
  * 
- * @see ICombinedPanel The combination of two panels, one for the background,
- *      one for the foreground; a frequent use case in roguelikes.
  */
 @Beta
 public interface ISquidPanel<T> {

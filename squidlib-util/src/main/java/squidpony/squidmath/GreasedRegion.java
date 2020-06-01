@@ -1,6 +1,7 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
+import squidpony.LZSEncoding;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.zone.MutableZone;
@@ -66,7 +67,6 @@ import static squidpony.squidmath.CrossHash.Water.*;
  * <br>
  * Created by Tommy Ettinger on 6/24/2016.
  */
-@Beta
 public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, Serializable, MutableZone {
     private static final long serialVersionUID = 0;
     private static final SobolQRNG sobol = new SobolQRNG(2);
@@ -6491,12 +6491,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Compresses this GreasedRegion into a UTF-16 String and returns the String without modifying this GreasedRegion.
      * Uses {@link CoordPacker}'s algorithm and data to compress this GreasedRegion in 256x128 blocks, storing the
-     * CoordPacker-like data as chars with values from 256 to 33023 (a concept also used in {@link squidpony.LZSPlus}),
+     * CoordPacker-like data as chars with values from 256 to 33023 (a concept also used in {@link LZSEncoding}),
      * and using ASCII semicolons to separate them or store other info (just width and height, which are given first as
-     * 16 hex digits).
+     * 16 hex digits). This finishes by running the result through {@link LZSEncoding}, a combination which typically
+     * gets very good compression.
      * @return a String that could be used to reconstruct this GreasedRegion using {@link #decompress(String)}
      */
-    @Beta
     public String toCompressedString()
     {
         CoordPacker.init();
@@ -6549,20 +6549,22 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     packing.append((char) (skip + 256));
             }
         }
-        return packing.toString();
+        return LZSEncoding.compressToUTF16(packing.toString());
     }
 
     /**
      * Decompresses a String returned by {@link #toCompressedString()}, returning a new GreasedRegion with identical
-     * width, height, and contents to the GreasedRegion before compression.
+     * width, height, and contents to the GreasedRegion before compression. This decompresses the {@link LZSEncoding}
+     * applied to the data, then decompresses the {@link CoordPacker}-type Hilbert Curve RLE data to get the original
+     * GreasedRegion back.
      * @param compressed a String that was compressed by {@link #toCompressedString()}, without changes
      * @return a new copy of the GreasedRegion that was previously compressed
      */
-    @Beta
     public static GreasedRegion decompress(String compressed)
     {
         CoordPacker.init();
         GreasedRegion target;
+        compressed = LZSEncoding.decompressFromUTF16(compressed);
         final int width = StringKit.intFromHex(compressed), height = StringKit.intFromHex(compressed, 8, 16);
         target = new GreasedRegion(width, height);
         final int chunksX = width + 255 >> 8, chunksY = height + 127 >> 7;

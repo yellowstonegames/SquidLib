@@ -1,61 +1,55 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.annotation.Beta;
 import squidpony.squidmath.FastNoise;
-import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.NumberTools;
 
 /**
  * Tools to create maps. Not commonly used outside of code that needs height maps.
  *
+ * @see WorldMapGenerator WorldMapGenerator is a much-more-detailed kind of map generator.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-@Beta
 public class HeightMapFactory {
-    private static final int[] perlinDivisors = {1, 1, 2, 4, 8, 16, 64};
-
     /**
-     * Returns a randomly generated map of doubles. Commonly referred to as a
-     * Height Map. Uses {@link PerlinNoise} in layers to generate coherent heights.
+     * Returns a randomly generated map of doubles that smoothly change nearby. Commonly referred to as a
+     * Height Map. Uses {@link FastNoise} to generate coherent heights. The {@code offset} parameter is
+     * converted to an int seed via {@link NumberTools#doubleToMixedIntBits(double)}, so it can be any
+     * double, even an infinite one, and will still be treated as a valid seed.
      *
      * @param width  in cells
      * @param height in cells
-     * @param offset a double that changes the sampling process; often randomly generated
+     * @param offset a double that changes the sampling process; the range doesn't matter
      * @return the created map as a 2D double array
      */
     public static double[][] heightMap(int width, int height, double offset) {
         double[][] heightMap = new double[width][height];
-
+        int seed = NumberTools.doubleToMixedIntBits(offset);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                //Get noise
-                double n = 0;
-                double xi = width * 0.1375, yi = height * 0.1375;//Math.max(width, height);
-
-                for (int p = 0; p < perlinDivisors.length; p++) {
-                    n += PerlinNoise.noise((x + offset) / xi, (y + offset) / yi) / perlinDivisors[p];
-                    xi *= 0.5;
-                    yi *= 0.5;
-                }
+                //Get noise; layered2D uses 6 octaves of Simplex noise with a low frequency
+                double n = FastNoise.instance.layered2D(x, y, seed, 6, 0.0125f) * 0.8
+                        // and singleFoam gets a very different type of noise, contributing less though
+                        + FastNoise.instance.singleFoam(~seed, x * 0x1p-4f, y * 0x1p-4f) * 0.2;
                 double xdist = x - width * 0.5;
                 xdist *= xdist;
                 double ydist = y - height * 0.5;
                 ydist *= ydist;
                 double dist = Math.sqrt(xdist + ydist);
-                n -= Math.max(0, Math.pow(dist / (width * 0.5), 2) - 0.4);
-
-                heightMap[x][y] = n;
+                // drop off height toward the east and west edges so the map kinda tiles
+                heightMap[x][y] = n - Math.max(0, Math.pow(dist / (width * 0.5), 2) - 0.4);
             }
         }
         return heightMap;
     }
-    private static final FastNoise noise = new FastNoise(1, 0x1p-5f, FastNoise.SIMPLEX_FRACTAL, 7);
+    private static final FastNoise noise = new FastNoise(1, 0x1p-5f, FastNoise.SIMPLEX_FRACTAL, 6);
     /**
      * Returns a randomly generated map of floats. Commonly referred to as a
-     * Height Map. Uses {@link FastNoise} (producing) FBM Simplex noise) to generate coherent heights.
-     *
+     * Height Map. Uses {@link FastNoise} (producing FBM Simplex noise) to generate coherent heights.
+     * Unlike {@link #heightMap(int, int, double)}, this doesn't drop off heights at the east and west edges of the map.
+     * As such, it may be more suitable for local maps than world maps, since it is unlikely to tile east-west.
      * @param width  in cells
      * @param height in cells
-     * @param seed   an int that significantly changes the generation process (more than an offset does)
+     * @param seed   an int that significantly changes the generation process
      * @return the created map as a 2D float array
      */
     public static float[][] heightMapSeeded(int width, int height, int seed) {

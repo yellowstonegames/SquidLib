@@ -2,19 +2,21 @@ package squidpony;
 
 import squidpony.annotation.Beta;
 import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.MathExtras;
 
 /**
- * Very early way of additional compression that can be applied to 2D double arrays. This doesn't compress as well as
- * using {@link LZSEncoding} on a simply-serialized String produced by {@link Converters#convertArrayDouble2D}, but you
- * can use LZSEncoding on the results of this class to significantly reduce output size. Testing on a heat map of double
- * values from 0.0 to 1.0 from a world map:
+ * Very early way of additional compression that can be applied to 2D double and byte arrays. This doesn't compress a
+ * well as using {@link LZSEncoding} on a simply-serialized String produced by {@link Converters#convertArrayDouble2D},
+ * but you can use LZSEncoding on the results of this class to significantly reduce output size. Testing on a heat map
+ * of byte values from -128 to 127 from a world map:
  * <pre>
  * Base size   : 1143142 // this is an uncompressed String produced by Converters
  * LZS size    : 89170   // this uses LZSEncoding alone on the above Base string
  * Custom size : 216209  // this uses GridCompression alone
  * Both size   : 43120   // this uses GridCompression followed by LZSEncoding
  * </pre>
+ * <br>
+ * This class is marked Beta because it still has some improvement that can be done on it, like having more support for
+ * other array types.
  * <br>
  * Created by Tommy Ettinger on 4/27/2020.
  */

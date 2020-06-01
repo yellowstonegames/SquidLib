@@ -1,7 +1,6 @@
 package squidpony.squidgrid.mapping;
 
 
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GWTRNG;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-@Beta
 public class GrowingTreeMazeGenerator {
 
     private IRNG rng;
@@ -87,7 +85,7 @@ public class GrowingTreeMazeGenerator {
 
         /**
          * Given the size to choose from, will return a single value smaller than the passed in value and greater than
-         * or equal to 0. The value chosen is dependant on the individual implementation.
+         * or equal to 0. The value chosen is dependent on the individual implementation.
          *
          * @param size
          * @return
