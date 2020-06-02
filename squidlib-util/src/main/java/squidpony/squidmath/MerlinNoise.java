@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 
 /**
@@ -11,11 +9,13 @@ import java.io.Serializable;
  * <a href="https://i.imgur.com/qPLZw0k.gifv">look like this in 3D</a>. MerlinNoise implements 2D and 3D noise
  * interfaces, allowing it to be used with the various support code in Noise like {@link Noise.Layered2D}.
  * <br>
+ * MerlinNoise can be a good fit for some kinds of procedural generation that need smoothly-curving patterns that don't
+ * look altogether organic, like paint jobs on a space ship. It does tend to produce a somewhat-noticeable grid.
+ * <br>
  * This is called Merlin noise because it has a roughly-similar implementation to "classic" Perlin Noise (with hashes
  * per grid point used to blend values), and because working with noise functions makes me feel like a wizard.
  * This was a completely unrelated noise algorithm that also avoided floating-point math, but was really pretty awful.
  */
-@Beta
 public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
 
     private static final long serialVersionUID = 2L;

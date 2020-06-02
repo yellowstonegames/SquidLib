@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import squidpony.ArrayTools;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -14,7 +15,8 @@ import java.util.SortedSet;
  * with a B key or index, and a Q value with an A key, B key, or index.
  * Created by Tommy Ettinger on 10/27/2016.
  */
-public class K2V1<A, B, Q> {
+public class K2V1<A, B, Q> implements Serializable {
+    private static final long serialVersionUID = 1L;
     public K2<A, B> keys;
     public ArrayList<Q> values;
 

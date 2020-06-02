@@ -3,7 +3,6 @@ package squidpony.squidmath;
 import squidpony.ArrayTools;
 import squidpony.LZSEncoding;
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.zone.MutableZone;
 import squidpony.squidgrid.zone.Zone;
 

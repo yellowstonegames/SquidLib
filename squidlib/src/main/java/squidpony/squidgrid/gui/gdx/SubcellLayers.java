@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.IColorCenter;
-import squidpony.panel.ISquidPanel;
 
 import java.util.ArrayList;
 
@@ -480,20 +479,6 @@ public class SubcellLayers extends SparseLayers {
     @Override
     public void put(float[][] colors) {
         super.put(colors);
-    }
-
-    /**
-     * @return The panel doing the real job, i.e. an instance of
-     * {@code SquidPanel}. The type of colors is unspecified, as some
-     * clients have forwarding instances of this class that hides that
-     * the type of color of the backer differs from the type of color in
-     * {@code this}.
-     * <p>
-     * This implementation returns {@code this}.
-     */
-    @Override
-    public ISquidPanel<?> getBacker() {
-        return this;
     }
 
     /**

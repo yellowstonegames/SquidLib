@@ -3,7 +3,6 @@ package squidpony;
 import regexodus.Category;
 import regexodus.Matcher;
 import regexodus.Pattern;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.IntIntOrderedMap;
 import squidpony.squidmath.IntVLA;
@@ -13,7 +12,9 @@ import java.util.ArrayList;
 
 /**
  * A simple Markov chain text generator; call {@link #analyze(CharSequence)} once on a large sample text, then you can
- * call {@link #chain(long)} many times to get odd-sounding "remixes" of the sample text. This is meant to allow easy
+ * call {@link #chain(long)} many times to get odd-sounding "remixes" of the sample text. This is an order-2 Markov
+ * chain, so it chooses the next word based on the previous two words; {@link MarkovTextLimited} is an order-1 Markov
+ * chain, and is faster, but produces lousy output because it only uses one previous word. This is meant to allow easy
  * serialization of the necessary data to call chain(); if you can store the {@link #words} and {@link #processed}
  * arrays in some serialized form, then you can reassign them to the same fields to avoid calling analyze(). One way to
  * do this conveniently is to use {@link #serializeToString()} after calling analyze() once and to save the resulting
@@ -22,7 +23,6 @@ import java.util.ArrayList;
  * <br>
  * Created by Tommy Ettinger on 1/30/2018.
  */
-@Beta
 public class MarkovText implements Serializable {
     private static final long serialVersionUID = 1L;
 

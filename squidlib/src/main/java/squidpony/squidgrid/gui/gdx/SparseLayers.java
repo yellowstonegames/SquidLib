@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
-import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Noise;
@@ -724,12 +723,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * Note that the IColorCenter is not used to filter floats that encode colors, so passing the result of
      * {@link Color#toFloatBits()} can be used to bypass the filtering if you want a color to be used exactly.
      * @param icc an IColorCenter that can cache and possibly filter {@link Color} objects
-     * @return {@code this} for chaining
      */
-    @Override
-    public ISquidPanel<Color> setColorCenter(IColorCenter<Color> icc) {
+    private void setColorCenter(IColorCenter<Color> icc) {
         scc = icc;
-        return this;
     }
 
     /**
@@ -740,20 +736,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public IColorCenter<Color> getColorCenter() {
         return scc;
-    }
-
-    /**
-     * @return The panel doing the real job, i.e. an instance of
-     * {@code SquidPanel}. The type of colors is unspecified, as some
-     * clients have forwarding instances of this class that hides that
-     * the type of color of the backer differs from the type of color in
-     * {@code this}.
-     * <p>
-     * This implementation returns {@code this}.
-     */
-    @Override
-    public ISquidPanel<?> getBacker() {
-        return this;
     }
 
     /**

@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.IntMap;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
-import squidpony.panel.ISquidPanel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,7 +75,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param factory the factory to use for cell rendering
      * @param center
      * 			The color center to use. Can be {@code null}, but then must be set later on with
-     *          {@link #setColorCenter(IColorCenter)}.
+     *          {@link SquidPanel#setColorCenter(IColorCenter)}.
      */
     public ImageSquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center) {
         this(gridWidth, gridHeight, factory, center, 0f, 0f);
@@ -94,7 +93,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param factory the factory to use for cell rendering
      * @param center
      * 			The color center to use. Can be {@code null}, but then must be set later on with
-     *          {@link #setColorCenter(IColorCenter)}.
+     *          {@link SquidPanel#setColorCenter(IColorCenter)}.
      */
     public ImageSquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center,
                            float xOffset, float yOffset) {
@@ -120,7 +119,7 @@ public class ImageSquidPanel extends SquidPanel {
      * @param factory the factory to use for cell rendering
      * @param center
      * 			The color center to use. Can be {@code null}, but then must be set later on with
-     *          {@link #setColorCenter(IColorCenter)}.
+     *          {@link SquidPanel#setColorCenter(IColorCenter)}.
      * @param xOffset the x offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)
      * @param yOffset the y offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)
      * @param actualMap will often be a different size than gridWidth by gridHeight, which enables camera scrolling
@@ -636,27 +635,19 @@ public class ImageSquidPanel extends SquidPanel {
         animatedEntities.add(ae);
         return ae;
     }
-    
-	@Override
-	public ISquidPanel<Color> getBacker() {
-		return this;
-	}
 
-	/**
+    /**
 	 * Use this method if you use your own {@link IColorCenter} and want this
 	 * panel not to allocate its own colors (or fill
 	 * {@link DefaultResources#getSCC()} but instead to the provided center.
 	 * 
 	 * @param scc
 	 *            The color center to use. Should not be {@code null}.
-	 * @return {@code this}
 	 * @throws NullPointerException
 	 *             If {@code scc} is {@code null}.
 	 */
-	@Override
-	public ImageSquidPanel setColorCenter(IColorCenter<Color> scc) {
+	public void setColorCenter(IColorCenter<Color> scc) {
 	    super.setColorCenter(scc);
-		return this;
 	}
 
     /**

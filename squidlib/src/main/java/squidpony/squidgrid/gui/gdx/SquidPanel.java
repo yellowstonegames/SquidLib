@@ -14,7 +14,6 @@ import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
 import squidpony.panel.IColoredString;
-import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedSet;
@@ -2290,12 +2289,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         animatedEntities.remove(ae);
     }
 
-	@Override
-	public ISquidPanel<Color> getBacker() {
-		return this;
-	}
-
-	/**
+    /**
 	 * @return The current color center. Never {@code null}.
 	 */
 	public IColorCenter<Color> getColorCenter() {
@@ -2309,18 +2303,15 @@ public class SquidPanel extends Group implements IPackedColorPanel {
 	 * 
 	 * @param scc
 	 *            The color center to use. Should not be {@code null}.
-	 * @return {@code this}
 	 * @throws NullPointerException
 	 *             If {@code scc} is {@code null}.
 	 */
-	@Override
-	public SquidPanel setColorCenter(IColorCenter<Color> scc) {
+	public void setColorCenter(IColorCenter<Color> scc) {
 		if (scc == null)
 			/* Better fail now than later */
 			throw new NullPointerException(
 					"The color center should not be null in " + getClass().getSimpleName());
 		this.scc = scc;
-		return this;
 	}
 
     public char getAt(int x, int y)
