@@ -919,8 +919,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             ct = 0;
             tallied = true;
         } else {
-            this.width = (width <= 0) ? 0 : width;
-            this.height = (height <= 0) ? 0 : height;
+            this.width = Math.max(width, 0);
+            this.height = Math.max(height, 0);
             ySections = (this.height + 63) >> 6;
             yEndMask = -1L >>> (64 - (this.height & 63));
             data = new long[this.width * ySections];
@@ -1062,8 +1062,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[i] = random.nextLong();
                 }
             } else {
-                this.width = (width <= 0) ? 0 : width;
-                this.height = (height <= 0) ? 0 : height;
+                this.width = Math.max(width, 0);
+                this.height = Math.max(height, 0);
                 ySections = (this.height + 63) >> 6;
                 yEndMask = -1L >>> (64 - (this.height & 63));
                 data = new long[this.width * ySections];
@@ -1124,8 +1124,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[i] = random.nextLong();
                 }
             } else {
-                this.width = (width <= 0) ? 0 : width;
-                this.height = (height <= 0) ? 0 : height;
+                this.width = Math.max(width, 0);
+                this.height = Math.max(height, 0);
                 ySections = (this.height + 63) >> 6;
                 yEndMask = -1L >>> (64 - (this.height & 63));
                 data = new long[this.width * ySections];
@@ -1207,8 +1207,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[i] = approximateBits(random, bitCount);
                 }
             } else {
-                this.width = (width <= 0) ? 0 : width;
-                this.height = (height <= 0) ? 0 : height;
+                this.width = Math.max(width, 0);
+                this.height = Math.max(height, 0);
                 ySections = (this.height + 63) >> 6;
                 yEndMask = -1L >>> (64 - (this.height & 63));
                 data = new long[this.width * ySections];
@@ -1467,6 +1467,54 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         tallied = false;
         return this;
+    }
+
+    /**
+     * Makes a copy of this GreasedRegion that has been rotated 90 degrees {@code turns} times. If using y-down
+     * coordinates, then these rotations are clockwise; otherwise, they are counter-clockwise. This uses a copy because
+     * in many caseswhere the GreasedRegion has non-equal width and height, the rotated version has different
+     * dimensions, and that requires allocating most of a new GreasedRegion anyway. This GreasedRegion is never modifed
+     * as a result of this method.
+     * @param turns how many times to rotate the copy (clockwise if using y-down, counterclockwise otherwise)
+     * @return a potentially-rotated copy of this GreasedRegion
+     */
+    public GreasedRegion copyRotated(int turns)
+    {
+        switch (turns & 3) {
+            case 0: {
+                return copy();
+            }
+            case 1: {
+                GreasedRegion next = new GreasedRegion(height, width);
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0, iy = height - 1; y < height; y++, iy--) {
+                        if((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0L)
+                            next.data[iy * ySections + (x >> 6)] |= 1L << (x & 63);
+                    }
+                }
+                return next;
+            }
+            case 2: {
+                GreasedRegion next = new GreasedRegion(width, height);
+                for (int x = 0, ix = width - 1; x < width; x++, ix--) {
+                    for (int y = 0, iy = height - 1; y < height; y++, iy--) {
+                        if((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0L)
+                            next.data[ix * ySections + (iy >> 6)] |= 1L << (iy & 63);
+                    }
+                }
+                return next;
+            }
+            default: {
+                GreasedRegion next = new GreasedRegion(height, width);
+                for (int x = 0, ix = width - 1; x < width; x++, ix--) {
+                    for (int y = 0; y < height; y++) {
+                        if((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0L)
+                            next.data[y * ySections + (ix >> 6)] |= 1L << (ix & 63);
+                    }
+                }
+                return next;
+            }
+        }
     }
 
     /**
