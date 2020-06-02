@@ -1,8 +1,8 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.Beta;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.SortedSet;
 
@@ -15,9 +15,8 @@ import java.util.SortedSet;
  * Called K2 because it has 2 key sets; other collections can have other keys or have values, like K2V1.
  * Created by Tommy Ettinger on 10/25/2016.
  */
-@Beta
-public class K2<A, B>
-{
+public class K2<A, B> implements Serializable {
+    private static final long serialVersionUID = 1L;
     public Arrangement<A> keysA;
     public Arrangement<B> keysB;
 

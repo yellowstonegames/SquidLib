@@ -3,7 +3,6 @@ package squidpony;
 import regexodus.Category;
 import regexodus.Matcher;
 import regexodus.Pattern;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.IntIntOrderedMap;
 import squidpony.squidmath.IntVLA;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
  * <br>
  * Created by Tommy Ettinger on 1/30/2018.
  */
-@Beta
 public class MarkovChar implements Serializable {
     private static final long serialVersionUID = 1L;
 

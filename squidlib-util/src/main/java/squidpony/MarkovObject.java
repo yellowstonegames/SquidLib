@@ -1,6 +1,5 @@
 package squidpony;
 
-import squidpony.annotation.Beta;
 import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.IntVLA;
 
@@ -20,7 +19,6 @@ import java.util.List;
  * <br>
  * Created by Tommy Ettinger on 2/26/2018.
  */
-@Beta
 public class MarkovObject<T> implements Serializable {
     private static final long serialVersionUID = 0L;
 

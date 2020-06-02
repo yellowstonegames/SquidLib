@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import static squidpony.squidmath.Noise.cerp;
 import static squidpony.squidmath.Noise.fastFloor;
 import static squidpony.squidmath.SeededNoise.phiGrad2;
@@ -25,9 +23,8 @@ import static squidpony.squidmath.SeededNoise.grad4d;
  * Noise3D implementation, and it tends to about as fast as {@link WhirlingNoise} in 3D with less artifacts. JitterNoise
  * is a fair amount slower than ClassicNoise, but it has much better quality in 2D and may have somewhat-better quality
  * in higher dimensions as well. There's probably no reason to prefer JitterNoise over ClassicNoise for 6D output,
- * because they're practically indistinguishable.
+ * because they're practically indistinguishable other than ClassicNoise being much faster.
  */
-@Beta
 public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     public static final JitterNoise instance = new JitterNoise();
     public long seed;

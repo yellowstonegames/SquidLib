@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
@@ -44,7 +43,6 @@ import java.io.Serializable;
  * probably would pass much more if I gave it more days to run).
  * @author Tommy Ettinger
  */
-@Beta
 public final class MizuchiRNG implements StatefulRandomness, Serializable {
 
     private static final long serialVersionUID = 153186732328748834L;

@@ -8,7 +8,6 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 package squidpony.squidmath;
 
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
@@ -20,7 +19,6 @@ import java.io.Serializable;
  * so this may be useful as a way of generating test data in an unpredictable order.
  * @author Tommy Ettinger
  */
-@Beta
 public class LFSR implements StatefulRandomness, Serializable {
 
 	private static final long DOUBLE_MASK = (1L << 53) - 1;

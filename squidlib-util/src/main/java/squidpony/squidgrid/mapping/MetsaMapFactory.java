@@ -11,7 +11,10 @@ import java.util.List;
 /**
  * A map generation factory using Perlin noise to make island chain style maps.
  *
- * Based largely on work done by Metsa from #rgrd
+ * Based largely on work done by Metsa from #rgrd .  This is marked Beta, despite having been in SquidLib for years,
+ * because it could still be modified as a simpler substitute for {@link WorldMapGenerator}. WorldMapGenerator does tend
+ * to produce much higher quality in its maps, however, due to calculating heat and moisture levels as well as height,
+ * then using those to build blending biomes.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */

@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
+import squidpony.annotation.Beta;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.NumberTools;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
  * A subsection of a (typically modern-day or sci-fi) area map that can be placed by ModularMapGenerator.
  * Created by Tommy Ettinger on 4/4/2016.
  */
+@Beta
 public class MapModule implements Comparable<MapModule>, Serializable {
     private static final long serialVersionUID = -1273406898212937188L;
 
