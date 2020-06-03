@@ -27,10 +27,10 @@ public class GreasedRegionTest {
     public static GreasedRegion box = new GreasedRegion(64, 64).insertRectangle(24, 24, 16, 16);
     public static GreasedRegion box2 = new GreasedRegion(120, 120).insertRectangle(24+32, 24+32, 16, 16);
     public static GreasedRegion box3 = new GreasedRegion(240, 240).insertRectangle(30, 30, 180, 180);
-    public static StatefulRNG srng = new StatefulRNG(0xCAFEBEEFBABAD00CL);
-    public static RNG rng = new RNG(0xCAFEBEEFBABAD00CL);
+    public static StatefulRNG srng = new StatefulRNG(0xB0BAFE7715BADA55L);
+    public static RNG rng = new RNG(0xB0BAFE7715BADA55L);
     public static DungeonBoneGen dungeonGen = new DungeonBoneGen(srng);
-    public static char[][] dungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON, 64, 64);
+    public static char[][] dungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON, 66, 70);
     public static GreasedRegion dataDungeon = dungeonGen.region.copy().removeEdges();
     public static char[][] giantDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON, 800, 800);
     public static GreasedRegion giantDataDungeon = dungeonGen.region.copy().removeEdges();
@@ -496,6 +496,8 @@ public class GreasedRegionTest {
         compressed = dataDungeon.toCompressedString();
         decompressed = GreasedRegion.decompress(compressed);
         assertEquals(dataDungeon, decompressed);
+        String basicText = dataDungeon.serializeToString();
+        if(PRINTING) System.out.println(basicText.length() + " compresses down to " + compressed.length());
 //        System.out.println("\n\nORIGINAL\n\n");
 //        System.out.println(dataDungeon);
 //        System.out.println("\n\nDECOMPRESSED\n\n");
@@ -510,13 +512,56 @@ public class GreasedRegionTest {
 //                + ", size=" + decompressed.size());
 //        System.out.println(decompressed.copy().xor(giantDataDungeon).size());
         assertEquals(giantDataDungeon, decompressed);
+        basicText = giantDataDungeon.serializeToString();
+        if(PRINTING) System.out.println(basicText.length() + " compresses down to " + compressed.length());
 //        System.out.println("\n\nORIGINAL\n\n");
 //        System.out.println(giantDataDungeon);
 //        System.out.println("\n\nDECOMPRESSED\n\n");
 //        System.out.println(decompressed);
 //        System.out.println("\n\nDIFF:\n\n");
 //        System.out.println(decompressed.xor(giantDataDungeon));
-        
+    }
+    @Test
+    public void testFlipRotate()
+    {
+        GreasedRegion work = dataDungeon.copy();
+        GreasedRegion once = work.copy().flip(true, false);
+        GreasedRegion twice = once.copy().flip(true, false);
+        assertEquals(twice, work);
+        printRegion(work);
+        printRegion(once);
+        if(PRINTING) System.out.println();
+        once = work.copy().flip(false, true);
+        twice = once.copy().flip(false, true);
+        assertEquals(twice, work);
+        printRegion(work);
+        printRegion(once);
+        if(PRINTING) System.out.println();
+        once = work.copy().flip(true, true);
+        twice = once.copy().flip(true, true);
+        assertEquals(twice, work);
+        printRegion(work);
+        printRegion(once);
+        if(PRINTING) System.out.println();
+        work = giantDataDungeon.copy();
+        once = work.copy().flip(true, false);
+        twice = once.copy().flip(true, false);
+        assertEquals(twice, work);
+        once = work.copy().flip(false, true);
+        twice = once.copy().flip(false, true);
+        assertEquals(twice, work);
+        once = work.copy().flip(true, true);
+        twice = once.copy().flip(true, true);
+        assertEquals(twice, work);
+
+        work = dataDungeon.copy();
+        once.remake(work.copyRotated(1));
+        twice.remake(work.copyRotated(2));
+        GreasedRegion triple = work.copyRotated(3);
+        printRegion(work);
+        printRegion(once);
+        printRegion(twice);
+        printRegion(triple);
     }
 }
 

@@ -45,7 +45,7 @@ import java.util.List;
  * {@link #packMulti(byte[][], int)} and other Multi kinds of method, no {@link #radiate(short[], short[], int)}, and no
  * {@link #reachable(short[], short[], Reach)}, while CoordPacker has no equivalent to
  * {@link GreasedRegion#expandSeriesToLimit()} and other ToLimit kinds of method, no
- * {@link GreasedRegion#flip(int, int)}, no {@link GreasedRegion#deteriorate(RandomnessSource, int)}, no
+ * {@link GreasedRegion#toggle(int, int)}, no {@link GreasedRegion#deteriorate(RandomnessSource, int)}, no
  * {@link GreasedRegion#insert(int, int, GreasedRegion)} (though CoordPacker can generally use
  * {@link #unionPacked(short[], short[])} for that), and several other methods don't have equivalents. In general, you
  * will probably find GreasedRegion more intuitive because it involves working with objects instead of a short[] that is

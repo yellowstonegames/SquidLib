@@ -1411,6 +1411,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             ySections = other.ySections;
             yEndMask = other.yEndMask;
             data = new long[width * ySections];
+            counts = new int[width * ySections];
             System.arraycopy(other.data, 0, data, 0, width * ySections);
             System.arraycopy(other.counts, 0, counts, 0, width * ySections);
             ct = other.ct;
@@ -1515,6 +1516,72 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 return next;
             }
         }
+    }
+    
+    public GreasedRegion flip(boolean leftRight, boolean upDown) {
+        if(ySections <= 0) return this;
+        if(leftRight) {
+            long t;
+            for (int x = 0, o = width - 1; x < (width >>> 1); x++, o--) {
+                for (int y = 0; y < ySections; y++) {
+                    t = data[x * ySections + y];
+                    data[x * ySections + y] = data[o * ySections + y];
+                    data[o * ySections + y] = t;
+                }
+            }
+        }
+        if(upDown) {
+            if(yEndMask == -1L) {
+                long t;
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0, o = ySections - 1; y < (ySections >>> 1); y++, o--) {
+                        t = Long.reverse(data[x * ySections + y]);
+                        data[x * ySections + y] = Long.reverse(data[x * ySections + o]);
+                        data[x * ySections + o] = t;
+                    }
+                    if((ySections & 1) == 1){
+                        data[x * ySections + (ySections >>> 1)] = Long.reverse(data[x * ySections + (ySections >>> 1)]);
+                    }
+                }
+            }
+            else {
+                int shift = Long.numberOfLeadingZeros(yEndMask);
+                if (ySections == 1) {
+                    for (int x = 0; x < width; x++) {
+                        data[x] = Long.reverse(data[x]) >>> shift;
+                    }
+                } else {
+                    for (int x = 0; x < width; x++) {
+                        int ie = x * ySections + ySections - 1;
+                        int ib = x * ySections + ySections - 2;
+                        int il = x * ySections + 1;
+                        int is = x * ySections;
+                        long end = Long.reverse(data[ie]);
+                        long big = Long.reverse(data[ib]);
+                        long little = Long.reverse(data[il]);
+                        long start = Long.reverse(data[is]);
+                        data[ie] = start >>> shift;
+                        data[is] = end >>> shift;
+                        data[is] |= big << 64 - shift;
+                        data[ib] = start << 64 - shift;
+                        data[ib] |= little >>> shift;
+                        
+                        for (int y = 1; y < (ySections >>> 1); y++) {
+                            end = big;
+                            start = little;
+                            big = Long.reverse(data[--ib]);
+                            little = Long.reverse(data[++il]);
+                            ++is;
+                            data[is] = end >>> shift;
+                            data[is] |= big << 64 - shift;
+                            data[ib] = start << 64 - shift;
+                            data[ib] |= little >>> shift;
+                        }
+                    }
+                }
+            }
+        }
+        return this;
     }
 
     /**
@@ -2506,7 +2573,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
-                data[x * ySections + y] |= other.data[x * ySections + y];
+                data[x * ySections + y] |= other.data[x * other.ySections + y];
             }
         }
 
@@ -2530,7 +2597,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
-                data[x * ySections + y] &= other.data[x * ySections + y];
+                data[x * ySections + y] &= other.data[x * other.ySections + y];
             }
         }
         tallied = false;
@@ -2566,7 +2633,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
-                data[x * ySections + y] &= ~other.data[x * ySections + y];
+                data[x * ySections + y] &= ~other.data[x * other.ySections + y];
             }
         }
         tallied = false;
@@ -2584,7 +2651,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
-                data[x * ySections + y] = other.data[x * ySections + y] & ~data[x * ySections + y];
+                data[x * ySections + y] = other.data[x * other.ySections + y] & ~data[x * ySections + y];
             }
         }
         tallied = false;
@@ -2603,7 +2670,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
-                data[x * ySections + y] ^= other.data[x * ySections + y];
+                data[x * ySections + y] ^= other.data[x * other.ySections + y];
             }
         }
 
@@ -6792,12 +6859,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Inverts the on/off state of the cell with the given x and y.
+     * Changes the on/off state of the cell with the given x and y, making an on cell into an off cell, or an off cell
+     * into an on cell.
+     * <br>
+     * This was called flip(), but that name would be confusing since flipping a rectangular area usually means
+     * reversing an axis.
      * @param x the x position of the cell to flip
      * @param y the y position of the cell to flip
      * @return this for chaining, modified
      */
-    public GreasedRegion flip(int x, int y) {
+    public GreasedRegion toggle(int x, int y) {
         if(x >= 0 && y >= 0 && x < width && y < height && ySections > 0)
         {
             data[x * ySections + (y >> 6)] ^= (1L << (y & 63));
