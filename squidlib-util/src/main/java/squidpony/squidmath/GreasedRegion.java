@@ -3946,6 +3946,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return regions;
     }
+
+    /**
+     * Like {@link #expand()}, but limits expansion to the "on" cells of {@code bounds}. Expands in all 4-way directions
+     * by one cell simultaneously, and only successfully affects the cells that are adjacent to this and are in bounds.
+     * @param bounds the set of "on" cells that limits where this can expand into
+     * @return this, after expanding, for chaining
+     */
     public GreasedRegion flood(GreasedRegion bounds)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
@@ -4001,6 +4008,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Like {@link #expand(int)}, but limits expansion to the "on" cells of {@code bounds}. Repeatedly expands in the
+     * 4-way directions by one cell simultaneously, and only successfully affects the cells that are adjacent to the
+     * previous expansion and are in bounds. This won't skip over gaps in bounds, even if amount is high enough that a
+     * call to {@link #expand(int)} would reach past the gap; it will stop at the gap and only pass it if expansion
+     * takes it around.
+     * @param bounds the set of "on" cells that limits where this can expand into
+     * @param amount how far to expand this outward by, in cells
+     * @return this, after expanding, for chaining
+     */
     public GreasedRegion flood(GreasedRegion bounds, int amount)
     {
         int ct = size(), ct2;
@@ -4015,7 +4032,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
-
+    /**
+     * Repeatedly calls {@link #flood(GreasedRegion)} {@code amount} times and returns the intermediate steps in a
+     * GreasedRegion array of size {@code amount}. Doesn't modify this GreasedRegion, and doesn't return it in the array
+     * (it may return a copy of it if and only if no flood8way() calls can expand the area). If this fills
+     * {@code bounds} as fully as possible and still has steps left, the remaining steps are all copies of the
+     * fully-filled area.
+     * @param bounds the set of "on" cells that this will attempt to fill in steps
+     * @param amount how many steps to flood outward, and the size of the array to return
+     * @return an array of GreasedRegion, {@code amount} in size, containing larger and larger expansions of this
+     */
     public GreasedRegion[] floodSeries(GreasedRegion bounds, int amount)
     {
         if(amount <= 0) return new GreasedRegion[0];
@@ -4038,6 +4064,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return regions;
     }
 
+    /**
+     * Repeatedly generates new GreasedRegions, each one cell expanded in 4 directions from the previous GreasedRegion
+     * and staying inside the "on" cells of {@code bounds}, until it can't expand any more. Returns an ArrayList of the
+     * GreasedRegion steps this generated; this list does not include this GreasedRegion (or any unmodified copy of this
+     * GreasedRegion), and this method does not modify it.
+     * @param bounds the set of "on" cells that this will attempt to fill in steps
+     * @return an ArrayList of steps from one {@link #flood(GreasedRegion)} call to possibly many chained after it
+     */
     public ArrayList<GreasedRegion> floodSeriesToLimit(GreasedRegion bounds) {
         int ct = size(), ct2;
         ArrayList<GreasedRegion> regions = new ArrayList<>();
@@ -4053,6 +4087,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
     }
 
+    /**
+     * Like {@link #expand8way()}, but limits expansion to the "on" cells of {@code bounds}. Expands in all directions
+     * by one cell simultaneously, and only successfully affects the cells that are adjacent to this and are in bounds.
+     * @param bounds the set of "on" cells that limits where this can expand into
+     * @return this, after expanding, for chaining
+     */
     public GreasedRegion flood8way(GreasedRegion bounds)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
@@ -4117,7 +4157,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         tallied = false;
         return this;
     }
-
+    /**
+     * Like {@link #expand8way(int)}, but limits expansion to the "on" cells of {@code bounds}. Repeatedly expands in
+     * all directions by one cell simultaneously, and only successfully affects the cells that are adjacent to the
+     * previous expansion and are in bounds. This won't skip over gaps in bounds, even if amount is high enough that a
+     * call to {@link #expand8way(int)} would reach past the gap; it will stop at the gap and only pass it if expansion
+     * takes it around.
+     * @param bounds the set of "on" cells that limits where this can expand into
+     * @param amount how far to expand this outward by, in cells
+     * @return this, after expanding, for chaining
+     */
     public GreasedRegion flood8way(GreasedRegion bounds, int amount)
     {
         int ct = size(), ct2;
@@ -4131,6 +4180,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Repeatedly calls {@link #flood8way(GreasedRegion)} {@code amount} times and returns the intermediate steps in a
+     * GreasedRegion array of size {@code amount}. Doesn't modify this GreasedRegion, and doesn't return it in the array
+     * (it may return a copy of it if and only if no flood8way() calls can expand the area). If this fills
+     * {@code bounds} as fully as possible and still has steps left, the remaining steps are all copies of the
+     * fully-filled area.
+     * @param bounds the set of "on" cells that this will attempt to fill in steps
+     * @param amount how many steps to flood outward, and the size of the array to return
+     * @return an array of GreasedRegion, {@code amount} in size, containing larger and larger expansions of this
+     */
     public GreasedRegion[] floodSeries8way(GreasedRegion bounds, int amount)
     {
         if(amount <= 0) return new GreasedRegion[0];
@@ -4152,6 +4211,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return regions;
     }
+
+    /**
+     * Repeatedly generates new GreasedRegions, each one cell expanded in 8 directions from the previous GreasedRegion
+     * and staying inside the "on" cells of {@code bounds}, until it can't expand any more. Returns an ArrayList of the
+     * GreasedRegion steps this generated; this list does not include this GreasedRegion (or any unmodified copy of this
+     * GreasedRegion), and this method does not modify it.
+     * @param bounds the set of "on" cells that this will attempt to fill in steps
+     * @return an ArrayList of steps from one {@link #flood8way(GreasedRegion)} call to possibly many chained after it
+     */
     public ArrayList<GreasedRegion> floodSeriesToLimit8way(GreasedRegion bounds) {
         int ct = size(), ct2;
         ArrayList<GreasedRegion> regions = new ArrayList<>();
@@ -4166,6 +4234,17 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
+
+    /**
+     * A randomized flood-fill that modifies this GreasedRegion so it randomly adds adjacent cells while staying inside
+     * the "on" cells of {@code bounds}, until {@link #size()} is equal to {@code volume} or there are no more cells
+     * this can expand into. This GreasedRegion acts as the initial state, and often contains just one cell before this
+     * is called. This method is useful for imitating the movement of fluids like water or smoke within some boundaries.
+     * @param bounds this GreasedRegion will only expand to cells that are "on" in bounds; bounds should overlap with this
+     * @param volume the maximum {@link #size()} this GreasedRegion can reach before this stops expanding
+     * @param rng a random number generator, like {@link RNG} or {@link GWTRNG}
+     * @return this, after expanding randomly, for chaining
+     */
     public GreasedRegion spill(GreasedRegion bounds, int volume, IRNG rng)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
@@ -4219,6 +4298,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Where a cell is "on" but forms a right-angle with exactly two orthogonally-adjacent "on" cells and exactly two
+     * orthogonally-adjacent "off" cells, this turns each of those cells "off." This won't affect east-west lines of
+     * flat "on" cells, nor north-south lines.
+     * @return this, after removing right-angle corner "on" cells, for chaining
+     */
     public GreasedRegion removeCorners()
     {
         if(width <= 2 || ySections <= 0)
