@@ -54,7 +54,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
                 * (0x1.0040100401004p-10);
     }
 
-    //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
+    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even
     //// they should normally be used for the 3D version of R2, but we only use 2 of the 3 constants
     //x should be premultiplied by 0xD1B55
     //y should be premultiplied by 0xABC99
@@ -87,7 +87,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
                 ) * (0x1.0040100401004p-10);
     }
 
-    //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
+    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even
     //// they should normally be used for the 4D version of R2, but we only use 3 of the 4 constants
     //x should be premultiplied by 0xDB4F1
     //y should be premultiplied by 0xBBE05
@@ -133,7 +133,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
                 ))) * (0x1.0040100401004p-10);
     }
 
-    //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
+    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even
     //// they should normally be used for the 5D version of R2, but we only use 4 of the 5 constants
     //x should be premultiplied by 0xE19B1
     //y should be premultiplied by 0xC6D1D
@@ -240,7 +240,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
         ) * (0x1.0040100401004p-10);
     }
 
-    //// constants are the most significant 20 bits of constants from MummyNoise, incremented if even
+    //// constants are the most significant 20 bits of constants from PhantomNoise, incremented if even
     //// they should normally be used for the 7D version of R2, but we only use 6 of the 7 constants
     //x should be premultiplied by 0xE95E1
     //y should be premultiplied by 0xD4BC7

@@ -2,13 +2,15 @@ package squidpony.squidmath;
 
 /**
  * An arbitrary-dimensional noise generator; it's not suitable for real-time use, but could be very useful when used
- * with unconventional axes, particularly during level generation. It produces smooth, cloudy gradient noise.
+ * with unconventional axes, particularly during level generation. It produces smooth, non-artifact-prone gradient noise
+ * with lots of rounded "raindrops on a window" shapes. It is very biased toward central results (near 0.0) and only
+ * rarely returns results near -1.0 or 1.0, the extremes of its range.
  * <br>
- * It currently is capable of exceeding its normal -1.0 to 1.0 range, so you may want to wrap its result in
- * {@link NumberTools#sway(double)} with a 0.5 offset.
+ * <a href="https://i.imgur.com/WR062LY.png">Sample of 2D MitchellNoise</a>.
  * <br>
  * Created by Tommy Ettinger on 11/6/2019 using
  * <a href="https://twitter.com/DonaldM38768041/status/1191771541354078208">code by Donald Mitchell</a>.
+ * @see PhantomNoise PhantomNoise also produces arbitrary-dimensional noise, is faster, and is less centrally-biased
  */
 public class MitchellNoise {
     public final int MAX_DIM;
@@ -63,7 +65,7 @@ public class MitchellNoise {
     }
 
     public static long latticeValue(long lat) {
-        lat *= 0xE95E1DD17D35800DL;
+        lat = lat * 0xE95E1DD17D35800DL + 0x9E3779B97F4A7C15L;
         return (lat << lat | lat >>> -lat);
     }
 
@@ -73,16 +75,16 @@ public class MitchellNoise {
         double kx, ky, kz, kw;
 
         floor = floors[dim];
-        h0 = latticeValue(floor - 1L ^ lattice);
-        h1 = latticeValue(floor ^ lattice);
-        h2 = latticeValue(floor + 1L ^ lattice);
-        h3 = latticeValue(floor + 2L ^ lattice);
+        h0 = latticeValue(floor - 1L + lattice);
+        h1 = latticeValue(floor + lattice);
+        h2 = latticeValue(floor + 1L + lattice);
+        h3 = latticeValue(floor + 2L + lattice);
 
         if (dim == 0) {
-            kx = h0 >> 12;
-            ky = h1 >> 12;
-            kz = h2 >> 12;
-            kw = h3 >> 12;
+            kx = h0 >> 13;
+            ky = h1 >> 13;
+            kz = h2 >> 13;
+            kw = h3 >> 13;
         } else {
             --dim;
             kx = spline(dim, h0);
@@ -107,6 +109,6 @@ public class MitchellNoise {
             coef[dim].z = 1.0/6.0 + 0.5*x*(1.0 + x*(1.0 - x));
             coef[dim].w = 1.0/6.0 * x*x*x;
         }
-        return gain * spline(size-1, seed) * 0.9 * 0x1p-52 + 0.5;
+        return gain * spline(size-1, seed) * 0.9 * 0x1p-51;
     }
 }
