@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 /**
  * A subsection of a (typically modern-day or sci-fi) area map that can be placed by ModularMapGenerator.
+ * <br>
+ * This is marked Beta because both MapModule and {@link ModularMapGenerator} need improvement to be actually usable,
+ * but it might be a while before there's a clear pathway towards how they can be improved. 
+ * <br>
  * Created by Tommy Ettinger on 4/4/2016.
  */
 @Beta

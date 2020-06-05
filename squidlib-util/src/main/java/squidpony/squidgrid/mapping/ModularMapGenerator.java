@@ -2,7 +2,15 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IStatefulRNG;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrthoLine;
+import squidpony.squidmath.RegionMap;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.*;
 
@@ -11,6 +19,9 @@ import java.util.*;
  * Different from traditional fantasy dungeon generation in that it should seem generally less chaotic in how it's laid
  * out, and repeated elements with minor tweaks should be especially common. May also be useful in fantasy games for
  * regimented areas built by well-organized military forces.
+ * <br>
+ * This is marked Beta because both {@link MapModule} and ModularMapGenerator need improvement to be actually usable,
+ * but it might be a while before there's a clear pathway towards how they can be improved. 
  * <br>
  * Preview: https://gist.github.com/tommyettinger/c711f8fc83fa9919245d88092444bf7f
  * Created by Tommy Ettinger on 4/2/2016.
