@@ -25,11 +25,7 @@ import java.io.Serializable;
  * case. This also uses a different seed for each round.
  * <br>
  * This class extends {@link LowStorageShuffler}, changing it from producing a unique set of ints once, to producing
- * many sets of ints one after the next. It is very similar to {@link SNShuffledIntSequence}, which is just like this
- * class but extends {@link SwapOrNotShuffler} instead. This class and LowStorageShuffler perform slightly better than
- * SwapOrNotShuffler and SNShuffledIntSequence when the bound is equal to a power of 4 or slightly less, but perform
- * drastically worse when the bound is slightly greater than a power of 4. SNShuffledIntSequence should usually be
- * preferred over this class when the bound is unknown or known to be a problem for this class.
+ * many sets of ints one after the next.
  * <br>
  * Created by Tommy Ettinger on 9/30/2018.
  * @author Alan Wolfe

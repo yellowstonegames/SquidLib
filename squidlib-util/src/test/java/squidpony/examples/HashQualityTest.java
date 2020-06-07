@@ -1262,10 +1262,10 @@ public class HashQualityTest {
 //                        colliders[i] = new IntSet(SIZE, 0.5f);
 //                    }
                         DiverRNG rng = new DiverRNG(1L);
-                        SNShuffledIntSequence
-                                xShuffle = new SNShuffledIntSequence(WIDTH, 1),
-                                yShuffle = new SNShuffledIntSequence(HEIGHT, -1),
-                                zShuffle = new SNShuffledIntSequence(DEPTH, rng.nextInt());
+                        ShuffledIntSequence
+                                xShuffle = new ShuffledIntSequence(WIDTH, 1),
+                                yShuffle = new ShuffledIntSequence(HEIGHT, -1),
+                                zShuffle = new ShuffledIntSequence(DEPTH, rng.nextInt());
                         UnorderedSet<Coord3D> points = new UnorderedSet<>(SIZE);
                         for (int i = 0; i < WIDTH; i++) {
                             for (int j = 0; j < HEIGHT; j++) {

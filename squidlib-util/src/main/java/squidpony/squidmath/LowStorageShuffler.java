@@ -23,9 +23,7 @@ import java.io.Serializable;
  * two states, and that turns out to be just fine for a Feistel network. Using 4 rounds turns out to be overkill in this
  * case. This also uses a different seed for each round.
  * <br>
- * This class is extremely similar to {@link SwapOrNotShuffler}; both are optimized for usage on GWT but
- * SwapOrNotShuffler is meant to have higher quality in general, and performs many more rounds of encoding when the
- * bound is large (which is slow). There's also {@link ShuffledIntSequence}, which extends this class and uses different
+ * This class is similar to {@link ShuffledIntSequence}, which extends this class and uses different
  * behavior so it "re-shuffles" the results when all results have been produced.
  * <br>
  * Created by Tommy Ettinger on 9/22/2018.

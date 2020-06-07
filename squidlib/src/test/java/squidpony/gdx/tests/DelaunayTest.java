@@ -10,7 +10,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.TimeUtils;
 import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CoordDouble;
+import squidpony.squidmath.DelaunayTriangulator;
+import squidpony.squidmath.MiniMover64RNG;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.SeededNoise;
+import squidpony.squidmath.VanDerCorputQRNG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,6 +111,7 @@ public class DelaunayTest extends ApplicationAdapter {
             shaper.triangle((float)t.a.x, (float)t.a.y, (float)t.b.x, (float)t.b.y, (float)t.c.x, (float)t.c.y);
         }
         shaper.end();
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
     }
 
     public static void main (String[] arg) {

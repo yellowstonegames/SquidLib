@@ -16,10 +16,10 @@ import java.util.ArrayList;
 /**
  * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.
  * Supports filtering any colors that this creates using an {@link IFilter}, such as one from {@link Filters}.
- * This class largely supersedes the earlier {@link SColorFactory} class, and supports similar operations
- * while also allowing filters to modify the returned colors. Some things use different terms between the
- * two classes; {@link SColorFactory#blend(SColor, SColor, double)} is {@link #lerp(Color, Color, double)}
- * here, and {@link SColorFactory#setFloor(int)} is {@link #setGranularity(int)} (with different behavior).
+ * This class largely supersedes the earlier SColorFactory class, and supports similar operations
+ * while also allowing filters to modify the returned colors. SColorFactory has been removed, so code transitioning
+ * to SquidColorCenter may need to change blend() to {@link #lerp(Color, Color, double)}, and setFloor() to
+ * {@link #setGranularity(int)} (with different behavior).
  * @author smelC
  * @author Tommy Ettinger
  * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.
