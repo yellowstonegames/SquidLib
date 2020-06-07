@@ -536,6 +536,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         config.vSyncEnabled = false;
         config.foregroundFPS = 0;
         config.backgroundFPS = 0;
+        config.forceExit = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);

@@ -89,6 +89,7 @@ public class DelaunayMosaicTest extends ApplicationAdapter {
 //                    points[c << 1 | 1]);
         }
         shaper.end();
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
     }
 
     public static void main (String[] arg) {
@@ -96,8 +97,8 @@ public class DelaunayMosaicTest extends ApplicationAdapter {
         config.title = "SquidLib/libGDX Demo: Delaunay Mosaic Test";
         config.width = 404;//1279;// 404;
         config.height = 600;//765;//600;
-        config.vSyncEnabled = true;
-        config.foregroundFPS = 60;
+        config.vSyncEnabled = false;
+        config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-64.png", Files.FileType.Internal);

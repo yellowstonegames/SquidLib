@@ -85,6 +85,7 @@ public class DelaunayGDXTest extends ApplicationAdapter {
                     points[c << 1 | 1] + NumberTools.swayRandomized(~c, time - cf) * 8f);
         }
         shaper.end();
+        Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() + " FPS");
     }
 
     public static void main (String[] arg) {

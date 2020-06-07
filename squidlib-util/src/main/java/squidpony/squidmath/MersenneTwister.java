@@ -57,8 +57,13 @@ import java.util.Arrays;
  * are guaranteed to be at least {@code pow(2, 40)} values long, and they are
  * {@code pow(2, 8295)} values long on average." IsaacRNG should be your choice if security is a
  * concern, LongPeriodRNG if quality and speed are important, and MersenneTwister should be used
- * if period is the only criterion to judge an RNG on. There may be a CMWC generator added at
- * some point, which would have potentially a greater period than the Mersenne Twister.
+ * if period is the only criterion to judge an RNG on. Keep in mind that extremely long periods
+ * are not always a good thing; there are known states for the Mersenne Twister that produce dozens
+ * of {@code 0} outputs in a row, which is fundamentally impossible for {@link LightRNG} or
+ * {@link DiverRNG}. It also would take longer to exhaust the period of a 128-bit-state generator
+ * (generating 100 gigabytes per second) than the amount of time humans have walked the Earth.
+ * This has 19968 bits of state... so if 128 is more than is possible to exhaust, why do you need
+ * 19968 bits, again? Consider {@link GoatRNG} if you want a high-quality 128-bit generator.
  * <br>
  * This is mostly a straight port of the
  * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/mt19937-64.c">
@@ -107,7 +112,7 @@ public class MersenneTwister implements Serializable, RandomnessSource {
     /**
      * Mersenne Twister data.
      */
-    private long[] mt = new long[NN];
+    private final long[] mt = new long[NN];
 
     /**
      * Mersenne Twister Index.

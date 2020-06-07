@@ -11,19 +11,17 @@ import java.util.List;
  * Creates a field of particles that tend to form a neuron image type
  * distribution. The distribution tends to reach towards the largest area of
  * empty space, but features many nice branches and curls as well.
- *
  * If no points are added before the populate method is run, the center of the
  * area is chosen as the single pre-populated point.
- *
- * Based on work by Nolithius
- *
- * http://www.nolithius.com/game-development/neural-particle-deposition
- *
- * Source code is available on GitHub:
- * https://github.com/Nolithius/neural-particle as well as Google Code
- * (now archived): http://code.google.com/p/neural-particle/
- *
- * @author @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * <br>
+ * <a href="http://www.nolithius.com/game-development/neural-particle-deposition">Based on work by Nolithius</a>
+ * <br>
+ * Source code is available on <a href="https://github.com/Nolithius/neural-particle">GitHub</a>,
+ * as well as <a href="http://code.google.com/p/neural-particle/">Google Code (now archived)</a>
+ * <br>
+ * This class is marked Beta because no test or demo was ever written to use it.
+ * Who could be to blame for this omission...
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
 public class NeuralParticle implements Serializable{

@@ -266,7 +266,7 @@ public class Voronoi implements Serializable {
 
     /**
      * Creates a random permutation of the specified point set. Based on the
-     * implementation of the Delaunay algorithm this can speed up the
+     * implementation of the Delaunay algorithm, this can speed up the
      * computation.
      */
     public void shuffle(IRNG rng) {

@@ -43,15 +43,11 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
      5 = snowcap
      6 = lowsea
      */
-    private final SColor[] colors = new SColor[]{SColor.DENIM, SColor.PEACH, SColor.PALE_YOUNG_GREEN_ONION,
+    private Color[] colors = new Color[]{SColor.DENIM, SColor.PEACH, SColor.PALE_YOUNG_GREEN_ONION,
             SColor.FOREST_GREEN, SColor.SLATE_GRAY, SColor.ALICE_BLUE, SColor.AZUL};
-    private final SColor[] polarcolors = colors;
-    //            new SColor[]{SColor.DARK_SLATE_GRAY, SColor.SCHOOL_BUS_YELLOW, SColor.YELLOW_GREEN,
-//        SColor.GREEN_BAMBOO, SColorFactory.lighter(SColor.LIGHT_BLUE_SILK), SColor.ALICE_BLUE, SColor.AZUL};
-    private final SColor[] desertcolors = colors;
-//            new SColor[]{SColor.DARK_SLATE_GRAY, SColor.SCHOOL_BUS_YELLOW, SColor.YELLOW_GREEN,
-//        SColor.GREEN_BAMBOO, SColorFactory.lighter(SColor.LIGHT_BLUE_SILK), SColor.ALICE_BLUE, SColor.AZUL};
-
+    private Color[] polarcolors;
+    private Color[] desertcolors;
+    
     private double highn = 0;
     private int[][] biomeMap;
     private double[][] map;
@@ -70,6 +66,10 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
     }
     @Override
     public void create () {
+        polarcolors = new Color[]{SColor.AURORA_RIPPED_DENIM, SColor.BAIKO_BROWN, SColor.AURORA_DUN,
+                SColor.FOREST_GREEN, SColor.SLATE_GRAY, SColor.ALICE_BLUE, SColor.CW_LIGHT_AZURE};
+        desertcolors = new Color[]{SColor.DENIM, SColor.PEACH, SColor.SCHOOL_BUS_YELLOW,
+                SColor.AURORA_BURNT_YELLOW, SColor.DB_GRAPHITE, SColor.ALICE_BLUE, SColor.AZUL};
         batch = new FilterBatch();
         width = 240;
         height = 120;
@@ -115,7 +115,7 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 n = map[x][y];
-                SColor[] curcolor = colors;
+                Color[] curcolor = colors;
                 if (biomeMap[x][y] == 1 || biomeMap[x][y] == 3) {
                     curcolor = polarcolors;
                 }
@@ -156,20 +156,16 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
                     int shadow = mapFactory.getShadow(x, y, map);
                     if (n > MetsaMapFactory.SNOW_LEVEL && (biomeMap[x][y] == 1 || biomeMap[x][y] == 3)) {//SNOWAREA VOLCANO CASE
                         if (shadow == -1) {//shadow side INVERSE
-//                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
                             color = colorFactory.lerp(color, SColor.DENIM, (float)(0.1 * n));
                         }
                         if (shadow == 1) {//sun side INVERSE
-//                            color = SColorFactory.blend(color, new SColor(255, 255, 0), 0.1);
                             color = colorFactory.lerp(color, SColor.BRASS, (float)(0.05 * n));
                         }
                     } else {
                         if (shadow == 1) { //shadow side
-//                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
                             color = colorFactory.lerp(color, SColor.ONANDO, (float)(0.1 * n));
                         }
                         if (shadow == -1) {//sun side
-//                            color = SColorFactory.blend(color, new SColor(220, 220, 100), 0.2);
                             color = colorFactory.lerp(color, SColor.YELLOW, (float)(0.1 * n));
                         }
                     }
