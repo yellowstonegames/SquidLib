@@ -2,7 +2,6 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.LZSPlus;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
 import squidpony.squidmath.Noise.Noise2D;
 import squidpony.squidmath.Noise.Noise3D;
@@ -35,7 +34,6 @@ import java.util.Arrays;
  * which stores one biome per cell, and {@link DetailedBiomeMapper}, which gives each cell a midway value between two
  * biomes.
  */
-@Beta
 public abstract class WorldMapGenerator implements Serializable {
     private static final long serialVersionUID = 1L;
     public final int width, height;
@@ -1563,8 +1561,6 @@ public abstract class WorldMapGenerator implements Serializable {
      * rectangle (like this class) and an ellipse (like EllipticalMap), with all-round sides.
      * <a href="http://squidpony.github.io/SquidLib/SphereWorld.png" >Example map</a>.
      */
-//     * <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
-    @Beta
     public static class SphereMap extends WorldMapGenerator {
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         //protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
@@ -1954,8 +1950,6 @@ public abstract class WorldMapGenerator implements Serializable {
      * This uses the <a href="https://en.wikipedia.org/wiki/Mollweide_projection">Mollweide projection</a>.
      * <a href="http://squidpony.github.io/SquidLib/EllipseWorld.png" >Example map</a>.
      */
-//     * <a href="https://i.imgur.com/BBKrKjI.png" >Example map, showing ellipse shape</a>
-     @Beta
     public static class EllipticalMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
@@ -2721,9 +2715,6 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="http://squidpony.github.io/SquidLib/SpaceViewMap.png" >Example map, showing circular shape as if viewed
      * from afar</a>
      */
-//         * <a href="https://tommyettinger.github.io/DorpBorx/worlds7/index.html">Example views of 50 planets</a>.
-
-    @Beta
     public static class SpaceViewMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
@@ -3083,7 +3074,6 @@ public abstract class WorldMapGenerator implements Serializable {
      * This uses the <a href="https://en.wikipedia.org/wiki/Eckert_IV_projection">Eckert IV projection</a>.
      * <a href="https://squidpony.github.io/SquidLib/RoundSideWorldMap.png">Example map</a>
      */
-    @Beta
     public static class RoundSideMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
@@ -3443,7 +3433,6 @@ public abstract class WorldMapGenerator implements Serializable {
      * This uses the <a href="https://en.wikipedia.org/wiki/Tobler_hyperelliptical_projection">Tobler hyperelliptical projection</a>.
      * <a href="">Example map</a>
      */
-    @Beta
     public static class HyperellipticalMap extends WorldMapGenerator {
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
@@ -3876,7 +3865,6 @@ public abstract class WorldMapGenerator implements Serializable {
      * distortion around the edges, but the curvature of the latitude lines can be hard to visualize).
      * <a href="https://i.imgur.com/nmN6lMK.gifv">Preview image link of a world rotating</a>.
      */
-    @Beta
     public static class EllipticalHammerMap extends WorldMapGenerator {
         //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
@@ -4256,7 +4244,6 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="https://i.imgur.com/WNa5nQ1.gifv">Example view of a planet rotating</a>.
      * <a href="https://i.imgur.com/NV5IMd6.gifv">Another example</a>.
      */
-    @Beta
     public static class RotatingSpaceMap extends WorldMapGenerator {
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
