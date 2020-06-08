@@ -16,22 +16,30 @@ import java.util.ArrayList;
 import static squidpony.Maker.makeList;
 
 /**
- * A finite 2D area map for some kind of wilderness, with specifics handled by subclasses.
+ * A finite 2D area map for some kind of wilderness, adapting to different ecosystems by changing its output.
  * Regional maps for wilderness areas have very different requirements from mostly-artificial dungeons. This is intended
- * to work alongside {@link WorldMapGenerator} and {@link WorldMapGenerator.DetailedBiomeMapper} to produce blends
- * between biomes where a strict line can't be drawn between, say, woodland and grassland.
+ * to work alongside {@link WorldMapGenerator} and {@link WorldMapGenerator.DetailedBiomeMapper} to produce, for
+ * example, very sparse maps with an occasional cactus in a desert, or very dense maps with many trees and shrubs for a
+ * forest.
  * <br>
- * Using this code mostly involves constructing a subclass, adding kinds of game objects that you want to appear
- * in this type of map to {@link #contentTypes}, and only then calling {@link #generate()}, which is implemented by
- * subclasses only. You can use just about any type for {@code T}, including {@link Object}; all this code uses is the
- * number of items in {@link #contentTypes} to put correct indices into {@link #content}. Because contentTypes is an
- * ArrayList, you can have and are encouraged to have duplicates when an object should appear more often. An index of -1
- * in content indicates nothing of note is present there. There is also a String array of {@link #floorTypes} that is
- * not typically user-set unless you subclass WildMap yourself; it is used to look up the indices in {@link #floors}.
- * The floors are set to reasonable values for the particular subclass, so a forest might have "dirt" and "leaves" among
- * others, while a desert might only have "sand". Again, only the indices matter, so you could change the values in
- * {@link #floorTypes} to match names of textures in a graphical game and make lookup easier, or to a char followed by
- * the name of a color (as in SColor in the display module) for a text-based game.
+ * Using this code mostly involves constructing a WildMap with a width, height, biome, and optionally a random number
+ * generator, an ArrayList of floor types (as Strings) that can appear, and an ArrayList of terrain content that can
+ * appear (also as Strings). Then you can call {@link #generate()}, which assigns indices into {@link #content} and
+ * {@link #floors}, where an index can look up a value from {@link #contentTypes} or {@link #floorTypes}. The biome is
+ * usually an index into {@link squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper#biomeTable}, but can
+ * be some other index if you don't use DetailedBiomeMapper (you would probably use a subclass then). The
+ * {@link #contentTypes} field is an ArrayList; you can have and are encouraged to have duplicates when an object should
+ * appear more often. An index of -1 in content indicates nothing of note is present there. There is also a String array
+ * of {@link #floorTypes} that is not typically user-set unless you subclass WildMap yourself; it is used to look up the
+ * indices in {@link #floors}. The floors are set to reasonable values for the particular biome, so a forest has "dirt"
+ * and "leaves" among others, while a desert might only have "sand". Again, only the indices matter, so you could change
+ * the values in {@link #floorTypes} to match names of textures in a graphical game and make lookup easier, or to a char
+ * followed by the name of a color (as in SColor in the display module) for a text-based game.
+ * <br>
+ * This is marked Beta because there's still some work to be done, and the actual output will change even if the API
+ * doesn't have any breaks. While the wilderness maps this produces are usable, they don't have paths or areas that a
+ * character would have to find a way around (like a cliff). This is meant to be added at some point, probably in
+ * conjunction with some system for connecting WildMaps.
  * <br>
  * Created by Tommy Ettinger on 10/16/2019.
  */
@@ -93,6 +101,12 @@ public class WildMap implements Serializable {
         return al;
     }
 
+    /**
+     * Gets a list of Strings that are really just the names of types of floor tile for wilderness areas.
+     * @param biome an index into {@link squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper#biomeTable}, or some other index if you don't use DetailedBiomeMapper
+     * @param rng an IRNG, like {@link squidpony.squidmath.RNG} or {@link squidpony.squidmath.GWTRNG} 
+     * @return a shuffled ArrayList that typically contains repeats of the kinds of floor that can appear here
+     */
     public static ArrayList<String> floorsByBiome(int biome, IRNG rng) {
         biome &= 1023;
         switch (biome) {
@@ -173,7 +187,12 @@ public class WildMap implements Serializable {
                 return makeList("empty space");
         }
     }
-
+    /**
+     * Gets a list of Strings that are really just the names of types of path tile for wilderness areas.
+     * Not currently used.
+     * @param biome an index into {@link squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper#biomeTable}, or some other index if you don't use DetailedBiomeMapper
+     * @return an ArrayList that typically contains just the one or few types of path that can appear here
+     */
     public static ArrayList<String> pathsByBiome(int biome) {
         biome &= 1023;
         switch (biome) {
@@ -250,7 +269,12 @@ public class WildMap implements Serializable {
 
         }
     }
-    
+    /**
+     * Gets a list of Strings that are really just the names of types of terrain feature for wilderness areas.
+     * @param biome an index into {@link squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper#biomeTable}, or some other index if you don't use DetailedBiomeMapper
+     * @param rng an IRNG, like {@link squidpony.squidmath.RNG} or {@link squidpony.squidmath.GWTRNG}
+     * @return a shuffled ArrayList that typically contains repeats of the kinds of terrain feature that can appear here
+     */
     public static ArrayList<String> contentByBiome(int biome, IRNG rng) {
         biome &= 1023;
         switch (biome) {
@@ -399,7 +423,14 @@ public class WildMap implements Serializable {
             }
         }
     }
-    
+
+    /**
+     * A subclass of {@link WildMap} that serves as a ragged edge between 2, 3, or 4 WildMaps in a square intersection.
+     * You almost always supply 4 WildMaps to this (typically not other MixedWildMaps), one for each corner of the map,
+     * and this generates an uneven border between them. Make sure to look up the indices in the {@link #content} and
+     * {@link #floors} using this MixedWildMap's {@link #contentTypes} and {@link #floorTypes}, not the ones in the
+     * inner WildMaps, because the indices in the MixedWildMap are different.
+     */
     public static class MixedWildMap extends WildMap implements Serializable
     {
         private static final long serialVersionUID = 1L;

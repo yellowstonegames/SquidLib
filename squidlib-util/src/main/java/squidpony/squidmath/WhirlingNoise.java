@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 
 import static squidpony.squidmath.Noise.fastFloor;
@@ -14,9 +12,9 @@ import static squidpony.squidmath.Noise.fastFloor;
  * <br>
  * Created by Tommy Ettinger on 12/14/2016. The technique for point hashing in the "noiseAlt" code is based closely on
  * <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&rep=rep1&type=pdf">this paper</a>,
- * with credit to Andrew Kensler, Aaron Knoll and Peter Shirley.
+ * with credit to Andrew Kensler, Aaron Knoll and Peter Shirley. This technique is good, but it may be periodic in
+ * undesirable ways, and isn't much faster when implemented in Java than {@link IntPointHash}, if at all.
  */
-@Beta
 public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D,
         Serializable {
 
