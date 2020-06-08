@@ -22,8 +22,6 @@
 
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,7 +35,6 @@ import java.util.ListIterator;
  * @author Johannes Diemke
  * @author Tommy Ettinger
  */
-@Beta
 public class Voronoi implements Serializable {
     private static final long serialVersionUID = 1L;
 

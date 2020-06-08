@@ -1,7 +1,6 @@
 package squidpony;
 
 import regexodus.Category;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IStatefulRNG;
 import squidpony.squidmath.ProbabilityTable;
@@ -15,9 +14,9 @@ import java.util.Set;
  * https://github.com/Nolithius/weighted-letter-namegen
  * http://code.google.com/p/weighted-letter-namegen/
  *
+ * @see FakeLanguageGen FakeLanguageGen is meant for generating more than just names, and can imitate language styles.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-@Beta
 public class WeightedLetterNamegen {
 //<editor-fold defaultstate="collapsed" desc="Viking Style static name list">
 

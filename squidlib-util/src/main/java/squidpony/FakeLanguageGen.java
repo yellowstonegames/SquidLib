@@ -20,17 +20,25 @@ import java.util.Set;
  * A text generator for producing sentences and/or words in nonsense languages that fit a theme. This does not use an
  * existing word list as a basis for its output, so it may or may not produce existing words occasionally, but you can
  * safely assume it won't generate a meaningful sentence except in the absolute unlikeliest of cases.
+ * <br>
+ * This supports a lot of language styles in predefined constants. There's a registry of these constants in
+ * {@link #registered} and their names in {@link #registeredNames}, plus the languages that would make sense for
+ * real-world cultures to use (and all use the Latin alphabet, so they can be swapped around) are in
+ * {@link #romanizedHumanLanguages}. You can make a new language with a constructor, but it's pretty time-consuming; the
+ * recommended ways are generating a random language with {@link #randomLanguage(long)} (when you don't care too much
+ * about exactly how it should sound), or blending two or more languages with {@link #mixAll(Object...)} or
+ * {@link #mix(double, FakeLanguageGen, double, Object...)} (when you have a sound in mind that isn't quite met by an
+ * existing language).
+ * <br>
  * Created by Tommy Ettinger on 11/29/2015.
- *
- * @author Tommy Ettinger
+ * @see NaturalLanguageCipher NaturalLanguageCipher uses a FakeLanguageGen to reversibly translate English text to nonsense.
+ * @see Thesaurus Thesaurus uses this class a lot to generate things like plant names and the titles of nations.
  */
-
 public class FakeLanguageGen implements Serializable {
     private static final long serialVersionUID = -2396642435461186352L;
     public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
             vowelSplitters, closingSyllables;
     public final boolean clean;
-    //public final IntDoubleOrderedMap syllableFrequencies;
     public final double[] syllableFrequencies;
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
@@ -39,9 +47,10 @@ public class FakeLanguageGen implements Serializable {
     public static final GWTRNG srng = new GWTRNG();
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64, Hashers.caseInsensitiveStringHasher);
     protected String summary = null;
-    private String name = "Nameless Language";
-    private static transient StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12),
-            ssb = new StringBuilder(80);
+    protected String name = "Nameless Language";
+    private static final transient StringBuilder sb = new StringBuilder(20);
+    private static final transient StringBuilder ender = new StringBuilder(12);
+    private static final transient StringBuilder ssb = new StringBuilder(80);
     /**
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
      * and Cyrillic; for use when a String will be interpreted as a regex (as in {@link FakeLanguageGen.Alteration}).
@@ -450,8 +459,9 @@ public class FakeLanguageGen implements Serializable {
     /**
      * Ia! Ia! Cthulhu Rl'yeh ftaghn! Useful for generating cultist ramblings or unreadable occult texts. You may want
      * to consider mixing this with multiple other languages using {@link #mixAll(Object...)}; using some very different
-     * languages in low amounts relative to the amount used for this, like {@link #NAHUATL}, {@link #INUKTITUT}, and
-     * {@link #SOMALI}, can alter the aesthetic of the generated text in ways that may help distinguish magic styles.
+     * languages in low amounts relative to the amount used for this, like {@link #NAHUATL}, {@link #INUKTITUT},
+     * {@link #SOMALI}, {@link #DEEP_SPEECH}, and {@link #INSECT} can alter the aesthetic of the generated text in ways
+     * that may help distinguish magic styles.
      * <br>
      * Zvrugg pialuk, ya'as irlemrugle'eith iposh hmo-es nyeighi, glikreirk shaivro'ei!
      */
@@ -4536,6 +4546,10 @@ public class FakeLanguageGen implements Serializable {
      * Makes a new FakeLanguageGen that mixes this object with {@code other}, mingling the consonants and vowels they
      * use as well as any word suffixes or other traits, and favoring the qualities in {@code other} by
      * {@code otherInfluence}, which will value both languages evenly if it is 0.5 . 
+     * <br>
+     * You should generally prefer {@link #mix(double, FakeLanguageGen, double, Object...)} or
+     * {@link #mixAll(Object...)} if you ever mix 3 or more languages. Chaining this mix() method can be very
+     * counter-intuitive because the weights are relative, while in the other mix() and mixAll() they are absolute.
      * @param other another FakeLanguageGen to mix along with this one into a new language
      * @param otherInfluence how much other should affect the pair, with 0.5 being equal and 1.0 being only other used
      * @return a new FakeLanguageGen with traits from both languages
@@ -4601,10 +4615,10 @@ public class FakeLanguageGen implements Serializable {
      * 3 equal weights with this, whereas with mix chaining you would need to mix the first two with 0.5 and the third
      * with 0.33 .
      * <br>
-     * Unlike the static method {@link #mixAll(Object...)}, this _is_ intended for external use, in part because the
-     * technique for mixing languages by weight is so much more intuitive, but also because this assigns valid data for
-     * serializing and deserializing this FakeLanguageGen that allows it to use significantly less space (less than 1/72
-     * the bytes used in one not-quite-simple test).
+     * It's up to you whether you want to use {@link #mixAll(Object...)} or this method; they call the same code and
+     * produce the same result, including the summary for serialization support. You probably shouldn't use
+     * {@link #mix(FakeLanguageGen, double)} with two arguments in new code, since it's easy to make mistakes when
+     * mixing three or more languages (calling that twice or more).
      *
      * @param myWeight the weight to assign this FakeLanguageGen in the mix
      * @param other1   another FakeLanguageGen to mix in; if null, this method will abort and return {@link #copy()}
@@ -4677,7 +4691,10 @@ public class FakeLanguageGen implements Serializable {
      * 3 equal weights with this, whereas with mix chaining you would need to mix the first two with 0.5 and the third
      * with 0.33 .
      * <br>
-     * Not intended for external use, but it could be useful. Used internally in the deserialization code.
+     * This is probably the most intuitive way to mix languages here, though there's also
+     * {@link #mix(double, FakeLanguageGen, double, Object...)}, which is very similar but doesn't take its parameters
+     * in quite the same way (it isn't static, and treats the FakeLanguageGen object like the first item in pairs here).
+     * Used internally in the deserialization code.
      *
      * @param pairs should have at least one item, and must alternate between FakeLanguageGen and number (weight) elements
      * @return a FakeLanguageGen produced by mixing any FakeLanguageGen arguments by the given weights
