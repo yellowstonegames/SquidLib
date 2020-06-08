@@ -4,7 +4,6 @@ import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.Maker;
 import squidpony.Thesaurus;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidmath.*;
@@ -23,8 +22,8 @@ import java.util.Map;
  * will have short, identifiable parts of generated names corresponding to the same chars as in atlas, and an OrderedMap
  * of {@link #spokenLanguages} that contains any randomly generated languages produced for nations.
  * <a href="https://gist.github.com/tommyettinger/4a16a09bebed8e2fe8473c8ea444a2dd">Example output of a related class</a>.
+ * @see FantasyPoliticalMapper There's also an alternative for cases where non-human species compete for specific areas.
  */
-@Beta
 public class PoliticalMapper {
     public int width;
     public int height;

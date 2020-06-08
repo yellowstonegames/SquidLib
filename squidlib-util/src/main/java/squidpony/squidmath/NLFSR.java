@@ -8,7 +8,6 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 package squidpony.squidmath;
 
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
@@ -18,12 +17,12 @@ import java.io.Serializable;
  * period of (2 to the 27) minus 1, and uses data from
  * http://people.kth.se/~dubrova/nlfsr.html and https://eprint.iacr.org/2012/314.pdf . You would normally only prefer
  * NLFSR over LFSR if you expect players to scrutinize your randomly-generated data, or if you want to use it as part of
- * a more complex process such as encoding a saved file in a more robust way.
+ * a more complex process such as encoding a saved file in a more robust way. Since 2 to the 27 numbers can be produced
+ * and analyzed in a matter of seconds, you'd need a lot of independent steps like this to actually improve encoding.
  * It is important to note that an NLFSR or LFSR will produce each number from 1 until its maximum exactly once before
  * repeating, so this may be useful as a way of generating test data in an unpredictable order.
  * @author Tommy Ettinger
  */
-@Beta
 public class NLFSR implements StatefulRandomness, Serializable {
 
 	private static final long DOUBLE_MASK = (1L << 53) - 1;

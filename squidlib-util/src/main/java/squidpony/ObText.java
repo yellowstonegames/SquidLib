@@ -3,7 +3,6 @@ package squidpony;
 import regexodus.Matcher;
 import regexodus.Pattern;
 import regexodus.REFlags;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
 
 import java.io.Reader;
@@ -26,12 +25,14 @@ import static squidpony.ArrayTools.letters;
  * particular primary String's associated entries, if there are any, or to skip over them and
  * go to the next String in the current List.
  * <br>
- * This implements List of String and is modifiable; it extends the List interface with
- * {@link #parse(CharSequence)} to read a String in the following format, as well as with some
- * overloads of add() to add just a String with no associated values. A quirk of how this
- * implements List is that it only considers the top-level Strings to be part of the List for
- * length and for {@link #contains(Object)}, and will ignore child strings unless you access
- * them via the {@link ObTextEntry#associated} List on an entry that has associated entries.
+ * This extends ArrayList of ObTextEntry and is modifiable, but it doesn't act quite like what
+ * what you might expect from an ArrayList. Chiefly, this only considers the top-level Strings
+ * to be part of the List for length and for {@link #contains(Object)}, and will ignore child
+ * strings unless you access them via the {@link ObTextEntry#associated} List on an entry that
+ * has associated entries.
+ * <br>
+ * A common way to use this is with {@link #parse(CharSequence)} to read a String in the
+ * following format.
  * <br>
  * Format example:
  * <pre>
@@ -66,8 +67,9 @@ import static squidpony.ArrayTools.letters;
  * here, the delimiter is '''different''', just to be different.]different]]
  * </pre>
  * <br>
- * Inspired strongly by STOB, https://github.com/igagis/stob-java and https://github.com/igagis/stob , but
- * no code is shared and the format is slightly different. The main differences are:
+ * Inspired strongly by <a href="https://github.com/igagis/stob">STOB</a> and its
+ * <a href="https://github.com/igagis/stob-java">Java port</a> , but no code is shared and the format is
+ * slightly different. The main differences are:
  * <ul>
  * <li>We use square brackets in place of STOB's curly braces to mark children associated with a string.<li>
  * <li>ObText supports nested block comments using the syntax {@code /[delimiter/contents/delimiter]/} where
@@ -78,7 +80,6 @@ import static squidpony.ArrayTools.letters;
  * again delimiter may be empty and contents is the body of the raw string.</li>
  * <ul>
  */
-@Beta
 public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializable{
     private static final long serialVersionUID = 7L;
     public static class ObTextEntry implements Serializable
@@ -170,14 +171,14 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
             if(associated == null)
                 return result ^ z;
             final int len = associated.size();
+            result ^= len;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (associated.get(i).hash64() ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-                result = (result << 54 | result >>> 10);
+                result ^= associated.get(i).hash64() * (z += 0xC6BC279692B5CC86L);
+                result = (result << 11 | result >>> 53);
             }
             result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
             result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
             return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
-
         }
 
         @Override
@@ -295,13 +296,15 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
     {
         long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
         final int len = size();
+        result ^= len;
         for (int i = 0; i < len; i++) {
-            result ^= (z += (get(i).hash64() ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-            result = (result << 54 | result >>> 10);
+            result ^= get(i).hash64() * (z += 0xC6BC279692B5CC86L);
+            result = (result << 11 | result >>> 53);
         }
         result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
         result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
         return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
+
     }
     
     @Override
@@ -485,7 +488,7 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
     public OrderedSet<String> keyOrderedSet()
     {
         final int sz = size();
-        OrderedSet<String> keys = new OrderedSet<>(sz, CrossHash.stringHasher);
+        OrderedSet<String> keys = new OrderedSet<>(sz);
         for (int i = 0; i < sz; i++) {
             keys.add(get(i).primary);
         }
@@ -519,7 +522,7 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
     public OrderedMap<String, String> basicOrderedMap()
     {
         final int sz = size();
-        OrderedMap<String, String> keys = new OrderedMap<>(sz, CrossHash.stringHasher);
+        OrderedMap<String, String> keys = new OrderedMap<>(sz);
         ObTextEntry got;
         for (int i = 0; i < sz; i++) {
             got = get(i);
@@ -557,7 +560,7 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
     public OrderedMap<String, ArrayList<String>> shallowOrderedMap()
     {
         final int sz = size();
-        OrderedMap<String, ArrayList<String>> keys = new OrderedMap<>(sz, CrossHash.stringHasher);
+        OrderedMap<String, ArrayList<String>> keys = new OrderedMap<>(sz);
         ObTextEntry got;
         for (int i = 0; i < sz; i++) {
             got = get(i);

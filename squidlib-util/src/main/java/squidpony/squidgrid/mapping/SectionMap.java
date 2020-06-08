@@ -1,7 +1,6 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
@@ -35,7 +34,6 @@ import java.util.List;
  * <br>
  * Created by Tommy Ettinger on 11/28/2016.
  */
-@Beta
 public class SectionMap implements Serializable {
     private static final long serialVersionUID = -2322572367863327331L;
 
