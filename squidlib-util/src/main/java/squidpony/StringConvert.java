@@ -2,7 +2,6 @@ package squidpony;
 
 import regexodus.Matcher;
 import regexodus.Pattern;
-import squidpony.annotation.Beta;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.K2;
 
@@ -22,7 +21,6 @@ import java.util.Objects;
  * by varargs, especially when you have a bunch of Class items and need Strings, but the array it returns must not be
  * edited once used to construct a StringConvert.
  */
-@Beta
 public abstract class StringConvert<T> {
     public final CharSequence name;
     public final CharSequence[] typeNames;

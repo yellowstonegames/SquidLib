@@ -1,14 +1,16 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 /**
  * A low-quality continuous noise generator with strong grid artifacts, this is nonetheless useful as a building block.
  * This implements Noise2D, Noise3D, and Noise4D, and could have more dimensionality support added later. It has much
  * lower quality than {@link ClassicNoise}, but is structured similarly in many ways, and should be a little faster.
+ * <br>
+ * Note: the {@link #valueNoise(int, double, double)} methods in this class return results in the range of 0.0 to 1.0,
+ * while the {@link #getNoise(double, double)} and {@link #getNoiseWithSeed(double, double, long)} methods use the Noise
+ * class default range of -1.0 to 1.0.
  * @see FoamNoise FoamNoise produces high-quality noise by combining a few rotated results of ValueNoise with domain warping.
+ * @see PhantomNoise PhantomNoise doesn't use this class directly, but does have its own way of generating arbitrary-dimensional value noise.
  */
-@Beta
 public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
     public static final ValueNoise instance = new ValueNoise();
     

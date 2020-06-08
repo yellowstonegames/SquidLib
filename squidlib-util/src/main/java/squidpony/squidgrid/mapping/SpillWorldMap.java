@@ -2,7 +2,6 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.Thesaurus;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidmath.*;
@@ -15,10 +14,17 @@ import java.util.Collections;
  * Generates a procedural world map and fills it with the requested number of factions, keeping some land unclaimed.
  * The factions are given procedural names in an atlas that is linked to the chars used by the world map.
  * Uses MultiSpill internally to produce the semi-random land and water shapes, hence the name.
+ * <br>
+ * This class is probably fine for a lot of roguelike usage, but if you want a more realistic map and still want to
+ * distribute factions across it, consider {@link WorldMapGenerator}'s inner classes and {@link PoliticalMapper} or
+ * {@link FantasyPoliticalMapper} to place claims by factions. Most of the WorldMapGenerator maps allow wrapping around
+ * one axis (or both for {@link squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap}), and allow calculating data
+ * for the ecosystems on the world map with {@link squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper}.
+ * This class doesn't compute the height or moisture levels that DetailedBiomeMapper needs to figure out ecosystems.
+ * <br>
  * <a href="https://gist.github.com/tommyettinger/4a16a09bebed8e2fe8473c8ea444a2dd">Example output</a>.
  * Created by Tommy Ettinger on 9/12/2016.
  */
-@Beta
 public class SpillWorldMap {
     public int width;
     public int height;

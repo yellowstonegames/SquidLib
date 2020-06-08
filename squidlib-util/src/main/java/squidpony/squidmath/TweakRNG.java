@@ -1,19 +1,32 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 import java.io.Serializable;
 
 /**
- * Highly experimental RNG that can be configured to smoothly transition between producing mostly values in the center
- * of its range, to producing more values at or near the extremes, as well as favoring high or low results. The
- * probability distribution is... unusual, with lumps that rise or fall based on centrality.
+ * Somewhat experimental RNG that can be configured to smoothly transition between producing mostly values in the
+ * center of its range, to producing more values at or near the extremes, as well as favoring high or low results.
+ * The probability distribution is... unusual, with lumps that rise or fall based on centrality.
+ * <br>
+ * Even though this is experimental, it's still usable. Mostly the useful parts of this relate to changing centrality,
+ * making results occur more or less frequently in the center of the output range. You can also change the "favor" to
+ * bias results towards higher or lower parts of the same output range, though if favor is non-zero it may have
+ * counterintuitive results for {@link #nextLong()}.
+ * <br>
+ * Internally, this acts as a {@link TangleRNG}, which is a fairly solid, very fast algorithm, and uses its results two
+ * at a time to give to an atan2 calculation (specifically, {@link NumberTools#atan2_(float, float)} or
+ * {@link NumberTools#atan2_(double, double)}. These particular approximations of atan2 range from 0.0 to 1.0 instead of
+ * -pi to pi. This means atan2 inputs with positive x and small y are likely to return values near 1.0 or near 0.0, but
+ * not between 0.25 and 0.75. The opposite is true for inputs with negative x and small y; that is likely to be near 0.5
+ * and can't be between 0.0 and 0.25 or between 0.75 and 1.0. TweakRNG uses this property to implement centrality,
+ * changing the inputs to its internal atan2 usage so x is positive when centrality is positive, or negative when
+ * centrality is negative. Likewise, favor is implemented by changing y, though reversed; positive favor makes the atan2
+ * calculation adjusted with negative y, making it more likely to be between 0.5 and 1.0, while negative favor pushes it
+ * back to between 0.0 and 0.5.
  * <br>
  * <a href="https://i.imgur.com/VCvtlSc.gifv">Here's an animation of the distribution graph changing.</a>
  * <br>
  * Created by Tommy Ettinger on 10/6/2019.
  */
-@Beta
 public class TweakRNG extends AbstractRNG implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,7 +73,7 @@ public class TweakRNG extends AbstractRNG implements Serializable {
     @Override
     public long nextLong() {
         final long r = internalLong(), s = internalLong();
-        return (long) (NumberTools.atan2_(((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)) - favor,
+        return (long) (NumberTools.atan2_(((r & 0xFF) - (r >>> 8 & 0xFF)) * ((r >>> 16 & 0xFF) - (r >>> 24 & 0xFF)) - (double)favor,
                 ((r >>> 32 & 0xFF) - (r >>> 40 & 0xFF)) * ((r >>> 48 & 0xFF) - (r >>> 56 & 0xFF)) + centrality) * 0x6000000000000000L)
                 + (s & 0x1FFFFFFFFFFFFFFFL) << 1 ^ (s >>> 63);
     }
@@ -151,6 +164,6 @@ public class TweakRNG extends AbstractRNG implements Serializable {
     {
         final long s = (stateA += 0xC6BC279692B5C323L);
         final long z = (s ^ s >>> 31) * (stateB += 0x9E3779B97F4A7C16L);
-        return z ^ z >>> 26;
+        return z ^ z >>> 26 ^ z >>> 6;
     }
 }

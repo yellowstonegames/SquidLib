@@ -107,18 +107,6 @@ public final class GoatRNG implements RandomnessSource, Serializable {
      */
     @Override
     public final int next(final int bits) {
-//        long s = (stateA += 0xD1342543DE82EF95L);
-//        s ^= s >>> 31;
-//        if(s < 0x31E131D6149D9795L) {
-//            final long t = (stateB += 0xC6BC279692B5C323L);
-//            s *= ((t ^ t >>> 29 ^ t << 11) | 1L);
-//            return (int)(s ^ s >>> 25) >>> (32 - bits);
-//        }
-//        else {
-//            final long t = stateB;
-//            s *= ((t ^ t >>> 29 ^ t << 11) | 1L);
-//            return (int)(s ^ s >>> 25) >>> (32 - bits);
-//        }
         long s = (stateA += 0xD1342543DE82EF95L);
         s ^= s >>> 31 ^ s >>> 23;
         if(s < 0x46BC279692B5C323L) {
