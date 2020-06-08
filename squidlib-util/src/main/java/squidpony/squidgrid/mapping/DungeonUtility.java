@@ -2,6 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.FOV;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.GreasedRegion;
@@ -23,7 +24,7 @@ import java.util.Set;
  * for walls and make a copy that uses unicode box drawing characters.
  *
  * @author Tommy Ettinger - https://github.com/tommyettinger
- * @see squidpony.squidgrid.mapping.DungeonGenerator DungeonGenerator uses this class a fair amount
+ * @see DungeonGenerator DungeonGenerator uses this class a fair amount
  * Created by Tommy Ettinger on 4/1/2015.
  */
 public class DungeonUtility {
@@ -645,608 +646,39 @@ public class DungeonUtility {
         return unpaired;
     }
 
-    /**
-     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
-     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
-     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
-     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, 6 for traps, and
-     * 20 for grass.
-     *
-     * @param map a char[][] containing foreground characters that you want foreground palette indices for
-     * @return a 2D array of ints that can be used as indices into a palette; palettes are available in related modules
-     */
-    public static int[][] generatePaletteIndices(char[][] map) {
-
-        int width = map.length;
-        int height = map[0].length;
-        int[][] portion = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 2;
-                        break;
-                    case '.':
-                    case ':':
-                        portion[i][j] = 3;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = 4;
-                        break;
-                    case ',':
-                    case '~':
-                        portion[i][j] = 5;
-                        break;
-                    case '"':
-                        portion[i][j] = 20;
-                        break;
-                    case '^':
-                        portion[i][j] = 6;
-                        break;
-                    default:
-                        portion[i][j] = 1;
-                }
-            }
-        }
-        return portion;
-    }
-
-    /**
-     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
-     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
-     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
-     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, 6 for traps, and
-     * 20 for grass.
-     *
-     * @param map a char[][] containing foreground characters that you want foreground palette indices for
-     * @return a 2D array of ints that can be used as indices into a palette; palettes are available in related modules
-     */
-    public static int[][] generatePaletteIndices(char[][] map, char deepChar, int deepIndex,
-                                                 char shallowChar, int shallowIndex) {
-
-        int width = map.length;
-        int height = map[0].length;
-        int[][] portion = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 2;
-                        break;
-                    case '.':
-                    case ':':
-                        portion[i][j] = 3;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = 4;
-                        break;
-                    case ',':
-                    case '~':
-                        portion[i][j] = 5;
-                        break;
-                    case '"':
-                        portion[i][j] = 20;
-                        break;
-                    case '^':
-                        portion[i][j] = 6;
-                        break;
-                    default:
-                        if (map[i][j] == deepChar)
-                            portion[i][j] = deepIndex;
-                        else if (map[i][j] == shallowChar)
-                            portion[i][j] = shallowIndex;
-                        else portion[i][j] = 1;
-                }
-            }
-        }
-        return portion;
-    }
-
-
-    /**
-     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
-     * rendering method, but meant for the background palette. This will produce 0 for most characters, but deep water
-     * (represented by '~') will produce 24 (in the default palette, this is dark blue-green), shallow water
-     * (represented by ',') will produce 23 (medium blue-green), and grass (represented by '"') will produce 21 (dark
-     * green). If you use SquidLayers, you can cause the lightness of water and grass to vary as if currents or wind
-     * are moving their surface using getLightnessModifiers() and a frame count argument.
-     *
-     * @param map a char[][] containing foreground characters that you want background palette indices for
-     * @return a 2D array of ints that can be used as indices into a palette; palettes are available in related modules
-     */
-    public static int[][] generateBGPaletteIndices(char[][] map) {
-
-        int width = map.length;
-        int height = map[0].length;
-        int[][] portion = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 0;
-                        break;
-                    case '.':
-                        portion[i][j] = 0;
-                        break;
-                    case ':':
-                        portion[i][j] = 35;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = 0;
-                        break;
-                    case ',':
-                        portion[i][j] = 23;
-                        break;
-                    case '~':
-                        portion[i][j] = 24;
-                        break;
-                    case '"':
-                        portion[i][j] = 21;
-                        break;
-                    case '^':
-                        portion[i][j] = 0;
-                        break;
-                    default:
-                        portion[i][j] = 0;
-                }
-            }
-        }
-        return portion;
-    }
-
-
-    /**
-     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
-     * rendering method, but meant for the background palette. This will produce 0 for most characters, but deep water
-     * (represented by '~') will produce 24 (in the default palette, this is dark blue-green), shallow water
-     * (represented by ',') will produce 23 (medium blue-green), and grass (represented by '"') will produce 21 (dark
-     * green). If you use SquidLayers, you can cause the lightness of water and grass to vary as if currents or wind
-     * are moving their surface using getLightnessModifiers() and a frame count argument.
-     *
-     * @param map a char[][] containing foreground characters that you want background palette indices for
-     * @return a 2D array of ints that can be used as indices into a palette; palettes are available in related modules
-     */
-    public static int[][] generateBGPaletteIndices(char[][] map, char deepChar, int deepIndex,
-                                                   char shallowChar, int shallowIndex) {
-
-        int width = map.length;
-        int height = map[0].length;
-        int[][] portion = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 0;
-                        break;
-                    case '.':
-                        portion[i][j] = 0;
-                        break;
-                    case ':':
-                        portion[i][j] = 35;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = 0;
-                        break;
-                    case ',':
-                        portion[i][j] = 23;
-                        break;
-                    case '~':
-                        portion[i][j] = 24;
-                        break;
-                    case '"':
-                        portion[i][j] = 21;
-                        break;
-                    case '^':
-                        portion[i][j] = 0;
-                        break;
-                    default:
-                        if (map[i][j] == deepChar)
-                            portion[i][j] = deepIndex;
-                        else if (map[i][j] == shallowChar)
-                            portion[i][j] = shallowIndex;
-                        else portion[i][j] = 0;
-                }
-            }
-        }
-        return portion;
-    }
-
-    /**
-     * Produces an int[][] that can be used with SquidLayers to alter the background colors.
-     *
-     * @param map a char[][] that you want to be find background lightness modifiers for
-     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
-     */
-    public static int[][] generateLightnessModifiers(char[][] map) {
-        int width = map.length;
-        int height = map[0].length;
-        int[][] portion = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 30;
-                        break;
-                    case '.':
-                        portion[i][j] = 0;
-                        break;
-                    case ':':
-                        portion[i][j] = -15;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = -10;
-                        break;
-                    case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.45));
-                        break;
-                    case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.65));
-                        break;
-                    case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.25 - 1.5));
-                        break;
-                    case '^':
-                        portion[i][j] = 40;
-                        break;
-                    default:
-                        portion[i][j] = 0;
-                }
-            }
-        }
-        return portion;
-    }
-
-    /**
-     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using Perlin Noise are desired.
-     *
-     * @param map   a char[][] that you want to be find background lightness modifiers for
-     * @param frame a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
-     *              water and grass move more
-     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
-     */
-    public static int[][] generateLightnessModifiers(char[][] map, double frame) {
-        int width = map.length;
-        int height = map[0].length;
-        int[][] portion = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 30;
-                        break;
-                    case '.':
-                        portion[i][j] = 0;
-                        break;
-                    case ':':
-                        portion[i][j] = -15;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = -10;
-                        break;
-                    case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
-                        break;
-                    case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
-                        break;
-                    case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.25 - 1.5));
-                        break;
-                    case '^':
-                        portion[i][j] = 40;
-                        break;
-                    default:
-                        portion[i][j] = 0;
-                }
-            }
-        }
-        return portion;
-    }
-
-    /**
-     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars
-     * to be treated like deep and shallow water regarding the ripple animation.
-     *
-     * @param map           a char[][] that you want to be find background lightness modifiers for
-     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
-     *                      water and grass move more
-     * @param deepLiquid    a char that will be treated like deep water when animating ripples
-     * @param shallowLiquid a char that will be treated like shallow water when animating ripples
-     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
-     */
-    public static int[][] generateLightnessModifiers(char[][] map, double frame, char deepLiquid, char shallowLiquid) {
-        int width = map.length;
-        int height = map[0].length;
-        int[][] portion = new int[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 30;
-                        break;
-                    case '.':
-                        portion[i][j] = 0;
-                        break;
-                    case ':':
-                        portion[i][j] = -15;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = -10;
-                        break;
-                    case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
-                        break;
-                    case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
-                        break;
-                    case '"':
-                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.3 - 1.5));
-                        break;
-                    case '^':
-                        portion[i][j] = 40;
-                        break;
-                    default:
-                        if (map[i][j] == deepLiquid)
-                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.5) * 0.45 - 0.7));
-                        else if (map[i][j] == shallowLiquid)
-                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 3.1, j* 3.1, frame * 0.25) * 0.4 - 0.65));
-                        else portion[i][j] = 0;
-                }
-            }
-        }
-        return portion;
-    }
 
     /**
      * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(). It expects any
      * doors to be represented by '+' if closed or '/' if open (which can be caused by calling
      * DungeonUtility.closeDoors() ), any walls to be '#' or box drawing characters, and it doesn't care what other
      * chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).
+     * <br>
+     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateResistances(char[][])}.
      *
      * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
      * @return a resistance map suitable for use with the FOV class, with clear cells assigned 0.0 and blocked ones 1.0
      */
     public static double[][] generateResistances(char[][] map) {
-        int width = map.length;
-        int height = map[0].length;
-        double[][] portion = new double[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 1.0;
-                        break;
-                    case '/':
-                    case '"':
-                        portion[i][j] = 0.15;
-                        break;
-                    case '+':
-                        portion[i][j] = 0.95;
-                        break;
-                    case '.':
-                    case ',':
-                    case '~':
-                    case '^':
-                    default:
-                        portion[i][j] = 0.0;
-                }
-            }
-        }
-        return portion;
+        return FOV.generateResistances(map);
     }
 
     /**
      * Given a char[][] for the map that should use box drawing characters (as produced by
      * {@link #hashesToLines(char[][], boolean)}), produces a double[][] with triple width and triple height that can be
-     * used with FOV.calculateFOV() in classes that use subcell lighting. It expects any doors to be represented by '+'
-     * if closed or '/' if open (which can be caused by calling DungeonUtility.closeDoors() ), thick vegetation or other
-     * concealing obstructions to be '"', any normal walls to be box drawing characters, any cells that block all
-     * subcells to be '#', and it doesn't care what other chars are used (only doors, including open ones, vegetation,
-     * and walls obscure light and thus have a resistance by default).
-     *
+     * used with FOV.calculateFOV() in classes that use subcell lighting. Importantly, this only considers a "thin line"
+     * of wall to be blocking (matching the box drawing character), instead of the whole 3x3 area. This expects any
+     * doors to be represented by '+' if closed or '/' if open (which can be caused by calling
+     * {@link #closeDoors(char[][])}), thick vegetation or other concealing obstructions to be '"', any normal walls to
+     * be box drawing characters, any cells that block all subcells to be '#', and it doesn't care what other chars are
+     * used (only doors, including open ones, vegetation, and walls obscure light and thus have a resistance normally).
+     * <br>
+     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateResistances3x3(char[][])}
+     * 
      * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
      * @return a resistance map suitable for use with the FOV class and subcell lighting, with triple width/height
      */
     public static double[][] generateResistances3x3(char[][] map) {
-        int width = map.length;
-        int height = map[0].length;
-        double[][] portion = new double[width * 3][height * 3];
-        for (int i = 0, x = 0; i < width; i++, x+=3) {
-            for (int j = 0, y = 0; j < height; j++, y+=3) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '#':
-                        portion[x][y] = portion[x+1][y] = portion[x+2][y] =
-                                portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                        portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] = 1.0;
-                        break;
-                    case '├':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = portion[x+2][y+1] =
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                                    break;
-                    case '┤':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┴':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                    /*portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┬':
-                        /*portion[x][y] = portion[x+1][y] = portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                                    break;
-                    case '┌':
-                        /*portion[x][y] = portion[x+1][y] = portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = portion[x+2][y+1] =
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┐':
-                        /*portion[x][y] = portion[x+1][y] = portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '└':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = portion[x+2][y+1] =
-                                    /*portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┘':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                                    /*portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '│':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                                    break;
-                    case '─':
-                        portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
-                        break;
-                    case '╴':
-                        portion[x][y+1] = portion[x+1][y+1] = 1.0;
-                        break;
-                    case '╵':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/ 1.0;
-                        break;
-                    case '╶':
-                        portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
-                        break;
-                    case '╷':
-                        /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                            /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┼':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                                portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                        /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '/':
-                    case '"':
-                        portion[x][y] = portion[x+1][y] = portion[x+2][y] =
-                                portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                        portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] = 0.15;
-                        break;
-                    case '+':
-                        portion[x][y] = portion[x+1][y] = portion[x+2][y] =
-                                portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                        portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] = 0.95;
-                        break;
-                }
-            }
-        }
-        return portion;
+        return FOV.generateResistances3x3(map);
     }
 
     /**
@@ -1257,39 +689,14 @@ public class DungeonUtility {
      * open (most door placement defaults to a mix of '+' and '/', so by calling
      * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), and any walls to be '#' or
      * box drawing characters. This will assign 1.0 resistance to walls and closed doors or 0.0 for any other cell.
+     * <br>
+     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateSimpleResistances(char[][])}.
      *
      * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
      * @return a resistance map suitable for use with the FOV class, but with no partially transparent cells
      */
     public static double[][] generateSimpleResistances(char[][] map) {
-        int width = map.length;
-        int height = map[0].length;
-        double[][] portion = new double[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                    case '+':
-                        portion[i][j] = 1.0;
-                        break;
-                    default:
-                        portion[i][j] = 0.0;
-                }
-            }
-        }
-        return portion;
+        return FOV.generateSimpleResistances(map);
     }
 
     /**
@@ -1300,101 +707,14 @@ public class DungeonUtility {
      * {@link DungeonUtility#closeDoors(char[][])} you can close all doors at the start), any walls to be box drawing
      * characters, and any cells that block all subcells within their area to be '#'. This will assign 1.0 resistance to
      * walls and closed doors where a line of the box drawing char would block light, or 0.0 for any other subcell.
+     * <br>
+     * This is here for backwards-compatibility; this method delegates to {@link FOV#generateSimpleResistances3x3(char[][])}.
      *
      * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
      * @return a resistance map suitable for use with the FOV class and subcell lighting, with triple width/height
      */
     public static double[][] generateSimpleResistances3x3(char[][] map) {
-        int width = map.length;
-        int height = map[0].length;
-        double[][] portion = new double[width * 3][height * 3];
-        for (int i = 0, x = 0; i < width; i++, x+=3) {
-            for (int j = 0, y = 0; j < height; j++, y+=3) {
-                switch (map[i][j]) {
-                    case '\1':
-                    case '#':
-                    case '+':
-                        portion[x][y] = portion[x+1][y] = portion[x+2][y] =
-                                portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                        portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] = 1.0;
-                        break;
-                    case '├':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = portion[x+2][y+1] =
-                            /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┤':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┴':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                    /*portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┬':
-                        /*portion[x][y] = portion[x+1][y] = portion[x+2][y] =*/
-                        portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┌':
-                        /*portion[x][y] = portion[x+1][y] = portion[x+2][y] =*/
-                        /*portion[x][y+1] =*/ portion[x+1][y+1] = portion[x+2][y+1] =
-                            /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┐':
-                        /*portion[x][y] = portion[x+1][y] = portion[x+2][y] =*/
-                        portion[x][y+1] = portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                                /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '└':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = portion[x+2][y+1] =
-                            /*portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┘':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                                    /*portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '│':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                            /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '─':
-                        portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
-                        break;
-                    case '╴':
-                        portion[x][y+1] = portion[x+1][y+1] = 1.0;
-                        break;
-                    case '╵':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/ 1.0;
-                        break;
-                    case '╶':
-                        portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
-                        break;
-                    case '╷':
-                        /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/
-                            /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-                    case '┼':
-                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
-                            portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
-                                    /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
-                        break;
-//                    case '.':
-//                    case ',':
-//                    case '~':
-//                    case '^':
-//                    default:
-//                        portion[i][j] = 0.0;
-                }
-            }
-        }
-        return portion;
+        return FOV.generateSimpleResistances3x3(map);
     }
 
     /**
@@ -1474,7 +794,7 @@ public class DungeonUtility {
      * number, meaning it is impassable for AStarSearch. For any other entry in costs, a char in the 2D char array that
      * matches the key will correspond (at the same x,y position in the returned 2D double array) to that key's value in
      * costs. If a char is used in the map but does not have a corresponding key in costs, it will be given the value of
-     * the parameter defaultValue, which is typically 0 unless a creature is limited to only moving in some terrain.
+     * the parameter defaultValue, which is typically 1 unless a creature is limited to only moving in some terrain.
      * <p/>
      * The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 1 is the
      * cost for a normal walkable tile, and higher numbers are harder to enter.
@@ -1537,7 +857,7 @@ public class DungeonUtility {
         double[][] dijkstra = new double[astar.length][astar[0].length];
         for (int x = 0; x < astar.length; x++) {
             for (int y = 0; y < astar[x].length; y++) {
-                if (astar[x][y] < 0)
+                if (astar[x][y] <= 0)
                     dijkstra[x][y] = DijkstraMap.WALL;
                 else
                     dijkstra[x][y] = DijkstraMap.FLOOR;
@@ -1826,46 +1146,5 @@ public class DungeonUtility {
             }
         }
         return result;
-    }
-
-    /**
-     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
-     * @param array2d a 2D array that will be modified in-place
-     * @param value the value to fill all of array2D with
-     * @deprecated Use {@link ArrayTools#fill(boolean[][], boolean)} instead
-     */
-    @Deprecated
-    public static void fill(boolean[][] array2d, boolean value) {
-        ArrayTools.fill(array2d, value);
-    }
-    /**
-     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
-     * @param array2d a 2D array that will be modified in-place
-     * @param value the value to fill all of array2D with
-     * @deprecated Use {@link ArrayTools#fill(char[][], char)} instead
-     */
-    @Deprecated
-    public static void fill(char[][] array2d, char value) {
-        ArrayTools.fill(array2d, value);
-    }
-    /**
-     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
-     * @param array2d a 2D array that will be modified in-place
-     * @param value the value to fill all of array2D with
-     * @deprecated Use {@link ArrayTools#fill(int[][], int)} instead
-     */
-    @Deprecated
-    public static void fill(int[][] array2d, int value) {
-        ArrayTools.fill(array2d, value);
-    }
-    /**
-     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
-     * @param array2d a 2D array that will be modified in-place
-     * @param value the value to fill all of array2D with
-     * @deprecated Use {@link ArrayTools#fill(double[][], double)} instead
-     */
-    @Deprecated
-    public static void fill(double[][] array2d, double value) {
-        ArrayTools.fill(array2d, value);
     }
 }

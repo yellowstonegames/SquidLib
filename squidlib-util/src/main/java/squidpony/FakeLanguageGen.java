@@ -5320,30 +5320,6 @@ public class FakeLanguageGen implements Serializable {
         }
 
         /**
-         * This was used in an earlier version, which attempted to use a Romanization technique that would use Greek
-         * letters and several accented Latin letters to try to accurately represent some of the complex orthography of
-         * Arabic, but because FakeLanguageGen doesn't use that technique any more (it was effectively unreadable), this
-         * Modifier is a no-op. Its use is never needed any more.
-         * @deprecated This Modifier doesn't do anything, and isn't needed.
-         */
-        @Deprecated
-        public static final Modifier SIMPLIFY_ARABIC = new Modifier(
-                /*
-                new Alteration("ţ", "th"),
-                new Alteration("ĥ", "kh"),
-                new Alteration("ħ", "khr"),
-                new Alteration("đ", "dh"),
-                new Alteration("ď", "dt"),
-                new Alteration("š", "sh"),
-                new Alteration("ş", "shw"),
-                new Alteration("ť", "ch"),
-                new Alteration("ż", "zh"),
-                new Alteration("ξ", "khm"),
-                new Alteration("δ", "gh"),
-                new Alteration("ā", "aa"),
-                new Alteration("ū", "uu"),
-                new Alteration("ī", "ii")*/);
-        /**
          * Replaces any characters this can produce that aren't in ASCII or Latin-1 with Latin-script stand-ins; this
          * will often use accented characters, but will only use those present in Latin-1 (which many fonts support).
          * <br>
