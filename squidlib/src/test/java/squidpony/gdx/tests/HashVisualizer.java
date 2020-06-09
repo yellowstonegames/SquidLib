@@ -3172,7 +3172,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             case 4: { //Noise mode
                 switch (noiseMode) {
                     case 0:
-                        Gdx.graphics.setTitle("Perlin Noise, 3 manual octaves at " + Gdx.graphics.getFramesPerSecond() +
+                        Gdx.graphics.setTitle("Seeded Noise, 3 manual octaves at " + Gdx.graphics.getFramesPerSecond() +
                                 " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
@@ -3182,9 +3182,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         //prepare((
                                         //PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
                                         //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
-                                        PerlinNoise.noise(xx * 0.25, yy * 0.25) * 4 +
-                                        PerlinNoise.noise(xx * 0.5, yy * 0.5) * 2 +
-                                        PerlinNoise.noise(xx, yy)
+                                        SeededNoise.noise(xx * 0.02777777777777777, yy * 0.02777777777777777, 123456789) * 4 +
+                                        SeededNoise.noise(xx * 0.05555555555555555, yy * 0.05555555555555555, 123456789) * 2 +
+                                        SeededNoise.noise(xx * 0.1111111111111111, yy * 0.1111111111111111, 123456789)
                                         ///) 7f);
                                         + 7f) / 14f;
                                         //+ 15f) / 30f;
@@ -3284,9 +3284,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (
                                         //PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
-                                                PerlinNoise.noise(x * 0.25, y * 0.25, ctr * 0.3) * 4 +
-                                                        PerlinNoise.noise(x * 0.5, y * 0.5, ctr * 0.3) * 2 +
-                                                        PerlinNoise.noise(x, y, ctr * 0.3)
+                                SeededNoise.noise(x * 0.02777777777777777, y * 0.02777777777777777, ctr * 0.03333333333333333, 123456789) * 4 +
+                                        SeededNoise.noise(x * 0.05555555555555555, y * 0.05555555555555555, ctr * 0.03333333333333333, 123456789) * 2 +
+                                        SeededNoise.noise(x * 0.1111111111111111, y * 0.1111111111111111, ctr * 0.03333333333333333, 123456789)
+
                                         // / 7);
 
                                                         + 7f) / 14f;

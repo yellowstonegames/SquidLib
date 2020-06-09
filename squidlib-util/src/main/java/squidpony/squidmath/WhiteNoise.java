@@ -3,7 +3,7 @@ package squidpony.squidmath;
 /**
  * Performance-oriented white noise generator for 1D, 2D, 3D, 4D, and 6D. Produces noise values from -1.0 inclusive
  * to 1.0 exclusive. Should produce a completely different double even for extremely-nearby points, so this is not a
- * kind of continuous noise like {@link PerlinNoise}. It is not actually random, and the value is always determined by
+ * kind of continuous noise like {@link SeededNoise}. It is not actually random, and the value is always determined by
  * the exact double positions (and possibly a long seed) given to it. Even a slight change should drastically alter the
  * returned value, though below some very small epsilon the results might not be different between two very close points
  * in space. The output should look like "TV static" if rendered as grayscale pixels.

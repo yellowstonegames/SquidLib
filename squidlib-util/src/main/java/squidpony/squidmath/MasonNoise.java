@@ -450,11 +450,8 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     /**
-     * Delegates to {@link WhirlingNoise#noise(double, double, double, double, long)}.
+     * Delegates to {@link FastNoise#getNoiseWithSeed(double, double, double, double, long)}
      * <br>
-     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
-     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
-     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise.
      * @param x X input
      * @param y Y input
      * @param z Z input
@@ -463,11 +460,11 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(final double x, final double y, final double z, final double w, final long seed) {
-        return WhirlingNoise.noise(x, y, z, w, seed); 
+        return FastNoise.instance.getNoiseWithSeed(x, y, z, w, seed);
     }
 
     /**
-     * Delegates to {@link SeededNoise#noise(double, double, double, double, double, double, long)}.
+     * Delegates to {@link FastNoise#getNoiseWithSeed(double, double, double, double, double, double, long)}
      * <br>
      * @param x X input
      * @param y Y input
@@ -480,6 +477,6 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      */
     public static double noise(final double x, final double y, final double z,
                                final double w, final double u, final double v, final long seed) {
-        return SeededNoise.noise(x, y, z, w, u, v, seed);
+        return FastNoise.instance.getNoiseWithSeed(x, y, z, w, u, v, seed);
     }
 }

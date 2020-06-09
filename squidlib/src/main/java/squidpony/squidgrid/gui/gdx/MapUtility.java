@@ -3,7 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import squidpony.ArrayTools;
-import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.SeededNoise;
 
 /**
  * Created by Tommy Ettinger on 7/9/2017.
@@ -1147,7 +1147,7 @@ public class MapUtility {
 
     /**
      * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using Perlin Noise are desired.
+     * animation frame if rippling water and waving grass using SeededNoise are desired.
      *
      * @param map   a char[][] that you want to be find background lightness modifiers for
      * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
@@ -1162,7 +1162,7 @@ public class MapUtility {
 
     /**
      * Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,
-     * accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired.
+     * accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired.
      *
      * @param lights an int[][] that will be modified, filled with lighting ints; must match map's size
      * @param map    a char[][] that you want to be find background lightness modifiers for
@@ -1204,13 +1204,13 @@ public class MapUtility {
                         lights[i][j] = -10;
                         break;
                     case ',':
-                        lights[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));
+                        lights[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
                         break;
                     case '~':
-                        lights[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));
+                        lights[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
                         break;
                     case '"':
-                        lights[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));
+                        lights[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
                         break;
                     case '^':
                         lights[i][j] = 40;
@@ -1225,7 +1225,7 @@ public class MapUtility {
 
     /**
      * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars
+     * animation frame if rippling water and waving grass using SeededNoise are desired. Also allows additional chars
      * to be treated like deep and shallow liquid regarding the ripple animation.
      *
      * @param map           a char[][] that you want to be find background lightness modifiers for
@@ -1242,7 +1242,7 @@ public class MapUtility {
     }
     /**
      * Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,
-     * accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired. Also
+     * accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired. Also
      * allows additional chars to be treated like deep and shallow liquid regarding the ripple animation.
      *
      * @param lights an int[][] that will be modified, filled with lighting ints; must match map's size
@@ -1287,22 +1287,22 @@ public class MapUtility {
                         lights[i][j] = -10;
                         break;
                     case ',':
-                        lights[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));
+                        lights[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
                         break;
                     case '~':
-                        lights[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));
+                        lights[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
                         break;
                     case '"':
-                        lights[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));
+                        lights[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
                         break;
                     case '^':
                         lights[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            lights[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.55) * 0.45 - 0.7));
+                            lights[i][j] = (int) (180 * (SeededNoise.noise(i * 0.46, j * 0.46, frame * 0.041, 987654321) * 0.45 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            lights[i][j] = (int) (110 * (PerlinNoise.noise(i * 3.1, j * 3.1, frame * 0.3) * 0.4 - 0.65));
+                            lights[i][j] = (int) (110 * (SeededNoise.noise(i * 0.56, j * 0.56, frame * 0.061, 987654321) * 0.4 - 0.65));
                         else lights[i][j] = 0;
                 }
             }
