@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode = 0, rngMode = 0, noiseMode = 90, otherMode = 1;//142
+    private int hashMode = 0, rngMode = 0, noiseMode = 5, otherMode = 1;//142
 
     private FilterBatch batch;
     
@@ -1368,10 +1368,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return (n * n * (3 - 2 * n));
     }
 
-    private float getGray(float brightness) {
-//        return Float.intBitsToFloat((int)(brightness * 255) * 0x00010101 | 0xFE000000);
+    /**
+     * If you're editing the source of HashVisualizer, you can comment out one line and uncomment another to change
+     * how this shows values in the 0-1 range, typically for noise.
+     * @param brightness a float that must be between 0.0f and 1.0f, inclusive.
+     * @return a packed float color
+     */
+    public float getGray(float brightness) {
+        //// black or white, threshold at 50%
+//        return grayscaleF[-(int)(brightness * 1.999) & 255];
+        //// colorful; purple is darkest, green middle, red brightest
         return gradientF[(int)(brightness * 255.999)];
+        //// retro green-scale, with the darkest colors in the middle
 //        return bumpF[(int)(brightness * 255.999)];
+        //// grayscale, dark to light
 //        return grayscaleF[(int)(brightness * 255.999)];
     }
 
