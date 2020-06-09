@@ -1,39 +1,28 @@
 package squidpony.squidmath;
 
 /**
- * This is Ken Perlin's third revision of his noise function. It is sometimes
- * referred to as "Simplex Noise". Results are bound by (-1, 1) inclusive.
- *
- *
- * It is significantly faster than his earlier versions. This particular version
- * was originally from Stefan Gustavson. This is much preferred to the earlier
- * versions of Perlin Noise due to the reasons noted in the articles:
- * <ul>
- * <li>http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf</li>
- * <li>http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/ch02.pdf</li>
- * </ul>
- * But, Gustavson's paper is not without its own issues, particularly for 2D noise.
- * More detail is noted here,
- * http://stackoverflow.com/questions/18885440/why-does-simplex-noise-seem-to-have-more-artifacts-than-classic-perlin-noise#21568753
- * and some changes have been made to 2D noise generation to reduce angular artifacts.
- * Specifically for the 2D gradient table, code based on Gustavson's paper used 12
- * points, with some duplicates, and not all on the unit circle. In this version,
- * points are used on the unit circle starting at (1,0) and moving along the circle
- * in increments of 1.61803398875 radians, that is, the golden ratio phi, getting the
- * sin and cosine of 15 points after the starting point and storing them as constants.
- * This definitely doesn't have a noticeable 45 degree angle artifact, though it does
- * have, to a lesser extent, some other minor artifacts.
+ * Delegates to {@link ClassicNoise} methods and always uses the same seed (123456789); that means this produces 
+ * "Classic Perlin Noise" and not Simplex Noise (both were created by Ken Perlin). ClassicNoise provides more options
+ * because it implements {@link squidpony.squidmath.Noise.Noise2D} and other Noise interfaces; you can use Noise2D and
+ * its relatives with classes like {@link squidpony.squidmath.Noise.Ridged2D}. You could also use {@link FastNoise} with
+ * {@link FastNoise#PERLIN_FRACTAL} as its noiseType, which includes features like adding together multiple octaves or
+ * the above ridged noise. This is pretty much here as a bare-bones, basic noise generator.
  * <br>
- * You can also consider {@link WhirlingNoise} as an alternative, which can be faster
- * and also reduces the likelihood of angular artifacts. WhirlingNoise does not scale its
- * input (it doesn't need to), so it won't produce the same results as PerlinNoise for the
- * same inputs, but it will produce similar shape, density, and aesthetic quality of noise.
- * @see WhirlingNoise A subclass that has a faster implementation and some different qualities.
+ * This formerly produced Simplex noise, which was incredibly confusing; if you want that type of noise you should use
+ * {@link SeededNoise}. To exactly reproduce the old PerlinNoise methods, you can call
+ * {@code return SeededNoise.noise(x * 0.11709966304863834, y * 0.11709966304863834, 123456789)} for 2D,
+ * {@code return SeededNoise.noise(x * 0.11709966304863834, y * 0.11709966304863834, z * 0.11709966304863834, 123456789)} for 3D, or
+ * {@code return SeededNoise.noise(x * 0.11709966304863834, y * 0.11709966304863834, z * 0.11709966304863834, w * 0.11709966304863834, 123456789)} for 4D.
+ * {@code 0.11709966304863834} is just the frequency this uses; it's {@code 1.0 / Math.E / Math.PI}, which is meant to
+ * hit an integer multiple very rarely.
  */
 public class PerlinNoise {
 
+    /**
+     * This class simply calls methods from {@link ClassicNoise} and multiplies the inputs by 0.11709966304863834, or
+     * {@code 1.0 / Math.E / Math.PI}. Where a seed is used, it's always 123456789.
+     */
     public static final double SCALE = 1.0 / Math.E / Math.PI;
-    //phi = 1.61803398875, unit1_4 = 0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;
 
     protected PerlinNoise()
     {
@@ -41,22 +30,20 @@ public class PerlinNoise {
     }
     
     /**
-     * 2D simplex noise.
-     * This doesn't use its parameters verbatim; xin and yin are both effectively divided by
-     * ({@link Math#E} * {@link Math#PI}), because without a step like that, any integer parameters would return 0 and
-     * only doubles with a decimal component would produce actual noise. This step allows integers to be passed in a
-     * arguments, and changes the cycle at which 0 is repeated to multiples of (E*PI).
+     * Delegates to {@link ClassicNoise#getNoiseWithSeed(double, double, long)}; multiplies its inputs by {@link #SCALE}
+     * and uses a seed of 123456789.
      *
      * @param xin x input; works well if between 0.0 and 1.0, but anything is accepted
      * @param yin y input; works well if between 0.0 and 1.0, but anything is accepted
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double xin, double yin) {
-        return SeededNoise.noise(xin * SCALE, yin * SCALE, 123456789);
+        return ClassicNoise.instance.getNoiseWithSeed(xin * 0.11709966304863834, yin * 0.11709966304863834, 123456789);
     }
 
     /**
-     * 3D simplex noise.
+     * Delegates to {@link ClassicNoise#getNoiseWithSeed(double, double, double, long)}; multiplies its inputs by
+     * {@link #SCALE} and uses a seed of 123456789.
      *
      * @param xin X input
      * @param yin Y input
@@ -64,19 +51,20 @@ public class PerlinNoise {
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double xin, double yin, double zin) {
-        return SeededNoise.noise(xin * SCALE, yin * SCALE, zin * SCALE, 123456789);
+        return ClassicNoise.instance.getNoiseWithSeed(xin * 0.11709966304863834, yin * 0.11709966304863834, zin * 0.11709966304863834, 123456789);
     }
 
     /**
-     * 4D simplex noise.
+     * Delegates to {@link ClassicNoise#getNoiseWithSeed(double, double, double, double, long)}; multiplies its inputs
+     * by {@link #SCALE} and uses a seed of 123456789.
      *
      * @param x X position
      * @param y Y position
      * @param z Z position
-     * @param w Fourth-dimensional position. It is I, the Fourth-Dimensional Ziltoid the Omniscient!
+     * @param w W position (fourth dimension)
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double x, double y, double z, double w) {
-        return SeededNoise.noise(x * SCALE, y * SCALE, z * SCALE, w * SCALE, 123456789);
+        return ClassicNoise.instance.getNoiseWithSeed(x * 0.11709966304863834, y * 0.11709966304863834, z * 0.11709966304863834, w * 0.11709966304863834, 123456789);
     }
 }

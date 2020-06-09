@@ -2,7 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.squidmath.IRNG;
-import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.SeededNoise;
 
 /**
  * Created by Tommy Ettinger on 8/7/2016.
@@ -49,7 +49,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
      * a constant corresponding to the same kind of area, e.g. ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be
      * given to roomShape but preferably would not be given to the others. If the combination of arguments is
      * invalid, such as if they are all 0, this uses the default shapes: expanded room and corridor walls, and
-     * chaotic cave walls controlled by Perlin noise.
+     * chaotic cave walls controlled by {@link SeededNoise}.
      * <br>
      * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and
      * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you
@@ -76,7 +76,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
      * clarity, the 3 fields should each be given a constant corresponding to the same kind of area, e.g.
      * ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be given to roomShape but preferably would not be given to
      * the others. If the combination of arguments is invalid, such as if they are all 0, this uses the default
-     * shapes: expanded room and corridor walls, and chaotic cave walls controlled by Perlin noise.
+     * shapes: expanded room and corridor walls, and chaotic cave walls controlled by {@link SeededNoise}.
      * <br>
      * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and
      * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you
@@ -270,7 +270,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             default:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
+                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) > -0.2) {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
@@ -312,7 +312,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case DungeonUtility.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
+                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {
@@ -489,7 +489,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             default:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
+                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) > -0.2) {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
@@ -531,7 +531,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case DungeonUtility.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
-                                        if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
+                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {

@@ -1,6 +1,5 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.FOV;
 import squidpony.squidmath.Coord;
@@ -9,7 +8,6 @@ import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.IStatefulRNG;
 import squidpony.squidmath.OrthoLine;
-import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;

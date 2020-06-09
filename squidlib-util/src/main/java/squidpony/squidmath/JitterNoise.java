@@ -9,18 +9,18 @@ import static squidpony.squidmath.SeededNoise.grad4d;
 
 /**
  * "Classic Perlin" noise with jitter applied to the grid it operates on. Not to be confused with the Simplex Noise also
- * created by Ken Perlin (which is in {@link PerlinNoise}), or with the non-jittered but similar {@link ClassicNoise}.
+ * created by Ken Perlin (which is in {@link SeededNoise}), or with the non-jittered but similar {@link ClassicNoise}.
  * This noise can in theory be scaled up to arbitrary dimensions, but in practice uses unreasonably hefty amounts of
  * memory when dimensionality exceeds 10 or so, since it needs to hash {@code Math.pow(2, dimensionality)} points per
  * sample of noise, which involves over a thousand points in 10 dimensions and over a million points in 20 dimensions.
  * For that reason, it's limited to 6D noise here, and also implements 2D, 3D, and 4D. Its performance is similar to
- * {@link WhirlingNoise} in 2D, and slows down further on 3D, 4D, and especially 6D. However, due to the grid jitter,
+ * {@link SeededNoise} in 2D, and slows down further on 3D, 4D, and especially 6D. However, due to the grid jitter,
  * its quality is improved substantially over vanilla Simplex Noise, and it appears more detailed with one octave than
  * Simplex does. This uses different gradient vectors than what was recommended in the "Improved
  * Perlin Noise" paper, since the ones this uses avoid 45-degree angular artifacts in all dimensions implemented.
  * <br>
  * ClassicNoise is recommended for most usage in {@link squidpony.squidgrid.mapping.WorldMapGenerator} that needs a
- * Noise3D implementation, and it tends to about as fast as {@link WhirlingNoise} in 3D with less artifacts. JitterNoise
+ * Noise3D implementation, and it tends to about as fast as {@link SeededNoise} in 3D with less artifacts. JitterNoise
  * is a fair amount slower than ClassicNoise, but it has much better quality in 2D and may have somewhat-better quality
  * in higher dimensions as well. There's probably no reason to prefer JitterNoise over ClassicNoise for 6D output,
  * because they're practically indistinguishable other than ClassicNoise being much faster.

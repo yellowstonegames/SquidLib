@@ -8,21 +8,25 @@ import static squidpony.squidmath.SeededNoise.grad3d;
 import static squidpony.squidmath.SeededNoise.grad4d;
 
 /**
- * "Classic Perlin" noise, as opposed to the Simplex Noise also created by Ken Perlin (which is in {@link PerlinNoise}).
+ * "Classic Perlin" noise, as opposed to the Simplex Noise also created by Ken Perlin (which is produced by
+ * {@link SeededNoise}; both can be produced by {@link FastNoise}).
  * This noise can in theory be scaled up to arbitrary dimensions, but in practice uses unreasonably hefty amounts of
  * memory when dimensionality exceeds 10 or so, since it needs to hash {@code Math.pow(2, dimensionality)} points per
  * sample of noise, which involves over a thousand points in 10 dimensions and over a million points in 20 dimensions.
  * For that reason, it's limited to 6D noise here, and also implements 2D, 3D, and 4D. Its performance is surprisingly
  * good at 2D, 3D, and 4D but trails off quickly at 6D. Its quality is worse than normal simplex noise in 2D, but you
  * can use {@link JitterNoise} (which takes the same algorithm and distorts the grid pseudo-randomly) to get unusually
- * high-quality 2D noise. The 3D and higher dimensionality versions don't seem to need jitter to avoid grid artifacts,
- * at least most of the time. This uses different gradient vectors than what was recommended in the "Improved Perlin
- * Noise" paper, since the ones this uses avoid 45-degree angular artifacts in all dimensions implemented.
+ * high-quality 2D noise. The quality is actually quite good in 4D and higher; there's often some rhythmic patterns in
+ * 3D when time is z, but with 4 or 6 dimensions this can have fewer artifacts than Simplex in the same dimension. The
+ * 3D and higher dimensionality versions don't seem to need jitter to avoid grid artifacts, at least most of the time.
+ * This uses different gradient vectors than what was recommended in the "Improved Perlin Noise" paper, since the ones
+ * this uses avoid 45-degree angular artifacts in all dimensions implemented.
  * <br>
  * ClassicNoise is a good choice with parts of {@link squidpony.squidgrid.mapping.WorldMapGenerator} that need a
- * Noise3D implementation, and it tends to about as fast as {@link WhirlingNoise} in 3D. It is not recommended for 2D
- * use; prefer {@link JitterNoise} or {@link WhirlingNoise} for that. You can also use {@link FastNoise} with
+ * Noise3D implementation, and it tends to about as fast as {@link SeededNoise} in 3D. It is not recommended for 2D
+ * use; prefer {@link JitterNoise} or {@link SeededNoise} for that. You can also use {@link FastNoise} with
  * {@link FastNoise#PERLIN_FRACTAL} as the noiseType if you primarily want to use float input and get float output.
+ * If you want higher-dimensional noise than this supports, you can use {@link PhantomNoise}.
  */
 public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     public static final ClassicNoise instance = new ClassicNoise();

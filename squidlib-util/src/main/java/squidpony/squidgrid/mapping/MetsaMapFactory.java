@@ -2,7 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.SeededNoise;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * A map generation factory using Perlin noise to make island chain style maps.
- *
+ * <br>
  * Based largely on work done by Metsa from #rgrd .  This is marked Beta, despite having been in SquidLib for years,
  * because it could still be modified as a simpler substitute for {@link WorldMapGenerator}. WorldMapGenerator does tend
  * to produce much higher quality in its maps, however, due to calculating heat and moisture levels as well as height,
@@ -129,7 +129,7 @@ public class MetsaMapFactory {
     }
 
 	public double[][] makeHeightMap() {
-        double[][] map = HeightMapFactory.heightMap(width, height, rng.nextInt() * 0x1p-16f);
+        double[][] map = HeightMapFactory.heightMap(width, height, rng.nextLong());
 
         for (int x = 0; x < width / 8; x++) {
             for (int y = 0; y < height; y++) {
@@ -180,7 +180,7 @@ public class MetsaMapFactory {
             for (int y = 0; y < height; y++) {
                 biomeMap[x][y] = 0;
                 double distanceFromEquator = Math.abs(y - height * 0.5) / (height * 0.5);
-                distanceFromEquator += PerlinNoise.noise(x * 0.0625, y * 0.0625) / 8 + map[x][y] / 32;
+                distanceFromEquator += SeededNoise.noise(x * 0.0073, y * 0.0073, 123456789) / 8 + map[x][y] / 32;
                 if (distanceFromEquator > POLAR_LIMIT) {
                     biomeMap[x][y] = 1;
                 }

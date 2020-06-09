@@ -9,7 +9,7 @@ import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.SeededNoise;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -112,7 +112,7 @@ public class SquidLayers extends Group {
     }
     /**
      * Alters the lightnesses that affect the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link PerlinNoise} are desired. It may make sense to
+     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
      * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
      * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
      * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
@@ -125,7 +125,7 @@ public class SquidLayers extends Group {
 
     /**
      * Alters the lightnesses that affect the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link PerlinNoise} are desired. It may make sense to
+     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
      * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
      * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
      * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
@@ -141,7 +141,7 @@ public class SquidLayers extends Group {
     }
     /**
      * Alters the lightnesses that affect the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link PerlinNoise} are desired. It may make sense to
+     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
      * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
      * Also allows additional chars to be treated like deep and shallow water regarding the ripple animation.
      * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
@@ -189,24 +189,23 @@ public class SquidLayers extends Group {
                         lightnesses[i][j] = -10;
                         break;
                     case ',':
-                        lightnesses[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));
+                        lightnesses[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));
                         break;
                     case '~':
-                        lightnesses[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));
+                        lightnesses[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));
                         break;
                     case '"':
-                        lightnesses[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));
+                        lightnesses[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));
                         break;
                     case '^':
                         lightnesses[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            lightnesses[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.55) * 0.45 - 0.7));
+                            lightnesses[i][j] = (int) (180 * (SeededNoise.noise(i * 0.46, j * 0.46, frame * 0.041, 987654321) * 0.45 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            lightnesses[i][j] = (int) (110 * (PerlinNoise.noise(i * 3.1, j * 3.1, frame * 0.3) * 0.4 - 0.65));
-                        else
-                            lightnesses[i][j] = 0;
+                            lightnesses[i][j] = (int) (110 * (SeededNoise.noise(i * 0.56, j * 0.56, frame * 0.061, 987654321) * 0.4 - 0.65));
+                        else lightnesses[i][j] = 0;
                 }
             }
         }
