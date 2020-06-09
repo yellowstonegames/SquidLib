@@ -115,6 +115,32 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
         }
 
+        char[][] map, sdungeon;
+
+        GrowingTreeMazeGenerator mazeGenerator = new GrowingTreeMazeGenerator(40, 20, rng);
+        int methodIndex = 0;
+        String[] methodNames = {"Newest", "Oldest", "Random", "Newest/Random"};
+        for(GrowingTreeMazeGenerator.ChoosingMethod method : new GrowingTreeMazeGenerator.ChoosingMethod[]{
+                mazeGenerator.newest, mazeGenerator.oldest, mazeGenerator.random, mazeGenerator.mix(mazeGenerator.newest, 0.5, mazeGenerator.random, 0.5)}) { 
+            System.out.println("GrowingTreeMazeGenerator " + methodNames[methodIndex++] + "\n");
+            rng.setState(2252637788195L);
+
+            dungeonGenerator = new DungeonGenerator(40, 20, rng);
+//            dungeonGenerator.addDoors(9, false);
+//            dungeonGenerator.addWater(5);
+//            dungeonGenerator.addGrass(9);
+            map = mazeGenerator.generate(method);
+            dungeonGenerator.generate(ArrayTools.copy(map));
+
+            sdungeon = DungeonUtility.closeDoors(dungeonGenerator.getDungeon());
+            sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+            sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+            dungeonGenerator.setDungeon(
+                    DungeonUtility.hashesToLines(sdungeon));
+            System.out.println(dungeonGenerator);
+            System.out.println("------------------------------------------------------------");
+        }
         System.out.println("SerpentMapGenerator\n");
 
 
@@ -127,10 +153,10 @@ public class DungeonGeneratorTest {
         serpent.putWalledBoxRoomCarvers(5);
         serpent.putRoundRoomCarvers(3);
         serpent.putCaveCarvers(3);
-        char[][] map = serpent.generate();
+        map = serpent.generate();
         dungeonGenerator.generate(ArrayTools.copy(map));
 
-        char[][] sdungeon = DungeonUtility.closeDoors(dungeonGenerator.getDungeon());
+        sdungeon = DungeonUtility.closeDoors(dungeonGenerator.getDungeon());
         sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
