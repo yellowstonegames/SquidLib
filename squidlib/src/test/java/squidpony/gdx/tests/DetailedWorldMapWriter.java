@@ -110,7 +110,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         writer.setFlipY(false);
         writer.setCompression(6);
 //        writer.palette = new PaletteReducer();
-//        writer.palette.setDitherStrength(1.75f);
+//        writer.palette.setDitherStrength(1f);
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
