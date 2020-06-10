@@ -11511,16 +11511,17 @@ public class SColor extends Color implements Serializable {
      * for a pixel art editor, but it is usable for lots of high-color purposes. The original palette did not have
      * names. Naming 256 colors was an ordeal, since many of these colors are well-described by the same name, even when
      * two or more can be distinguished visually from each other. Aurora is a good option as a broad-purpose palette
-     * when using {@link PaletteReducer}, and it is the default there if no palette is specified. For pixel art or
-     * low-color edits of traditional art, this palette can reproduce a lot of realistic colors and slight changes on
-     * those colors, with many skin tones (mostly, these are numbered so 1 is the darkest skin tone in a group and
-     * higher numbers get progressively lighter; the lightest tones are {@link #AURORA_LIGHT_SKIN_9},
-     * {@link #AURORA_PINK_SKIN_4}, {@link #AURORA_BRONZE_SKIN_4}, and {@link #AURORA_DARK_SKIN_3}, with the LIGHT skin
-     * tones steadily going from warm and saturated colors at {@link #AURORA_LIGHT_SKIN_1} to more pale at 9, and the
-     * PINK skin tones meant for accents on some body parts that aren't quite skin-colored, like the lips and ears).
-     * <a href="https://i.imgur.com/CrI1LyU.png">Preview of all 256 colors, each with the hex number for its index in
-     * this array.</a> <a href="https://i.imgur.com/hufvt0v.png">Another preview of all 256 colors, but with the name of
-     * each color instead (without "Aurora " at the start).</a>
+     * when using {@link com.github.tommyettinger.anim8.PaletteReducer}, and it is the default there if no palette is
+     * specified. For pixel art or low-color edits of traditional art, this palette can reproduce a lot of realistic
+     * colors and slight changes on those colors, with many skin tones (mostly, these are numbered so 1 is the darkest
+     * skin tone in a group and higher numbers get progressively lighter; the lightest tones are
+     * {@link #AURORA_LIGHT_SKIN_9}, {@link #AURORA_PINK_SKIN_4}, {@link #AURORA_BRONZE_SKIN_4}, and
+     * {@link #AURORA_DARK_SKIN_3}, with the LIGHT skin tones steadily going from warm and saturated colors at
+     * {@link #AURORA_LIGHT_SKIN_1} to more pale at 9, and the PINK skin tones meant for accents on some body parts that
+     * aren't quite skin-colored, like the lips and ears). <a href="https://i.imgur.com/CrI1LyU.png">Preview of all 256
+     * colors, each with the hex number for its index in this array.</a>
+     * <a href="https://i.imgur.com/hufvt0v.png">Another preview of all 256 colors, but with the name of each color
+     * instead (without "Aurora " at the start).</a>
      */
     public static final SColor[] DAWNBRINGER_AURORA = {
             AURORA_TRANSPARENT, AURORA_PITCH_BLACK, AURORA_COAL_BLACK, AURORA_SHADOW, AURORA_GRAPHITE, AURORA_SMOKE, AURORA_LEAD, AURORA_IRON,

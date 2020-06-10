@@ -12,11 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.PNG8;
-import squidpony.squidgrid.gui.gdx.PaletteReducer;
+import com.github.tommyettinger.anim8.AnimatedGif;
+import com.github.tommyettinger.anim8.PaletteReducer;
 import squidpony.squidmath.*;
-
-import java.io.IOException;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_POINTS;
@@ -39,12 +37,12 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private HastyPointHash hph = new HastyPointHash();
     private IntPointHash iph = new IntPointHash();
     private FlawedPointHash.RugHash rug = new FlawedPointHash.RugHash(1);
-    private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 32);
+    private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, rug, quilt, cube};
 
-    private static final int width = 64, height = 64;
+    private static final int width = 128, height = 128;
 
     private InputAdapter input;
     
@@ -52,7 +50,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private int ctr = -256;
     private boolean keepGoing = true;
     
-    private PNG8 png8;
+    private AnimatedGif gif;
     private Array<Pixmap> frames = new Array<>(64);
 
     public static float basicPrepare(float n)
@@ -64,8 +62,10 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new ScreenViewport();
-        png8 = new PNG8();
-        png8.palette = new PaletteReducer(new int[] {
+        noise.setPointHash(quilt);
+        noise.setFractalType(FastNoise.RIDGED_MULTI);
+        gif = new AnimatedGif();
+        gif.palette = new PaletteReducer(new int[] {
                 0x000000FF, 0x081820FF, 0x132C2DFF, 0x1E403BFF, 0x295447FF, 0x346856FF, 0x497E5BFF,
                 0x5E9463FF, 0x73AA69FF, 0x88C070FF, 0x9ECE88FF, 0xB4DCA0FF, 0xCAEAB8FF, 0xE0F8D0FF, 0xEFFBE7FF,
                 0xFFFFFFFF,
@@ -107,10 +107,10 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                     case ENTER:
                         frames.clear();
                         for (int c = 0; c < 64; c++) {
-                            Pixmap p = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-                            for (int x = 0; x < width; x++) {
-                                for (int y = 0; y < height; y++) {
-                                    float color = basicPrepare(noise.getConfiguredNoise(x-1, y-1, c));
+                            Pixmap p = new Pixmap(128, 128, Pixmap.Format.RGBA8888);
+                            for (int x = 0; x < 128; x++) {
+                                for (int y = 0; y < 128; y++) {
+                                    float color = basicPrepare(noise.getConfiguredNoise(x, y, c));
                                     color *= color * 0.8125f;
                                     p.setColor(color, color, color, 1f);
                                     p.drawPixel(x, y);
@@ -118,11 +118,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
                             }
                             frames.add(p);
                         }
-                        try {
-                            png8.write(Gdx.files.local("green.png"), frames, 16, true);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        gif.write(Gdx.files.local("green.gif"), frames, 12);
+                        
                         break;
                     case P: //pause
                         keepGoing = !keepGoing;

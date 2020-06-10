@@ -9,7 +9,11 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
+import com.github.tommyettinger.anim8.PNG8;
+import com.github.tommyettinger.anim8.PaletteReducer;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.NumberTools;
@@ -33,7 +37,7 @@ import static squidpony.squidgrid.gui.gdx.SColor.*;
  * Shows all of the Biva variations before showing the da Vinci variations.
  */
 public class QuantizeDemo extends ApplicationAdapter {
-    private static final boolean WRITING = false;
+    private static final boolean WRITING = true;
     
     private static final int width = 574, width1 = width, width2 = 404, height = 600, height1 = 480;
     private FilterBatch batch;
@@ -89,16 +93,8 @@ public class QuantizeDemo extends ApplicationAdapter {
         auroraPalette = new PaletteReducer();
         png8.palette = auroraPalette;
         if(WRITING) {
-            try {
-                png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Aurora.png"), bivaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Aurora.png", ex);
-            }
-            try {
-                png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Aurora.png"), monaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Aurora.png", ex);
-            }
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Aurora.png"), bivaOriginal, false);
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Aurora.png"), monaOriginal, false);
             // use computed palette
             try {
                 png.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG32.png"), bivaOriginal);
@@ -116,51 +112,32 @@ public class QuantizeDemo extends ApplicationAdapter {
         colorsPalette = new PaletteReducer(colors, 400);
         png8.palette = bivaPalette;
         if(WRITING) {
-            try {
-                png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
-            }
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
             png8.palette = new PaletteReducer(monaOriginal, 400);
-            try {
-                png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
+            CrossHash.Curlup[] hs = new CrossHash.Curlup[255];
+            for (int i = 0; i < 255; i++) {
+                hs[i] = new CrossHash.Curlup(i);
             }
-            try {
-                png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Mona.png", ex);
+            int[] palette = new int[256];
+            String text = "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.";
+            for (int i = 1; i < 256; i++) {
+                palette[i] = hs[i - 1].hash(text) * i | 0xFF;
             }
-            try {
-                final String text = "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.";
-                final int alter = CrossHash.hash(text) << 8;
-                for (int i = png8.palette.paletteArray[0] == 0 ? 1 : 0; i < png8.palette.paletteArray.length; i++) {
-                    png8.palette.paletteArray[i] ^= alter;
-                }
-                png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Declaration.png"), monaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Declaration.png", ex);
-            }
+            png8.palette.exact(palette);
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Declaration.png"), monaOriginal, false);
 
             png8.palette = new PaletteReducer(monaOriginal, 400);
-            try {
-                final String text = "Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.";
-                final int alter = CrossHash.hash(text) << 8;
-                for (int i = png8.palette.paletteArray[0] == 0 ? 1 : 0; i < png8.palette.paletteArray.length; i++) {
-                    png8.palette.paletteArray[i] ^= alter;
-//                png8.palette.paletteArray[i] ^= new CrossHash.Mist(DiverRNG.determine(i), DiverRNG.randomize(i)).hash(text) & 0x1F1F1F00;
-                }
-                png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Art_Of_War.png"), monaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Art_Of_War.png", ex);
+
+            text = "Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.";
+            for (int i = 1; i < 256; i++) {
+                palette[i] = hs[i - 1].hash(text) * i | 0xFF;
             }
+            png8.palette.exact(palette);
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Art_Of_War.png"), monaOriginal, false);
             png8.palette = bivaPalette;
-            try {
-                png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Biva.png"), monaOriginal, false);
-            } catch (IOException ex) {
-                throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Biva.png", ex);
-            }
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Biva.png"), monaOriginal, false);
         }
         png8.palette = bivaPalette;
 
@@ -212,30 +189,30 @@ public class QuantizeDemo extends ApplicationAdapter {
             case 2:
                 Gdx.graphics.setTitle("(Adaptive Palette, Floyd-Steinberg dither) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
-                bivaPalette.reduce(edit);
+                bivaPalette.reduceFloydSteinberg(edit);
                 break;
             case 3:
-                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(Adaptive Palette, Knoll-Roberts dither) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
-                bivaPalette.reduceBurkes(edit);
+                bivaPalette.reduceKnollRoberts(edit);
                 break;
             case 4:
-                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(Adaptive Palette, Jimenez dither) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
                 bivaPalette.reduceJimenez(edit);
                 break;
             case 5:
                 Gdx.graphics.setTitle("(DawnBringer Aurora, Floyd-Steinberg dither)  Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
-                auroraPalette.reduce(edit);
+                auroraPalette.reduceFloydSteinberg(edit);
                 break;
             case 6:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Knoll-Roberts dither) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
-                auroraPalette.reduceBurkes(edit);
+                auroraPalette.reduceKnollRoberts(edit);
                 break;
             case 7:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither)  Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Jimenez dither)  Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
                 auroraPalette.reduceJimenez(edit);
                 break;
@@ -289,12 +266,12 @@ public class QuantizeDemo extends ApplicationAdapter {
                 monaPalette.reduce(edit);
                 break;
             case 12:
-                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(Adaptive Palette, Knoll-Roberts dither) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
-                monaPalette.reduceBurkes(edit);
+                monaPalette.reduceKnollRoberts(edit);
                 break;
             case 13:
-                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(Adaptive Palette, Jimenez dither) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
                 monaPalette.reduce(edit);
                 break;
@@ -304,12 +281,12 @@ public class QuantizeDemo extends ApplicationAdapter {
                 auroraPalette.reduce(edit);
                 break;
             case 15:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Knoll-Roberts dither) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
-                auroraPalette.reduceBurkes(edit);
+                auroraPalette.reduceKnollRoberts(edit);
                 break;
             case 16:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Jimenez dither) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
                 auroraPalette.reduceJimenez(edit);
                 break;
@@ -363,12 +340,12 @@ public class QuantizeDemo extends ApplicationAdapter {
                 colorsPalette.reduce(edit);
                 break;
             case 21:
-                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) Hilbert Hues");
+                Gdx.graphics.setTitle("(Adaptive Palette, Knoll-Roberts dither) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
-                colorsPalette.reduceBurkes(edit);
+                colorsPalette.reduceKnollRoberts(edit);
                 break;
             case 22:
-                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) Hilbert Hues");
+                Gdx.graphics.setTitle("(Adaptive Palette, Jimenez dither) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 colorsPalette.reduceJimenez(edit);
                 break;
@@ -378,12 +355,12 @@ public class QuantizeDemo extends ApplicationAdapter {
                 auroraPalette.reduce(edit);
                 break;
             case 24:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) Hilbert Hues");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Knoll-Roberts dither) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
-                auroraPalette.reduceBurkes(edit);
+                auroraPalette.reduceKnollRoberts(edit);
                 break;
             case 25:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither)  Hilbert Hues");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Jimenez dither)  Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 auroraPalette.reduceJimenez(edit);
                 break;

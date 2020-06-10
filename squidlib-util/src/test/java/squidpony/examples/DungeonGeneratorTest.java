@@ -234,11 +234,12 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
-/*
-        dungeonGenerator = new DungeonGenerator(width, height, rng);
+        System.out.println("PacMazeGenerator\n");
+
+        dungeonGenerator = new DungeonGenerator(30, 30, rng);
         //dungeonGenerator.addDoors(10, false);
         rng.setState(2252637788195L);
-        PacMazeGenerator pac = new PacMazeGenerator(width, height, rng);
+        PacMazeGenerator pac = new PacMazeGenerator(30, 30, rng);
         map = pac.generate();
         dungeonGenerator.generate(map);
 
@@ -251,7 +252,7 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
 
         System.out.println("------------------------------------------------------------");
-*/
+
         System.out.println("OrganicMapGenerator\n");
 
         rng.setState(2252637788195L);
@@ -399,7 +400,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("ConnectingMapGenerator\n");
         rng.setState(1L);
-        ConnectingMapGenerator cmg = new ConnectingMapGenerator(60, 30, 1, 1, rng, 2);
+        ConnectingMapGenerator cmg = new ConnectingMapGenerator(30, 30, 1, 1, rng, 2);
         sdg.clearEffects();
         //sdg.addGrass(DungeonUtility.CORRIDOR_FLOOR, 20);
         cmg.generate();
@@ -408,8 +409,8 @@ public class DungeonGeneratorTest {
         dungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         dungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(
-                DungeonUtility.hashesToLines(dungeon, true));
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(dungeon, true)));
         System.out.println(dungeonGenerator);
         System.out.println();
         dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));

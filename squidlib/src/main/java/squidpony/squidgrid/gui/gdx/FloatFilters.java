@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.NumberTools;
+import com.github.tommyettinger.anim8.PaletteReducer;
 
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
 import static squidpony.squidgrid.gui.gdx.SColor.lerpFloatColorsBlended;
