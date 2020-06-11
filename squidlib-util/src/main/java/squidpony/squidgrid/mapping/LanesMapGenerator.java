@@ -119,8 +119,9 @@ public class LanesMapGenerator implements IDungeonGenerator {
         temp = CoordPacker.hilbertToCoord(m);
         Coord starter = CoordPacker.hilbertToCoord(m);
         m += r;
+        ArrayList<Coord> cl = new ArrayList<>(4);
         for (int i = r; i < 256 && m < 256 - 9; i += r, m += r) {
-            List<Coord> cl = new ArrayList<>(4);
+            cl.clear();
             cl.add(Coord.get(columns[temp.x], rows[temp.y]));
             temp = CoordPacker.hilbertToCoord(m);
             r = random.between(8, 24);

@@ -207,7 +207,7 @@ public class GreasedRegionTest {
 //        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
 
         DividedMazeGenerator mazeGen = new DividedMazeGenerator(120, 120);
-        System.out.println(gr2.refill(mazeGen.create()).not().toString());
+        System.out.println(gr2.refill(mazeGen.generate(), '.').toString());
     }
 
     public static int FOV_RANGE = 12;
