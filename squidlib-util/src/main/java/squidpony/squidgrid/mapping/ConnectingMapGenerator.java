@@ -90,7 +90,7 @@ public class ConnectingMapGenerator implements IDungeonGenerator {
     public char[][] dungeon;
     public int[][] environment;
     public GreasedRegion region;
-    private transient GreasedRegion tempRegion;
+    private final transient GreasedRegion tempRegion;
     public IRNG rng;
 
     /**
