@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 
@@ -12,13 +13,15 @@ import java.util.*;
 /**
  * This class provides methods for calculating Field of View in grids. Field of
  * View (FOV) algorithms determine how much area surrounding a point can be
- * seen. They return a two dimensional array of doubles, representing the amount
- * of view (typically sight, but perhaps sound, smell, etc.) which the origin
- * has of each cell.
+ * seen. They return a 2D array of doubles, representing the amount of view
+ * (typically sight, but perhaps sound, smell, etc.) which the origin has of
+ * each cell. In the returned 2D array, 1.0 is always "fully seen," while 0.0
+ * is always "unseen." Values in between are much more common, and they enable
+ * this class to be used for lighting effects.
  * <br>
  * The input resistanceMap is considered the percent of opacity. This resistance
  * is on top of the resistance applied from the light spreading out. You can
- * obtain a resistance map easily with the DungeonUtility.generateResistances()
+ * obtain a resistance map easily with the {@link #generateResistances(char[][])}
  * method, which uses defaults for common chars used in SquidLib, but you may
  * also want to create a resistance map manually if a given char means something
  * very different in your game. This is easy enough to do by looping over all the
@@ -26,17 +29,32 @@ import java.util.*;
  * assigning a double to the same x,y position in a double[][]. The value should
  * be between 0.0 (unblocked) for things light passes through, 1.0 (blocked) for
  * things light can't pass at all, and possibly other values if you have
- * translucent obstacles.
+ * translucent obstacles. There's {@link #generateSimpleResistances(char[][])} as
+ * well, which only returns 1.0 (fully blocked) or 0.0 (passable), and 3x3 subcell
+ * variants, which produce a resistance map that is 3 times wider and 3 times
+ * taller than the input map. The subcell variants have especially useful behavior
+ * when using {@link DungeonUtility#hashesToLines(char[][])} to draw a map with
+ * box-drawing characters, since these 3x3 resistance maps will line up blocking
+ * cells to where a box-drawing line is.
  * <br>
  * The returned light map is considered the percent of light in the cells.
  * <br>
- * Not all implementations are required to provide percentage levels of light.
- * In such cases the returned values will be 0 for no light and 1.0 for fully
- * lit. Implementations that return this way note so in their documentation.
- * Currently, all implementations do provide percentage levels.
+ * All implementations for FOV here (that is, Ripple FOV and Shadow FOV) provide
+ * percentage levels for partially-lit or partially-seen cells. This leads to a
+ * straightforward implementation of soft lighting using an FOV result -- just
+ * mix the background or floor color of a cell, however you represent it, with
+ * a very light color (like pastel yellow), with the percentage of the light
+ * color to mix in equal to the percent of light in the FOV map.
  * <br>
  * All solvers perform bounds checking so solid borders in the map are not
  * required.
+ * <br>
+ * For calculating FOV maps, this class provides both instance methods, which
+ * attempt to reuse the same 2D array for light stored in the object, and static
+ * methods, which take a light 2D array as an argument and edit it in-place.
+ * In older versions of SquidLib, constantly allocating and returning 2D double
+ * arrays on each call dragged performance down, but both of the new methods
+ * should perform well.
  * <br>
  * Static methods are provided to add together FOV maps in the simple way
  * (disregarding visibility of distant FOV from a given cell), or the more
@@ -46,11 +64,14 @@ import java.util.*;
  * FOV map and can be easily obtained with calculateLOSMap().
  * <br>
  * If you want to iterate through cells that are visible in a double[][] returned
- * by FOV, you can pass that double[][] to the constructor for Region, and you
- * can use the Region as a reliably-ordered List of Coord (among other things).
- * The order Region iterates in is somewhat strange, and doesn't, for example,
- * start at the center of an FOV map, but it will be the same every time you
- * create a Region with the same FOV map (or the same visible Coords).
+ * by FOV, you can pass that double[][] to the constructor for GreasedRegion, and
+ * you can use the GreasedRegion as a reliably-ordered Collection of Coord (among
+ * other things). The order GreasedRegion iterates in is somewhat strange, and
+ * doesn't, for example, start at the center of an FOV map, but it will be the
+ * same every time you create a GreasedRegion with the same FOV map (or the same
+ * visible Coords).
+ * <br>
+ * This class is not thread-safe. This is generally true for most of SquidLib.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -58,29 +79,32 @@ public class FOV implements Serializable {
     private static final long serialVersionUID = 3258723684733275798L;
     /**
      * Performs FOV by pushing values outwards from the source location.
-     * It will go around corners a bit.
+     * It will go around corners a bit. This corresponds to a
+     * {@code rippleLooseness} of 2 in {@link #reuseRippleFOV(double[][], double[][], int, int, int, double, Radius)}.
      */
     public static final int RIPPLE = 1;
     /**
      * Performs FOV by pushing values outwards from the source location.
      * It will spread around edges like smoke or water, but maintain a
      * tendency to curl towards the start position when going around
-     * edges.
+     * edges. This corresponds to a {@code rippleLooseness} of 3
+     * in {@link #reuseRippleFOV(double[][], double[][], int, int, int, double, Radius)}.
      */
     public static final int RIPPLE_LOOSE = 2;
     /**
      * Performs FOV by pushing values outwards from the source location.
-     * It will only go around corners slightly.
+     * It will only go around corners slightly. This corresponds to a
+     * {@code rippleLooseness} of 1 in {@link #reuseRippleFOV(double[][], double[][], int, int, int, double, Radius)}.
      */
     public static final int RIPPLE_TIGHT = 3;
     /**
      * Performs FOV by pushing values outwards from the source location.
-     * It will go around corners massively.
+     * It will go around corners massively. This corresponds to a
+     * {@code rippleLooseness} of 6 in {@link #reuseRippleFOV(double[][], double[][], int, int, int, double, Radius)}.
      */
     public static final int RIPPLE_VERY_LOOSE = 4;
     /**
-     * Uses Shadow Casting FOV algorithm. Treats all translucent cells
-     * as fully transparent. Returns a percentage from 1.0 (center of
+     * Uses Shadow Casting FOV algorithm. Returns a percentage from 1.0 (center of
      * FOV) to 0.0 (outside of FOV).
      */
     public static final int SHADOW = 5;
@@ -95,12 +119,14 @@ public class FOV implements Serializable {
 	 * Data allocated in the previous calls to the public API, if any. Used to
 	 * save allocations when multiple calls are done on the same instance.
 	 */
-    protected boolean[][] nearLight;
+    protected GreasedRegion nearLight;
 
     protected static final Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
             Direction.LEFT, Direction.DOWN_LEFT, Direction.DOWN, Direction.DOWN_RIGHT};
+    private static final ArrayDeque<Coord> dq = new ArrayDeque<>();
+    private static final GreasedRegion lightWorkspace = new GreasedRegion(64, 64);
 
     /**
      * Creates a solver which will use the default SHADOW solver.
@@ -127,7 +153,7 @@ public class FOV implements Serializable {
      * calculations. The light will be treated as having infinite possible
      * radius.
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
      * @return the computed light grid
@@ -145,7 +171,7 @@ public class FOV implements Serializable {
      * of the origin cell. Radius determinations based on Euclidean
      * calculations.
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -164,7 +190,7 @@ public class FOV implements Serializable {
      * of the origin cell. Radius determinations are determined by the provided
      * RadiusStrategy.
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link squidpony.squidgrid.mapping.DungeonUtility#generateResistances(char[][])}
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -186,9 +212,9 @@ public class FOV implements Serializable {
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
                 initializeNearLight(width, height);
-                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique);
+                doRippleFOV(light, rippleValue(type), startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique);
                 break;
-            case SHADOW:
+            default:
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCast(0, d.deltaX, d.deltaY, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
                     shadowCast(d.deltaX, 0, 0, d.deltaY, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
@@ -208,7 +234,7 @@ public class FOV implements Serializable {
      * RadiusStrategy. A conical section of FOV is lit by this method if
      * span is greater than 0.
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -235,9 +261,9 @@ public class FOV implements Serializable {
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
                 initializeNearLight(width, height);
-                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique, angle, span);
+                doRippleFOV(light, rippleValue(type), startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique, angle, span);
                 break;
-            case SHADOW:
+            default:
                 light = shadowCastLimited(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
                 light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
 
@@ -269,14 +295,46 @@ public class FOV implements Serializable {
      * of the origin cell. Radius determinations based on Euclidean
      * calculations. The light will be treated as having infinite possible
      * radius.
-     *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * <br>
+     * This static method is equivalent to the static method {@link #reuseFOV(double[][], double[][], int, int)},
+     * but all of the overloads are called reuseFOV(), so this method name is discouraged for new code. Both delegate to
+     * {@link #reuseFOV(double[][], double[][], int, int, double, Radius)} anyway.
+     * 
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param light a non-null 2D double array that will have its contents overwritten, modified, and returned
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
      * @return the computed light grid (the same as {@code light})
      */
     public static double[][] calculateFOV(double[][] resistanceMap, double[][] light, int startx, int starty) {
+        return reuseFOV(resistanceMap, light, startx, starty, Integer.MAX_VALUE, Radius.CIRCLE);
+    }
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Assigns to, and returns, a light map where the values
+     * represent a percentage of fully lit. Always uses shadowcasting FOV,
+     * which allows this method to be static since it doesn't need to keep any
+     * state around, and can reuse the state the user gives it via the
+     * {@code light} parameter.  The values in light are always cleared before
+     * this is run, because prior state can make this give incorrect results.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations based on Euclidean
+     * calculations. The light will be treated as having infinite possible
+     * radius.
+     * <br>
+     * This static method is equivalent to the static method {@link #calculateFOV(double[][], double[][], int, int)},
+     * but all of the overloads are called reuseFOV(), so this method name is preferred in new code. Both delegate to
+     * {@link #reuseFOV(double[][], double[][], int, int, double, Radius)} anyway.
+     *
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
+     * @param light a non-null 2D double array that will have its contents overwritten, modified, and returned
+     * @param startx the horizontal component of the starting location
+     * @param starty the vertical component of the starting location
+     * @return the computed light grid (the same as {@code light})
+     */
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startx, int starty) {
         return reuseFOV(resistanceMap, light, startx, starty, Integer.MAX_VALUE, Radius.CIRCLE);
     }
 
@@ -293,7 +351,7 @@ public class FOV implements Serializable {
      * of the origin cell. Radius determinations based on Euclidean
      * calculations.
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -316,7 +374,7 @@ public class FOV implements Serializable {
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are determined by the provided
      * RadiusStrategy.
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
@@ -356,7 +414,7 @@ public class FOV implements Serializable {
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are determined by the provided
      * RadiusStrategy.
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
@@ -455,7 +513,7 @@ public class FOV implements Serializable {
      * of the origin cell. Radius determinations are pretty much irrelevant because
      * the distance doesn't matter, only the presence of a clear line, but this uses
      * {@link Radius#SQUARE} if it matters.
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "no line"
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
@@ -480,7 +538,7 @@ public class FOV implements Serializable {
      * of the origin cell. Radius determinations are pretty much irrelevant because
      * the distance doesn't matter, only the presence of a clear line, but this uses
      * {@link Radius#SQUARE} if it matters.
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "no line"
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
@@ -520,7 +578,7 @@ public class FOV implements Serializable {
      * RadiusStrategy.  A conical section of FOV is lit by this method if
      * span is greater than 0.
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
@@ -555,22 +613,74 @@ public class FOV implements Serializable {
     }
 
     /**
-     * Reuses the existing light 2D array and fills it with a straight-line bouncing path of light that reflects its way
-     * through the given resistanceMap from startX, startY until it uses up the given distance. The angle the path
-     * takes is given in degrees, and the angle used can change as obstacles are hit (reflecting backwards if it hits a
-     * corner pointing directly into or away from its path). This can be used something like an LOS method, but because
-     * the path can be traveled back over, an array or Queue becomes somewhat more complex, and the decreasing numbers
-     * for a straight line that stack may make more sense for how this could be used (especially with visual effects).
-     * This currently allows the path to pass through single-cell wall-like obstacles without changing direction, e.g.
-     * it passes through pillars, but will bounce if it hits a bigger wall.
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
-     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
-     * @param startX the horizontal component of the starting location
-     * @param startY the vertical component of the starting location
-     * @param distance the distance the light will extend to
-     * @param angle in degrees, the angle to start the path traveling in
-     * @return the given light parameter, after modifications
+     * Like the {@link #reuseFOV(double[][], double[][], int, int, double, Radius)} method, but this uses Ripple FOV
+     * with a configurable tightness/looseness (between 1, tightest, and 6, loosest). Other parameters are similar; you
+     * can get a resistance map from {@link #generateResistances(char[][])}, {@code light} will be modified and returned
+     * (it will be overwritten, but its size should be the same as the resistance map), there's a starting x,y position,
+     * a radius in cells, and a {@link Radius} enum constant to choose the distance measurement.
+     * @param resistanceMap probably calculated with {@link #generateResistances(char[][])}; 1.0 blocks light, 0.0 allows it
+     * @param light will be overwritten! Should be initialized with the same size as {@code resistanceMap}
+     * @param rippleLooseness affects spread; between 1 and 6, inclusive; 1 is tightest, 2 is normal, and 6 is loosest
+     * @param x starting x position to look from
+     * @param y starting y position to look from
+     * @param radius the distance to extend from the starting x,y position
+     * @param radiusTechnique how to measure distance; typically {@link Radius#CIRCLE}.
+     * @return {@code light}, after writing the FOV map into it; 1.0 is fully lit and 0.0 is unseen
      */
+    public static double[][] reuseRippleFOV(double[][] resistanceMap, double[][] light, int rippleLooseness, int x, int y, double radius, Radius radiusTechnique) {
+        ArrayTools.fill(light, 0);
+        light[x][y] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
+        lightWorkspace.resizeAndEmpty(light.length, light[0].length);
+        doRippleFOV(light, MathExtras.clamp(rippleLooseness, 1, 6), x, y, 1.0 / radius, radius, resistanceMap, lightWorkspace, radiusTechnique);
+        return light;
+    }
+
+    /**
+     * Like the {@link #reuseFOV(double[][], double[][], int, int, double, Radius, double, double)} method, but this
+     * uses Ripple FOV with a configurable tightness/looseness (between 1, tightest, and 6, loosest). Other parameters
+     * are similar; you can get a resistance map from {@link #generateResistances(char[][])}, {@code light} will be
+     * modified and returned (it will be overwritten, but its size should be the same as the resistance map), there's 
+     * starting x,y position, a radius in cells, a {@link Radius} enum constant to choose the distance measurement, and
+     * the angle/span combination to specify a conical section of FOV (span is the total in degrees, centered on angle).
+     * @param resistanceMap probably calculated with {@link #generateResistances(char[][])}; 1.0 blocks light, 0.0 allows it
+     * @param light will be overwritten! Should be initialized with the same size as {@code resistanceMap}
+     * @param rippleLooseness affects spread; between 1 and 6, inclusive; 1 is tightest, 2 is normal, and 6 is loosest
+     * @param x starting x position to look from
+     * @param y starting y position to look from
+     * @param radius the distance to extend from the starting x,y position
+     * @param radiusTechnique how to measure distance; typically {@link Radius#CIRCLE}.
+     * @param angle the angle to center the conical FOV on
+     * @param span the total span in degrees for the conical FOV to cover
+     * @return {@code light}, after writing the FOV map into it; 1.0 is fully lit and 0.0 is unseen
+     */
+    public static double[][] reuseRippleFOV(double[][] resistanceMap, double[][] light, int rippleLooseness, int x, int y, double radius, Radius radiusTechnique, double angle, double span) {
+        ArrayTools.fill(light, 0);
+        light[x][y] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
+        lightWorkspace.resizeAndEmpty(light.length, light[0].length);
+        angle = ((angle >= 360.0 || angle < 0.0)
+                ? MathExtras.remainder(angle, 360.0) : angle) * 0.002777777777777778;
+        span = span * 0.002777777777777778;
+        doRippleFOV(light, MathExtras.clamp(rippleLooseness, 1, 6), x, y, 1.0 / radius, radius, resistanceMap, lightWorkspace, radiusTechnique, angle, span);
+        return light;
+    }
+
+        /**
+         * Reuses the existing light 2D array and fills it with a straight-line bouncing path of light that reflects its way
+         * through the given resistanceMap from startX, startY until it uses up the given distance. The angle the path
+         * takes is given in degrees, and the angle used can change as obstacles are hit (reflecting backwards if it hits a
+         * corner pointing directly into or away from its path). This can be used something like an LOS method, but because
+         * the path can be traveled back over, an array or Queue becomes somewhat more complex, and the decreasing numbers
+         * for a straight line that stack may make more sense for how this could be used (especially with visual effects).
+         * This currently allows the path to pass through single-cell wall-like obstacles without changing direction, e.g.
+         * it passes through pillars, but will bounce if it hits a bigger wall.
+         * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
+         * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
+         * @param startX the horizontal component of the starting location
+         * @param startY the vertical component of the starting location
+         * @param distance the distance the light will extend to
+         * @param angle in degrees, the angle to start the path traveling in
+         * @return the given light parameter, after modifications
+         */
     public static double[][] bouncingLine(double[][] resistanceMap, double[][] light, int startX, int startY, double distance, double angle)
     {
         double rad = Math.max(1, distance);
@@ -644,18 +754,21 @@ public class FOV implements Serializable {
 	 *            The height that {@link #nearLight} should have.
 	 */
 	private void initializeNearLight(int width, int height) {
-		if (nearLight == null)
-			nearLight = new boolean[width][height];
+		if (nearLight == null) {
+		    /* Can't do much with null */
+            nearLight = new GreasedRegion(width, height);
+        }
 		else {
-			if (nearLight.length != width || nearLight[0].length != height)
-				/* Size changed */
-				nearLight = new boolean[width][height];
+			if (nearLight.width != width || nearLight.height != height) {
+                /* Size changed */
+                nearLight.resizeAndEmpty(width, height);
+            }
 			else {
 				/*
 				 * Size did not change, we simply need to erase the previous
 				 * result
 				 */
-				ArrayTools.fill(nearLight, false);
+				nearLight.clear();
 			}
 		}
 	}
@@ -672,18 +785,18 @@ public class FOV implements Serializable {
 			return 6;
 		default:
 			System.err.println("Unrecognized ripple type: " + type + ". Defaulting to RIPPLE");
-			return rippleValue(RIPPLE);
+			return 2;
 		}
 	}
 
-    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
-        final ArrayDeque<Coord> dq = new ArrayDeque<>();
+    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, double decay, double radius, double[][] map, GreasedRegion indirect, Radius radiusStrategy) {
+        dq.clear();
         int width = lightMap.length;
         int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
             Coord p = dq.removeFirst();
-            if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
+            if (lightMap[p.x][p.y] <= 0 || indirect.contains(p)) {
                 continue;//no light to spread
             }
 
@@ -691,11 +804,11 @@ public class FOV implements Serializable {
                 int x2 = p.x + dir.deltaX;
                 int y2 = p.y + dir.deltaY;
                 if (x2 < 0 || x2 >= width || y2 < 0 || y2 >= height //out of bounds
-                        || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {//+1 to cover starting tile
+                        || radiusStrategy.radius(x, y, x2, y2) >= radius + 1) {//+1 to cover starting tile
                     continue;
                 }
 
-                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy);
+                double surroundingLight = nearRippleLight(x2, y2, ripple, x, y, decay, lightMap, map, indirect, radiusStrategy);
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
@@ -708,14 +821,14 @@ public class FOV implements Serializable {
 
 
 
-    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {
-        final ArrayDeque<Coord> dq = new ArrayDeque<>();
+    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, double decay, double radius, double[][] map, GreasedRegion indirect, Radius radiusStrategy, double angle, double span) {
+	    dq.clear();
         int width = lightMap.length;
         int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
             Coord p = dq.removeFirst();
-            if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
+            if (lightMap[p.x][p.y] <= 0 || indirect.contains(p)) {
                 continue;//no light to spread
             }
 
@@ -723,15 +836,15 @@ public class FOV implements Serializable {
                 int x2 = p.x + dir.deltaX;
                 int y2 = p.y + dir.deltaY;
                 if (x2 < 0 || x2 >= width || y2 < 0 || y2 >= height //out of bounds
-                        || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {//+1 to cover starting tile
+                        || radiusStrategy.radius(x, y, x2, y2) >= radius + 1) {//+1 to cover starting tile
                     continue;
                 }
-                double newAngle = NumberTools.atan2_(y2 - starty, x2 - startx);
+                double newAngle = NumberTools.atan2_(y2 - y, x2 - x);
                 if (newAngle > span * 0.5 && newAngle < 1.0 - span * 0.5) 
                     continue;
 //if (Math.abs(MathExtras.remainder(angle - newAngle, Math.PI * 2)) > span * 0.5)
 
-                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );
+                double surroundingLight = nearRippleLight(x2, y2, ripple, x, y, decay, lightMap, map, indirect, radiusStrategy );
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
@@ -742,7 +855,7 @@ public class FOV implements Serializable {
         }
     }
 
-    private static double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
+    private static double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, GreasedRegion indirect, Radius radiusStrategy) {
         if (x == startx && y == starty) {
             return 1;
         }
@@ -792,7 +905,7 @@ public class FOV implements Serializable {
         for (Coord p : neighbors) {
             if (lightMap[p.x][p.y] > 0) {
                 lit++;
-                if (indirect[p.x][p.y]) {
+                if (indirect.contains(p)) {
                     indirects++;
                 }
                 double dist = radiusStrategy.radius(x, y, p.x, p.y);
@@ -801,7 +914,7 @@ public class FOV implements Serializable {
         }
 
         if (map[x][y] >= 1 || indirects >= lit) {
-            indirect[x][y] = true;
+            indirect.insert(x, y);
         }
         return light;
     }
@@ -1023,7 +1136,7 @@ public class FOV implements Serializable {
      * {@link #reuseFOV(double[][], double[][], int, int, double, Radius)}; otherwise
      * may produce conical shapes (potentially more than one, or overlapping ones).
      *
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
@@ -1323,7 +1436,7 @@ public class FOV implements Serializable {
      * mixVisibleFOVs() to limit extra light sources to those visible from the starting point. Just like calling
      * calculateFOV(), this creates a new double[][]; there doesn't appear to be a way to work with Ripple FOV and avoid
      * needing an empty double[][] every time, since it uses previously-placed light to determine how it should spread.
-     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param resistanceMap the grid of cells to calculate on; the kind made by {@link #generateResistances(char[][])}
      * @param startX the center of the LOS map; typically the player's x-position
      * @param startY the center of the LOS map; typically the player's y-position
      * @return an LOS map with the given starting point
@@ -1347,7 +1460,7 @@ public class FOV implements Serializable {
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
                 initializeNearLight(width, height);
-                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, Radius.SQUARE);
+                doRippleFOV(light, rippleValue(type), startX, startY, decay, rad, resistanceMap, nearLight, Radius.SQUARE);
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
                         if(light[x][y] > 0.0001)
@@ -1355,7 +1468,7 @@ public class FOV implements Serializable {
                     }
                 }
                 break;
-            case SHADOW:
+            default:
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCastBinary(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, 0, 0, width, height);
                     shadowCastBinary(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, 0, 0, width, height);
