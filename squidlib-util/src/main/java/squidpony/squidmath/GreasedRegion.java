@@ -2709,69 +2709,66 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param y the y offset to translate by; can be negative
      * @return this for chaining
      */
-    public GreasedRegion translate(int x, int y)
-    {
-        if(width < 1 || ySections <= 0 || (x == 0 && y == 0))
-            return this;
-        int start = Math.max(0, x), len = Math.min(width, width + x) - start,
-                jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
-                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
-        long[] data2 = new long[width * ySections];
-
-        long prev, tmp;
-        if (x < 0) {
-            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
-                    data2[jj * ySections + i] = data[j * ySections + oi];
-                }
-            }
-        } else if (x > 0) {
-            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                for (int j = 0, jj = start; j < len; j++, jj++) {
-                    data2[jj * ySections + i] = data[j * ySections + oi];
-                }
-            }
+    public GreasedRegion translate(int x, int y) {
+        GreasedRegion result = this;
+        if (width < 1 || ySections <= 0 || (x == 0 && y == 0)) {
         } else {
-            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                for (int j = 0; j < len; j++) {
-                    data2[j * ySections + i] = data[j * ySections + oi];
+            int start = Math.max(0, x), len = Math.min(width, width + x) - start,
+                    jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                    originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
+            long[] data2 = new long[width * ySections];
+            long prev, tmp;
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = data[j * ySections + oi];
+                    }
                 }
             }
-        }
-
-        if(lily < 0) {
-            for (int i = start; i < len; i++) {
-                prev = 0L;
-                for (int j = 0; j < ySections; j++) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
-                    data2[i * ySections + j] >>>= -lily;
-                    data2[i * ySections + j] |= tmp;
+            if (lily < 0) {
+                for (int i = start; i < len; i++) {
+                    prev = 0L;
+                    for (int j = 0; j < ySections; j++) {
+                        tmp = prev;
+                        prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                        data2[i * ySections + j] >>>= -lily;
+                        data2[i * ySections + j] |= tmp;
+                    }
+                }
+            } else if (lily > 0) {
+                for (int i = start; i < start + len; i++) {
+                    prev = 0L;
+                    for (int j = 0; j < ySections; j++) {
+                        tmp = prev;
+                        prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                        data2[i * ySections + j] <<= lily;
+                        data2[i * ySections + j] |= tmp;
+                    }
                 }
             }
-        }
-        else if(lily > 0) {
-            for (int i = start; i < start + len; i++) {
-                prev = 0L;
-                for (int j = 0; j < ySections; j++) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
-                    data2[i * ySections + j] <<= lily;
-                    data2[i * ySections + j] |= tmp;
+            if (yEndMask != -1) {
+                for (int a = ySections - 1; a < data2.length; a += ySections) {
+                    data2[a] &= yEndMask;
                 }
             }
+            data = data2;
+            tallied = false;
         }
 
 
-        if(yEndMask != -1) {
-            for (int a = ySections - 1; a < data2.length; a += ySections) {
-                data2[a] &= yEndMask;
-            }
-        }
-
-        data = data2;
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -2781,72 +2778,69 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param y the y offset to translate by; can be negative
      * @return this for chaining
      */
-    public GreasedRegion insertTranslation(int x, int y)
-    {
-        if(width < 1 || ySections <= 0 || (x == 0 && y == 0))
-            return this;
-        int start = Math.max(0, x), len = Math.min(width, width + x) - start,
-                jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
-                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
-        long[] data2 = new long[width * ySections];
-        long prev, tmp;
-        if (x < 0) {
-            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
-                    data2[jj * ySections + i] = data[j * ySections + oi];
-                }
-            }
-        } else if (x > 0) {
-            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                for (int j = 0, jj = start; j < len; j++, jj++) {
-                    data2[jj * ySections + i] = data[j * ySections + oi];
-                }
-            }
+    public GreasedRegion insertTranslation(int x, int y) {
+        GreasedRegion result = this;
+        if (width < 1 || ySections <= 0 || (x == 0 && y == 0)) {
         } else {
-            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
-                for (int j = 0; j < len; j++) {
-                    data2[j * ySections + i] = data[j * ySections + oi];
+            int start = Math.max(0, x), len = Math.min(width, width + x) - start,
+                    jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                    originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
+            long[] data2 = new long[width * ySections];
+            long prev, tmp;
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = data[j * ySections + oi];
+                    }
                 }
             }
-        }
-
-        if(lily < 0) {
-            for (int i = start; i < len; i++) {
-                prev = 0L;
-                for (int j = 0; j < ySections; j++) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
-                    data2[i * ySections + j] >>>= -lily;
-                    data2[i * ySections + j] |= tmp;
+            if (lily < 0) {
+                for (int i = start; i < len; i++) {
+                    prev = 0L;
+                    for (int j = 0; j < ySections; j++) {
+                        tmp = prev;
+                        prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                        data2[i * ySections + j] >>>= -lily;
+                        data2[i * ySections + j] |= tmp;
+                    }
+                }
+            } else if (lily > 0) {
+                for (int i = start; i < start + len; i++) {
+                    prev = 0L;
+                    for (int j = 0; j < ySections; j++) {
+                        tmp = prev;
+                        prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                        data2[i * ySections + j] <<= lily;
+                        data2[i * ySections + j] |= tmp;
+                    }
                 }
             }
-        }
-        else if(lily > 0) {
-            for (int i = start; i < start + len; i++) {
-                prev = 0L;
-                for (int j = 0; j < ySections; j++) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
-                    data2[i * ySections + j] <<= lily;
-                    data2[i * ySections + j] |= tmp;
+            for (int i = 0; i < width * ySections; i++) {
+                data2[i] |= data[i];
+            }
+            if (yEndMask != -1) {
+                for (int a = ySections - 1; a < data2.length; a += ySections) {
+                    data2[a] &= yEndMask;
                 }
             }
+            data = data2;
+            tallied = false;
         }
 
-        for (int i = 0; i < width * ySections; i++) {
-            data2[i] |= data[i];
-        }
 
-
-        if(yEndMask != -1) {
-            for (int a = ySections - 1; a < data2.length; a += ySections) {
-                data2[a] &= yEndMask;
-            }
-        }
-
-        data = data2;
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -2857,128 +2851,121 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param y in the doubled coordinate space, the y position that should become 0 y in the result; can be negative
      * @return this for chaining
      */
-    public GreasedRegion zoom(int x, int y)
-    {
-        if(width < 1 || ySections <= 0)
-            return this;
-        x = -x;
-        y = -y;
-        int
-                width2 = width + 1 >>> 1, ySections2 = ySections + 1 >>> 1,
-                start = Math.max(0, x), len = Math.min(width, width + x) - start,
-                //tall = (Math.min(height, height + y) - Math.max(0, y)) + 63 >> 6,
-                jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
-                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump),
-                oddX = (x & 1), oddY = (y & 1);
-        long[] data2 = new long[width * ySections];
-
-        long prev, tmp, yEndMask2 = -1L >>> (64 - ((height + 1 >>> 1) & 63));
-        if (x < 0) {
-            for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
-                for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
-                    data2[jj * ySections + i] = data[j * ySections + oi];
-                }
-            }
-        } else if (x > 0) {
-            for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
-                for (int j = 0, jj = start; j < len; j++, jj++) {
-                    data2[jj * ySections + i] = data[j * ySections + oi];
-                }
-            }
+    public GreasedRegion zoom(int x, int y) {
+        GreasedRegion result = this;
+        if (width < 1 || ySections <= 0) {
         } else {
-            for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
-                for (int j = 0; j < len; j++) {
-                    data2[j * ySections + i] = data[j * ySections + oi];
+            x = -x;
+            y = -y;
+            int
+                    width2 = width + 1 >>> 1, ySections2 = ySections + 1 >>> 1,
+                    start = Math.max(0, x), len = Math.min(width, width + x) - start,
+                    //tall = (Math.min(height, height + y) - Math.max(0, y)) + 63 >> 6,
+                    jump = (y == 0) ? 0 : (y < 0) ? -(-y >>> 6) : (y >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                    originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump),
+                    oddX = (x & 1), oddY = (y & 1);
+            long[] data2 = new long[width * ySections];
+            long prev, tmp, yEndMask2 = -1L >>> (64 - ((height + 1 >>> 1) & 63));
+            if (x < 0) {
+                for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
+                    for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else if (x > 0) {
+                for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
+                    for (int j = 0, jj = start; j < len; j++, jj++) {
+                        data2[jj * ySections + i] = data[j * ySections + oi];
+                    }
+                }
+            } else {
+                for (int i = alterJump, oi = originalJump; i <= ySections2 && oi < ySections; i++, oi++) {
+                    for (int j = 0; j < len; j++) {
+                        data2[j * ySections + i] = data[j * ySections + oi];
+                    }
                 }
             }
-        }
-
-        if(lily < 0) {
-            for (int i = start; i < len; i++) {
-                prev = 0L;
-                for (int j = ySections2; j >= 0; j--) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
-                    data2[i * ySections + j] >>>= -lily;
-                    data2[i * ySections + j] |= tmp;
+            if (lily < 0) {
+                for (int i = start; i < len; i++) {
+                    prev = 0L;
+                    for (int j = ySections2; j >= 0; j--) {
+                        tmp = prev;
+                        prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                        data2[i * ySections + j] >>>= -lily;
+                        data2[i * ySections + j] |= tmp;
+                    }
+                }
+            } else if (lily > 0) {
+                for (int i = start; i < start + len; i++) {
+                    prev = 0L;
+                    for (int j = 0; j < ySections2; j++) {
+                        tmp = prev;
+                        prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                        data2[i * ySections + j] <<= lily;
+                        data2[i * ySections + j] |= tmp;
+                    }
                 }
             }
-        }
-        else if(lily > 0) {
-            for (int i = start; i < start + len; i++) {
-                prev = 0L;
+            if (yEndMask2 != -1) {
+                for (int a = ySections2 - 1; a < data2.length; a += ySections) {
+                    data2[a] &= yEndMask2;
+                    if (ySections2 < ySections)
+                        data2[a + 1] = 0L;
+                }
+            }
+            for (int i = 0; i < width2; i++) {
                 for (int j = 0; j < ySections2; j++) {
-                    tmp = prev;
-                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
-                    data2[i * ySections + j] <<= lily;
-                    data2[i * ySections + j] |= tmp;
-                }
-            }
-        }
-
-
-        if(ySections2 > 0 && yEndMask2 != -1) {
-            for (int a = ySections2 - 1; a < data2.length; a += ySections) {
-                data2[a] &= yEndMask2;
-                if(ySections2 < ySections)
-                    data2[a+1] = 0L;
-            }
-        }
-        for (int i = 0; i < width2; i++) {
-            for (int j = 0; j < ySections2; j++) {
-                prev = data2[i * ySections + j];
-                tmp = prev >>> 32;
-                prev &= 0xFFFFFFFFL;
-                prev = (prev | (prev << 16)) & 0x0000FFFF0000FFFFL;
-                prev = (prev | (prev << 8)) & 0x00FF00FF00FF00FFL;
-                prev = (prev | (prev << 4)) & 0x0F0F0F0F0F0F0F0FL;
-                prev = (prev | (prev << 2)) & 0x3333333333333333L;
-                prev = (prev | (prev << 1)) & 0x5555555555555555L;
-                prev <<= oddY;
-                if(oddX == 1) {
-                    if (i * 2 + 1 < width)
-                        data[(i * ySections + j) * 2 + ySections] = prev;
-                    if (i * 2 < width)
-                        data[(i * ySections + j) * 2] = 0L;
-                }
-                else
-                {
-                    if (i * 2 < width)
-                        data[(i * ySections + j) * 2] = prev;
-                    if (i * 2 + 1 < width)
-                        data[(i * ySections + j) * 2 + ySections] = 0L;
-                }
-                if(j * 2 + 1 < ySections) {
-                    tmp = (tmp | (tmp << 16)) & 0x0000FFFF0000FFFFL;
-                    tmp = (tmp | (tmp << 8)) & 0x00FF00FF00FF00FFL;
-                    tmp = (tmp | (tmp << 4)) & 0x0F0F0F0F0F0F0F0FL;
-                    tmp = (tmp | (tmp << 2)) & 0x3333333333333333L;
-                    tmp = (tmp | (tmp << 1)) & 0x5555555555555555L;
-                    tmp <<= oddY;
-                    if(oddX == 1) {
+                    prev = data2[i * ySections + j];
+                    tmp = prev >>> 32;
+                    prev &= 0xFFFFFFFFL;
+                    prev = (prev | (prev << 16)) & 0x0000FFFF0000FFFFL;
+                    prev = (prev | (prev << 8)) & 0x00FF00FF00FF00FFL;
+                    prev = (prev | (prev << 4)) & 0x0F0F0F0F0F0F0F0FL;
+                    prev = (prev | (prev << 2)) & 0x3333333333333333L;
+                    prev = (prev | (prev << 1)) & 0x5555555555555555L;
+                    prev <<= oddY;
+                    if (oddX == 1) {
                         if (i * 2 + 1 < width)
-                            data[(i * ySections + j) * 2 + ySections + 1] = tmp;
+                            data[(i * ySections + j) * 2 + ySections] = prev;
                         if (i * 2 < width)
-                            data[(i * ySections + j) * 2 + 1] = 0L;
+                            data[(i * ySections + j) * 2] = 0L;
+                    } else {
+                        if (i * 2 < width)
+                            data[(i * ySections + j) * 2] = prev;
+                        if (i * 2 + 1 < width)
+                            data[(i * ySections + j) * 2 + ySections] = 0L;
                     }
-                    else
-                    {
-                        if (i * 2 < width)
-                            data[(i * ySections + j) * 2 + 1] = tmp;
-                        if (i * 2 + 1 < width)
-                            data[(i * ySections + j) * 2 + ySections + 1] = 0L;
+                    if (j * 2 + 1 < ySections) {
+                        tmp = (tmp | (tmp << 16)) & 0x0000FFFF0000FFFFL;
+                        tmp = (tmp | (tmp << 8)) & 0x00FF00FF00FF00FFL;
+                        tmp = (tmp | (tmp << 4)) & 0x0F0F0F0F0F0F0F0FL;
+                        tmp = (tmp | (tmp << 2)) & 0x3333333333333333L;
+                        tmp = (tmp | (tmp << 1)) & 0x5555555555555555L;
+                        tmp <<= oddY;
+                        if (oddX == 1) {
+                            if (i * 2 + 1 < width)
+                                data[(i * ySections + j) * 2 + ySections + 1] = tmp;
+                            if (i * 2 < width)
+                                data[(i * ySections + j) * 2 + 1] = 0L;
+                        } else {
+                            if (i * 2 < width)
+                                data[(i * ySections + j) * 2 + 1] = tmp;
+                            if (i * 2 + 1 < width)
+                                data[(i * ySections + j) * 2 + ySections + 1] = 0L;
+                        }
                     }
                 }
             }
+            if (yEndMask != -1) {
+                for (int a = ySections - 1; a < data.length; a += ySections) {
+                    data[a] &= yEndMask;
+                }
+            }
+            tallied = false;
         }
 
-        if(yEndMask != -1) {
-            for (int a = ySections - 1; a < data.length; a += ySections) {
-                data[a] &= yEndMask;
-            }
-        }
-        tallied = false;
-        return this;
+
+        return result;
     }
 
     /**
@@ -2990,55 +2977,51 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * very well by operating in bulk on up to 64 cells at a time.
      * @return this for chaining
      */
-    public GreasedRegion connect()
-    {
-        if(width < 2 || ySections == 0)
-            return this;
+    public GreasedRegion connect() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections == 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            System.arraycopy(data, 0, next, 0, width * ySections);
+            for (int a = 0; a < ySections; a++) {
+                next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a + ySections];
+                next[(width - 1) * ySections + a] |= ((data[(width - 1) * ySections + a] << 1) & (data[(width - 1) * ySections + a] >>> 1)) | data[(width - 2) * ySections + a];
 
-        final long[] next = new long[width * ySections];
-        System.arraycopy(data, 0, next, 0, width * ySections);
-        for (int a = 0; a < ySections; a++) {
-            next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a+ySections];
-            next[(width-1)*ySections+a] |= ((data[(width-1)*ySections+a] << 1) & (data[(width-1)*ySections+a] >>> 1)) | data[(width-2) *ySections+a];
-
-            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections]);
-            }
-
-            if(a > 0) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1);
-                }
-            }
-            else
-            {
-                for (int i = ySections; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i] >>> 1 & 1L);
-                }
-            }
-
-            if(a < ySections - 1) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i + 1] & 1L) << 63 & (data[i] << 1);
-                }
-            }
-            else
-            {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i] << 1 & 0x8000000000000000L);
+                for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                    next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections]);
                 }
 
+                if (a > 0) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1);
+                    }
+                } else {
+                    for (int i = ySections; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i] >>> 1 & 1L);
+                    }
+                }
+
+                if (a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i + 1] & 1L) << 63 & (data[i] << 1);
+                    }
+                } else {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i] << 1 & 0x8000000000000000L);
+                    }
+
+                }
             }
+            if (ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
+                }
+            }
+            data = next;
+            tallied = false;
         }
 
-        if(ySections > 0 && yEndMask != -1) {
-            for (int a = ySections - 1; a < next.length; a += ySections) {
-                next[a] &= yEndMask;
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -3050,63 +3033,59 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * very well by operating in bulk on up to 64 cells at a time.
      * @return this for chaining
      */
-    public GreasedRegion connect8way()
-    {
-        if(width < 2 || ySections == 0)
-            return this;
+    public GreasedRegion connect8way() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections == 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            System.arraycopy(data, 0, next, 0, width * ySections);
+            for (int a = 0; a < ySections; a++) {
+                next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a + ySections] | (data[a + ySections] << 1) | (data[a + ySections] >>> 1);
+                next[(width - 1) * ySections + a] |= ((data[(width - 1) * ySections + a] << 1) & (data[(width - 1) * ySections + a] >>> 1))
+                        | data[(width - 2) * ySections + a] | (data[(width - 2) * ySections + a] << 1) | (data[(width - 2) * ySections + a] >>> 1);
 
-        final long[] next = new long[width * ySections];
-        System.arraycopy(data, 0, next, 0, width * ySections);
-        for (int a = 0; a < ySections; a++) {
-            next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
-            next[(width-1)*ySections+a] |= ((data[(width-1)*ySections+a] << 1) & (data[(width-1)*ySections+a] >>> 1))
-                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
-
-            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections])
-                        | ((data[i - ySections] << 1) & (data[i + ySections] >>> 1))
-                        | ((data[i + ySections] << 1) & (data[i - ySections] >>> 1));
-            }
-
-            if(a > 0) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1)) |
-                            ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i + ySections] >>> 1)) |
-                            ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i - ySections] >>> 1));
-                }
-            }
-            else
-            {
-                for (int i = ySections; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i] >>> 1 & 1L) | (data[i - ySections] >>> 1 & 1L) | (data[i + ySections] >>> 1 & 1L);
-                }
-            }
-
-            if(a < ySections - 1) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= ((data[i + 1] & 1L) << 63 & (data[i] << 1)) |
-                            ((data[i - ySections + 1] & 1L) << 63 & (data[i + ySections] << 1)) |
-                            ((data[i + ySections + 1] & 1L) << 63 & (data[i - ySections] << 1)) ;
-                }
-            }
-            else
-            {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i] << 1 & 0x8000000000000000L)
-                            | (data[i - ySections] << 1 & 0x8000000000000000L) | (data[i + ySections] << 1 & 0x8000000000000000L);
+                for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                    next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections])
+                            | ((data[i - ySections] << 1) & (data[i + ySections] >>> 1))
+                            | ((data[i + ySections] << 1) & (data[i - ySections] >>> 1));
                 }
 
+                if (a > 0) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1)) |
+                                ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i + ySections] >>> 1)) |
+                                ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i - ySections] >>> 1));
+                    }
+                } else {
+                    for (int i = ySections; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i] >>> 1 & 1L) | (data[i - ySections] >>> 1 & 1L) | (data[i + ySections] >>> 1 & 1L);
+                    }
+                }
+
+                if (a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= ((data[i + 1] & 1L) << 63 & (data[i] << 1)) |
+                                ((data[i - ySections + 1] & 1L) << 63 & (data[i + ySections] << 1)) |
+                                ((data[i + ySections + 1] & 1L) << 63 & (data[i - ySections] << 1));
+                    }
+                } else {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i] << 1 & 0x8000000000000000L)
+                                | (data[i - ySections] << 1 & 0x8000000000000000L) | (data[i + ySections] << 1 & 0x8000000000000000L);
+                    }
+
+                }
             }
+            if (ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
+                }
+            }
+            data = next;
+            tallied = false;
         }
 
-        if(ySections > 0 && yEndMask != -1) {
-            for (int a = ySections - 1; a < next.length; a += ySections) {
-                next[a] &= yEndMask;
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
     /**
      * Takes the pairs of "on" cells in this GreasedRegion that are separated by exactly one cell in an orthogonal or
@@ -3120,63 +3099,59 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * very well by operating in bulk on up to 64 cells at a time.
      * @return this for chaining
      */
-    public GreasedRegion connectLines()
-    {
-        if(width < 2 || ySections == 0)
-            return this;
+    public GreasedRegion connectLines() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections == 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            System.arraycopy(data, 0, next, 0, width * ySections);
+            for (int a = 0; a < ySections; a++) {
+                next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a + ySections] | (data[a + ySections] << 1) | (data[a + ySections] >>> 1);
+                next[(width - 1) * ySections + a] |= ((data[(width - 1) * ySections + a] << 1) & (data[(width - 1) * ySections + a] >>> 1))
+                        | data[(width - 2) * ySections + a] | (data[(width - 2) * ySections + a] << 1) | (data[(width - 2) * ySections + a] >>> 1);
 
-        final long[] next = new long[width * ySections];
-        System.arraycopy(data, 0, next, 0, width * ySections);
-        for (int a = 0; a < ySections; a++) {
-            next[a] |= ((data[a] << 1) & (data[a] >>> 1)) | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
-            next[(width-1)*ySections+a] |= ((data[(width-1)*ySections+a] << 1) & (data[(width-1)*ySections+a] >>> 1))
-                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
-
-            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections])
-                        | (((data[i - ySections] << 1) & (data[i + ySections] >>> 1))
-                           ^ ((data[i + ySections] << 1) & (data[i - ySections] >>> 1)));
-            }
-
-            if(a > 0) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1))
-                            | (((data[i - ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i + ySections] >>> 1))
-                               ^ ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i - ySections] >>> 1)));
-                }
-            }
-            else
-            {
-                for (int i = ySections; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i] >>> 1 & 1L) | (data[i - ySections] >>> 1 & 1L) | (data[i + ySections] >>> 1 & 1L);
-                }
-            }
-
-            if(a < ySections - 1) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= ((data[i + 1] & 1L) << 63 & (data[i] << 1))
-                            | (((data[i - ySections + 1] & 1L) << 63 & (data[i + ySections] << 1))
-                               ^ ((data[i + ySections + 1] & 1L) << 63 & (data[i - ySections] << 1)));
-                }
-            }
-            else
-            {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i] << 1 & 0x8000000000000000L)
-                            | (data[i - ySections] << 1 & 0x8000000000000000L) | (data[i + ySections] << 1 & 0x8000000000000000L);
+                for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                    next[i] |= ((data[i] << 1) & (data[i] >>> 1)) | (data[i - ySections] & data[i + ySections])
+                            | (((data[i - ySections] << 1) & (data[i + ySections] >>> 1))
+                            ^ ((data[i + ySections] << 1) & (data[i - ySections] >>> 1)));
                 }
 
+                if (a > 0) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63 & (data[i] >>> 1))
+                                | (((data[i - ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i + ySections] >>> 1))
+                                ^ ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63 & (data[i - ySections] >>> 1)));
+                    }
+                } else {
+                    for (int i = ySections; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i] >>> 1 & 1L) | (data[i - ySections] >>> 1 & 1L) | (data[i + ySections] >>> 1 & 1L);
+                    }
+                }
+
+                if (a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= ((data[i + 1] & 1L) << 63 & (data[i] << 1))
+                                | (((data[i - ySections + 1] & 1L) << 63 & (data[i + ySections] << 1))
+                                ^ ((data[i + ySections + 1] & 1L) << 63 & (data[i - ySections] << 1)));
+                    }
+                } else {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i] << 1 & 0x8000000000000000L)
+                                | (data[i - ySections] << 1 & 0x8000000000000000L) | (data[i + ySections] << 1 & 0x8000000000000000L);
+                    }
+
+                }
             }
+            if (ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
+                }
+            }
+            data = next;
+            tallied = false;
         }
 
-        if(ySections > 0 && yEndMask != -1) {
-            for (int a = ySections - 1; a < next.length; a += ySections) {
-                next[a] &= yEndMask;
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -3192,19 +3167,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * had problems where it yielded significantly larger minimum widths in some areas).
      * @return this for chaining
      */
-    public GreasedRegion thin()
-    {
-        if(width <= 2 || ySections <= 0)
-            return this;
-        GreasedRegion c1 = new GreasedRegion(this).retract(),
-                c2 = new GreasedRegion(c1).expand().xor(this).expand().and(this);
-        remake(c1).or(c2);
-        /*
+    public GreasedRegion thin() {
+        GreasedRegion result = this;
+        if (width <= 2 || ySections <= 0) {
+        } else {
+            GreasedRegion c1 = new GreasedRegion(this).retract(),
+                    c2 = new GreasedRegion(c1).expand().xor(this).expand().and(this);
+            remake(c1).or(c2);/*
         System.out.println("\n\nc1:\n" + c1.toString() + "\n");
         System.out.println("\n\nc2:\n" + c2.toString() + "\n");
         System.out.println("\n\nthis:\n" + toString() + "\n");
         */
-        return this;
+        }
+        return result;
     }
 
     /**
@@ -3236,14 +3211,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * This method was called {@link #thin()}, but now that name refers to a variant that uses 4-way adjacency.
      * @return this for chaining
      */
-    public GreasedRegion thin8way()
-    {
-        if(width <= 2 || ySections <= 0)
-            return this;
-        GreasedRegion c1 = new GreasedRegion(this).retract8way(),
-                c2 = new GreasedRegion(c1).expand8way().xor(this).expand8way().and(this);
-        remake(c1).or(c2);
-        return this;
+    public GreasedRegion thin8way() {
+        GreasedRegion result = this;
+        if (width <= 2 || ySections <= 0) {
+        } else {
+            GreasedRegion c1 = new GreasedRegion(this).retract8way(),
+                    c2 = new GreasedRegion(c1).expand8way().xor(this).expand8way().and(this);
+            remake(c1).or(c2);
+        }
+        return result;
     }
 
     /**
@@ -3268,19 +3244,20 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * checkerboard turned off and all others kept as-is.
      * @return this for chaining
      */
-    public GreasedRegion disperse()
-    {
-        if(width < 1 || ySections <= 0)
-            return this;
-        long mask = 0x5555555555555555L;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < ySections; j++) {
-                data[j] &= mask;
+    public GreasedRegion disperse() {
+        GreasedRegion result = this;
+        if (width < 1 || ySections <= 0) {
+        } else {
+            long mask = 0x5555555555555555L;
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < ySections; j++) {
+                    data[j] &= mask;
+                }
+                mask = ~mask;
             }
-            mask = ~mask;
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
     /**
      * Removes "on" cells that are 8-way adjacent to other "on" cells, keeping at least one cell in a group "on."
@@ -3288,18 +3265,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * but all other cells (with either or both odd x or odd y) turned off.
      * @return this for chaining
      */
-    public GreasedRegion disperse8way()
-    {
-        if(width < 1 || ySections <= 0)
-            return this;
-        int len = data.length;
-        long mask = 0x5555555555555555L;
-        for (int j = 0; j < len - 1; j += 2) {
-            data[j] &= mask;
-            data[j+1] = 0;
+    public GreasedRegion disperse8way() {
+        GreasedRegion result = this;
+        if (width < 1 || ySections <= 0) {
+        } else {
+            int len = data.length;
+            long mask = 0x5555555555555555L;
+            for (int j = 0; j < len - 1; j += 2) {
+                data[j] &= mask;
+                data[j + 1] = 0;
+            }
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
     /**
      * Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
@@ -3308,16 +3286,17 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param random the RNG used for a random factor
      * @return this for chaining
      */
-    public GreasedRegion disperseRandom(RandomnessSource random)
-    {
-        if(width < 1 || ySections <= 0)
-            return this;
-        int len = data.length;
-        for (int j = 0; j < len; j++) {
-            data[j] &= randomInterleave(random);
+    public GreasedRegion disperseRandom(RandomnessSource random) {
+        GreasedRegion result = this;
+        if (width < 1 || ySections <= 0) {
+        } else {
+            int len = data.length;
+            for (int j = 0; j < len; j++) {
+                data[j] &= randomInterleave(random);
+            }
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
     /**
      * Generates a random 64-bit long with a number of '1' bits (Hamming weight) equal on average to bitCount.
@@ -3338,22 +3317,26 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long
      */
     public static long approximateBits(RandomnessSource random, int bitCount) {
-        if (bitCount <= 0)
-            return 0L;
-        if (bitCount >= 64)
-            return -1L;
-        if (bitCount == 32)
-            return random.nextLong();
-        boolean high = bitCount > 32;
-        int altered = (high ? 64 - bitCount : bitCount), lsb = NumberTools.lowestOneBit(altered);
-        long data = random.nextLong();
-        for (int i = lsb << 1; i <= 16; i <<= 1) {
-            if ((altered & i) == 0)
-                data &= random.nextLong();
-            else
-                data |= random.nextLong();
+        long result;
+        if (bitCount <= 0) {
+            result = 0L;
+        } else if (bitCount >= 64) {
+            result = -1L;
+        } else if (bitCount == 32) {
+            result = random.nextLong();
+        } else {
+            boolean high = bitCount > 32;
+            int altered = (high ? 64 - bitCount : bitCount), lsb = NumberTools.lowestOneBit(altered);
+            long data = random.nextLong();
+            for (int i = lsb << 1; i <= 16; i <<= 1) {
+                if ((altered & i) == 0)
+                    data &= random.nextLong();
+                else
+                    data |= random.nextLong();
+            }
+            result = high ? ~(random.nextLong() & data) : (random.nextLong() & data);
         }
-        return high ? ~(random.nextLong() & data) : (random.nextLong() & data);
+        return result;
     }
 
     /**
@@ -3394,46 +3377,46 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * cell then).
      * <br>
      * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
-     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * methods (including expand(), {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
      * very well by operating in bulk on up to 64 cells at a time.
      * @return this for chaining
      */
-    public GreasedRegion expand()
-    {
-        if(width < 2 || ySections == 0)
-            return this;
+    public GreasedRegion expand() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections == 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            System.arraycopy(data, 0, next, 0, width * ySections);
+            for (int a = 0; a < ySections; a++) {
+                next[a] |= (data[a] << 1) | (data[a] >>> 1) | data[a + ySections];
+                next[(width - 1) * ySections + a] |= (data[(width - 1) * ySections + a] << 1) | (data[(width - 1) * ySections + a] >>> 1) | data[(width - 2) * ySections + a];
 
-        final long[] next = new long[width * ySections];
-        System.arraycopy(data, 0, next, 0, width * ySections);
-        for (int a = 0; a < ySections; a++) {
-            next[a] |= (data[a] << 1) | (data[a] >>> 1) | data[a+ySections];
-            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1) | data[(width-2) *ySections+a];
+                for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                    next[i] |= (data[i] << 1) | (data[i] >>> 1) | data[i - ySections] | data[i + ySections];
+                }
 
-            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                next[i] |= (data[i] << 1) | (data[i] >>> 1) | data[i - ySections] | data[i + ySections];
-            }
+                if (a > 0) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i - 1] & 0x8000000000000000L) >>> 63;
+                    }
+                }
 
-            if(a > 0) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i - 1] & 0x8000000000000000L) >>> 63;
+                if (a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= (data[i + 1] & 1L) << 63;
+                    }
                 }
             }
-
-            if(a < ySections - 1) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= (data[i + 1] & 1L) << 63;
+            if (ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
                 }
             }
+            data = next;
+            tallied = false;
         }
 
-        if(ySections > 0 && yEndMask != -1) {
-            for (int a = ySections - 1; a < next.length; a += ySections) {
-                next[a] &= yEndMask;
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
     /**
      * Takes the "on" cells in this GreasedRegion and expands them by amount cells in the 4 orthogonal directions,
@@ -3464,15 +3447,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * very well by operating in bulk on up to 64 cells at a time.
      * @return an array of new GreasedRegions, length == amount, where each one is expanded by 1 relative to the last
      */
-    public GreasedRegion[] expandSeries(int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        GreasedRegion temp = new GreasedRegion(this);
-        for (int i = 0; i < amount; i++) {
-            regions[i] = new GreasedRegion(temp.expand());
+    public GreasedRegion[] expandSeries(int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            GreasedRegion temp = new GreasedRegion(this);
+            for (int i = 0; i < amount; i++) {
+                regions[i] = new GreasedRegion(temp.expand());
+            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
 
     public ArrayList<GreasedRegion> expandSeriesToLimit()
@@ -3536,20 +3523,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * very well by operating in bulk on up to 64 cells at a time.
      * @return an array of new GreasedRegions, length == amount, where each one is a 1-depth fringe pushed further out from this
      */
-    public GreasedRegion[] fringeSeries(int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        GreasedRegion temp = new GreasedRegion(this);
-        regions[0] = new GreasedRegion(temp);
-        for (int i = 1; i < amount; i++) {
-            regions[i] = new GreasedRegion(temp.expand());
+    public GreasedRegion[] fringeSeries(int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            GreasedRegion temp = new GreasedRegion(this);
+            regions[0] = new GreasedRegion(temp);
+            for (int i = 1; i < amount; i++) {
+                regions[i] = new GreasedRegion(temp.expand());
+            }
+            for (int i = 0; i < amount - 1; i++) {
+                regions[i].xor(regions[i + 1]);
+            }
+            regions[amount - 1].fringe();
+            result = regions;
         }
-        for (int i = 0; i < amount - 1; i++) {
-            regions[i].xor(regions[i + 1]);
-        }
-        regions[amount - 1].fringe();
-        return regions;
+        return result;
     }
     public ArrayList<GreasedRegion> fringeSeriesToLimit()
     {
@@ -3566,58 +3557,55 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * making each "on" cell that was orthogonally adjacent to an "off" cell into an "off" cell.
      * <br>
      * This method is very efficient due to how the class is implemented, and the various spatial increase/decrease
-     * methods (including {@link #expand()}, {@link #retract()}, {@link #fringe()}, and {@link #surface()}) all perform
+     * methods (including {@link #expand()}, retract(), {@link #fringe()}, and {@link #surface()}) all perform
      * very well by operating in bulk on up to 64 cells at a time.
      * @return this for chaining
      */
-    public GreasedRegion retract()
-    {
-        if(width <= 2 || ySections <= 0)
-            return this;
-
-        final long[] next = new long[width * ySections];
-        System.arraycopy(data, ySections, next, ySections, (width - 2) * ySections);
-        for (int a = 0; a < ySections; a++) {
-            if(a > 0 && a < ySections - 1) {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
-                            & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & data[i - ySections]
-                            & data[i + ySections];
+    public GreasedRegion retract() {
+        GreasedRegion result = this;
+        if (width <= 2 || ySections <= 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            System.arraycopy(data, ySections, next, ySections, (width - 2) * ySections);
+            for (int a = 0; a < ySections; a++) {
+                if (a > 0 && a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
+                                & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
+                                & data[i - ySections]
+                                & data[i + ySections];
+                    }
+                } else if (a > 0) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
+                                & (data[i] >>> 1)
+                                & data[i - ySections]
+                                & data[i + ySections];
+                    }
+                } else if (a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= (data[i] << 1)
+                                & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
+                                & data[i - ySections]
+                                & data[i + ySections];
+                    }
+                } else // only the case when ySections == 1
+                {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= (data[i] << 1) & (data[i] >>> 1) & data[i - ySections] & data[i + ySections];
+                    }
                 }
             }
-            else if(a > 0) {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
-                            & (data[i] >>> 1)
-                            & data[i - ySections]
-                            & data[i + ySections];
+            if (yEndMask != -1) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
                 }
             }
-            else if(a < ySections - 1) {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= (data[i] << 1)
-                            & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & data[i - ySections]
-                            & data[i + ySections];
-                }
-            }
-            else // only the case when ySections == 1
-            {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= (data[i] << 1) & (data[i] >>> 1) & data[i - ySections] & data[i + ySections];
-                }
-            }
+            data = next;
+            tallied = false;
         }
 
-        if(yEndMask != -1) {
-            for (int a = ySections - 1; a < next.length; a += ySections) {
-                next[a] &= yEndMask;
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -3638,15 +3626,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
-    public GreasedRegion[] retractSeries(int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        GreasedRegion temp = new GreasedRegion(this);
-        for (int i = 0; i < amount; i++) {
-            regions[i] = new GreasedRegion(temp.retract());
+    public GreasedRegion[] retractSeries(int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            GreasedRegion temp = new GreasedRegion(this);
+            for (int i = 0; i < amount; i++) {
+                regions[i] = new GreasedRegion(temp.retract());
+            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
 
     public ArrayList<GreasedRegion> retractSeriesToLimit()
@@ -3686,61 +3678,64 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return regions;
     }
 
-    public ArrayList<GreasedRegion> surfaceSeriesToLimit()
-    {
+    public ArrayList<GreasedRegion> surfaceSeriesToLimit() {
+        ArrayList<GreasedRegion> result;
         ArrayList<GreasedRegion> regions = retractSeriesToLimit();
-        if(regions.isEmpty())
-            return regions;
-        regions.add(0, regions.get(0).copy().xor(this));
-        for (int i = 1; i < regions.size() - 1; i++) {
-            regions.get(i).xor(regions.get(i+1));
+        if (regions.isEmpty()) {
+            result = regions;
+        } else {
+            regions.add(0, regions.get(0).copy().xor(this));
+            for (int i = 1; i < regions.size() - 1; i++) {
+                regions.get(i).xor(regions.get(i + 1));
+            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
-    public GreasedRegion expand8way()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
+    public GreasedRegion expand8way() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            System.arraycopy(data, 0, next, 0, width * ySections);
+            for (int a = 0; a < ySections; a++) {
+                next[a] |= (data[a] << 1) | (data[a] >>> 1)
+                        | data[a + ySections] | (data[a + ySections] << 1) | (data[a + ySections] >>> 1);
+                next[(width - 1) * ySections + a] |= (data[(width - 1) * ySections + a] << 1) | (data[(width - 1) * ySections + a] >>> 1)
+                        | data[(width - 2) * ySections + a] | (data[(width - 2) * ySections + a] << 1) | (data[(width - 2) * ySections + a] >>> 1);
 
-        final long[] next = new long[width * ySections];
-        System.arraycopy(data, 0, next, 0, width * ySections);
-        for (int a = 0; a < ySections; a++) {
-            next[a] |= (data[a] << 1) | (data[a] >>> 1)
-                    | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
-            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1)
-                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
+                for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                    next[i] |= (data[i] << 1) | (data[i] >>> 1)
+                            | data[i - ySections] | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
+                            | data[i + ySections] | (data[i + ySections] << 1) | (data[i + ySections] >>> 1);
+                }
 
-            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                next[i] |= (data[i] << 1) | (data[i] >>> 1)
-                        | data[i - ySections] | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
-                        | data[i + ySections] | (data[i + ySections] << 1) | (data[i + ySections] >>> 1);
-            }
+                if (a > 0) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63) |
+                                ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63) |
+                                ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63);
+                    }
+                }
 
-            if(a > 0) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= ((data[i - 1] & 0x8000000000000000L) >>> 63) |
-                            ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63) |
-                            ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63);
+                if (a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] |= ((data[i + 1] & 1L) << 63) |
+                                ((data[i - ySections + 1] & 1L) << 63) |
+                                ((data[i + ySections + 1] & 1L) << 63);
+                    }
                 }
             }
-
-            if(a < ySections - 1) {
-                for (int i = ySections+a; i < (width-1) * ySections; i+= ySections) {
-                    next[i] |= ((data[i + 1] & 1L) << 63) |
-                            ((data[i - ySections + 1] & 1L) << 63) |
-                            ((data[i + ySections+ 1] & 1L) << 63);
+            if (ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
                 }
             }
+            data = next;
+            tallied = false;
         }
 
-        if(ySections > 0 && yEndMask != -1) {
-            for (int a = ySections - 1; a < next.length; a += ySections) {
-                next[a] &= yEndMask;
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
 
     @Override
@@ -3752,15 +3747,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
-    public GreasedRegion[] expandSeries8way(int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        GreasedRegion temp = new GreasedRegion(this);
-        for (int i = 0; i < amount; i++) {
-            regions[i] = new GreasedRegion(temp.expand8way());
+    public GreasedRegion[] expandSeries8way(int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            GreasedRegion temp = new GreasedRegion(this);
+            for (int i = 0; i < amount; i++) {
+                regions[i] = new GreasedRegion(temp.expand8way());
+            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
     public ArrayList<GreasedRegion> expandSeriesToLimit8way()
     {
@@ -3785,20 +3784,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return andNot(cpy);
     }
 
-    public GreasedRegion[] fringeSeries8way(int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        GreasedRegion temp = new GreasedRegion(this);
-        regions[0] = new GreasedRegion(temp);
-        for (int i = 1; i < amount; i++) {
-            regions[i] = new GreasedRegion(temp.expand8way());
+    public GreasedRegion[] fringeSeries8way(int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            GreasedRegion temp = new GreasedRegion(this);
+            regions[0] = new GreasedRegion(temp);
+            for (int i = 1; i < amount; i++) {
+                regions[i] = new GreasedRegion(temp.expand8way());
+            }
+            for (int i = 0; i < amount - 1; i++) {
+                regions[i].xor(regions[i + 1]);
+            }
+            regions[amount - 1].fringe8way();
+            result = regions;
         }
-        for (int i = 0; i < amount - 1; i++) {
-            regions[i].xor(regions[i + 1]);
-        }
-        regions[amount - 1].fringe8way();
-        return regions;
+        return result;
     }
     public ArrayList<GreasedRegion> fringeSeriesToLimit8way()
     {
@@ -3810,73 +3813,70 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return regions;
     }
 
-    public GreasedRegion retract8way()
-    {
-        if(width <= 2 || ySections <= 0)
-            return this;
-
-        final long[] next = new long[width * ySections];
-        System.arraycopy(data, ySections, next, ySections, (width - 2) * ySections);
-        for (int a = 0; a < ySections; a++) {
-            if(a > 0 && a < ySections - 1) {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
-                            & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & data[i - ySections]
-                            & data[i + ySections]
-                            & ((data[i - ySections] << 1) | ((data[i - 1 - ySections] & 0x8000000000000000L) >>> 63))
-                            & ((data[i + ySections] << 1) | ((data[i - 1 + ySections] & 0x8000000000000000L) >>> 63))
-                            & ((data[i - ySections] >>> 1) | ((data[i + 1 - ySections] & 1L) << 63))
-                            & ((data[i + ySections] >>> 1) | ((data[i + 1 + ySections] & 1L) << 63));
+    public GreasedRegion retract8way() {
+        GreasedRegion result = this;
+        if (width <= 2 || ySections <= 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            System.arraycopy(data, ySections, next, ySections, (width - 2) * ySections);
+            for (int a = 0; a < ySections; a++) {
+                if (a > 0 && a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
+                                & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
+                                & data[i - ySections]
+                                & data[i + ySections]
+                                & ((data[i - ySections] << 1) | ((data[i - 1 - ySections] & 0x8000000000000000L) >>> 63))
+                                & ((data[i + ySections] << 1) | ((data[i - 1 + ySections] & 0x8000000000000000L) >>> 63))
+                                & ((data[i - ySections] >>> 1) | ((data[i + 1 - ySections] & 1L) << 63))
+                                & ((data[i + ySections] >>> 1) | ((data[i + 1 + ySections] & 1L) << 63));
+                    }
+                } else if (a > 0) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
+                                & (data[i] >>> 1)
+                                & data[i - ySections]
+                                & data[i + ySections]
+                                & ((data[i - ySections] << 1) | ((data[i - 1 - ySections] & 0x8000000000000000L) >>> 63))
+                                & ((data[i + ySections] << 1) | ((data[i - 1 + ySections] & 0x8000000000000000L) >>> 63))
+                                & (data[i - ySections] >>> 1)
+                                & (data[i + ySections] >>> 1);
+                    }
+                } else if (a < ySections - 1) {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= (data[i] << 1)
+                                & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
+                                & data[i - ySections]
+                                & data[i + ySections]
+                                & (data[i - ySections] << 1)
+                                & (data[i + ySections] << 1)
+                                & ((data[i - ySections] >>> 1) | ((data[i + 1 - ySections] & 1L) << 63))
+                                & ((data[i + ySections] >>> 1) | ((data[i + 1 + ySections] & 1L) << 63));
+                    }
+                } else // only the case when ySections == 1
+                {
+                    for (int i = ySections + a; i < (width - 1) * ySections; i += ySections) {
+                        next[i] &= (data[i] << 1)
+                                & (data[i] >>> 1)
+                                & data[i - ySections]
+                                & data[i + ySections]
+                                & (data[i - ySections] << 1)
+                                & (data[i + ySections] << 1)
+                                & (data[i - ySections] >>> 1)
+                                & (data[i + ySections] >>> 1);
+                    }
                 }
             }
-            else if(a > 0) {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= ((data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63))
-                            & (data[i] >>> 1)
-                            & data[i - ySections]
-                            & data[i + ySections]
-                            & ((data[i - ySections] << 1) | ((data[i - 1 - ySections] & 0x8000000000000000L) >>> 63))
-                            & ((data[i + ySections] << 1) | ((data[i - 1 + ySections] & 0x8000000000000000L) >>> 63))
-                            & (data[i - ySections] >>> 1)
-                            & (data[i + ySections] >>> 1);
+            if (yEndMask != -1) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
                 }
             }
-            else if(a < ySections - 1) {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= (data[i] << 1)
-                            & ((data[i] >>> 1) | ((data[i + 1] & 1L) << 63))
-                            & data[i - ySections]
-                            & data[i + ySections]
-                            & (data[i - ySections] << 1)
-                            & (data[i + ySections] << 1)
-                            & ((data[i - ySections] >>> 1) | ((data[i + 1 - ySections] & 1L) << 63))
-                            & ((data[i + ySections] >>> 1) | ((data[i + 1 + ySections] & 1L) << 63));
-                }
-            }
-            else // only the case when ySections == 1
-            {
-                for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
-                    next[i] &= (data[i] << 1)
-                            & (data[i] >>> 1)
-                            & data[i - ySections]
-                            & data[i + ySections]
-                            & (data[i - ySections] << 1)
-                            & (data[i + ySections] << 1)
-                            & (data[i - ySections] >>> 1)
-                            & (data[i + ySections] >>> 1);
-                }
-            }
+            data = next;
+            tallied = false;
         }
 
-        if(yEndMask != -1) {
-            for (int a = ySections - 1; a < next.length; a += ySections) {
-                next[a] &= yEndMask;
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
 
     public GreasedRegion retract8way(int amount)
@@ -3887,15 +3887,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
-    public GreasedRegion[] retractSeries8way(int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        GreasedRegion temp = new GreasedRegion(this);
-        for (int i = 0; i < amount; i++) {
-            regions[i] = new GreasedRegion(temp.retract8way());
+    public GreasedRegion[] retractSeries8way(int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            GreasedRegion temp = new GreasedRegion(this);
+            for (int i = 0; i < amount; i++) {
+                regions[i] = new GreasedRegion(temp.retract8way());
+            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
 
     public ArrayList<GreasedRegion> retractSeriesToLimit8way()
@@ -3920,31 +3924,38 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return xor(cpy);
     }
 
-    public GreasedRegion[] surfaceSeries8way(int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        GreasedRegion temp = new GreasedRegion(this);
-        regions[0] = new GreasedRegion(temp);
-        for (int i = 1; i < amount; i++) {
-            regions[i] = new GreasedRegion(temp.retract8way());
+    public GreasedRegion[] surfaceSeries8way(int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            GreasedRegion temp = new GreasedRegion(this);
+            regions[0] = new GreasedRegion(temp);
+            for (int i = 1; i < amount; i++) {
+                regions[i] = new GreasedRegion(temp.retract8way());
+            }
+            for (int i = 0; i < amount - 1; i++) {
+                regions[i].xor(regions[i + 1]);
+            }
+            regions[amount - 1].surface8way();
+            result = regions;
         }
-        for (int i = 0; i < amount - 1; i++) {
-            regions[i].xor(regions[i + 1]);
-        }
-        regions[amount - 1].surface8way();
-        return regions;
+        return result;
     }
-    public ArrayList<GreasedRegion> surfaceSeriesToLimit8way()
-    {
+    public ArrayList<GreasedRegion> surfaceSeriesToLimit8way() {
+        ArrayList<GreasedRegion> result;
         ArrayList<GreasedRegion> regions = retractSeriesToLimit8way();
-        if(regions.isEmpty())
-            return regions;
-        regions.add(0, regions.get(0).copy().xor(this));
-        for (int i = 1; i < regions.size() - 1; i++) {
-            regions.get(i).xor(regions.get(i+1));
+        if (regions.isEmpty()) {
+            result = regions;
+        } else {
+            regions.add(0, regions.get(0).copy().xor(this));
+            for (int i = 1; i < regions.size() - 1; i++) {
+                regions.get(i).xor(regions.get(i + 1));
+            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
 
     /**
@@ -3953,59 +3964,57 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param bounds the set of "on" cells that limits where this can expand into
      * @return this, after expanding, for chaining
      */
-    public GreasedRegion flood(GreasedRegion bounds)
-    {
-        if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
-            return this;
+    public GreasedRegion flood(GreasedRegion bounds) {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            for (int a = 0; a < ySections && a < bounds.ySections; a++) {
+                next[a] |= (data[a] | (data[a] << 1) | (data[a] >>> 1) | data[a + ySections]) & bounds.data[a];
+                next[(width - 1) * ySections + a] |= (data[(width - 1) * ySections + a] | (data[(width - 1) * ySections + a] << 1)
+                        | (data[(width - 1) * ySections + a] >>> 1) | data[(width - 2) * ySections + a]) & bounds.data[(width - 1) * bounds.ySections + a];
 
-        final long[] next = new long[width * ySections];
-        for (int a = 0; a < ySections && a < bounds.ySections; a++) {
-            next[a] |= (data[a] |(data[a] << 1) | (data[a] >>> 1) | data[a+ySections]) & bounds.data[a];
-            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] | (data[(width-1)*ySections+a] << 1)
-                    | (data[(width-1)*ySections+a] >>> 1) | data[(width-2) *ySections+a]) & bounds.data[(width-1)*bounds.ySections+a];
+                for (int i = ySections + a, j = bounds.ySections + a; i < (width - 1) * ySections &&
+                        j < (bounds.width - 1) * bounds.ySections; i += ySections, j += bounds.ySections) {
+                    next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1) | data[i - ySections] | data[i + ySections]) & bounds.data[j];
+                }
 
-            for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
-                    j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
-                next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1) | data[i - ySections] | data[i + ySections]) & bounds.data[j];
-            }
+                if (a > 0) {
+                    for (int i = ySections + a, j = bounds.ySections + a; i < (width - 1) * ySections && j < (bounds.width - 1) * bounds.ySections;
+                         i += ySections, j += bounds.ySections) {
+                        next[i] |= (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
+                    }
+                }
 
-            if(a > 0) {
-                for (int i = ySections+a, j = bounds.ySections+a; i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections;
-                     i+= ySections, j += bounds.ySections) {
-                    next[i] |= (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
+                if (a < ySections - 1 && a < bounds.ySections - 1) {
+                    for (int i = ySections + a, j = bounds.ySections + a;
+                         i < (width - 1) * ySections && j < (bounds.width - 1) * bounds.ySections; i += ySections, j += bounds.ySections) {
+                        next[i] |= (data[i] | ((data[i + 1] & 1L) << 63)) & bounds.data[j];
+                    }
                 }
             }
-
-            if(a < ySections - 1 && a < bounds.ySections - 1) {
-                for (int i = ySections+a, j = bounds.ySections+a;
-                     i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections; i+= ySections, j += bounds.ySections) {
-                    next[i] |= (data[i] | ((data[i + 1] & 1L) << 63)) & bounds.data[j];
+            if (yEndMask != -1 && bounds.yEndMask != -1) {
+                if (ySections == bounds.ySections) {
+                    long mask = ((yEndMask >>> 1) <= (bounds.yEndMask >>> 1))
+                            ? yEndMask : bounds.yEndMask;
+                    for (int a = ySections - 1; a < next.length; a += ySections) {
+                        next[a] &= mask;
+                    }
+                } else if (ySections < bounds.ySections) {
+                    for (int a = ySections - 1; a < next.length; a += ySections) {
+                        next[a] &= yEndMask;
+                    }
+                } else {
+                    for (int a = bounds.ySections - 1; a < next.length; a += ySections) {
+                        next[a] &= bounds.yEndMask;
+                    }
                 }
             }
+            data = next;
+            tallied = false;
         }
 
-        if(yEndMask != -1 && bounds.yEndMask != -1) {
-            if(ySections == bounds.ySections) {
-                long mask = ((yEndMask >>> 1) <= (bounds.yEndMask >>> 1))
-                        ? yEndMask : bounds.yEndMask;
-                for (int a = ySections - 1; a < next.length; a += ySections) {
-                    next[a] &= mask;
-                }
-            }
-            else if(ySections < bounds.ySections) {
-                for (int a = ySections - 1; a < next.length; a += ySections) {
-                    next[a] &= yEndMask;
-                }
-            }
-            else {
-                for (int a = bounds.ySections - 1; a < next.length; a += ySections) {
-                    next[a] &= bounds.yEndMask;
-                }
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4042,26 +4051,29 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param amount how many steps to flood outward, and the size of the array to return
      * @return an array of GreasedRegion, {@code amount} in size, containing larger and larger expansions of this
      */
-    public GreasedRegion[] floodSeries(GreasedRegion bounds, int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        int ct = size(), ct2;
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        boolean done = false;
-        GreasedRegion temp = new GreasedRegion(this);
-        for (int i = 0; i < amount; i++) {
-            if(done) {
-                regions[i] = new GreasedRegion(temp);
+    public GreasedRegion[] floodSeries(GreasedRegion bounds, int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            int ct = size(), ct2;
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            boolean done = false;
+            GreasedRegion temp = new GreasedRegion(this);
+            for (int i = 0; i < amount; i++) {
+                if (done) {
+                    regions[i] = new GreasedRegion(temp);
+                } else {
+                    regions[i] = new GreasedRegion(temp.flood(bounds));
+                    if (ct == (ct2 = temp.size()))
+                        done = true;
+                    else
+                        ct = ct2;
+                }
             }
-            else {
-                regions[i] = new GreasedRegion(temp.flood(bounds));
-                if (ct == (ct2 = temp.size()))
-                    done = true;
-                else
-                    ct = ct2;
-            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
 
     /**
@@ -4093,69 +4105,67 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param bounds the set of "on" cells that limits where this can expand into
      * @return this, after expanding, for chaining
      */
-    public GreasedRegion flood8way(GreasedRegion bounds)
-    {
-        if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
-            return this;
+    public GreasedRegion flood8way(GreasedRegion bounds) {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0) {
+        } else {
+            final long[] next = new long[width * ySections];
+            for (int a = 0; a < ySections && a < bounds.ySections; a++) {
+                next[a] |= (data[a] | (data[a] << 1) | (data[a] >>> 1)
+                        | data[a + ySections] | (data[a + ySections] << 1) | (data[a + ySections] >>> 1)) & bounds.data[a];
+                next[(width - 1) * ySections + a] |= (data[(width - 1) * ySections + a]
+                        | (data[(width - 1) * ySections + a] << 1) | (data[(width - 1) * ySections + a] >>> 1)
+                        | data[(width - 2) * ySections + a] | (data[(width - 2) * ySections + a] << 1) | (data[(width - 2) * ySections + a] >>> 1))
+                        & bounds.data[(width - 1) * bounds.ySections + a];
 
-        final long[] next = new long[width * ySections];
-        for (int a = 0; a < ySections && a < bounds.ySections; a++) {
-            next[a] |= (data[a] | (data[a] << 1) | (data[a] >>> 1)
-                    | data[a+ySections] | (data[a+ySections] << 1) | (data[a+ySections] >>> 1)) & bounds.data[a];
-            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a]
-                    | (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1)
-                    | data[(width-2) *ySections+a] | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1))
-                    & bounds.data[(width-1)*bounds.ySections+a];
+                for (int i = ySections + a, j = bounds.ySections + a; i < (width - 1) * ySections &&
+                        j < (bounds.width - 1) * bounds.ySections; i += ySections, j += bounds.ySections) {
+                    next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1)
+                            | data[i - ySections] | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
+                            | data[i + ySections] | (data[i + ySections] << 1) | (data[i + ySections] >>> 1))
+                            & bounds.data[j];
+                }
 
-            for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
-                    j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
-                next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1)
-                        | data[i - ySections] | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
-                        | data[i + ySections] | (data[i + ySections] << 1) | (data[i + ySections] >>> 1))
-                        & bounds.data[j];
-            }
+                if (a > 0) {
+                    for (int i = ySections + a, j = bounds.ySections + a; i < (width - 1) * ySections && j < (bounds.width - 1) * bounds.ySections;
+                         i += ySections, j += bounds.ySections) {
+                        next[i] |= (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63) |
+                                ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63) |
+                                ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
+                    }
+                }
 
-            if(a > 0) {
-                for (int i = ySections+a, j = bounds.ySections+a; i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections;
-                     i+= ySections, j += bounds.ySections) {
-                    next[i] |= (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63) |
-                            ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63) |
-                            ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
+                if (a < ySections - 1 && a < bounds.ySections - 1) {
+                    for (int i = ySections + a, j = bounds.ySections + a;
+                         i < (width - 1) * ySections && j < (bounds.width - 1) * bounds.ySections; i += ySections, j += bounds.ySections) {
+                        next[i] |= (data[i] | ((data[i + 1] & 1L) << 63) |
+                                ((data[i - ySections + 1] & 1L) << 63) |
+                                ((data[i + ySections + 1] & 1L) << 63)) & bounds.data[j];
+                    }
                 }
             }
-
-            if(a < ySections - 1 && a < bounds.ySections - 1) {
-                for (int i = ySections+a, j = bounds.ySections+a;
-                     i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections; i+= ySections, j += bounds.ySections) {
-                    next[i] |= (data[i] | ((data[i + 1] & 1L) << 63) |
-                            ((data[i - ySections + 1] & 1L) << 63) |
-                            ((data[i + ySections+ 1] & 1L) << 63)) & bounds.data[j];
+            if (yEndMask != -1 && bounds.yEndMask != -1) {
+                if (ySections == bounds.ySections) {
+                    long mask = ((yEndMask >>> 1) <= (bounds.yEndMask >>> 1))
+                            ? yEndMask : bounds.yEndMask;
+                    for (int a = ySections - 1; a < next.length; a += ySections) {
+                        next[a] &= mask;
+                    }
+                } else if (ySections < bounds.ySections) {
+                    for (int a = ySections - 1; a < next.length; a += ySections) {
+                        next[a] &= yEndMask;
+                    }
+                } else {
+                    for (int a = bounds.ySections - 1; a < next.length; a += ySections) {
+                        next[a] &= bounds.yEndMask;
+                    }
                 }
             }
+            data = next;
+            tallied = false;
         }
 
-        if(yEndMask != -1 && bounds.yEndMask != -1) {
-            if(ySections == bounds.ySections) {
-                long mask = ((yEndMask >>> 1) <= (bounds.yEndMask >>> 1))
-                        ? yEndMask : bounds.yEndMask;
-                for (int a = ySections - 1; a < next.length; a += ySections) {
-                    next[a] &= mask;
-                }
-            }
-            else if(ySections < bounds.ySections) {
-                for (int a = ySections - 1; a < next.length; a += ySections) {
-                    next[a] &= yEndMask;
-                }
-            }
-            else {
-                for (int a = bounds.ySections - 1; a < next.length; a += ySections) {
-                    next[a] &= bounds.yEndMask;
-                }
-            }
-        }
-        data = next;
-        tallied = false;
-        return this;
+        return result;
     }
     /**
      * Like {@link #expand8way(int)}, but limits expansion to the "on" cells of {@code bounds}. Repeatedly expands in
@@ -4190,26 +4200,29 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param amount how many steps to flood outward, and the size of the array to return
      * @return an array of GreasedRegion, {@code amount} in size, containing larger and larger expansions of this
      */
-    public GreasedRegion[] floodSeries8way(GreasedRegion bounds, int amount)
-    {
-        if(amount <= 0) return new GreasedRegion[0];
-        int ct = size(), ct2;
-        GreasedRegion[] regions = new GreasedRegion[amount];
-        boolean done = false;
-        GreasedRegion temp = new GreasedRegion(this);
-        for (int i = 0; i < amount; i++) {
-            if(done) {
-                regions[i] = new GreasedRegion(temp);
+    public GreasedRegion[] floodSeries8way(GreasedRegion bounds, int amount) {
+        GreasedRegion[] result;
+        if (amount <= 0) {
+            result = new GreasedRegion[0];
+        } else {
+            int ct = size(), ct2;
+            GreasedRegion[] regions = new GreasedRegion[amount];
+            boolean done = false;
+            GreasedRegion temp = new GreasedRegion(this);
+            for (int i = 0; i < amount; i++) {
+                if (done) {
+                    regions[i] = new GreasedRegion(temp);
+                } else {
+                    regions[i] = new GreasedRegion(temp.flood8way(bounds));
+                    if (ct == (ct2 = temp.size()))
+                        done = true;
+                    else
+                        ct = ct2;
+                }
             }
-            else {
-                regions[i] = new GreasedRegion(temp.flood8way(bounds));
-                if (ct == (ct2 = temp.size()))
-                    done = true;
-                else
-                    ct = ct2;
-            }
+            result = regions;
         }
-        return regions;
+        return result;
     }
 
     /**
@@ -4245,57 +4258,54 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param rng a random number generator, like {@link RNG} or {@link GWTRNG}
      * @return this, after expanding randomly, for chaining
      */
-    public GreasedRegion spill(GreasedRegion bounds, int volume, IRNG rng)
-    {
-        if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
-            return this;
-        int current = size();
-        if(current >= volume)
-            return this;
-        GreasedRegion t = new GreasedRegion(this).notAnd(bounds);
-        long[] b2 = new long[t.data.length];
-        System.arraycopy(t.data, 0, b2, 0, b2.length);
-        t.remake(this).fringe().and(bounds).tally();
-        if(t.ct <= 0)
-            return this;
-        Coord c;
-        int x, y, p;
-        for (int i = current; i < volume; i++) {
-            c = t.singleRandom(rng);
-            x = c.x;
-            y = c.y;
-            if(data[p = x * ySections + (y >> 6)] != (data[p] |= 1L << (y & 63)))
-            {
-                counts[p]++;
-                for (int j = p+1; j < data.length; j++) {
-                    if(counts[j] > 0) ++counts[j];
-                }
-                ct++;
-                t.data[p] &= ~(1L << (y & 63));
-//                b2[p] &= ~(1L << (y & 63));
-                if(x < width - 1 && (b2[p = (x+1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0)
-                {
-                    t.data[p] |= 1L << (y & 63);
-                }
-                if(y < height - 1 && (b2[p = x * ySections + (y+1 >> 6)] & 1L << (y+1 & 63)) != 0)
-                {
-                    t.data[p] |= 1L << (y+1 & 63);
-                }
-                if(y > 0 && (b2[p = x * ySections + (y-1 >> 6)] & 1L << (y-1 & 63)) != 0)
-                {
-                    t.data[p] |= 1L << (y-1 & 63);
-                }
-                if(x > 0 && (b2[p = (x-1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0)
-                {
+    public GreasedRegion spill(GreasedRegion bounds, int volume, IRNG rng) {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0) {
+        } else {
+            int current = size();
+            if (current >= volume) {
+            } else {
+                GreasedRegion t = new GreasedRegion(this).notAnd(bounds);
+                long[] b2 = new long[t.data.length];
+                System.arraycopy(t.data, 0, b2, 0, b2.length);
+                t.remake(this).fringe().and(bounds).tally();
+                if (t.ct <= 0) {
+                } else {
+                    Coord c;
+                    int x, y, p;
+                    for (int i = current; i < volume; i++) {
+                        c = t.singleRandom(rng);
+                        x = c.x;
+                        y = c.y;
+                        if (data[p = x * ySections + (y >> 6)] != (data[p] |= 1L << (y & 63))) {
+                            counts[p]++;
+                            for (int j = p + 1; j < data.length; j++) {
+                                if (counts[j] > 0) ++counts[j];
+                            }
+                            ct++;
+                            t.data[p] &= ~(1L << (y & 63));
+                            if (x < width - 1 && (b2[p = (x + 1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0) {
+                                t.data[p] |= 1L << (y & 63);
+                            }
+                            if (y < height - 1 && (b2[p = x * ySections + (y + 1 >> 6)] & 1L << (y + 1 & 63)) != 0) {
+                                t.data[p] |= 1L << (y + 1 & 63);
+                            }
+                            if (y > 0 && (b2[p = x * ySections + (y - 1 >> 6)] & 1L << (y - 1 & 63)) != 0) {
+                                t.data[p] |= 1L << (y - 1 & 63);
+                            }
+                            if (x > 0 && (b2[p = (x - 1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0) {
 
-                    t.data[p] |= 1L << (y & 63);
+                                t.data[p] |= 1L << (y & 63);
+                            }
+                            t.tally();
+                            if (t.ct <= 0) break;
+                        }
+                    }
+                    tallied = false;
                 }
-                t.tally();
-                if(t.ct <= 0) break;
             }
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4512,24 +4522,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborUp()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = ySections - 1; a >= 0; a--) {
-            if(a > 0) {
-                for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] = (data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63);
+    public GreasedRegion neighborUp() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = ySections - 1; a >= 0; a--) {
+                if (a > 0) {
+                    for (int i = a; i < width * ySections; i += ySections) {
+                        data[i] = (data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63);
+                    }
+                } else {
+                    for (int i = a; i < width * ySections; i += ySections) {
+                        data[i] = (data[i] << 1);
+                    }
                 }
             }
-            else {
-                for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] = (data[i] << 1);
-                }
-            }
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4538,24 +4548,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborDown()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = 0; a < ySections; a++) {
-            if(a < ySections - 1) {
-                for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] = (data[i] >>> 1) | ((data[i + 1] & 1L) << 63);
+    public GreasedRegion neighborDown() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = 0; a < ySections; a++) {
+                if (a < ySections - 1) {
+                    for (int i = a; i < width * ySections; i += ySections) {
+                        data[i] = (data[i] >>> 1) | ((data[i + 1] & 1L) << 63);
+                    }
+                } else {
+                    for (int i = a; i < width * ySections; i += ySections) {
+                        data[i] = (data[i] >>> 1);
+                    }
                 }
             }
-            else {
-                for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] = (data[i] >>> 1);
-                }
-            }
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4564,18 +4574,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborLeft()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = 0; a < ySections; a++) {
-            for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                data[i] = data[i - ySections];
+    public GreasedRegion neighborLeft() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = 0; a < ySections; a++) {
+                for (int i = ySections * (width - 1) + a; i >= ySections; i -= ySections) {
+                    data[i] = data[i - ySections];
+                }
+                data[a] = 0L;
             }
-            data[a] = 0L;
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4584,18 +4595,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborRight()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = 0; a < ySections; a++) {
-            for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                data[i] = data[i + ySections];
+    public GreasedRegion neighborRight() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = 0; a < ySections; a++) {
+                for (int i = a; i < (width - 1) * ySections; i += ySections) {
+                    data[i] = data[i + ySections];
+                }
+                data[(width - 1) * ySections + a] = 0L;
             }
-            data[(width-1)*ySections+a] = 0L;
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4605,25 +4617,25 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborUpLeft()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = ySections - 1; a >= 0; a--) {
-            if(a > 0) {
-                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] = (data[i - ySections] << 1) | ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63);
+    public GreasedRegion neighborUpLeft() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = ySections - 1; a >= 0; a--) {
+                if (a > 0) {
+                    for (int i = ySections * (width - 1) + a; i >= ySections; i -= ySections) {
+                        data[i] = (data[i - ySections] << 1) | ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63);
+                    }
+                    data[a] = 0L;
+                } else {
+                    for (int i = ySections * (width - 1) + a; i >= ySections; i -= ySections) {
+                        data[i] = (data[i - ySections] << 1);
+                    }
+                    data[a] = 0L;
                 }
-                data[a] = 0L;
-            }
-            else {
-                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] = (data[i - ySections] << 1);
-                }
-                data[a] = 0L;
             }
         }
-        return this;
+        return result;
     }
 
     /**
@@ -4633,26 +4645,26 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborUpRight()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = ySections - 1; a >= 0; a--) {
-            if(a > 0) {
-                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] = (data[i + ySections] << 1) | ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63);
+    public GreasedRegion neighborUpRight() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = ySections - 1; a >= 0; a--) {
+                if (a > 0) {
+                    for (int i = a; i < (width - 1) * ySections; i += ySections) {
+                        data[i] = (data[i + ySections] << 1) | ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63);
+                    }
+                    data[(width - 1) * ySections + a] = 0L;
+                } else {
+                    for (int i = a; i < (width - 1) * ySections; i += ySections) {
+                        data[i] = (data[i + ySections] << 1);
+                    }
+                    data[(width - 1) * ySections + a] = 0L;
                 }
-                data[(width-1)*ySections+a] = 0L;
             }
-            else {
-                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] = (data[i + ySections] << 1);
-                }
-                data[(width-1)*ySections+a] = 0L;
-            }
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4662,26 +4674,26 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborDownLeft()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = 0; a < ySections; a++) {
-            if(a < ySections - 1) {
-                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] = (data[i - ySections] >>> 1) | ((data[i - ySections + 1] & 1L) << 63);
+    public GreasedRegion neighborDownLeft() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = 0; a < ySections; a++) {
+                if (a < ySections - 1) {
+                    for (int i = ySections * (width - 1) + a; i >= ySections; i -= ySections) {
+                        data[i] = (data[i - ySections] >>> 1) | ((data[i - ySections + 1] & 1L) << 63);
+                    }
+                    data[a] = 0L;
+                } else {
+                    for (int i = ySections * (width - 1) + a; i >= ySections; i -= ySections) {
+                        data[i] = (data[i - ySections] >>> 1);
+                    }
+                    data[a] = 0L;
                 }
-                data[a] = 0L;
             }
-            else {
-                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] = (data[i - ySections] >>> 1);
-                }
-                data[a] = 0L;
-            }
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -4691,26 +4703,26 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
-    public GreasedRegion neighborDownRight()
-    {
-        if(width < 2 || ySections <= 0)
-            return this;
-        for (int a = 0; a < ySections; a++) {
-            if(a < ySections - 1) {
-                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] = (data[i + ySections] >>> 1) | ((data[i + ySections + 1] & 1L) << 63);
+    public GreasedRegion neighborDownRight() {
+        GreasedRegion result = this;
+        if (width < 2 || ySections <= 0) {
+        } else {
+            for (int a = 0; a < ySections; a++) {
+                if (a < ySections - 1) {
+                    for (int i = a; i < (width - 1) * ySections; i += ySections) {
+                        data[i] = (data[i + ySections] >>> 1) | ((data[i + ySections + 1] & 1L) << 63);
+                    }
+                    data[(width - 1) * ySections + a] = 0L;
+                } else {
+                    for (int i = a; i < (width - 1) * ySections; i += ySections) {
+                        data[i] = (data[i + ySections] >>> 1);
+                    }
+                    data[(width - 1) * ySections + a] = 0L;
                 }
-                data[(width-1)*ySections+a] = 0L;
             }
-            else {
-                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] = (data[i + ySections] >>> 1);
-                }
-                data[(width-1)*ySections+a] = 0L;
-            }
+            tallied = false;
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     public GreasedRegion removeIsolated()
@@ -4733,17 +4745,20 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param other another GreasedRegion; its size does not have to match this GreasedRegion's size
      * @return true if this shares any "on" cells with other
      */
-    public boolean intersects(GreasedRegion other)
-    {
-        if(other == null)
-            return false;
-        for (int x = 0; x < width && x < other.width; x++) {
-            for (int y = 0; y < ySections && y < other.ySections; y++) {
-                if((data[x * ySections + y] & other.data[x * ySections + y]) != 0)
-                    return true;
+    public boolean intersects(GreasedRegion other) {
+        boolean result = false;
+        if (other != null) {
+            OUTER:
+            for (int x = 0; x < width && x < other.width; x++) {
+                for (int y = 0; y < ySections && y < other.ySections; y++) {
+                    if ((data[x * ySections + y] & other.data[x * ySections + y]) != 0) {
+                        result = true;
+                        break OUTER;
+                    }
+                }
             }
         }
-        return false;
+        return result;
     }
 
     public static OrderedSet<GreasedRegion> whichContain(int x, int y, GreasedRegion ... packed)
@@ -4811,8 +4826,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return ct;
     }
 
-    public Coord fit(double xFraction, double yFraction)
-    {
+    public Coord fit(double xFraction, double yFraction) {
+        Coord result = null;
+        boolean finished = false;
         int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
         long t;
         int[] xCounts = new int[width];
@@ -4826,84 +4842,90 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
-        xTarget = (int)(xTotal * xFraction);
+        xTarget = (int) (xTotal * xFraction);
         for (int x = 0; x < width; x++) {
-            if((xTarget -= xCounts[x]) < 0)
-            {
+            if ((xTarget -= xCounts[x]) < 0) {
                 bestX = x;
                 yTotal = xCounts[x];
                 break;
             }
         }
-        if(bestX < 0)
-        {
-            return Coord.get(-1, -1);
-        }
-        yTarget = (int)(yTotal * yFraction);
-
-        for (int s = 0, y = 0; s < ySections; s++) {
-            t = data[bestX * ySections + s] | 0L;
-            for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
-                if((t & (cy | 0L)) != 0 && --yTarget < 0)
-                {
-                    return Coord.get(bestX, y);
-                }
-            }
-        }
-
-        return Coord.get(-1, -1);
-    }
-
-    public int[][] fit(int[][] basis, int defaultValue)
-    {
-        int[][] next = ArrayTools.fill(defaultValue, width, height);
-        if(basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0)
-            return next;
-        int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX, oX = basis.length, oY = basis[0].length, ao;
-        long t;
-        int[] xCounts = new int[width];
-        for (int x = 0; x < width; x++) {
-            for (int s = 0; s < ySections; s++) {
-                t = data[x * ySections + s] | 0L;
-                if (t != 0) {
-                    tmp = Long.bitCount(t);
-                    xCounts[x] += tmp;
-                    xTotal += tmp;
-                }
-            }
-        }
-        if(xTotal <= 0)
-            return next;
-        for (int aX = 0; aX < oX; aX++) {
-            CELL_WISE:
-            for (int aY = 0; aY < oY; aY++) {
-                if((ao = basis[aX][aY]) == defaultValue)
-                    continue;
-                xTarget = xTotal * aX / oX;
-                for (int x = 0; x < width; x++) {
-                    if((xTarget -= xCounts[x]) < 0)
-                    {
-                        bestX = x;
-                        yTotal = xCounts[x];
-                        yTarget = yTotal * aY / oY;
-                        for (int s = 0, y = 0; s < ySections; s++) {
-                            t = data[bestX * ySections + s] | 0L;
-                            for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
-                                if((t & (cy|0L)) != 0 && --yTarget < 0)
-                                {
-                                    next[bestX][y] = ao;
-                                    continue CELL_WISE;
-                                }
-                            }
-                        }
-                        continue CELL_WISE;
+        if (bestX < 0) {
+            result = Coord.get(-1, -1);
+        } else {
+            yTarget = (int) (yTotal * yFraction);
+            for (int s = 0, y = 0; s < ySections; s++) {
+                t = data[bestX * ySections + s] | 0L;
+                for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
+                    if ((t & (cy | 0L)) != 0 && --yTarget < 0) {
+                        result = Coord.get(bestX, y);
+                        finished = true;
+                        break;
                     }
                 }
-
+                if (finished) break;
+            }
+            if (!finished) {
+                result = Coord.get(-1, -1);
             }
         }
 
-        return next;
+        return result;
+    }
+
+    public int[][] fit(int[][] basis, int defaultValue) {
+        int[][] result;
+        int[][] next = ArrayTools.fill(defaultValue, width, height);
+        if (basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0) {
+            result = next;
+        } else {
+            int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX, oX = basis.length, oY = basis[0].length, ao;
+            long t;
+            int[] xCounts = new int[width];
+            for (int x = 0; x < width; x++) {
+                for (int s = 0; s < ySections; s++) {
+                    t = data[x * ySections + s] | 0L;
+                    if (t != 0) {
+                        tmp = Long.bitCount(t);
+                        xCounts[x] += tmp;
+                        xTotal += tmp;
+                    }
+                }
+            }
+            if (xTotal <= 0) {
+                result = next;
+            } else {
+                for (int aX = 0; aX < oX; aX++) {
+                    CELL_WISE:
+                    for (int aY = 0; aY < oY; aY++) {
+                        if ((ao = basis[aX][aY]) == defaultValue)
+                            continue;
+                        xTarget = xTotal * aX / oX;
+                        for (int x = 0; x < width; x++) {
+                            if ((xTarget -= xCounts[x]) < 0) {
+                                bestX = x;
+                                yTotal = xCounts[x];
+                                yTarget = yTotal * aY / oY;
+                                for (int s = 0, y = 0; s < ySections; s++) {
+                                    t = data[bestX * ySections + s] | 0L;
+                                    for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
+                                        if ((t & (cy | 0L)) != 0 && --yTarget < 0) {
+                                            next[bestX][y] = ao;
+                                            continue CELL_WISE;
+                                        }
+                                    }
+                                }
+                                continue CELL_WISE;
+                            }
+                        }
+
+                    }
+                }
+                result = next;
+            }
+        }
+
+        return result;
     }
     
     /**
@@ -4913,54 +4935,56 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param fraction between 0.0 and 1.0
      * @return a Coord array that may not have the full fraction used; you have been advised
      */
-    public Coord[] separatedPortion(double fraction)
-    {
-        if(fraction < 0)
-            return new Coord[0];
-        if(fraction > 1)
-            fraction = 1;
-        int ct, tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
-        long t;
-        int[] xCounts = new int[width];
-        for (int s = 0; s < ySections; s++) {
-            for (int x = 0; x < width; x++) {
-                t = data[x * ySections + s] | 0L;
-                if (t != 0) {
-                    tmp = Long.bitCount(t);
-                    xCounts[x] += tmp;
-                    xTotal += tmp;
-                }
-            }
-        }
-        Coord[] vl = new Coord[ct = (int)(fraction * xTotal)];
-        double[] vec = new double[2];
-        sobol.skipTo(1337);
-        EACH_SOBOL:
-        for (int i = 0; i < ct; i++)
-        {
-            sobol.fillVector(vec);
-            xTarget = (int) (xTotal * vec[0]);
-            for (int x = 0; x < width; x++) {
-                if ((xTarget -= xCounts[x]) < 0) {
-                    bestX = x;
-                    yTotal = xCounts[x];
-                    break;
-                }
-            }
-            yTarget = (int) (yTotal * vec[1]);
-
-            for (int s = 0, y = 0; s < ySections; s++) {
-                t = data[bestX * ySections + s] | 0L;
-                for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
-                    if ((t & (cy|0L)) != 0 && --yTarget < 0) {
-                        vl[i] = Coord.get(bestX, y);
-                        continue EACH_SOBOL;
+    public Coord[] separatedPortion(double fraction) {
+        Coord[] result;
+        if (fraction < 0) {
+            result = new Coord[0];
+        } else {
+            if (fraction > 1)
+                fraction = 1;
+            int ct, tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
+            long t;
+            int[] xCounts = new int[width];
+            for (int s = 0; s < ySections; s++) {
+                for (int x = 0; x < width; x++) {
+                    t = data[x * ySections + s] | 0L;
+                    if (t != 0) {
+                        tmp = Long.bitCount(t);
+                        xCounts[x] += tmp;
+                        xTotal += tmp;
                     }
                 }
             }
-        }
-        return vl;
+            Coord[] vl = new Coord[ct = (int) (fraction * xTotal)];
+            double[] vec = new double[2];
+            sobol.skipTo(1337);
+            EACH_SOBOL:
+            for (int i = 0; i < ct; i++) {
+                sobol.fillVector(vec);
+                xTarget = (int) (xTotal * vec[0]);
+                for (int x = 0; x < width; x++) {
+                    if ((xTarget -= xCounts[x]) < 0) {
+                        bestX = x;
+                        yTotal = xCounts[x];
+                        break;
+                    }
+                }
+                yTarget = (int) (yTotal * vec[1]);
 
+                for (int s = 0, y = 0; s < ySections; s++) {
+                    t = data[bestX * ySections + s] | 0L;
+                    for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
+                        if ((t & (cy | 0L)) != 0 && --yTarget < 0) {
+                            vl[i] = Coord.get(bestX, y);
+                            continue EACH_SOBOL;
+                        }
+                    }
+                }
+            }
+            result = vl;
+        }
+
+        return result;
     }
     /**
      * Don't use this in new code; prefer {@link #mixedRandomSeparated(double, int, long)} with a random long as the
@@ -4983,57 +5007,59 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param limit how many Coord values this should return, at most; typically this will return less
      * @return a Coord array that may not have the full fraction used; you have been advised
      */
-    public Coord[] randomSeparated(double fraction, IRNG rng, int limit)
-    {
-        if(fraction < 0)
-            return new Coord[0];
-        if(fraction > 1)
-            fraction = 1;
-        int ct, tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
-        long t;
-        int[] xCounts = new int[width];
-        for (int x = 0; x < width; x++) {
-            for (int s = 0; s < ySections; s++) {
-                t = data[x * ySections + s] | 0L;
-                if (t != 0) {
-                    tmp = Long.bitCount(t);
-                    xCounts[x] += tmp;
-                    xTotal += tmp;
-                }
-            }
-        }
-        ct = (int)(fraction * xTotal);
-        if(limit >= 0 && limit < ct)
-            ct = limit;
-        Coord[] vl = new Coord[ct];
-        double[] vec = new double[2];
-        sobol.skipTo(rng.between(1000, 65000));
-        EACH_SOBOL:
-        for (int i = 0; i < ct; i++)
-        {
-            sobol.fillVector(vec);
-            xTarget = (int) (xTotal * vec[0]);
+    public Coord[] randomSeparated(double fraction, IRNG rng, int limit) {
+        Coord[] result;
+        if (fraction < 0) {
+            result = new Coord[0];
+        } else {
+            if (fraction > 1)
+                fraction = 1;
+            int ct, tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
+            long t;
+            int[] xCounts = new int[width];
             for (int x = 0; x < width; x++) {
-                if ((xTarget -= xCounts[x]) < 0) {
-                    bestX = x;
-                    yTotal = xCounts[x];
-                    break;
-                }
-            }
-            yTarget = (int) (yTotal * vec[1]);
-
-            for (int s = 0, y = 0; s < ySections; s++) {
-                t = data[bestX * ySections + s] | 0L;
-                for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
-                    if ((t & (cy|0L)) != 0 && --yTarget < 0) {
-                        vl[i] = Coord.get(bestX, y);
-                        continue EACH_SOBOL;
+                for (int s = 0; s < ySections; s++) {
+                    t = data[x * ySections + s] | 0L;
+                    if (t != 0) {
+                        tmp = Long.bitCount(t);
+                        xCounts[x] += tmp;
+                        xTotal += tmp;
                     }
                 }
             }
-        }
-        return vl;
+            ct = (int) (fraction * xTotal);
+            if (limit >= 0 && limit < ct)
+                ct = limit;
+            Coord[] vl = new Coord[ct];
+            double[] vec = new double[2];
+            sobol.skipTo(rng.between(1000, 65000));
+            EACH_SOBOL:
+            for (int i = 0; i < ct; i++) {
+                sobol.fillVector(vec);
+                xTarget = (int) (xTotal * vec[0]);
+                for (int x = 0; x < width; x++) {
+                    if ((xTarget -= xCounts[x]) < 0) {
+                        bestX = x;
+                        yTotal = xCounts[x];
+                        break;
+                    }
+                }
+                yTarget = (int) (yTotal * vec[1]);
 
+                for (int s = 0, y = 0; s < ySections; s++) {
+                    t = data[bestX * ySections + s] | 0L;
+                    for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
+                        if ((t & (cy | 0L)) != 0 && --yTarget < 0) {
+                            vl[i] = Coord.get(bestX, y);
+                            continue EACH_SOBOL;
+                        }
+                    }
+                }
+            }
+            result = vl;
+        }
+
+        return result;
     }
 
     /**
@@ -5084,39 +5110,43 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return a freshly-allocated Coord array containing the pseudo-random cells
      */
     public Coord[] mixedRandomSeparated(double fraction, int limit, long seed) {
-        if (fraction < 0)
-            return new Coord[0];
-        if (fraction > 1)
-            fraction = 1;
-        int tmp, ic;
-        long t, w;
-        seed |= 1L;
-        final int total = size();
-        int ct = (int) (total * fraction);
-        if (limit >= 0 && limit < ct)
-            ct = limit;
-        Coord[] vl = new Coord[ct];
-        EACH_QUASI:
-        for (int i = 0; i < ct; i++) {
-            tmp = (int) (VanDerCorputQRNG.altDetermine(seed, i + 1) * total);
+        Coord[] result;
+        if (fraction < 0) {
+            result = new Coord[0];
+        } else {
+            if (fraction > 1)
+                fraction = 1;
+            int tmp, ic;
+            long t, w;
+            seed |= 1L;
+            final int total = size();
+            int ct = (int) (total * fraction);
+            if (limit >= 0 && limit < ct)
+                ct = limit;
+            Coord[] vl = new Coord[ct];
+            EACH_QUASI:
+            for (int i = 0; i < ct; i++) {
+                tmp = (int) (VanDerCorputQRNG.altDetermine(seed, i + 1) * total);
 
-            for (int s = 0; s < ySections; s++) {
-                for (int x = 0; x < width; x++) {
-                    if ((ic = counts[x * ySections + s]) > tmp) {
-                        t = data[x * ySections + s]|0L;
-                        for (--ic; t != 0; ic--) {
-                            w = NumberTools.lowestOneBit(t);
-                            if (ic == tmp) {
-                                vl[i] = Coord.get(x, (s << 6) | Long.bitCount(w - 1));
-                                continue EACH_QUASI;
+                for (int s = 0; s < ySections; s++) {
+                    for (int x = 0; x < width; x++) {
+                        if ((ic = counts[x * ySections + s]) > tmp) {
+                            t = data[x * ySections + s] | 0L;
+                            for (--ic; t != 0; ic--) {
+                                w = NumberTools.lowestOneBit(t);
+                                if (ic == tmp) {
+                                    vl[i] = Coord.get(x, (s << 6) | Long.bitCount(w - 1));
+                                    continue EACH_QUASI;
+                                }
+                                t ^= w;
                             }
-                            t ^= w;
                         }
                     }
                 }
             }
+            result = vl;
         }
-        return vl;
+        return result;
     }
 
 
@@ -5164,65 +5194,69 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return this for chaining
      */
     public GreasedRegion mixedRandomRegion(double fraction, int limit, long seed) {
+        GreasedRegion result = this;
         int idx, run = 0;
         final int total = size();
-        if (total <= limit)
-            return this;
-        if (total <= 0)
-            return empty();
-        if (limit < 0)
-            limit = (int) (fraction * ct);
-        if(limit <= 0)
-            return empty();
-        seed |= 1L;
-        int[] order = new int[limit];
-        for (int i = 0, m = 1; i < limit; i++, m++) {
-            idx = (int)(VanDerCorputQRNG.altDetermine(seed, m) * total);
-            BIG:
-            while (true) {
-                for (int j = 0; j < i; j++) {
-                    if (order[j] == idx) {
-                        idx = (int)(VanDerCorputQRNG.altDetermine(seed, ++m) * total);
-                        continue BIG;
-                    }
-                }
-                break;
-            }
-            order[i] = idx;
-        }
-        idx = 0;
-        Arrays.sort(order);
-        long t, w;
-        ALL:
-        for (int s = 0; s < ySections; s++) {
-            for (int x = 0; x < width; x++) {
-                if ((t = data[x * ySections + s]|0L) != 0L) {
-                    w = NumberTools.lowestOneBit(t);
-                    while (w != 0) {
-                        if (run++ == order[idx]) {
-                            if (++idx >= limit) {
-                                data[x * ySections + s] &= (w<<1)-1;
-                                for (int rx = x+1; rx < width; rx++) {
-                                    data[rx * ySections + s] = 0;
-                                }
-                                for (int rs = s+1; rs < ySections; rs++) {
-                                    for (int rx = 0; rx < width; rx++) {
-                                        data[rx * ySections + rs] = 0;
-                                    }
-                                }
-                                break ALL;
+        if (total <= limit) {
+        } else if (total <= 0) {
+            result = empty();
+        } else {
+            if (limit < 0)
+                limit = (int) (fraction * ct);
+            if (limit <= 0) {
+                result = empty();
+            } else {
+                seed |= 1L;
+                int[] order = new int[limit];
+                for (int i = 0, m = 1; i < limit; i++, m++) {
+                    idx = (int) (VanDerCorputQRNG.altDetermine(seed, m) * total);
+                    BIG:
+                    while (true) {
+                        for (int j = 0; j < i; j++) {
+                            if (order[j] == idx) {
+                                idx = (int) (VanDerCorputQRNG.altDetermine(seed, ++m) * total);
+                                continue BIG;
                             }
-                        } else {
-                            data[x * ySections + s] ^= w;
                         }
-                        t ^= w;
-                        w = NumberTools.lowestOneBit(t);
+                        break;
+                    }
+                    order[i] = idx;
+                }
+                idx = 0;
+                Arrays.sort(order);
+                long t, w;
+                ALL:
+                for (int s = 0; s < ySections; s++) {
+                    for (int x = 0; x < width; x++) {
+                        if ((t = data[x * ySections + s] | 0L) != 0L) {
+                            w = NumberTools.lowestOneBit(t);
+                            while (w != 0) {
+                                if (run++ == order[idx]) {
+                                    if (++idx >= limit) {
+                                        data[x * ySections + s] &= (w << 1) - 1;
+                                        for (int rx = x + 1; rx < width; rx++) {
+                                            data[rx * ySections + s] = 0;
+                                        }
+                                        for (int rs = s + 1; rs < ySections; rs++) {
+                                            for (int rx = 0; rx < width; rx++) {
+                                                data[rx * ySections + rs] = 0;
+                                            }
+                                        }
+                                        break ALL;
+                                    }
+                                } else {
+                                    data[x * ySections + s] ^= w;
+                                }
+                                t ^= w;
+                                w = NumberTools.lowestOneBit(t);
+                            }
+                        }
                     }
                 }
+                tallied = false;
             }
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -5232,9 +5266,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * request too many cells (too high of a value for fraction), it will start to overlap, however.
      * Does not restrict the size of the returned array other than only using up to {@code fraction * size()} cells.
      * <br>
-     * You can choose between {@link #mixedRandomSeparated(double)}, {@link #separatedZCurve(double)}, and this method,
-     * where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional gaps between
-     * cells, and this method is somewhere in the middle.
+     * You can choose between {@link #mixedRandomSeparated(double)}, {@link #separatedZCurve(double)}, 
+     * {@link #separatedBlue(double)}, and this method, where all are quasi-random, mixedRandom and
+     * separatedBlue are probably fastest, ZCurve and separatedBlue may have better 2-dimensional gaps
+     * between cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return a freshly-allocated Coord array containing the quasi-random cells
      */
@@ -5251,54 +5286,57 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells are "on").
      * If limit is negative, this will not restrict the size.
      * <br>
-     * You can choose between {@link #mixedRandomSeparated(double, int)}, {@link #separatedZCurve(double, int)}, and
-     * this method, where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional
-     * gaps between cells, and this method is somewhere in the middle.
+     * You can choose between {@link #mixedRandomSeparated(double)}, {@link #separatedZCurve(double)}, 
+     * {@link #separatedBlue(double)}, and this method, where all are quasi-random, mixedRandom and
+     * separatedBlue are probably fastest, ZCurve and separatedBlue may have better 2-dimensional gaps
+     * between cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum size of the array to return
      * @return a freshly-allocated Coord array containing the quasi-random cells
      */
-    public Coord[] quasiRandomSeparated(double fraction, int limit)
-    {
-        if(fraction < 0)
-            return new Coord[0];
-        if(fraction > 1)
-            fraction = 1;
-        int ct = 0, tmp, total, ic;
-        long t, w;
-        int[] counts = new int[width * ySections];
-        for (int i = 0; i < width * ySections; i++) {
-            tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
-        }
-        total = ct;
-        ct *= fraction;// (int)(fraction * ct);
-        if(limit >= 0 && limit < ct)
-            ct = limit;
-        Coord[] vl = new Coord[ct];
-        EACH_QUASI:
-        for (int i = 0; i < ct; i++)
-        {
-            tmp = (int)(VanDerCorputQRNG.determine2(i ^ i >>> 1) * total);
-            for (int s = 0; s < ySections; s++) {
-                for (int x = 0; x < width; x++) {
-                    if ((ic = counts[x * ySections + s]) > tmp) {
-                        t = data[x * ySections + s];
-                        w = NumberTools.lowestOneBit(t);
-                        for (--ic; w != 0; ic--) {
-                            if (ic == tmp) {
-                                vl[i] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
-                                continue EACH_QUASI;
-                            }
-                            t ^= w;
+    public Coord[] quasiRandomSeparated(double fraction, int limit) {
+        Coord[] result;
+        if (fraction < 0) {
+            result = new Coord[0];
+        } else {
+            if (fraction > 1)
+                fraction = 1;
+            int ct = 0, tmp, total, ic;
+            long t, w;
+            int[] counts = new int[width * ySections];
+            for (int i = 0; i < width * ySections; i++) {
+                tmp = Long.bitCount(data[i]);
+                counts[i] = tmp == 0 ? -1 : (ct += tmp);
+            }
+            total = ct;
+            ct *= fraction;// (int)(fraction * ct);
+            if (limit >= 0 && limit < ct)
+                ct = limit;
+            Coord[] vl = new Coord[ct];
+            EACH_QUASI:
+            for (int i = 0; i < ct; i++) {
+                tmp = (int) (VanDerCorputQRNG.determine2(i ^ i >>> 1) * total);
+                for (int s = 0; s < ySections; s++) {
+                    for (int x = 0; x < width; x++) {
+                        if ((ic = counts[x * ySections + s]) > tmp) {
+                            t = data[x * ySections + s];
                             w = NumberTools.lowestOneBit(t);
+                            for (--ic; w != 0; ic--) {
+                                if (ic == tmp) {
+                                    vl[i] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                                    continue EACH_QUASI;
+                                }
+                                t ^= w;
+                                w = NumberTools.lowestOneBit(t);
+                            }
                         }
                     }
                 }
+                vl[i] = atFraction(tmp);
             }
-            vl[i] = atFraction(tmp);
+            result = vl;
         }
-        return vl;
+        return result;
     }
 
 
@@ -5311,8 +5349,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Does not restrict the count of "on" cells after this returns other than by only using up to
      * {@code fraction * size()} cells.
      * <br>
-     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double)}, and this
-     * method, where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional gaps
+     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double), 
+     * {@link #separatedRegionBlue(double)}, and this method, where all are quasi-random, mixedRandom and
+     * separatedRegionBlue are probably fastest, ZCurve and separatedRegionBlue may have better 2-dimensional gaps
      * between cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return this for chaining
@@ -5328,71 +5367,76 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
      * cells are "on"). If limit is negative, this will not restrict the count.
      * <br>
-     * You can choose between {@link #mixedRandomRegion(double, int)}, {@link #separatedRegionZCurve(double, int)}, and
-     * this method, where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional
-     * gaps between cells, and this method is somewhere in the middle.
+     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double),
+     * {@link #separatedRegionBlue(double)}, and this method, where all are quasi-random, mixedRandom and
+     * separatedRegionBlue are probably fastest, ZCurve and separatedRegionBlue may have better 2-dimensional gaps
+     * between cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum count of "on" cells to keep
      * @return this for chaining
      */
     public GreasedRegion quasiRandomRegion(double fraction, int limit) {
+        GreasedRegion result = this;
         int ct = size(), idx, run = 0;
-        if (ct <= limit)
-            return this;
-        if (ct <= 0)
-            return empty();
-        if (limit < 0)
-            limit = (int) (fraction * ct);
-        if(limit <= 0)
-            return empty();
-        int[] order = new int[limit];
-        for (int i = 0, m = 1; i < limit; i++, m++) {
-            idx = (int) (VanDerCorputQRNG.determine2(m) * ct);
-            BIG:
-            while (true) {
-                for (int j = 0; j < i; j++) {
-                    if (order[j] == idx) {
-                        idx = (int) (VanDerCorputQRNG.determine2(++m) * ct);
-                        continue BIG;
-                    }
-                }
-                break;
-            }
-            order[i] = idx;
-        }
-        idx = 0;
-        Arrays.sort(order);
-        long t, w;
-        ALL:
-        for (int s = 0; s < ySections; s++) {
-            for (int x = 0; x < width; x++) {
-                if ((t = data[x * ySections + s]) != 0) {
-                    w = NumberTools.lowestOneBit(t);
-                    while (w != 0) {
-                        if (run++ == order[idx]) {
-                            if (++idx >= limit) {
-                                data[x * ySections + s] &= (w<<1)-1;
-                                for (int rx = x+1; rx < width; rx++) {
-                                    data[rx * ySections + s] = 0;
-                                }
-                                for (int rs = s+1; rs < ySections; rs++) {
-                                    for (int rx = 0; rx < width; rx++) {
-                                        data[rx * ySections + rs] = 0;
-                                    }
-                                }
-                                break ALL;
+        if (ct <= limit) {
+        } else if (ct <= 0) {
+            result = empty();
+        } else {
+            if (limit < 0)
+                limit = (int) (fraction * ct);
+            if (limit <= 0) {
+                result = empty();
+            } else {
+                int[] order = new int[limit];
+                for (int i = 0, m = 1; i < limit; i++, m++) {
+                    idx = (int) (VanDerCorputQRNG.determine2(m) * ct);
+                    BIG:
+                    while (true) {
+                        for (int j = 0; j < i; j++) {
+                            if (order[j] == idx) {
+                                idx = (int) (VanDerCorputQRNG.determine2(++m) * ct);
+                                continue BIG;
                             }
-                        } else {
-                            data[x * ySections + s] ^= w;
                         }
-                        t ^= w;
-                        w = NumberTools.lowestOneBit(t);
+                        break;
+                    }
+                    order[i] = idx;
+                }
+                idx = 0;
+                Arrays.sort(order);
+                long t, w;
+                ALL:
+                for (int s = 0; s < ySections; s++) {
+                    for (int x = 0; x < width; x++) {
+                        if ((t = data[x * ySections + s]) != 0) {
+                            w = NumberTools.lowestOneBit(t);
+                            while (w != 0) {
+                                if (run++ == order[idx]) {
+                                    if (++idx >= limit) {
+                                        data[x * ySections + s] &= (w << 1) - 1;
+                                        for (int rx = x + 1; rx < width; rx++) {
+                                            data[rx * ySections + s] = 0;
+                                        }
+                                        for (int rs = s + 1; rs < ySections; rs++) {
+                                            for (int rx = 0; rx < width; rx++) {
+                                                data[rx * ySections + rs] = 0;
+                                            }
+                                        }
+                                        break ALL;
+                                    }
+                                } else {
+                                    data[x * ySections + s] ^= w;
+                                }
+                                t ^= w;
+                                w = NumberTools.lowestOneBit(t);
+                            }
+                        }
                     }
                 }
+                tallied = false;
             }
         }
-        tallied = false;
-        return this;
+        return result;
     }
 
     /**
@@ -5434,74 +5478,79 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return this for chaining
      */
     public GreasedRegion randomScatter(IRNG rng, int minimumDistance, int limit) {
+        GreasedRegion result = this;
         int tmp, total = 0, ct;
         tally();
-        if(this.ct == 0)
-            return this;
-        if(limit == 0)
-            return empty();
-        else if(limit < 0)
-            limit = width * height;
-        long t, w;
-        long[] data2 = new long[data.length];
-        MAIN_LOOP:
-        while (total < limit) { 
-            if(!tallied) 
-                tally();
-            tmp = rng.nextInt(this.ct);
+        if (this.ct == 0) {
+        } else if (limit == 0) {
+            result = empty();
+        } else {
+            if (limit < 0)
+                limit = width * height;
+            long t, w;
+            long[] data2 = new long[data.length];
+            MAIN_LOOP:
+            while (total < limit) {
+                if (!tallied)
+                    tally();
+                tmp = rng.nextInt(this.ct);
 
-            for (int s = 0; s < ySections; s++) {
-                for (int x = 0; x < width; x++) {
-                    if ((ct = counts[x * ySections + s]) > tmp) {
-                        t = data[x * ySections + s];
-                        w = NumberTools.lowestOneBit(t);
-                        for (--ct; w != 0; ct--) {
-                            if (ct == tmp) {
-                                removeRectangle(x - minimumDistance,
-                                        ((s << 6) | Long.numberOfTrailingZeros(w)) - minimumDistance,
-                                        minimumDistance << 1 | 1, minimumDistance << 1 | 1);
-                                data2[x * ySections + s] |= w;
-                                ++total;
-                                continue MAIN_LOOP;
-                            }
-                            t ^= w;
+                for (int s = 0; s < ySections; s++) {
+                    for (int x = 0; x < width; x++) {
+                        if ((ct = counts[x * ySections + s]) > tmp) {
+                            t = data[x * ySections + s];
                             w = NumberTools.lowestOneBit(t);
+                            for (--ct; w != 0; ct--) {
+                                if (ct == tmp) {
+                                    removeRectangle(x - minimumDistance,
+                                            ((s << 6) | Long.numberOfTrailingZeros(w)) - minimumDistance,
+                                            minimumDistance << 1 | 1, minimumDistance << 1 | 1);
+                                    data2[x * ySections + s] |= w;
+                                    ++total;
+                                    continue MAIN_LOOP;
+                                }
+                                t ^= w;
+                                w = NumberTools.lowestOneBit(t);
+                            }
                         }
                     }
                 }
+                break;
             }
-            break;
+            data = data2;
+            tallied = false;
         }
-        data = data2;
-        tallied = false;
-        return this;
+        return result;
     }
 
-    public double rateDensity()
-    {
+    public double rateDensity() {
+        double result = 0;
         double sz = height * width;
-        if(sz == 0)
-            return 0;
-        double onAmount = sz - size(), retractedOn = sz - copy().retract().size();
-        return (onAmount + retractedOn) / (sz * 2.0);
+        if (sz != 0) {
+            double onAmount = sz - size(), retractedOn = sz - copy().retract().size();
+            result = (onAmount + retractedOn) / (sz * 2.0);
+        }
+        return result;
     }
-    public double rateRegularity()
-    {
+    public double rateRegularity() {
+        double result = 0;
         GreasedRegion me2 = copy().surface8way();
         double irregularCount = me2.size();
-        if(irregularCount == 0)
-            return 0;
-        return me2.remake(this).surface().size() / irregularCount;
+        if (irregularCount != 0) {
+            result = me2.remake(this).surface().size() / irregularCount;
+        }
+        return result;
     }
 
-    private static int median(int[] working, int start, int amount)
-    {
+    private static int median(int[] working, int start, int amount) {
+        int result;
         Arrays.sort(working, start, start + amount);
         if ((amount & 1) == 0) {
-            return working[start + (amount >> 1) - 1] + working[start + (amount >> 1)] >>> 1;
+            result = working[start + (amount >> 1) - 1] + working[start + (amount >> 1)] >>> 1;
         } else {
-            return working[start + (amount >> 1)];
+            result = working[start + (amount >> 1)];
         }
+        return result;
     }
 
     /**
@@ -5594,27 +5643,34 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return asCoords(new Coord[size()]);
 
     }
-    public Coord[] asCoords(Coord[] points)
-    {
-        if(points == null)
+    public Coord[] asCoords(Coord[] points) {
+        Coord[] result = null;
+        if (points == null)
             points = new Coord[size()];
         int idx = 0, len = points.length;
         long t, w;
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                if((t = data[x * ySections + s]) != 0)
-                {
+                if ((t = data[x * ySections + s]) != 0) {
                     w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
-                        if(idx >= len) return points;
+                        if (idx >= len) {
+                            result = points;
+                            break;
+                        }
                         points[idx++] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         t ^= w;
                         w = NumberTools.lowestOneBit(t);
                     }
+                    if (result != null) break;
                 }
             }
+            if (result != null) break;
         }
-        return points;
+        if (result == null) {
+            result = points;
+        }
+        return result;
     }
     public int[] asEncoded()
     {
