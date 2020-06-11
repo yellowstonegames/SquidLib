@@ -197,13 +197,4 @@ public interface AOE extends Serializable {
      */
     void setReach(Reach reach);
 
-    /**
-     * Unused because FOVCache rarely provides a speed boost and usually does the opposite. The implementation for this
-     * method should be a no-op.
-     * @param cache an FOV that could be an FOVCache for the current level; can be null to stop using the cache
-     * @deprecated AOE doesn't really benefit from using an FOVCache
-     */
-    @Deprecated
-    void setCache(FOV cache);
-
 }
