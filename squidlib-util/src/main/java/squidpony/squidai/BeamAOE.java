@@ -1,6 +1,5 @@
 package squidpony.squidai;
 
-import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
@@ -757,17 +756,6 @@ public class BeamAOE implements AOE, Serializable {
         dijkstra.resetMap();
         dijkstra.clearGoals();
         return AreaUtils.dijkstraToHashMap(dmap);
-    }
-
-    /**
-     * Unused because FOVCache rarely provides a speed boost and usually does the opposite. The implementation for this
-     * method should be a no-op.
-     * @param cache an FOV that could be an FOVCache for the current level; can be null to stop using the cache
-     * @deprecated AOE doesn't really benefit from using an FOVCache
-     */
-    @Override
-    @Deprecated
-    public void setCache(FOV cache) {
     }
 
 }

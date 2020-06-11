@@ -594,16 +594,4 @@ public class BlastAOE implements AOE, Serializable {
             this.reach = reach;
     }
 
-    /**
-     * Unused because FOVCache rarely provides a speed boost and usually does the opposite. The implementation for this
-     * method should be a no-op.
-     * @param cache an FOV that could be an FOVCache for the current level; can be null to stop using the cache
-     * @deprecated AOE doesn't really benefit from using an FOVCache
-     */
-    @Override
-    @Deprecated
-    public void setCache(FOV cache) {
-        fov = cache;
-    }
-
 }
