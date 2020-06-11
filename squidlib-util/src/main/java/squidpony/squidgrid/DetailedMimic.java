@@ -201,13 +201,13 @@ public class DetailedMimic {
     {
         int[] result = new int[OW * OH];
         Integer[] origins = new Integer[OW * OH];
-        boolean[][] mask = new boolean[SW][SH], cleanMask = new boolean[SW][SH];
+        GreasedRegion mask = new GreasedRegion(SW, SH);
 
         for (int i = 0; i < OW * OH; i++)
         {
             int x = i % OW, y = i / OW;
             IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();
-            ArrayTools.insert(cleanMask, mask, 0, 0);
+            mask.clear();
 
             for (int dy = -1; dy <= 1; dy++){
                 for (int dx = -1; dx <= 1; dx++)
@@ -222,8 +222,8 @@ public class DetailedMimic {
                             int ox = (p % SW - dx + SW) % SW, oy = (p / SW - dy + SH) % SH;
                             double s = similarity(oy * SW + ox, sample, SW, SH, i, result, OW, OH, N, origins, indexed);
 
-                            if (!mask[ox][oy]) candidates.put(ox + oy * SW, Math.pow(100, s / t));
-                            mask[ox][oy] = true;
+                            if (!mask.contains(ox, oy)) candidates.put(ox + oy * SW, Math.pow(100, s / t));
+                            mask.insert(ox, oy);
                         }
                     }
                 }
