@@ -11507,7 +11507,7 @@ public class SColor extends Color implements Serializable {
 
     /**
      * DawnBringer's 256-color Aurora palette, modified slightly to fit one transparent color by removing one gray.
-     * Aurora is available in <a href="http://pixeljoint.com/forum/forum_posts.asp?TID=26080&KW=">this set of tools</a>
+     * Aurora is available in <a href="http://pixeljoint.com/forum/forum_posts.asp?TID=26080">this set of tools</a>
      * for a pixel art editor, but it is usable for lots of high-color purposes. The original palette did not have
      * names. Naming 256 colors was an ordeal, since many of these colors are well-described by the same name, even when
      * two or more can be distinguished visually from each other. Aurora is a good option as a broad-purpose palette

@@ -11,7 +11,7 @@ import static squidpony.squidmath.Noise.fastFloor;
  * or {@link FastNoise} if you want the effects all in one place or to use {@code float} instead of {@code double}.
  * <br>
  * Created by Tommy Ettinger on 12/14/2016. The technique for point hashing in the "noiseAlt" code is based closely on
- * <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&rep=rep1&type=pdf">this paper</a>,
+ * <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&amp;rep=rep1&amp;type=pdf">this paper</a>,
  * with credit to Andrew Kensler, Aaron Knoll and Peter Shirley. This technique is good, but it may be periodic in
  * undesirable ways, and isn't much faster when implemented in Java than {@link IntPointHash}, if at all.
  */

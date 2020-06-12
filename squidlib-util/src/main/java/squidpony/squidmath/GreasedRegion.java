@@ -5349,7 +5349,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Does not restrict the count of "on" cells after this returns other than by only using up to
      * {@code fraction * size()} cells.
      * <br>
-     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double), 
+     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double)}, 
      * {@link #separatedRegionBlue(double)}, and this method, where all are quasi-random, mixedRandom and
      * separatedRegionBlue are probably fastest, ZCurve and separatedRegionBlue may have better 2-dimensional gaps
      * between cells, and this method is somewhere in the middle.
@@ -5367,7 +5367,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
      * cells are "on"). If limit is negative, this will not restrict the count.
      * <br>
-     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double),
+     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double)},
      * {@link #separatedRegionBlue(double)}, and this method, where all are quasi-random, mixedRandom and
      * separatedRegionBlue are probably fastest, ZCurve and separatedRegionBlue may have better 2-dimensional gaps
      * between cells, and this method is somewhere in the middle.
