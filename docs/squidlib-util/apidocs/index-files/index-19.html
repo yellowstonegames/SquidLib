@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,23 +52,18 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1>Index</h1>
 </div>
-<div class="contentContainer"><a href="index-1.html">$</a>&nbsp;<a href="index-2.html">A</a>&nbsp;<a href="index-3.html">B</a>&nbsp;<a href="index-4.html">C</a>&nbsp;<a href="index-5.html">D</a>&nbsp;<a href="index-6.html">E</a>&nbsp;<a href="index-7.html">F</a>&nbsp;<a href="index-8.html">G</a>&nbsp;<a href="index-9.html">H</a>&nbsp;<a href="index-10.html">I</a>&nbsp;<a href="index-11.html">J</a>&nbsp;<a href="index-12.html">K</a>&nbsp;<a href="index-13.html">L</a>&nbsp;<a href="index-14.html">M</a>&nbsp;<a href="index-15.html">N</a>&nbsp;<a href="index-16.html">O</a>&nbsp;<a href="index-17.html">P</a>&nbsp;<a href="index-18.html">Q</a>&nbsp;<a href="index-19.html">R</a>&nbsp;<a href="index-20.html">S</a>&nbsp;<a href="index-21.html">T</a>&nbsp;<a href="index-22.html">U</a>&nbsp;<a href="index-23.html">V</a>&nbsp;<a href="index-24.html">W</a>&nbsp;<a href="index-25.html">X</a>&nbsp;<a href="index-26.html">Y</a>&nbsp;<a href="index-27.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:R">
+<div class="contentContainer"><a href="index-1.html">$</a>&nbsp;<a href="index-2.html">A</a>&nbsp;<a href="index-3.html">B</a>&nbsp;<a href="index-4.html">C</a>&nbsp;<a href="index-5.html">D</a>&nbsp;<a href="index-6.html">E</a>&nbsp;<a href="index-7.html">F</a>&nbsp;<a href="index-8.html">G</a>&nbsp;<a href="index-9.html">H</a>&nbsp;<a href="index-10.html">I</a>&nbsp;<a href="index-11.html">J</a>&nbsp;<a href="index-12.html">K</a>&nbsp;<a href="index-13.html">L</a>&nbsp;<a href="index-14.html">M</a>&nbsp;<a href="index-15.html">N</a>&nbsp;<a href="index-16.html">O</a>&nbsp;<a href="index-17.html">P</a>&nbsp;<a href="index-18.html">Q</a>&nbsp;<a href="index-19.html">R</a>&nbsp;<a href="index-20.html">S</a>&nbsp;<a href="index-21.html">T</a>&nbsp;<a href="index-22.html">U</a>&nbsp;<a href="index-23.html">V</a>&nbsp;<a href="index-24.html">W</a>&nbsp;<a href="index-25.html">X</a>&nbsp;<a href="index-26.html">Y</a>&nbsp;<a href="index-27.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a><span class="verticalSeparator">|</span><a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:R">
 <!--   -->
 </a>
 <h2 class="title">R</h2>
@@ -116,8 +111,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Basic radius strategy implementations likely to be used for roguelikes.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#radiusKind">radiusKind</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#radiusPositionIterator(int,int,squidpony.squidgrid.Radius,int)">radiusPositionIterator(int, int, Radius, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>
 <div class="block">Iterates through positions in a region defined by a Radius (starting at a minimum of x - distance, y - distance
@@ -140,6 +133,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/BasicCaveGenerator.html#random">random</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/BasicCaveGenerator.html" title="class in squidpony.squidgrid.mapping">BasicCaveGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#random">random</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html" title="class in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator</a></dt>
+<dd>
+<div class="block">Produces chaotic, jumbled spans of corridors that are similar to those produced by Prim's algorithm.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/LanesMapGenerator.html#random">random</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/LanesMapGenerator.html" title="class in squidpony.squidgrid.mapping">LanesMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MimicWFC.html#random">random</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MimicWFC.html" title="class in squidpony.squidgrid">MimicWFC</a></dt>
@@ -318,6 +315,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SquidID.html#randomize()">randomize()</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SquidID.html" title="class in squidpony.squidmath">SquidID</a></dt>
 <dd>
 <div class="block">Makes the IDs generated after calling this non-repeatable, with a random 128-bit seed.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Curlup.html#randomize(long)">randomize(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
+<dd>
+<div class="block">Very similar to Pelican and related unary hashes; uses "xor rotate xor rotate" as an early step to mix any
+ clustered bits all around the result, then the rest is like MurmurHash3's mixer.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomize(long)">randomize(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>
@@ -562,27 +564,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Stupidly simple convenience method that produces a range from 0 to end, not including end, as an int array.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#range(int)">range(int)</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#range(int)"><code>ArrayTools.range(int)</code></a> instead.</div>
-</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#range(int,int)">range(int, int)</a></span> - Static method in class squidpony.<a href="../squidpony/ArrayTools.html" title="class in squidpony">ArrayTools</a></dt>
 <dd>
 <div class="block">Stupidly simple convenience method that produces a range from start to end, not including end, as an int array.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#range(int,int)">range(int, int)</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#range(int,int)"><code>ArrayTools.range(int, int)</code></a> instead.</div>
-</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#rateDensity()">rateDensity()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#rateRegularity()">rateRegularity()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Curlup.html#raum">raum</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#raum">raum</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Curlup.html#raum_">raum_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#raum_">raum_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
 <dd>&nbsp;</dd>
@@ -815,15 +809,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Changes the sequences for all groups of synonyms this can produce, effectively turning this Thesaurus into a
  different version that knows all the same synonyms and categories but will produce different results.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#refreshCache(char%5B%5D%5B%5D)">refreshCache(char[][])</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
-<dd>
-<div class="block">Runs FOV calculations for any cells that were changed as a result of newMap being different from the map passed
- to the FOVCache constructor.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#refreshComplete">refreshComplete</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html#%3Cinit%3E(char%5B%5D%5B%5D)">RefreshUnit(char[][])</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html" title="class in squidpony.squidgrid">FOVCache.RefreshUnit</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IsaacRNG.html#regen()">regen()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath">IsaacRNG</a></dt>
 <dd>
 <div class="block">Generates 256 results to be used by later calls to next() or nextLong().</div>
@@ -1071,12 +1056,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.ValueIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.ValueIterator.html" title="class in squidpony.squidmath">OrderedMap.ValueIterator</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.SharedEntries.SharedEntryIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.SharedEntries.SharedEntryIterator.html" title="class in squidpony.squidmath">OrganizedMap.SharedEntries.SharedEntryIterator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.SharedKeySet.SharedKeyIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.SharedKeySet.SharedKeyIterator.html" title="class in squidpony.squidmath">OrganizedMap.SharedKeySet.SharedKeyIterator</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.SharedValues.SharedValueIterator.html#remove()">remove()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.SharedValues.SharedValueIterator.html" title="class in squidpony.squidmath">OrganizedMap.SharedValues.SharedValueIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#remove(int)">remove(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#remove(int)">remove(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
@@ -1139,8 +1118,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#remove(java.lang.Object)">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#remove(java.lang.Object)">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.html#remove(java.lang.Object)">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.html" title="class in squidpony.squidmath">OrganizedMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/UnorderedMap.html#remove(java.lang.Object)">remove(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a></dt>
 <dd>&nbsp;</dd>
@@ -1295,8 +1272,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Removes the item at the given index in the iteration order in not-exactly constant time (though it still should
  be efficient).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrganizedMap.html#removeAt(int)">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrganizedMap.html" title="class in squidpony.squidmath">OrganizedMap</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2.html#removeB(B)">removeB(B)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a></dt>
 <dd>
 <div class="block">Removes a given B key, if <code>removing</code> exists in this K2's B keys, and also removes any keys
@@ -1310,7 +1285,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeCircle(squidpony.squidmath.Coord,int)">removeCircle(Coord, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeCorners()">removeCorners()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Where a cell is "on" but forms a right-angle with exactly two orthogonally-adjacent "on" cells and exactly two
+ orthogonally-adjacent "off" cells, this turns each of those cells "off." This won't affect east-west lines of
+ flat "on" cells, nor north-south lines.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeEdges()">removeEdges()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Turns all cells that are adjacent to the boundaries of the GreasedRegion to "off".</div>
@@ -1454,21 +1433,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Removes all triangles from this triangle soup that contain the specified
  vertex.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.html#removeTrianglesUsing(squidpony.squidmath.Delaunay3D.MultiCoord)">removeTrianglesUsing(Delaunay3D.MultiCoord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath">Delaunay3D</a></dt>
-<dd>
-<div class="block">Removes all triangles from this triangle soup that contain the specified
- vertex.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#removeValue(int)">removeValue(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
 <dd>
 <div class="block">Removes the first occurrence of the requested value, and returns the index it was removed at (-1 if not found)</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#removeValue(short)">removeValue(short)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#removeWalls(short%5B%5D)">removeWalls(short[])</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
-<dd>
-<div class="block">When you have some packed on/off data and want to make sure it does not include walls, you can use this.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#reorder(int...)">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the
@@ -1528,12 +1498,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with
  <a href="../squidpony/squidmath/RNG.html#randomOrdering(int)"><code>RNG.randomOrdering(int)</code></a> or
  <a href="../squidpony/squidmath/RNG.html#randomOrdering(int,int%5B%5D)"><code>RNG.randomOrdering(int, int[])</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/GwtCompatibility.html#reorder(java.util.ArrayList,int...)">reorder(ArrayList&lt;T&gt;, int...)</a></span> - Static method in class squidpony.<a href="../squidpony/GwtCompatibility.html" title="class in squidpony">GwtCompatibility</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../squidpony/ArrayTools.html#reorder(java.util.ArrayList,int...)"><code>ArrayTools.reorder(ArrayList, int...)</code></a> instead.</div>
-</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#repeats">repeats</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
@@ -1605,8 +1569,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Meant for making maps conform to the Mollweide (elliptical) projection that MimicMap uses.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html#res">res</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html" title="class in squidpony.squidgrid">FOVCache.RefreshUnit</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LongPeriodRNG.html#reseed()">reseed()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LongPeriodRNG.html#reseed(long)">reseed(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a></dt>
@@ -1747,15 +1709,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  a differently-sized amount of internal data to match the new width and height, sets the fields to all match the
  new width and height, and returns this GreasedRegion with its new width and height, with all contents "off".</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#resMap">resMap</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MerlinNoise.html#resolution">resolution</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LowStorageShuffler.html#restart()">restart()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LowStorageShuffler.html" title="class in squidpony.squidmath">LowStorageShuffler</a></dt>
-<dd>
-<div class="block">Starts the same sequence over from the beginning.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SwapOrNotShuffler.html#restart()">restart()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></dt>
 <dd>
 <div class="block">Starts the same sequence over from the beginning.</div>
 </dd>
@@ -1764,14 +1720,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Starts the sequence over, but can change the seed (completely changing the sequence).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShuffledIntSequence.html#restart(int)">restart(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></dt>
-<dd>
-<div class="block">Starts the sequence over, but can change the seed (completely changing the sequence).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#restart(int)">restart(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
-<dd>
-<div class="block">Starts the sequence over, but can change the seed (completely changing the sequence).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SwapOrNotShuffler.html#restart(int)">restart(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></dt>
 <dd>
 <div class="block">Starts the sequence over, but can change the seed (completely changing the sequence).</div>
 </dd>
@@ -1862,6 +1810,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#retractSeriesToLimit8way()">retractSeriesToLimit8way()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#reuseFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int)">reuseFOV(double[][], double[][], int, int)</a></span> - Static method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
+<dd>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#reuseFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int,double)">reuseFOV(double[][], double[][], int, int, double)</a></span> - Static method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>
 <div class="block">Calculates the Field Of View for the provided map from the given x, y
@@ -1896,6 +1849,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#reuseLOS(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int,int,int,int,int)">reuseLOS(double[][], double[][], int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
 <dd>
 <div class="block">Calculates which cells have line of sight from the given x, y coordinates.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#reuseRippleFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int,int,double,squidpony.squidgrid.Radius)">reuseRippleFOV(double[][], double[][], int, int, int, double, Radius)</a></span> - Static method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
+<dd>
+<div class="block">Like the <a href="../squidpony/squidgrid/FOV.html#reuseFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int,double,squidpony.squidgrid.Radius)"><code>FOV.reuseFOV(double[][], double[][], int, int, double, Radius)</code></a> method, but this uses Ripple FOV
+ with a configurable tightness/looseness (between 1, tightest, and 6, loosest).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOV.html#reuseRippleFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int,int,double,squidpony.squidgrid.Radius,double,double)">reuseRippleFOV(double[][], double[][], int, int, int, double, Radius, double, double)</a></span> - Static method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a></dt>
+<dd>
+<div class="block">Like the <a href="../squidpony/squidgrid/FOV.html#reuseFOV(double%5B%5D%5B%5D,double%5B%5D%5B%5D,int,int,double,squidpony.squidgrid.Radius,double,double)"><code>FOV.reuseFOV(double[][], double[][], int, int, double, Radius, double, double)</code></a> method, but this
+ uses Ripple FOV with a configurable tightness/looseness (between 1, tightest, and 6, loosest).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/NaturalLanguageCipher.html#reverse">reverse</a></span> - Variable in class squidpony.<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a></dt>
 <dd>
@@ -1956,9 +1919,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/AestheticDifference.html#rgba8888">rgba8888</a></span> - Static variable in interface squidpony.squidgrid.<a href="../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Curlup.html#rho">rho</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#rho">rho</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#rho">rho</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Curlup.html#rho_">rho_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#rho_">rho_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
 <dd>&nbsp;</dd>
@@ -2178,7 +2145,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">FakeLanguageGen constants that are meant to sound like specific real-world languages, and that all use the Latin
  script (like English) with maybe some accents.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Curlup.html#ronove">ronove</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#ronove">ronove</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Curlup.html#ronove_">ronove_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Curlup.html" title="class in squidpony.squidmath">CrossHash.Curlup</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Yolk.html#ronove_">ronove_</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Yolk.html" title="class in squidpony.squidmath">CrossHash.Yolk</a></dt>
 <dd>&nbsp;</dd>
@@ -2276,6 +2247,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MixedGenerator.html#roomWidth">roomWidth</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MixedGenerator.html" title="class in squidpony.squidgrid.mapping">MixedGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#rosenbergStrongHashCode(int,int)">rosenbergStrongHashCode(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
+<dd>
+<div class="block">A static version of the current <a href="../squidpony/squidmath/Coord.html#hashCode()"><code>Coord.hashCode()</code></a> method of this class, taking x and y as parameters instead of
+ requiring a Coord object.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#rotate(int)">rotate(int)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
 <dd>
 <div class="block">Rotates a copy of this MapModule by the given number of 90-degree turns.</div>
@@ -2355,8 +2331,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/tileset/RoundRoomsDiagonalCorridors.html#%3Cinit%3E()">RoundRoomsDiagonalCorridors()</a></span> - Constructor for class squidpony.tileset.<a href="../squidpony/tileset/RoundRoomsDiagonalCorridors.html" title="class in squidpony.tileset">RoundRoomsDiagonalCorridors</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SwapOrNotShuffler.html#ROUNDS">ROUNDS</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html#%3Cinit%3E()">RoundSideMap()</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a></dt>
 <dd>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
@@ -2399,27 +2373,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MimicFill.html#ruins">ruins</a></span> - Static variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MimicFill.html" title="class in squidpony.squidgrid">MimicFill</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.PerformanceUnit.html#run()">run()</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.PerformanceUnit.html" title="class in squidpony.squidgrid">FOVCache.PerformanceUnit</a></dt>
-<dd>
-<div class="block">When an object implementing interface <code>Runnable</code> is used
- to create a thread, starting the thread causes the object's
- <code>run</code> method to be called in that separately executing
- thread.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.QualityUnit.html#run()">run()</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.QualityUnit.html" title="class in squidpony.squidgrid">FOVCache.QualityUnit</a></dt>
-<dd>
-<div class="block">When an object implementing interface <code>Runnable</code> is used
- to create a thread, starting the thread causes the object's
- <code>run</code> method to be called in that separately executing
- thread.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html#run()">run()</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.RefreshUnit.html" title="class in squidpony.squidgrid">FOVCache.RefreshUnit</a></dt>
-<dd>
-<div class="block">When an object implementing interface <code>Runnable</code> is used
- to create a thread, starting the thread causes the object's
- <code>run</code> method to be called in that separately executing
- thread.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MimicWFC.html#run(long,int)">run(long, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MimicWFC.html" title="class in squidpony.squidgrid">MimicWFC</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MimicWFC.html#run(squidpony.squidmath.IRNG,int)">run(IRNG, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MimicWFC.html" title="class in squidpony.squidgrid">MimicWFC</a></dt>
@@ -2455,7 +2408,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Imitation modern Russian, romanized to use the Latin alphabet.</div>
 </dd>
 </dl>
-<a href="index-1.html">$</a>&nbsp;<a href="index-2.html">A</a>&nbsp;<a href="index-3.html">B</a>&nbsp;<a href="index-4.html">C</a>&nbsp;<a href="index-5.html">D</a>&nbsp;<a href="index-6.html">E</a>&nbsp;<a href="index-7.html">F</a>&nbsp;<a href="index-8.html">G</a>&nbsp;<a href="index-9.html">H</a>&nbsp;<a href="index-10.html">I</a>&nbsp;<a href="index-11.html">J</a>&nbsp;<a href="index-12.html">K</a>&nbsp;<a href="index-13.html">L</a>&nbsp;<a href="index-14.html">M</a>&nbsp;<a href="index-15.html">N</a>&nbsp;<a href="index-16.html">O</a>&nbsp;<a href="index-17.html">P</a>&nbsp;<a href="index-18.html">Q</a>&nbsp;<a href="index-19.html">R</a>&nbsp;<a href="index-20.html">S</a>&nbsp;<a href="index-21.html">T</a>&nbsp;<a href="index-22.html">U</a>&nbsp;<a href="index-23.html">V</a>&nbsp;<a href="index-24.html">W</a>&nbsp;<a href="index-25.html">X</a>&nbsp;<a href="index-26.html">Y</a>&nbsp;<a href="index-27.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a></div>
+<a href="index-1.html">$</a>&nbsp;<a href="index-2.html">A</a>&nbsp;<a href="index-3.html">B</a>&nbsp;<a href="index-4.html">C</a>&nbsp;<a href="index-5.html">D</a>&nbsp;<a href="index-6.html">E</a>&nbsp;<a href="index-7.html">F</a>&nbsp;<a href="index-8.html">G</a>&nbsp;<a href="index-9.html">H</a>&nbsp;<a href="index-10.html">I</a>&nbsp;<a href="index-11.html">J</a>&nbsp;<a href="index-12.html">K</a>&nbsp;<a href="index-13.html">L</a>&nbsp;<a href="index-14.html">M</a>&nbsp;<a href="index-15.html">N</a>&nbsp;<a href="index-16.html">O</a>&nbsp;<a href="index-17.html">P</a>&nbsp;<a href="index-18.html">Q</a>&nbsp;<a href="index-19.html">R</a>&nbsp;<a href="index-20.html">S</a>&nbsp;<a href="index-21.html">T</a>&nbsp;<a href="index-22.html">U</a>&nbsp;<a href="index-23.html">V</a>&nbsp;<a href="index-24.html">W</a>&nbsp;<a href="index-25.html">X</a>&nbsp;<a href="index-26.html">Y</a>&nbsp;<a href="index-27.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a><span class="verticalSeparator">|</span><a href="../allpackages-index.html">All&nbsp;Packages</a></div>
 </main>
 <footer role="contentinfo">
 <nav role="navigation">
@@ -2485,5 +2438,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

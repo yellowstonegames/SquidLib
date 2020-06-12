@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,23 +51,18 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1>Index</h1>
 </div>
-<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:S">
+<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a><span class="verticalSeparator">|</span><a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:S">
 <!--   -->
 </a>
 <h2 class="title">S</h2>
@@ -215,17 +210,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Creates a new color that's the same value as the passed in color and
  given the provided name.</div>
 </dd>
-<dt><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">SColorFactory</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">You should use <a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidColorCenter</code></a> or pure SColor methods on floats instead.</div>
-</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html#%3Cinit%3E()">SColorFactory()</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Constructs a new SColorFactory with an empty cache.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#SCORCHED_BROWN">SCORCHED_BROWN</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">This color constant "Scorched Brown" has RGB code <code>0x351F19</code>, red 0.20784314, green 0.12156863, blue 0.09803922, alpha 1, hue 0.035714388, saturation 0.5283019, and value 0.20784314.</div>
@@ -347,17 +331,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setColorCenter(squidpony.IColorCenter)">setColorCenter(IColorCenter&lt;Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
 <dd>
-<div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
+<div class="block">Use this method if you use your own <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink"><code>IColorCenter</code></a> and want this
  panel not to allocate its own colors (or fill
  <a href="../squidpony/squidgrid/gui/gdx/DefaultResources.html#getSCC()"><code>DefaultResources.getSCC()</code></a> but instead to the provided center.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#setColorCenter(squidpony.IColorCenter)">setColorCenter(IColorCenter&lt;Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
-<dd>
-<div class="block">Method to change the backing <code>IColorCenter</code>.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#setColorCenter(squidpony.IColorCenter)">setColorCenter(IColorCenter&lt;Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>
-<div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
+<div class="block">Use this method if you use your own <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink"><code>IColorCenter</code></a> and want this
  panel not to allocate its own colors (or fill
  <a href="../squidpony/squidgrid/gui/gdx/DefaultResources.html#getSCC()"><code>DefaultResources.getSCC()</code></a> but instead to the provided center.</div>
 </dd>
@@ -379,20 +359,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Sets the list of colors this uses to choose what color it draws with.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AnimatedPNG.html#setCompression(int)">setCompression(int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AnimatedPNG.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedPNG</a></dt>
-<dd>
-<div class="block">Sets the deflate compression level.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PNG8.html#setCompression(int)">setCompression(int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PNG8.html" title="class in squidpony.squidgrid.gui.gdx">PNG8</a></dt>
-<dd>
-<div class="block">Sets the deflate compression level.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#setDefaultBackground(com.badlogic.gdx.graphics.Color)">setDefaultBackground(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
 <dd>
 <div class="block">Sets the default background color.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground(Color)</a></span> - Method in interface squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></dt>
+<dd>
+<div class="block">Sets the default foreground color.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
 <dd>
 <div class="block">Sets the default foreground color.</div>
@@ -405,10 +381,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setDirectionGlyph(char)">setDirectionGlyph(char)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#setDitherStrength(float)">setDitherStrength(float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
-<dd>
-<div class="block">Changes the "strength" of the dither effect applied during <a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduce(com.badlogic.gdx.graphics.Pixmap)"><code>PaletteReducer.reduce(Pixmap)</code></a> calls.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PackedColorAction.html#setEndColor(float)">setEndColor(float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PackedColorAction.html" title="class in squidpony.squidgrid.gui.gdx">PackedColorAction</a></dt>
 <dd>
 <div class="block">Sets the color to transition to.</div>
@@ -423,26 +395,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/FilterBatch.html#setFilter(squidpony.squidgrid.gui.gdx.FloatFilter)">setFilter(FloatFilter)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/FilterBatch.html" title="class in squidpony.squidgrid.gui.gdx">FilterBatch</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html#setFirst(squidpony.panel.IColoredString)">setFirst(IColoredString&lt;T&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">LinesPanel</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Change the first entry in <code>this</code> to  <code>ics</code>, overwriting the existing
- first entry if present.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AnimatedPNG.html#setFlipY(boolean)">setFlipY(boolean)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AnimatedPNG.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedPNG</a></dt>
-<dd>
-<div class="block">If true, the resulting AnimatedPNG is flipped vertically.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PNG8.html#setFlipY(boolean)">setFlipY(boolean)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PNG8.html" title="class in squidpony.squidgrid.gui.gdx">PNG8</a></dt>
-<dd>
-<div class="block">If true, the resulting PNG is flipped vertically.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html#setFloor(int)">setFloor(int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Sets the value at which each of the red, green, and blue values will be
- set to the nearest lower multiple of.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#setFont(com.badlogic.gdx.graphics.g2d.BitmapFont)">setFont(BitmapFont)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx">TextPanel</a></dt>
 <dd>
 <div class="block">Sets the font to use.</div>
@@ -569,12 +521,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidInput.html#setKeyHandler(squidpony.squidgrid.gui.gdx.SquidInput.KeyHandler)">setKeyHandler(SquidInput.KeyHandler)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html#setLast(squidpony.panel.IColoredString)">setLast(IColoredString&lt;T&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">LinesPanel</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Change the last entry in <code>this</code> to  <code>ics</code>, overwriting the existing
- last entry if present.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#setLayer(int,squidpony.squidgrid.gui.gdx.SparseTextMap)">setLayer(int, SparseTextMap)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
 <dd>
 <div class="block">Sets the SparseTextMap associated with the given layerNumber to the given contents.</div>
@@ -934,7 +880,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">SquidColorCenter</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
 <dd>
-<div class="block">A concrete implementation of <code>IColorCenter</code> for libgdx's <code>Color</code>.</div>
+<div class="block">A concrete implementation of <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink"><code>IColorCenter</code></a> for libgdx's <code>Color</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html#%3Cinit%3E()">SquidColorCenter()</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a></dt>
 <dd>
@@ -1324,7 +1270,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ICellVisible.Basic.html#symbol">symbol</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ICellVisible.Basic.html" title="class in squidpony.squidgrid.gui.gdx">ICellVisible.Basic</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a></div>
+<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a><span class="verticalSeparator">|</span><a href="../allpackages-index.html">All&nbsp;Packages</a></div>
 </main>
 <footer role="contentinfo">
 <nav role="navigation">
@@ -1353,5 +1299,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

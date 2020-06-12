@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class MersenneTwister" class="title">Class MersenneTwister</h1>
@@ -101,7 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.87">MersenneTwister</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.92">MersenneTwister</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></pre>
 <div class="block">Mersenne Twister, 64-bit version as a RandomnessSource.
@@ -115,8 +110,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  are guaranteed to be at least <code>pow(2, 40)</code> values long, and they are
  <code>pow(2, 8295)</code> values long on average." IsaacRNG should be your choice if security is a
  concern, LongPeriodRNG if quality and speed are important, and MersenneTwister should be used
- if period is the only criterion to judge an RNG on. There may be a CMWC generator added at
- some point, which would have potentially a greater period than the Mersenne Twister.
+ if period is the only criterion to judge an RNG on. Keep in mind that extremely long periods
+ are not always a good thing; there are known states for the Mersenne Twister that produce dozens
+ of <code>0</code> outputs in a row, which is fundamentally impossible for <a href="LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> or
+ <a href="DiverRNG.html" title="class in squidpony.squidmath"><code>DiverRNG</code></a>. It also would take longer to exhaust the period of a 128-bit-state generator
+ (generating 100 gigabytes per second) than the amount of time humans have walked the Earth.
+ This has 19968 bits of state... so if 128 is more than is possible to exhaust, why do you need
+ 19968 bits, again? Consider <a href="GoatRNG.html" title="class in squidpony.squidmath"><code>GoatRNG</code></a> if you want a high-quality 128-bit generator.
  <br>
  This is mostly a straight port of the
  <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/mt19937-64.c">
@@ -281,14 +281,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">MersenneTwister</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.131">MersenneTwister</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.136">MersenneTwister</a></span>()</div>
 <div class="block">Seeds this using two calls to Math.random().</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">MersenneTwister</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.141">MersenneTwister</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.146">MersenneTwister</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Seeds this with the given long, which will be used to affect the large state.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -299,7 +299,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long[])">MersenneTwister</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.150">MersenneTwister</a></span>&#8203;(<span class="arguments">long[]&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.155">MersenneTwister</a></span>&#8203;(<span class="arguments">long[]&nbsp;seed)</span></div>
 <div class="block">Seeds this with the given long array, which will be used to affect the large state, and not used directly.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -320,7 +320,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="setSeed(long)">setSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.160">setSeed</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.165">setSeed</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Initalize the pseudo random number generator with 64 bits.
  Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.</div>
 <dl>
@@ -332,7 +332,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="setSeed(long[])">setSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.173">setSeed</a></span>&#8203;(<span class="arguments">long[]&nbsp;array)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.178">setSeed</a></span>&#8203;(<span class="arguments">long[]&nbsp;array)</span></div>
 <div class="block">Initalize the pseudo random number generator with a long array of any size, which should not be null but can be.
  Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.</div>
 <dl>
@@ -344,7 +344,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="next(int)">next</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.212">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.217">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
 <div class="block">Returns up to 32 random bits.
  <br>
  The implementation splits a 64-bit long into two 32-bit chunks.</div>
@@ -361,7 +361,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong()">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.230">nextLong</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.235">nextLong</a></span>()</div>
 <div class="block">Returns 64 random bits.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -374,7 +374,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="MersenneTwister.html" title="class in squidpony.squidmath">MersenneTwister</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.260">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="MersenneTwister.html" title="class in squidpony.squidmath">MersenneTwister</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.265">copy</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="RandomnessSource.html#copy()">RandomnessSource</a></code></span></div>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
@@ -390,7 +390,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.270">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.275">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -400,7 +400,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.276">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.281">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -410,7 +410,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.286">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.291">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -423,8 +423,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -470,5 +470,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai.astar</a></div>
 <h1 title="Class Pathfinder" class="title">Class Pathfinder&lt;N&gt;</h1>
@@ -101,22 +96,25 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>N</code> - Type of node</dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.48">Pathfinder</a>&lt;N&gt;
+<pre>public class <a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.51">Pathfinder</a>&lt;N&gt;
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">An indexed A* pathfinder that works with a Graph of nodes (generic type <code>N</code>). The path this returns is an
- ArrayList of <a href="Connection.html" title="interface in squidpony.squidai.astar"><code>Connection</code></a> items, which can be entered in order to handle movement.
+ ArrayList of <a href="Connection.html" title="interface in squidpony.squidai.astar"><code>Connection</code></a> items, which can be entered in order to handle movement. You can also receive an
+ ArrayList of nodes instead, which may make more sense if the Connections always have the same cost. The node type is
+ often <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a>, and the Graph is often a <a href="DefaultGraph.html" title="class in squidpony.squidai.astar"><code>DefaultGraph</code></a> in that case.
  <p>
- This implementation is a common variation of the A* algorithm that is faster than the general A*.
+ This implementation is a common variation of the A* algorithm that is faster than the general A*; it was originally
+ from gdx-ai as IndexedAStarPathFinder.
  <p>
  In the general A* implementation, data are held for each node in the open or closed lists, and these data are held as a
  NodeRecord instance. Records are created when a node is first considered and then moved between the open and closed lists, as
  required. There is a key step in the algorithm where the lists are searched for a node record corresponding to a particular
- node. This operation is something time-consuming.
+ node. This operation is somewhat time-consuming.
  <p>
  The indexed A* algorithm improves execution speed by using an array of all the node records for every node in the graph. Nodes
  must be numbered using sequential integers (see <a href="Graph.html#getIndex(N)"><code>Graph.getIndex(Object)</code></a>), so we don't need to search for a node in the
  two lists at all. We can simply use the node index to look up its record in the array (creating it if it is missing). This
- means that the close list is no longer needed. To know whether a node is open or closed, we use the <code>category</code> of the node record. This makes the search step very fast indeed (in fact, there is no search, and we can go straight
+ means that the close list is no longer needed. To know whether a node is open or closed, we use the <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true#category" title="class or interface in squidpony.squidai.astar" class="externalLink"><code>category</code></a> of the node record. This makes the search step very fast indeed (in fact, there is no search, and we can go straight
  to the information we need). Unfortunately, we can't get rid of the open list because we still need to be able to retrieve the
  element with the lowest cost. However, we use a <a href="../../squidmath/BinaryHeap.html" title="class in squidpony.squidmath"><code>BinaryHeap</code></a> for the open list in order to keep performance as high as
  possible.</div>
@@ -179,7 +177,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#current">current</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -194,7 +192,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;[]</code></td>
+<td class="colFirst"><code>protected <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#nodeRecords">nodeRecords</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -204,7 +202,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../squidmath/BinaryHeap.html" title="class in squidpony.squidmath">BinaryHeap</a>&lt;squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../squidmath/BinaryHeap.html" title="class in squidpony.squidmath">BinaryHeap</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openList">openList</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -268,8 +266,8 @@ boolean&nbsp;calculateMetrics)</code></th>
 <tbody>
 <tr class="altColor" id="i0">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addToOpenList(squidpony.squidai.astar.Pathfinder.NodeRecord,float)">addToOpenList</a></span>&#8203;(squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;nodeRecord,
-float&nbsp;estimatedTotalCost)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addToOpenList(squidpony.squidai.astar.Pathfinder.NodeRecord,double)">addToOpenList</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;nodeRecord,
+double&nbsp;estimatedTotalCost)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i1">
@@ -285,7 +283,7 @@ float&nbsp;estimatedTotalCost)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i3">
-<td class="colFirst"><code>protected squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNodeRecord(N)">getNodeRecord</a></span>&#8203;(<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;node)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -356,37 +354,37 @@ float&nbsp;estimatedTotalCost)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="graph">graph</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.49">graph</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.52">graph</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nodeRecords">nodeRecords</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.50">nodeRecords</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.53">nodeRecords</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="openList">openList</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../../squidmath/BinaryHeap.html" title="class in squidpony.squidmath">BinaryHeap</a>&lt;squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.51">openList</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../../squidmath/BinaryHeap.html" title="class in squidpony.squidmath">BinaryHeap</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.54">openList</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="current">current</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.52">current</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.55">current</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="metrics">metrics</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.53">metrics</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.56">metrics</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="UNVISITED">UNVISITED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.58">UNVISITED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.61">UNVISITED</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidai.astar.Pathfinder.UNVISITED">Constant Field Values</a></dd>
@@ -396,7 +394,7 @@ float&nbsp;estimatedTotalCost)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="OPEN">OPEN</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.59">OPEN</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.62">OPEN</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidai.astar.Pathfinder.OPEN">Constant Field Values</a></dd>
@@ -406,7 +404,7 @@ float&nbsp;estimatedTotalCost)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CLOSED">CLOSED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.60">CLOSED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.63">CLOSED</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidai.astar.Pathfinder.CLOSED">Constant Field Values</a></dd>
@@ -426,13 +424,13 @@ float&nbsp;estimatedTotalCost)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidai.astar.Graph)">Pathfinder</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.62">Pathfinder</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;graph)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.65">Pathfinder</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;graph)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidai.astar.Graph,boolean)">Pathfinder</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.66">Pathfinder</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;graph,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.69">Pathfinder</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;graph,
 boolean&nbsp;calculateMetrics)</span></div>
 </section>
 </li>
@@ -451,7 +449,7 @@ boolean&nbsp;calculateMetrics)</span></div>
 <h3><a id="searchConnectionPath(java.lang.Object,java.lang.Object,squidpony.squidai.astar.Heuristic,java.util.List)">
 <!--   -->
 </a><a id="searchConnectionPath(N,N,squidpony.squidai.astar.Heuristic,java.util.List)">searchConnectionPath</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.83">searchConnectionPath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.86">searchConnectionPath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
 <a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;endNode,
 <a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;heuristic,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&gt;&nbsp;outPath)</span></div>
@@ -473,7 +471,7 @@ boolean&nbsp;calculateMetrics)</span></div>
 <h3><a id="searchNodePath(java.lang.Object,java.lang.Object,squidpony.squidai.astar.Heuristic,java.util.List)">
 <!--   -->
 </a><a id="searchNodePath(N,N,squidpony.squidai.astar.Heuristic,java.util.List)">searchNodePath</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.106">searchNodePath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.109">searchNodePath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
 <a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;endNode,
 <a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;heuristic,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;outPath)</span></div>
@@ -495,7 +493,7 @@ boolean&nbsp;calculateMetrics)</span></div>
 <h3><a id="search(java.lang.Object,java.lang.Object,squidpony.squidai.astar.Heuristic)">
 <!--   -->
 </a><a id="search(N,N,squidpony.squidai.astar.Heuristic)">search</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.119">search</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.122">search</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
 <a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;endNode,
 <a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;heuristic)</span></div>
 </section>
@@ -505,7 +503,7 @@ boolean&nbsp;calculateMetrics)</span></div>
 <h3><a id="initSearch(java.lang.Object,java.lang.Object,squidpony.squidai.astar.Heuristic)">
 <!--   -->
 </a><a id="initSearch(N,N,squidpony.squidai.astar.Heuristic)">initSearch</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.185">initSearch</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.188">initSearch</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
 <a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;endNode,
 <a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;heuristic)</span></div>
 </section>
@@ -515,7 +513,7 @@ boolean&nbsp;calculateMetrics)</span></div>
 <h3><a id="visitChildren(java.lang.Object,squidpony.squidai.astar.Heuristic)">
 <!--   -->
 </a><a id="visitChildren(N,squidpony.squidai.astar.Heuristic)">visitChildren</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.204">visitChildren</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;endNode,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.207">visitChildren</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;endNode,
 <a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;heuristic)</span></div>
 </section>
 </li>
@@ -524,7 +522,7 @@ boolean&nbsp;calculateMetrics)</span></div>
 <h3><a id="generateConnectionPath(java.lang.Object,java.util.List)">
 <!--   -->
 </a><a id="generateConnectionPath(N,java.util.List)">generateConnectionPath</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.258">generateConnectionPath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.261">generateConnectionPath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&gt;&nbsp;outPath)</span></div>
 </section>
 </li>
@@ -533,15 +531,15 @@ boolean&nbsp;calculateMetrics)</span></div>
 <h3><a id="generateNodePath(java.lang.Object,java.util.List)">
 <!--   -->
 </a><a id="generateNodePath(N,java.util.List)">generateNodePath</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.271">generateNodePath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.274">generateNodePath</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;startNode,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;outPath)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="addToOpenList(squidpony.squidai.astar.Pathfinder.NodeRecord,float)">addToOpenList</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.285">addToOpenList</a></span>&#8203;(<span class="arguments">squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;nodeRecord,
-float&nbsp;estimatedTotalCost)</span></div>
+<h3><a id="addToOpenList(squidpony.squidai.astar.Pathfinder.NodeRecord,double)">addToOpenList</a></h3>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.288">addToOpenList</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;&nbsp;nodeRecord,
+double&nbsp;estimatedTotalCost)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -549,7 +547,7 @@ float&nbsp;estimatedTotalCost)</span></div>
 <h3><a id="getNodeRecord(java.lang.Object)">
 <!--   -->
 </a><a id="getNodeRecord(N)">getNodeRecord</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">squidpony.squidai.astar.Pathfinder.NodeRecord&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.294">getNodeRecord</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;node)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidai/astar/Pathfinder.NodeRecord.html?is-external=true" title="class or interface in squidpony.squidai.astar" class="externalLink">squidpony.squidai.astar.Pathfinder.NodeRecord</a>&lt;<a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Pathfinder.html#line.297">getNodeRecord</a></span>&#8203;(<span class="arguments"><a href="Pathfinder.html" title="type parameter in Pathfinder">N</a>&nbsp;node)</span></div>
 </section>
 </li>
 </ul>
@@ -558,8 +556,8 @@ float&nbsp;estimatedTotalCost)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -605,5 +603,7 @@ float&nbsp;estimatedTotalCost)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai.astar</a></div>
 <h1 title="Interface Graph" class="title">Interface Graph&lt;N&gt;</h1>
@@ -102,9 +97,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></code></dd>
 </dl>
 <hr>
-<pre>public interface <a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.28">Graph</a>&lt;N&gt;</pre>
+<pre>public interface <a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.30">Graph</a>&lt;N&gt;</pre>
 <div class="block">A graph is a collection of nodes, each one having a collection of outgoing <a href="Connection.html" title="interface in squidpony.squidai.astar"><code>connections</code></a>.
- Because this works with indexed A*, each node must also have a unique index.</div>
+ Because this works with indexed A*, each node must also have a unique index.
+ <br>
+ Many users will be fine with <a href="DefaultGraph.html" title="class in squidpony.squidai.astar"><code>DefaultGraph</code></a> as the only kind of Graph they need to use.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>davebaol</dd>
@@ -173,7 +170,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h3><a id="getConnections(java.lang.Object)">
 <!--   -->
 </a><a id="getConnections(N)">getConnections</a></h3>
-<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="Graph.html" title="type parameter in Graph">N</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.33">getConnections</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="type parameter in Graph">N</a>&nbsp;fromNode)</span></div>
+<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="Graph.html" title="type parameter in Graph">N</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.35">getConnections</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="type parameter in Graph">N</a>&nbsp;fromNode)</span></div>
 <div class="block">Returns the connections outgoing from the given node.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -188,7 +185,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h3><a id="getIndex(java.lang.Object)">
 <!--   -->
 </a><a id="getIndex(N)">getIndex</a></h3>
-<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.38">getIndex</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="type parameter in Graph">N</a>&nbsp;node)</span></div>
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.40">getIndex</a></span>&#8203;(<span class="arguments"><a href="Graph.html" title="type parameter in Graph">N</a>&nbsp;node)</span></div>
 <div class="block">Returns the unique index of the given node.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -201,7 +198,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNodeCount()">getNodeCount</a></h3>
-<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.41">getNodeCount</a></span>()</div>
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Graph.html#line.43">getNodeCount</a></span>()</div>
 <div class="block">Returns the number of nodes in this graph.</div>
 </section>
 </li>
@@ -211,8 +208,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -258,5 +255,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

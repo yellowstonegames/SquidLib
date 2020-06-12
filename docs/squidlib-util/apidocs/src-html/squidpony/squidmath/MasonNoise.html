@@ -462,39 +462,36 @@
 <span class="sourceLineNo">450</span><a id="line.450">    }</a>
 <span class="sourceLineNo">451</span><a id="line.451"></a>
 <span class="sourceLineNo">452</span><a id="line.452">    /**</a>
-<span class="sourceLineNo">453</span><a id="line.453">     * Delegates to {@link WhirlingNoise#noise(double, double, double, double, long)}.</a>
+<span class="sourceLineNo">453</span><a id="line.453">     * Delegates to {@link FastNoise#getNoiseWithSeed(double, double, double, double, long)}</a>
 <span class="sourceLineNo">454</span><a id="line.454">     * &lt;br&gt;</a>
-<span class="sourceLineNo">455</span><a id="line.455">     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be</a>
-<span class="sourceLineNo">456</span><a id="line.456">     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this</a>
-<span class="sourceLineNo">457</span><a id="line.457">     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise.</a>
-<span class="sourceLineNo">458</span><a id="line.458">     * @param x X input</a>
-<span class="sourceLineNo">459</span><a id="line.459">     * @param y Y input</a>
-<span class="sourceLineNo">460</span><a id="line.460">     * @param z Z input</a>
-<span class="sourceLineNo">461</span><a id="line.461">     * @param w W input (fourth-dimensional)</a>
-<span class="sourceLineNo">462</span><a id="line.462">     * @param seed any long; will be used to completely alter the noise</a>
-<span class="sourceLineNo">463</span><a id="line.463">     * @return noise from -1.0 to 1.0, inclusive</a>
-<span class="sourceLineNo">464</span><a id="line.464">     */</a>
-<span class="sourceLineNo">465</span><a id="line.465">    public static double noise(final double x, final double y, final double z, final double w, final long seed) {</a>
-<span class="sourceLineNo">466</span><a id="line.466">        return WhirlingNoise.noise(x, y, z, w, seed); </a>
-<span class="sourceLineNo">467</span><a id="line.467">    }</a>
-<span class="sourceLineNo">468</span><a id="line.468"></a>
-<span class="sourceLineNo">469</span><a id="line.469">    /**</a>
-<span class="sourceLineNo">470</span><a id="line.470">     * Delegates to {@link SeededNoise#noise(double, double, double, double, double, double, long)}.</a>
-<span class="sourceLineNo">471</span><a id="line.471">     * &lt;br&gt;</a>
-<span class="sourceLineNo">472</span><a id="line.472">     * @param x X input</a>
-<span class="sourceLineNo">473</span><a id="line.473">     * @param y Y input</a>
-<span class="sourceLineNo">474</span><a id="line.474">     * @param z Z input</a>
-<span class="sourceLineNo">475</span><a id="line.475">     * @param w W input (fourth-dimensional)</a>
-<span class="sourceLineNo">476</span><a id="line.476">     * @param u U input (fifth-dimensional)</a>
-<span class="sourceLineNo">477</span><a id="line.477">     * @param v V input (sixth-dimensional)</a>
-<span class="sourceLineNo">478</span><a id="line.478">     * @param seed any long; will be used to completely alter the noise</a>
-<span class="sourceLineNo">479</span><a id="line.479">     * @return noise from -1.0 to 1.0, inclusive</a>
-<span class="sourceLineNo">480</span><a id="line.480">     */</a>
-<span class="sourceLineNo">481</span><a id="line.481">    public static double noise(final double x, final double y, final double z,</a>
-<span class="sourceLineNo">482</span><a id="line.482">                               final double w, final double u, final double v, final long seed) {</a>
-<span class="sourceLineNo">483</span><a id="line.483">        return SeededNoise.noise(x, y, z, w, u, v, seed);</a>
-<span class="sourceLineNo">484</span><a id="line.484">    }</a>
-<span class="sourceLineNo">485</span><a id="line.485">}</a>
+<span class="sourceLineNo">455</span><a id="line.455">     * @param x X input</a>
+<span class="sourceLineNo">456</span><a id="line.456">     * @param y Y input</a>
+<span class="sourceLineNo">457</span><a id="line.457">     * @param z Z input</a>
+<span class="sourceLineNo">458</span><a id="line.458">     * @param w W input (fourth-dimensional)</a>
+<span class="sourceLineNo">459</span><a id="line.459">     * @param seed any long; will be used to completely alter the noise</a>
+<span class="sourceLineNo">460</span><a id="line.460">     * @return noise from -1.0 to 1.0, inclusive</a>
+<span class="sourceLineNo">461</span><a id="line.461">     */</a>
+<span class="sourceLineNo">462</span><a id="line.462">    public static double noise(final double x, final double y, final double z, final double w, final long seed) {</a>
+<span class="sourceLineNo">463</span><a id="line.463">        return FastNoise.instance.getNoiseWithSeed(x, y, z, w, seed);</a>
+<span class="sourceLineNo">464</span><a id="line.464">    }</a>
+<span class="sourceLineNo">465</span><a id="line.465"></a>
+<span class="sourceLineNo">466</span><a id="line.466">    /**</a>
+<span class="sourceLineNo">467</span><a id="line.467">     * Delegates to {@link FastNoise#getNoiseWithSeed(double, double, double, double, double, double, long)}</a>
+<span class="sourceLineNo">468</span><a id="line.468">     * &lt;br&gt;</a>
+<span class="sourceLineNo">469</span><a id="line.469">     * @param x X input</a>
+<span class="sourceLineNo">470</span><a id="line.470">     * @param y Y input</a>
+<span class="sourceLineNo">471</span><a id="line.471">     * @param z Z input</a>
+<span class="sourceLineNo">472</span><a id="line.472">     * @param w W input (fourth-dimensional)</a>
+<span class="sourceLineNo">473</span><a id="line.473">     * @param u U input (fifth-dimensional)</a>
+<span class="sourceLineNo">474</span><a id="line.474">     * @param v V input (sixth-dimensional)</a>
+<span class="sourceLineNo">475</span><a id="line.475">     * @param seed any long; will be used to completely alter the noise</a>
+<span class="sourceLineNo">476</span><a id="line.476">     * @return noise from -1.0 to 1.0, inclusive</a>
+<span class="sourceLineNo">477</span><a id="line.477">     */</a>
+<span class="sourceLineNo">478</span><a id="line.478">    public static double noise(final double x, final double y, final double z,</a>
+<span class="sourceLineNo">479</span><a id="line.479">                               final double w, final double u, final double v, final long seed) {</a>
+<span class="sourceLineNo">480</span><a id="line.480">        return FastNoise.instance.getNoiseWithSeed(x, y, z, w, u, v, seed);</a>
+<span class="sourceLineNo">481</span><a id="line.481">    }</a>
+<span class="sourceLineNo">482</span><a id="line.482">}</a>
 
 
 

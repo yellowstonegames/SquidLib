@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class CrossHash.Lightning" class="title">Class CrossHash.Lightning</h1>
@@ -101,7 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="CrossHash.html" title="class in squidpony.squidmath">CrossHash</a></dd>
 </dl>
 <hr>
-<pre>public static final class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.862">CrossHash.Lightning</a>
+<pre>public static final class <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.816">CrossHash.Lightning</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">A quick, simple hashing function that seems to have good results. Like LightRNG, it stores a state that
  it updates independently of the output, and this starts at a large prime. At each step, it takes the
@@ -423,7 +418,7 @@ int&nbsp;step)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">Lightning</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.863">Lightning</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.816">Lightning</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -439,55 +434,55 @@ int&nbsp;step)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(boolean[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.865">hash64</a></span>&#8203;(<span class="arguments">boolean[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.818">hash64</a></span>&#8203;(<span class="arguments">boolean[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(byte[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.875">hash64</a></span>&#8203;(<span class="arguments">byte[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.828">hash64</a></span>&#8203;(<span class="arguments">byte[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(short[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.885">hash64</a></span>&#8203;(<span class="arguments">short[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.838">hash64</a></span>&#8203;(<span class="arguments">short[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(char[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.895">hash64</a></span>&#8203;(<span class="arguments">char[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.848">hash64</a></span>&#8203;(<span class="arguments">char[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(int[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.905">hash64</a></span>&#8203;(<span class="arguments">int[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.858">hash64</a></span>&#8203;(<span class="arguments">int[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(long[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.915">hash64</a></span>&#8203;(<span class="arguments">long[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.868">hash64</a></span>&#8203;(<span class="arguments">long[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(float[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.925">hash64</a></span>&#8203;(<span class="arguments">float[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.878">hash64</a></span>&#8203;(<span class="arguments">float[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(double[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.935">hash64</a></span>&#8203;(<span class="arguments">double[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.888">hash64</a></span>&#8203;(<span class="arguments">double[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(char[],int,int)">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.953">hash64</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.906">hash64</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
 int&nbsp;start,
 int&nbsp;end)</span></div>
 <div class="block">Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).</div>
@@ -504,7 +499,7 @@ int&nbsp;end)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(char[],int,int,int)">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.972">hash64</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.925">hash64</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
 int&nbsp;start,
 int&nbsp;end,
 int&nbsp;step)</span></div>
@@ -524,97 +519,97 @@ int&nbsp;step)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(java.lang.CharSequence)">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.982">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.935">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(char[][])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.992">hash64</a></span>&#8203;(<span class="arguments">char[][]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.945">hash64</a></span>&#8203;(<span class="arguments">char[][]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(long[][])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1002">hash64</a></span>&#8203;(<span class="arguments">long[][]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.955">hash64</a></span>&#8203;(<span class="arguments">long[][]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(java.lang.CharSequence[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1012">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.965">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(java.lang.Iterable)">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1022">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&gt;&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.975">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&gt;&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(java.lang.CharSequence[]...)">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1032">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]...&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.985">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]...&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64(java.lang.Object[])">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1042">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.995">hash64</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(boolean[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1054">hash</a></span>&#8203;(<span class="arguments">boolean[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1007">hash</a></span>&#8203;(<span class="arguments">boolean[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(byte[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1064">hash</a></span>&#8203;(<span class="arguments">byte[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1017">hash</a></span>&#8203;(<span class="arguments">byte[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(short[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1074">hash</a></span>&#8203;(<span class="arguments">short[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1027">hash</a></span>&#8203;(<span class="arguments">short[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(char[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1084">hash</a></span>&#8203;(<span class="arguments">char[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1037">hash</a></span>&#8203;(<span class="arguments">char[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(int[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1094">hash</a></span>&#8203;(<span class="arguments">int[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1047">hash</a></span>&#8203;(<span class="arguments">int[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(long[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1105">hash</a></span>&#8203;(<span class="arguments">long[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1058">hash</a></span>&#8203;(<span class="arguments">long[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(float[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1115">hash</a></span>&#8203;(<span class="arguments">float[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1068">hash</a></span>&#8203;(<span class="arguments">float[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(double[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1125">hash</a></span>&#8203;(<span class="arguments">double[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1078">hash</a></span>&#8203;(<span class="arguments">double[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(char[],int,int)">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1143">hash</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1096">hash</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
 int&nbsp;start,
 int&nbsp;end)</span></div>
 <div class="block">Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).</div>
@@ -631,7 +626,7 @@ int&nbsp;end)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(char[],int,int,int)">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1163">hash</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1116">hash</a></span>&#8203;(<span class="arguments">char[]&nbsp;data,
 int&nbsp;start,
 int&nbsp;end,
 int&nbsp;step)</span></div>
@@ -651,43 +646,43 @@ int&nbsp;step)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(java.lang.CharSequence)">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1174">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1127">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(char[][])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1184">hash</a></span>&#8203;(<span class="arguments">char[][]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1137">hash</a></span>&#8203;(<span class="arguments">char[][]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(long[][])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1194">hash</a></span>&#8203;(<span class="arguments">long[][]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1147">hash</a></span>&#8203;(<span class="arguments">long[][]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(java.lang.CharSequence[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1204">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1157">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(java.lang.Iterable)">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1214">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&gt;&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1167">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&gt;&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(java.lang.CharSequence[]...)">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1224">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]...&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1177">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>[]...&nbsp;data)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash(java.lang.Object[])">hash</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1234">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CrossHash.Lightning.html#line.1187">hash</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]&nbsp;data)</span></div>
 </section>
 </li>
 </ul>
@@ -696,8 +691,8 @@ int&nbsp;step)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -743,5 +738,7 @@ int&nbsp;step)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

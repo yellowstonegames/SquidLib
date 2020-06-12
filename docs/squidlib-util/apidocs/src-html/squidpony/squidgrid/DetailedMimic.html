@@ -213,13 +213,13 @@
 <span class="sourceLineNo">201</span><a id="line.201">    {</a>
 <span class="sourceLineNo">202</span><a id="line.202">        int[] result = new int[OW * OH];</a>
 <span class="sourceLineNo">203</span><a id="line.203">        Integer[] origins = new Integer[OW * OH];</a>
-<span class="sourceLineNo">204</span><a id="line.204">        boolean[][] mask = new boolean[SW][SH], cleanMask = new boolean[SW][SH];</a>
+<span class="sourceLineNo">204</span><a id="line.204">        GreasedRegion mask = new GreasedRegion(SW, SH);</a>
 <span class="sourceLineNo">205</span><a id="line.205"></a>
 <span class="sourceLineNo">206</span><a id="line.206">        for (int i = 0; i &lt; OW * OH; i++)</a>
 <span class="sourceLineNo">207</span><a id="line.207">        {</a>
 <span class="sourceLineNo">208</span><a id="line.208">            int x = i % OW, y = i / OW;</a>
 <span class="sourceLineNo">209</span><a id="line.209">            IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();</a>
-<span class="sourceLineNo">210</span><a id="line.210">            ArrayTools.insert(cleanMask, mask, 0, 0);</a>
+<span class="sourceLineNo">210</span><a id="line.210">            mask.clear();</a>
 <span class="sourceLineNo">211</span><a id="line.211"></a>
 <span class="sourceLineNo">212</span><a id="line.212">            for (int dy = -1; dy &lt;= 1; dy++){</a>
 <span class="sourceLineNo">213</span><a id="line.213">                for (int dx = -1; dx &lt;= 1; dx++)</a>
@@ -234,8 +234,8 @@
 <span class="sourceLineNo">222</span><a id="line.222">                            int ox = (p % SW - dx + SW) % SW, oy = (p / SW - dy + SH) % SH;</a>
 <span class="sourceLineNo">223</span><a id="line.223">                            double s = similarity(oy * SW + ox, sample, SW, SH, i, result, OW, OH, N, origins, indexed);</a>
 <span class="sourceLineNo">224</span><a id="line.224"></a>
-<span class="sourceLineNo">225</span><a id="line.225">                            if (!mask[ox][oy]) candidates.put(ox + oy * SW, Math.pow(100, s / t));</a>
-<span class="sourceLineNo">226</span><a id="line.226">                            mask[ox][oy] = true;</a>
+<span class="sourceLineNo">225</span><a id="line.225">                            if (!mask.contains(ox, oy)) candidates.put(ox + oy * SW, Math.pow(100, s / t));</a>
+<span class="sourceLineNo">226</span><a id="line.226">                            mask.insert(ox, oy);</a>
 <span class="sourceLineNo">227</span><a id="line.227">                        }</a>
 <span class="sourceLineNo">228</span><a id="line.228">                    }</a>
 <span class="sourceLineNo">229</span><a id="line.229">                }</a>

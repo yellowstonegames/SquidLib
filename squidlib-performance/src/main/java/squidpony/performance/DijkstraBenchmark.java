@@ -49,6 +49,7 @@ import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidmath.AStarSearch;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
@@ -62,18 +63,20 @@ import static squidpony.squidgrid.Measurement.CHEBYSHEV;
 /**
  * Times:
  * These benchmark results are split up based on the size of the map, which has major implications for performance.
- * We compare DijkstraMap from SquidLib, CustomDijkstraMap from SquidLib, and IndexedAStarPathFinder from gdx-ai.
- * IndexedAStarPathFinder is a generally excellent performer on many maps, but it's a mixed bag on features. While it
- * allows setting a cost to traverse between cells, it can't reuse an already-scanned map like DijkstraMap can.
- * DijkstraMap technically doesn't use Dijkstra's Pathfinding Algorithm, and is much closer to breadth-first search; it
- * produces what roguelike developers call a Dijkstra map because it is so similar to what Dijkstra's algorithm uses.
- * The map produced by scanning with DijkstraMap is a 2D double array of distances; this can be reused and multiple
- * goals can simultaneously be sought to find the closest. CustomDijkstraMap allows specifying adjacency in unusual ways
- * (like considering facing direction when calculating cost). It is otherwise much like DijkstraMap.
+ * We compare DijkstraMap from SquidLib, CustomDijkstraMap from SquidLib, Pathfinder from SquidLib (called IndexedAStar
+ * here), AStarSearch from SquidLib, and IndexedAStarPathFinder from gdx-ai (called GDXAStar here). Pathfinder is
+ * closely related to libGDX's IndexedAStarPathFinder, and AStarSearch mostly just wraps SquidLib's Pathfinder. All are
+ * generally excellent performers on many maps, but features are a mixed bag. While AStar allows setting a cost to
+ * traverse between cells, it can't reuse an already-scanned map like DijkstraMap can. DijkstraMap technically doesn't
+ * use Dijkstra's Pathfinding Algorithm, and is much closer to breadth-first search; it produces what roguelike
+ * developers call a Dijkstra map because it is so similar to what Dijkstra's algorithm uses. The map produced by
+ * scanning with DijkstraMap is a 2D double array of distances; this can be reused and multiple goals can simultaneously
+ * be sought to find the closest. CustomDijkstraMap allows specifying adjacency in unusual ways (like considering facing
+ * direction when calculating cost). It is otherwise much like DijkstraMap, but slower.
  * <br>
- * For performance on the smaller 64x64 map size, the gdx-ai pathfinding can't be touched. It is between 4 and 5 times
+ * For performance on the smaller 64x64 map size, the A-Star pathfinding can't be touched. It is between 2 and 3 times
  * faster than DijkstraMap on very short paths (under 9 cells), and about 1.5x faster on longer ones (a random point
- * in the 64x64 dungeon map to another random point). As map size increases, gdx-ai loses its lead; on 128x128 maps it
+ * in the 64x64 dungeon map to another random point). As map size increases, A-Star loses its lead; on 128x128 maps it
  * is the slowest option for long paths but is still very much the fastest for short paths (percentage-wise, its lead
  * has improved on short paths despite worsening significantly on long ones). On those 128x128 maps, DijkstraMap is the
  * fastest for long paths. DijkstraMap's margin of improvement on long paths continues on 192x192 maps, though gdx-ai
@@ -85,102 +88,28 @@ import static squidpony.squidgrid.Measurement.CHEBYSHEV;
  * (These use JMH's recommendations for benchmarking; older benchmark results, which weren't set up correctly, are
  * available in the Git history of this file. The older benchmarks included repeated initialization and GC of
  * DijkstraMap, CustomDijkstraMap, or other similar objects in the time per benchmark.)
- *
+ * <pre>
+ * OpenJDK 8, HotSpot, Windows 7, 6th generation i7 mobile processor:
  *                       This is the relevant measurement,
  *                       time in ms to find all paths -> +-------+
- * Map size: 64x64, 1364 paths                           |       |
+ * Map size: 64x64, 2328 paths                           |       |
  * Benchmark                                   Mode  Cnt    Score    Error  Units
- * DijkstraBenchmark.doPathCustomDijkstra      avgt    5  220.851 ± 93.593  ms/op
- * DijkstraBenchmark.doPathDijkstra            avgt    5  153.784 ±  5.654  ms/op
- * DijkstraBenchmark.doPathGDXAStar            avgt    5  107.962 ±  2.949  ms/op
- * DijkstraBenchmark.doScanCustomDijkstra      avgt    5  344.942 ± 22.039  ms/op
- * DijkstraBenchmark.doScanDijkstra            avgt    5  244.537 ± 15.884  ms/op
- * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    5   16.763 ±  0.254  ms/op
- * DijkstraBenchmark.doTinyPathDijkstra        avgt    5    9.922 ±  0.444  ms/op
- * DijkstraBenchmark.doTinyPathGDXAStar        avgt    5    2.115 ±  0.155  ms/op
- *
- * Map size: 128x128, 4677 paths
- * Benchmark                                   Mode  Cnt     Score      Error  Units
- * DijkstraBenchmark.doPathCustomDijkstra      avgt    5  2106.727 ±   11.773  ms/op
- * DijkstraBenchmark.doPathDijkstra            avgt    5  1713.969 ±   54.823  ms/op
- * DijkstraBenchmark.doPathGDXAStar            avgt    5  2275.877 ±   37.086  ms/op
- * DijkstraBenchmark.doScanCustomDijkstra      avgt    5  4159.586 ± 2221.693  ms/op
- * DijkstraBenchmark.doScanDijkstra            avgt    5  2882.672 ±   25.996  ms/op
- * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    5   210.557 ±    8.608  ms/op
- * DijkstraBenchmark.doTinyPathDijkstra        avgt    5    80.280 ±    0.264  ms/op
- * DijkstraBenchmark.doTinyPathGDXAStar        avgt    5     7.478 ±    0.168  ms/op
- *
- * Map size: 192x192, 9908 paths
- * Benchmark                                   Mode  Cnt      Score     Error  Units
- * DijkstraBenchmark.doPathCustomDijkstra      avgt    5   8930.620 ±  50.764  ms/op
- * DijkstraBenchmark.doPathDijkstra            avgt    5   7852.002 ±  44.351  ms/op
- * DijkstraBenchmark.doPathGDXAStar            avgt    5  11673.292 ± 181.477  ms/op
- * DijkstraBenchmark.doScanCustomDijkstra      avgt    5  16930.492 ±  65.738  ms/op
- * DijkstraBenchmark.doScanDijkstra            avgt    5  12387.999 ± 172.563  ms/op
- * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    5   1001.202 ±  20.125  ms/op
- * DijkstraBenchmark.doTinyPathDijkstra        avgt    5    379.848 ±   2.214  ms/op
- * DijkstraBenchmark.doTinyPathGDXAStar        avgt    5     18.619 ±   2.698  ms/op
- *
- * ... Testing changes made on and around July 14, 2018...
+ * DijkstraBenchmark.doPathAStarSearch         avgt    3  183.527 ±  6.912  ms/op
+ * DijkstraBenchmark.doPathCustomDijkstra      avgt    3  522.064 ± 45.927  ms/op
+ * DijkstraBenchmark.doPathDijkstra            avgt    3  271.181 ±  1.418  ms/op
+ * DijkstraBenchmark.doPathGDXAStar            avgt    3  241.030 ± 52.309  ms/op
+ * DijkstraBenchmark.doPathIndexedAStar        avgt    3  175.329 ±  4.674  ms/op
+ * DijkstraBenchmark.doScanCustomDijkstra      avgt    3  837.541 ± 17.253  ms/op
+ * DijkstraBenchmark.doScanDijkstra            avgt    3  531.719 ± 10.016  ms/op
+ * DijkstraBenchmark.doTinyPathAStarSearch     avgt    3    5.082 ±  0.041  ms/op
+ * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    3   32.134 ±  0.805  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstra        avgt    3   12.706 ±  0.357  ms/op
+ * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3    6.393 ±  0.085  ms/op
+ * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    3    4.930 ±  0.088  ms/op
  * 
- * Map size: 64x64, 2264 paths (slower because the computer was under heavy load)
- * Benchmark                                   Mode  Cnt     Score    Error  Units
- * DijkstraBenchmark.doPathCustomDijkstra      avgt    3   642.238 ± 67.942  ms/op
- * DijkstraBenchmark.doPathDijkstra            avgt    3   318.874 ± 46.723  ms/op // currently in squidlib-util
- * DijkstraBenchmark.doPathGDXAStar            avgt    3   142.955 ± 29.477  ms/op
- * DijkstraBenchmark.doPathOtherDijkstra       avgt    3   378.071 ± 52.248  ms/op // previously in squidlib-util
- * DijkstraBenchmark.doScanCustomDijkstra      avgt    3  1042.841 ± 95.942  ms/op
- * DijkstraBenchmark.doScanDijkstra            avgt    3   647.943 ± 72.479  ms/op
- * DijkstraBenchmark.doScanOtherDijkstra       avgt    3   690.908 ± 55.090  ms/op
- * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    3    27.699 ±  4.254  ms/op
- * DijkstraBenchmark.doTinyPathDijkstra        avgt    3    14.740 ±  1.510  ms/op
- * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3     3.892 ±  0.447  ms/op
- * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    3    17.411 ±  3.890  ms/op
- * 
- * And on November 19, 2019, testing whether a priority queue would work well in DijkstraPQ:
- * Map size: 64x64, 2328 paths
- * <pre>
- * Benchmark                                   Mode  Cnt     Score     Error  Units
- * DijkstraBenchmark.doPathCustomDijkstra      avgt    3   524.351 ±  34.333  ms/op
- * DijkstraBenchmark.doPathDijkstra            avgt    3   296.256 ±   5.660  ms/op
- * DijkstraBenchmark.doPathDijkstraPQ          avgt    3   618.922 ±  11.230  ms/op
- * DijkstraBenchmark.doPathGDXAStar            avgt    3   143.497 ±  35.298  ms/op
- * DijkstraBenchmark.doPathOtherDijkstra       avgt    3   338.742 ±  34.707  ms/op
- * DijkstraBenchmark.doScanCustomDijkstra      avgt    3   827.388 ± 362.668  ms/op
- * DijkstraBenchmark.doScanDijkstra            avgt    3   595.408 ±  20.643  ms/op
- * DijkstraBenchmark.doScanDijkstraPQ          avgt    3  1233.676 ±  30.090  ms/op
- * DijkstraBenchmark.doScanOtherDijkstra       avgt    3   680.902 ±  92.995  ms/op
- * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    3    23.916 ±   0.865  ms/op
- * DijkstraBenchmark.doTinyPathDijkstra        avgt    3    14.893 ±   1.728  ms/op
- * DijkstraBenchmark.doTinyPathDijkstraPQ      avgt    3    19.324 ±   2.084  ms/op
- * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3     4.244 ±   0.164  ms/op
- * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    3    21.053 ±  32.397  ms/op
- * </pre>
- * The tests with DijkstraMapPQ did not do well at all, and were generally much slower than the equivalent current
- * DijkstraMap class. DijkstraMapPQ uses the JDK's PriorityQueue implementation but its Comparator may be... bad.
- * <br>
- * Testing a version of gdx-ai's Indexed A* in SquidLib. Earlier benchmarks erroneously tested gdx-ai with the Manhattan
- * heuristic when everything else used Chebyshev; changing them all to match puts SquidLib's indexed A* in the lead.
- * This isn't because the library code is any better, it's probably the same -- but the code using gdx-ai, code which
- * needs to be supplied by the library user, isn't optimal here, and the DefaultGraph in SquidLib turns out to be best.
- * <pre>
- * Benchmark                                   Mode  Cnt     Score    Error  Units
- * DijkstraBenchmark.doPathCustomDijkstra      avgt    4   530.563 ±  6.197  ms/op
- * DijkstraBenchmark.doPathDijkstra            avgt    4   285.308 ±  3.221  ms/op
- * DijkstraBenchmark.doPathDijkstraPQ          avgt    4   616.417 ± 26.729  ms/op
- * DijkstraBenchmark.doPathGDXAStar            avgt    4   266.524 ±  2.485  ms/op
- * DijkstraBenchmark.doPathIndexedAStar        avgt    4   191.194 ±  4.310  ms/op
- * DijkstraBenchmark.doPathOtherDijkstra       avgt    4   327.755 ±  2.748  ms/op
- * DijkstraBenchmark.doScanCustomDijkstra      avgt    4   814.130 ± 42.122  ms/op
- * DijkstraBenchmark.doScanDijkstra            avgt    4   567.830 ±  6.023  ms/op
- * DijkstraBenchmark.doScanDijkstraPQ          avgt    4  1174.243 ± 16.153  ms/op
- * DijkstraBenchmark.doScanOtherDijkstra       avgt    4   623.162 ± 10.047  ms/op
- * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    4    23.542 ±  0.254  ms/op
- * DijkstraBenchmark.doTinyPathDijkstra        avgt    4    15.707 ±  0.164  ms/op
- * DijkstraBenchmark.doTinyPathDijkstraPQ      avgt    4    19.804 ±  0.153  ms/op
- * DijkstraBenchmark.doTinyPathGDXAStar        avgt    4     7.545 ±  0.053  ms/op
- * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    4     5.314 ±  0.073  ms/op
- * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    4    20.470 ±  0.547  ms/op
+ * Map size: 128x128, ??? paths
+ *
+ * Map size: 192x192, ??? paths
  * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
@@ -192,7 +121,7 @@ public class DijkstraBenchmark {
 
     @State(Scope.Thread)
     public static class BenchmarkState {
-        public int DIMENSION = 64;
+        public int DIMENSION = 128;
         public DungeonGenerator dungeonGen = new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
         //public SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
         public char[][] map;
@@ -210,6 +139,7 @@ public class DijkstraBenchmark {
         public DefaultGraph dg;
         public IndexedAStarPathFinder<Coord> astar;
         public Pathfinder<Coord> iasSquid;
+        public AStarSearch as;
         public GraphPath<Coord> dgp;
         public ArrayList<Coord> path;
         @Setup(Level.Trial)
@@ -224,6 +154,7 @@ public class DijkstraBenchmark {
             System.out.println("Floors: " + floorCount);
             System.out.println("Percentage walkable: " + floorCount * 100.0 / (DIMENSION * DIMENSION) + "%");
             astarMap = DungeonUtility.generateAStarCostMap(map, Collections.<Character, Double>emptyMap(), 1);
+            as = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
             nearbyMap = new Coord[DIMENSION][DIMENSION];
             customNearbyMap = new int[DIMENSION * DIMENSION];
             GreasedRegion tmp = new GreasedRegion(DIMENSION, DIMENSION);
@@ -416,9 +347,60 @@ public class DijkstraBenchmark {
         return scanned;
     }
 
+
+
+
+
+    @Benchmark
+    public long doPathAStarSearch(BenchmarkState state)
+    {
+        Coord r;
+        Coord tgt;
+        long scanned = 0;
+        final AStarSearch aStarSearch = state.as;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
+                r = state.srng.getRandomElement(state.floorArray);
+                tgt = Coord.get(x, y);
+                state.path.clear();
+                state.path.addAll(aStarSearch.path(r, tgt));
+                scanned += state.path.size();
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    public long doTinyPathAStarSearch(BenchmarkState state)
+    {
+        Coord r;
+        Coord tgt;
+        long scanned = 0;
+        final AStarSearch aStarSearch = state.as;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                r = state.nearbyMap[x][y];
+                tgt = Coord.get(x, y);
+                state.path.clear();
+                state.path.addAll(aStarSearch.path(r, tgt));
+                scanned += state.path.size();
+            }
+        }
+        return scanned;
+    }
+
+
+
 //    public long doPathAStar()
 //    {
-//        squidpony.performance.alternate.AStarSearch astar = new squidpony.performance.alternate.AStarSearch(astarMap, squidpony.performance.alternate.AStarSearch.SearchType.CHEBYSHEV);
+//        AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
 //        Coord r;
 //        long scanned = 0;
 //        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));

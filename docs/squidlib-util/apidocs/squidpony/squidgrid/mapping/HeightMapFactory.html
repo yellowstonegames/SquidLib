@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class HeightMapFactory" class="title">Class HeightMapFactory</h1>
@@ -97,13 +92,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.12">HeightMapFactory</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.12">HeightMapFactory</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Tools to create maps. Not commonly used outside of code that needs height maps.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator is a much-more-detailed kind of map generator.</code></a></dd>
 </dl>
 </section>
 <section class="summary">
@@ -157,7 +153,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 int&nbsp;height,
 double&nbsp;offset)</code></th>
 <td class="colLast">
-<div class="block">Returns a randomly generated map of doubles.</div>
+<div class="block">Returns a randomly generated map of doubles that smoothly change nearby.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i1">
@@ -194,7 +190,7 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">HeightMapFactory</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.13">HeightMapFactory</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.12">HeightMapFactory</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -210,16 +206,18 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heightMap(int,int,double)">heightMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.25">heightMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.24">heightMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 double&nbsp;offset)</span></div>
-<div class="block">Returns a randomly generated map of doubles. Commonly referred to as a
- Height Map. Uses <a href="../../squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a> in layers to generate coherent heights.</div>
+<div class="block">Returns a randomly generated map of doubles that smoothly change nearby. Commonly referred to as a
+ Height Map. Uses <a href="../../squidmath/FastNoise.html" title="class in squidpony.squidmath"><code>FastNoise</code></a> to generate coherent heights. The <code>offset</code> parameter is
+ converted to an int seed via <a href="../../squidmath/NumberTools.html#doubleToMixedIntBits(double)"><code>NumberTools.doubleToMixedIntBits(double)</code></a>, so it can be any
+ double, even an infinite one, and will still be treated as a valid seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - in cells</dd>
 <dd><code>height</code> - in cells</dd>
-<dd><code>offset</code> - a double that changes the sampling process; often randomly generated</dd>
+<dd><code>offset</code> - a double that changes the sampling process; the range doesn't matter</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the created map as a 2D double array</dd>
 </dl>
@@ -228,16 +226,18 @@ double&nbsp;offset)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heightMapSeeded(int,int,int)">heightMapSeeded</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.61">heightMapSeeded</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/HeightMapFactory.html#line.55">heightMapSeeded</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;seed)</span></div>
 <div class="block">Returns a randomly generated map of floats. Commonly referred to as a
- Height Map. Uses <a href="../../squidmath/FastNoise.html" title="class in squidpony.squidmath"><code>FastNoise</code></a> (producing) FBM Simplex noise) to generate coherent heights.</div>
+ Height Map. Uses <a href="../../squidmath/FastNoise.html" title="class in squidpony.squidmath"><code>FastNoise</code></a> (producing FBM Simplex noise) to generate coherent heights.
+ Unlike <a href="#heightMap(int,int,double)"><code>heightMap(int, int, double)</code></a>, this doesn't drop off heights at the east and west edges of the map.
+ As such, it may be more suitable for local maps than world maps, since it is unlikely to tile east-west.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>width</code> - in cells</dd>
 <dd><code>height</code> - in cells</dd>
-<dd><code>seed</code> - an int that significantly changes the generation process (more than an offset does)</dd>
+<dd><code>seed</code> - an int that significantly changes the generation process</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the created map as a 2D float array</dd>
 </dl>
@@ -249,8 +249,8 @@ int&nbsp;seed)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -296,5 +296,7 @@ int&nbsp;seed)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

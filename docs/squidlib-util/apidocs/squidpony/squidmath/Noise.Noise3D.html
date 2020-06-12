@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Interface Noise.Noise3D" class="title">Interface Noise.Noise3D</h1>
@@ -95,7 +90,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="description">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></code>, <code><a href="CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></code>, <code><a href="FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></code>, <code><a href="FoamNoise.html" title="class in squidpony.squidmath">FoamNoise</a></code>, <code><a href="GlitchNoise.html" title="class in squidpony.squidmath">GlitchNoise</a></code>, <code><a href="JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></code>, <code><a href="MasonNoise.html" title="class in squidpony.squidmath">MasonNoise</a></code>, <code><a href="MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></code>, <code><a href="MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a></code>, <code><a href="Noise.Exponential3D.html" title="class in squidpony.squidmath">Noise.Exponential3D</a></code>, <code><a href="Noise.InverseLayered3D.html" title="class in squidpony.squidmath">Noise.InverseLayered3D</a></code>, <code><a href="Noise.Layered3D.html" title="class in squidpony.squidmath">Noise.Layered3D</a></code>, <code><a href="Noise.Ridged3D.html" title="class in squidpony.squidmath">Noise.Ridged3D</a></code>, <code><a href="Noise.Scaled3D.html" title="class in squidpony.squidmath">Noise.Scaled3D</a></code>, <code><a href="Noise.Slick3D.html" title="class in squidpony.squidmath">Noise.Slick3D</a></code>, <code><a href="Noise.Turbulent3D.html" title="class in squidpony.squidmath">Noise.Turbulent3D</a></code>, <code><a href="Noise.Viny3D.html" title="class in squidpony.squidmath">Noise.Viny3D</a></code>, <code><a href="SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></code>, <code><a href="ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></code>, <code><a href="WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></code>, <code><a href="WhiteNoise.html" title="class in squidpony.squidmath">WhiteNoise</a></code></dd>
+<dd><code><a href="ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></code>, <code><a href="CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></code>, <code><a href="FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></code>, <code><a href="FoamNoise.html" title="class in squidpony.squidmath">FoamNoise</a></code>, <code><a href="GlitchNoise.html" title="class in squidpony.squidmath">GlitchNoise</a></code>, <code><a href="JitterNoise.html" title="class in squidpony.squidmath">JitterNoise</a></code>, <code><a href="MasonNoise.html" title="class in squidpony.squidmath">MasonNoise</a></code>, <code><a href="MerlinNoise.html" title="class in squidpony.squidmath">MerlinNoise</a></code>, <code><a href="Noise.Exponential3D.html" title="class in squidpony.squidmath">Noise.Exponential3D</a></code>, <code><a href="Noise.InverseLayered3D.html" title="class in squidpony.squidmath">Noise.InverseLayered3D</a></code>, <code><a href="Noise.Layered3D.html" title="class in squidpony.squidmath">Noise.Layered3D</a></code>, <code><a href="Noise.Ridged3D.html" title="class in squidpony.squidmath">Noise.Ridged3D</a></code>, <code><a href="Noise.Scaled3D.html" title="class in squidpony.squidmath">Noise.Scaled3D</a></code>, <code><a href="Noise.Slick3D.html" title="class in squidpony.squidmath">Noise.Slick3D</a></code>, <code><a href="Noise.Turbulent3D.html" title="class in squidpony.squidmath">Noise.Turbulent3D</a></code>, <code><a href="Noise.Viny3D.html" title="class in squidpony.squidmath">Noise.Viny3D</a></code>, <code><a href="SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></code>, <code><a href="ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></code>, <code><a href="WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></code>, <code><a href="WhiteNoise.html" title="class in squidpony.squidmath">WhiteNoise</a></code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -179,8 +174,8 @@ long&nbsp;seed)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -226,5 +221,7 @@ long&nbsp;seed)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

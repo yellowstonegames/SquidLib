@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidmath.OrderedSet" class="title">Uses of Class<br>squidpony.squidmath.OrderedSet</h1>
@@ -553,45 +548,6 @@ int&nbsp;height,
 </div>
 <div class="useSummary">
 <table>
-<caption><span>Fields in <a href="../package-summary.html">squidpony.squidmath</a> declared as <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../AStarSearch.html#open">open</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">OrganizedMap.</span><code><span class="memberNameLink"><a href="../OrganizedMap.html#order">order</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">OrganizedMap.SharedEntries.</span><code><span class="memberNameLink"><a href="../OrganizedMap.SharedEntries.html#order">order</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">OrganizedMap.SharedKeySet.</span><code><span class="memberNameLink"><a href="../OrganizedMap.SharedKeySet.html#order">order</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">OrganizedMap.SharedValues.</span><code><span class="memberNameLink"><a href="../OrganizedMap.SharedValues.html#order">order</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="useSummary">
-<table>
 <caption><span>Methods in <a href="../package-summary.html">squidpony.squidmath</a> that return <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></span><span class="tabEnd">&nbsp;</span></caption>
 <thead>
 <tr>
@@ -807,35 +763,6 @@ int&nbsp;y,
 </div>
 <div class="useSummary">
 <table>
-<caption><span>Methods in <a href="../package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../OrganizedMap.SharedEntries.html" title="class in squidpony.squidmath">OrganizedMap.SharedEntries</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">OrganizedMap.</span><code><span class="memberNameLink"><a href="../OrganizedMap.html#entrySet(squidpony.squidmath.OrderedSet)">entrySet</a></span>&#8203;(<a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;&nbsp;alternateOrder)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../OrganizedMap.SharedKeySet.html" title="class in squidpony.squidmath">OrganizedMap.SharedKeySet</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">OrganizedMap.</span><code><span class="memberNameLink"><a href="../OrganizedMap.html#keySet(squidpony.squidmath.OrderedSet)">keySet</a></span>&#8203;(<a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;&nbsp;alternateOrder)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../OrganizedMap.SharedValues.html" title="class in squidpony.squidmath">OrganizedMap.SharedValues</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">OrganizedMap.</span><code><span class="memberNameLink"><a href="../OrganizedMap.html#values(squidpony.squidmath.OrderedSet)">values</a></span>&#8203;(<a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;&nbsp;alternateOrder)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="useSummary">
-<table>
 <caption><span>Constructors in <a href="../package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></span><span class="tabEnd">&nbsp;</span></caption>
 <thead>
 <tr>
@@ -845,18 +772,6 @@ int&nbsp;y,
 </thead>
 <tbody>
 <tr class="altColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../OrganizedMap.SharedEntries.html#%3Cinit%3E(squidpony.squidmath.OrderedSet)">SharedEntries</a></span>&#8203;(<a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;&nbsp;order)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../OrganizedMap.SharedKeySet.html#%3Cinit%3E(squidpony.squidmath.OrderedSet)">SharedKeySet</a></span>&#8203;(<a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;&nbsp;order)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../OrganizedMap.SharedValues.html#%3Cinit%3E(squidpony.squidmath.OrderedSet)">SharedValues</a></span>&#8203;(<a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt;&nbsp;order)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../Voronoi.html#%3Cinit%3E(squidpony.squidmath.OrderedSet)">Voronoi</a></span>&#8203;(<a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;&nbsp;pointSet)</code></th>
 <td class="colLast">
 <div class="block">Constructs a new triangulator instance using the specified point set.</div>
@@ -899,5 +814,7 @@ int&nbsp;y,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

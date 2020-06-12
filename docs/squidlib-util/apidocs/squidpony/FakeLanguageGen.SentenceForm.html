@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class FakeLanguageGen.SentenceForm" class="title">Class FakeLanguageGen.SentenceForm</h1>
@@ -105,7 +100,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../src-html/squidpony/FakeLanguageGen.html#line.5479">FakeLanguageGen.SentenceForm</a>
+<pre>public static class <a href="../src-html/squidpony/FakeLanguageGen.html#line.5472">FakeLanguageGen.SentenceForm</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A simple way to bundle a FakeLanguageGen with the arguments that would be passed to it when calling
@@ -318,49 +313,49 @@ int&nbsp;maxChars)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5482">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5475">rng</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minWords">minWords</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5483">minWords</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5476">minWords</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxWords">maxWords</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5483">maxWords</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5476">maxWords</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxChars">maxChars</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5483">maxChars</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5476">maxChars</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="midPunctuation">midPunctuation</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5484">midPunctuation</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5477">midPunctuation</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="endPunctuation">endPunctuation</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5484">endPunctuation</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5477">endPunctuation</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="midPunctuationFrequency">midPunctuationFrequency</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5485">midPunctuationFrequency</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5478">midPunctuationFrequency</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="language">language</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5486">language</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5479">language</a></span></div>
 </section>
 </li>
 </ul>
@@ -376,7 +371,7 @@ int&nbsp;maxChars)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">SentenceForm</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5493">SentenceForm</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5486">SentenceForm</a></span>()</div>
 <div class="block">Builds a SentenceForm with all default fields, using <a href="FakeLanguageGen.html#FANTASY_NAME"><code>FakeLanguageGen.FANTASY_NAME</code></a> for a language,
  using between 1 and 9 words in a sentence, and otherwise defaulting to how
  <a href="#%3Cinit%3E(squidpony.FakeLanguageGen,int,int)"><code>SentenceForm(FakeLanguageGen, int, int)</code></a> behaves.</div>
@@ -385,7 +380,7 @@ int&nbsp;maxChars)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.FakeLanguageGen,int,int)">SentenceForm</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5510">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5503">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
 int&nbsp;minWords,
 int&nbsp;maxWords)</span></div>
 <div class="block">Builds a SentenceForm with only a few fields specified. The <a href="#rng"><code>rng</code></a> will be made based on
@@ -405,7 +400,7 @@ int&nbsp;maxWords)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.FakeLanguageGen,int,int,java.lang.String[],java.lang.String[],double)">SentenceForm</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5526">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5519">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
 int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
@@ -428,7 +423,7 @@ double&nbsp;midPunctuationFrequency)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.FakeLanguageGen,int,int,java.lang.String[],java.lang.String[],double,int)">SentenceForm</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5543">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5536">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
 int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
@@ -452,7 +447,7 @@ int&nbsp;maxChars)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.FakeLanguageGen,squidpony.squidmath.IStatefulRNG,int,int,java.lang.String[],java.lang.String[],double,int)">SentenceForm</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5562">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5555">SentenceForm</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
 <a href="squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng,
 int&nbsp;minWords,
 int&nbsp;maxWords,
@@ -488,19 +483,19 @@ int&nbsp;maxChars)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence()">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5575">sentence</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5568">sentence</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="serializeToString()">serializeToString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5581">serializeToString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5574">serializeToString</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="deserializeFromString(java.lang.String)">deserializeFromString</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5591">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;ser)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.5584">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;ser)</span></div>
 </section>
 </li>
 </ul>
@@ -509,8 +504,8 @@ int&nbsp;maxChars)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -556,5 +551,7 @@ int&nbsp;maxChars)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

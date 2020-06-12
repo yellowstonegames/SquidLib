@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai.astar</a></div>
 <h1 title="Class DefaultGraph" class="title">Class DefaultGraph</h1>
@@ -101,9 +96,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.12">DefaultGraph</a>
+<pre>public class <a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.19">DefaultGraph</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="Graph.html" title="interface in squidpony.squidai.astar">Graph</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</pre>
+<div class="block">A convenient implementation of <a href="Graph.html" title="interface in squidpony.squidai.astar"><code>Graph</code></a> for <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> nodes; this also allows constructing a Graph with a
+ 2D char array like those produced all over SquidLib. Some predefined heuristics are available as static constants
+ here. You can "show" a DefaultGraph in conjunction with a <a href="Pathfinder.html" title="class in squidpony.squidai.astar"><code>Pathfinder</code></a>, which appends a big grid of node costs
+ matching the Pathfinder to a StringBuilder.</div>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -224,6 +223,20 @@ boolean&nbsp;eightWay)</code></th>
 </td>
 </tr>
 <tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(double%5B%5D%5B%5D)">DefaultGraph</a></span>&#8203;(double[][]&nbsp;costs)</code></th>
+<td class="colLast">
+<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="#init(double%5B%5D%5B%5D,boolean)"><code>init(double[][], boolean)</code></a>, with eightWay set
+ to false (only orthogonal neighbors will be connected).</div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(double%5B%5D%5B%5D,boolean)">DefaultGraph</a></span>&#8203;(double[][]&nbsp;costs,
+boolean&nbsp;eightWay)</code></th>
+<td class="colLast">
+<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="#init(double%5B%5D%5B%5D,boolean)"><code>init(double[][], boolean)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int)">DefaultGraph</a></span>&#8203;(int&nbsp;capacity)</code></th>
 <td class="colLast">
 <div class="block">Creates an empty DefaultGraph with the given minimum capacity; you must call <a href="#init(char%5B%5D%5B%5D,boolean)"><code>init(char[][], boolean)</code></a> or
@@ -283,11 +296,23 @@ boolean&nbsp;eightWay)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i4">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#init(double%5B%5D%5B%5D,boolean)">init</a></span>&#8203;(double[][]&nbsp;costs,
+boolean&nbsp;eightWay)</code></th>
+<td class="colLast">
+<div class="block">Initializes or resets the nodes this knows about and their connections to their neighbors.</div>
+</td>
+</tr>
+<tr class="rowColor" id="i5">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#show(java.lang.StringBuilder,squidpony.squidai.astar.Pathfinder,squidpony.squidai.astar.Pathfinder.Metrics)">show</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;sb,
 <a href="Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;pathfinder,
 <a href="Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a>&nbsp;metrics)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Given a StringBuilder to append to, a Pathfinder with Coord nodes that has run and at least attempted to find a
+ path, and the <a href="Pathfinder.html#metrics"><code>Pathfinder.metrics</code></a> that the Pathfinder must have been configured to record, this makes a
+ textual representation of the explored nodes and appends it to the StringBuilder.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -314,7 +339,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="MANHATTAN">MANHATTAN</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.18">MANHATTAN</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.25">MANHATTAN</a></span></div>
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing twice as
  much as orthogonal movement. This is a good choice for graphs where only four-way movement is used.</div>
 </section>
@@ -322,7 +347,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CHEBYSHEV">CHEBYSHEV</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.29">CHEBYSHEV</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.36">CHEBYSHEV</a></span></div>
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing the same as
  orthogonal movement. This is only suggested for graphs where eight-way movement is used, and it may produce
  erratic paths compared to <a href="#EUCLIDEAN"><code>EUCLIDEAN</code></a>.</div>
@@ -331,7 +356,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="EUCLIDEAN">EUCLIDEAN</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.41">EUCLIDEAN</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.48">EUCLIDEAN</a></span></div>
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where all movement is calculated "as-the-crow-flies," using
  the standard Pythagorean formula for distance as in the real world. This does not make diagonal connections, if
  they are allowed, actually cost more or less, but they won't be preferred if an orthogonal route can be taken.
@@ -341,7 +366,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="DIJKSTRA">DIJKSTRA</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.51">DIJKSTRA</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.58">DIJKSTRA</a></span></div>
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where the heuristic is not used, and all cells are
  considered equivalent regardless of actual distance.</div>
 </section>
@@ -349,31 +374,31 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="HEURISTICS">HEURISTICS</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.58">HEURISTICS</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.65">HEURISTICS</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="positions">positions</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.60">positions</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.67">positions</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="allConnections">allConnections</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.61">allConnections</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.68">allConnections</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.62">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.69">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.63">height</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.70">height</a></span></div>
 </section>
 </li>
 </ul>
@@ -389,7 +414,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">DefaultGraph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.70">DefaultGraph</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.77">DefaultGraph</a></span>()</div>
 <div class="block">Creates an empty DefaultGraph with capacity 16; you must call <a href="#init(char%5B%5D%5B%5D,boolean)"><code>init(char[][], boolean)</code></a> or
  otherwise manually initialize this DefaultGraph before using it. The capacity is expected to resize to fit a
  typically-much-larger map.</div>
@@ -398,7 +423,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int)">DefaultGraph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.79">DefaultGraph</a></span>&#8203;(<span class="arguments">int&nbsp;capacity)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.86">DefaultGraph</a></span>&#8203;(<span class="arguments">int&nbsp;capacity)</span></div>
 <div class="block">Creates an empty DefaultGraph with the given minimum capacity; you must call <a href="#init(char%5B%5D%5B%5D,boolean)"><code>init(char[][], boolean)</code></a> or
  otherwise manually initialize this DefaultGraph before using it.</div>
 <dl>
@@ -410,7 +435,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(char[][])">DefaultGraph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.89">DefaultGraph</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.96">DefaultGraph</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Creates a DefaultGraph and immediately initializes it using <a href="#init(char%5B%5D%5B%5D,boolean)"><code>init(char[][], boolean)</code></a>, with eightWay set
  to false (only orthogonal neighbors will be connected).</div>
 <dl>
@@ -422,12 +447,37 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(char[][],boolean)">DefaultGraph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.99">DefaultGraph</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.106">DefaultGraph</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 boolean&nbsp;eightWay)</span></div>
 <div class="block">Creates a DefaultGraph and immediately initializes it using <a href="#init(char%5B%5D%5B%5D,boolean)"><code>init(char[][], boolean)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] where <code>#</code> is used to mean a wall or an impassable cell</dd>
+<dd><code>eightWay</code> - if true, this will try to connect diagonals as well as orthogonally adjacent cells</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="&lt;init&gt;(double[][])">DefaultGraph</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.117">DefaultGraph</a></span>&#8203;(<span class="arguments">double[][]&nbsp;costs)</span></div>
+<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="#init(double%5B%5D%5B%5D,boolean)"><code>init(double[][], boolean)</code></a>, with eightWay set
+ to false (only orthogonal neighbors will be connected).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>costs</code> - a double[][] where negative values are blocked and any other values are the cost to enter that cell</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="&lt;init&gt;(double[][],boolean)">DefaultGraph</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.127">DefaultGraph</a></span>&#8203;(<span class="arguments">double[][]&nbsp;costs,
+boolean&nbsp;eightWay)</span></div>
+<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="#init(double%5B%5D%5B%5D,boolean)"><code>init(double[][], boolean)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>costs</code> - a double[][] where negative values are blocked and any other values are the cost to enter that cell</dd>
 <dd><code>eightWay</code> - if true, this will try to connect diagonals as well as orthogonally adjacent cells</dd>
 </dl>
 </section>
@@ -445,7 +495,7 @@ boolean&nbsp;eightWay)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="init(char[][],boolean)">init</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.113">init</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.141">init</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 boolean&nbsp;eightWay)</span></div>
 <div class="block">Initializes or resets the nodes this knows about and their connections to their neighbors. This can be called
  more than once on a DefaultGraph, typically when the map changes, and will forget its old nodes and only store
@@ -460,8 +510,26 @@ boolean&nbsp;eightWay)</span></div>
 </li>
 <li class="blockList">
 <section class="detail">
+<h3><a id="init(double[][],boolean)">init</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.179">init</a></span>&#8203;(<span class="arguments">double[][]&nbsp;costs,
+boolean&nbsp;eightWay)</span></div>
+<div class="block">Initializes or resets the nodes this knows about and their connections to their neighbors. This can be called
+ more than once on a DefaultGraph, typically when the map changes, and will forget its old nodes and only store
+ the ones in the latest map. The double[][] <code>costs</code> stores the costs to enter cells; it is typically
+ produced by <a href="../../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D,java.util.Map,double)"><code>DungeonUtility.generateAStarCostMap(char[][], Map, double)</code></a>.
+ Negative values in costs mark cells that cannot be entered (like walls); 1.0 is used for normal cells that can be
+ entered easily, and higher values mark more challenging cells to enter.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>costs</code> - a double[][] where negative values are blocked and any other values are the cost to enter that cell</dd>
+<dd><code>eightWay</code> - if true, this will try to connect diagonals as well as orthogonally adjacent cells</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
 <h3><a id="getConnections(squidpony.squidmath.Coord)">getConnections</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.147">getConnections</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;fromNode)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.213">getConnections</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;fromNode)</span></div>
 <div class="block">Returns the connections outgoing from the given node.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -476,7 +544,7 @@ boolean&nbsp;eightWay)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getIndex(squidpony.squidmath.Coord)">getIndex</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.158">getIndex</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;node)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.224">getIndex</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;node)</span></div>
 <div class="block">Returns the unique index of the given node.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -491,7 +559,7 @@ boolean&nbsp;eightWay)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNodeCount()">getNodeCount</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.166">getNodeCount</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.232">getNodeCount</a></span>()</div>
 <div class="block">Returns the number of nodes in this graph.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -502,9 +570,27 @@ boolean&nbsp;eightWay)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="show(java.lang.StringBuilder,squidpony.squidai.astar.Pathfinder,squidpony.squidai.astar.Pathfinder.Metrics)">show</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.171">show</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;sb,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultGraph.html#line.253">show</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;sb,
 <a href="Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;pathfinder,
 <a href="Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a>&nbsp;metrics)</span></div>
+<div class="block">Given a StringBuilder to append to, a Pathfinder with Coord nodes that has run and at least attempted to find a
+ path, and the <a href="Pathfinder.html#metrics"><code>Pathfinder.metrics</code></a> that the Pathfinder must have been configured to record, this makes a
+ textual representation of the explored nodes and appends it to the StringBuilder. This shows the actual costs of
+ all explored nodes in the Pathfinder for its latest path. If you intend to show a DefaultGraph like this, the
+ Pathfinder must be constructed with <a href="Pathfinder.html#%3Cinit%3E(squidpony.squidai.astar.Graph,boolean)"><code>Pathfinder(Graph, boolean)</code></a> where calculateMetrics is true
+ (or where <a href="Pathfinder.html#metrics"><code>Pathfinder.metrics</code></a> was assigned <code>new Pathfinder.Metrics()</code> before calculating a path).
+ This will vary in displayed width based on the maximum width required to print any node, so if the
+ longest-distance node costs 100 to enter, the displayed width will be longer than if the longest-distance node
+ only cost 99. Any unvisited nodes, including walls and out-of-the-way areas, will be shown with some number of
+ '#' chars. Spaces will separate nodes on the same line.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sb</code> - a StringBuilder that will be appended to and returned</dd>
+<dd><code>pathfinder</code> - a Pathfinder that must have at least tried to find a path (and must have metrics, see below)</dd>
+<dd><code>metrics</code> - the Metrics for the above Pathfinder, which are required to be non-null when the path was tried</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the StringBuilder, after appending what is usually a lot of text in a grid</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -513,8 +599,8 @@ boolean&nbsp;eightWay)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -560,5 +646,7 @@ boolean&nbsp;eightWay)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

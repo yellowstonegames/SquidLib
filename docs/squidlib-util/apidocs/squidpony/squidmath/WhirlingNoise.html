@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class WhirlingNoise" class="title">Class WhirlingNoise</h1>
@@ -103,8 +98,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code>, <code><a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code>, <code><a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code>, <code><a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.19">WhirlingNoise</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.18">WhirlingNoise</a>
 extends <a href="SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a>
 implements <a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A Noise class that's here for compatibility; it extends <a href="SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a> and delegates to it for all methods
@@ -113,8 +107,9 @@ implements <a href="Noise.Noise2D.html" title="interface in squidpony.squidmath"
  or <a href="FastNoise.html" title="class in squidpony.squidmath"><code>FastNoise</code></a> if you want the effects all in one place or to use <code>float</code> instead of <code>double</code>.
  <br>
  Created by Tommy Ettinger on 12/14/2016. The technique for point hashing in the "noiseAlt" code is based closely on
- <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&rep=rep1&type=pdf">this paper</a>,
- with credit to Andrew Kensler, Aaron Knoll and Peter Shirley.</div>
+ <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&amp;rep=rep1&amp;type=pdf">this paper</a>,
+ with credit to Andrew Kensler, Aaron Knoll and Peter Shirley. This technique is good, but it may be periodic in
+ undesirable ways, and isn't much faster when implemented in Java than <a href="IntPointHash.html" title="class in squidpony.squidmath"><code>IntPointHash</code></a>, if at all.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../serialized-form.html#squidpony.squidmath.WhirlingNoise">Serialized Form</a></dd>
@@ -251,7 +246,7 @@ float&nbsp;z)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNoise(double,double)">getNoise</a></span>&#8203;(double&nbsp;x,
 double&nbsp;y)</code></th>
 <td class="colLast">
-<div class="block">2D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a> with the initial seed given to this object.</div>
 </td>
 </tr>
 <tr class="altColor" id="i2">
@@ -260,7 +255,7 @@ double&nbsp;y)</code></th>
 double&nbsp;y,
 double&nbsp;z)</code></th>
 <td class="colLast">
-<div class="block">3D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a> with the initial seed given to this object.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i3">
@@ -270,7 +265,7 @@ double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</code></th>
 <td class="colLast">
-<div class="block">4D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a> with the initial seed given to this object.</div>
 </td>
 </tr>
 <tr class="altColor" id="i4">
@@ -281,7 +276,7 @@ double&nbsp;z,
 double&nbsp;w,
 long&nbsp;seed)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="#getNoise(double,double,double,double)"><code>getNoise(double, double, double, double)</code></a>; ignores seed.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i5">
@@ -291,7 +286,7 @@ double&nbsp;y,
 double&nbsp;z,
 long&nbsp;seed)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="#getNoise(double,double,double)"><code>getNoise(double, double, double)</code></a>; ignores seed.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a>.</div>
 </td>
 </tr>
 <tr class="altColor" id="i6">
@@ -300,7 +295,7 @@ long&nbsp;seed)</code></th>
 double&nbsp;y,
 long&nbsp;seed)</code></th>
 <td class="colLast">
-<div class="block">Identical to <a href="#getNoise(double,double)"><code>getNoise(double, double)</code></a>; ignores seed.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i7">
@@ -308,7 +303,7 @@ long&nbsp;seed)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#noise(double,double)">noise</a></span>&#8203;(double&nbsp;xin,
 double&nbsp;yin)</code></th>
 <td class="colLast">
-<div class="block">2D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a> with 123456789 as the seed.</div>
 </td>
 </tr>
 <tr class="altColor" id="i8">
@@ -317,7 +312,7 @@ double&nbsp;yin)</code></th>
 double&nbsp;yin,
 double&nbsp;zin)</code></th>
 <td class="colLast">
-<div class="block">3D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a> with 123456789 as the seed.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i9">
@@ -327,7 +322,7 @@ double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</code></th>
 <td class="colLast">
-<div class="block">4D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a> with 123456789 as the seed.</div>
 </td>
 </tr>
 <tr class="altColor" id="i10">
@@ -338,7 +333,7 @@ double&nbsp;z,
 double&nbsp;w,
 long&nbsp;seed)</code></th>
 <td class="colLast">
-<div class="block">4D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i11">
@@ -348,7 +343,7 @@ double&nbsp;yin,
 double&nbsp;zin,
 long&nbsp;seed)</code></th>
 <td class="colLast">
-<div class="block">3D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a>.</div>
 </td>
 </tr>
 <tr class="altColor" id="i12">
@@ -357,7 +352,7 @@ long&nbsp;seed)</code></th>
 double&nbsp;yin,
 long&nbsp;seed)</code></th>
 <td class="colLast">
-<div class="block">2D simplex noise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i13">
@@ -414,13 +409,13 @@ double&nbsp;z)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance">instance</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.24">instance</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.22">instance</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="grad3f">grad3f</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">float[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.44">grad3f</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">float[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.42">grad3f</a></span></div>
 <div class="block">The 32 3D vertices of a rhombic triacontahedron. These were modified from values taken from Vladimir Bulatov's
  stellation applet, which has available source but is unlicensed, and is
  <a href="http://www.bulatov.org/polyhedra/stellation_applet/index.html">available here</a>, but the vertices are
@@ -430,37 +425,37 @@ double&nbsp;z)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="perm_x">perm_x</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.474">perm_x</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.448">perm_x</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="perm_y">perm_y</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.474">perm_y</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.448">perm_y</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="perm_z">perm_z</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.474">perm_z</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.448">perm_z</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="perm_w">perm_w</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.474">perm_w</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.448">perm_w</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="perm_u">perm_u</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.474">perm_u</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.448">perm_u</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="perm_v">perm_v</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.474">perm_v</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.448">perm_v</a></span></div>
 </section>
 </li>
 </ul>
@@ -476,13 +471,13 @@ double&nbsp;z)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">WhirlingNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.25">WhirlingNoise</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.23">WhirlingNoise</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">WhirlingNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.29">WhirlingNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.27">WhirlingNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 </section>
 </li>
 </ul>
@@ -498,7 +493,7 @@ double&nbsp;z)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dotf(float[],float,float,float)">dotf</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.166">dotf</a></span>&#8203;(<span class="arguments">float[]&nbsp;g,
+<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.164">dotf</a></span>&#8203;(<span class="arguments">float[]&nbsp;g,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;z)</span></div>
@@ -507,19 +502,17 @@ float&nbsp;z)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.179">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.175">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y)</span></div>
-<div class="block">2D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double)"><code>PerlinNoise.noise(double, double)</code></a> and this method. Roughly
- 20-25% faster than the equivalent method in PerlinNoise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a> with the initial seed given to this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Noise.Noise2D.html#getNoise(double,double)">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SeededNoise.html#getNoise(double,double)">getNoise</a></code>&nbsp;in class&nbsp;<code><a href="SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - X input; works well if between 0.0 and 1.0, but anything is accepted</dd>
-<dd><code>y</code> - Y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dd><code>x</code> - X input</dd>
+<dd><code>y</code> - Y input</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -528,19 +521,19 @@ double&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.190">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.187">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 long&nbsp;seed)</span></div>
-<div class="block">Identical to <a href="#getNoise(double,double)"><code>getNoise(double, double)</code></a>; ignores seed.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Noise.Noise2D.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed</a></code>&nbsp;in interface&nbsp;<code><a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SeededNoise.html#getNoiseWithSeed(double,double,long)">getNoiseWithSeed</a></code>&nbsp;in class&nbsp;<code><a href="SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - X input; works well if between 0.0 and 1.0, but anything is accepted</dd>
-<dd><code>y</code> - Y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
-<dd><code>seed</code> - ignored entirely.</dd>
+<dd><code>x</code> - X input</dd>
+<dd><code>y</code> - Y input</dd>
+<dd><code>seed</code> - will completely alter the shape of the noise if changed between calls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -549,14 +542,10 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.204">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.198">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z)</span></div>
-<div class="block">3D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double,double)"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
- Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
- because it uses a pseudo-random function (curiously, <a href="ThrustAltRNG.html#determine(long)"><code>ThrustAltRNG.determine(long)</code></a>, which has very good
- distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a> with the initial seed given to this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Noise.Noise3D.html#getNoise(double,double,double)">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></dd>
@@ -574,11 +563,11 @@ double&nbsp;z)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.215">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.210">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 long&nbsp;seed)</span></div>
-<div class="block">Identical to <a href="#getNoise(double,double,double)"><code>getNoise(double, double, double)</code></a>; ignores seed.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Noise.Noise3D.html#getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed</a></code>&nbsp;in interface&nbsp;<code><a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></dd>
@@ -588,7 +577,7 @@ long&nbsp;seed)</span></div>
 <dd><code>x</code> - X input</dd>
 <dd><code>y</code> - Y input</dd>
 <dd><code>z</code> - Z input</dd>
-<dd><code>seed</code> - ignored entirely.</dd>
+<dd><code>seed</code> - will completely alter the shape of the noise if changed between calls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -597,15 +586,11 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.231">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.223">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</span></div>
-<div class="block">4D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double,double)"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
- Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
- because it uses a pseudo-random function (curiously, <a href="ThrustAltRNG.html#determine(long)"><code>ThrustAltRNG.determine(long)</code></a>, which has very good
- distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a> with the initial seed given to this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Noise.Noise4D.html#getNoise(double,double,double,double)">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></dd>
@@ -624,12 +609,12 @@ double&nbsp;w)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.243">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.235">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
 long&nbsp;seed)</span></div>
-<div class="block">Identical to <a href="#getNoise(double,double,double,double)"><code>getNoise(double, double, double, double)</code></a>; ignores seed.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Noise.Noise4D.html#getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed</a></code>&nbsp;in interface&nbsp;<code><a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></dd>
@@ -640,7 +625,7 @@ long&nbsp;seed)</span></div>
 <dd><code>y</code> - Y input</dd>
 <dd><code>z</code> - Z input</dd>
 <dd><code>w</code> - W input (fourth-dimension)</dd>
-<dd><code>seed</code> - ignored entirely.</dd>
+<dd><code>seed</code> - will completely alter the shape of the noise if changed between calls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -649,17 +634,13 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noise(double,double)">noise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.259">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.247">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
 double&nbsp;yin)</span></div>
-<div class="block">2D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double)"><code>PerlinNoise.noise(double, double)</code></a> and this method. Roughly
- 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
- it uses a pseudo-random function (curiously, <a href="ThrustAltRNG.html#determine(long)"><code>ThrustAltRNG.determine(long)</code></a>, which has very good distribution
- and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a> with 123456789 as the seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>xin</code> - X input; works well if between 0.0 and 1.0, but anything is accepted</dd>
-<dd><code>yin</code> - Y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dd><code>xin</code> - X input</dd>
+<dd><code>yin</code> - Y input</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -668,16 +649,15 @@ double&nbsp;yin)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noise(double,double,long)">noise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.272">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.259">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
 double&nbsp;yin,
 long&nbsp;seed)</span></div>
-<div class="block">2D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double)"><code>PerlinNoise.noise(double, double)</code></a> and this method. Roughly
- 20-25% faster than the equivalent method in PerlinNoise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,long)"><code>SeededNoise.noise(double, double, long)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>xin</code> - X input; works well if between 0.0 and 1.0, but anything is accepted</dd>
-<dd><code>yin</code> - Y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dd><code>xin</code> - X input</dd>
+<dd><code>yin</code> - Y input</dd>
+<dd><code>seed</code> - will completely alter the shape of the noise if changed between calls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -686,14 +666,10 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noise(double,double,double)">noise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.289">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.272">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
 double&nbsp;yin,
 double&nbsp;zin)</span></div>
-<div class="block">3D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double,double)"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
- Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
- because it uses a pseudo-random function (curiously, <a href="ThrustAltRNG.html#determine(long)"><code>ThrustAltRNG.determine(long)</code></a>, which has very
- good distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a> with 123456789 as the seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>xin</code> - X input</dd>
@@ -707,20 +683,17 @@ double&nbsp;zin)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noise(double,double,double,long)">noise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.304">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.284">noise</a></span>&#8203;(<span class="arguments">double&nbsp;xin,
 double&nbsp;yin,
 double&nbsp;zin,
 long&nbsp;seed)</span></div>
-<div class="block">3D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double,double)"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
- Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
- because it uses a pseudo-random function (curiously, <a href="ThrustAltRNG.html#determine(long)"><code>ThrustAltRNG.determine(long)</code></a>, which has very
- good distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,long)"><code>SeededNoise.noise(double, double, double, long)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>xin</code> - X input</dd>
 <dd><code>yin</code> - Y input</dd>
 <dd><code>zin</code> - Z input</dd>
+<dd><code>seed</code> - will completely alter the shape of the noise if changed between calls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -729,15 +702,11 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noise(double,double,double,double)">noise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.320">noise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.296">noise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</span></div>
-<div class="block">4D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double,double,double)"><code>PerlinNoise.noise(double, double, double, double)</code></a> and this
- method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
- chunks because it uses a pseudo-random function (curiously, <a href="ThrustAltRNG.html#determine(long)"><code>ThrustAltRNG.determine(long)</code></a>, which has very
- good distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a> with 123456789 as the seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - X input</dd>
@@ -752,21 +721,19 @@ double&nbsp;w)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noise(double,double,double,double,long)">noise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.335">noise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.309">noise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
 long&nbsp;seed)</span></div>
-<div class="block">4D simplex noise. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
- different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double,double,double)"><code>PerlinNoise.noise(double, double, double, double)</code></a> and this
- method. Roughly 20-25% faster than the equivalent method in PerlinNoise.</div>
+<div class="block">Delegates to <a href="SeededNoise.html#noise(double,double,double,double,long)"><code>SeededNoise.noise(double, double, double, double, long)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - X input</dd>
 <dd><code>y</code> - Y input</dd>
 <dd><code>z</code> - Z input</dd>
 <dd><code>w</code> - W input (fourth-dimensional)</dd>
-<dd><code>seed</code> - any int; will be used to completely alter the noise</dd>
+<dd><code>seed</code> - will completely alter the shape of the noise if changed between calls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -775,16 +742,15 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noiseAlt(double,double)">noiseAlt</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.524">noiseAlt</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.497">noiseAlt</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y)</span></div>
 <div class="block">2D simplex noise returning a float; extremely similar to <a href="#noise(double,double)"><code>noise(double, double)</code></a>, but this may be slightly
- faster or slightly slower. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result
- will be different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double)"><code>PerlinNoise.noise(double, double)</code></a> and this method.
+ faster or slightly slower. This uses its parameters verbatim, so you should apply frequency changes yourself.
  This also cannot take a seed, while <a href="#noise(double,double,long)"><code>noise(double, double, long)</code></a> can.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - x input; works well if between 0.0 and 1.0, but anything is accepted</dd>
-<dd><code>y</code> - y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dd><code>x</code> - x input</dd>
+<dd><code>y</code> - y input</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>
@@ -793,13 +759,12 @@ double&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="noiseAlt(double,double,double)">noiseAlt</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.606">noiseAlt</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.578">noiseAlt</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z)</span></div>
 <div class="block">3D simplex noise returning a float; extremely similar to <a href="#noise(double,double,double)"><code>noise(double, double, double)</code></a>, but this may
- be slightly faster or slightly slower. Unlike <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of
- the result will be different when passing the same arguments to <a href="PerlinNoise.html#noise(double,double,double)"><code>PerlinNoise.noise(double, double, double)</code></a>
- and this method. This also cannot take a seed, while <a href="#noise(double,double,double,long)"><code>noise(double, double, double, long)</code></a> can.</div>
+ be slightly faster or slightly slower. This uses its parameters verbatim, so you should apply frequency changes
+ yourself. This also cannot take a seed, while <a href="#noise(double,double,double,long)"><code>noise(double, double, double, long)</code></a> can.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - X input</dd>
@@ -816,8 +781,8 @@ double&nbsp;z)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -863,5 +828,7 @@ double&nbsp;z)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

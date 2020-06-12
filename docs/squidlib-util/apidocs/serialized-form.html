@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Serialized Form" class="title">Serialized Form</h1>
@@ -579,7 +574,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="blockList">
 <h5>rs</h5>
-<pre>squidpony.NaturalLanguageCipher.SemiRandom rs</pre>
+<pre><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/NaturalLanguageCipher.SemiRandom.html?is-external=true" title="class or interface in squidpony" class="externalLink">squidpony.NaturalLanguageCipher.SemiRandom</a> rs</pre>
 </li>
 <li class="blockList">
 <h5>shift</h5>
@@ -1733,30 +1728,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </section>
 </li>
 <li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidgrid.BevelFOV">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidgrid/BevelFOV.html" title="class in squidpony.squidgrid">squidpony.squidgrid.BevelFOV</a> extends <a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a> implements Serializable</h3>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>map</h5>
-<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> map</pre>
-</li>
-<li class="blockList">
-<h5>resMapCache</h5>
-<pre>double[][] resMapCache</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
 <section class="serializedClassDetails"><a id="squidpony.squidgrid.FOV">
 <!--   -->
 </a>
@@ -1778,157 +1749,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="blockList">
 <h5>nearLight</h5>
-<pre>boolean[][] nearLight</pre>
+<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> nearLight</pre>
 <div class="block">Data allocated in the previous calls to the public API, if any. Used to
  save allocations when multiple calls are done on the same instance.</div>
 </li>
 <li class="blockList">
 <h5>type</h5>
 <pre>int type</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidgrid.FOVCache">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">squidpony.squidgrid.FOVCache</a> extends <a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a> implements Serializable</h3>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>ALL_WALLS</h5>
-<pre>short[][] ALL_WALLS</pre>
-</li>
-<li class="blockList">
-<h5>atan2Cache</h5>
-<pre>double[][] atan2Cache</pre>
-</li>
-<li class="blockList">
-<h5>cache</h5>
-<pre>short[][][] cache</pre>
-</li>
-<li class="blockList">
-<h5>complete</h5>
-<pre>boolean complete</pre>
-</li>
-<li class="blockList">
-<h5>decay</h5>
-<pre>double decay</pre>
-</li>
-<li class="blockList">
-<h5>directionAngles</h5>
-<pre>double[][] directionAngles</pre>
-</li>
-<li class="blockList">
-<h5>distanceCache</h5>
-<pre>short[][] distanceCache</pre>
-</li>
-<li class="blockList">
-<h5>executor</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/concurrent/ExecutorService.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">ExecutorService</a> executor</pre>
-</li>
-<li class="blockList">
-<h5>fov</h5>
-<pre><a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a> fov</pre>
-</li>
-<li class="blockList">
-<h5>fovPermissiveness</h5>
-<pre>double fovPermissiveness</pre>
-</li>
-<li class="blockList">
-<h5>gradedFOV</h5>
-<pre><a href="squidpony/squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a> gradedFOV</pre>
-</li>
-<li class="blockList">
-<h5>height</h5>
-<pre>int height</pre>
-</li>
-<li class="blockList">
-<h5>levels</h5>
-<pre>double[][] levels</pre>
-</li>
-<li class="blockList">
-<h5>lightBrightnesses</h5>
-<pre>int[] lightBrightnesses</pre>
-</li>
-<li class="blockList">
-<h5>lights</h5>
-<pre><a href="squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt; lights</pre>
-</li>
-<li class="blockList">
-<h5>lightSources</h5>
-<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[] lightSources</pre>
-</li>
-<li class="blockList">
-<h5>limit</h5>
-<pre>int limit</pre>
-</li>
-<li class="blockList">
-<h5>losCache</h5>
-<pre>short[][] losCache</pre>
-</li>
-<li class="blockList">
-<h5>mapLimit</h5>
-<pre>int mapLimit</pre>
-</li>
-<li class="blockList">
-<h5>maxLOSRadius</h5>
-<pre>int maxLOSRadius</pre>
-</li>
-<li class="blockList">
-<h5>maxRadius</h5>
-<pre>int maxRadius</pre>
-</li>
-<li class="blockList">
-<h5>NUM_THREADS</h5>
-<pre>int NUM_THREADS</pre>
-</li>
-<li class="blockList">
-<h5>performanceThread</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">Thread</a> performanceThread</pre>
-</li>
-<li class="blockList">
-<h5>qualityComplete</h5>
-<pre>boolean qualityComplete</pre>
-</li>
-<li class="blockList">
-<h5>qualityThread</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Thread.html?is-external=true" title="class or interface in java.lang" class="externalLink">Thread</a> qualityThread</pre>
-</li>
-<li class="blockList">
-<h5>radiusKind</h5>
-<pre><a href="squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a> radiusKind</pre>
-</li>
-<li class="blockList">
-<h5>refreshComplete</h5>
-<pre>boolean refreshComplete</pre>
-</li>
-<li class="blockList">
-<h5>resMap</h5>
-<pre>double[][] resMap</pre>
-</li>
-<li class="blockList">
-<h5>tmpCache</h5>
-<pre>short[][][] tmpCache</pre>
-</li>
-<li class="blockList">
-<h5>wallMap</h5>
-<pre>short[] wallMap</pre>
-</li>
-<li class="blockList">
-<h5>waves</h5>
-<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[][] waves</pre>
-</li>
-<li class="blockList">
-<h5>width</h5>
-<pre>int width</pre>
 </li>
 </ul>
 </section>
@@ -2161,7 +1988,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h5>blockedBiomes</h5>
 <pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/HashSet.html?is-external=true" title="class or interface in java.util" class="externalLink">HashSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt; blockedBiomes</pre>
-<div class="block">An UnorderedSet of String keys, where each key is the name of a biome this Faction will never occupy.
+<div class="block">A HashSet of String keys, where each key is the name of a biome this Faction will never occupy.
  May be null if all biomes are available, but unless this is specified in a constructor, the default will be
  to consider "Ocean" blocked.</div>
 </li>
@@ -2176,7 +2003,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h5>preferredBiomes</h5>
 <pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/HashSet.html?is-external=true" title="class or interface in java.util" class="externalLink">HashSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt; preferredBiomes</pre>
-<div class="block">An UnorderedSet of String keys, where each key is the name of a biome this Faction wants to occupy.
+<div class="block">A HashSet of String keys, where each key is the name of a biome this Faction wants to occupy.
  May be null if no biomes are specifically preferred.</div>
 </li>
 <li class="blockList">
@@ -3405,7 +3232,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h5>readObject</h5>
-<div class="memberSignature"><span class="modifiers">private</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="src-html/squidpony/squidmath/Arrangement.html#line.2214">readObject</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">ObjectInputStream</a>&nbsp;s)</span>
+<div class="memberSignature"><span class="modifiers">private</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="src-html/squidpony/squidmath/Arrangement.html#line.2212">readObject</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">ObjectInputStream</a>&nbsp;s)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a>,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang" class="externalLink">ClassNotFoundException</a></span></div>
 <dl>
@@ -3416,7 +3243,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="blockList">
 <h5>writeObject</h5>
-<div class="memberSignature"><span class="modifiers">private</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="src-html/squidpony/squidmath/Arrangement.html#line.2201">writeObject</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">ObjectOutputStream</a>&nbsp;s)</span>
+<div class="memberSignature"><span class="modifiers">private</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="src-html/squidpony/squidmath/Arrangement.html#line.2199">writeObject</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io" class="externalLink">ObjectOutputStream</a>&nbsp;s)</span>
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></span></div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -3442,7 +3269,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="blockList">
 <h5>entries</h5>
-<pre>squidpony.squidmath.Arrangement.MapEntrySet entries</pre>
+<pre><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Arrangement.MapEntrySet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.Arrangement.MapEntrySet</a> entries</pre>
 <div class="block">Cached set of entries.</div>
 </li>
 <li class="blockList">
@@ -3510,7 +3337,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.Arrangement.FastEntryIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/Arrangement.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.FastEntryIterator</a> extends squidpony.squidmath.Arrangement.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/Arrangement.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.FastEntryIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Arrangement.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.Arrangement.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -3522,7 +3349,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h5>entry</h5>
-<pre>squidpony.squidmath.Arrangement.MapEntry entry</pre>
+<pre><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Arrangement.MapEntry.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.Arrangement.MapEntry</a> entry</pre>
 </li>
 </ul>
 </section>
@@ -3534,7 +3361,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.Arrangement.KeyIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/Arrangement.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.KeyIterator</a> extends squidpony.squidmath.Arrangement.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/Arrangement.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.KeyIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Arrangement.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.Arrangement.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -3567,7 +3394,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.Arrangement.ValueIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/Arrangement.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.ValueIterator</a> extends squidpony.squidmath.Arrangement.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/Arrangement.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.Arrangement.ValueIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Arrangement.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.Arrangement.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -3581,7 +3408,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h3>Class <a href="squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">squidpony.squidmath.AStarSearch</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>1248976538417655312L</dd>
+<dd>10L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -3589,36 +3416,28 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>Serialized Fields</h4>
 <ul class="blockList">
 <li class="blockList">
-<h5>dirCount</h5>
-<pre>int dirCount</pre>
-</li>
-<li class="blockList">
-<h5>dirs</h5>
-<pre><a href="squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[] dirs</pre>
-</li>
-<li class="blockList">
-<h5>finished</h5>
-<pre>boolean[][] finished</pre>
-</li>
-<li class="blockList">
-<h5>gCache</h5>
-<pre>double[][] gCache</pre>
+<h5>graph</h5>
+<pre><a href="squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a> graph</pre>
 </li>
 <li class="blockList">
 <h5>height</h5>
 <pre>int height</pre>
 </li>
 <li class="blockList">
-<h5>map</h5>
-<pre>double[][] map</pre>
+<h5>path</h5>
+<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; path</pre>
 </li>
 <li class="blockList">
-<h5>open</h5>
-<pre><a href="squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; open</pre>
+<h5>pathfinder</h5>
+<pre><a href="squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt; pathfinder</pre>
 </li>
 <li class="blockList">
-<h5>parent</h5>
-<pre>byte[][] parent</pre>
+<h5>start</h5>
+<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> start</pre>
+</li>
+<li class="blockList">
+<h5>target</h5>
+<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> target</pre>
 </li>
 <li class="blockList">
 <h5>type</h5>
@@ -3904,94 +3723,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h5>step</h5>
 <pre>int step</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.Delaunay3D">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath">squidpony.squidmath.Delaunay3D</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>points</h5>
-<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a>[] points</pre>
-</li>
-<li class="blockList">
-<h5>triangleSoup</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="squidpony/squidmath/Delaunay3D.Triangle.html" title="class in squidpony.squidmath">Delaunay3D.Triangle</a>&gt; triangleSoup</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.Delaunay3D.Edge">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/Delaunay3D.Edge.html" title="class in squidpony.squidmath">squidpony.squidmath.Delaunay3D.Edge</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>a</h5>
-<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> a</pre>
-</li>
-<li class="blockList">
-<h5>b</h5>
-<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> b</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.Delaunay3D.Triangle">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/Delaunay3D.Triangle.html" title="class in squidpony.squidmath">squidpony.squidmath.Delaunay3D.Triangle</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>a</h5>
-<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> a</pre>
-</li>
-<li class="blockList">
-<h5>b</h5>
-<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> b</pre>
-</li>
-<li class="blockList">
-<h5>c</h5>
-<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> c</pre>
 </li>
 </ul>
 </section>
@@ -4736,7 +4467,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.IntDoubleOrderedMap.FastEntryIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.FastEntryIterator</a> extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.FastEntryIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntDoubleOrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntDoubleOrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -4760,7 +4491,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.IntDoubleOrderedMap.KeyIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.KeyIterator</a> extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.KeyIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntDoubleOrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntDoubleOrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -4804,7 +4535,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.IntDoubleOrderedMap.ValueIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.ValueIterator</a> extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.ValueIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntDoubleOrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntDoubleOrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -4928,7 +4659,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.IntIntOrderedMap.FastEntryIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/IntIntOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntIntOrderedMap.FastEntryIterator</a> extends squidpony.squidmath.IntIntOrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/IntIntOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntIntOrderedMap.FastEntryIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntIntOrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntIntOrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -4952,7 +4683,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.IntIntOrderedMap.KeyIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/IntIntOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntIntOrderedMap.KeyIterator</a> extends squidpony.squidmath.IntIntOrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/IntIntOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntIntOrderedMap.KeyIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntIntOrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntIntOrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -4996,7 +4727,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.IntIntOrderedMap.ValueIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/IntIntOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntIntOrderedMap.ValueIterator</a> extends squidpony.squidmath.IntIntOrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/IntIntOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntIntOrderedMap.ValueIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntIntOrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntIntOrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -5131,6 +4862,62 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h5>results</h5>
 <pre>long[] results</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.K2">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/K2.html" title="class in squidpony.squidmath">squidpony.squidmath.K2</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>keysA</h5>
+<pre><a href="squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="squidpony/squidmath/K2.html" title="type parameter in K2">A</a>&gt; keysA</pre>
+</li>
+<li class="blockList">
+<h5>keysB</h5>
+<pre><a href="squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="squidpony/squidmath/K2.html" title="type parameter in K2">B</a>&gt; keysB</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li class="blockList">
+<section class="serializedClassDetails"><a id="squidpony.squidmath.K2V1">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">squidpony.squidmath.K2V1</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="blockList">
+<li class="blockList">
+<h5>keys</h5>
+<pre><a href="squidpony/squidmath/K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="squidpony/squidmath/K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="squidpony/squidmath/K2V1.html" title="type parameter in K2V1">B</a>&gt; keys</pre>
+</li>
+<li class="blockList">
+<h5>values</h5>
+<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="squidpony/squidmath/K2V1.html" title="type parameter in K2V1">Q</a>&gt; values</pre>
 </li>
 </ul>
 </section>
@@ -5737,7 +5524,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.OrderedMap.KeyIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/OrderedMap.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.OrderedMap.KeyIterator</a> extends squidpony.squidmath.OrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/OrderedMap.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.OrderedMap.KeyIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.OrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -5781,7 +5568,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="serializedClassDetails"><a id="squidpony.squidmath.OrderedMap.ValueIterator">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/OrderedMap.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.OrderedMap.ValueIterator</a> extends squidpony.squidmath.OrderedMap.MapIterator implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/OrderedMap.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.OrderedMap.ValueIterator</a> extends <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.MapIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.OrderedMap.MapIterator</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>0L</dd>
@@ -5873,214 +5660,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h5>size</h5>
 <pre>int size</pre>
 <div class="block">Number of entries in the set (including the key zero, if present).</div>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>entries</h5>
-<pre><a href="squidpony/squidmath/OrganizedMap.SharedEntries.html" title="class in squidpony.squidmath">OrganizedMap.SharedEntries</a> entries</pre>
-</li>
-<li class="blockList">
-<h5>internalMap</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/HashMap.html?is-external=true" title="class or interface in java.util" class="externalLink">HashMap</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a>,&#8203;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">V</a>&gt; internalMap</pre>
-</li>
-<li class="blockList">
-<h5>keySet</h5>
-<pre><a href="squidpony/squidmath/OrganizedMap.SharedKeySet.html" title="class in squidpony.squidmath">OrganizedMap.SharedKeySet</a> keySet</pre>
-</li>
-<li class="blockList">
-<h5>order</h5>
-<pre><a href="squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt; order</pre>
-</li>
-<li class="blockList">
-<h5>values</h5>
-<pre><a href="squidpony/squidmath/OrganizedMap.SharedValues.html" title="class in squidpony.squidmath">OrganizedMap.SharedValues</a> values</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.MapEntry">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.MapEntry.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap.MapEntry</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>key</h5>
-<pre><a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a> key</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedEntries">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.SharedEntries.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap.SharedEntries</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/AbstractSet.html?is-external=true" title="class or interface in java.util" class="externalLink">AbstractSet</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util" class="externalLink">Map.Entry</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a>,&#8203;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">V</a>&gt;&gt; implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>order</h5>
-<pre><a href="squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt; order</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedEntries.SharedEntryIterator">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.SharedEntries.SharedEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap.SharedEntries.SharedEntryIterator</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>current</h5>
-<pre>int current</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedKeySet">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.SharedKeySet.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap.SharedKeySet</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/AbstractSet.html?is-external=true" title="class or interface in java.util" class="externalLink">AbstractSet</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt; implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>order</h5>
-<pre><a href="squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt; order</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedKeySet.SharedKeyIterator">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.SharedKeySet.SharedKeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap.SharedKeySet.SharedKeyIterator</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>current</h5>
-<pre>int current</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedValues">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.SharedValues.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap.SharedValues</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util" class="externalLink">AbstractCollection</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">V</a>&gt; implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>order</h5>
-<pre><a href="squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="squidpony/squidmath/OrganizedMap.html" title="type parameter in OrganizedMap">K</a>&gt; order</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.OrganizedMap.SharedValues.SharedValueIterator">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/OrganizedMap.SharedValues.SharedValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.OrganizedMap.SharedValues.SharedValueIterator</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>current</h5>
-<pre>int current</pre>
 </li>
 </ul>
 </section>
@@ -6488,30 +6067,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </section>
 </li>
 <li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.SNShuffledIntSequence">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">squidpony.squidmath.SNShuffledIntSequence</a> extends <a href="squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>seed</h5>
-<pre>int seed</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li class="blockList">
 <section class="serializedClassDetails"><a id="squidpony.squidmath.SobolQRNG">
 <!--   -->
 </a>
@@ -6624,46 +6179,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt>serialVersionUID:</dt>
 <dd>-2456306898212937163L</dd>
 </dl>
-</section>
-</li>
-<li class="blockList">
-<section class="serializedClassDetails"><a id="squidpony.squidmath.SwapOrNotShuffler">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">squidpony.squidmath.SwapOrNotShuffler</a> extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="blockList">
-<li class="blockList">
-<h5>bound</h5>
-<pre>int bound</pre>
-</li>
-<li class="blockList">
-<h5>func</h5>
-<pre>int func</pre>
-</li>
-<li class="blockList">
-<h5>index</h5>
-<pre>int index</pre>
-</li>
-<li class="blockList">
-<h5>keys</h5>
-<pre>int[] keys</pre>
-</li>
-<li class="blockList">
-<h5>ROUNDS</h5>
-<pre>int ROUNDS</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
 </section>
 </li>
 <li class="blockList">
@@ -6810,7 +6325,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="blockList">
 <h5>entries</h5>
-<pre>squidpony.squidmath.UnorderedMap.MapEntrySet entries</pre>
+<pre><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/UnorderedMap.MapEntrySet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.UnorderedMap.MapEntrySet</a> entries</pre>
 <div class="block">Cached set of entries.</div>
 </li>
 <li class="blockList">
@@ -6829,7 +6344,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="blockList">
 <h5>keys</h5>
-<pre>squidpony.squidmath.UnorderedMap.KeySet keys</pre>
+<pre><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/UnorderedMap.KeySet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.UnorderedMap.KeySet</a> keys</pre>
 <div class="block">Cached set of keys.</div>
 </li>
 <li class="blockList">
@@ -7017,7 +6532,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 <li class="blockList">
 <h5>triangleSoup</h5>
-<pre>squidpony.squidmath.Voronoi.TriangleSoup triangleSoup</pre>
+<pre><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Voronoi.TriangleSoup.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.Voronoi.TriangleSoup</a> triangleSoup</pre>
 </li>
 </ul>
 </section>
@@ -7254,5 +6769,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

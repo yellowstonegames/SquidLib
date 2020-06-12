@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class SquidLayers" class="title">Class SquidLayers</h1>
@@ -520,7 +515,7 @@ boolean&nbsp;doubleWidth)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#autoLight()">autoLight</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i19">
@@ -528,7 +523,7 @@ boolean&nbsp;doubleWidth)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#autoLight(double)">autoLight</a></span>&#8203;(double&nbsp;frame)</code></th>
 <td class="colLast">
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 <tr class="altColor" id="i20">
@@ -538,7 +533,7 @@ char&nbsp;deepLiquid,
 char&nbsp;shallowLiquid)</code></th>
 <td class="colLast">
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i21">
@@ -546,7 +541,7 @@ char&nbsp;shallowLiquid)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bump(int,int,int,squidpony.squidgrid.Direction,float)">bump</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
 int&nbsp;layer,
-squidpony.squidgrid.Direction&nbsp;dir,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir,
 float&nbsp;duration)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -554,21 +549,21 @@ float&nbsp;duration)</code></th>
 <td class="colFirst"><code><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bump(int,int,squidpony.squidgrid.Direction)">bump</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
-squidpony.squidgrid.Direction&nbsp;dir)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i23">
 <td class="colFirst"><code><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bump(squidpony.squidgrid.gui.gdx.AnimatedEntity,int,squidpony.squidgrid.Direction,float)">bump</a></span>&#8203;(<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;layer,
-squidpony.squidgrid.Direction&nbsp;dir,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir,
 float&nbsp;duration)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i24">
 <td class="colFirst"><code><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bump(squidpony.squidgrid.gui.gdx.AnimatedEntity,squidpony.squidgrid.Direction)">bump</a></span>&#8203;(<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
-squidpony.squidgrid.Direction&nbsp;dir)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i25">
@@ -632,12 +627,12 @@ int&nbsp;layer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i33">
-<td class="colFirst"><code>squidpony.squidmath.OrderedSet&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAnimatedEntities()">getAnimatedEntities</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i34">
-<td class="colFirst"><code>squidpony.squidmath.OrderedSet&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAnimatedEntities(int)">getAnimatedEntities</a></span>&#8203;(int&nbsp;layer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -1059,7 +1054,7 @@ int&nbsp;layer)</code></th>
 </tr>
 <tr class="altColor" id="i84">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBGColorCenter(squidpony.IColorCenter)">setBGColorCenter</a></span>&#8203;(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBGColorCenter(squidpony.IColorCenter)">setBGColorCenter</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</code></th>
 <td class="colLast">
 <div class="block">Sets the IColorCenter used by the background layer.</div>
 </td>
@@ -1074,7 +1069,7 @@ int&nbsp;index)</code></th>
 </tr>
 <tr class="altColor" id="i86">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFGColorCenter(squidpony.IColorCenter)">setFGColorCenter</a></span>&#8203;(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFGColorCenter(squidpony.IColorCenter)">setFGColorCenter</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</code></th>
 <td class="colLast">
 <div class="block">Sets the IColorCenter used by the foreground layer.</div>
 </td>
@@ -1346,7 +1341,7 @@ float&nbsp;duration)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.241">SquidLayers</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.240">SquidLayers</a></span>()</div>
 <div class="block">Create a new SquidLayers widget with a default stretchable font, 40 cells wide and 40 cells high,
  and 12x12 pixels for each cell.
  <br>
@@ -1361,7 +1356,7 @@ float&nbsp;duration)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.259">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.258">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight)</span></div>
 <div class="block">Create a new SquidLayers widget with a default stretchable font, the given number of cells for gridWidth
  and gridHeight, and 12x12 pixels for each cell.
@@ -1382,7 +1377,7 @@ int&nbsp;gridHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.280">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.279">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight)</span></div>
@@ -1408,7 +1403,7 @@ int&nbsp;cellHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,java.lang.String)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.294">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.293">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1428,7 +1423,7 @@ int&nbsp;cellHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,com.badlogic.gdx.graphics.g2d.BitmapFont)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.309">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.308">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1448,7 +1443,7 @@ com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;bitmapFont)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,squidpony.squidgrid.gui.gdx.TextCellFactory)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.326">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.325">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1470,7 +1465,7 @@ int&nbsp;cellHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,squidpony.squidgrid.gui.gdx.SquidColorCenter,squidpony.squidgrid.gui.gdx.SquidColorCenter)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.350">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.349">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1500,7 +1495,7 @@ int&nbsp;cellHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,java.lang.String,squidpony.squidgrid.gui.gdx.SquidColorCenter,squidpony.squidgrid.gui.gdx.SquidColorCenter)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.368">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.367">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1524,7 +1519,7 @@ int&nbsp;cellHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,com.badlogic.gdx.graphics.g2d.BitmapFont,squidpony.squidgrid.gui.gdx.SquidColorCenter,squidpony.squidgrid.gui.gdx.SquidColorCenter)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.385">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.384">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1548,7 +1543,7 @@ com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;bitmapFont,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.squidgrid.gui.gdx.SquidColorCenter,squidpony.squidgrid.gui.gdx.SquidColorCenter)">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.404">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.403">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1574,7 +1569,7 @@ int&nbsp;cellHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.squidgrid.gui.gdx.SquidColorCenter,squidpony.squidgrid.gui.gdx.SquidColorCenter,char[][])">SquidLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.431">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.430">SquidLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight,
@@ -1720,7 +1715,7 @@ char[][]&nbsp;actualMap)</span></div>
 <h3><a id="autoLight()">autoLight</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.122">autoLight</a></span>()</div>
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired. It may make sense to
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired. It may make sense to
  pass some fraction of the current time, as given by <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/System.html?is-external=true#currentTimeMillis()" title="class or interface in java.lang" class="externalLink"><code>System.currentTimeMillis()</code></a>, instead of a frame.
  Does not allocate a new 2D int array like <a href="MapUtility.html#generateLightnessModifiers(char%5B%5D%5B%5D)"><code>MapUtility.generateLightnessModifiers(char[][])</code></a> or its
  equivalent in DungeonUtility, and directly mutates the lightness data. You can use the <a href="#lightnesses"><code>lightnesses</code></a> field
@@ -1736,7 +1731,7 @@ char[][]&nbsp;actualMap)</span></div>
 <h3><a id="autoLight(double)">autoLight</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.139">autoLight</a></span>&#8203;(<span class="arguments">double&nbsp;frame)</span></div>
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired. It may make sense to
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired. It may make sense to
  pass some fraction of the current time, as given by <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/System.html?is-external=true#currentTimeMillis()" title="class or interface in java.lang" class="externalLink"><code>System.currentTimeMillis()</code></a>, instead of a frame.
  Does not allocate a new 2D int array like <a href="MapUtility.html#generateLightnessModifiers(char%5B%5D%5B%5D)"><code>MapUtility.generateLightnessModifiers(char[][])</code></a> or its
  equivalent in DungeonUtility, and directly mutates the lightness data. You can use the <a href="#lightnesses"><code>lightnesses</code></a> field
@@ -1759,7 +1754,7 @@ char[][]&nbsp;actualMap)</span></div>
 char&nbsp;deepLiquid,
 char&nbsp;shallowLiquid)</span></div>
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired. It may make sense to
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired. It may make sense to
  pass some fraction of the current time, as given by <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/System.html?is-external=true#currentTimeMillis()" title="class or interface in java.lang" class="externalLink"><code>System.currentTimeMillis()</code></a>, instead of a frame.
  Also allows additional chars to be treated like deep and shallow water regarding the ripple animation.
  Does not allocate a new 2D int array like <a href="MapUtility.html#generateLightnessModifiers(char%5B%5D%5B%5D)"><code>MapUtility.generateLightnessModifiers(char[][])</code></a> or its
@@ -1781,7 +1776,7 @@ char&nbsp;shallowLiquid)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setLightnesses(int[][])">setLightnesses</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.226">setLightnesses</a></span>&#8203;(<span class="arguments">int[][]&nbsp;lightnesses)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.225">setLightnesses</a></span>&#8203;(<span class="arguments">int[][]&nbsp;lightnesses)</span></div>
 <div class="block">Sets the lightness modifiers used for background cells with the int[][] passed as lightnesses. This 2D array
  should have elements between 0 to 511, with 256 as the unmodified lightness level, lower numbers meaning darker,
  and higher meaning lighter. Elements less than 0 or higher than 511 will probably cause array out-of-bounds
@@ -1797,7 +1792,7 @@ char&nbsp;shallowLiquid)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addExtraLayer()">addExtraLayer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.467">addExtraLayer</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.466">addExtraLayer</a></span>()</div>
 <div class="block">Add an extra layer on top of the foreground layer. Use putInto methods to specify the layer when adding a char (0
  is background, 1 is unused, 2 is foreground, and the first call to this method creates layer 3).</div>
 <dl>
@@ -1809,7 +1804,7 @@ char&nbsp;shallowLiquid)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setTextSize(int,float,float)">setTextSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.488">setTextSize</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.487">setTextSize</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
 float&nbsp;wide,
 float&nbsp;high)</span></div>
 <div class="block">Sets the size of the text in the given layer  (but not the size of the cells) to the given width and height in
@@ -1827,7 +1822,7 @@ float&nbsp;high)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setTextSize(float,float)">setTextSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.513">setTextSize</a></span>&#8203;(<span class="arguments">float&nbsp;wide,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.512">setTextSize</a></span>&#8203;(<span class="arguments">float&nbsp;wide,
 float&nbsp;high)</span></div>
 <div class="block">Sets the size of the text in all layers (but not the size of the cells) to the given width and height in pixels
  (which may be stretched by viewports later on, if your program uses them).</div>
@@ -1843,7 +1838,7 @@ float&nbsp;high)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.532">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.531">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c)</span></div>
 <div class="block">Place a char c into the foreground at position x, y, with the default color.</div>
@@ -1860,7 +1855,7 @@ char&nbsp;c)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,com.badlogic.gdx.graphics.Color)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.546">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.545">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;foreground)</span></div>
@@ -1879,7 +1874,7 @@ com.badlogic.gdx.graphics.Color&nbsp;foreground)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,float)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.560">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.559">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 float&nbsp;encodedForeground)</span></div>
@@ -1898,7 +1893,7 @@ float&nbsp;encodedForeground)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.575">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.574">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -1919,7 +1914,7 @@ com.badlogic.gdx.graphics.Color&nbsp;background)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,int)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.595">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.594">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -1945,7 +1940,7 @@ int&nbsp;backgroundLightness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,int,com.badlogic.gdx.graphics.Color)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.616">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.615">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -1973,7 +1968,7 @@ com.badlogic.gdx.graphics.Color&nbsp;mixBackground)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,float,float,int)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.638">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.637">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 float&nbsp;encodedForeground,
@@ -1999,7 +1994,7 @@ int&nbsp;backgroundLightness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,float,float,int,float)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.660">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.659">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 float&nbsp;encodedForeground,
@@ -2027,7 +2022,7 @@ float&nbsp;mixBackground)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,float,float,float,float)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.682">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.681">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 float&nbsp;encodedForeground,
@@ -2055,7 +2050,7 @@ float&nbsp;mixBackground)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.689">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.688">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char[][]&nbsp;c)</span></div>
 </section>
@@ -2063,7 +2058,7 @@ char[][]&nbsp;c)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char[][],com.badlogic.gdx.graphics.Color[][],com.badlogic.gdx.graphics.Color[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.694">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.693">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char[][]&nbsp;c,
 com.badlogic.gdx.graphics.Color[][]&nbsp;foreground,
@@ -2073,7 +2068,7 @@ com.badlogic.gdx.graphics.Color[][]&nbsp;background)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char[][],com.badlogic.gdx.graphics.Color[][],com.badlogic.gdx.graphics.Color[][],int[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.715">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.714">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char[][]&nbsp;c,
 com.badlogic.gdx.graphics.Color[][]&nbsp;foregrounds,
@@ -2099,7 +2094,7 @@ int[][]&nbsp;backgroundLightness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putInto(int,int,int,char)">putInto</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.737">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.736">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
 int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c)</span></div>
@@ -2118,7 +2113,7 @@ char&nbsp;c)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putInto(int,int,int,char,com.badlogic.gdx.graphics.Color)">putInto</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.752">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.751">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
 int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
@@ -2139,7 +2134,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putInto(int,int,int,char[][])">putInto</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.766">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.765">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
 int&nbsp;x,
 int&nbsp;y,
 char[][]&nbsp;c)</span></div>
@@ -2158,7 +2153,7 @@ char[][]&nbsp;c)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putInto(int,int,int,char[][],com.badlogic.gdx.graphics.Color[][])">putInto</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.781">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.780">putInto</a></span>&#8203;(<span class="arguments">int&nbsp;layer,
 int&nbsp;x,
 int&nbsp;y,
 char[][]&nbsp;c,
@@ -2179,7 +2174,7 @@ com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putString(int,int,java.lang.String)">putString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.794">putString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.793">putString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</span></div>
 <div class="block">Put a string at the given x, y position, using the default foreground color.</div>
@@ -2196,7 +2191,7 @@ int&nbsp;y,
 <li class="blockList">
 <section class="detail">
 <h3><a id="putString(int,int,java.lang.String,com.badlogic.gdx.graphics.Color)">putString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.808">putString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.807">putString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;foreground)</span></div>
@@ -2215,7 +2210,7 @@ com.badlogic.gdx.graphics.Color&nbsp;foreground)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putString(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color)">putString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.823">putString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.822">putString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -2236,7 +2231,7 @@ com.badlogic.gdx.graphics.Color&nbsp;background)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putBoxedString(int,int,java.lang.String)">putBoxedString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.840">putBoxedString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.839">putBoxedString</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</span></div>
 <div class="block">A utility method that draws a 1-cell-wide black box around the text you request (as s) and replaces the contents
@@ -2254,7 +2249,7 @@ int&nbsp;y,
 <li class="blockList">
 <section class="detail">
 <h3><a id="highlight(int,int,int)">highlight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.865">highlight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.864">highlight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;lightness)</span></div>
 <div class="block">Change the lightness for the background of the cell at x, y (0 is no change, 100 is
@@ -2270,7 +2265,7 @@ int&nbsp;lightness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="highlight(int,int,int[][])">highlight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.880">highlight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.879">highlight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int[][]&nbsp;lightness)</span></div>
 <div class="block">Change the lightness for the background of the cell at x, y (0 is no change, 100 is
@@ -2286,7 +2281,7 @@ int[][]&nbsp;lightness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hasValue(int,int)">hasValue</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.899">hasValue</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.898">hasValue</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Very basic check to see if something was rendered at the x,y cell requested; this only checks the
  foreground. If the foreground contains the character <code>' '</code> at the given position or has not
@@ -2303,7 +2298,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clear(int,int)">clear</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.912">clear</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.911">clear</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Clear one cell at position x, y of  its foreground contents.
  <p>
@@ -2320,13 +2315,13 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="eraseLayer(int)">eraseLayer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.917">eraseLayer</a></span>&#8203;(<span class="arguments">int&nbsp;layer)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.916">eraseLayer</a></span>&#8203;(<span class="arguments">int&nbsp;layer)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="erase()">erase</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.928">erase</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.927">erase</a></span>()</div>
 <div class="block">Erase everything visible in all cells or all layers.  This is not at all expensive to do compared to the
  pre-SquidLib-3.0.0 version of this method that used Swing and took a long time to erase.</div>
 <dl>
@@ -2338,41 +2333,41 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bump(int,int,int,squidpony.squidgrid.Direction,float)">bump</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.937">bump</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.936">bump</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;layer,
-squidpony.squidgrid.Direction&nbsp;dir,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir,
 float&nbsp;duration)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bump(squidpony.squidgrid.gui.gdx.AnimatedEntity,int,squidpony.squidgrid.Direction,float)">bump</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.944">bump</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.943">bump</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;layer,
-squidpony.squidgrid.Direction&nbsp;dir,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir,
 float&nbsp;duration)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bump(int,int,squidpony.squidgrid.Direction)">bump</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.951">bump</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.950">bump</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
-squidpony.squidgrid.Direction&nbsp;dir)</span></div>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bump(squidpony.squidgrid.gui.gdx.AnimatedEntity,squidpony.squidgrid.Direction)">bump</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.955">bump</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
-squidpony.squidgrid.Direction&nbsp;dir)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.954">bump</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="slide(squidpony.squidgrid.gui.gdx.AnimatedEntity,int,int,int,float)">slide</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.959">slide</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.958">slide</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;endX,
 int&nbsp;endY,
 int&nbsp;layer,
@@ -2382,7 +2377,7 @@ float&nbsp;duration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="slide(int,int,int,int,int,float)">slide</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.966">slide</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.965">slide</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;endX,
 int&nbsp;endY,
@@ -2393,7 +2388,7 @@ float&nbsp;duration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="slide(int,int,int,int)">slide</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.973">slide</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.972">slide</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;endX,
 int&nbsp;endY)</span></div>
@@ -2402,7 +2397,7 @@ int&nbsp;endY)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="slide(squidpony.squidgrid.gui.gdx.AnimatedEntity,int,int)">slide</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.977">slide</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.976">slide</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;endX,
 int&nbsp;endY)</span></div>
 </section>
@@ -2410,7 +2405,7 @@ int&nbsp;endY)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wiggle(int,int,int,float)">wiggle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.981">wiggle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.980">wiggle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;layer,
 float&nbsp;duration)</span></div>
@@ -2419,7 +2414,7 @@ float&nbsp;duration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wiggle(squidpony.squidgrid.gui.gdx.AnimatedEntity,int,float)">wiggle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.988">wiggle</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.987">wiggle</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;layer,
 float&nbsp;duration)</span></div>
 </section>
@@ -2427,20 +2422,20 @@ float&nbsp;duration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wiggle(int,int)">wiggle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.995">wiggle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.994">wiggle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wiggle(squidpony.squidgrid.gui.gdx.AnimatedEntity)">wiggle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.999">wiggle</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.998">wiggle</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tint(int,int,com.badlogic.gdx.graphics.Color,int,float)">tint</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1003">tint</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1002">tint</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 int&nbsp;layer,
@@ -2450,7 +2445,7 @@ float&nbsp;duration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tint(squidpony.squidgrid.gui.gdx.AnimatedEntity,com.badlogic.gdx.graphics.Color,int,float)">tint</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1010">tint</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1009">tint</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 int&nbsp;layer,
 float&nbsp;duration)</span></div>
@@ -2459,7 +2454,7 @@ float&nbsp;duration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tint(int,int,com.badlogic.gdx.graphics.Color)">tint</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1017">tint</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1016">tint</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 </section>
@@ -2467,20 +2462,20 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tint(squidpony.squidgrid.gui.gdx.AnimatedEntity,com.badlogic.gdx.graphics.Color)">tint</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1021">tint</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1020">tint</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hasActiveAnimations()">hasActiveAnimations</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1025">hasActiveAnimations</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1024">hasActiveAnimations</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="directionMarker(int,int,com.badlogic.gdx.graphics.Color,int,boolean)">directionMarker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1037">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1036">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 int&nbsp;layer,
@@ -2490,7 +2485,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="directionMarker(int,int,java.util.Collection,float,int,boolean)">directionMarker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1041">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1040">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime,
@@ -2501,7 +2496,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,char,com.badlogic.gdx.graphics.Color,int)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1045">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1044">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2511,7 +2506,7 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,char,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1049">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1048">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
@@ -2520,7 +2515,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,char,com.badlogic.gdx.graphics.Color,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1053">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1052">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2530,7 +2525,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,char,java.util.Collection,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1057">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1056">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
@@ -2540,7 +2535,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,char,java.util.Collection,float,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1061">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1060">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
@@ -2551,7 +2546,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,int)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1065">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1064">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2561,7 +2556,7 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,int,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1069">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1068">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2572,7 +2567,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,int)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1073">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1072">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2582,7 +2577,7 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,int,boolean,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1077">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1076">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2594,7 +2589,7 @@ boolean&nbsp;stretch)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,java.lang.String,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1081">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1080">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
@@ -2603,7 +2598,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1085">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1084">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2613,7 +2608,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1089">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1088">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
@@ -2622,7 +2617,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1093">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1092">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2632,7 +2627,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,boolean,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1097">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1096">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2643,7 +2638,7 @@ boolean&nbsp;stretch)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1101">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1100">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr)</span></div>
 </section>
@@ -2651,7 +2646,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1105">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1104">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 boolean&nbsp;doubleWidth)</span></div>
@@ -2660,7 +2655,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,boolean,boolean)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1109">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1108">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 boolean&nbsp;doubleWidth,
@@ -2670,19 +2665,19 @@ boolean&nbsp;stretch)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAnimatedEntities(int)">getAnimatedEntities</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidmath.OrderedSet&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1113">getAnimatedEntities</a></span>&#8203;(<span class="arguments">int&nbsp;layer)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1112">getAnimatedEntities</a></span>&#8203;(<span class="arguments">int&nbsp;layer)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAnimatedEntities()">getAnimatedEntities</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidmath.OrderedSet&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1117">getAnimatedEntities</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedSet.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedSet</a>&lt;<a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1116">getAnimatedEntities</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAnimatedEntityByCell(int,int,int)">getAnimatedEntityByCell</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1121">getAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1120">getAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;layer)</span></div>
 </section>
@@ -2690,27 +2685,27 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAnimatedEntity(squidpony.squidgrid.gui.gdx.AnimatedEntity,int)">removeAnimatedEntity</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1125">removeAnimatedEntity</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1124">removeAnimatedEntity</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;layer)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAnimatedEntity(squidpony.squidgrid.gui.gdx.AnimatedEntity)">removeAnimatedEntity</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1129">removeAnimatedEntity</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1128">removeAnimatedEntity</a></span>&#8203;(<span class="arguments"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAnimatedEntityByCell(int,int)">getAnimatedEntityByCell</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1133">getAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1132">getAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAnimatedEntityByCell(int,int,int)">removeAnimatedEntityByCell</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1137">removeAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1136">removeAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;layer)</span></div>
 </section>
@@ -2718,14 +2713,14 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAnimatedEntityByCell(int,int)">removeAnimatedEntityByCell</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1141">removeAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1140">removeAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1145">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1144">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -2736,7 +2731,7 @@ float&nbsp;parentAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="drawActor(com.badlogic.gdx.graphics.g2d.Batch,float,squidpony.squidgrid.gui.gdx.AnimatedEntity,int)">drawActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1151">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1150">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha,
 <a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;layer)</span></div>
@@ -2745,7 +2740,7 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="drawActor(com.badlogic.gdx.graphics.g2d.Batch,float,squidpony.squidgrid.gui.gdx.AnimatedEntity)">drawActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1155">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1154">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha,
 <a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</span></div>
 </section>
@@ -2753,19 +2748,19 @@ float&nbsp;parentAlpha,
 <li class="blockList">
 <section class="detail">
 <h3><a id="setLightingColor(com.badlogic.gdx.graphics.Color)">setLightingColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1159">setLightingColor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;lightingColor)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1158">setLightingColor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;lightingColor)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getLightingColor()">getLightingColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.Color</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1163">getLightingColor</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.Color</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1162">getLightingColor</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setPosition(float,float)">setPosition</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1174">setPosition</a></span>&#8203;(<span class="arguments">float&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1173">setPosition</a></span>&#8203;(<span class="arguments">float&nbsp;x,
 float&nbsp;y)</span></div>
 <div class="block">Sets the position of the actor's bottom left corner.</div>
 <dl>
@@ -2780,7 +2775,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getLayer(int)">getLayer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1192">getLayer</a></span>&#8203;(<span class="arguments">int&nbsp;layer)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1191">getLayer</a></span>&#8203;(<span class="arguments">int&nbsp;layer)</span></div>
 <div class="block">Gets a SquidPanel from this SquidLayers and returns a direct reference. Layer 0 is the background, layer 1 or 2
  is the foreground, and any values 3 or higher are extra SquidPanels added via <a href="#addExtraLayer()"><code>addExtraLayer()</code></a>.
  If the layer is not found, this returns the foreground SquidPanel.</div>
@@ -2795,13 +2790,13 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getForegroundLayer()">getForegroundLayer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1207">getForegroundLayer</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1206">getForegroundLayer</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setForegroundLayer(squidpony.squidgrid.gui.gdx.SquidPanel)">setForegroundLayer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1222">setForegroundLayer</a></span>&#8203;(<span class="arguments"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1221">setForegroundLayer</a></span>&#8203;(<span class="arguments"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel)</span></div>
 <div class="block">Sets the foreground panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
  This does not do any validation of size, but the <a href="SquidPanel.html#getTotalWidth()"><code>SquidPanel.getTotalWidth()</code></a> and
  <a href="SquidPanel.html#getTotalHeight()"><code>SquidPanel.getTotalHeight()</code></a> of panel should almost always match this object's <a href="#getTotalWidth()"><code>getTotalWidth()</code></a>
@@ -2818,13 +2813,13 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBackgroundLayer()">getBackgroundLayer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1231">getBackgroundLayer</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1230">getBackgroundLayer</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setBackgroundLayer(squidpony.squidgrid.gui.gdx.SquidPanel)">setBackgroundLayer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1246">setBackgroundLayer</a></span>&#8203;(<span class="arguments"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1245">setBackgroundLayer</a></span>&#8203;(<span class="arguments"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel)</span></div>
 <div class="block">Sets the background panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
  This does not do any validation of size, but the <a href="SquidPanel.html#getTotalWidth()"><code>SquidPanel.getTotalWidth()</code></a> and
  <a href="SquidPanel.html#getTotalHeight()"><code>SquidPanel.getTotalHeight()</code></a> of panel should almost always match this object's <a href="#getTotalWidth()"><code>getTotalWidth()</code></a>
@@ -2841,7 +2836,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setExtraPanel(squidpony.squidgrid.gui.gdx.SquidPanel,int)">setExtraPanel</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1273">setExtraPanel</a></span>&#8203;(<span class="arguments"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1272">setExtraPanel</a></span>&#8203;(<span class="arguments"><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel,
 int&nbsp;index)</span></div>
 <div class="block">Sets an extra panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
  This tries to find the SquidPanel at the given index in the extra panels that may have been added to this with
@@ -2865,7 +2860,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFGColorCenter(squidpony.IColorCenter)">setFGColorCenter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1292">setFGColorCenter</a></span>&#8203;(<span class="arguments">squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1291">setFGColorCenter</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</span></div>
 <div class="block">Sets the IColorCenter used by the foreground layer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2876,7 +2871,7 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setBGColorCenter(squidpony.IColorCenter)">setBGColorCenter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1301">setBGColorCenter</a></span>&#8203;(<span class="arguments">squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1300">setBGColorCenter</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</span></div>
 <div class="block">Sets the IColorCenter used by the background layer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2887,44 +2882,44 @@ int&nbsp;index)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setOffsets(float,float)">setOffsets</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1305">setOffsets</a></span>&#8203;(<span class="arguments">float&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1304">setOffsets</a></span>&#8203;(<span class="arguments">float&nbsp;x,
 float&nbsp;y)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getGridOffsetX()">getGridOffsetX</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1312">getGridOffsetX</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1311">getGridOffsetX</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getGridOffsetY()">getGridOffsetY</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1316">getGridOffsetY</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1315">getGridOffsetY</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setGridOffsetX(int)">setGridOffsetX</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1320">setGridOffsetX</a></span>&#8203;(<span class="arguments">int&nbsp;offset)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1319">setGridOffsetX</a></span>&#8203;(<span class="arguments">int&nbsp;offset)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setGridOffsetY(int)">setGridOffsetY</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1327">setGridOffsetY</a></span>&#8203;(<span class="arguments">int&nbsp;offset)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1326">setGridOffsetY</a></span>&#8203;(<span class="arguments">int&nbsp;offset)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getTotalWidth()">getTotalWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1334">getTotalWidth</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1333">getTotalWidth</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getTotalHeight()">getTotalHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1338">getTotalHeight</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidLayers.html#line.1337">getTotalHeight</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -2933,8 +2928,8 @@ float&nbsp;y)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -2979,5 +2974,7 @@ float&nbsp;y)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

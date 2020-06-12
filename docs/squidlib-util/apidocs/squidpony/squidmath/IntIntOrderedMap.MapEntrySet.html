@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class IntIntOrderedMap.MapEntrySet" class="title">Class IntIntOrderedMap.MapEntrySet</h1>
@@ -221,7 +216,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i11">
-<td class="colFirst"><code>squidpony.squidmath.IntIntOrderedMap.EntryIterator</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntIntOrderedMap.EntryIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntIntOrderedMap.EntryIterator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterator()">iterator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -341,7 +336,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="iterator()">iterator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidmath.IntIntOrderedMap.EntryIterator</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/IntIntOrderedMap.MapEntrySet.html#line.1041">iterator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IntIntOrderedMap.EntryIterator.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">squidpony.squidmath.IntIntOrderedMap.EntryIterator</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/IntIntOrderedMap.MapEntrySet.html#line.1041">iterator</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true#iterator()" title="class or interface in java.util" class="externalLink">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="IntIntOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntIntOrderedMap.MapEntry</a>&gt;</code></dd>
@@ -629,8 +624,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -676,5 +671,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

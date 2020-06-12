@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Interface squidpony.squidgrid.mapping.IDungeonGenerator" class="title">Uses of Interface<br>squidpony.squidgrid.mapping.IDungeonGenerator</h1>
@@ -135,17 +130,31 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../DividedMazeGenerator.html" title="class in squidpony.squidgrid.mapping">DividedMazeGenerator</a></span></code></th>
+<td class="colLast">
+<div class="block">Recursively divided maze.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></span></code></th>
 <td class="colLast">
 <div class="block">The primary way to create a more-complete dungeon, layering different effects and modifications on top of
  a DungeonBoneGen's dungeon or another dungeon without such effects.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../FlowingCaveGenerator.html" title="class in squidpony.squidgrid.mapping">FlowingCaveGenerator</a></span></code></th>
 <td class="colLast">
 <div class="block">An IDungeonGenerator that distorts and smooths an ordinary dungeon map to make it appear like a cave complex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../GrowingTreeMazeGenerator.html" title="class in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator</a></span></code></th>
+<td class="colLast">
+<div class="block">A maze generator that can be configured using a <a href="../GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping"><code>GrowingTreeMazeGenerator.ChoosingMethod</code></a>, which can be customized for the app.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -243,5 +252,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class ImageSquidPanel" class="title">Class ImageSquidPanel</h1>
@@ -103,10 +98,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>com.badlogic.gdx.scenes.scene2d.utils.Cullable</code>, <code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code>, <code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
+<dd><code>com.badlogic.gdx.scenes.scene2d.utils.Cullable</code>, <code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.26">ImageSquidPanel</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.25">ImageSquidPanel</a>
 extends <a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></pre>
 <div class="block">Displays text and images in a grid pattern, like SquidPanel, but will automatically render certain chars as images.
  Supports basic animations, such as sliding, wiggling, or fading the contents of a cell.
@@ -197,7 +192,7 @@ int&nbsp;gridHeight,
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter)">ImageSquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
 <td class="colLast">
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
@@ -206,7 +201,7 @@ squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float)">ImageSquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset)</code></th>
 <td class="colLast">
@@ -217,7 +212,7 @@ float&nbsp;yOffset)</code></th>
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float,char%5B%5D%5B%5D)">ImageSquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset,
 char[][]&nbsp;actualMap)</code></th>
@@ -532,16 +527,11 @@ int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i26">
-<td class="colFirst"><code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBacker()">getBacker</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor" id="i27">
 <td class="colFirst"><code>com.badlogic.gdx.graphics.Color</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultForegroundColor()">getDefaultForegroundColor</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i28">
+<tr class="rowColor" id="i27">
 <td class="colFirst"><code>com.badlogic.gdx.graphics.g2d.TextureRegion</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getImageSwap(char)">getImageSwap</a></span>&#8203;(char&nbsp;toFind)</code></th>
 <td class="colLast">
@@ -549,7 +539,7 @@ int&nbsp;y)</code></th>
  otherwise it returns null.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i29">
+<tr class="altColor" id="i28">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSnapshot()">getSnapshot</a></span>()</code></th>
 <td class="colLast">
@@ -558,7 +548,7 @@ int&nbsp;y)</code></th>
  <a href="#setFromSnapshot(java.lang.String,int,int,int,int)"><code>setFromSnapshot(String, int, int, int, int)</code></a> or its overload that takes a StringBuilder.</div>
 </td>
 </tr>
-<tr class="altColor" id="i30">
+<tr class="rowColor" id="i29">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSnapshot(int,int,int,int)">getSnapshot</a></span>&#8203;(int&nbsp;startX,
 int&nbsp;startY,
@@ -570,7 +560,7 @@ int&nbsp;height)</code></th>
  <a href="#setFromSnapshot(java.lang.String,int,int,int,int)"><code>setFromSnapshot(String, int, int, int, int)</code></a> or its overload that takes a StringBuilder.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i31">
+<tr class="altColor" id="i30">
 <td class="colFirst"><code>static char</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUnusedChar(char)">getUnusedChar</a></span>&#8203;(char&nbsp;initial)</code></th>
 <td class="colLast">
@@ -578,7 +568,7 @@ int&nbsp;height)</code></th>
  original easy-to-write char to be used as its own non-image char.</div>
 </td>
 </tr>
-<tr class="altColor" id="i32">
+<tr class="rowColor" id="i31">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeImageSwap(char)">removeImageSwap</a></span>&#8203;(char&nbsp;toRemove)</code></th>
 <td class="colLast">
@@ -586,21 +576,23 @@ int&nbsp;height)</code></th>
  already replace toRemove with an image.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i33">
-<td class="colFirst"><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</code></th>
+<tr class="altColor" id="i32">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</code></th>
 <td class="colLast">
-<div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
+<div class="block">Use this method if you use your own <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink"><code>IColorCenter</code></a> and want this
  panel not to allocate its own colors (or fill
  <a href="DefaultResources.html#getSCC()"><code>DefaultResources.getSCC()</code></a> but instead to the provided center.</div>
 </td>
 </tr>
-<tr class="altColor" id="i34">
+<tr class="rowColor" id="i33">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a></span>&#8203;(com.badlogic.gdx.graphics.Color&nbsp;defaultForeground)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sets the default foreground color.</div>
+</td>
 </tr>
-<tr class="rowColor" id="i35">
+<tr class="altColor" id="i34">
 <td class="colFirst"><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromSnapshot(java.lang.String)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot)</code></th>
 <td class="colLast">
@@ -608,7 +600,7 @@ int&nbsp;height)</code></th>
  ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
 </td>
 </tr>
-<tr class="altColor" id="i36">
+<tr class="rowColor" id="i35">
 <td class="colFirst"><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromSnapshot(java.lang.StringBuilder)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot)</code></th>
 <td class="colLast">
@@ -616,7 +608,7 @@ int&nbsp;height)</code></th>
  ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i37">
+<tr class="altColor" id="i36">
 <td class="colFirst"><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromSnapshot(java.lang.StringBuilder,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -627,7 +619,7 @@ int&nbsp;putY)</code></th>
  (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
 </td>
 </tr>
-<tr class="altColor" id="i38">
+<tr class="rowColor" id="i37">
 <td class="colFirst"><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromSnapshot(java.lang.StringBuilder,int,int,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -640,7 +632,7 @@ int&nbsp;limitHeight)</code></th>
  so they have the values stored in the snapshot.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i39">
+<tr class="altColor" id="i38">
 <td class="colFirst"><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromSnapshot(java.lang.String,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -651,7 +643,7 @@ int&nbsp;putY)</code></th>
  (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
 </td>
 </tr>
-<tr class="altColor" id="i40">
+<tr class="rowColor" id="i39">
 <td class="colFirst"><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFromSnapshot(java.lang.String,int,int,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -664,7 +656,7 @@ int&nbsp;limitHeight)</code></th>
  so they have the values stored in the snapshot.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i41">
+<tr class="altColor" id="i40">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setImageSwap(char,com.badlogic.gdx.graphics.g2d.TextureRegion)">setImageSwap</a></span>&#8203;(char&nbsp;swapOut,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</code></th>
@@ -712,7 +704,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="imageMap">imageMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.utils.IntMap&lt;com.badlogic.gdx.graphics.g2d.TextureRegion&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.28">imageMap</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.utils.IntMap&lt;com.badlogic.gdx.graphics.g2d.TextureRegion&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.27">imageMap</a></span></div>
 </section>
 </li>
 </ul>
@@ -728,7 +720,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">ImageSquidPanel</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.36">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.35">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight)</span></div>
 <div class="block">Creates a bare-bones panel with all default values for text rendering.</div>
 <dl>
@@ -741,7 +733,7 @@ int&nbsp;gridHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int)">ImageSquidPanel</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.48">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.47">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight)</span></div>
@@ -758,7 +750,7 @@ int&nbsp;cellHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory)">ImageSquidPanel</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.63">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.62">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory)</span></div>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
@@ -777,10 +769,10 @@ int&nbsp;gridHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter)">ImageSquidPanel</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.81">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.80">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</span></div>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</span></div>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
  are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
 
@@ -792,17 +784,17 @@ squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</span
 <dd><code>gridHeight</code> - the number of cells vertically</dd>
 <dd><code>factory</code> - the factory to use for cell rendering</dd>
 <dd><code>center</code> - The color center to use. Can be <code>null</code>, but then must be set later on with
-          <a href="#setColorCenter(squidpony.IColorCenter)"><code>setColorCenter(IColorCenter)</code></a>.</dd>
+          <a href="SquidPanel.html#setColorCenter(squidpony.IColorCenter)"><code>SquidPanel.setColorCenter(IColorCenter)</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float)">ImageSquidPanel</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.99">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.98">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset)</span></div>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
@@ -816,17 +808,17 @@ float&nbsp;yOffset)</span></div>
 <dd><code>gridHeight</code> - the number of cells vertically</dd>
 <dd><code>factory</code> - the factory to use for cell rendering</dd>
 <dd><code>center</code> - The color center to use. Can be <code>null</code>, but then must be set later on with
-          <a href="#setColorCenter(squidpony.IColorCenter)"><code>setColorCenter(IColorCenter)</code></a>.</dd>
+          <a href="SquidPanel.html#setColorCenter(squidpony.IColorCenter)"><code>SquidPanel.setColorCenter(IColorCenter)</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float,char[][])">ImageSquidPanel</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.128">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.127">ImageSquidPanel</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset,
 char[][]&nbsp;actualMap)</span></div>
@@ -849,7 +841,7 @@ char[][]&nbsp;actualMap)</span></div>
 <dd><code>gridHeight</code> - the number of cells vertically</dd>
 <dd><code>factory</code> - the factory to use for cell rendering</dd>
 <dd><code>center</code> - The color center to use. Can be <code>null</code>, but then must be set later on with
-          <a href="#setColorCenter(squidpony.IColorCenter)"><code>setColorCenter(IColorCenter)</code></a>.</dd>
+          <a href="SquidPanel.html#setColorCenter(squidpony.IColorCenter)"><code>SquidPanel.setColorCenter(IColorCenter)</code></a>.</dd>
 <dd><code>xOffset</code> - the x offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)</dd>
 <dd><code>yOffset</code> - the y offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)</dd>
 <dd><code>actualMap</code> - will often be a different size than gridWidth by gridHeight, which enables camera scrolling</dd>
@@ -869,7 +861,7 @@ char[][]&nbsp;actualMap)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.145">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.144">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha)</span></div>
 <div class="block">Draws this ImageSquidPanel and any <a href="SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a> it has, and calls <code>Actor.act(float)</code> for each
  AnimatedEntity this contains in <a href="SquidPanel.html#animatedEntities"><code>SquidPanel.animatedEntities</code></a> or <a href="SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a>.
@@ -891,7 +883,7 @@ float&nbsp;parentAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="drawActor(com.badlogic.gdx.graphics.g2d.Batch,float,squidpony.squidgrid.gui.gdx.AnimatedEntity)">drawActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.186">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.185">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha,
 <a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</span></div>
 <div class="block">Draws one AnimatedEntity, specifically the Actor it contains. Batch must be between start() and end()</div>
@@ -908,7 +900,7 @@ float&nbsp;parentAlpha,
 <li class="blockList">
 <section class="detail">
 <h3><a id="drawActor(com.badlogic.gdx.graphics.g2d.Batch,float,com.badlogic.gdx.scenes.scene2d.Actor)">drawActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.197">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.196">drawActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha,
 com.badlogic.gdx.scenes.scene2d.Actor&nbsp;ac)</span></div>
 <div class="block">Draws one AnimatedEntity, specifically the Actor it contains. Batch must be between start() and end()</div>
@@ -925,10 +917,12 @@ com.badlogic.gdx.scenes.scene2d.Actor&nbsp;ac)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.205">setDefaultForeground</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;defaultForeground)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.204">setDefaultForeground</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;defaultForeground)</span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="IPackedColorPanel.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">IPackedColorPanel</a></code></span></div>
+<div class="block">Sets the default foreground color.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>setDefaultForeground</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="IPackedColorPanel.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a></code>&nbsp;in interface&nbsp;<code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SquidPanel.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a></code>&nbsp;in class&nbsp;<code><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></dd>
 </dl>
@@ -937,19 +931,24 @@ com.badlogic.gdx.scenes.scene2d.Actor&nbsp;ac)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDefaultForegroundColor()">getDefaultForegroundColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.Color</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.210">getDefaultForegroundColor</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.Color</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.209">getDefaultForegroundColor</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>getDefaultForegroundColor</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="IPackedColorPanel.html#getDefaultForegroundColor()">getDefaultForegroundColor</a></code>&nbsp;in interface&nbsp;<code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SquidPanel.html#getDefaultForegroundColor()">getDefaultForegroundColor</a></code>&nbsp;in class&nbsp;<code><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The default foreground color (if none was set with
+         <a href="IPackedColorPanel.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)"><code>IPackedColorPanel.setDefaultForeground(Color)</code></a>), or the last color set
+         with <a href="IPackedColorPanel.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)"><code>IPackedColorPanel.setDefaultForeground(Color)</code></a>. Cannot be
+         <code>null</code>.</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAnimatedEntityByCell(int,int)">getAnimatedEntityByCell</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.215">getAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.214">getAnimatedEntityByCell</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -960,7 +959,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,char,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.232">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.231">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
@@ -980,7 +979,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,char,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.247">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.246">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 char&nbsp;c,
@@ -1003,7 +1002,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,java.lang.String,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.268">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.267">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
@@ -1023,7 +1022,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,java.lang.String,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.283">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.282">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
@@ -1046,7 +1045,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,java.lang.String,java.util.Collection)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.302">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.301">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
@@ -1069,7 +1068,7 @@ boolean&nbsp;doubleWidth,
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,java.lang.String,java.util.Collection,float)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.317">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.316">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
@@ -1094,7 +1093,7 @@ float&nbsp;loopTime)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,char,java.util.Collection)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.336">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.335">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 char&nbsp;c,
@@ -1115,7 +1114,7 @@ char&nbsp;c,
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,char,java.util.Collection,float)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.351">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.350">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 char&nbsp;c,
@@ -1138,7 +1137,7 @@ float&nbsp;loopTime)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="directionMarker(int,int,boolean,java.util.Collection,float)">directionMarker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.374">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.373">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
@@ -1162,7 +1161,7 @@ float&nbsp;loopTime)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="directionMarker(int,int,boolean,com.badlogic.gdx.graphics.Color)">directionMarker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.383">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.382">directionMarker</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
@@ -1175,7 +1174,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,char,int,java.util.ArrayList)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.401">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.400">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 int&nbsp;index,
@@ -1195,7 +1194,7 @@ int&nbsp;index,
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,java.lang.String,int,java.util.ArrayList)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.415">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.414">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 int&nbsp;index,
@@ -1215,7 +1214,7 @@ int&nbsp;index,
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.428">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.427">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture)</span></div>
 <div class="block">Create an AnimatedEntity at position x, y, using a TextureRegion with no color modifications, which will be
@@ -1234,7 +1233,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.451">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.450">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
@@ -1255,7 +1254,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.474">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.473">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture)</span></div>
@@ -1276,7 +1275,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.502">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.501">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -1299,7 +1298,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,java.lang.String)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.516">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.515">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -1321,7 +1320,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color,
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion,java.util.Collection)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.540">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.539">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -1344,7 +1343,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion,java.util.Collection,float)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.553">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.552">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -1368,7 +1367,7 @@ float&nbsp;loopTime)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion,java.util.Collection,float,java.lang.String)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.566">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.565">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -1391,7 +1390,7 @@ float&nbsp;loopTime,
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.592">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.591">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 boolean&nbsp;stretch,
@@ -1415,7 +1414,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="animateActor(int,int,boolean,boolean,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color)">animateActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.622">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.621">animateActor</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 boolean&nbsp;doubleWidth,
 boolean&nbsp;stretch,
@@ -1440,32 +1439,16 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="getBacker()">getBacker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.640">getBacker</a></span>()</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>getBacker</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="SquidPanel.html#getBacker()">getBacker</a></code>&nbsp;in class&nbsp;<code><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
 <h3><a id="setColorCenter(squidpony.IColorCenter)">setColorCenter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.656">setColorCenter</a></span>&#8203;(<span class="arguments">squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</span></div>
-<div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.649">setColorCenter</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</span></div>
+<div class="block">Use this method if you use your own <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink"><code>IColorCenter</code></a> and want this
  panel not to allocate its own colors (or fill
  <a href="DefaultResources.html#getSCC()"><code>DefaultResources.getSCC()</code></a> but instead to the provided center.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>setColorCenter</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SquidPanel.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></code>&nbsp;in class&nbsp;<code><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>scc</code> - The color center to use. Should not be <code>null</code>.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>this</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - If <code>scc</code> is <code>null</code>.</dd>
 </dl>
@@ -1474,7 +1457,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSnapshot()">getSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.674">getSnapshot</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.665">getSnapshot</a></span>()</div>
 <div class="block">Gets a "snapshot" of the data represented by this ImageSquidPanel; stores the dimensions, the char data, and the
  color data in a way that can be set back to a SquidPanel or ImageSquidPanel using
  <a href="#setFromSnapshot(java.lang.String,int,int,int,int)"><code>setFromSnapshot(String, int, int, int, int)</code></a> or its overload that takes a StringBuilder. The actual
@@ -1495,7 +1478,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSnapshot(int,int,int,int)">getSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.696">getSnapshot</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.687">getSnapshot</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
 int&nbsp;startY,
 int&nbsp;width,
 int&nbsp;height)</span></div>
@@ -1526,7 +1509,7 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFromSnapshot(java.lang.StringBuilder)">setFromSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.719">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.710">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot)</span></div>
 <div class="block">Given a "snapshot" from <a href="#getSnapshot(int,int,int,int)"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
  ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
 <dl>
@@ -1542,7 +1525,7 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFromSnapshot(java.lang.StringBuilder,int,int)">setFromSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.732">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.723">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
 int&nbsp;putX,
 int&nbsp;putY)</span></div>
 <div class="block">Given a "snapshot" from <a href="#getSnapshot(int,int,int,int)"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
@@ -1563,7 +1546,7 @@ int&nbsp;putY)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFromSnapshot(java.lang.StringBuilder,int,int,int,int)">setFromSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.749">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.740">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
 int&nbsp;putX,
 int&nbsp;putY,
 int&nbsp;limitWidth,
@@ -1590,7 +1573,7 @@ int&nbsp;limitHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFromSnapshot(java.lang.String)">setFromSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.787">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.778">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot)</span></div>
 <div class="block">Given a "snapshot" from <a href="#getSnapshot(int,int,int,int)"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
  ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.
  <br>
@@ -1608,7 +1591,7 @@ int&nbsp;limitHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFromSnapshot(java.lang.String,int,int)">setFromSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.802">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.793">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
 int&nbsp;putX,
 int&nbsp;putY)</span></div>
 <div class="block">Given a "snapshot" from <a href="#getSnapshot(int,int,int,int)"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
@@ -1631,7 +1614,7 @@ int&nbsp;putY)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFromSnapshot(java.lang.String,int,int,int,int)">setFromSnapshot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.823">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.814">setFromSnapshot</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
 int&nbsp;putX,
 int&nbsp;putY,
 int&nbsp;limitWidth,
@@ -1660,7 +1643,7 @@ int&nbsp;limitHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setImageSwap(char,com.badlogic.gdx.graphics.g2d.TextureRegion)">setImageSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.860">setImageSwap</a></span>&#8203;(<span class="arguments">char&nbsp;swapOut,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.851">setImageSwap</a></span>&#8203;(<span class="arguments">char&nbsp;swapOut,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</span></div>
 <div class="block">Makes it so when the char swapOut would be drawn, the TextureRegion swapIn is drawn instead.
  This will apply for as long as this ImageSquidPanel is in use unless swapIn is removed with
@@ -1675,7 +1658,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeImageSwap(char)">removeImageSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.871">removeImageSwap</a></span>&#8203;(<span class="arguments">char&nbsp;toRemove)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.862">removeImageSwap</a></span>&#8203;(<span class="arguments">char&nbsp;toRemove)</span></div>
 <div class="block">Removes the char toRemove from the mapping of chars to replace with images, or does nothing if this did not
  already replace toRemove with an image. This means toRemove will render as itself, if present in the font.</div>
 <dl>
@@ -1687,7 +1670,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getImageSwap(char)">getImageSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.882">getImageSwap</a></span>&#8203;(<span class="arguments">char&nbsp;toFind)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.873">getImageSwap</a></span>&#8203;(<span class="arguments">char&nbsp;toFind)</span></div>
 <div class="block">If there is a TextureRegion that would replace the char toFind when drawn, this will return that TextureRegion,
  otherwise it returns null.</div>
 <dl>
@@ -1701,7 +1684,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getUnusedChar(char)">getUnusedChar</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.904">getUnusedChar</a></span>&#8203;(<span class="arguments">char&nbsp;initial)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#line.895">getUnusedChar</a></span>&#8203;(<span class="arguments">char&nbsp;initial)</span></div>
 <div class="block">Meant for taking easy-to-write chars and generating chars that can map to images, while still allowing the
  original easy-to-write char to be used as its own non-image char. Given a char that should be from the
  "relatively common" parts of Unicode (essentially, anything with a codepoint before 0x1000, or with a small risk
@@ -1728,8 +1711,8 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -1774,5 +1757,7 @@ com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;swapIn)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

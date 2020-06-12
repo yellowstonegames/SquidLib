@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Interface squidpony.IColorCenter" class="title">Uses of Interface<br>squidpony.IColorCenter</h1>
@@ -83,12 +78,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colFirst" scope="row"><a href="#squidpony">squidpony</a></th>
 <td class="colLast">
 <div class="block">Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="#squidpony.panel">squidpony.panel</a></th>
-<td class="colLast">
-<div class="block">Interfaces for panels in GUIs/TUIs; these do not depend on any particular implementation of a color type.</div>
 </td>
 </tr>
 </tbody>
@@ -117,46 +106,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a>&lt;T&gt;</span></code></th>
 <td class="colLast">
 <div class="block">A skeletal implementation of <a href="../IColorCenter.html" title="interface in squidpony"><code>IColorCenter</code></a>.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail"><a id="squidpony.panel">
-<!--   -->
-</a>
-<h2>Uses of <a href="../IColorCenter.html" title="interface in squidpony">IColorCenter</a> in <a href="../panel/package-summary.html">squidpony.panel</a></h2>
-<div class="useSummary">
-<table>
-<caption><span>Methods in <a href="../panel/package-summary.html">squidpony.panel</a> with parameters of type <a href="../IColorCenter.html" title="interface in squidpony">IColorCenter</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ICombinedPanel.Impl.</span><code><span class="memberNameLink"><a href="../panel/ICombinedPanel.Impl.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(<a href="../IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../panel/ICombinedPanel.Impl.html" title="type parameter in ICombinedPanel.Impl">T</a>&gt;&nbsp;icc)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ICombinedPanel.</span><code><span class="memberNameLink"><a href="../panel/ICombinedPanel.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(<a href="../IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../panel/ICombinedPanel.html" title="type parameter in ICombinedPanel">T</a>&gt;&nbsp;icc)</code></th>
-<td class="colLast">
-<div class="block">Changes the underlying <a href="../IColorCenter.html" title="interface in squidpony"><code>IColorCenter</code></a>.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../panel/ISquidPanel.html" title="interface in squidpony.panel">ISquidPanel</a>&lt;<a href="../panel/ISquidPanel.html" title="type parameter in ISquidPanel">T</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ISquidPanel.</span><code><span class="memberNameLink"><a href="../panel/ISquidPanel.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(<a href="../IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../panel/ISquidPanel.html" title="type parameter in ISquidPanel">T</a>&gt;&nbsp;icc)</code></th>
-<td class="colLast">
-<div class="block">Method to change the backing <a href="../IColorCenter.html" title="interface in squidpony"><code>IColorCenter</code></a>.</div>
 </td>
 </tr>
 </tbody>
@@ -196,5 +145,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

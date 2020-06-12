@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class FlawedPointHash.CubeHash" class="title">Class FlawedPointHash.CubeHash</h1>
@@ -107,7 +102,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FlawedPointHash.html" title="interface in squidpony.squidmath">FlawedPointHash</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.210">FlawedPointHash.CubeHash</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.213">FlawedPointHash.CubeHash</a>
 extends <a href="IPointHash.LongImpl.html" title="class in squidpony.squidmath">IPointHash.LongImpl</a>
 implements <a href="FlawedPointHash.html" title="interface in squidpony.squidmath">FlawedPointHash</a></pre>
 <div class="block">Very similar to <a href="FlawedPointHash.QuiltHash.html" title="class in squidpony.squidmath"><code>FlawedPointHash.QuiltHash</code></a>, but this doesn't change the pattern in different large squares, and instead
@@ -318,19 +313,19 @@ int&nbsp;state)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">CubeHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.213">CubeHash</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.216">CubeHash</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">CubeHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.216">CubeHash</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.219">CubeHash</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int)">CubeHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.220">CubeHash</a></span>&#8203;(<span class="arguments">long&nbsp;state,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.223">CubeHash</a></span>&#8203;(<span class="arguments">long&nbsp;state,
 int&nbsp;size)</span></div>
 </section>
 </li>
@@ -347,25 +342,25 @@ int&nbsp;size)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getState()">getState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.225">getState</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.228">getState</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSize()">getSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.229">getSize</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.232">getSize</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setSize(int)">setSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.233">setSize</a></span>&#8203;(<span class="arguments">int&nbsp;size)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.236">setSize</a></span>&#8203;(<span class="arguments">int&nbsp;size)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.238">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.241">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;s)</span></div>
 </section>
@@ -373,7 +368,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.257">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.260">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;z,
 long&nbsp;s)</span></div>
@@ -382,7 +377,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.293">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.296">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;z,
 long&nbsp;w,
@@ -392,7 +387,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long,long,long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.297">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.300">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;z,
 long&nbsp;w,
@@ -404,7 +399,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.301">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.304">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;state)</span></div>
 <dl>
@@ -416,7 +411,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.306">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.309">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;state)</span></div>
@@ -429,7 +424,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.311">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.314">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;w,
@@ -443,7 +438,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.316">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.CubeHash.html#line.319">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;w,
@@ -462,8 +457,8 @@ int&nbsp;state)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -509,5 +504,7 @@ int&nbsp;state)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

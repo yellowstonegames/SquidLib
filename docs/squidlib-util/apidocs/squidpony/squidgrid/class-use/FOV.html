@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,206 +52,18 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.FOV" class="title">Uses of Class<br>squidpony.squidgrid.FOV</h1>
 </div>
-<div class="classUseContainer">
-<div class="useSummary">
-<table>
-<caption><span>Packages that use <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Package</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<th class="colFirst" scope="row"><a href="#squidpony.squidai">squidpony.squidai</a></th>
-<td class="colLast">
-<div class="block">Tools for finding paths, optimizing targets for area-of-effect (AOE) abilities, and evaluating influence on a grid.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></th>
-<td class="colLast">
-<div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<section class="classUses">
-<ul class="blockList">
-<li class="blockList">
-<section class="detail"><a id="squidpony.squidai">
-<!--   -->
-</a>
-<h2>Uses of <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a> in <a href="../../squidai/package-summary.html">squidpony.squidai</a></h2>
-<div class="useSummary">
-<table>
-<caption><span>Methods in <a href="../../squidai/package-summary.html">squidpony.squidai</a> with parameters of type <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../squidai/AOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BeamAOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BlastAOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../squidai/BurstAOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../squidai/CloudAOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../squidai/ConeAOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../squidai/LineAOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../squidai/PointAOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail"><a id="squidpony.squidgrid">
-<!--   -->
-</a>
-<h2>Uses of <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a> in <a href="../package-summary.html">squidpony.squidgrid</a></h2>
-<div class="useSummary">
-<table>
-<caption><span>Subclasses of <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a> in <a href="../package-summary.html">squidpony.squidgrid</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../BevelFOV.html" title="class in squidpony.squidgrid">BevelFOV</a></span></code></th>
-<td class="colLast">
-<div class="block">Use FOV instead, probably with type SHADOW; this has the same results as shadowcasting FOV but is slower, currently.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></span></code></th>
-<td class="colLast">
-<div class="block">A combined FOV calculator, partial LOS calculator, FOV/LOS compressor, and tool to store/query/extract compressed
- FOV/LOS data; it is less generally-useful than it sounds, and using <a href="../FOV.html" title="class in squidpony.squidgrid"><code>FOV</code></a> is usually easier and faster.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="useSummary">
-<table>
-<caption><span>Fields in <a href="../package-summary.html">squidpony.squidgrid</a> declared as <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">FOVCache.</span><code><span class="memberNameLink"><a href="../FOVCache.html#fov">fov</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../FOV.html" title="class in squidpony.squidgrid">FOV</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">FOVCache.</span><code><span class="memberNameLink"><a href="../FOVCache.html#gradedFOV">gradedFOV</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</li>
-</ul>
-</section>
-</div>
+<div class="classUseContainer">No usage of squidpony.squidgrid.FOV</div>
 </main>
 <footer role="contentinfo">
 <nav role="navigation">
@@ -281,5 +93,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

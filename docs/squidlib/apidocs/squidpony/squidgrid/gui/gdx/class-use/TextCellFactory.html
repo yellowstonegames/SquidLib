@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,18 +51,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.gui.gdx.TextCellFactory" class="title">Uses of Class<br>squidpony.squidgrid.gui.gdx.TextCellFactory</h1>
@@ -117,38 +112,30 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LinesPanel.</span><code><span class="memberNameLink"><a href="../LinesPanel.html#tcf">tcf</a></span></code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">An alternative to <a href="../LinesPanel.html#font"><code>LinesPanel.font</code></a>, used to draw <a href="../LinesPanel.html#content"><code>LinesPanel.content</code></a>.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">TextPanel.</span><code><span class="memberNameLink"><a href="../TextPanel.html#tcf">tcf</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">VisualInput.</span><code><span class="memberNameLink"><a href="../VisualInput.html#tcfLeft">tcfLeft</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">VisualInput.</span><code><span class="memberNameLink"><a href="../VisualInput.html#tcfRight">tcfRight</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../SquidLayers.html#textFactory">textFactory</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../SquidPanel.html#textFactory">textFactory</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">StarterKit.</span><code><span class="memberNameLink"><a href="../StarterKit.html#textFactory">textFactory</a></span></code></th>
 <td class="colLast">
@@ -199,7 +186,7 @@ char&nbsp;replace)</code></th>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../TextCellFactory.html#addSwaps(squidpony.squidmath.OrderedMap)">addSwaps</a></span>&#8203;(squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../TextCellFactory.html#addSwaps(squidpony.squidmath.OrderedMap)">addSwaps</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
 <td class="colLast">
 <div class="block">Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the
  entries in a Map of Character keys to String values.</div>
@@ -602,14 +589,14 @@ float&nbsp;newHeight)</code></th>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../TextCellFactory.html#setAllSwaps(squidpony.squidmath.OrderedMap)">setAllSwaps</a></span>&#8203;(squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../TextCellFactory.html#setAllSwaps(squidpony.squidmath.OrderedMap)">setAllSwaps</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
 <td class="colLast">
 <div class="block">Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../TextCellFactory.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;icc)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TextCellFactory.</span><code><span class="memberNameLink"><a href="../TextCellFactory.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;icc)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -668,15 +655,6 @@ float&nbsp;newHeight)</code></th>
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LinesPanel.</span><code><span class="memberNameLink"><a href="../LinesPanel.html#computeMaxLines(squidpony.squidgrid.gui.gdx.TextCellFactory,float)">computeMaxLines</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;tcf,
-float&nbsp;height)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Used to help find the last parameter to give the constructor of this class.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SparseTextMap.</span><code><span class="memberNameLink"><a href="../SparseTextMap.html#draw(com.badlogic.gdx.graphics.g2d.Batch,squidpony.squidgrid.gui.gdx.TextCellFactory)">draw</a></span>&#8203;(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory)</code></th>
@@ -685,7 +663,7 @@ float&nbsp;height)</code></th>
  <a href="../SparseTextMap.html#place(int,int,char,float)"><code>SparseTextMap.place(int, int, char, float)</code></a> and drawing the associated char at that x,y position.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SparseTextMap.</span><code><span class="memberNameLink"><a href="../SparseTextMap.html#draw(com.badlogic.gdx.graphics.g2d.Batch,squidpony.squidgrid.gui.gdx.TextCellFactory,float,float)">draw</a></span>&#8203;(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
@@ -697,7 +675,7 @@ float&nbsp;screenOffsetY)</code></th>
  offset on x and/or y.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SparseTextMap.</span><code><span class="memberNameLink"><a href="../SparseTextMap.html#draw(com.badlogic.gdx.graphics.g2d.Batch,squidpony.squidgrid.gui.gdx.TextCellFactory,com.badlogic.gdx.math.Frustum)">draw</a></span>&#8203;(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
@@ -707,7 +685,7 @@ com.badlogic.gdx.math.Frustum&nbsp;frustum)</code></th>
  <a href="../SparseTextMap.html#place(int,int,char,float)"><code>SparseTextMap.place(int, int, char, float)</code></a> and drawing the associated char at that x,y position.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SparseTextMap.</span><code><span class="memberNameLink"><a href="../SparseTextMap.html#draw(com.badlogic.gdx.graphics.g2d.Batch,squidpony.squidgrid.gui.gdx.TextCellFactory,com.badlogic.gdx.math.Frustum,float,float)">draw</a></span>&#8203;(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
@@ -720,7 +698,7 @@ float&nbsp;screenOffsetY)</code></th>
  offset on x and/or y.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SparseTextMap.</span><code><span class="memberNameLink"><a href="../SparseTextMap.html#draw(com.badlogic.gdx.graphics.g2d.Batch,squidpony.squidgrid.gui.gdx.TextCellFactory,com.badlogic.gdx.math.Frustum,float,float,char)">draw</a></span>&#8203;(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
@@ -734,7 +712,7 @@ char&nbsp;replacement)</code></th>
  offset on x and/or y.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">VisualInput.</span><code><span class="memberNameLink"><a href="../VisualInput.html#init(squidpony.squidgrid.gui.gdx.TextCellFactory,java.lang.String...)">init</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>...&nbsp;enabled)</code></th>
@@ -742,7 +720,7 @@ char&nbsp;replacement)</code></th>
 <div class="block">Convenience method that does essentially the same thing as init(Map&lt;Character, String&gt;).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">VisualInput.</span><code><span class="memberNameLink"><a href="../VisualInput.html#init(squidpony.squidgrid.gui.gdx.TextCellFactory,java.util.Map)">init</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;available)</code></th>
@@ -752,14 +730,14 @@ char&nbsp;replacement)</code></th>
  available as buttons on the right side of the screen if on a device with no hardware keyboard.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SparseLayers.</span><code><span class="memberNameLink"><a href="../SparseLayers.html#setFont(squidpony.squidgrid.gui.gdx.TextCellFactory)">setFont</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font)</code></th>
 <td class="colLast">
 <div class="block">Sets the TextCellFactory this uses to draw and size its text items and cells.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">TextPanel.</span><code><span class="memberNameLink"><a href="../TextPanel.html#setFont(squidpony.squidgrid.gui.gdx.TextCellFactory)">setFont</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font)</code></th>
 <td class="colLast">
@@ -791,7 +769,7 @@ int&nbsp;gridHeight,
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter)">ImageSquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
 <td class="colLast">
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
@@ -800,7 +778,7 @@ squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float)">ImageSquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset)</code></th>
 <td class="colLast">
@@ -811,7 +789,7 @@ float&nbsp;yOffset)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float,char%5B%5D%5B%5D)">ImageSquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset,
 char[][]&nbsp;actualMap)</code></th>
@@ -820,14 +798,6 @@ char[][]&nbsp;actualMap)</code></th>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../LinesPanel.html#%3Cinit%3E(squidpony.panel.IMarkup,squidpony.squidgrid.gui.gdx.TextCellFactory,int)">LinesPanel</a></span>&#8203;(squidpony.panel.IMarkup&lt;<a href="../LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;markup,
-<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
-int&nbsp;maxLines)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SparseLayers.html#%3Cinit%3E(int,int,float,float,squidpony.squidgrid.gui.gdx.TextCellFactory)">SparseLayers</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 float&nbsp;cellWidth,
@@ -835,7 +805,7 @@ float&nbsp;cellHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SparseLayers.html#%3Cinit%3E(int,int,float,float,squidpony.squidgrid.gui.gdx.TextCellFactory,float,float)">SparseLayers</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 float&nbsp;cellWidth,
@@ -845,7 +815,7 @@ float&nbsp;xOffset,
 float&nbsp;yOffset)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidLayers.html#%3Cinit%3E(int,int,int,int,squidpony.squidgrid.gui.gdx.TextCellFactory)">SquidLayers</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
@@ -856,7 +826,7 @@ int&nbsp;cellHeight,
  for gridWidth and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidLayers.html#%3Cinit%3E(int,int,int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.squidgrid.gui.gdx.SquidColorCenter,squidpony.squidgrid.gui.gdx.SquidColorCenter)">SquidLayers</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
@@ -870,7 +840,7 @@ int&nbsp;cellHeight,
  SquidColorCenters for background and foreground.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidLayers.html#%3Cinit%3E(int,int,int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.squidgrid.gui.gdx.SquidColorCenter,squidpony.squidgrid.gui.gdx.SquidColorCenter,char%5B%5D%5B%5D)">SquidLayers</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
@@ -887,7 +857,7 @@ char[][]&nbsp;actualMap)</code></th>
  allows camera scrolling across the map).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidMessageBox.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory)">SquidMessageBox</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory)</code></th>
@@ -895,16 +865,16 @@ int&nbsp;gridHeight,
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidMessageBox.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter)">SquidMessageBox</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
 <td class="colLast">
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidPanel.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory)">SquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory)</code></th>
@@ -912,31 +882,31 @@ int&nbsp;gridHeight,
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidPanel.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter)">SquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</code></th>
 <td class="colLast">
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidPanel.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float)">SquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset)</code></th>
 <td class="colLast">
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SquidPanel.html#%3Cinit%3E(int,int,squidpony.squidgrid.gui.gdx.TextCellFactory,squidpony.IColorCenter,float,float,char%5B%5D%5B%5D)">SquidPanel</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
-squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
 float&nbsp;xOffset,
 float&nbsp;yOffset,
 char[][]&nbsp;actualMap)</code></th>
@@ -944,7 +914,7 @@ char[][]&nbsp;actualMap)</code></th>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../StarterKit.html#%3Cinit%3E(squidpony.squidgrid.gui.gdx.TextCellFactory,int,int,int,int)">StarterKit</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
 int&nbsp;gridWidth,
 int&nbsp;gridHeight,
@@ -955,7 +925,7 @@ int&nbsp;cellHeight)</code></th>
  and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../StarterKit.html#%3Cinit%3E(squidpony.squidgrid.gui.gdx.TextCellFactory,int,int,int,int,int,int)">StarterKit</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
 int&nbsp;gridWidth,
 int&nbsp;gridHeight,
@@ -968,7 +938,7 @@ int&nbsp;additionalHeight)</code></th>
  and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SubcellLayers.html#%3Cinit%3E(int,int,float,float,squidpony.squidgrid.gui.gdx.TextCellFactory)">SubcellLayers</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 float&nbsp;cellWidth,
@@ -976,7 +946,7 @@ float&nbsp;cellHeight,
 <a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../SubcellLayers.html#%3Cinit%3E(int,int,float,float,squidpony.squidgrid.gui.gdx.TextCellFactory,float,float)">SubcellLayers</a></span>&#8203;(int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 float&nbsp;cellWidth,
@@ -986,7 +956,7 @@ float&nbsp;xOffset,
 float&nbsp;yOffset)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../TextPanel.html#%3Cinit%3E(squidpony.squidgrid.gui.gdx.TextCellFactory)">TextPanel</a></span>&#8203;(<a href="../TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font)</code></th>
 <td class="colLast">
 <div class="block">The text to display MUST be set later on with <a href="../TextPanel.html#init(float,float,java.util.Collection)"><code>TextPanel.init(float, float, Collection)</code></a> (which can't be updated) or
@@ -1029,5 +999,7 @@ float&nbsp;yOffset)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

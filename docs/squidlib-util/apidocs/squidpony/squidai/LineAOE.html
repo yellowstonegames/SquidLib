@@ -19,8 +19,8 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":42,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai</a></div>
 <h1 title="Class LineAOE" class="title">Class LineAOE</h1>
@@ -101,7 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidai/LineAOE.html#line.39">LineAOE</a>
+<pre>public class <a href="../../src-html/squidpony/squidai/LineAOE.html#line.38">LineAOE</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="AOE.html" title="interface in squidpony.squidai">AOE</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">Line Area of Effect that affects an slightly expanded (DDA) line from a given origin Coord to a given end Coord,
@@ -185,7 +180,7 @@ int&nbsp;maxRange)</code></th>
 </a>
 <h2>Method Summary</h2>
 <div class="memberSummary">
-<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t6" class="tableTab" onclick="show(32);">Deprecated Methods</button></div>
+<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button></div>
 <div id="memberSummary_tabpanel" role="tabpanel">
 <table aria-labelledby="t0">
 <thead>
@@ -297,19 +292,10 @@ int&nbsp;maxRange)</code></th>
 </tr>
 <tr class="rowColor" id="i13">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="altColor" id="i14">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEnd(squidpony.squidmath.Coord)">setEnd</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i15">
+<tr class="altColor" id="i14">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLimitType(squidpony.squidai.AimLimit)">setLimitType</a></span>&#8203;(<a href="AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;limitType)</code></th>
 <td class="colLast">
@@ -323,21 +309,21 @@ int&nbsp;maxRange)</code></th>
      axis.</div>
 </td>
 </tr>
-<tr class="altColor" id="i16">
+<tr class="rowColor" id="i15">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMap(char%5B%5D%5B%5D)">setMap</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
 <div class="block">This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i17">
+<tr class="altColor" id="i16">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxRange(int)">setMaxRange</a></span>&#8203;(int&nbsp;maxRange)</code></th>
 <td class="colLast">
 <div class="block">The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 </td>
 </tr>
-<tr class="altColor" id="i18">
+<tr class="rowColor" id="i17">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMetric(squidpony.squidgrid.Radius)">setMetric</a></span>&#8203;(<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code></th>
 <td class="colLast">
@@ -345,14 +331,14 @@ int&nbsp;maxRange)</code></th>
  of minRange and maxRange.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i19">
+<tr class="altColor" id="i18">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMinRange(int)">setMinRange</a></span>&#8203;(int&nbsp;minRange)</code></th>
 <td class="colLast">
 <div class="block">The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 </td>
 </tr>
-<tr class="altColor" id="i20">
+<tr class="rowColor" id="i19">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">
@@ -362,24 +348,24 @@ int&nbsp;maxRange)</code></th>
  have a maxRange at which they can deliver that effect).</div>
 </td>
 </tr>
-<tr class="rowColor" id="i21">
+<tr class="altColor" id="i20">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRadius(int)">setRadius</a></span>&#8203;(int&nbsp;radius)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i22">
+<tr class="rowColor" id="i21">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRadiusType(squidpony.squidgrid.Radius)">setRadiusType</a></span>&#8203;(<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i23">
+<tr class="altColor" id="i22">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReach(squidpony.squidai.Reach)">setReach</a></span>&#8203;(<a href="Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;reach)</code></th>
 <td class="colLast">
 <div class="block">Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.</div>
 </td>
 </tr>
-<tr class="altColor" id="i24">
+<tr class="rowColor" id="i23">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">
@@ -412,14 +398,14 @@ int&nbsp;maxRange)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">LineAOE</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.48">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.47">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
 <a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.Coord,squidpony.squidmath.Coord,int)">LineAOE</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.58">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.57">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
 <a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
 int&nbsp;radius)</span></div>
 </section>
@@ -427,7 +413,7 @@ int&nbsp;radius)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,squidpony.squidgrid.Radius)">LineAOE</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.68">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.67">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
 <a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
 int&nbsp;radius,
 <a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</span></div>
@@ -436,7 +422,7 @@ int&nbsp;radius,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,squidpony.squidgrid.Radius,int,int)">LineAOE</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.91">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.90">LineAOE</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
 <a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
 int&nbsp;radius,
 <a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType,
@@ -457,7 +443,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getOrigin()">getOrigin</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.131">getOrigin</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.130">getOrigin</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#getOrigin()">AOE</a></code></span></div>
 <div class="block">Get the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
  lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen
@@ -472,7 +458,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setOrigin(squidpony.squidmath.Coord)">setOrigin</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.136">setOrigin</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.135">setOrigin</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#setOrigin(squidpony.squidmath.Coord)">AOE</a></code></span></div>
 <div class="block">Set the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
  lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen
@@ -487,7 +473,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getLimitType()">getLimitType</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AimLimit.html" title="enum in squidpony.squidai">AimLimit</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.143">getLimitType</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AimLimit.html" title="enum in squidpony.squidai">AimLimit</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.142">getLimitType</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#getLimitType()">AOE</a></code></span></div>
 <div class="block">Gets the AimLimit enum that can be used to restrict points this checks (defaults to null if not set).
  You can use limitType to restrict any Points that might be processed based on the given origin (which will be
@@ -515,7 +501,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMinRange()">getMinRange</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.148">getMinRange</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.147">getMinRange</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#getMinRange()">AOE</a></code></span></div>
 <div class="block">The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -527,7 +513,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMaxRange()">getMaxRange</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.153">getMaxRange</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.152">getMaxRange</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#getMaxRange()">AOE</a></code></span></div>
 <div class="block">The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -539,7 +525,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMetric()">getMetric</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.158">getMetric</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.157">getMetric</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#getMetric()">AOE</a></code></span></div>
 <div class="block">Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
  of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
@@ -555,7 +541,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getReach()">getReach</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Reach.html" title="class in squidpony.squidai">Reach</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.169">getReach</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Reach.html" title="class in squidpony.squidai">Reach</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.168">getReach</a></span>()</div>
 <div class="block">Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one
  Reach object.</div>
 <dl>
@@ -569,7 +555,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setLimitType(squidpony.squidai.AimLimit)">setLimitType</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.174">setLimitType</a></span>&#8203;(<span class="arguments"><a href="AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;limitType)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.173">setLimitType</a></span>&#8203;(<span class="arguments"><a href="AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;limitType)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#setLimitType(squidpony.squidai.AimLimit)">AOE</a></code></span></div>
 <div class="block">You can use limitType to restrict any Points that might be processed based on the given origin (which will be
  used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:
@@ -599,7 +585,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setMinRange(int)">setMinRange</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.180">setMinRange</a></span>&#8203;(<span class="arguments">int&nbsp;minRange)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.179">setMinRange</a></span>&#8203;(<span class="arguments">int&nbsp;minRange)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#setMinRange(int)">AOE</a></code></span></div>
 <div class="block">The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -611,7 +597,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setMaxRange(int)">setMaxRange</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.185">setMaxRange</a></span>&#8203;(<span class="arguments">int&nbsp;maxRange)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.184">setMaxRange</a></span>&#8203;(<span class="arguments">int&nbsp;maxRange)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#setMaxRange(int)">AOE</a></code></span></div>
 <div class="block">The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -623,7 +609,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setMetric(squidpony.squidgrid.Radius)">setMetric</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.191">setMetric</a></span>&#8203;(<span class="arguments"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.190">setMetric</a></span>&#8203;(<span class="arguments"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#setMetric(squidpony.squidgrid.Radius)">AOE</a></code></span></div>
 <div class="block">Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
  of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
@@ -639,7 +625,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setReach(squidpony.squidai.Reach)">setReach</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.201">setReach</a></span>&#8203;(<span class="arguments"><a href="Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;reach)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.200">setReach</a></span>&#8203;(<span class="arguments"><a href="Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;reach)</span></div>
 <div class="block">Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -652,43 +638,43 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getEnd()">getEnd</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.208">getEnd</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.207">getEnd</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setEnd(squidpony.squidmath.Coord)">setEnd</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.212">setEnd</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.211">setEnd</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getRadius()">getRadius</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.221">getRadius</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.220">getRadius</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setRadius(int)">setRadius</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.225">setRadius</a></span>&#8203;(<span class="arguments">int&nbsp;radius)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.224">setRadius</a></span>&#8203;(<span class="arguments">int&nbsp;radius)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getRadiusType()">getRadiusType</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.229">getRadiusType</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.228">getRadiusType</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setRadiusType(squidpony.squidgrid.Radius)">setRadiusType</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.233">setRadiusType</a></span>&#8203;(<span class="arguments"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.232">setRadiusType</a></span>&#8203;(<span class="arguments"><a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shift(squidpony.squidmath.Coord)">shift</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.252">shift</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.251">shift</a></span>&#8203;(<span class="arguments"><a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#shift(squidpony.squidmath.Coord)">AOE</a></code></span></div>
 <div class="block">After an AOE has been constructed, it may need to have the affected area shifted over to a different position
  without changing any other properties of the AOE. Some AOE implementations may have an origin where the AOE
@@ -705,7 +691,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="mayContainTarget(java.util.Collection)">mayContainTarget</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.257">mayContainTarget</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.256">mayContainTarget</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#mayContainTarget(java.util.Collection)">AOE</a></code></span></div>
 <div class="block">Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does
  a quick approximation to see if there is any possibility that the AOE as currently configured might include one
@@ -727,7 +713,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="idealLocations(java.util.Collection,java.util.Collection)">idealLocations</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.268">idealLocations</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.267">idealLocations</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#idealLocations(java.util.Collection,java.util.Collection)">AOE</a></code></span></div>
 <div class="block">Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
@@ -759,7 +745,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="idealLocations(java.util.Collection,java.util.Collection,java.util.Collection)">idealLocations</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.413">idealLocations</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.412">idealLocations</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#idealLocations(java.util.Collection,java.util.Collection,java.util.Collection)">AOE</a></code></span></div>
@@ -785,7 +771,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setMap(char[][])">setMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.696">setMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.695">setMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#setMap(char%5B%5D%5B%5D)">AOE</a></code></span></div>
 <div class="block">This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.
  It must be bounded with walls, which DungeonGenerator does automatically.</div>
@@ -800,7 +786,7 @@ int&nbsp;maxRange)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="findArea()">findArea</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.703">findArea</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.702">findArea</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AOE.html#findArea()">AOE</a></code></span></div>
 <div class="block">This is how an AOE interacts with anything that uses it. It expects a map to have already been set with setMap,
  with '#' for walls, '.' for floors and potentially other chars that implementors can use if they are present in
@@ -818,32 +804,14 @@ int&nbsp;maxRange)</span></div>
 </dl>
 </section>
 </li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="setCache(squidpony.squidgrid.FOV)">setCache</a></h3>
-<div class="memberSignature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/LineAOE.html#line.718">setCache</a></span>&#8203;(<span class="arguments"><a href="../squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</span></div>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-<div class="block">Unused because FOVCache rarely provides a speed boost and usually does the opposite. The implementation for this
- method should be a no-op.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></code>&nbsp;in interface&nbsp;<code><a href="AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cache</code> - an FOV that could be an FOVCache for the current level; can be null to stop using the cache</dd>
-</dl>
-</section>
-</li>
 </ul>
 </section>
 </li>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -889,5 +857,7 @@ int&nbsp;maxRange)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

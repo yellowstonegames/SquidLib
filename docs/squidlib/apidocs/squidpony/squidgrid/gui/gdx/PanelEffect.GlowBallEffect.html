@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class PanelEffect.GlowBallEffect" class="title">Class PanelEffect.GlowBallEffect</h1>
@@ -110,8 +105,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dd>
 </dl>
 <hr>
-<pre>@Beta
-public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.859">PanelEffect.GlowBallEffect</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.857">PanelEffect.GlowBallEffect</a>
 extends <a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></pre>
 </section>
 <section class="summary">
@@ -147,16 +141,16 @@ extends <a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;squidpony.squidmath.Coord&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#affected">affected</a></span></code></th>
 <td class="colLast">
-<div class="block">The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to
- show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as
+<div class="block">The raw list of Coords that might be affected by the glow; may include some cells that aren't going to
+ show as glowing (it usually has some false positives), but shouldn't exclude any cells that should show as
  such (no false negatives).</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>squidpony.squidmath.Coord[]</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#centers">centers</a></span></code></th>
 <td class="colLast">
 <div class="block">This will change over the course of the effect's duration, and includes 16 overlapping faint glowing areas.</div>
@@ -170,7 +164,7 @@ extends <a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>squidpony.squidmath.Coord</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#end">end</a></span></code></th>
 <td class="colLast">
 <div class="block">Where the glow effect should travel towards as a whole.</div>
@@ -180,7 +174,7 @@ extends <a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">
 <td class="colFirst"><code>double[][][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lightMaps">lightMaps</a></span></code></th>
 <td class="colLast">
-<div class="block">The internal representation of how affected each cell is by the explosion, based on proximity to center.</div>
+<div class="block">The internal representation of how affected each cell is by the glow, based on proximity to center.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -224,8 +218,8 @@ extends <a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int)">GlowBallEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius)</code></th>
 <td class="colLast">
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields.</div>
@@ -234,9 +228,9 @@ int&nbsp;radius)</code></th>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int)">GlowBallEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius)</code></th>
 <td class="colLast">
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields.</div>
@@ -245,9 +239,9 @@ int&nbsp;radius)</code></th>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,float)">GlowBallEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius,
 float&nbsp;coloring)</code></th>
 <td class="colLast">
@@ -257,9 +251,9 @@ float&nbsp;coloring)</code></th>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,com.badlogic.gdx.graphics.Color)">GlowBallEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius,
 com.badlogic.gdx.graphics.Color&nbsp;coloring)</code></th>
 <td class="colLast">
@@ -268,8 +262,8 @@ com.badlogic.gdx.graphics.Color&nbsp;coloring)</code></th>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int)">GlowBallEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius)</code></th>
 <td class="colLast">
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields.</div>
@@ -345,45 +339,45 @@ int&nbsp;radius)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="centers">centers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidmath.Coord[]</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.865">centers</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>[]</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.862">centers</a></span></div>
 <div class="block">This will change over the course of the effect's duration, and includes 16 overlapping faint glowing areas.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="end">end</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidmath.Coord</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.870">end</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.867">end</a></span></div>
 <div class="block">Where the glow effect should travel towards as a whole.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="radius">radius</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.874">radius</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.871">radius</a></span></div>
 <div class="block">Normally you should set this in the constructor, and not change it later.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="color">color</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.878">color</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.875">color</a></span></div>
 <div class="block">The default glow ball color is medium-light blue.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="lightMaps">lightMaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][][]</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.883">lightMaps</a></span></div>
-<div class="block">The internal representation of how affected each cell is by the explosion, based on proximity to center.
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][][]</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.880">lightMaps</a></span></div>
+<div class="block">The internal representation of how affected each cell is by the glow, based on proximity to center.
  This always has 16 light maps, but many will be identical and only calculated once.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="affected">affected</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;squidpony.squidmath.Coord&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.890">affected</a></span></div>
-<div class="block">The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to
- show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.887">affected</a></span></div>
+<div class="block">The raw list of Coords that might be affected by the glow; may include some cells that aren't going to
+ show as glowing (it usually has some false positives), but shouldn't exclude any cells that should show as
  such (no false negatives). You can edit this if you need to, but it isn't recommended.</div>
 </section>
 </li>
@@ -400,9 +394,9 @@ int&nbsp;radius)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int)">GlowBallEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.900">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.897">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius)</span></div>
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
  the full expanse of the IPackedColorPanel. The duration will be 1 second.</div>
@@ -418,10 +412,10 @@ int&nbsp;radius)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int)">GlowBallEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.913">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.910">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius)</span></div>
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
  the full expanse of the IPackedColorPanel.</div>
@@ -438,11 +432,11 @@ int&nbsp;radius)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int)">GlowBallEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.937">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.934">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius)</span></div>
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
  the full expanse of the IPackedColorPanel.</div>
@@ -460,11 +454,11 @@ int&nbsp;radius)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,com.badlogic.gdx.graphics.Color)">GlowBallEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.966">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.963">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius,
 com.badlogic.gdx.graphics.Color&nbsp;coloring)</span></div>
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -483,11 +477,11 @@ com.badlogic.gdx.graphics.Color&nbsp;coloring)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,float)">GlowBallEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.981">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.978">GlowBallEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;start,
-squidpony.squidmath.Coord&nbsp;end,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;start,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;end,
 int&nbsp;radius,
 float&nbsp;coloring)</span></div>
 <div class="block">Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -516,7 +510,7 @@ float&nbsp;coloring)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="update(float)">update</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.993">update</a></span>&#8203;(<span class="arguments">float&nbsp;percent)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html#line.990">update</a></span>&#8203;(<span class="arguments">float&nbsp;percent)</span></div>
 <div class="block">Called each frame.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -533,8 +527,8 @@ float&nbsp;coloring)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -579,5 +573,7 @@ float&nbsp;coloring)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

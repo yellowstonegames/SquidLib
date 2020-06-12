@@ -12,75 +12,69 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.mapping;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.annotation.Beta;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.squidmath.FastNoise;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.PerlinNoise;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">/**</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * Tools to create maps. Not commonly used outside of code that needs height maps.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> *</a>
+<span class="sourceLineNo">003</span><a id="line.3">import squidpony.squidmath.FastNoise;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import squidpony.squidmath.NumberTools;</a>
+<span class="sourceLineNo">005</span><a id="line.5"></a>
+<span class="sourceLineNo">006</span><a id="line.6">/**</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * Tools to create maps. Not commonly used outside of code that needs height maps.</a>
+<span class="sourceLineNo">008</span><a id="line.8"> *</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * @see WorldMapGenerator WorldMapGenerator is a much-more-detailed kind of map generator.</a>
 <span class="sourceLineNo">010</span><a id="line.10"> * @author Eben Howard - http://squidpony.com - howard@squidpony.com</a>
 <span class="sourceLineNo">011</span><a id="line.11"> */</a>
-<span class="sourceLineNo">012</span><a id="line.12">@Beta</a>
-<span class="sourceLineNo">013</span><a id="line.13">public class HeightMapFactory {</a>
-<span class="sourceLineNo">014</span><a id="line.14">    private static final int[] perlinDivisors = {1, 1, 2, 4, 8, 16, 64};</a>
-<span class="sourceLineNo">015</span><a id="line.15"></a>
-<span class="sourceLineNo">016</span><a id="line.16">    /**</a>
-<span class="sourceLineNo">017</span><a id="line.17">     * Returns a randomly generated map of doubles. Commonly referred to as a</a>
-<span class="sourceLineNo">018</span><a id="line.18">     * Height Map. Uses {@link PerlinNoise} in layers to generate coherent heights.</a>
-<span class="sourceLineNo">019</span><a id="line.19">     *</a>
-<span class="sourceLineNo">020</span><a id="line.20">     * @param width  in cells</a>
-<span class="sourceLineNo">021</span><a id="line.21">     * @param height in cells</a>
-<span class="sourceLineNo">022</span><a id="line.22">     * @param offset a double that changes the sampling process; often randomly generated</a>
-<span class="sourceLineNo">023</span><a id="line.23">     * @return the created map as a 2D double array</a>
-<span class="sourceLineNo">024</span><a id="line.24">     */</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public static double[][] heightMap(int width, int height, double offset) {</a>
-<span class="sourceLineNo">026</span><a id="line.26">        double[][] heightMap = new double[width][height];</a>
-<span class="sourceLineNo">027</span><a id="line.27"></a>
-<span class="sourceLineNo">028</span><a id="line.28">        for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">029</span><a id="line.29">            for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">030</span><a id="line.30">                //Get noise</a>
-<span class="sourceLineNo">031</span><a id="line.31">                double n = 0;</a>
-<span class="sourceLineNo">032</span><a id="line.32">                double xi = width * 0.1375, yi = height * 0.1375;//Math.max(width, height);</a>
-<span class="sourceLineNo">033</span><a id="line.33"></a>
-<span class="sourceLineNo">034</span><a id="line.34">                for (int p = 0; p &lt; perlinDivisors.length; p++) {</a>
-<span class="sourceLineNo">035</span><a id="line.35">                    n += PerlinNoise.noise((x + offset) / xi, (y + offset) / yi) / perlinDivisors[p];</a>
-<span class="sourceLineNo">036</span><a id="line.36">                    xi *= 0.5;</a>
-<span class="sourceLineNo">037</span><a id="line.37">                    yi *= 0.5;</a>
-<span class="sourceLineNo">038</span><a id="line.38">                }</a>
-<span class="sourceLineNo">039</span><a id="line.39">                double xdist = x - width * 0.5;</a>
-<span class="sourceLineNo">040</span><a id="line.40">                xdist *= xdist;</a>
-<span class="sourceLineNo">041</span><a id="line.41">                double ydist = y - height * 0.5;</a>
-<span class="sourceLineNo">042</span><a id="line.42">                ydist *= ydist;</a>
-<span class="sourceLineNo">043</span><a id="line.43">                double dist = Math.sqrt(xdist + ydist);</a>
-<span class="sourceLineNo">044</span><a id="line.44">                n -= Math.max(0, Math.pow(dist / (width * 0.5), 2) - 0.4);</a>
-<span class="sourceLineNo">045</span><a id="line.45"></a>
-<span class="sourceLineNo">046</span><a id="line.46">                heightMap[x][y] = n;</a>
-<span class="sourceLineNo">047</span><a id="line.47">            }</a>
-<span class="sourceLineNo">048</span><a id="line.48">        }</a>
-<span class="sourceLineNo">049</span><a id="line.49">        return heightMap;</a>
-<span class="sourceLineNo">050</span><a id="line.50">    }</a>
-<span class="sourceLineNo">051</span><a id="line.51">    private static final FastNoise noise = new FastNoise(1, 0x1p-5f, FastNoise.SIMPLEX_FRACTAL, 7);</a>
-<span class="sourceLineNo">052</span><a id="line.52">    /**</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * Returns a randomly generated map of floats. Commonly referred to as a</a>
-<span class="sourceLineNo">054</span><a id="line.54">     * Height Map. Uses {@link FastNoise} (producing) FBM Simplex noise) to generate coherent heights.</a>
-<span class="sourceLineNo">055</span><a id="line.55">     *</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * @param width  in cells</a>
-<span class="sourceLineNo">057</span><a id="line.57">     * @param height in cells</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * @param seed   an int that significantly changes the generation process (more than an offset does)</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * @return the created map as a 2D float array</a>
-<span class="sourceLineNo">060</span><a id="line.60">     */</a>
-<span class="sourceLineNo">061</span><a id="line.61">    public static float[][] heightMapSeeded(int width, int height, int seed) {</a>
-<span class="sourceLineNo">062</span><a id="line.62">        noise.setSeed(seed);</a>
-<span class="sourceLineNo">063</span><a id="line.63">        float[][] heights = new float[width][height];</a>
-<span class="sourceLineNo">064</span><a id="line.64">        for (int x = 0; x &lt; width; x++) {</a>
-<span class="sourceLineNo">065</span><a id="line.65">            for (int y = 0; y &lt; height; y++) {</a>
-<span class="sourceLineNo">066</span><a id="line.66">                heights[x][y] = noise.getConfiguredNoise(x, y);</a>
-<span class="sourceLineNo">067</span><a id="line.67">            }</a>
-<span class="sourceLineNo">068</span><a id="line.68">        }</a>
-<span class="sourceLineNo">069</span><a id="line.69">        return heights;</a>
-<span class="sourceLineNo">070</span><a id="line.70">    }</a>
-<span class="sourceLineNo">071</span><a id="line.71">}</a>
+<span class="sourceLineNo">012</span><a id="line.12">public class HeightMapFactory {</a>
+<span class="sourceLineNo">013</span><a id="line.13">    /**</a>
+<span class="sourceLineNo">014</span><a id="line.14">     * Returns a randomly generated map of doubles that smoothly change nearby. Commonly referred to as a</a>
+<span class="sourceLineNo">015</span><a id="line.15">     * Height Map. Uses {@link FastNoise} to generate coherent heights. The {@code offset} parameter is</a>
+<span class="sourceLineNo">016</span><a id="line.16">     * converted to an int seed via {@link NumberTools#doubleToMixedIntBits(double)}, so it can be any</a>
+<span class="sourceLineNo">017</span><a id="line.17">     * double, even an infinite one, and will still be treated as a valid seed.</a>
+<span class="sourceLineNo">018</span><a id="line.18">     *</a>
+<span class="sourceLineNo">019</span><a id="line.19">     * @param width  in cells</a>
+<span class="sourceLineNo">020</span><a id="line.20">     * @param height in cells</a>
+<span class="sourceLineNo">021</span><a id="line.21">     * @param offset a double that changes the sampling process; the range doesn't matter</a>
+<span class="sourceLineNo">022</span><a id="line.22">     * @return the created map as a 2D double array</a>
+<span class="sourceLineNo">023</span><a id="line.23">     */</a>
+<span class="sourceLineNo">024</span><a id="line.24">    public static double[][] heightMap(int width, int height, double offset) {</a>
+<span class="sourceLineNo">025</span><a id="line.25">        double[][] heightMap = new double[width][height];</a>
+<span class="sourceLineNo">026</span><a id="line.26">        int seed = NumberTools.doubleToMixedIntBits(offset);</a>
+<span class="sourceLineNo">027</span><a id="line.27">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">028</span><a id="line.28">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">029</span><a id="line.29">                //Get noise; layered2D uses 6 octaves of Simplex noise with a low frequency</a>
+<span class="sourceLineNo">030</span><a id="line.30">                double n = FastNoise.instance.layered2D(x, y, seed, 6, 0.0125f) * 0.8</a>
+<span class="sourceLineNo">031</span><a id="line.31">                        // and singleFoam gets a very different type of noise, contributing less though</a>
+<span class="sourceLineNo">032</span><a id="line.32">                        + FastNoise.instance.singleFoam(~seed, x * 0x1p-4f, y * 0x1p-4f) * 0.2;</a>
+<span class="sourceLineNo">033</span><a id="line.33">                double xdist = x - width * 0.5;</a>
+<span class="sourceLineNo">034</span><a id="line.34">                xdist *= xdist;</a>
+<span class="sourceLineNo">035</span><a id="line.35">                double ydist = y - height * 0.5;</a>
+<span class="sourceLineNo">036</span><a id="line.36">                ydist *= ydist;</a>
+<span class="sourceLineNo">037</span><a id="line.37">                double dist = Math.sqrt(xdist + ydist);</a>
+<span class="sourceLineNo">038</span><a id="line.38">                // drop off height toward the east and west edges so the map kinda tiles</a>
+<span class="sourceLineNo">039</span><a id="line.39">                heightMap[x][y] = n - Math.max(0, Math.pow(dist / (width * 0.5), 2) - 0.4);</a>
+<span class="sourceLineNo">040</span><a id="line.40">            }</a>
+<span class="sourceLineNo">041</span><a id="line.41">        }</a>
+<span class="sourceLineNo">042</span><a id="line.42">        return heightMap;</a>
+<span class="sourceLineNo">043</span><a id="line.43">    }</a>
+<span class="sourceLineNo">044</span><a id="line.44">    private static final FastNoise noise = new FastNoise(1, 0x1p-5f, FastNoise.SIMPLEX_FRACTAL, 6);</a>
+<span class="sourceLineNo">045</span><a id="line.45">    /**</a>
+<span class="sourceLineNo">046</span><a id="line.46">     * Returns a randomly generated map of floats. Commonly referred to as a</a>
+<span class="sourceLineNo">047</span><a id="line.47">     * Height Map. Uses {@link FastNoise} (producing FBM Simplex noise) to generate coherent heights.</a>
+<span class="sourceLineNo">048</span><a id="line.48">     * Unlike {@link #heightMap(int, int, double)}, this doesn't drop off heights at the east and west edges of the map.</a>
+<span class="sourceLineNo">049</span><a id="line.49">     * As such, it may be more suitable for local maps than world maps, since it is unlikely to tile east-west.</a>
+<span class="sourceLineNo">050</span><a id="line.50">     * @param width  in cells</a>
+<span class="sourceLineNo">051</span><a id="line.51">     * @param height in cells</a>
+<span class="sourceLineNo">052</span><a id="line.52">     * @param seed   an int that significantly changes the generation process</a>
+<span class="sourceLineNo">053</span><a id="line.53">     * @return the created map as a 2D float array</a>
+<span class="sourceLineNo">054</span><a id="line.54">     */</a>
+<span class="sourceLineNo">055</span><a id="line.55">    public static float[][] heightMapSeeded(int width, int height, int seed) {</a>
+<span class="sourceLineNo">056</span><a id="line.56">        noise.setSeed(seed);</a>
+<span class="sourceLineNo">057</span><a id="line.57">        float[][] heights = new float[width][height];</a>
+<span class="sourceLineNo">058</span><a id="line.58">        for (int x = 0; x &lt; width; x++) {</a>
+<span class="sourceLineNo">059</span><a id="line.59">            for (int y = 0; y &lt; height; y++) {</a>
+<span class="sourceLineNo">060</span><a id="line.60">                heights[x][y] = noise.getConfiguredNoise(x, y);</a>
+<span class="sourceLineNo">061</span><a id="line.61">            }</a>
+<span class="sourceLineNo">062</span><a id="line.62">        }</a>
+<span class="sourceLineNo">063</span><a id="line.63">        return heights;</a>
+<span class="sourceLineNo">064</span><a id="line.64">    }</a>
+<span class="sourceLineNo">065</span><a id="line.65">}</a>
 
 
 

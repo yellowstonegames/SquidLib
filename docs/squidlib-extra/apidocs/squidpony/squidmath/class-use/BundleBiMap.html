@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidmath.BundleBiMap" class="title">Uses of Class<br>squidpony.squidmath.BundleBiMap</h1>
@@ -127,14 +122,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><span class="typeNameLabel">BundleBiMap.</span><code><span class="memberNameLink"><a href="../BundleBiMap.html#reorder(int...)">reorder</a></span>&#8203;(int...&nbsp;ordering)</code></th>
 <td class="colLast">
 <div class="block">Reorders this BundleBiMap using <code>ordering</code>, which has the same length as this object's <a href="../BundleBiMap.html#size()"><code>size()</code></a>
- and can be generated with <code>ArrayTools.range(int)</code> (which, if applied, would produce no
- change to the current ordering), <code>IRNG.randomOrdering(int)</code> (which gives a random ordering, and if
+ and can be generated with <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/ArrayTools.html?is-external=true#range(int)" title="class or interface in squidpony" class="externalLink"><code>ArrayTools.range(int)</code></a> (which, if applied, would produce no
+ change to the current ordering), <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true#randomOrdering(int)" title="class or interface in squidpony.squidmath" class="externalLink"><code>IRNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
  applied immediately would be the same as calling <a href="../BundleBiMap.html#shuffle(squidpony.squidmath.IRNG)"><code>shuffle(IRNG)</code></a>), or made in some other way.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../BundleBiMap.html" title="class in squidpony.squidmath">BundleBiMap</a>&lt;<a href="../BundleBiMap.html" title="type parameter in BundleBiMap">E</a>,&#8203;<a href="../BundleBiMap.html" title="type parameter in BundleBiMap">S</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">BundleBiMap.</span><code><span class="memberNameLink"><a href="../BundleBiMap.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(squidpony.squidmath.IRNG&nbsp;rng)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">BundleBiMap.</span><code><span class="memberNameLink"><a href="../BundleBiMap.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Generates a random ordering with rng and applies the same ordering to all kinds of keys this has; they will
  maintain their current association to other keys but their ordering/indices will change.</div>
@@ -217,5 +212,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -1236,7 +1236,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * to not appear distorted like {@link SphereMap} does in some areas, even though this is inaccurate for a
      * rectangular projection of a spherical world (that inaccuracy is likely what players expect in a map, though).
      * You may want {@link LocalMap} instead, for non-world maps that don't tile.
-     * <a href="http://squidpony.github.io/SquidLib/TilingMap.png" >Example map</a>.
+     * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapDemo.png" >Example map</a>.
      */
     public static class TilingMap extends WorldMapGenerator {
         //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;

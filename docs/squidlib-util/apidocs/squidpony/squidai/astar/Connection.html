@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai.astar</a></div>
 <h1 title="Interface Connection" class="title">Interface Connection&lt;N&gt;</h1>
@@ -99,7 +94,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></code></dd>
+<dd><code><a href="CostlyConnection.html" title="class in squidpony.squidai.astar">CostlyConnection</a></code>, <code><a href="DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></code></dd>
 </dl>
 <hr>
 <pre>public interface <a href="../../../src-html/squidpony/squidai/astar/Connection.html#line.28">Connection</a>&lt;N&gt;</pre>
@@ -133,7 +128,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
-<td class="colFirst"><code>float</code></td>
+<td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCost()">getCost</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the non-negative cost of this connection</div>
@@ -173,7 +168,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <section class="detail">
 <h3><a id="getCost()">getCost</a></h3>
-<div class="memberSignature"><span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Connection.html#line.31">getCost</a></span>()</div>
+<div class="memberSignature"><span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Connection.html#line.31">getCost</a></span>()</div>
 <div class="block">Returns the non-negative cost of this connection</div>
 </section>
 </li>
@@ -197,8 +192,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -244,5 +239,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

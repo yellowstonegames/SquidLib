@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class Voronoi" class="title">Class Voronoi</h1>
@@ -101,8 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/Voronoi.html#line.40">Voronoi</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/Voronoi.html#line.38">Voronoi</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A Java implementation of both a 2D Delaunay triangulation algorithm and a Voronoi polygon data structure.
@@ -274,7 +268,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">Voronoi</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.52">Voronoi</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.49">Voronoi</a></span>()</div>
 <div class="block">Constructs a triangulator instance but does not insert any points; you should add points to
  <a href="#getPointSet()"><code>getPointSet()</code></a> before running <a href="#triangulate()"><code>triangulate()</code></a>.</div>
 </section>
@@ -282,7 +276,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.OrderedSet)">Voronoi</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.62">Voronoi</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;&nbsp;pointSet)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.59">Voronoi</a></span>&#8203;(<span class="arguments"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;&nbsp;pointSet)</span></div>
 <div class="block">Constructs a new triangulator instance using the specified point set.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -303,7 +297,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="triangulate()">triangulate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.71">triangulate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.68">triangulate</a></span>()</div>
 <div class="block">This method generates a Delaunay triangulation from the specified point
  set.</div>
 </section>
@@ -311,22 +305,22 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="polygonize()">polygonize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Voronoi.Polygon.html" title="class in squidpony.squidmath">Voronoi.Polygon</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.173">polygonize</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Voronoi.Polygon.html" title="class in squidpony.squidmath">Voronoi.Polygon</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.170">polygonize</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shuffle(squidpony.squidmath.IRNG)">shuffle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.272">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.269">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Creates a random permutation of the specified point set. Based on the
- implementation of the Delaunay algorithm this can speed up the
+ implementation of the Delaunay algorithm, this can speed up the
  computation.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="reorder(int[])">reorder</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.282">reorder</a></span>&#8203;(<span class="arguments">int[]&nbsp;permutation)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.279">reorder</a></span>&#8203;(<span class="arguments">int[]&nbsp;permutation)</span></div>
 <div class="block">Shuffles the point set using a custom permutation sequence.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -337,7 +331,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="getPointSet()">getPointSet</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.291">getPointSet</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.288">getPointSet</a></span>()</div>
 <div class="block">Returns the point set in form of a vector of 2D vectors.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -348,7 +342,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="getTriangles()">getTriangles</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.301">getTriangles</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.html#line.298">getTriangles</a></span>()</div>
 <div class="block">Returns the triangles of the triangulation in form of a list of 2D
  triangles.</div>
 <dl>
@@ -363,8 +357,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -410,5 +404,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

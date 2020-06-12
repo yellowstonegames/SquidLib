@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class MetsaMapFactory" class="title">Class MetsaMapFactory</h1>
@@ -98,11 +93,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="description">
 <hr>
 <pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.18">MetsaMapFactory</a>
+public class <a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.21">MetsaMapFactory</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">A map generation factory using Perlin noise to make island chain style maps.
-
- Based largely on work done by Metsa from #rgrd</div>
+ <br>
+ Based largely on work done by Metsa from #rgrd .  This is marked Beta, despite having been in SquidLib for years,
+ because it could still be modified as a simpler substitute for <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a>. WorldMapGenerator does tend
+ to produce much higher quality in its maps, however, due to calculating heat and moisture levels as well as height,
+ then using those to build blending biomes.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
@@ -317,7 +315,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="SEA_LEVEL">SEA_LEVEL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.22">SEA_LEVEL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.25">SEA_LEVEL</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.MetsaMapFactory.SEA_LEVEL">Constant Field Values</a></dd>
@@ -327,7 +325,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="BEACH_LEVEL">BEACH_LEVEL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.22">BEACH_LEVEL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.25">BEACH_LEVEL</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.MetsaMapFactory.BEACH_LEVEL">Constant Field Values</a></dd>
@@ -337,7 +335,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="PLAINS_LEVEL">PLAINS_LEVEL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.22">PLAINS_LEVEL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.25">PLAINS_LEVEL</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.MetsaMapFactory.PLAINS_LEVEL">Constant Field Values</a></dd>
@@ -347,7 +345,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="MOUNTAIN_LEVEL">MOUNTAIN_LEVEL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.22">MOUNTAIN_LEVEL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.25">MOUNTAIN_LEVEL</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.MetsaMapFactory.MOUNTAIN_LEVEL">Constant Field Values</a></dd>
@@ -357,7 +355,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="SNOW_LEVEL">SNOW_LEVEL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.22">SNOW_LEVEL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.25">SNOW_LEVEL</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.MetsaMapFactory.SNOW_LEVEL">Constant Field Values</a></dd>
@@ -367,7 +365,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="DEEP_SEA_LEVEL">DEEP_SEA_LEVEL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.22">DEEP_SEA_LEVEL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.25">DEEP_SEA_LEVEL</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.MetsaMapFactory.DEEP_SEA_LEVEL">Constant Field Values</a></dd>
@@ -387,20 +385,20 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">MetsaMapFactory</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.57">MetsaMapFactory</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.60">MetsaMapFactory</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">MetsaMapFactory</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.61">MetsaMapFactory</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.64">MetsaMapFactory</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,long)">MetsaMapFactory</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.65">MetsaMapFactory</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.68">MetsaMapFactory</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 long&nbsp;rngSeed)</span></div>
 </section>
@@ -408,7 +406,7 @@ long&nbsp;rngSeed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidmath.StatefulRNG)">MetsaMapFactory</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.70">MetsaMapFactory</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.73">MetsaMapFactory</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 <a href="../../squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng)</span></div>
 </section>
@@ -426,7 +424,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getShadow(int,int,double[][])">getShadow</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.78">getShadow</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.81">getShadow</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 double[][]&nbsp;map)</span></div>
 </section>
@@ -434,7 +432,7 @@ double[][]&nbsp;map)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="closestCity(squidpony.squidmath.Coord)">closestCity</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.112">closestCity</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.115">closestCity</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</span></div>
 <div class="block">Finds and returns the closest point containing a city to the given point.
  Does not include provided point as a possible city location.
 
@@ -449,68 +447,68 @@ double[][]&nbsp;map)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeHeightMap()">makeHeightMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.128">makeHeightMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.131">makeHeightMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="regenerateHeightMap()">regenerateHeightMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.161">regenerateHeightMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.164">regenerateHeightMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="regenerateHeightMap(int,int)">regenerateHeightMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.165">regenerateHeightMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.168">regenerateHeightMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeBiomeMap()">makeBiomeMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.173">makeBiomeMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.176">makeBiomeMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeNationMap()">makeNationMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.195">makeNationMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.198">makeNationMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeWeightedMap()">makeWeightedMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.210">makeWeightedMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.213">makeWeightedMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getCities()">getCities</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.242">getCities</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.245">getCities</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMaxPeak()">getMaxPeak</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.246">getMaxPeak</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.249">getMaxPeak</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getHeightMap()">getHeightMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.250">getHeightMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.253">getHeightMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getHeight()">getHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.254">getHeight</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.257">getHeight</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getWidth()">getWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.258">getWidth</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MetsaMapFactory.html#line.261">getWidth</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -519,8 +517,8 @@ int&nbsp;height)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -566,5 +564,7 @@ int&nbsp;height)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

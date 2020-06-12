@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class ObText.ContentMatcher" class="title">Class ObText.ContentMatcher</h1>
@@ -107,7 +102,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="ObText.html" title="class in squidpony">ObText</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../src-html/squidpony/ObText.html#line.638">ObText.ContentMatcher</a>
+<pre>public static class <a href="../src-html/squidpony/ObText.html#line.641">ObText.ContentMatcher</a>
 extends regexodus.Matcher</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -255,7 +250,7 @@ int&nbsp;len)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">ContentMatcher</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.645">ContentMatcher</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.648">ContentMatcher</a></span>()</div>
 <div class="block">Constructs a ContentMatcher that will need to have its target set with <a href="#setTarget(java.lang.CharSequence)"><code>setTarget(CharSequence)</code></a> or
  one of its overloads. The target should contain multiple substrings that may have quotation around them; this
  class is meant to skip the quotation in ObText's style.</div>
@@ -264,7 +259,7 @@ int&nbsp;len)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.CharSequence)">ContentMatcher</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.654">ContentMatcher</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;text)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.657">ContentMatcher</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;text)</span></div>
 <div class="block">Constructs a ContentMatcher that already has its target set to <code>text</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -285,7 +280,7 @@ int&nbsp;len)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setTarget(java.lang.CharSequence)">setTarget</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.677">setTarget</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;text)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.680">setTarget</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;text)</span></div>
 <div class="block">Supplies a text to search in/match with.
  Resets current search position to zero.</div>
 <dl>
@@ -304,7 +299,7 @@ int&nbsp;len)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setTarget(java.lang.CharSequence,int,int)">setTarget</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.694">setTarget</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;text,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.697">setTarget</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;text,
 int&nbsp;start,
 int&nbsp;len)</span></div>
 <div class="block">Supplies a text to search in/match with, as a part of String.
@@ -327,7 +322,7 @@ int&nbsp;len)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setTarget(char[],int,int)">setTarget</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.711">setTarget</a></span>&#8203;(<span class="arguments">char[]&nbsp;text,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.714">setTarget</a></span>&#8203;(<span class="arguments">char[]&nbsp;text,
 int&nbsp;start,
 int&nbsp;len)</span></div>
 <div class="block">Supplies a text to search in/match with, as a part of char array.
@@ -350,7 +345,7 @@ int&nbsp;len)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hasMatch()">hasMatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.721">hasMatch</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.724">hasMatch</a></span>()</div>
 <div class="block">Returns true if <code>Matcher.find()</code> has returned true and the found text is a usable String (not some syntax).
  If this returns true, you can reasonably get a (possibly empty) String using <a href="#getMatch()"><code>getMatch()</code></a>.</div>
 <dl>
@@ -362,7 +357,7 @@ int&nbsp;len)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMatch()">getMatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.733">getMatch</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ObText.ContentMatcher.html#line.736">getMatch</a></span>()</div>
 <div class="block">Returns the contents of the latest String successfully found with <code>Matcher.find()</code>, without quotation.
  You should typically call <a href="#hasMatch()"><code>hasMatch()</code></a> even if find() has returned true, to ensure there is a valid
  String that can be acquired (this will return an empty String if hasMatch() returns false, but an empty
@@ -379,8 +374,8 @@ int&nbsp;len)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -426,5 +421,7 @@ int&nbsp;len)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

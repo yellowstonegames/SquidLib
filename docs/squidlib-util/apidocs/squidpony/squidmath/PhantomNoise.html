@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class PhantomNoise" class="title">Class PhantomNoise</h1>
@@ -98,8 +93,42 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="description">
 <hr>
 <pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.7">PhantomNoise</a>
+public class <a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.41">PhantomNoise</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Arbitrary-dimensional continuous noise that maintains most of the same style even as the dimensionality gets fairly
+ high. If you know what dimension of noise you need, and it's covered by <a href="FoamNoise.html" title="class in squidpony.squidmath"><code>FoamNoise</code></a> (meaning it's 2D, 3D, 4D,
+ or 6D noise), then using FoamNoise will give you a significantly faster version of approximately the same algorithm.
+ If your noise has an unknown dimension count, this won't really work either, since PhantomNoise needs to do some
+ preparation and allocation for a specific dimension in its constructor. But, if you know what the range of dimensions
+ is, and the lowest is at least 2D, you can make one PhantomNoise per dimension easily enough.
+ <br>
+ The algorithm this uses is surprisingly simple. To produce N-D noise, it makes N+1 calls to N-D value noise, with
+ each call using a different rotation of the same size of grid. It "domain warps" value noise calls after the first,
+ adding the previous value noise result to one coordinate of the next value noise call. To get a PhantomNoise result,
+ it averages all the value noise calls and curves the output range so it doesn't get more biased toward 0 with higher
+ dimensions (which would happen with a pure average of a rising number of variables). The curving here uses adapted
+ code from libGDX's Interpolation.Pow class; it looks
+ <a href="https://user-images.githubusercontent.com/12948924/75205109-c2194b00-5727-11ea-99e9-614c2f613331.png">like this for 2D</a>,
+ <a href="https://user-images.githubusercontent.com/12948924/75205657-36082300-5729-11ea-8636-683fa98d1988.png">like this for 3D</a>, and
+ <a href="https://user-images.githubusercontent.com/12948924/75206040-52f12600-572a-11ea-8621-7763df2868e5.png">like this for 4D</a>.
+ There's some preparation this does in the constructor, which eliminates the need for allocations during noise
+ generation. For N-D PhantomNoise, this makes N+1 double arrays, one for each rotation for a value noise call, and
+ each rotation array has N items. The rotations match the vertices of an N-simplex, so a triangle in 2D, a tetrahedron
+ in 3D, etc. It also stores two working-room arrays, each with N+1 double items, two frequently-edited int arrays of
+ the floors of doubles it's using, and of modified versions of those floors to be hashed (each with N+1 items), and
+ interestingly, a <a href="CrossHash.Yolk.html" title="class in squidpony.squidmath"><code>CrossHash.Yolk</code></a> hash functor, seeded in the PhantomNoise constructor.
+ <br>
+ At higher dimensions, Simplex noise (what <a href="SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a> produces) starts to change how it looks compared to
+ lower dimensions. PhantomNoise, on the other hand, maintains a fairly consistent blob-like organic look, such as
+ <a href="https://i.imgur.com/wxomHAc.png">this 6D PhantomNoise sample</a>. Red and purple mark the highest and lowest
+ possible values, respectively, and while they appear plenty in PhantomNoise, they are absent in
+ <a href="https://i.imgur.com/2t7hRtk.png">this 6D SeededNoise sample</a>. There may be differences in how the inputs
+ are handled between the two samples, but 6D Simplex generally suffers from "the curse of dimensionality" more-so than
+ PhantomNoise (or Perlin noise like <a href="ClassicNoise.html" title="class in squidpony.squidmath"><code>ClassicNoise</code></a>, somewhat surprisingly), with the "curse" affecting the
+ density of information in higher-dimensional space.
+ <br>
+ This is marked Beta because it's still pretty slow at higher dimensions, and if some optimization becomes available
+ here, I'll take it and the output will change from this version.</div>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -123,6 +152,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#dim">dim</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#goldenDouble">goldenDouble</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static long[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#goldenLong">goldenLong</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -253,50 +292,62 @@ double&nbsp;y)</code></th>
 <ul class="blockList">
 <li class="blockList">
 <section class="detail">
+<h3><a id="dim">dim</a></h3>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.44">dim</a></span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="goldenDouble">goldenDouble</a></h3>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.183">goldenDouble</a></span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="goldenLong">goldenLong</a></h3>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">long[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.193">goldenLong</a></span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
 <h3><a id="instance2D">instance2D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.9">instance2D</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.479">instance2D</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance3D">instance3D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.10">instance3D</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.480">instance3D</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance4D">instance4D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.11">instance4D</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.481">instance4D</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance5D">instance5D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.12">instance5D</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.482">instance5D</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance6D">instance6D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.13">instance6D</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.483">instance6D</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance7D">instance7D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.14">instance7D</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.484">instance7D</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance8D">instance8D</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.15">instance8D</a></span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="dim">dim</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.18">dim</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.485">instance8D</a></span></div>
 </section>
 </li>
 </ul>
@@ -312,13 +363,13 @@ double&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">PhantomNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.23">PhantomNoise</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.49">PhantomNoise</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int)">PhantomNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.27">PhantomNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.53">PhantomNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;dimension)</span></div>
 </section>
 </li>
@@ -335,19 +386,19 @@ int&nbsp;dimension)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="valueNoise()">valueNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.63">valueNoise</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.87">valueNoise</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double...)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.87">getNoise</a></span>&#8203;(<span class="arguments">double...&nbsp;args)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.110">getNoise</a></span>&#8203;(<span class="arguments">double...&nbsp;args)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise2D(double,double)">getNoise2D</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.116">getNoise2D</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/PhantomNoise.html#line.139">getNoise2D</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y)</span></div>
 </section>
 </li>
@@ -357,8 +408,8 @@ double&nbsp;y)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -404,5 +455,7 @@ double&nbsp;y)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

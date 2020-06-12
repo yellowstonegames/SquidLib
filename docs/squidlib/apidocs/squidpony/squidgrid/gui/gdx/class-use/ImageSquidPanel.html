@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,18 +51,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.gui.gdx.ImageSquidPanel" class="title">Uses of Class<br>squidpony.squidgrid.gui.gdx.ImageSquidPanel</h1>
@@ -88,22 +83,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ImageSquidPanel.</span><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</code></th>
-<td class="colLast">
-<div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
- panel not to allocate its own colors (or fill
- <a href="../DefaultResources.html#getSCC()"><code>DefaultResources.getSCC()</code></a> but instead to the provided center.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ImageSquidPanel.</span><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#setFromSnapshot(java.lang.String)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot)</code></th>
 <td class="colLast">
 <div class="block">Given a "snapshot" from <a href="../ImageSquidPanel.html#getSnapshot(int,int,int,int)"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
  ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ImageSquidPanel.</span><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#setFromSnapshot(java.lang.StringBuilder)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot)</code></th>
 <td class="colLast">
@@ -111,7 +97,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ImageSquidPanel.</span><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#setFromSnapshot(java.lang.StringBuilder,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -122,7 +108,7 @@ int&nbsp;putY)</code></th>
  (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ImageSquidPanel.</span><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#setFromSnapshot(java.lang.StringBuilder,int,int,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -135,7 +121,7 @@ int&nbsp;limitHeight)</code></th>
  so they have the values stored in the snapshot.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ImageSquidPanel.</span><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#setFromSnapshot(java.lang.String,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -146,7 +132,7 @@ int&nbsp;putY)</code></th>
  (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">ImageSquidPanel.</span><code><span class="memberNameLink"><a href="../ImageSquidPanel.html#setFromSnapshot(java.lang.String,int,int,int,int)">setFromSnapshot</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;snapshot,
 int&nbsp;putX,
@@ -195,5 +181,7 @@ int&nbsp;limitHeight)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

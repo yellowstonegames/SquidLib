@@ -37,99 +37,95 @@
 <span class="sourceLineNo">025</span><a id="line.25"> * case. This also uses a different seed for each round.</a>
 <span class="sourceLineNo">026</span><a id="line.26"> * &lt;br&gt;</a>
 <span class="sourceLineNo">027</span><a id="line.27"> * This class extends {@link LowStorageShuffler}, changing it from producing a unique set of ints once, to producing</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * many sets of ints one after the next. It is very similar to {@link SNShuffledIntSequence}, which is just like this</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * class but extends {@link SwapOrNotShuffler} instead. This class and LowStorageShuffler perform slightly better than</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * SwapOrNotShuffler and SNShuffledIntSequence when the bound is equal to a power of 4 or slightly less, but perform</a>
-<span class="sourceLineNo">031</span><a id="line.31"> * drastically worse when the bound is slightly greater than a power of 4. SNShuffledIntSequence should usually be</a>
-<span class="sourceLineNo">032</span><a id="line.32"> * preferred over this class when the bound is unknown or known to be a problem for this class.</a>
-<span class="sourceLineNo">033</span><a id="line.33"> * &lt;br&gt;</a>
-<span class="sourceLineNo">034</span><a id="line.34"> * Created by Tommy Ettinger on 9/30/2018.</a>
-<span class="sourceLineNo">035</span><a id="line.35"> * @author Alan Wolfe</a>
-<span class="sourceLineNo">036</span><a id="line.36"> * @author Tommy Ettinger</a>
-<span class="sourceLineNo">037</span><a id="line.37"> */</a>
-<span class="sourceLineNo">038</span><a id="line.38">public class ShuffledIntSequence extends LowStorageShuffler implements Serializable {</a>
-<span class="sourceLineNo">039</span><a id="line.39">    private static final long serialVersionUID = 1L;</a>
-<span class="sourceLineNo">040</span><a id="line.40">    protected int seed;</a>
-<span class="sourceLineNo">041</span><a id="line.41">    /**</a>
-<span class="sourceLineNo">042</span><a id="line.42">     * Constructs a ShuffledIntSequence with a random seed and a bound of 10.</a>
-<span class="sourceLineNo">043</span><a id="line.43">     */</a>
-<span class="sourceLineNo">044</span><a id="line.44">    public ShuffledIntSequence(){</a>
-<span class="sourceLineNo">045</span><a id="line.45">        this(10);</a>
-<span class="sourceLineNo">046</span><a id="line.46">    }</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">    /**</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * Constructs a ShuffledIntSequence with the given exclusive upper bound and a random seed.</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * @param bound how many distinct ints this can return</a>
-<span class="sourceLineNo">051</span><a id="line.51">     */</a>
-<span class="sourceLineNo">052</span><a id="line.52">    public ShuffledIntSequence(int bound)</a>
-<span class="sourceLineNo">053</span><a id="line.53">    {</a>
-<span class="sourceLineNo">054</span><a id="line.54">        this(bound, (int)((Math.random() * 2.0 - 1.0) * 0x80000000));</a>
-<span class="sourceLineNo">055</span><a id="line.55">    }</a>
-<span class="sourceLineNo">056</span><a id="line.56"></a>
-<span class="sourceLineNo">057</span><a id="line.57">    /**</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * Constructs a ShuffledIntSequence with the given exclusive upper bound and int seed.</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * @param bound how many distinct ints this can return</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * @param seed any int; will be used to get several seeds used internally</a>
-<span class="sourceLineNo">061</span><a id="line.61">     */</a>
-<span class="sourceLineNo">062</span><a id="line.62">    public ShuffledIntSequence(int bound, int seed)</a>
-<span class="sourceLineNo">063</span><a id="line.63">    {</a>
-<span class="sourceLineNo">064</span><a id="line.64">        super(bound, seed);</a>
-<span class="sourceLineNo">065</span><a id="line.65">        this.seed = seed;</a>
-<span class="sourceLineNo">066</span><a id="line.66">    }</a>
-<span class="sourceLineNo">067</span><a id="line.67"></a>
-<span class="sourceLineNo">068</span><a id="line.68">    /**</a>
-<span class="sourceLineNo">069</span><a id="line.69">     * Gets the next distinct int in the sequence, shuffling the sequence if it has been exhausted so it never runs out.</a>
-<span class="sourceLineNo">070</span><a id="line.70">     * @return the next item in the sequence</a>
-<span class="sourceLineNo">071</span><a id="line.71">     */</a>
-<span class="sourceLineNo">072</span><a id="line.72">    @Override</a>
-<span class="sourceLineNo">073</span><a id="line.73">    public int next()</a>
-<span class="sourceLineNo">074</span><a id="line.74">    {</a>
-<span class="sourceLineNo">075</span><a id="line.75">        int r = super.next();</a>
-<span class="sourceLineNo">076</span><a id="line.76">        if(r == -1)</a>
-<span class="sourceLineNo">077</span><a id="line.77">        {</a>
-<span class="sourceLineNo">078</span><a id="line.78">            restart(seed = seed + 0x9E3779B9 | 0);</a>
-<span class="sourceLineNo">079</span><a id="line.79">            return super.next();</a>
-<span class="sourceLineNo">080</span><a id="line.80">        }</a>
-<span class="sourceLineNo">081</span><a id="line.81">        return r;</a>
-<span class="sourceLineNo">082</span><a id="line.82">    }</a>
-<span class="sourceLineNo">083</span><a id="line.83">    /**</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * Gets the previous returned int from the sequence (as yielded by {@link #next()}), restarting the sequence in a</a>
-<span class="sourceLineNo">085</span><a id="line.85">     * correctly-ordered way if it would go to before the "start" of the sequence (it is actually close to infinite both</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * going forwards and backwards).</a>
-<span class="sourceLineNo">087</span><a id="line.87">     * @return the previously-given item in the sequence, or -1 if something goes wrong (which shouldn't be possible)</a>
-<span class="sourceLineNo">088</span><a id="line.88">     */</a>
-<span class="sourceLineNo">089</span><a id="line.89">    @Override</a>
-<span class="sourceLineNo">090</span><a id="line.90">    public int previous()</a>
-<span class="sourceLineNo">091</span><a id="line.91">    {</a>
-<span class="sourceLineNo">092</span><a id="line.92">        int shuffleIndex;</a>
-<span class="sourceLineNo">093</span><a id="line.93">        // two tries to get a result, return -1 in the probably-impossible case this fails</a>
-<span class="sourceLineNo">094</span><a id="line.94">        for (int i = 0; i &lt; 2; i++) {</a>
-<span class="sourceLineNo">095</span><a id="line.95">            while (index &gt; 0) {</a>
-<span class="sourceLineNo">096</span><a id="line.96">                // get the next number</a>
-<span class="sourceLineNo">097</span><a id="line.97">                shuffleIndex = encode(--index);</a>
-<span class="sourceLineNo">098</span><a id="line.98"></a>
-<span class="sourceLineNo">099</span><a id="line.99">                // if we found a valid index, return success!</a>
-<span class="sourceLineNo">100</span><a id="line.100">                if (shuffleIndex &lt; bound)</a>
-<span class="sourceLineNo">101</span><a id="line.101">                    return shuffleIndex;</a>
-<span class="sourceLineNo">102</span><a id="line.102">            }</a>
-<span class="sourceLineNo">103</span><a id="line.103">            restart(seed = seed - 0x9E3779B9 | 0);</a>
-<span class="sourceLineNo">104</span><a id="line.104">            index = pow4;</a>
-<span class="sourceLineNo">105</span><a id="line.105">        }</a>
-<span class="sourceLineNo">106</span><a id="line.106">        return -1;</a>
-<span class="sourceLineNo">107</span><a id="line.107">    }</a>
-<span class="sourceLineNo">108</span><a id="line.108">    </a>
-<span class="sourceLineNo">109</span><a id="line.109">    /**</a>
-<span class="sourceLineNo">110</span><a id="line.110">     * Starts the sequence over, but can change the seed (completely changing the sequence). If {@code seed} is the same</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * as the seed given in the constructor, this will use the same sequence, acting like {@link #restart()}.</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * @param seed any int; will be used to get several seeds used internally</a>
-<span class="sourceLineNo">113</span><a id="line.113">     */</a>
-<span class="sourceLineNo">114</span><a id="line.114">    @Override</a>
-<span class="sourceLineNo">115</span><a id="line.115">    public void restart(int seed)</a>
-<span class="sourceLineNo">116</span><a id="line.116">    {</a>
-<span class="sourceLineNo">117</span><a id="line.117">        super.restart(seed);</a>
-<span class="sourceLineNo">118</span><a id="line.118">        this.seed = seed;</a>
-<span class="sourceLineNo">119</span><a id="line.119">    }</a>
-<span class="sourceLineNo">120</span><a id="line.120">}</a>
+<span class="sourceLineNo">028</span><a id="line.28"> * many sets of ints one after the next.</a>
+<span class="sourceLineNo">029</span><a id="line.29"> * &lt;br&gt;</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * Created by Tommy Ettinger on 9/30/2018.</a>
+<span class="sourceLineNo">031</span><a id="line.31"> * @author Alan Wolfe</a>
+<span class="sourceLineNo">032</span><a id="line.32"> * @author Tommy Ettinger</a>
+<span class="sourceLineNo">033</span><a id="line.33"> */</a>
+<span class="sourceLineNo">034</span><a id="line.34">public class ShuffledIntSequence extends LowStorageShuffler implements Serializable {</a>
+<span class="sourceLineNo">035</span><a id="line.35">    private static final long serialVersionUID = 1L;</a>
+<span class="sourceLineNo">036</span><a id="line.36">    protected int seed;</a>
+<span class="sourceLineNo">037</span><a id="line.37">    /**</a>
+<span class="sourceLineNo">038</span><a id="line.38">     * Constructs a ShuffledIntSequence with a random seed and a bound of 10.</a>
+<span class="sourceLineNo">039</span><a id="line.39">     */</a>
+<span class="sourceLineNo">040</span><a id="line.40">    public ShuffledIntSequence(){</a>
+<span class="sourceLineNo">041</span><a id="line.41">        this(10);</a>
+<span class="sourceLineNo">042</span><a id="line.42">    }</a>
+<span class="sourceLineNo">043</span><a id="line.43"></a>
+<span class="sourceLineNo">044</span><a id="line.44">    /**</a>
+<span class="sourceLineNo">045</span><a id="line.45">     * Constructs a ShuffledIntSequence with the given exclusive upper bound and a random seed.</a>
+<span class="sourceLineNo">046</span><a id="line.46">     * @param bound how many distinct ints this can return</a>
+<span class="sourceLineNo">047</span><a id="line.47">     */</a>
+<span class="sourceLineNo">048</span><a id="line.48">    public ShuffledIntSequence(int bound)</a>
+<span class="sourceLineNo">049</span><a id="line.49">    {</a>
+<span class="sourceLineNo">050</span><a id="line.50">        this(bound, (int)((Math.random() * 2.0 - 1.0) * 0x80000000));</a>
+<span class="sourceLineNo">051</span><a id="line.51">    }</a>
+<span class="sourceLineNo">052</span><a id="line.52"></a>
+<span class="sourceLineNo">053</span><a id="line.53">    /**</a>
+<span class="sourceLineNo">054</span><a id="line.54">     * Constructs a ShuffledIntSequence with the given exclusive upper bound and int seed.</a>
+<span class="sourceLineNo">055</span><a id="line.55">     * @param bound how many distinct ints this can return</a>
+<span class="sourceLineNo">056</span><a id="line.56">     * @param seed any int; will be used to get several seeds used internally</a>
+<span class="sourceLineNo">057</span><a id="line.57">     */</a>
+<span class="sourceLineNo">058</span><a id="line.58">    public ShuffledIntSequence(int bound, int seed)</a>
+<span class="sourceLineNo">059</span><a id="line.59">    {</a>
+<span class="sourceLineNo">060</span><a id="line.60">        super(bound, seed);</a>
+<span class="sourceLineNo">061</span><a id="line.61">        this.seed = seed;</a>
+<span class="sourceLineNo">062</span><a id="line.62">    }</a>
+<span class="sourceLineNo">063</span><a id="line.63"></a>
+<span class="sourceLineNo">064</span><a id="line.64">    /**</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * Gets the next distinct int in the sequence, shuffling the sequence if it has been exhausted so it never runs out.</a>
+<span class="sourceLineNo">066</span><a id="line.66">     * @return the next item in the sequence</a>
+<span class="sourceLineNo">067</span><a id="line.67">     */</a>
+<span class="sourceLineNo">068</span><a id="line.68">    @Override</a>
+<span class="sourceLineNo">069</span><a id="line.69">    public int next()</a>
+<span class="sourceLineNo">070</span><a id="line.70">    {</a>
+<span class="sourceLineNo">071</span><a id="line.71">        int r = super.next();</a>
+<span class="sourceLineNo">072</span><a id="line.72">        if(r == -1)</a>
+<span class="sourceLineNo">073</span><a id="line.73">        {</a>
+<span class="sourceLineNo">074</span><a id="line.74">            restart(seed = seed + 0x9E3779B9 | 0);</a>
+<span class="sourceLineNo">075</span><a id="line.75">            return super.next();</a>
+<span class="sourceLineNo">076</span><a id="line.76">        }</a>
+<span class="sourceLineNo">077</span><a id="line.77">        return r;</a>
+<span class="sourceLineNo">078</span><a id="line.78">    }</a>
+<span class="sourceLineNo">079</span><a id="line.79">    /**</a>
+<span class="sourceLineNo">080</span><a id="line.80">     * Gets the previous returned int from the sequence (as yielded by {@link #next()}), restarting the sequence in a</a>
+<span class="sourceLineNo">081</span><a id="line.81">     * correctly-ordered way if it would go to before the "start" of the sequence (it is actually close to infinite both</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * going forwards and backwards).</a>
+<span class="sourceLineNo">083</span><a id="line.83">     * @return the previously-given item in the sequence, or -1 if something goes wrong (which shouldn't be possible)</a>
+<span class="sourceLineNo">084</span><a id="line.84">     */</a>
+<span class="sourceLineNo">085</span><a id="line.85">    @Override</a>
+<span class="sourceLineNo">086</span><a id="line.86">    public int previous()</a>
+<span class="sourceLineNo">087</span><a id="line.87">    {</a>
+<span class="sourceLineNo">088</span><a id="line.88">        int shuffleIndex;</a>
+<span class="sourceLineNo">089</span><a id="line.89">        // two tries to get a result, return -1 in the probably-impossible case this fails</a>
+<span class="sourceLineNo">090</span><a id="line.90">        for (int i = 0; i &lt; 2; i++) {</a>
+<span class="sourceLineNo">091</span><a id="line.91">            while (index &gt; 0) {</a>
+<span class="sourceLineNo">092</span><a id="line.92">                // get the next number</a>
+<span class="sourceLineNo">093</span><a id="line.93">                shuffleIndex = encode(--index);</a>
+<span class="sourceLineNo">094</span><a id="line.94"></a>
+<span class="sourceLineNo">095</span><a id="line.95">                // if we found a valid index, return success!</a>
+<span class="sourceLineNo">096</span><a id="line.96">                if (shuffleIndex &lt; bound)</a>
+<span class="sourceLineNo">097</span><a id="line.97">                    return shuffleIndex;</a>
+<span class="sourceLineNo">098</span><a id="line.98">            }</a>
+<span class="sourceLineNo">099</span><a id="line.99">            restart(seed = seed - 0x9E3779B9 | 0);</a>
+<span class="sourceLineNo">100</span><a id="line.100">            index = pow4;</a>
+<span class="sourceLineNo">101</span><a id="line.101">        }</a>
+<span class="sourceLineNo">102</span><a id="line.102">        return -1;</a>
+<span class="sourceLineNo">103</span><a id="line.103">    }</a>
+<span class="sourceLineNo">104</span><a id="line.104">    </a>
+<span class="sourceLineNo">105</span><a id="line.105">    /**</a>
+<span class="sourceLineNo">106</span><a id="line.106">     * Starts the sequence over, but can change the seed (completely changing the sequence). If {@code seed} is the same</a>
+<span class="sourceLineNo">107</span><a id="line.107">     * as the seed given in the constructor, this will use the same sequence, acting like {@link #restart()}.</a>
+<span class="sourceLineNo">108</span><a id="line.108">     * @param seed any int; will be used to get several seeds used internally</a>
+<span class="sourceLineNo">109</span><a id="line.109">     */</a>
+<span class="sourceLineNo">110</span><a id="line.110">    @Override</a>
+<span class="sourceLineNo">111</span><a id="line.111">    public void restart(int seed)</a>
+<span class="sourceLineNo">112</span><a id="line.112">    {</a>
+<span class="sourceLineNo">113</span><a id="line.113">        super.restart(seed);</a>
+<span class="sourceLineNo">114</span><a id="line.114">        this.seed = seed;</a>
+<span class="sourceLineNo">115</span><a id="line.115">    }</a>
+<span class="sourceLineNo">116</span><a id="line.116">}</a>
 
 
 

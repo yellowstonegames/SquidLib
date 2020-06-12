@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.store.text</a></div>
 <h1 title="Class BonusConverters" class="title">Class BonusConverters</h1>
@@ -97,8 +92,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre>@Beta
-public class <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.17">BonusConverters</a>
+<pre>public class <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.16">BonusConverters</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Created by Tommy Ettinger on 4/22/2017.</div>
 </section>
@@ -122,42 +116,42 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/FakeLanguageGen.html?is-external=true" title="class or interface in squidpony" class="externalLink">FakeLanguageGen</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertListLanguage">convertListLanguage</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt;&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/FakeLanguageGen.html?is-external=true" title="class or interface in squidpony" class="externalLink">FakeLanguageGen</a>&gt;&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertMapCharListLanguage">convertMapCharListLanguage</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertMapCharString">convertMapCharString</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;squidpony.squidgrid.mapping.PoliticalMapper&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/PoliticalMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">PoliticalMapper</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertPoliticalMapper">convertPoliticalMapper</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;squidpony.squidmath.RNG&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">RNG</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertRNG">convertRNG</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;squidpony.squidgrid.mapping.SpillWorldMap&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SpillWorldMap.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">SpillWorldMap</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertSpillWorldMap">convertSpillWorldMap</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;squidpony.squidmath.StatefulRandomness&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/StatefulRandomness.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">StatefulRandomness</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertStatefulRandomness">convertStatefulRandomness</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static squidpony.StringConvert&lt;squidpony.squidmath.StatefulRNG&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">StatefulRNG</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertStatefulRNG">convertStatefulRNG</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -210,18 +204,18 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
-<td class="colFirst"><code>static &lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</code></td>
+<td class="colFirst"><code>static &lt;K&gt;&nbsp;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/ProbabilityTable.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">ProbabilityTable</a>&lt;K&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertProbabilityTable(java.lang.CharSequence)">convertProbabilityTable</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;type)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i1">
-<td class="colFirst"><code>static &lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</code></td>
+<td class="colFirst"><code>static &lt;K&gt;&nbsp;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/ProbabilityTable.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">ProbabilityTable</a>&lt;K&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertProbabilityTable(java.lang.Class)">convertProbabilityTable</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;K&gt;&nbsp;type)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i2">
-<td class="colFirst"><code>static &lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertProbabilityTable(squidpony.StringConvert)">convertProbabilityTable</a></span>&#8203;(squidpony.StringConvert&lt;K&gt;&nbsp;convert)</code></th>
+<td class="colFirst"><code>static &lt;K&gt;&nbsp;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/ProbabilityTable.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">ProbabilityTable</a>&lt;K&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertProbabilityTable(squidpony.StringConvert)">convertProbabilityTable</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;K&gt;&nbsp;convert)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -249,49 +243,49 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertMapCharString">convertMapCharString</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.20">convertMapCharString</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.18">convertMapCharString</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertListLanguage">convertListLanguage</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.22">convertListLanguage</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/FakeLanguageGen.html?is-external=true" title="class or interface in squidpony" class="externalLink">FakeLanguageGen</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.20">convertListLanguage</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertMapCharListLanguage">convertMapCharListLanguage</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.23">convertMapCharListLanguage</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/FakeLanguageGen.html?is-external=true" title="class or interface in squidpony" class="externalLink">FakeLanguageGen</a>&gt;&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.21">convertMapCharListLanguage</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertStatefulRNG">convertStatefulRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.StatefulRNG&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.25">convertStatefulRNG</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">StatefulRNG</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.23">convertStatefulRNG</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertStatefulRandomness">convertStatefulRandomness</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.StatefulRandomness&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.44">convertStatefulRandomness</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/StatefulRandomness.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">StatefulRandomness</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.42">convertStatefulRandomness</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertRNG">convertRNG</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.RNG&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.64">convertRNG</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">RNG</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.62">convertRNG</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertSpillWorldMap">convertSpillWorldMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;squidpony.squidgrid.mapping.SpillWorldMap&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.136">convertSpillWorldMap</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SpillWorldMap.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">SpillWorldMap</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.134">convertSpillWorldMap</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertPoliticalMapper">convertPoliticalMapper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">squidpony.StringConvert&lt;squidpony.squidgrid.mapping.PoliticalMapper&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.167">convertPoliticalMapper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/PoliticalMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">PoliticalMapper</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.165">convertPoliticalMapper</a></span></div>
 </section>
 </li>
 </ul>
@@ -307,7 +301,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">BonusConverters</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.19">BonusConverters</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.17">BonusConverters</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -324,21 +318,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <section class="detail">
 <h3><a id="convertProbabilityTable(squidpony.StringConvert)">convertProbabilityTable</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="typeParameters">&lt;K&gt;</span>
-<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.81">convertProbabilityTable</a></span>&#8203;(<span class="arguments">squidpony.StringConvert&lt;K&gt;&nbsp;convert)</span></div>
+<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/ProbabilityTable.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">ProbabilityTable</a>&lt;K&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.79">convertProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;K&gt;&nbsp;convert)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertProbabilityTable(java.lang.CharSequence)">convertProbabilityTable</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="typeParameters">&lt;K&gt;</span>
-<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.128">convertProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;type)</span></div>
+<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/ProbabilityTable.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">ProbabilityTable</a>&lt;K&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.126">convertProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;type)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="convertProbabilityTable(java.lang.Class)">convertProbabilityTable</a></h3>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="typeParameters">&lt;K&gt;</span>
-<span class="returnType">squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.132">convertProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;K&gt;&nbsp;type)</span></div>
+<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony" class="externalLink">StringConvert</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/ProbabilityTable.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">ProbabilityTable</a>&lt;K&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.130">convertProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;K&gt;&nbsp;type)</span></div>
 </section>
 </li>
 </ul>
@@ -347,8 +341,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -394,5 +388,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class CosmicNumbering" class="title">Class CosmicNumbering</h1>
@@ -101,8 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code>, <code><a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code>, <code><a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code>, <code><a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.23">CosmicNumbering</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.26">CosmicNumbering</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>, <a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></pre>
 <div class="block">Like a kind of RNG, but fully deterministic in a way that depends on a "connected" double array.
@@ -113,7 +107,11 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  produce ints and doubles, and does not produce a different output unless its input is changed (usually by altering a
  shared reference to <code>connections</code>). Also implements the various <a href="Noise.html" title="class in squidpony.squidmath"><code>Noise</code></a> interfaces, which this doesn't
  do perfectly but is at least different (it may yield large spans of high or low results, which Simplex and Perlin
- noise cannot actually do).
+ noise cannot actually do). <a href="https://i.imgur.com/BrTVlj1.gifv">Here's a short clip of this in motion</a>.
+ <br>
+ If you're using this as an arbitrary-dimensional noise algorithm, you may want to also consider <a href="PhantomNoise.html" title="class in squidpony.squidmath"><code>PhantomNoise</code></a>,
+ which has output that looks more like Perlin or Simplex noise but scales to arbitrary dimensions.
+ <a href="https://i.imgur.com/rmwXwO5.gifv">Here's a short clip of PhantomNoise in motion</a>.
  <br>
  Created by Tommy Ettinger on 5/18/2017.</div>
 <dl>
@@ -344,31 +342,31 @@ long&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance">instance</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.26">instance</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.28">instance</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="connections">connections</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.27">connections</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.29">connections</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="len">len</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.28">len</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.30">len</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="seed">seed</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.30">seed</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.32">seed</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="effect">effect</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.34">effect</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.36">effect</a></span></div>
 </section>
 </li>
 </ul>
@@ -384,19 +382,19 @@ long&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">CosmicNumbering</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.35">CosmicNumbering</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.37">CosmicNumbering</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(double[])">CosmicNumbering</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.38">CosmicNumbering</a></span>&#8203;(<span class="arguments">double[]&nbsp;connections)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.40">CosmicNumbering</a></span>&#8203;(<span class="arguments">double[]&nbsp;connections)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,double[])">CosmicNumbering</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.42">CosmicNumbering</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.44">CosmicNumbering</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 double[]&nbsp;connections)</span></div>
 </section>
 </li>
@@ -413,19 +411,19 @@ double[]&nbsp;connections)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getConnections()">getConnections</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.55">getConnections</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.57">getConnections</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setConnections(double[])">setConnections</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.59">setConnections</a></span>&#8203;(<span class="arguments">double[]&nbsp;connections)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.61">setConnections</a></span>&#8203;(<span class="arguments">double[]&nbsp;connections)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDoubleBase()">getDoubleBase</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.118">getDoubleBase</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.120">getDoubleBase</a></span>()</div>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="#getConnections()"><code>getConnections()</code></a>.
  Returns a value between -1.0 and 1.0 (exclusive on 1.0). Used as the basis for other methods in this class.</div>
 <dl>
@@ -437,7 +435,7 @@ double[]&nbsp;connections)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDouble()">getDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.150">getDouble</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.152">getDouble</a></span>()</div>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="#getConnections()"><code>getConnections()</code></a>.
  Returns a value between 0.0 and 1.0 (exclusive on 1.0).</div>
 <dl>
@@ -449,7 +447,7 @@ double[]&nbsp;connections)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getInt()">getInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.198">getInt</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.200">getInt</a></span>()</div>
 <div class="block">Gets an int determined by the current values in the connections, accessible via <a href="#getConnections()"><code>getConnections()</code></a>.
  Returns a value in the full range of ints, but is less likely to produce ints close to <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MAX_VALUE</code></a>
  or <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a> (expect very few values in the bottom and top quarters of the range).</div>
@@ -462,7 +460,7 @@ double[]&nbsp;connections)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.203">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.205">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -473,7 +471,7 @@ double&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.208">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.210">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 long&nbsp;seed)</span></div>
 <dl>
@@ -485,7 +483,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.220">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.222">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z)</span></div>
 <dl>
@@ -497,7 +495,7 @@ double&nbsp;z)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.225">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.227">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 long&nbsp;seed)</span></div>
@@ -510,7 +508,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.240">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.242">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</span></div>
@@ -523,7 +521,7 @@ double&nbsp;w)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.245">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.247">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -537,7 +535,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double,double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.254">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.256">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -552,7 +550,7 @@ double&nbsp;v)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.259">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.261">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -571,8 +569,8 @@ long&nbsp;seed)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -618,5 +616,7 @@ long&nbsp;seed)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

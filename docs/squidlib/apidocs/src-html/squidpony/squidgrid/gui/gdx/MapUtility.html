@@ -15,7 +15,7 @@
 <span class="sourceLineNo">003</span><a id="line.3">import com.badlogic.gdx.graphics.Color;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import com.badlogic.gdx.graphics.g2d.Batch;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import squidpony.ArrayTools;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.PerlinNoise;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.SeededNoise;</a>
 <span class="sourceLineNo">007</span><a id="line.7"></a>
 <span class="sourceLineNo">008</span><a id="line.8">/**</a>
 <span class="sourceLineNo">009</span><a id="line.9"> * Created by Tommy Ettinger on 7/9/2017.</a>
@@ -1159,7 +1159,7 @@
 <span class="sourceLineNo">1147</span><a id="line.1147"></a>
 <span class="sourceLineNo">1148</span><a id="line.1148">    /**</a>
 <span class="sourceLineNo">1149</span><a id="line.1149">     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for</a>
-<span class="sourceLineNo">1150</span><a id="line.1150">     * animation frame if rippling water and waving grass using Perlin Noise are desired.</a>
+<span class="sourceLineNo">1150</span><a id="line.1150">     * animation frame if rippling water and waving grass using SeededNoise are desired.</a>
 <span class="sourceLineNo">1151</span><a id="line.1151">     *</a>
 <span class="sourceLineNo">1152</span><a id="line.1152">     * @param map   a char[][] that you want to be find background lightness modifiers for</a>
 <span class="sourceLineNo">1153</span><a id="line.1153">     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make</a>
@@ -1174,7 +1174,7 @@
 <span class="sourceLineNo">1162</span><a id="line.1162"></a>
 <span class="sourceLineNo">1163</span><a id="line.1163">    /**</a>
 <span class="sourceLineNo">1164</span><a id="line.1164">     * Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,</a>
-<span class="sourceLineNo">1165</span><a id="line.1165">     * accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired.</a>
+<span class="sourceLineNo">1165</span><a id="line.1165">     * accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired.</a>
 <span class="sourceLineNo">1166</span><a id="line.1166">     *</a>
 <span class="sourceLineNo">1167</span><a id="line.1167">     * @param lights an int[][] that will be modified, filled with lighting ints; must match map's size</a>
 <span class="sourceLineNo">1168</span><a id="line.1168">     * @param map    a char[][] that you want to be find background lightness modifiers for</a>
@@ -1216,13 +1216,13 @@
 <span class="sourceLineNo">1204</span><a id="line.1204">                        lights[i][j] = -10;</a>
 <span class="sourceLineNo">1205</span><a id="line.1205">                        break;</a>
 <span class="sourceLineNo">1206</span><a id="line.1206">                    case ',':</a>
-<span class="sourceLineNo">1207</span><a id="line.1207">                        lights[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));</a>
+<span class="sourceLineNo">1207</span><a id="line.1207">                        lights[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));</a>
 <span class="sourceLineNo">1208</span><a id="line.1208">                        break;</a>
 <span class="sourceLineNo">1209</span><a id="line.1209">                    case '~':</a>
-<span class="sourceLineNo">1210</span><a id="line.1210">                        lights[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));</a>
+<span class="sourceLineNo">1210</span><a id="line.1210">                        lights[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));</a>
 <span class="sourceLineNo">1211</span><a id="line.1211">                        break;</a>
 <span class="sourceLineNo">1212</span><a id="line.1212">                    case '"':</a>
-<span class="sourceLineNo">1213</span><a id="line.1213">                        lights[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));</a>
+<span class="sourceLineNo">1213</span><a id="line.1213">                        lights[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));</a>
 <span class="sourceLineNo">1214</span><a id="line.1214">                        break;</a>
 <span class="sourceLineNo">1215</span><a id="line.1215">                    case '^':</a>
 <span class="sourceLineNo">1216</span><a id="line.1216">                        lights[i][j] = 40;</a>
@@ -1237,7 +1237,7 @@
 <span class="sourceLineNo">1225</span><a id="line.1225"></a>
 <span class="sourceLineNo">1226</span><a id="line.1226">    /**</a>
 <span class="sourceLineNo">1227</span><a id="line.1227">     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for</a>
-<span class="sourceLineNo">1228</span><a id="line.1228">     * animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars</a>
+<span class="sourceLineNo">1228</span><a id="line.1228">     * animation frame if rippling water and waving grass using SeededNoise are desired. Also allows additional chars</a>
 <span class="sourceLineNo">1229</span><a id="line.1229">     * to be treated like deep and shallow liquid regarding the ripple animation.</a>
 <span class="sourceLineNo">1230</span><a id="line.1230">     *</a>
 <span class="sourceLineNo">1231</span><a id="line.1231">     * @param map           a char[][] that you want to be find background lightness modifiers for</a>
@@ -1254,7 +1254,7 @@
 <span class="sourceLineNo">1242</span><a id="line.1242">    }</a>
 <span class="sourceLineNo">1243</span><a id="line.1243">    /**</a>
 <span class="sourceLineNo">1244</span><a id="line.1244">     * Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,</a>
-<span class="sourceLineNo">1245</span><a id="line.1245">     * accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired. Also</a>
+<span class="sourceLineNo">1245</span><a id="line.1245">     * accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired. Also</a>
 <span class="sourceLineNo">1246</span><a id="line.1246">     * allows additional chars to be treated like deep and shallow liquid regarding the ripple animation.</a>
 <span class="sourceLineNo">1247</span><a id="line.1247">     *</a>
 <span class="sourceLineNo">1248</span><a id="line.1248">     * @param lights an int[][] that will be modified, filled with lighting ints; must match map's size</a>
@@ -1299,22 +1299,22 @@
 <span class="sourceLineNo">1287</span><a id="line.1287">                        lights[i][j] = -10;</a>
 <span class="sourceLineNo">1288</span><a id="line.1288">                        break;</a>
 <span class="sourceLineNo">1289</span><a id="line.1289">                    case ',':</a>
-<span class="sourceLineNo">1290</span><a id="line.1290">                        lights[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));</a>
+<span class="sourceLineNo">1290</span><a id="line.1290">                        lights[i][j] = (int) (85 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.55 - 0.7));</a>
 <span class="sourceLineNo">1291</span><a id="line.1291">                        break;</a>
 <span class="sourceLineNo">1292</span><a id="line.1292">                    case '~':</a>
-<span class="sourceLineNo">1293</span><a id="line.1293">                        lights[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));</a>
+<span class="sourceLineNo">1293</span><a id="line.1293">                        lights[i][j] = (int) (100 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 1234567) * 0.4 - 0.65));</a>
 <span class="sourceLineNo">1294</span><a id="line.1294">                        break;</a>
 <span class="sourceLineNo">1295</span><a id="line.1295">                    case '"':</a>
-<span class="sourceLineNo">1296</span><a id="line.1296">                        lights[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));</a>
+<span class="sourceLineNo">1296</span><a id="line.1296">                        lights[i][j] = (int) (95 * (SeededNoise.noise(i * 0.16, j * 0.16, frame * 0.05, 123456789) * 0.3 - 1.5));</a>
 <span class="sourceLineNo">1297</span><a id="line.1297">                        break;</a>
 <span class="sourceLineNo">1298</span><a id="line.1298">                    case '^':</a>
 <span class="sourceLineNo">1299</span><a id="line.1299">                        lights[i][j] = 40;</a>
 <span class="sourceLineNo">1300</span><a id="line.1300">                        break;</a>
 <span class="sourceLineNo">1301</span><a id="line.1301">                    default:</a>
 <span class="sourceLineNo">1302</span><a id="line.1302">                        if (map[i][j] == deepLiquid)</a>
-<span class="sourceLineNo">1303</span><a id="line.1303">                            lights[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.55) * 0.45 - 0.7));</a>
+<span class="sourceLineNo">1303</span><a id="line.1303">                            lights[i][j] = (int) (180 * (SeededNoise.noise(i * 0.46, j * 0.46, frame * 0.041, 987654321) * 0.45 - 0.7));</a>
 <span class="sourceLineNo">1304</span><a id="line.1304">                        else if (map[i][j] == shallowLiquid)</a>
-<span class="sourceLineNo">1305</span><a id="line.1305">                            lights[i][j] = (int) (110 * (PerlinNoise.noise(i * 3.1, j * 3.1, frame * 0.3) * 0.4 - 0.65));</a>
+<span class="sourceLineNo">1305</span><a id="line.1305">                            lights[i][j] = (int) (110 * (SeededNoise.noise(i * 0.56, j * 0.56, frame * 0.061, 987654321) * 0.4 - 0.65));</a>
 <span class="sourceLineNo">1306</span><a id="line.1306">                        else lights[i][j] = 0;</a>
 <span class="sourceLineNo">1307</span><a id="line.1307">                }</a>
 <span class="sourceLineNo">1308</span><a id="line.1308">            }</a>

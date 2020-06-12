@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class LFSR" class="title">Class LFSR</h1>
@@ -101,8 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code>, <code><a href="StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/LFSR.html#line.23">LFSR</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/LFSR.html#line.22">LFSR</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A Linear Feedback Shift Register that may be used like a StatefulRandomness but is not truly random. This has a
@@ -393,7 +387,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="state">state</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.33">state</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.31">state</a></span></div>
 </section>
 </li>
 </ul>
@@ -409,20 +403,20 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">LFSR</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.38">LFSR</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.36">LFSR</a></span>()</div>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">LFSR</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.42">LFSR</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.40">LFSR</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.CharSequence)">LFSR</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.46">LFSR</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.44">LFSR</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;seed)</span></div>
 </section>
 </li>
 </ul>
@@ -438,7 +432,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="next(int)">next</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.52">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.50">next</a></span>&#8203;(<span class="arguments">int&nbsp;bits)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="RandomnessSource.html#next(int)">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -455,7 +449,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong()">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.57">nextLong</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.55">nextLong</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="RandomnessSource.html#nextLong()">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -472,7 +466,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="LFSR.html" title="class in squidpony.squidmath">LFSR</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.69">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="LFSR.html" title="class in squidpony.squidmath">LFSR</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.67">copy</a></span>()</div>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -489,7 +483,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextInt()">nextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.79">nextInt</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.77">nextInt</a></span>()</div>
 <div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -500,7 +494,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextInt(int)">nextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.89">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.87">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
 <div class="block">Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
  result.</div>
 <dl>
@@ -514,7 +508,7 @@ long&nbsp;outer)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextInt(int,int)">nextInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.98">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;inner,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.96">nextInt</a></span>&#8203;(<span class="arguments">int&nbsp;inner,
 int&nbsp;outer)</span></div>
 <div class="block">Inclusive lower, exclusive upper.</div>
 <dl>
@@ -529,7 +523,7 @@ int&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong(long)">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.108">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;bound)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.106">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;bound)</span></div>
 <div class="block">Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
  result.</div>
 <dl>
@@ -543,7 +537,7 @@ int&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextLong(long,long)">nextLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.124">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;inner,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.122">nextLong</a></span>&#8203;(<span class="arguments">long&nbsp;inner,
 long&nbsp;outer)</span></div>
 <div class="block">Inclusive inner, exclusive outer; both inner and outer can be positive or negative.</div>
 <dl>
@@ -558,31 +552,31 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextDouble()">nextDouble</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.128">nextDouble</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.126">nextDouble</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextFloat()">nextFloat</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.132">nextFloat</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.130">nextFloat</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextBoolean()">nextBoolean</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.136">nextBoolean</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.134">nextBoolean</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextBytes(byte[])">nextBytes</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.140">nextBytes</a></span>&#8203;(<span class="arguments">byte[]&nbsp;bytes)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.138">nextBytes</a></span>&#8203;(<span class="arguments">byte[]&nbsp;bytes)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getState()">getState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.155">getState</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.153">getState</a></span>()</div>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -595,7 +589,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setState(long)">setState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.164">setState</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.162">setState</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -608,7 +602,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.171">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.169">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -618,7 +612,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.176">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.174">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -628,7 +622,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.186">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.184">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -638,7 +632,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determine(long)">determine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.200">determine</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.198">determine</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 <div class="block">Gets the next number that an LFSR would produce using <a href="#nextLong()"><code>nextLong()</code></a> if its state was <code>state</code>.
  Does not allow state to be 0. Strongly consider using the result of this and assigning it to state if you expect
  to call this again, such as with <code>(state = LFSR.determine(state))</code>, which will ensure the long-term
@@ -655,7 +649,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineByte(byte)">determineByte</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.215">determineByte</a></span>&#8203;(<span class="arguments">byte&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.213">determineByte</a></span>&#8203;(<span class="arguments">byte&nbsp;state)</span></div>
 <div class="block">Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was <code>state</code>.
  Does not allow state to be 0. If given all byte values except 0 as arguments, will produce all ints 1-255.
  Strongly consider using the result of this and assigning it to state if you expect to call this again, such as
@@ -673,7 +667,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineInt(int)">determineInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.230">determineInt</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.228">determineInt</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
 <div class="block">Gets the next number that a different kind of 32-bit LFSR would produce if its state was <code>state</code>.
  Does not allow state to be 0. If given all int values except 0 as arguments, will produce all ints except 0.
  Strongly consider using the result of this and assigning it to state if you expect to call this again, such as
@@ -691,7 +685,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determinePositiveLong(long)">determinePositiveLong</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.245">determinePositiveLong</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.243">determinePositiveLong</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 <div class="block">Gets the next positive long that a different kind of 63-bit LFSR would produce if its state was <code>state</code>.
  Does not allow state to be 0 or negative. If given all positive long values (not including 0) as arguments, will
  produce all longs greater than 0. Strongly consider using the result of this and assigning it to state if you
@@ -709,7 +703,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determinePositiveInt(int)">determinePositiveInt</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.266">determinePositiveInt</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.264">determinePositiveInt</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
 <div class="block">Gets the next positive int that a different kind of 31-bit LFSR would produce if its state was <code>state</code>.
  Does not allow state to be 0 or negative. If given all positive int values (not including 0) as arguments, will
  produce all ints greater than 0. Strongly consider using the result of this and assigning it to state if you
@@ -733,7 +727,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineIntSymmetrical(int)">determineIntSymmetrical</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.287">determineIntSymmetrical</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.285">determineIntSymmetrical</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
 <div class="block">Gets the next int that a different kind of LFSR would produce if its state was <code>state</code>.
  Does not allow state to be <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a>, nor will this produce a result of <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a>
  (as long as <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang" class="externalLink"><code>Integer.MIN_VALUE</code></a> was not the input). If given all int values except
@@ -757,7 +751,7 @@ long&nbsp;outer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineBounded(long,int)">determineBounded</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.301">determineBounded</a></span>&#8203;(<span class="arguments">long&nbsp;state,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.299">determineBounded</a></span>&#8203;(<span class="arguments">long&nbsp;state,
 int&nbsp;bound)</span></div>
 <div class="block">Gets the next number that an LFSR would produce using <a href="#nextInt(int)"><code>nextInt(int)</code></a> if its state was <code>state</code> and
  <code>bound</code> was passed to nextInt(). Does not allow state to be 0, but bound can be negative, which causes this
@@ -775,7 +769,7 @@ int&nbsp;bound)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determineBounded(int,int)">determineBounded</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.312">determineBounded</a></span>&#8203;(<span class="arguments">int&nbsp;state,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LFSR.html#line.310">determineBounded</a></span>&#8203;(<span class="arguments">int&nbsp;state,
 int&nbsp;bound)</span></div>
 <div class="block">Gets an int using <a href="#determineInt(int)"><code>determineInt(int)</code></a> and bounds it to fit between 0 (inclusive) and bound (exclusive).
  Does not allow state to be 0, but bound can be negative, which causes this not to produce positive numbers.</div>
@@ -794,8 +788,8 @@ int&nbsp;bound)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -841,5 +835,7 @@ int&nbsp;bound)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

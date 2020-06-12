@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai.astar</a></div>
 <h1 title="Class DefaultConnection" class="title">Class DefaultConnection&lt;N&gt;</h1>
@@ -105,10 +100,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;N&gt;</code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.24">DefaultConnection</a>&lt;N&gt;
+<pre>public class <a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.25">DefaultConnection</a>&lt;N&gt;
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;N&gt;</pre>
-<div class="block">A <code>DefaultConnection</code> is a <a href="Connection.html" title="interface in squidpony.squidai.astar"><code>Connection</code></a> whose cost is 1.</div>
+<div class="block">A <code>DefaultConnection</code> is a <a href="Connection.html" title="interface in squidpony.squidai.astar"><code>Connection</code></a> whose cost is 1.
+ These are often used on a <a href="DefaultGraph.html" title="class in squidpony.squidai.astar"><code>DefaultGraph</code></a> with <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> as <code>N</code>.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>davebaol</dd>
@@ -193,7 +189,7 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
-<td class="colFirst"><code>float</code></td>
+<td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCost()">getCost</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the non-negative cost of this connection</div>
@@ -238,13 +234,13 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 <li class="blockList">
 <section class="detail">
 <h3><a id="fromNode">fromNode</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.26">fromNode</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.27">fromNode</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toNode">toNode</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.27">toNode</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.28">toNode</a></span></div>
 </section>
 </li>
 </ul>
@@ -262,7 +258,7 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 <h3><a id="&lt;init&gt;(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="&lt;init&gt;(N,N)">DefaultConnection</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.29">DefaultConnection</a></span>&#8203;(<span class="arguments"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a>&nbsp;fromNode,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.30">DefaultConnection</a></span>&#8203;(<span class="arguments"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a>&nbsp;fromNode,
 <a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a>&nbsp;toNode)</span></div>
 </section>
 </li>
@@ -279,7 +275,7 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 <li class="blockList">
 <section class="detail">
 <h3><a id="getCost()">getCost</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.34">getCost</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.35">getCost</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Connection.html#getCost()">Connection</a></code></span></div>
 <div class="block">Returns the non-negative cost of this connection</div>
 <dl>
@@ -291,7 +287,7 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 <li class="blockList">
 <section class="detail">
 <h3><a id="getFromNode()">getFromNode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.39">getFromNode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.40">getFromNode</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Connection.html#getFromNode()">Connection</a></code></span></div>
 <div class="block">Returns the node that this connection came from</div>
 <dl>
@@ -303,7 +299,7 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 <li class="blockList">
 <section class="detail">
 <h3><a id="getToNode()">getToNode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.44">getToNode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DefaultConnection.html" title="type parameter in DefaultConnection">N</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/DefaultConnection.html#line.45">getToNode</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Connection.html#getToNode()">Connection</a></code></span></div>
 <div class="block">Returns the node that this connection leads to</div>
 <dl>
@@ -318,8 +314,8 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -365,5 +361,7 @@ implements <a href="Connection.html" title="interface in squidpony.squidai.astar
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,18 +51,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.gui.gdx.Radiance" class="title">Uses of Class<br>squidpony.squidgrid.gui.gdx.Radiance</h1>
@@ -87,10 +82,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>squidpony.squidmath.OrderedMap&lt;squidpony.squidmath.Coord,&#8203;<a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>,&#8203;<a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#lights">lights</a></span></code></th>
 <td class="colLast">
-<div class="block">A mapping from positions as <code>Coord</code> objects to <a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects that describe the color, lighting
+<div class="block">A mapping from positions as <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>Coord</code></a> objects to <a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects that describe the color, lighting
  radius, and changes over time of any in-game lights that should be shown on the map and change FOV.</div>
 </td>
 </tr>
@@ -123,7 +118,7 @@ int&nbsp;y)</code></th>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#get(squidpony.squidmath.Coord)">get</a></span>&#8203;(squidpony.squidmath.Coord&nbsp;position)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#get(squidpony.squidmath.Coord)">get</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Gets the Radiance at the given position, if present, or null if there is no light source there.</div>
 </td>
@@ -163,7 +158,7 @@ int&nbsp;y,
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#addLight(squidpony.squidmath.Coord,squidpony.squidgrid.gui.gdx.Radiance)">addLight</a></span>&#8203;(squidpony.squidmath.Coord&nbsp;position,
+<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#addLight(squidpony.squidmath.Coord,squidpony.squidgrid.gui.gdx.Radiance)">addLight</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;position,
 <a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;light)</code></th>
 <td class="colLast">
 <div class="block">Adds a Radiance as a light source at the given position.</div>
@@ -181,7 +176,7 @@ int&nbsp;lightY,
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#updateUI(squidpony.squidmath.Coord,squidpony.squidgrid.gui.gdx.Radiance)">updateUI</a></span>&#8203;(squidpony.squidmath.Coord&nbsp;pos,
+<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#updateUI(squidpony.squidmath.Coord,squidpony.squidgrid.gui.gdx.Radiance)">updateUI</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;pos,
 <a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;radiance)</code></th>
 <td class="colLast">
 <div class="block">Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
@@ -243,5 +238,7 @@ int&nbsp;lightY,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

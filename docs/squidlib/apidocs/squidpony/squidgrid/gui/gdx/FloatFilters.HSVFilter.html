@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class FloatFilters.HSVFilter" class="title">Class FloatFilters.HSVFilter</h1>
@@ -102,7 +97,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FloatFilters.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.25">FloatFilters.HSVFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.26">FloatFilters.HSVFilter</a>
 extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></pre>
 <div class="block">Wraps the functionality of <a href="SColor.html#toEditedFloat(float,float,float,float,float)"><code>SColor.toEditedFloat(float, float, float, float, float)</code></a> so it can be called as
  a FloatFilter, adding values to hue, saturation, and value (clamping saturation and value and wrapping hue).
@@ -234,19 +229,19 @@ float&nbsp;valueAdd)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hueAddend">hueAddend</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.26">hueAddend</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.27">hueAddend</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="saturationAddend">saturationAddend</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.26">saturationAddend</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.27">saturationAddend</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="valueAddend">valueAddend</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.26">valueAddend</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.27">valueAddend</a></span></div>
 </section>
 </li>
 </ul>
@@ -262,14 +257,14 @@ float&nbsp;valueAdd)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(float,float)">HSVFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.28">HSVFilter</a></span>&#8203;(<span class="arguments">float&nbsp;saturation,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.29">HSVFilter</a></span>&#8203;(<span class="arguments">float&nbsp;saturation,
 float&nbsp;value)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(float,float,float)">HSVFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.32">HSVFilter</a></span>&#8203;(<span class="arguments">float&nbsp;hueAdd,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.33">HSVFilter</a></span>&#8203;(<span class="arguments">float&nbsp;hueAdd,
 float&nbsp;saturationAdd,
 float&nbsp;valueAdd)</span></div>
 </section>
@@ -287,7 +282,7 @@ float&nbsp;valueAdd)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="alter(float)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.44">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html#line.45">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <div class="block">Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -305,8 +300,8 @@ float&nbsp;valueAdd)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -351,5 +346,7 @@ float&nbsp;valueAdd)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

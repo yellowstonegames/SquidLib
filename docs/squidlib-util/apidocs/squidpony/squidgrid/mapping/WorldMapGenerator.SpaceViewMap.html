@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class WorldMapGenerator.SpaceViewMap" class="title">Class WorldMapGenerator.SpaceViewMap</h1>
@@ -107,8 +102,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dd>
 </dl>
 <hr>
-<pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.2726">WorldMapGenerator.SpaceViewMap</a>
+<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.2718">WorldMapGenerator.SpaceViewMap</a>
 extends <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></pre>
 <div class="block">A concrete implementation of <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that imitates an infinite-distance perspective view of a
  world, showing only one hemisphere, that should be as wide as it is tall (its outline is a circle). This uses an
@@ -417,7 +411,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainFreq">terrainFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2729">terrainFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2720">terrainFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.SpaceViewMap.terrainFreq">Constant Field Values</a></dd>
@@ -427,7 +421,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainRidgedFreq">terrainRidgedFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2729">terrainRidgedFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2720">terrainRidgedFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.SpaceViewMap.terrainRidgedFreq">Constant Field Values</a></dd>
@@ -437,7 +431,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heatFreq">heatFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2729">heatFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2720">heatFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.SpaceViewMap.heatFreq">Constant Field Values</a></dd>
@@ -447,7 +441,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="moistureFreq">moistureFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2729">moistureFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2720">moistureFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.SpaceViewMap.moistureFreq">Constant Field Values</a></dd>
@@ -457,7 +451,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="otherFreq">otherFreq</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2729">otherFreq</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2720">otherFreq</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.SpaceViewMap.otherFreq">Constant Field Values</a></dd>
@@ -467,91 +461,91 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minHeat0">minHeat0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2730">minHeat0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2721">minHeat0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxHeat0">maxHeat0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2730">maxHeat0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2721">maxHeat0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minHeat1">minHeat1</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2730">minHeat1</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2721">minHeat1</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxHeat1">maxHeat1</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2730">maxHeat1</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2721">maxHeat1</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minWet0">minWet0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2730">minWet0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2721">minWet0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxWet0">maxWet0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2730">maxWet0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2721">maxWet0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrain">terrain</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2734">terrain</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2725">terrain</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heat">heat</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2734">heat</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2725">heat</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="moisture">moisture</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2734">moisture</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2725">moisture</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="otherRidged">otherRidged</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2734">otherRidged</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2725">otherRidged</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="terrainLayered">terrainLayered</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2734">terrainLayered</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2725">terrainLayered</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="xPositions">xPositions</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2735">xPositions</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2726">xPositions</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="yPositions">yPositions</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2735">yPositions</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2726">yPositions</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="zPositions">zPositions</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2735">zPositions</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2726">zPositions</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="edges">edges</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2738">edges</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2729">edges</a></span></div>
 </section>
 </li>
 </ul>
@@ -567,7 +561,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">SpaceViewMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2748">SpaceViewMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2739">SpaceViewMap</a></span>()</div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
  showing only one hemisphere at a time.
  Always makes a 100x100 map.
@@ -579,7 +573,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">SpaceViewMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2763">SpaceViewMap</a></span>&#8203;(<span class="arguments">int&nbsp;mapWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2754">SpaceViewMap</a></span>&#8203;(<span class="arguments">int&nbsp;mapWidth,
 int&nbsp;mapHeight)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
  showing only one hemisphere at a time.
@@ -597,7 +591,7 @@ int&nbsp;mapHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int)">SpaceViewMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2779">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2770">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
@@ -617,7 +611,7 @@ int&nbsp;mapHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,double)">SpaceViewMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2796">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2787">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 double&nbsp;octaveMultiplier)</span></div>
@@ -639,7 +633,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,squidpony.squidmath.Noise.Noise3D)">SpaceViewMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2813">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2804">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 <a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator)</span></div>
@@ -661,7 +655,7 @@ int&nbsp;mapHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int,int,squidpony.squidmath.Noise.Noise3D,double)">SpaceViewMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2838">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2829">SpaceViewMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 int&nbsp;mapWidth,
 int&nbsp;mapHeight,
 <a href="../../squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
@@ -693,7 +687,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.WorldMapGenerator.SpaceViewMap)">SpaceViewMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2858">SpaceViewMap</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.SpaceViewMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SpaceViewMap</a>&nbsp;other)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2849">SpaceViewMap</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.SpaceViewMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SpaceViewMap</a>&nbsp;other)</span></div>
 <div class="block">Copies the SpaceViewMap <code>other</code> to construct a new one that is exactly the same. References will only
  be shared to Noise classes.</div>
 <dl>
@@ -715,7 +709,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wrapX(int,int)">wrapX</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2878">wrapX</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2869">wrapX</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -726,7 +720,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wrapY(int,int)">wrapY</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2884">wrapY</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2875">wrapY</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -737,7 +731,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="regenerate(int,int,int,int,double,double,int,int)">regenerate</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2891">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#line.2882">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
 int&nbsp;startY,
 int&nbsp;usedWidth,
 int&nbsp;usedHeight,
@@ -757,8 +751,8 @@ int&nbsp;stateB)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -804,5 +798,7 @@ int&nbsp;stateB)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

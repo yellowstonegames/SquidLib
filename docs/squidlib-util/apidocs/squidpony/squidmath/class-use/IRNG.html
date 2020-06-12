@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Interface squidpony.squidmath.IRNG" class="title">Uses of Interface<br>squidpony.squidmath.IRNG</h1>
@@ -681,7 +676,9 @@ int&nbsp;height,
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">WildMap.</span><code><span class="memberNameLink"><a href="../../squidgrid/mapping/WildMap.html#contentByBiome(int,squidpony.squidmath.IRNG)">contentByBiome</a></span>&#8203;(int&nbsp;biome,
 <a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets a list of Strings that are really just the names of types of terrain feature for wilderness areas.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
@@ -699,7 +696,9 @@ char...&nbsp;blocking)</code></th>
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">WildMap.</span><code><span class="memberNameLink"><a href="../../squidgrid/mapping/WildMap.html#floorsByBiome(int,squidpony.squidmath.IRNG)">floorsByBiome</a></span>&#8203;(int&nbsp;biome,
 <a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets a list of Strings that are really just the names of types of floor tile for wilderness areas.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
@@ -1260,8 +1259,8 @@ int&nbsp;caveShape)</code></th>
 <td class="colFirst"><code>class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></span></code></th>
 <td class="colLast">
-<div class="block">Highly experimental RNG that can be configured to smoothly transition between producing mostly values in the center
- of its range, to producing more values at or near the extremes, as well as favoring high or low results.</div>
+<div class="block">Somewhat experimental RNG that can be configured to smoothly transition between producing mostly values in the
+ center of its range, to producing more values at or near the extremes, as well as favoring high or low results.</div>
 </td>
 </tr>
 </tbody>
@@ -1772,40 +1771,33 @@ boolean&nbsp;shareRNG)</code></th>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.</span><code><span class="memberNameLink"><a href="../Delaunay3D.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
-<td class="colLast">
-<div class="block">Creates a random permutation of the specified point set.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DelaunayTriangulator.</span><code><span class="memberNameLink"><a href="../DelaunayTriangulator.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Creates a random permutation of the specified point set.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../IntDoubleOrderedMap.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">IntIntOrderedMap.</span><code><span class="memberNameLink"><a href="../IntIntOrderedMap.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">IntVLA.</span><code><span class="memberNameLink"><a href="../IntVLA.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code></th>
 <td class="colLast">
 <div class="block">Shuffles this IntVLA in place using the given IRNG.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="../K2.html" title="type parameter in K2">A</a>,&#8203;<a href="../K2.html" title="type parameter in K2">B</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">K2.</span><code><span class="memberNameLink"><a href="../K2.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
@@ -1813,7 +1805,7 @@ boolean&nbsp;shareRNG)</code></th>
  maintain their current association to other keys but their ordering/indices will change.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="../K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="../K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="../K2V1.html" title="type parameter in K2V1">Q</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">K2V1.</span><code><span class="memberNameLink"><a href="../K2V1.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
@@ -1821,28 +1813,28 @@ boolean&nbsp;shareRNG)</code></th>
  maintain their current association to other keys and values but their ordering/indices will change.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../OrderedMap.html" title="type parameter in OrderedMap">K</a>,&#8203;<a href="../OrderedMap.html" title="type parameter in OrderedMap">V</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">OrderedMap.</span><code><span class="memberNameLink"><a href="../OrderedMap.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">OrderedSet.</span><code><span class="memberNameLink"><a href="../OrderedSet.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Randomly alters the iteration order for this OrderedSet using the given IRNG to shuffle.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Voronoi.</span><code><span class="memberNameLink"><a href="../Voronoi.html#shuffle(squidpony.squidmath.IRNG)">shuffle</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Creates a random permutation of the specified point set.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../CoordPacker.html#singleRandom(short%5B%5D,squidpony.squidmath.IRNG)">singleRandom</a></span>&#8203;(short[]&nbsp;packed,
 <a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
@@ -1851,19 +1843,19 @@ boolean&nbsp;shareRNG)</code></th>
  it as a Coord or returns null of the array is empty.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#singleRandom(squidpony.squidmath.IRNG)">singleRandom</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Gets a single random Coord from the "on" positions in this GreasedRegion, or the Coord (-1,-1) if this is empty.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#singleRandomTight(squidpony.squidmath.IRNG)">singleRandomTight</a></span>&#8203;(<a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static short[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../CoordPacker.html#spill(short%5B%5D,short%5B%5D,int,squidpony.squidmath.IRNG)">spill</a></span>&#8203;(short[]&nbsp;bounds,
 short[]&nbsp;start,
@@ -1876,12 +1868,16 @@ int&nbsp;volume,
  any expansion to within bounds and returning the final expanded (limited) packed data.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#spill(squidpony.squidmath.GreasedRegion,int,squidpony.squidmath.IRNG)">spill</a></span>&#8203;(<a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;bounds,
 int&nbsp;volume,
 <a href="../IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">A randomized flood-fill that modifies this GreasedRegion so it randomly adds adjacent cells while staying inside
+ the "on" cells of <code>bounds</code>, until <a href="../GreasedRegion.html#size()"><code>GreasedRegion.size()</code></a> is equal to <code>volume</code> or there are no more cells
+ this can expand into.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -2004,5 +2000,7 @@ int&nbsp;distribution)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Package squidpony.squidai.astar" class="title">Uses of Package<br>squidpony.squidai.astar</h1>
@@ -82,6 +77,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidai.astar">squidpony.squidai.astar</a></th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colFirst" scope="row"><a href="#squidpony.squidmath">squidpony.squidmath</a></th>
+<td class="colLast">
+<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -137,6 +138,38 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 </section>
 </li>
+<li class="blockList">
+<section class="detail"><a id="squidpony.squidmath">
+<!--   -->
+</a>
+<div class="useSummary">
+<table>
+<caption><span>Classes in <a href="package-summary.html">squidpony.squidai.astar</a> used by <a href="../../squidmath/package-summary.html">squidpony.squidmath</a></span><span class="tabEnd">&nbsp;</span></caption>
+<thead>
+<tr>
+<th class="colFirst" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="altColor">
+<th class="colFirst" scope="row"><a href="class-use/DefaultGraph.html#squidpony.squidmath">DefaultGraph</a></th>
+<td class="colLast">
+<div class="block">A convenient implementation of <a href="Graph.html" title="interface in squidpony.squidai.astar"><code>Graph</code></a> for <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> nodes; this also allows constructing a Graph with a
+ 2D char array like those produced all over SquidLib.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colFirst" scope="row"><a href="class-use/Pathfinder.html#squidpony.squidmath">Pathfinder</a></th>
+<td class="colLast">
+<div class="block">An indexed A* pathfinder that works with a Graph of nodes (generic type <code>N</code>).</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
 </ul>
 </section>
 </div>
@@ -169,5 +202,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

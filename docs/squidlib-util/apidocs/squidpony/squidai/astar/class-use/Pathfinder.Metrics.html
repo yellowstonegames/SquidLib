@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidai.astar.Pathfinder.Metrics" class="title">Uses of Class<br>squidpony.squidai.astar.Pathfinder.Metrics</h1>
@@ -128,7 +123,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../DefaultGraph.html#show(java.lang.StringBuilder,squidpony.squidai.astar.Pathfinder,squidpony.squidai.astar.Pathfinder.Metrics)">show</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;sb,
 <a href="../Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="../../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;pathfinder,
 <a href="../Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a>&nbsp;metrics)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Given a StringBuilder to append to, a Pathfinder with Coord nodes that has run and at least attempted to find a
+ path, and the <a href="../Pathfinder.html#metrics"><code>Pathfinder.metrics</code></a> that the Pathfinder must have been configured to record, this makes a
+ textual representation of the explored nodes and appends it to the StringBuilder.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -167,5 +166,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

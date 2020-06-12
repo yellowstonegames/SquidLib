@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class DamerauLevenshteinAlgorithm" class="title">Class DamerauLevenshteinAlgorithm</h1>
@@ -97,8 +92,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre><a href="annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../src-html/squidpony/DamerauLevenshteinAlgorithm.html#line.38">DamerauLevenshteinAlgorithm</a>
+<pre>public class <a href="../src-html/squidpony/DamerauLevenshteinAlgorithm.html#line.37">DamerauLevenshteinAlgorithm</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">The Damerau-Levenshtein Algorithm is an extension to the Levenshtein
  Algorithm which solves the edit distance problem between a source string and
@@ -125,7 +119,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 
  The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is
  the length of the source string and m is the length of the target string.
- This implementation consumes O(n*m) space.</div>
+ This implementation consumes O(n*m) space, none of which is cached for
+ future executions. Heavy usage may be taxing on the garbage collector.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Kevin L. Stern</dd>
@@ -215,7 +210,7 @@ int&nbsp;swapCost)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int)">DamerauLevenshteinAlgorithm</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/DamerauLevenshteinAlgorithm.html#line.51">DamerauLevenshteinAlgorithm</a></span>&#8203;(<span class="arguments">int&nbsp;deleteCost,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/DamerauLevenshteinAlgorithm.html#line.49">DamerauLevenshteinAlgorithm</a></span>&#8203;(<span class="arguments">int&nbsp;deleteCost,
 int&nbsp;insertCost,
 int&nbsp;replaceCost,
 int&nbsp;swapCost)</span></div>
@@ -242,7 +237,7 @@ int&nbsp;swapCost)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="execute(java.lang.CharSequence,java.lang.CharSequence)">execute</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/DamerauLevenshteinAlgorithm.html#line.69">execute</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;source,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/DamerauLevenshteinAlgorithm.html#line.67">execute</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;source,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;target)</span></div>
 <div class="block">Compute the Damerau-Levenshtein distance between the specified source
  string and the specified target string.</div>
@@ -254,8 +249,8 @@ int&nbsp;swapCost)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -301,5 +296,7 @@ int&nbsp;swapCost)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

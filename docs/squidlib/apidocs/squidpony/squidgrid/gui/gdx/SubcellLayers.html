@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class SubcellLayers" class="title">Class SubcellLayers</h1>
@@ -101,17 +96,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code>, <code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
+<dd><code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.33">SubcellLayers</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.32">SubcellLayers</a>
 extends <a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></pre>
 <div class="block">A subclass of SparseLayers that acts almost the same, but uses 3x3 subcells of background color for every cell that
  may contain a char. Methods that affect the background sometimes specify positions in subcells, which allows
  affecting less than one cell with some visual effect. You will usually want to use a triple-size resistance and FOV
  map; you can get a resistance map that respects subcells with
- <code>DungeonUtility.generateResistances3x3(char[][])</code> (this looks better if it is given
- a "line" dungeon as produced by <code>DungeonUtility.hashesToLines(char[][], boolean)</code>),
+ <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/DungeonUtility.html?is-external=true#generateResistances3x3(char%5B%5D%5B%5D)" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>DungeonUtility.generateResistances3x3(char[][])</code></a> (this looks better if it is given
+ a "line" dungeon as produced by <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/DungeonUtility.html?is-external=true#hashesToLines(char%5B%5D%5B%5D,boolean)" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>DungeonUtility.hashesToLines(char[][], boolean)</code></a>),
  and then you can use that resistance map with normal FOV methods, just typically at triple vision range. Much of the
  time, it makes sense to run both that triple-range FOV, and a normal-range FOV with a resistance map calculated in
  cells; you can use the normal-range FOV for gameplay and AI calculations and the triple-range for visual display. 
@@ -254,11 +249,6 @@ int&nbsp;height)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i5">
-<td class="colFirst"><code>squidpony.panel.ISquidPanel&lt;?&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBacker()">getBacker</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor" id="i6">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(char%5B%5D%5B%5D,float%5B%5D%5B%5D)">put</a></span>&#8203;(char[][]&nbsp;chars,
 float[][]&nbsp;colors)</code></th>
@@ -267,7 +257,7 @@ float[][]&nbsp;colors)</code></th>
  setting the background colors to match the given 2D array of colors as packed floats.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i7">
+<tr class="altColor" id="i6">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(char%5B%5D%5B%5D,float%5B%5D%5B%5D,float%5B%5D%5B%5D)">put</a></span>&#8203;(char[][]&nbsp;chars,
 float[][]&nbsp;fgColors,
@@ -277,7 +267,7 @@ float[][]&nbsp;bgColors)</code></th>
  starting at x=0, y=0, while also setting the background colors to match the second float 2D array.</div>
 </td>
 </tr>
-<tr class="altColor" id="i8">
+<tr class="rowColor" id="i7">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(char%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">put</a></span>&#8203;(char[][]&nbsp;chars,
 com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</code></th>
@@ -286,7 +276,7 @@ com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</code></th>
  setting the background colors to match the given Color 2D array.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i9">
+<tr class="altColor" id="i8">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(char%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">put</a></span>&#8203;(char[][]&nbsp;chars,
 com.badlogic.gdx.graphics.Color[][]&nbsp;fgColors,
@@ -296,14 +286,14 @@ com.badlogic.gdx.graphics.Color[][]&nbsp;bgColors)</code></th>
  starting at x=0, y=0, while also setting the background colors to match the second Color 2D array.</div>
 </td>
 </tr>
-<tr class="altColor" id="i10">
+<tr class="rowColor" id="i9">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(float%5B%5D%5B%5D)">put</a></span>&#8203;(float[][]&nbsp;colors)</code></th>
 <td class="colLast">
 <div class="block">Sets the background colors to match the given 2D array of colors as packed floats.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i11">
+<tr class="altColor" id="i10">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,char,float,float)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -315,7 +305,7 @@ float&nbsp;background)</code></th>
  those produced by <code>Color.toFloatBits()</code>.</div>
 </td>
 </tr>
-<tr class="altColor" id="i12">
+<tr class="rowColor" id="i11">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,char,float,float,int)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -328,7 +318,7 @@ int&nbsp;layer)</code></th>
  encoded floats, such as those produced by <code>Color.toFloatBits()</code>.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i13">
+<tr class="altColor" id="i12">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -339,7 +329,7 @@ com.badlogic.gdx.graphics.Color&nbsp;background)</code></th>
 <div class="block">Puts the char c at the position x,y with the given foreground and background colors.</div>
 </td>
 </tr>
-<tr class="altColor" id="i14">
+<tr class="rowColor" id="i13">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,int)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -351,7 +341,7 @@ int&nbsp;layer)</code></th>
 <div class="block">Puts the char c at the position x,y in the requested layer with the given foreground and background colors.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i15">
+<tr class="altColor" id="i14">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,float)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -360,7 +350,7 @@ float&nbsp;bg)</code></th>
 <div class="block">Changes the background at position x,y to the given color as an encoded float.</div>
 </td>
 </tr>
-<tr class="altColor" id="i16">
+<tr class="rowColor" id="i15">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,com.badlogic.gdx.graphics.Color)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -369,7 +359,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</code></th>
 <div class="block">Changes the background at position x,y to the given Color.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i17">
+<tr class="altColor" id="i16">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,java.lang.String,float,float)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -381,7 +371,7 @@ float&nbsp;background)</code></th>
  those produced by <code>Color.toFloatBits()</code>.</div>
 </td>
 </tr>
-<tr class="altColor" id="i18">
+<tr class="rowColor" id="i17">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,java.lang.String,float,float,int)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -394,7 +384,7 @@ int&nbsp;layer)</code></th>
  floats, such as those produced by <code>Color.toFloatBits()</code>.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i19">
+<tr class="altColor" id="i18">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -405,7 +395,7 @@ com.badlogic.gdx.graphics.Color&nbsp;background)</code></th>
 <div class="block">Puts text at the position x,y with the given foreground and background colors.</div>
 </td>
 </tr>
-<tr class="altColor" id="i20">
+<tr class="rowColor" id="i19">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,int)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -417,14 +407,14 @@ int&nbsp;layer)</code></th>
 <div class="block">Puts text at the position x,y in the requested layer with the given foreground and background colors.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i21">
+<tr class="altColor" id="i20">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">put</a></span>&#8203;(com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</code></th>
 <td class="colLast">
 <div class="block">Sets the background colors to match the given Color 2D array.</div>
 </td>
 </tr>
-<tr class="altColor" id="i22">
+<tr class="rowColor" id="i21">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putSingle(int,int,float)">putSingle</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -433,7 +423,7 @@ float&nbsp;color)</code></th>
 <div class="block">Sets a single subcell of the background to use the specified color as a packed float.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i23">
+<tr class="altColor" id="i22">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putWithConsistentLight(int,int,float,float,float,float)">putWithConsistentLight</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -446,7 +436,7 @@ float&nbsp;flickerSpeed)</code></th>
  amount, without putting a char on the screen; as a whole this affects one x,y position.</div>
 </td>
 </tr>
-<tr class="altColor" id="i24">
+<tr class="rowColor" id="i23">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putWithConsistentLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,float)">putWithConsistentLight</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -459,7 +449,7 @@ float&nbsp;flickerSpeed)</code></th>
  amount, without putting a char on the screen; as a whole this affects one x,y position.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i25">
+<tr class="altColor" id="i24">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putWithLight(int,int,float,float,float)">putWithLight</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -471,7 +461,7 @@ float&nbsp;lightAmount)</code></th>
  amount, without putting a char on the screen; as a whole this affects one x,y position.</div>
 </td>
 </tr>
-<tr class="altColor" id="i26">
+<tr class="rowColor" id="i25">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putWithLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithLight</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -483,7 +473,7 @@ float&nbsp;lightAmount)</code></th>
  amount, without putting a char on the screen; as a whole this affects one x,y position.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i27">
+<tr class="altColor" id="i26">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tint(float,int,int,float,float,java.lang.Runnable)">tint</a></span>&#8203;(float&nbsp;delay,
 int&nbsp;x,
@@ -505,7 +495,7 @@ float&nbsp;duration,
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.gui.gdx.<a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></h3>
 <a id="methods.inherited.from.class.squidpony.squidgrid.gui.gdx.SparseLayers">
 <!--   -->
-</a><code><a href="SparseLayers.html#addLayer()">addLayer</a>, <a href="SparseLayers.html#addLayer(int)">addLayer</a>, <a href="SparseLayers.html#bump(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,squidpony.squidgrid.Direction,float,java.lang.Runnable)">bump</a>, <a href="SparseLayers.html#bump(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,squidpony.squidgrid.Direction,float)">bump</a>, <a href="SparseLayers.html#burst(float,int,int,int,squidpony.squidgrid.Radius,char,float,float,float,java.lang.Runnable)">burst</a>, <a href="SparseLayers.html#burst(float,int,int,int,squidpony.squidgrid.Radius,java.lang.CharSequence,float,float,float,java.lang.Runnable)">burst</a>, <a href="SparseLayers.html#burst(int,int,int,squidpony.squidgrid.Radius,char,float,float,float)">burst</a>, <a href="SparseLayers.html#burst(int,int,int,squidpony.squidgrid.Radius,java.lang.CharSequence,float,float,float)">burst</a>, <a href="SparseLayers.html#calculateConsistentLightAmount(float,float)">calculateConsistentLightAmount</a>, <a href="SparseLayers.html#calculateConsistentLightModifier()">calculateConsistentLightModifier</a>, <a href="SparseLayers.html#calculateConsistentLightModifier(float)">calculateConsistentLightModifier</a>, <a href="SparseLayers.html#cellHeight()">cellHeight</a>, <a href="SparseLayers.html#cellWidth()">cellWidth</a>, <a href="SparseLayers.html#clear()">clear</a>, <a href="SparseLayers.html#clear(int)">clear</a>, <a href="SparseLayers.html#clear(int,int,int)">clear</a>, <a href="SparseLayers.html#fillBackground(float)">fillBackground</a>, <a href="SparseLayers.html#fillBackground(com.badlogic.gdx.graphics.Color)">fillBackground</a>, <a href="SparseLayers.html#findLayer(squidpony.squidgrid.gui.gdx.SparseTextMap)">findLayer</a>, <a href="SparseLayers.html#getBackgrounds()">getBackgrounds</a>, <a href="SparseLayers.html#getColorCenter()">getColorCenter</a>, <a href="SparseLayers.html#getDefaultBackgroundColor()">getDefaultBackgroundColor</a>, <a href="SparseLayers.html#getDefaultForegroundColor()">getDefaultForegroundColor</a>, <a href="SparseLayers.html#getFont()">getFont</a>, <a href="SparseLayers.html#getGridHeight()">getGridHeight</a>, <a href="SparseLayers.html#getGridWidth()">getGridWidth</a>, <a href="SparseLayers.html#getLayer(int)">getLayer</a>, <a href="SparseLayers.html#getLayerCount()">getLayerCount</a>, <a href="SparseLayers.html#getScc()">getScc</a>, <a href="SparseLayers.html#glyph(char,float,int,int)">glyph</a>, <a href="SparseLayers.html#glyph(char,com.badlogic.gdx.graphics.Color,int,int)">glyph</a>, <a href="SparseLayers.html#glyphFromGrid(int,int)">glyphFromGrid</a>, <a href="SparseLayers.html#glyphFromGrid(int,int,int)">glyphFromGrid</a>, <a href="SparseLayers.html#gridHeight()">gridHeight</a>, <a href="SparseLayers.html#gridWidth()">gridWidth</a>, <a href="SparseLayers.html#gridX(float)">gridX</a>, <a href="SparseLayers.html#gridY(float)">gridY</a>, <a href="SparseLayers.html#hasActiveAnimations()">hasActiveAnimations</a>, <a href="SparseLayers.html#put(int,int,char)">put</a>, <a href="SparseLayers.html#put(int,int,char,float)">put</a>, <a href="SparseLayers.html#put(int,int,char,com.badlogic.gdx.graphics.Color)">put</a>, <a href="SparseLayers.html#put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color)">put</a>, <a href="SparseLayers.html#put(int,int,squidpony.panel.IColoredString)">put</a>, <a href="SparseLayers.html#put(int,int,squidpony.squidgrid.gui.gdx.ICellVisible)">put</a>, <a href="SparseLayers.html#put(int,int,squidpony.squidgrid.gui.gdx.ICellVisible,float)">put</a>, <a href="SparseLayers.html#putBorders(float,java.lang.String)">putBorders</a>, <a href="SparseLayers.html#putBordersCaptioned(float,squidpony.panel.IColoredString)">putBordersCaptioned</a>, <a href="SparseLayers.html#putChars(char%5B%5D%5B%5D)">putChars</a>, <a href="SparseLayers.html#putChars(char%5B%5D%5B%5D,float%5B%5D%5B%5D)">putChars</a>, <a href="SparseLayers.html#putChars(char%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">putChars</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,float,float,float,double)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,float,float,float,double,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,float,float,float,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,float,float,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,float,float,float,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,float,float,float,float)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,float,float,float,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,float,float,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,float,float,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,float,float,float,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,float,float,float,float,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,double,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseLight(int,int,char,float,float,float,double)">putWithReverseLight</a>, <a href="SparseLayers.html#putWithReverseLight(int,int,char,float,float,float,float)">putWithReverseLight</a>, <a href="SparseLayers.html#recallToGrid(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph)">recallToGrid</a>, <a href="SparseLayers.html#recallToGrid(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,int)">recallToGrid</a>, <a href="SparseLayers.html#recolor(float,int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(float,int,int,float,float,java.lang.Runnable)">recolor</a>, <a href="SparseLayers.html#recolor(float,int,int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(float,int,int,int,float,float,java.lang.Runnable)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,int,com.badlogic.gdx.graphics.Color,float)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,com.badlogic.gdx.graphics.Color,float)">recolor</a>, <a href="SparseLayers.html#removeGlyph(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph)">removeGlyph</a>, <a href="SparseLayers.html#setBackgrounds(float%5B%5D%5B%5D)">setBackgrounds</a>, <a href="SparseLayers.html#setColorCenter(squidpony.IColorCenter)">setColorCenter</a>, <a href="SparseLayers.html#setDefaultBackground(com.badlogic.gdx.graphics.Color)">setDefaultBackground</a>, <a href="SparseLayers.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a>, <a href="SparseLayers.html#setFont(squidpony.squidgrid.gui.gdx.TextCellFactory)">setFont</a>, <a href="SparseLayers.html#setLayer(int,squidpony.squidgrid.gui.gdx.SparseTextMap)">setLayer</a>, <a href="SparseLayers.html#setScc(squidpony.IColorCenter)">setScc</a>, <a href="SparseLayers.html#setTextSize(float,float)">setTextSize</a>, <a href="SparseLayers.html#slide(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,int,int,int,int,float,java.lang.Runnable)">slide</a>, <a href="SparseLayers.html#slide(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,int,int,int,int,float,java.lang.Runnable)">slide</a>, <a href="SparseLayers.html#summon(float,float,float,float,char,float,float,float)">summon</a>, <a href="SparseLayers.html#summon(float,float,float,float,float,char,float,float,float,java.lang.Runnable)">summon</a>, <a href="SparseLayers.html#summon(float,int,int,int,int,char,float,float,float,java.lang.Runnable)">summon</a>, <a href="SparseLayers.html#summon(int,int,int,int,char,float,float,float)">summon</a>, <a href="SparseLayers.html#tint(float,int,int,int,float,float,java.lang.Runnable)">tint</a>, <a href="SparseLayers.html#tint(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float,float,java.lang.Runnable)">tint</a>, <a href="SparseLayers.html#tint(int,int,float,float)">tint</a>, <a href="SparseLayers.html#tint(int,int,int,float,float)">tint</a>, <a href="SparseLayers.html#tint(int,int,int,com.badlogic.gdx.graphics.Color,float)">tint</a>, <a href="SparseLayers.html#tint(int,int,com.badlogic.gdx.graphics.Color,float)">tint</a>, <a href="SparseLayers.html#tint(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float,float)">tint</a>, <a href="SparseLayers.html#wiggle(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float,java.lang.Runnable)">wiggle</a>, <a href="SparseLayers.html#wiggle(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float)">wiggle</a>, <a href="SparseLayers.html#worldX(int)">worldX</a>, <a href="SparseLayers.html#worldY(int)">worldY</a></code></div>
+</a><code><a href="SparseLayers.html#addLayer()">addLayer</a>, <a href="SparseLayers.html#addLayer(int)">addLayer</a>, <a href="SparseLayers.html#bump(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,squidpony.squidgrid.Direction,float,java.lang.Runnable)">bump</a>, <a href="SparseLayers.html#bump(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,squidpony.squidgrid.Direction,float)">bump</a>, <a href="SparseLayers.html#burst(float,int,int,int,squidpony.squidgrid.Radius,char,float,float,float,java.lang.Runnable)">burst</a>, <a href="SparseLayers.html#burst(float,int,int,int,squidpony.squidgrid.Radius,java.lang.CharSequence,float,float,float,java.lang.Runnable)">burst</a>, <a href="SparseLayers.html#burst(int,int,int,squidpony.squidgrid.Radius,char,float,float,float)">burst</a>, <a href="SparseLayers.html#burst(int,int,int,squidpony.squidgrid.Radius,java.lang.CharSequence,float,float,float)">burst</a>, <a href="SparseLayers.html#calculateConsistentLightAmount(float,float)">calculateConsistentLightAmount</a>, <a href="SparseLayers.html#calculateConsistentLightModifier()">calculateConsistentLightModifier</a>, <a href="SparseLayers.html#calculateConsistentLightModifier(float)">calculateConsistentLightModifier</a>, <a href="SparseLayers.html#cellHeight()">cellHeight</a>, <a href="SparseLayers.html#cellWidth()">cellWidth</a>, <a href="SparseLayers.html#clear()">clear</a>, <a href="SparseLayers.html#clear(int)">clear</a>, <a href="SparseLayers.html#clear(int,int,int)">clear</a>, <a href="SparseLayers.html#fillBackground(float)">fillBackground</a>, <a href="SparseLayers.html#fillBackground(com.badlogic.gdx.graphics.Color)">fillBackground</a>, <a href="SparseLayers.html#findLayer(squidpony.squidgrid.gui.gdx.SparseTextMap)">findLayer</a>, <a href="SparseLayers.html#getBackgrounds()">getBackgrounds</a>, <a href="SparseLayers.html#getColorCenter()">getColorCenter</a>, <a href="SparseLayers.html#getDefaultBackgroundColor()">getDefaultBackgroundColor</a>, <a href="SparseLayers.html#getDefaultForegroundColor()">getDefaultForegroundColor</a>, <a href="SparseLayers.html#getFont()">getFont</a>, <a href="SparseLayers.html#getGridHeight()">getGridHeight</a>, <a href="SparseLayers.html#getGridWidth()">getGridWidth</a>, <a href="SparseLayers.html#getLayer(int)">getLayer</a>, <a href="SparseLayers.html#getLayerCount()">getLayerCount</a>, <a href="SparseLayers.html#getScc()">getScc</a>, <a href="SparseLayers.html#glyph(char,float,int,int)">glyph</a>, <a href="SparseLayers.html#glyph(char,com.badlogic.gdx.graphics.Color,int,int)">glyph</a>, <a href="SparseLayers.html#glyphFromGrid(int,int)">glyphFromGrid</a>, <a href="SparseLayers.html#glyphFromGrid(int,int,int)">glyphFromGrid</a>, <a href="SparseLayers.html#gridHeight()">gridHeight</a>, <a href="SparseLayers.html#gridWidth()">gridWidth</a>, <a href="SparseLayers.html#gridX(float)">gridX</a>, <a href="SparseLayers.html#gridY(float)">gridY</a>, <a href="SparseLayers.html#hasActiveAnimations()">hasActiveAnimations</a>, <a href="SparseLayers.html#put(int,int,char)">put</a>, <a href="SparseLayers.html#put(int,int,char,float)">put</a>, <a href="SparseLayers.html#put(int,int,char,com.badlogic.gdx.graphics.Color)">put</a>, <a href="SparseLayers.html#put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color)">put</a>, <a href="SparseLayers.html#put(int,int,squidpony.panel.IColoredString)">put</a>, <a href="SparseLayers.html#put(int,int,squidpony.squidgrid.gui.gdx.ICellVisible)">put</a>, <a href="SparseLayers.html#put(int,int,squidpony.squidgrid.gui.gdx.ICellVisible,float)">put</a>, <a href="SparseLayers.html#putBorders(float,java.lang.String)">putBorders</a>, <a href="SparseLayers.html#putBordersCaptioned(float,squidpony.panel.IColoredString)">putBordersCaptioned</a>, <a href="SparseLayers.html#putChars(char%5B%5D%5B%5D)">putChars</a>, <a href="SparseLayers.html#putChars(char%5B%5D%5B%5D,float%5B%5D%5B%5D)">putChars</a>, <a href="SparseLayers.html#putChars(char%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">putChars</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,float,float,float,double)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,float,float,float,double,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,float,float,float,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,float,float,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithConsistentLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithConsistentLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,float,float,float,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,float,float,float,float)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,float,float,float,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,float,float,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,float,float,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,double)">putWithLight</a>, <a href="SparseLayers.html#putWithLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,squidpony.squidmath.Noise.Noise3D)">putWithLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,float,float,float,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,float,float,float,float,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,double,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseConsistentLight(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,float)">putWithReverseConsistentLight</a>, <a href="SparseLayers.html#putWithReverseLight(int,int,char,float,float,float,double)">putWithReverseLight</a>, <a href="SparseLayers.html#putWithReverseLight(int,int,char,float,float,float,float)">putWithReverseLight</a>, <a href="SparseLayers.html#recallToGrid(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph)">recallToGrid</a>, <a href="SparseLayers.html#recallToGrid(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,int)">recallToGrid</a>, <a href="SparseLayers.html#recolor(float,int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(float,int,int,float,float,java.lang.Runnable)">recolor</a>, <a href="SparseLayers.html#recolor(float,int,int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(float,int,int,int,float,float,java.lang.Runnable)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,int,float,float)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,int,com.badlogic.gdx.graphics.Color,float)">recolor</a>, <a href="SparseLayers.html#recolor(int,int,com.badlogic.gdx.graphics.Color,float)">recolor</a>, <a href="SparseLayers.html#removeGlyph(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph)">removeGlyph</a>, <a href="SparseLayers.html#setBackgrounds(float%5B%5D%5B%5D)">setBackgrounds</a>, <a href="SparseLayers.html#setDefaultBackground(com.badlogic.gdx.graphics.Color)">setDefaultBackground</a>, <a href="SparseLayers.html#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a>, <a href="SparseLayers.html#setFont(squidpony.squidgrid.gui.gdx.TextCellFactory)">setFont</a>, <a href="SparseLayers.html#setLayer(int,squidpony.squidgrid.gui.gdx.SparseTextMap)">setLayer</a>, <a href="SparseLayers.html#setScc(squidpony.IColorCenter)">setScc</a>, <a href="SparseLayers.html#setTextSize(float,float)">setTextSize</a>, <a href="SparseLayers.html#slide(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,int,int,int,int,float,java.lang.Runnable)">slide</a>, <a href="SparseLayers.html#slide(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,int,int,int,int,float,java.lang.Runnable)">slide</a>, <a href="SparseLayers.html#summon(float,float,float,float,char,float,float,float)">summon</a>, <a href="SparseLayers.html#summon(float,float,float,float,float,char,float,float,float,java.lang.Runnable)">summon</a>, <a href="SparseLayers.html#summon(float,int,int,int,int,char,float,float,float,java.lang.Runnable)">summon</a>, <a href="SparseLayers.html#summon(int,int,int,int,char,float,float,float)">summon</a>, <a href="SparseLayers.html#tint(float,int,int,int,float,float,java.lang.Runnable)">tint</a>, <a href="SparseLayers.html#tint(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float,float,java.lang.Runnable)">tint</a>, <a href="SparseLayers.html#tint(int,int,float,float)">tint</a>, <a href="SparseLayers.html#tint(int,int,int,float,float)">tint</a>, <a href="SparseLayers.html#tint(int,int,int,com.badlogic.gdx.graphics.Color,float)">tint</a>, <a href="SparseLayers.html#tint(int,int,com.badlogic.gdx.graphics.Color,float)">tint</a>, <a href="SparseLayers.html#tint(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float,float)">tint</a>, <a href="SparseLayers.html#wiggle(float,squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float,java.lang.Runnable)">wiggle</a>, <a href="SparseLayers.html#wiggle(squidpony.squidgrid.gui.gdx.TextCellFactory.Glyph,float)">wiggle</a>, <a href="SparseLayers.html#worldX(int)">worldX</a>, <a href="SparseLayers.html#worldY(int)">worldY</a></code></div>
 <div class="inheritedList">
 <h3>Methods inherited from class&nbsp;com.badlogic.gdx.scenes.scene2d.Actor</h3>
 <a id="methods.inherited.from.class.com.badlogic.gdx.scenes.scene2d.Actor">
@@ -532,14 +522,14 @@ float&nbsp;duration,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">SubcellLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.34">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.33">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,float,float)">SubcellLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.39">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.38">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 float&nbsp;cellWidth,
 float&nbsp;cellHeight)</span></div>
@@ -548,7 +538,7 @@ float&nbsp;cellHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,float,float,squidpony.squidgrid.gui.gdx.TextCellFactory)">SubcellLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.44">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.43">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 float&nbsp;cellWidth,
 float&nbsp;cellHeight,
@@ -558,7 +548,7 @@ float&nbsp;cellHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,float,float,squidpony.squidgrid.gui.gdx.TextCellFactory,float,float)">SubcellLayers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.48">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.47">SubcellLayers</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 float&nbsp;cellWidth,
 float&nbsp;cellHeight,
@@ -580,7 +570,7 @@ float&nbsp;yOffset)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(char[][],com.badlogic.gdx.graphics.Color[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.76">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.75">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
 com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</span></div>
 <div class="block">Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
  setting the background colors to match the given Color 2D array. The colors 2D array should have a width that is
@@ -589,7 +579,7 @@ com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</span></div>
  This will filter each Color in colors if the color center this uses has a filter.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>put</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="IPackedColorPanel.html#put(char%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">put</a></code>&nbsp;in interface&nbsp;<code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SparseLayers.html#put(char%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">put</a></code>&nbsp;in class&nbsp;<code><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -601,7 +591,7 @@ com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(char[][],float[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.92">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.91">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
 float[][]&nbsp;colors)</span></div>
 <div class="block">Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
  setting the background colors to match the given 2D array of colors as packed floats. The colors 2D array should
@@ -620,7 +610,7 @@ float[][]&nbsp;colors)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(char[][],com.badlogic.gdx.graphics.Color[][],com.badlogic.gdx.graphics.Color[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.110">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.109">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
 com.badlogic.gdx.graphics.Color[][]&nbsp;fgColors,
 com.badlogic.gdx.graphics.Color[][]&nbsp;bgColors)</span></div>
 <div class="block">Places the given char 2D array, if-non-null, with the given foreground colors in the first Color 2D array,
@@ -642,7 +632,7 @@ com.badlogic.gdx.graphics.Color[][]&nbsp;bgColors)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(char[][],float[][],float[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.127">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.126">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;chars,
 float[][]&nbsp;fgColors,
 float[][]&nbsp;bgColors)</span></div>
 <div class="block">Places the given char 2D array, if-non-null, with the given foreground colors in the first float 2D array,
@@ -663,7 +653,7 @@ float[][]&nbsp;bgColors)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.145">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.144">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -687,7 +677,7 @@ com.badlogic.gdx.graphics.Color&nbsp;background)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,float,float)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.164">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.163">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 float&nbsp;foreground,
@@ -711,7 +701,7 @@ float&nbsp;background)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,int)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.188">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.187">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -721,7 +711,7 @@ int&nbsp;layer)</span></div>
  foreground is null or is fully transparent (all channels 0), then this does not change
  the foreground contents. If background is null or is fully transparent, this does not change the background. Uses
  the color center to potentially filter the given colors; this can be changed with
- <a href="SparseLayers.html#setColorCenter(squidpony.IColorCenter)"><code>SparseLayers.setColorCenter(IColorCenter)</code></a>. The layer can be greater than the number of layers currently present,
+ <code>SparseLayers.setColorCenter(IColorCenter)</code>. The layer can be greater than the number of layers currently present,
  which will add a layer to be rendered over the existing layers, but the number that refers to that layer will not
  change. It is recommended that to add a layer, you only add at the value equal to <a href="SparseLayers.html#getLayerCount()"><code>SparseLayers.getLayerCount()</code></a>, which
  will maintain the order and layer numbers in a sane way.</div>
@@ -741,7 +731,7 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,char,float,float,int)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.211">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.210">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 char&nbsp;c,
 float&nbsp;foreground,
@@ -770,7 +760,7 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.231">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.230">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -778,7 +768,7 @@ com.badlogic.gdx.graphics.Color&nbsp;background)</span></div>
 <div class="block">Puts text at the position x,y with the given foreground and background colors. If foreground is null or is
  fully transparent (all channels 0), then this does not change the foreground contents.
  If background is null or is fully transparent, this does not change the background. Uses the color center to
- potentially filter the given colors; this can be changed with <a href="SparseLayers.html#setColorCenter(squidpony.IColorCenter)"><code>SparseLayers.setColorCenter(IColorCenter)</code></a>.</div>
+ potentially filter the given colors; this can be changed with <code>SparseLayers.setColorCenter(IColorCenter)</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SparseLayers.html#put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color)">put</a></code>&nbsp;in class&nbsp;<code><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></code></dd>
@@ -794,7 +784,7 @@ com.badlogic.gdx.graphics.Color&nbsp;background)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,java.lang.String,float,float)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.253">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.252">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
 float&nbsp;foreground,
@@ -817,7 +807,7 @@ float&nbsp;background)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,int)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.281">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.280">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -826,7 +816,7 @@ int&nbsp;layer)</span></div>
 <div class="block">Puts text at the position x,y in the requested layer with the given foreground and background colors. If
  foreground is null or is fully transparent (all channels 0), then this does not change the foreground contents.
  If background is null or is fully transparent, this does not change the background. Uses the color center to
- potentially filter the given colors; this can be changed with <a href="SparseLayers.html#setColorCenter(squidpony.IColorCenter)"><code>SparseLayers.setColorCenter(IColorCenter)</code></a>. The layer
+ potentially filter the given colors; this can be changed with <code>SparseLayers.setColorCenter(IColorCenter)</code>. The layer
  can be greater than the number of layers currently present, which will add a layer to be rendered over the
  existing layers, but the number that refers to that layer will not change. It is recommended that to add a layer,
  you only add at the value equal to <a href="SparseLayers.html#getLayerCount()"><code>SparseLayers.getLayerCount()</code></a>, which will maintain the order and layer numbers in a
@@ -847,7 +837,7 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,java.lang.String,float,float,int)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.308">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.307">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
 float&nbsp;foreground,
@@ -876,14 +866,14 @@ int&nbsp;layer)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,com.badlogic.gdx.graphics.Color)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.327">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.326">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <div class="block">Changes the background at position x,y to the given Color. If the color is null, then this will make the
  background fully transparent at the specified position.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>put</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="IPackedColorPanel.html#put(int,int,com.badlogic.gdx.graphics.Color)">put</a></code>&nbsp;in interface&nbsp;<code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SparseLayers.html#put(int,int,com.badlogic.gdx.graphics.Color)">put</a></code>&nbsp;in class&nbsp;<code><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -896,7 +886,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(int,int,float)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.353">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.352">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 float&nbsp;bg)</span></div>
 <div class="block">Changes the background at position x,y to the given color as an encoded float. The color can be transparent,
@@ -918,7 +908,7 @@ float&nbsp;bg)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putWithLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float)">putWithLight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.378">putWithLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.377">putWithLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.Color&nbsp;background,
 com.badlogic.gdx.graphics.Color&nbsp;lightColor,
@@ -940,7 +930,7 @@ float&nbsp;lightAmount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putWithLight(int,int,float,float,float)">putWithLight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.394">putWithLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.393">putWithLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 float&nbsp;background,
 float&nbsp;lightColor,
@@ -962,7 +952,7 @@ float&nbsp;lightAmount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putWithConsistentLight(int,int,float,float,float,float)">putWithConsistentLight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.419">putWithConsistentLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.418">putWithConsistentLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 float&nbsp;background,
 float&nbsp;lightColor,
@@ -991,7 +981,7 @@ float&nbsp;flickerSpeed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putWithConsistentLight(int,int,com.badlogic.gdx.graphics.Color,com.badlogic.gdx.graphics.Color,float,float)">putWithConsistentLight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.440">putWithConsistentLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.439">putWithConsistentLight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 com.badlogic.gdx.graphics.Color&nbsp;background,
 com.badlogic.gdx.graphics.Color&nbsp;lightColor,
@@ -1020,7 +1010,7 @@ float&nbsp;flickerSpeed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putSingle(int,int,float)">putSingle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.456">putSingle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.455">putSingle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 float&nbsp;color)</span></div>
 <div class="block">Sets a single subcell of the background to use the specified color as a packed float. The values given for x and
@@ -1040,7 +1030,7 @@ float&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(com.badlogic.gdx.graphics.Color[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.468">put</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.467">put</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</span></div>
 <div class="block">Sets the background colors to match the given Color 2D array. The colors 2D array should have a width that is 3 *
  <a href="SparseLayers.html#gridWidth"><code>SparseLayers.gridWidth</code></a> and a height that is 3 * <a href="SparseLayers.html#gridHeight"><code>SparseLayers.gridHeight</code></a>. If the colors argument is null, does nothing.
  This will filter each Color in colors if the color center this uses has a filter.</div>
@@ -1055,7 +1045,7 @@ float&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(float[][])">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.480">put</a></span>&#8203;(<span class="arguments">float[][]&nbsp;colors)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.479">put</a></span>&#8203;(<span class="arguments">float[][]&nbsp;colors)</span></div>
 <div class="block">Sets the background colors to match the given 2D array of colors as packed floats. The colors 2D array should
  have a width that is 3 * <a href="SparseLayers.html#gridWidth"><code>SparseLayers.gridWidth</code></a> and a height that is 3 * <a href="SparseLayers.html#gridHeight"><code>SparseLayers.gridHeight</code></a>. If the colors argument
  is null, does nothing. This will not filter the passed colors at all.</div>
@@ -1069,34 +1059,14 @@ float&nbsp;color)</span></div>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="getBacker()">getBacker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.panel.ISquidPanel&lt;?&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.494">getBacker</a></span>()</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>getBacker</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="SparseLayers.html#getBacker()">getBacker</a></code>&nbsp;in class&nbsp;<code><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The panel doing the real job, i.e. an instance of
- <code>SquidPanel</code>. The type of colors is unspecified, as some
- clients have forwarding instances of this class that hides that
- the type of color of the backer differs from the type of color in
- <code>this</code>.
- <p>
- This implementation returns <code>this</code>.</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
 <h3><a id="clear(int,int)">clear</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.506">clear</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.491">clear</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Removes the foreground chars, where present, in all layers at the given x,y position.
  The backgrounds will be unchanged.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>clear</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="IPackedColorPanel.html#clear(int,int)">clear</a></code>&nbsp;in interface&nbsp;<code><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="SparseLayers.html#clear(int,int)">clear</a></code>&nbsp;in class&nbsp;<code><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1108,7 +1078,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fillArea(com.badlogic.gdx.graphics.Color,int,int,int,int)">fillArea</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.540">fillArea</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;color,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.525">fillArea</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;color,
 int&nbsp;x,
 int&nbsp;y,
 int&nbsp;width,
@@ -1132,7 +1102,7 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fillArea(float,int,int,int,int)">fillArea</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.556">fillArea</a></span>&#8203;(<span class="arguments">float&nbsp;color,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.541">fillArea</a></span>&#8203;(<span class="arguments">float&nbsp;color,
 int&nbsp;x,
 int&nbsp;y,
 int&nbsp;width,
@@ -1156,7 +1126,7 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="blend(int,int,float,float)">blend</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.586">blend</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.571">blend</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 float&nbsp;color,
 float&nbsp;mixBy)</span></div>
@@ -1181,7 +1151,7 @@ float&nbsp;mixBy)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tint(float,int,int,float,float,java.lang.Runnable)">tint</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.610">tint</a></span>&#8203;(<span class="arguments">float&nbsp;delay,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.595">tint</a></span>&#8203;(<span class="arguments">float&nbsp;delay,
 int&nbsp;x,
 int&nbsp;y,
 float&nbsp;encodedColor,
@@ -1213,7 +1183,7 @@ float&nbsp;duration,
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.688">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.673">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha)</span></div>
 <div class="block">Draws the SubcellLayers and all glyphs it tracks. <code>Batch.begin()</code> must have already been called on the
  batch, and <code>Batch.end()</code> should be called after this returns and before the rendering code finishes for the
@@ -1239,8 +1209,8 @@ float&nbsp;parentAlpha)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -1285,5 +1255,7 @@ float&nbsp;parentAlpha)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

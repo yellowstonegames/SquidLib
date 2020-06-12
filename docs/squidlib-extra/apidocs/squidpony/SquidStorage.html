@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class SquidStorage" class="title">Class SquidStorage</h1>
@@ -99,8 +94,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre>@Beta
-public class <a href="../src-html/squidpony/SquidStorage.html#line.10">SquidStorage</a>
+<pre>public class <a href="../src-html/squidpony/SquidStorage.html#line.9">SquidStorage</a>
 extends <a href="store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a></pre>
 <div class="block">Helps games store information in libGDX's Preferences class as Strings, then get it back out.
  Created by Tommy Ettinger on 9/16/2016.</div>
@@ -267,7 +261,7 @@ long[]&nbsp;garble)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">SquidStorage</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.18">SquidStorage</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.16">SquidStorage</a></span>()</div>
 <div class="block">Please don't use this constructor if possible; it simply calls <a href="#%3Cinit%3E(java.lang.String)"><code>SquidStorage(String)</code></a> with the constant
  String "nameless". This could easily overlap with other files/sections in Preferences, so you should always
  prefer giving a String argument to the constructor, typically the name of the game.</div>
@@ -280,7 +274,7 @@ long[]&nbsp;garble)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String)">SquidStorage</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.42">SquidStorage</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fileName)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.40">SquidStorage</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fileName)</span></div>
 <div class="block">Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally
  be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
  semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
@@ -306,7 +300,7 @@ long[]&nbsp;garble)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String,java.lang.String)">SquidStorage</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.68">SquidStorage</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fileName,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.66">SquidStorage</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fileName,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;garble)</span></div>
 <div class="block">Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally
  be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
@@ -336,7 +330,7 @@ long[]&nbsp;garble)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String,long[])">SquidStorage</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.94">SquidStorage</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fileName,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.92">SquidStorage</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fileName,
 long[]&nbsp;garble)</span></div>
 <div class="block">Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally
  be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
@@ -376,7 +370,7 @@ long[]&nbsp;garble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="put(java.lang.String,java.lang.Object)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.106">put</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;innerName,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.104">put</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;innerName,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <div class="block">Prepares to store the Object <code>o</code> to be retrieved with <code>innerName</code> in the current group of objects.
  Does not write to a permanent location until <a href="#store(java.lang.String)"><code>store(String)</code></a> is called. The innerName used to store an
@@ -395,7 +389,7 @@ long[]&nbsp;garble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="store(java.lang.String)">store</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.122">store</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;outerName)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.120">store</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;outerName)</span></div>
 <div class="block">Actually stores all objects that had previously been prepared with <a href="#put(java.lang.String,java.lang.Object)"><code>put(String, Object)</code></a>, with
  <code>outerName</code> used as a key to retrieve any object in the current group. Flushes the preferences, making the
  changes permanent (until overwritten), but does not change the current group (you may want to call this method
@@ -415,7 +409,7 @@ long[]&nbsp;garble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="show()">show</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.133">show</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.131">show</a></span>()</div>
 <div class="block">Gets a String representation of the data that would be saved when <a href="#store(java.lang.String)"><code>store(String)</code></a> is called. This can be
  useful for finding particularly problematic objects that require unnecessary space when serialized.</div>
 <dl>
@@ -429,7 +423,7 @@ long[]&nbsp;garble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clear()">clear</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.142">clear</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.140">clear</a></span>()</div>
 <div class="block">Clears the current group of objects; recommended if you intend to store under multiple outerName keys.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -442,7 +436,7 @@ long[]&nbsp;garble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="remove(java.lang.String)">remove</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.155">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;innerName)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="SquidStorage.html" title="class in squidpony">SquidStorage</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.153">remove</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;innerName)</span></div>
 <div class="block">Removes one object from the current group by the <code>innerName</code> it was prepared with using
  <a href="#put(java.lang.String,java.lang.Object)"><code>put(String, Object)</code></a>. This does not affect already-stored objects unless <a href="#store(java.lang.String)"><code>store(String)</code></a> is called
  after this, in which case the new version of the current group, without the object this removed, is stored.</div>
@@ -459,7 +453,7 @@ long[]&nbsp;garble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="get(java.lang.String,java.lang.String,java.lang.Class)">get</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">T</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.172">get</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;outerName,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">T</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.170">get</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;outerName,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;innerName,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Gets an object from the storage by the given <code>outerName</code> key from <a href="#store(java.lang.String)"><code>store(String)</code></a> and
@@ -483,7 +477,7 @@ long[]&nbsp;garble)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="preferencesSize()">preferencesSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.185">preferencesSize</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/SquidStorage.html#line.183">preferencesSize</a></span>()</div>
 <div class="block">Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for
  GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can
  be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may
@@ -502,8 +496,8 @@ long[]&nbsp;garble)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -549,5 +543,7 @@ long[]&nbsp;garble)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

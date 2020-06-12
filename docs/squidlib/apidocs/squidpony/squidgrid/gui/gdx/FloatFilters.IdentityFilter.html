@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class FloatFilters.IdentityFilter" class="title">Class FloatFilters.IdentityFilter</h1>
@@ -102,7 +97,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FloatFilters.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.175">FloatFilters.IdentityFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.176">FloatFilters.IdentityFilter</a>
 extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></pre>
 <div class="block">A FloatFilter that makes no changes to the colors given to it; useful as a default for when no filter is wanted.</div>
 </section>
@@ -188,7 +183,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">IdentityFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.IdentityFilter.html#line.175">IdentityFilter</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.IdentityFilter.html#line.176">IdentityFilter</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -204,7 +199,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 <li class="blockList">
 <section class="detail">
 <h3><a id="alter(float)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.IdentityFilter.html#line.182">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.IdentityFilter.html#line.183">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <div class="block">Takes a packed float color and returns it un-edited.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -222,8 +217,8 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -268,5 +263,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

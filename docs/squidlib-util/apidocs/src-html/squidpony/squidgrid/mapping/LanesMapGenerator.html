@@ -131,172 +131,173 @@
 <span class="sourceLineNo">119</span><a id="line.119">        temp = CoordPacker.hilbertToCoord(m);</a>
 <span class="sourceLineNo">120</span><a id="line.120">        Coord starter = CoordPacker.hilbertToCoord(m);</a>
 <span class="sourceLineNo">121</span><a id="line.121">        m += r;</a>
-<span class="sourceLineNo">122</span><a id="line.122">        for (int i = r; i &lt; 256 &amp;&amp; m &lt; 256 - 9; i += r, m += r) {</a>
-<span class="sourceLineNo">123</span><a id="line.123">            List&lt;Coord&gt; cl = new ArrayList&lt;&gt;(4);</a>
-<span class="sourceLineNo">124</span><a id="line.124">            cl.add(Coord.get(columns[temp.x], rows[temp.y]));</a>
-<span class="sourceLineNo">125</span><a id="line.125">            temp = CoordPacker.hilbertToCoord(m);</a>
-<span class="sourceLineNo">126</span><a id="line.126">            r = random.between(8, 24);</a>
-<span class="sourceLineNo">127</span><a id="line.127">            for (int j = 0, p = r - 1;</a>
-<span class="sourceLineNo">128</span><a id="line.128">                 j &lt; 3 &amp;&amp; p &gt; 2 &amp;&amp; Math.min(random.nextDouble(), random.nextDouble()) &lt; 0.2;</a>
-<span class="sourceLineNo">129</span><a id="line.129">                 j++, p -= random.between(1, p)) {</a>
-<span class="sourceLineNo">130</span><a id="line.130">                t = CoordPacker.hilbertToCoord(m + p);</a>
-<span class="sourceLineNo">131</span><a id="line.131">                cl.add(Coord.get(columns[t.x], rows[t.y]));</a>
-<span class="sourceLineNo">132</span><a id="line.132">            }</a>
-<span class="sourceLineNo">133</span><a id="line.133">            connections.put(Coord.get(columns[temp.x], rows[temp.y]), cl);</a>
-<span class="sourceLineNo">134</span><a id="line.134">        }</a>
-<span class="sourceLineNo">135</span><a id="line.135">        connections.get(Coord.get(columns[temp.x], rows[temp.y])).add(</a>
-<span class="sourceLineNo">136</span><a id="line.136">                Coord.get(columns[starter.x], rows[starter.y]));</a>
-<span class="sourceLineNo">137</span><a id="line.137">        mix = new SymmetryDungeonGenerator(width, height, random, connections, 0.6f);</a>
-<span class="sourceLineNo">138</span><a id="line.138">        boolean[][] fixed = new boolean[width][height];</a>
-<span class="sourceLineNo">139</span><a id="line.139"></a>
-<span class="sourceLineNo">140</span><a id="line.140">        if(lanes != 2)</a>
-<span class="sourceLineNo">141</span><a id="line.141">        {</a>
-<span class="sourceLineNo">142</span><a id="line.142">            List&lt;Coord&gt; path = DDALine.line(3, 3, width - 4, height - 4);</a>
-<span class="sourceLineNo">143</span><a id="line.143">            for(Coord c : path)</a>
-<span class="sourceLineNo">144</span><a id="line.144">            {</a>
-<span class="sourceLineNo">145</span><a id="line.145">                for (int x = c.x - 2; x &lt;= c.x + 2; x++) {</a>
-<span class="sourceLineNo">146</span><a id="line.146">                    for (int y = c.y - 2; y &lt;= c.y + 2; y++) {</a>
-<span class="sourceLineNo">147</span><a id="line.147">                        fixed[x][y] = true;</a>
-<span class="sourceLineNo">148</span><a id="line.148">                    }</a>
-<span class="sourceLineNo">149</span><a id="line.149">                }</a>
-<span class="sourceLineNo">150</span><a id="line.150">            }</a>
-<span class="sourceLineNo">151</span><a id="line.151">        }</a>
-<span class="sourceLineNo">152</span><a id="line.152">        if(lanes &gt; 1)</a>
-<span class="sourceLineNo">153</span><a id="line.153">        {</a>
-<span class="sourceLineNo">154</span><a id="line.154">            List&lt;Coord&gt; path = DDALine.line(3, 3, 3, height - 4);</a>
-<span class="sourceLineNo">155</span><a id="line.155">            path.addAll(DDALine.line(3, 3, width - 4, 3));</a>
-<span class="sourceLineNo">156</span><a id="line.156">            for(Coord c : path)</a>
-<span class="sourceLineNo">157</span><a id="line.157">            {</a>
-<span class="sourceLineNo">158</span><a id="line.158">                for (int x = c.x - 2; x &lt;= c.x + 2; x++) {</a>
-<span class="sourceLineNo">159</span><a id="line.159">                    for (int y = c.y - 2; y &lt;= c.y + 2; y++) {</a>
-<span class="sourceLineNo">160</span><a id="line.160">                        fixed[x][y] = true;</a>
-<span class="sourceLineNo">161</span><a id="line.161">                    }</a>
-<span class="sourceLineNo">162</span><a id="line.162">                }</a>
-<span class="sourceLineNo">163</span><a id="line.163">            }</a>
-<span class="sourceLineNo">164</span><a id="line.164">        }</a>
-<span class="sourceLineNo">165</span><a id="line.165">        mix.setFixedRooms(fixed);</a>
-<span class="sourceLineNo">166</span><a id="line.166">    }</a>
-<span class="sourceLineNo">167</span><a id="line.167"></a>
+<span class="sourceLineNo">122</span><a id="line.122">        ArrayList&lt;Coord&gt; cl = new ArrayList&lt;&gt;(4);</a>
+<span class="sourceLineNo">123</span><a id="line.123">        for (int i = r; i &lt; 256 &amp;&amp; m &lt; 256 - 9; i += r, m += r) {</a>
+<span class="sourceLineNo">124</span><a id="line.124">            cl.clear();</a>
+<span class="sourceLineNo">125</span><a id="line.125">            cl.add(Coord.get(columns[temp.x], rows[temp.y]));</a>
+<span class="sourceLineNo">126</span><a id="line.126">            temp = CoordPacker.hilbertToCoord(m);</a>
+<span class="sourceLineNo">127</span><a id="line.127">            r = random.between(8, 24);</a>
+<span class="sourceLineNo">128</span><a id="line.128">            for (int j = 0, p = r - 1;</a>
+<span class="sourceLineNo">129</span><a id="line.129">                 j &lt; 3 &amp;&amp; p &gt; 2 &amp;&amp; Math.min(random.nextDouble(), random.nextDouble()) &lt; 0.2;</a>
+<span class="sourceLineNo">130</span><a id="line.130">                 j++, p -= random.between(1, p)) {</a>
+<span class="sourceLineNo">131</span><a id="line.131">                t = CoordPacker.hilbertToCoord(m + p);</a>
+<span class="sourceLineNo">132</span><a id="line.132">                cl.add(Coord.get(columns[t.x], rows[t.y]));</a>
+<span class="sourceLineNo">133</span><a id="line.133">            }</a>
+<span class="sourceLineNo">134</span><a id="line.134">            connections.put(Coord.get(columns[temp.x], rows[temp.y]), cl);</a>
+<span class="sourceLineNo">135</span><a id="line.135">        }</a>
+<span class="sourceLineNo">136</span><a id="line.136">        connections.get(Coord.get(columns[temp.x], rows[temp.y])).add(</a>
+<span class="sourceLineNo">137</span><a id="line.137">                Coord.get(columns[starter.x], rows[starter.y]));</a>
+<span class="sourceLineNo">138</span><a id="line.138">        mix = new SymmetryDungeonGenerator(width, height, random, connections, 0.6f);</a>
+<span class="sourceLineNo">139</span><a id="line.139">        boolean[][] fixed = new boolean[width][height];</a>
+<span class="sourceLineNo">140</span><a id="line.140"></a>
+<span class="sourceLineNo">141</span><a id="line.141">        if(lanes != 2)</a>
+<span class="sourceLineNo">142</span><a id="line.142">        {</a>
+<span class="sourceLineNo">143</span><a id="line.143">            List&lt;Coord&gt; path = DDALine.line(3, 3, width - 4, height - 4);</a>
+<span class="sourceLineNo">144</span><a id="line.144">            for(Coord c : path)</a>
+<span class="sourceLineNo">145</span><a id="line.145">            {</a>
+<span class="sourceLineNo">146</span><a id="line.146">                for (int x = c.x - 2; x &lt;= c.x + 2; x++) {</a>
+<span class="sourceLineNo">147</span><a id="line.147">                    for (int y = c.y - 2; y &lt;= c.y + 2; y++) {</a>
+<span class="sourceLineNo">148</span><a id="line.148">                        fixed[x][y] = true;</a>
+<span class="sourceLineNo">149</span><a id="line.149">                    }</a>
+<span class="sourceLineNo">150</span><a id="line.150">                }</a>
+<span class="sourceLineNo">151</span><a id="line.151">            }</a>
+<span class="sourceLineNo">152</span><a id="line.152">        }</a>
+<span class="sourceLineNo">153</span><a id="line.153">        if(lanes &gt; 1)</a>
+<span class="sourceLineNo">154</span><a id="line.154">        {</a>
+<span class="sourceLineNo">155</span><a id="line.155">            List&lt;Coord&gt; path = DDALine.line(3, 3, 3, height - 4);</a>
+<span class="sourceLineNo">156</span><a id="line.156">            path.addAll(DDALine.line(3, 3, width - 4, 3));</a>
+<span class="sourceLineNo">157</span><a id="line.157">            for(Coord c : path)</a>
+<span class="sourceLineNo">158</span><a id="line.158">            {</a>
+<span class="sourceLineNo">159</span><a id="line.159">                for (int x = c.x - 2; x &lt;= c.x + 2; x++) {</a>
+<span class="sourceLineNo">160</span><a id="line.160">                    for (int y = c.y - 2; y &lt;= c.y + 2; y++) {</a>
+<span class="sourceLineNo">161</span><a id="line.161">                        fixed[x][y] = true;</a>
+<span class="sourceLineNo">162</span><a id="line.162">                    }</a>
+<span class="sourceLineNo">163</span><a id="line.163">                }</a>
+<span class="sourceLineNo">164</span><a id="line.164">            }</a>
+<span class="sourceLineNo">165</span><a id="line.165">        }</a>
+<span class="sourceLineNo">166</span><a id="line.166">        mix.setFixedRooms(fixed);</a>
+<span class="sourceLineNo">167</span><a id="line.167">    }</a>
 <span class="sourceLineNo">168</span><a id="line.168"></a>
-<span class="sourceLineNo">169</span><a id="line.169">    /**</a>
-<span class="sourceLineNo">170</span><a id="line.170">     * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make</a>
-<span class="sourceLineNo">172</span><a id="line.172">     * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically</a>
-<span class="sourceLineNo">173</span><a id="line.173">     * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10</a>
-<span class="sourceLineNo">174</span><a id="line.174">     * between the count of putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">175</span><a id="line.175">     * @see MixedGenerator</a>
-<span class="sourceLineNo">176</span><a id="line.176">     * @param count the number of carvers making caves between rooms; only matters in relation to other carvers</a>
-<span class="sourceLineNo">177</span><a id="line.177">     */</a>
-<span class="sourceLineNo">178</span><a id="line.178">    public void putCaveCarvers(int count)</a>
-<span class="sourceLineNo">179</span><a id="line.179">    {</a>
-<span class="sourceLineNo">180</span><a id="line.180">        mix.putCaveCarvers(count);</a>
-<span class="sourceLineNo">181</span><a id="line.181">    }</a>
-<span class="sourceLineNo">182</span><a id="line.182">    /**</a>
-<span class="sourceLineNo">183</span><a id="line.183">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">184</span><a id="line.184">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count</a>
-<span class="sourceLineNo">185</span><a id="line.185">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
-<span class="sourceLineNo">186</span><a id="line.186">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
-<span class="sourceLineNo">187</span><a id="line.187">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">188</span><a id="line.188">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">189</span><a id="line.189">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">190</span><a id="line.190">     * @see MixedGenerator</a>
-<span class="sourceLineNo">191</span><a id="line.191">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">192</span><a id="line.192">     *              to other carvers</a>
-<span class="sourceLineNo">193</span><a id="line.193">     */</a>
-<span class="sourceLineNo">194</span><a id="line.194">    public void putBoxRoomCarvers(int count)</a>
-<span class="sourceLineNo">195</span><a id="line.195">    {</a>
-<span class="sourceLineNo">196</span><a id="line.196">        mix.putBoxRoomCarvers(count);</a>
-<span class="sourceLineNo">197</span><a id="line.197">    }</a>
-<span class="sourceLineNo">198</span><a id="line.198">    /**</a>
-<span class="sourceLineNo">199</span><a id="line.199">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">200</span><a id="line.200">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. This also</a>
-<span class="sourceLineNo">201</span><a id="line.201">     * ensures walls will be placed around the room, only allowing corridors and small cave openings to pass. If count</a>
-<span class="sourceLineNo">202</span><a id="line.202">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
-<span class="sourceLineNo">203</span><a id="line.203">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
-<span class="sourceLineNo">204</span><a id="line.204">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * @see MixedGenerator</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">209</span><a id="line.209">     *              to other carvers</a>
-<span class="sourceLineNo">210</span><a id="line.210">     */</a>
-<span class="sourceLineNo">211</span><a id="line.211">    public void putWalledBoxRoomCarvers(int count)</a>
-<span class="sourceLineNo">212</span><a id="line.212">    {</a>
-<span class="sourceLineNo">213</span><a id="line.213">        mix.putWalledBoxRoomCarvers(count);</a>
-<span class="sourceLineNo">214</span><a id="line.214">    }</a>
-<span class="sourceLineNo">215</span><a id="line.215">    /**</a>
-<span class="sourceLineNo">216</span><a id="line.216">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">217</span><a id="line.217">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
-<span class="sourceLineNo">218</span><a id="line.218">     * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
-<span class="sourceLineNo">219</span><a id="line.219">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
-<span class="sourceLineNo">220</span><a id="line.220">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">221</span><a id="line.221">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">222</span><a id="line.222">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">223</span><a id="line.223">     * @see MixedGenerator</a>
-<span class="sourceLineNo">224</span><a id="line.224">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">225</span><a id="line.225">     *              to other carvers</a>
-<span class="sourceLineNo">226</span><a id="line.226">     */</a>
-<span class="sourceLineNo">227</span><a id="line.227">    public void putRoundRoomCarvers(int count)</a>
-<span class="sourceLineNo">228</span><a id="line.228">    {</a>
-<span class="sourceLineNo">229</span><a id="line.229">        mix.putRoundRoomCarvers(count);</a>
-<span class="sourceLineNo">230</span><a id="line.230">    }</a>
-<span class="sourceLineNo">231</span><a id="line.231"></a>
-<span class="sourceLineNo">232</span><a id="line.232">    /**</a>
-<span class="sourceLineNo">233</span><a id="line.233">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
-<span class="sourceLineNo">234</span><a id="line.234">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
-<span class="sourceLineNo">235</span><a id="line.235">     * one. This also ensures walls will be placed around the room, only allowing corridors and small cave openings to</a>
-<span class="sourceLineNo">236</span><a id="line.236">     * pass. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
-<span class="sourceLineNo">237</span><a id="line.237">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
-<span class="sourceLineNo">238</span><a id="line.238">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
-<span class="sourceLineNo">239</span><a id="line.239">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
-<span class="sourceLineNo">240</span><a id="line.240">     * and putRoundRoomCarvers() is reasonable.</a>
-<span class="sourceLineNo">241</span><a id="line.241">     * @see MixedGenerator</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
-<span class="sourceLineNo">243</span><a id="line.243">     *              to other carvers</a>
-<span class="sourceLineNo">244</span><a id="line.244">     */</a>
-<span class="sourceLineNo">245</span><a id="line.245">    public void putWalledRoundRoomCarvers(int count)</a>
-<span class="sourceLineNo">246</span><a id="line.246">    {</a>
-<span class="sourceLineNo">247</span><a id="line.247">        mix.putWalledRoundRoomCarvers(count);</a>
-<span class="sourceLineNo">248</span><a id="line.248">    }</a>
-<span class="sourceLineNo">249</span><a id="line.249"></a>
-<span class="sourceLineNo">250</span><a id="line.250">    /**</a>
-<span class="sourceLineNo">251</span><a id="line.251">     * This generates a new map by stretching a 16x16 grid of potential rooms to fit the width and height passed to the</a>
-<span class="sourceLineNo">252</span><a id="line.252">     * constructor, randomly expanding columns and rows before contracting the whole to fit perfectly. This uses the</a>
-<span class="sourceLineNo">253</span><a id="line.253">     * Moore Curve, a space-filling curve that loops around on itself, to guarantee that the rooms will always have a</a>
-<span class="sourceLineNo">254</span><a id="line.254">     * long path through the dungeon that, if followed completely, will take you back to your starting room. Some small</a>
-<span class="sourceLineNo">255</span><a id="line.255">     * branches are possible, and large rooms may merge with other rooms nearby. This uses MixedGenerator.</a>
-<span class="sourceLineNo">256</span><a id="line.256">     * @see MixedGenerator</a>
-<span class="sourceLineNo">257</span><a id="line.257">     * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second</a>
-<span class="sourceLineNo">258</span><a id="line.258">     */</a>
-<span class="sourceLineNo">259</span><a id="line.259">    public char[][] generate()</a>
-<span class="sourceLineNo">260</span><a id="line.260">    {</a>
-<span class="sourceLineNo">261</span><a id="line.261">        return mix.generate();</a>
-<span class="sourceLineNo">262</span><a id="line.262">    }</a>
-<span class="sourceLineNo">263</span><a id="line.263"></a>
-<span class="sourceLineNo">264</span><a id="line.264">    /**</a>
-<span class="sourceLineNo">265</span><a id="line.265">     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of</a>
-<span class="sourceLineNo">266</span><a id="line.266">     * MixedGenerator. This array will have the same size as the last char 2D array prduced by generate(), and the value</a>
-<span class="sourceLineNo">267</span><a id="line.267">     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).</a>
-<span class="sourceLineNo">268</span><a id="line.268">     * &lt;ul&gt;</a>
-<span class="sourceLineNo">269</span><a id="line.269">     *     &lt;li&gt;MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;</a>
-<span class="sourceLineNo">270</span><a id="line.270">     *     &lt;li&gt;MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">271</span><a id="line.271">     *     &lt;li&gt;MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">272</span><a id="line.272">     *     &lt;li&gt;MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">273</span><a id="line.273">     *     &lt;li&gt;MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">274</span><a id="line.274">     *     &lt;li&gt;MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">275</span><a id="line.275">     *     &lt;li&gt;MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;</a>
-<span class="sourceLineNo">276</span><a id="line.276">     * &lt;/ul&gt;</a>
-<span class="sourceLineNo">277</span><a id="line.277">     * @return a 2D int array where each element is an environment type constant in MixedGenerator</a>
-<span class="sourceLineNo">278</span><a id="line.278">     */</a>
-<span class="sourceLineNo">279</span><a id="line.279">    public int[][] getEnvironment()</a>
-<span class="sourceLineNo">280</span><a id="line.280">    {</a>
-<span class="sourceLineNo">281</span><a id="line.281">        return mix.getEnvironment();</a>
-<span class="sourceLineNo">282</span><a id="line.282">    }</a>
-<span class="sourceLineNo">283</span><a id="line.283"></a>
-<span class="sourceLineNo">284</span><a id="line.284">    public char[][] getDungeon() {</a>
-<span class="sourceLineNo">285</span><a id="line.285">        return mix.getDungeon();</a>
-<span class="sourceLineNo">286</span><a id="line.286">    }</a>
-<span class="sourceLineNo">287</span><a id="line.287">}</a>
+<span class="sourceLineNo">169</span><a id="line.169"></a>
+<span class="sourceLineNo">170</span><a id="line.170">    /**</a>
+<span class="sourceLineNo">171</span><a id="line.171">     * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves</a>
+<span class="sourceLineNo">172</span><a id="line.172">     * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make</a>
+<span class="sourceLineNo">173</span><a id="line.173">     * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically</a>
+<span class="sourceLineNo">174</span><a id="line.174">     * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10</a>
+<span class="sourceLineNo">175</span><a id="line.175">     * between the count of putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">176</span><a id="line.176">     * @see MixedGenerator</a>
+<span class="sourceLineNo">177</span><a id="line.177">     * @param count the number of carvers making caves between rooms; only matters in relation to other carvers</a>
+<span class="sourceLineNo">178</span><a id="line.178">     */</a>
+<span class="sourceLineNo">179</span><a id="line.179">    public void putCaveCarvers(int count)</a>
+<span class="sourceLineNo">180</span><a id="line.180">    {</a>
+<span class="sourceLineNo">181</span><a id="line.181">        mix.putCaveCarvers(count);</a>
+<span class="sourceLineNo">182</span><a id="line.182">    }</a>
+<span class="sourceLineNo">183</span><a id="line.183">    /**</a>
+<span class="sourceLineNo">184</span><a id="line.184">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">185</span><a id="line.185">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count</a>
+<span class="sourceLineNo">186</span><a id="line.186">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
+<span class="sourceLineNo">187</span><a id="line.187">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
+<span class="sourceLineNo">188</span><a id="line.188">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">189</span><a id="line.189">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">190</span><a id="line.190">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">191</span><a id="line.191">     * @see MixedGenerator</a>
+<span class="sourceLineNo">192</span><a id="line.192">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">193</span><a id="line.193">     *              to other carvers</a>
+<span class="sourceLineNo">194</span><a id="line.194">     */</a>
+<span class="sourceLineNo">195</span><a id="line.195">    public void putBoxRoomCarvers(int count)</a>
+<span class="sourceLineNo">196</span><a id="line.196">    {</a>
+<span class="sourceLineNo">197</span><a id="line.197">        mix.putBoxRoomCarvers(count);</a>
+<span class="sourceLineNo">198</span><a id="line.198">    }</a>
+<span class="sourceLineNo">199</span><a id="line.199">    /**</a>
+<span class="sourceLineNo">200</span><a id="line.200">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">201</span><a id="line.201">     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. This also</a>
+<span class="sourceLineNo">202</span><a id="line.202">     * ensures walls will be placed around the room, only allowing corridors and small cave openings to pass. If count</a>
+<span class="sourceLineNo">203</span><a id="line.203">     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher</a>
+<span class="sourceLineNo">204</span><a id="line.204">     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then</a>
+<span class="sourceLineNo">205</span><a id="line.205">     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">206</span><a id="line.206">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">207</span><a id="line.207">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * @see MixedGenerator</a>
+<span class="sourceLineNo">209</span><a id="line.209">     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">210</span><a id="line.210">     *              to other carvers</a>
+<span class="sourceLineNo">211</span><a id="line.211">     */</a>
+<span class="sourceLineNo">212</span><a id="line.212">    public void putWalledBoxRoomCarvers(int count)</a>
+<span class="sourceLineNo">213</span><a id="line.213">    {</a>
+<span class="sourceLineNo">214</span><a id="line.214">        mix.putWalledBoxRoomCarvers(count);</a>
+<span class="sourceLineNo">215</span><a id="line.215">    }</a>
+<span class="sourceLineNo">216</span><a id="line.216">    /**</a>
+<span class="sourceLineNo">217</span><a id="line.217">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">218</span><a id="line.218">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
+<span class="sourceLineNo">219</span><a id="line.219">     * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
+<span class="sourceLineNo">220</span><a id="line.220">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
+<span class="sourceLineNo">221</span><a id="line.221">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">222</span><a id="line.222">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">223</span><a id="line.223">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">224</span><a id="line.224">     * @see MixedGenerator</a>
+<span class="sourceLineNo">225</span><a id="line.225">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">226</span><a id="line.226">     *              to other carvers</a>
+<span class="sourceLineNo">227</span><a id="line.227">     */</a>
+<span class="sourceLineNo">228</span><a id="line.228">    public void putRoundRoomCarvers(int count)</a>
+<span class="sourceLineNo">229</span><a id="line.229">    {</a>
+<span class="sourceLineNo">230</span><a id="line.230">        mix.putRoundRoomCarvers(count);</a>
+<span class="sourceLineNo">231</span><a id="line.231">    }</a>
+<span class="sourceLineNo">232</span><a id="line.232"></a>
+<span class="sourceLineNo">233</span><a id="line.233">    /**</a>
+<span class="sourceLineNo">234</span><a id="line.234">     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms</a>
+<span class="sourceLineNo">235</span><a id="line.235">     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is</a>
+<span class="sourceLineNo">236</span><a id="line.236">     * one. This also ensures walls will be placed around the room, only allowing corridors and small cave openings to</a>
+<span class="sourceLineNo">237</span><a id="line.237">     * pass. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,</a>
+<span class="sourceLineNo">238</span><a id="line.238">     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,</a>
+<span class="sourceLineNo">239</span><a id="line.239">     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver</a>
+<span class="sourceLineNo">240</span><a id="line.240">     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),</a>
+<span class="sourceLineNo">241</span><a id="line.241">     * and putRoundRoomCarvers() is reasonable.</a>
+<span class="sourceLineNo">242</span><a id="line.242">     * @see MixedGenerator</a>
+<span class="sourceLineNo">243</span><a id="line.243">     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation</a>
+<span class="sourceLineNo">244</span><a id="line.244">     *              to other carvers</a>
+<span class="sourceLineNo">245</span><a id="line.245">     */</a>
+<span class="sourceLineNo">246</span><a id="line.246">    public void putWalledRoundRoomCarvers(int count)</a>
+<span class="sourceLineNo">247</span><a id="line.247">    {</a>
+<span class="sourceLineNo">248</span><a id="line.248">        mix.putWalledRoundRoomCarvers(count);</a>
+<span class="sourceLineNo">249</span><a id="line.249">    }</a>
+<span class="sourceLineNo">250</span><a id="line.250"></a>
+<span class="sourceLineNo">251</span><a id="line.251">    /**</a>
+<span class="sourceLineNo">252</span><a id="line.252">     * This generates a new map by stretching a 16x16 grid of potential rooms to fit the width and height passed to the</a>
+<span class="sourceLineNo">253</span><a id="line.253">     * constructor, randomly expanding columns and rows before contracting the whole to fit perfectly. This uses the</a>
+<span class="sourceLineNo">254</span><a id="line.254">     * Moore Curve, a space-filling curve that loops around on itself, to guarantee that the rooms will always have a</a>
+<span class="sourceLineNo">255</span><a id="line.255">     * long path through the dungeon that, if followed completely, will take you back to your starting room. Some small</a>
+<span class="sourceLineNo">256</span><a id="line.256">     * branches are possible, and large rooms may merge with other rooms nearby. This uses MixedGenerator.</a>
+<span class="sourceLineNo">257</span><a id="line.257">     * @see MixedGenerator</a>
+<span class="sourceLineNo">258</span><a id="line.258">     * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second</a>
+<span class="sourceLineNo">259</span><a id="line.259">     */</a>
+<span class="sourceLineNo">260</span><a id="line.260">    public char[][] generate()</a>
+<span class="sourceLineNo">261</span><a id="line.261">    {</a>
+<span class="sourceLineNo">262</span><a id="line.262">        return mix.generate();</a>
+<span class="sourceLineNo">263</span><a id="line.263">    }</a>
+<span class="sourceLineNo">264</span><a id="line.264"></a>
+<span class="sourceLineNo">265</span><a id="line.265">    /**</a>
+<span class="sourceLineNo">266</span><a id="line.266">     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of</a>
+<span class="sourceLineNo">267</span><a id="line.267">     * MixedGenerator. This array will have the same size as the last char 2D array prduced by generate(), and the value</a>
+<span class="sourceLineNo">268</span><a id="line.268">     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).</a>
+<span class="sourceLineNo">269</span><a id="line.269">     * &lt;ul&gt;</a>
+<span class="sourceLineNo">270</span><a id="line.270">     *     &lt;li&gt;MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;</a>
+<span class="sourceLineNo">271</span><a id="line.271">     *     &lt;li&gt;MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;</a>
+<span class="sourceLineNo">272</span><a id="line.272">     *     &lt;li&gt;MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;</a>
+<span class="sourceLineNo">273</span><a id="line.273">     *     &lt;li&gt;MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;</a>
+<span class="sourceLineNo">274</span><a id="line.274">     *     &lt;li&gt;MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;</a>
+<span class="sourceLineNo">275</span><a id="line.275">     *     &lt;li&gt;MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;</a>
+<span class="sourceLineNo">276</span><a id="line.276">     *     &lt;li&gt;MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;</a>
+<span class="sourceLineNo">277</span><a id="line.277">     * &lt;/ul&gt;</a>
+<span class="sourceLineNo">278</span><a id="line.278">     * @return a 2D int array where each element is an environment type constant in MixedGenerator</a>
+<span class="sourceLineNo">279</span><a id="line.279">     */</a>
+<span class="sourceLineNo">280</span><a id="line.280">    public int[][] getEnvironment()</a>
+<span class="sourceLineNo">281</span><a id="line.281">    {</a>
+<span class="sourceLineNo">282</span><a id="line.282">        return mix.getEnvironment();</a>
+<span class="sourceLineNo">283</span><a id="line.283">    }</a>
+<span class="sourceLineNo">284</span><a id="line.284"></a>
+<span class="sourceLineNo">285</span><a id="line.285">    public char[][] getDungeon() {</a>
+<span class="sourceLineNo">286</span><a id="line.286">        return mix.getDungeon();</a>
+<span class="sourceLineNo">287</span><a id="line.287">    }</a>
+<span class="sourceLineNo">288</span><a id="line.288">}</a>
 
 
 

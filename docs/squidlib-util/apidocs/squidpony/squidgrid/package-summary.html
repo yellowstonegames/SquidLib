@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Package" class="title">Package&nbsp;squidpony.squidgrid</h1>
@@ -128,12 +123,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="BevelFOV.html" title="class in squidpony.squidgrid">BevelFOV</a></th>
-<td class="colLast">
-<div class="block">Use FOV instead, probably with type SHADOW; this has the same results as shadowcasting FOV but is slower, currently.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></th>
 <td class="colLast">
 <div class="block">Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
@@ -141,17 +130,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  placement, and so on by specifying a different technique for differentiating two int values.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="FOV.html" title="class in squidpony.squidgrid">FOV</a></th>
 <td class="colLast">
 <div class="block">This class provides methods for calculating Field of View in grids.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></th>
-<td class="colLast">
-<div class="block">A combined FOV calculator, partial LOS calculator, FOV/LOS compressor, and tool to store/query/extract compressed
- FOV/LOS data; it is less generally-useful than it sounds, and using <a href="FOV.html" title="class in squidpony.squidgrid"><code>FOV</code></a> is usually easier and faster.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -274,5 +256,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

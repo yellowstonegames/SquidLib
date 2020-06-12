@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.Direction" class="title">Uses of Class<br>squidpony.squidgrid.Direction</h1>
@@ -408,25 +403,6 @@ int&nbsp;height)</code></th>
 <h2>Uses of <a href="../Direction.html" title="enum in squidpony.squidgrid">Direction</a> in <a href="../../squidmath/package-summary.html">squidpony.squidmath</a></h2>
 <div class="useSummary">
 <table>
-<caption><span>Fields in <a href="../../squidmath/package-summary.html">squidpony.squidmath</a> declared as <a href="../Direction.html" title="enum in squidpony.squidgrid">Direction</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../../squidmath/AStarSearch.html#dirs">dirs</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="useSummary">
-<table>
 <caption><span>Methods in <a href="../../squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../Direction.html" title="enum in squidpony.squidgrid">Direction</a></span><span class="tabEnd">&nbsp;</span></caption>
 <thead>
 <tr>
@@ -500,5 +476,7 @@ int&nbsp;height)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

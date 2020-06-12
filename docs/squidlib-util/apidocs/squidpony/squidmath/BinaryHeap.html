@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class BinaryHeap" class="title">Class BinaryHeap&lt;T extends <a href="BinaryHeap.Node.html" title="class in squidpony.squidmath">BinaryHeap.Node</a>&gt;</h1>
@@ -99,8 +94,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <a href="../../src-html/squidpony/squidmath/BinaryHeap.html#line.24">BinaryHeap</a>&lt;T extends <a href="BinaryHeap.Node.html" title="class in squidpony.squidmath">BinaryHeap.Node</a>&gt;
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">A binary heap that stores nodes which each have a float value and are sorted either lowest first or highest first. The
- <a href="BinaryHeap.Node.html" title="class in squidpony.squidmath"><code>BinaryHeap.Node</code></a> class can be extended to store additional information.</div>
+<div class="block">A binary heap that stores nodes which each have a double value and are sorted either lowest first or highest first.
+ The <a href="BinaryHeap.Node.html" title="class in squidpony.squidmath"><code>BinaryHeap.Node</code></a> class can be extended to store additional information.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Nathan Sweet</dd>
@@ -221,8 +216,8 @@ boolean&nbsp;isMaxHeap)</code></th>
 </tr>
 <tr class="rowColor" id="i1">
 <td class="colFirst"><code><a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#add(T,float)">add</a></span>&#8203;(<a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a>&nbsp;node,
-float&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#add(T,double)">add</a></span>&#8203;(<a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a>&nbsp;node,
+double&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Sets the node's value and adds it to the heap.</div>
 </td>
@@ -285,8 +280,8 @@ boolean&nbsp;identity)</code></th>
 </tr>
 <tr class="rowColor" id="i11">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setValue(T,float)">setValue</a></span>&#8203;(<a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a>&nbsp;node,
-float&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setValue(T,double)">setValue</a></span>&#8203;(<a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a>&nbsp;node,
+double&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Changes the value of the node, which should already be in the heap.</div>
 </td>
@@ -368,11 +363,11 @@ boolean&nbsp;isMaxHeap)</span></div>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="add(squidpony.squidmath.BinaryHeap.Node,float)">
+<h3><a id="add(squidpony.squidmath.BinaryHeap.Node,double)">
 <!--   -->
-</a><a id="add(T,float)">add</a></h3>
+</a><a id="add(T,double)">add</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BinaryHeap.html#line.55">add</a></span>&#8203;(<span class="arguments"><a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a>&nbsp;node,
-float&nbsp;value)</span></div>
+double&nbsp;value)</span></div>
 <div class="block">Sets the node's value and adds it to the heap. The node should not already be in the heap.</div>
 </section>
 </li>
@@ -436,11 +431,11 @@ boolean&nbsp;identity)</span></div>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="setValue(squidpony.squidmath.BinaryHeap.Node,float)">
+<h3><a id="setValue(squidpony.squidmath.BinaryHeap.Node,double)">
 <!--   -->
-</a><a id="setValue(T,float)">setValue</a></h3>
+</a><a id="setValue(T,double)">setValue</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BinaryHeap.html#line.124">setValue</a></span>&#8203;(<span class="arguments"><a href="BinaryHeap.html" title="type parameter in BinaryHeap">T</a>&nbsp;node,
-float&nbsp;value)</span></div>
+double&nbsp;value)</span></div>
 <div class="block">Changes the value of the node, which should already be in the heap.</div>
 </section>
 </li>
@@ -480,8 +475,8 @@ float&nbsp;value)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -527,5 +522,7 @@ float&nbsp;value)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Package" class="title">Package&nbsp;squidpony.panel</h1>
@@ -94,24 +89,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colFirst" scope="row"><a href="ICombinedPanel.html" title="interface in squidpony.panel">ICombinedPanel</a>&lt;T&gt;</th>
-<td class="colLast">
-<div class="block">The combination of two panels, one to color the background, the other to
- write characters on the foreground.</div>
-</td>
-</tr>
-<tr class="altColor">
 <th class="colFirst" scope="row"><a href="IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;T&gt;</th>
 <td class="colLast">
 <div class="block">An interface that lets non-display code request some special rendering for a <code>T</code> value, and an implementation
  can handle this appropriately in display code.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="ISquidPanel.html" title="interface in squidpony.panel">ISquidPanel</a>&lt;T&gt;</th>
-<td class="colLast">
-<div class="block">The abstraction of <code>SquidPanel</code>s, to abstract from the UI
- implementation (i.e.</div>
 </td>
 </tr>
 </tbody>
@@ -142,36 +123,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="ICombinedPanel.Impl.html" title="class in squidpony.panel">ICombinedPanel.Impl</a>&lt;T&gt;</th>
-<td class="colLast">
-<div class="block">A generic implementation of <a href="ICombinedPanel.html" title="interface in squidpony.panel"><code>ICombinedPanel</code></a>.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="IMarkup.StringMarkup.html" title="class in squidpony.panel">IMarkup.StringMarkup</a></th>
 <td class="colLast">
 <div class="block">Probably not that useful on its own, but may be good as an example.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-<li class="blockList">
-<div class="typeSummary">
-<table>
-<caption><span>Enum Summary</span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Enum</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<th class="colFirst" scope="row"><a href="ICombinedPanel.What.html" title="enum in squidpony.panel">ICombinedPanel.What</a></th>
-<td class="colLast">
-<div class="block">What to fill</div>
 </td>
 </tr>
 </tbody>
@@ -210,5 +164,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

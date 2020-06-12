@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class FoamNoise" class="title">Class FoamNoise</h1>
@@ -101,39 +96,42 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code>, <code><a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code>, <code><a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code>, <code><a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.39">FoamNoise</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.41">FoamNoise</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></pre>
-<div class="block">An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, and
- 4D. Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs about a third as many octaves as the
- Simplex option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. A useful
- property of FoamNoise is how its visual "character" doesn't change much as dimensions are added; whereas 4D simplex
- noise tends to separate into "surflets" separated by spans of 0, and higher dimensions of simplex only have larger
- such spans, FoamNoise seems to stay approximately as coherent in 2D, 3D, and 4D. Verifying this claim about FoamNoise
- is not easy, but it makes sense intuitively because of how this generator works. Simplex noise in N dimensions relies
- on a lattice of N-simplices (such as triangles in 2D or tetrahedra in 3D) and evaluates the noise at a point by
- hashing each of the N+1 vertices, looking up a gradient vector for each vertex, and combining the gradient vectors
- based on proximity of the evaluated point to each vertex. FoamNoise in N dimensions is not nearly as complex; it
- relies on making N+1 averaged calls to N-dimensional value noise, each call using a rotated (and potentially skewed)
- set of axes, with each call's result also affecting the inputs to the next call (domain warping). Value noise uses a
- cubic lattice or its hypercube equivalent in higher dimensions, which seems to be more "stable" as dimensionality
- increases, and the number of value noise calls increases at the same rate as simplex noise adds gradient vectors.
- Averaging more calls causes the distribution of the noise to gradually approach Gaussian, but the effect of this
- approach gets less pronounced past 3 calls.
+<div class="block">An unusual continuous noise generator that tends to produce organic-looking forms, currently supporting 2D, 3D, 4D
+ and 6D. Produces noise values from -1.0 inclusive to 1.0 exclusive. Typically needs fewer octaves than the Simplex
+ option in FastNoise to produce roughly comparable quality, but it also has about a third the speed. A useful property
+ of FoamNoise is how its visual "character" doesn't change much as dimensions are added; whereas 6D simplex noise
+ tends to separate into "surflets" separated by spans of 0, and higher dimensions of simplex only have larger such
+ spans, FoamNoise seems to stay approximately as coherent in 2D, 3D, and 4D. Verifying this claim about FoamNoise is
+ not easy, but it makes sense intuitively because of how this generator works. Simplex noise in N dimensions relies on
+ a lattice of N-simplices (such as triangles in 2D or tetrahedra in 3D) and evaluates the noise at a point by hashing
+ each of the N+1 vertices, looking up a gradient vector for each vertex from a pre-calculated array, and combining the
+ gradient vectors based on proximity of the evaluated point to each vertex. FoamNoise in N dimensions is not nearly as
+ complex; it relies on making N+1 averaged calls to N-dimensional value noise, each call using a rotated (and
+ potentially skewed) set of axes, with each call's result also affecting the inputs to the next call (domain warping).
+ Value noise uses a cubic lattice or its hypercube equivalent in higher dimensions, which seems to be more "stable" as
+ dimensionality increases, and the number of value noise calls increases at the same rate as simplex noise adds
+ gradient vectors. Averaging more calls causes the distribution of the noise to gradually approach Gaussian (biased
+ toward results in the center of the range), but adjustments this does at the end counteract this well enough. 
  <br>
- It's strongly encouraged to experiment with the lacunarity parameter in <a href="Noise.Layered3D.html" title="class in squidpony.squidmath"><code>Noise.Layered3D</code></a> and similar classes
- if you use one of those variants, which also probably needs adjustments to frequency. Changing lacunarity with
- multiple octaves can be useful to edit how tightly the noise clumps together.
+ It's encouraged to experiment with the lacunarity parameter in <a href="Noise.Layered3D.html" title="class in squidpony.squidmath"><code>Noise.Layered3D</code></a> and similar classes if you use
+ one of those variants, which also probably needs adjustments to frequency. Changing lacunarity wit multiple octaves
+ can be useful to edit how tightly the noise clumps together. FoamNoise tends to look about the same with 3 octaves as
+ it does with 4 octaves; for perceived quality, the returns seem to diminish quickly from added octaves. This isn't
+ accurate for all frequencies, so you should definitely run through your options for what kinds of noise look good for
+ a particular scenario. Mixing Simplex and Foam noise can produce a good water effect when applied to grid cells.
  <br>
  <a href="https://i.imgur.com/WpUz1xP.png">2D FoamNoise, one octave</a>,
- <a href="https://i.imgur.com/39Brm9Y.png">2D FoamNoise, one octave colorized</a>,
- <a href="https://i.imgur.com/ytKe4MW.png">2D FoamNoise, two octaves colorized</a> (note fewer peaks and valleys),
- <a href="https://i.imgur.com/5FTjEIR.gifv">3D FoamNoise animated over time, one octave</a>,
- <a href="https://i.imgur.com/su9naGx.gifv">3D FoamNoise animated over time, one octave colorized</a>,
- <a href="https://i.imgur.com/nr4TROD.gifv">3D FoamNoise animated over time, two octaves colorized</a>,
- <a href="https://i.imgur.com/r5cx6im.gifv">4D FoamNoise animated over time, one octave colorized</a>,
- <a href="https://i.imgur.com/jEbUdun.gifv">4D FoamNoise animated over time, two octaves colorized</a>,
+ <a href="https://i.imgur.com/CDXcQRW.png">2D FoamNoise, one octave colorized</a>,
+ <a href="https://i.imgur.com/XYUN8y4.png">2D FoamNoise, two octaves colorized</a> (note fewer peaks and valleys),
+ <a href="https://i.imgur.com/cSiXzgW.gifv">3D FoamNoise animated over time, one octave colorized</a>,
+ <a href="https://i.imgur.com/a2xO1Tb.gifv">3D FoamNoise animated over time, two octaves colorized</a>,
+ <a href="https://i.imgur.com/MMnPn8C.gifv">4D FoamNoise animated over time, one octave colorized</a>,
+ <a href="https://i.imgur.com/0ZHicDs.gifv">4D FoamNoise animated over time, two octaves colorized</a>,
+ <a href="https://i.imgur.com/pjuFork.gifv">6D FoamNoise animated over time, one octave colorized</a>,
+ <a href="https://i.imgur.com/CvWFFyI.gifv">6D FoamNoise animated over time, two octaves colorized</a>,
  <a href="https://i.imgur.com/ktCTiIK.jpg">World map made using FoamNoise</a>.</div>
 </section>
 <section class="summary">
@@ -347,13 +345,13 @@ long&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance">instance</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FoamNoise.html" title="class in squidpony.squidmath">FoamNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.41">instance</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FoamNoise.html" title="class in squidpony.squidmath">FoamNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.42">instance</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="seed">seed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.43">seed</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.44">seed</a></span></div>
 </section>
 </li>
 </ul>
@@ -369,19 +367,19 @@ long&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">FoamNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.44">FoamNoise</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.45">FoamNoise</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int)">FoamNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.47">FoamNoise</a></span>&#8203;(<span class="arguments">int&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.48">FoamNoise</a></span>&#8203;(<span class="arguments">int&nbsp;seed)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">FoamNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.51">FoamNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.52">FoamNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 </section>
 </li>
 </ul>
@@ -397,7 +395,7 @@ long&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="foamNoise(double,double,int)">foamNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.55">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.56">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 int&nbsp;seed)</span></div>
 </section>
@@ -405,7 +403,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="foamNoise(double,double,double,int)">foamNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.107">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.108">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 int&nbsp;seed)</span></div>
@@ -414,7 +412,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="foamNoise(double,double,double,double,int)">foamNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.158">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.159">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -424,7 +422,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="foamNoise(double,double,double,double,double,double,int)">foamNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.223">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.224">foamNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -436,7 +434,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.306">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.307">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -447,7 +445,7 @@ double&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.310">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.311">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 long&nbsp;seed)</span></div>
 <dl>
@@ -459,7 +457,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.314">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.315">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z)</span></div>
 <dl>
@@ -471,7 +469,7 @@ double&nbsp;z)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.318">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.319">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 long&nbsp;seed)</span></div>
@@ -484,7 +482,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.322">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.323">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</span></div>
@@ -497,7 +495,7 @@ double&nbsp;w)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.326">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.327">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -511,7 +509,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double,double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.330">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.331">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -526,7 +524,7 @@ double&nbsp;v)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.334">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FoamNoise.html#line.335">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -545,8 +543,8 @@ long&nbsp;seed)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -592,5 +590,7 @@ long&nbsp;seed)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class FloatFilters.YCoCgFilter" class="title">Class FloatFilters.YCoCgFilter</h1>
@@ -102,7 +97,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FloatFilters.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.295">FloatFilters.YCoCgFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.296">FloatFilters.YCoCgFilter</a>
 extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></pre>
 <div class="block">Like <a href="FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a>, but edits its input colors in YCoCg color space, or like <a href="FloatFilters.HSVFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.HSVFilter</code></a> except it
  doesn't add, it multiplies. Most of the time you should prefer <a href="FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a> as long as it isn't a
@@ -242,19 +237,19 @@ float&nbsp;greenMul)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="yMul">yMul</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.296">yMul</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.297">yMul</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="coMul">coMul</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.296">coMul</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.297">coMul</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="cgMul">cgMul</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.296">cgMul</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.297">cgMul</a></span></div>
 </section>
 </li>
 </ul>
@@ -270,7 +265,7 @@ float&nbsp;greenMul)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(float,float,float)">YCoCgFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.298">YCoCgFilter</a></span>&#8203;(<span class="arguments">float&nbsp;luminanceMul,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.299">YCoCgFilter</a></span>&#8203;(<span class="arguments">float&nbsp;luminanceMul,
 float&nbsp;orangeMul,
 float&nbsp;greenMul)</span></div>
 </section>
@@ -288,7 +283,7 @@ float&nbsp;greenMul)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="alter(float)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.310">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html#line.311">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <div class="block">Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -306,8 +301,8 @@ float&nbsp;greenMul)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -352,5 +347,7 @@ float&nbsp;greenMul)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

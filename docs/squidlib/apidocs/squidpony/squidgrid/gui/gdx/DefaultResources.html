@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class DefaultResources" class="title">Class DefaultResources</h1>
@@ -773,7 +768,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 </td>
 </tr>
 <tr class="altColor" id="i18">
-<td class="colFirst"><code>static squidpony.squidmath.StatefulRNG</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">StatefulRNG</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGuiRandom()">getGuiRandom</a></span>()</code></th>
 <td class="colLast">
 <div class="block">This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any
@@ -3109,7 +3104,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getGuiRandom()">getGuiRandom</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">squidpony.squidmath.StatefulRNG</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2087">getGuiRandom</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">StatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2087">getGuiRandom</a></span>()</div>
 <div class="block">This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any
  changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.</div>
 </section>
@@ -3161,8 +3156,8 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -3207,5 +3202,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

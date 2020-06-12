@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class TextCellFactory.Glyph" class="title">Class TextCellFactory.Glyph</h1>
@@ -106,7 +101,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2200">TextCellFactory.Glyph</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2198">TextCellFactory.Glyph</a>
 extends com.badlogic.gdx.scenes.scene2d.Actor
 implements <a href="ICellVisible.html" title="interface in squidpony.squidgrid.gui.gdx">ICellVisible</a></pre>
 <div class="block">A kind of Actor for one char (with one color) that is innately drawn with a specific TextCellFactory, and will
@@ -283,7 +278,7 @@ float&nbsp;parentAlpha)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shown">shown</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2205">shown</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2203">shown</a></span></div>
 <div class="block">The char that will be shown for this Glyph.</div>
 </section>
 </li>
@@ -300,14 +295,14 @@ float&nbsp;parentAlpha)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">Glyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2216">Glyph</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2214">Glyph</a></span>()</div>
 <div class="block">Makes an orange '@' Glyph at 0,0 in world coordinates.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(char,com.badlogic.gdx.graphics.Color,float,float)">Glyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2227">Glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2225">Glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -324,7 +319,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(char,float,float,float)">Glyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2242">Glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2240">Glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
 float&nbsp;color,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -351,7 +346,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSymbol()">getSymbol</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2207">getSymbol</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2205">getSymbol</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="ICellVisible.html#getSymbol()">getSymbol</a></code>&nbsp;in interface&nbsp;<code><a href="ICellVisible.html" title="interface in squidpony.squidgrid.gui.gdx">ICellVisible</a></code></dd>
@@ -363,7 +358,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getPackedColor()">getPackedColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2253">getPackedColor</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2251">getPackedColor</a></span>()</div>
 <div class="block">Gets the color of this Glyph as a packed float color; does not allocate any objects.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -376,7 +371,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setPackedColor(float)">setPackedColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2262">setPackedColor</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2260">setPackedColor</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <div class="block">Sets the color of this Glyph with the given packed float color; does not allocate any objects.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -387,7 +382,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2266">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2264">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>com.badlogic.gdx.scenes.scene2d.Actor</code></dd>
@@ -397,7 +392,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2283">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2281">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float&nbsp;parentAlpha)</span></div>
 <div class="block">Draws the actor. The batch is configured to draw in the parent's coordinate system.
  <code>Batch.begin()</code> must have already been called on the batch before this method.</div>
@@ -416,8 +411,8 @@ float&nbsp;parentAlpha)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -462,5 +457,7 @@ float&nbsp;parentAlpha)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

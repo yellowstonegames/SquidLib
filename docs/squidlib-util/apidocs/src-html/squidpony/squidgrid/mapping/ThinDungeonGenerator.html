@@ -14,7 +14,7 @@
 <span class="sourceLineNo">002</span><a id="line.2"></a>
 <span class="sourceLineNo">003</span><a id="line.3">import squidpony.ArrayTools;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import squidpony.squidmath.IRNG;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.PerlinNoise;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.SeededNoise;</a>
 <span class="sourceLineNo">006</span><a id="line.6"></a>
 <span class="sourceLineNo">007</span><a id="line.7">/**</a>
 <span class="sourceLineNo">008</span><a id="line.8"> * Created by Tommy Ettinger on 8/7/2016.</a>
@@ -61,7 +61,7 @@
 <span class="sourceLineNo">049</span><a id="line.49">     * a constant corresponding to the same kind of area, e.g. ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be</a>
 <span class="sourceLineNo">050</span><a id="line.50">     * given to roomShape but preferably would not be given to the others. If the combination of arguments is</a>
 <span class="sourceLineNo">051</span><a id="line.51">     * invalid, such as if they are all 0, this uses the default shapes: expanded room and corridor walls, and</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * chaotic cave walls controlled by Perlin noise.</a>
+<span class="sourceLineNo">052</span><a id="line.52">     * chaotic cave walls controlled by {@link SeededNoise}.</a>
 <span class="sourceLineNo">053</span><a id="line.53">     * &lt;br&gt;</a>
 <span class="sourceLineNo">054</span><a id="line.54">     * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and</a>
 <span class="sourceLineNo">055</span><a id="line.55">     * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you</a>
@@ -88,7 +88,7 @@
 <span class="sourceLineNo">076</span><a id="line.76">     * clarity, the 3 fields should each be given a constant corresponding to the same kind of area, e.g.</a>
 <span class="sourceLineNo">077</span><a id="line.77">     * ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be given to roomShape but preferably would not be given to</a>
 <span class="sourceLineNo">078</span><a id="line.78">     * the others. If the combination of arguments is invalid, such as if they are all 0, this uses the default</a>
-<span class="sourceLineNo">079</span><a id="line.79">     * shapes: expanded room and corridor walls, and chaotic cave walls controlled by Perlin noise.</a>
+<span class="sourceLineNo">079</span><a id="line.79">     * shapes: expanded room and corridor walls, and chaotic cave walls controlled by {@link SeededNoise}.</a>
 <span class="sourceLineNo">080</span><a id="line.80">     * &lt;br&gt;</a>
 <span class="sourceLineNo">081</span><a id="line.81">     * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and</a>
 <span class="sourceLineNo">082</span><a id="line.82">     * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you</a>
@@ -282,7 +282,7 @@
 <span class="sourceLineNo">270</span><a id="line.270">                            default:</a>
 <span class="sourceLineNo">271</span><a id="line.271">                                switch (tempShapes &amp; 0xF) {</a>
 <span class="sourceLineNo">272</span><a id="line.272">                                    case ROOM_WALL_CHAOTIC:</a>
-<span class="sourceLineNo">273</span><a id="line.273">                                        if (PerlinNoise.noise(x * 6, y * 6) &gt; -0.2) {</a>
+<span class="sourceLineNo">273</span><a id="line.273">                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) &gt; -0.2) {</a>
 <span class="sourceLineNo">274</span><a id="line.274">                                            e2[x][y] = eHigh;</a>
 <span class="sourceLineNo">275</span><a id="line.275">                                            d2[x][y] = dHigh;</a>
 <span class="sourceLineNo">276</span><a id="line.276">                                        } else {</a>
@@ -324,7 +324,7 @@
 <span class="sourceLineNo">312</span><a id="line.312">                            case DungeonUtility.UNTOUCHED:</a>
 <span class="sourceLineNo">313</span><a id="line.313">                                switch (tempShapes &amp; 0xF) {</a>
 <span class="sourceLineNo">314</span><a id="line.314">                                    case ROOM_WALL_CHAOTIC:</a>
-<span class="sourceLineNo">315</span><a id="line.315">                                        if (PerlinNoise.noise(x * 6, y * 6) &gt; -0.2) {</a>
+<span class="sourceLineNo">315</span><a id="line.315">                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) &gt; -0.2) {</a>
 <span class="sourceLineNo">316</span><a id="line.316">                                            e2[x][y] = eLow;</a>
 <span class="sourceLineNo">317</span><a id="line.317">                                            d2[x][y] = dLow;</a>
 <span class="sourceLineNo">318</span><a id="line.318">                                        } else {</a>
@@ -501,7 +501,7 @@
 <span class="sourceLineNo">489</span><a id="line.489">                            default:</a>
 <span class="sourceLineNo">490</span><a id="line.490">                                switch (tempShapes &amp; 0xF) {</a>
 <span class="sourceLineNo">491</span><a id="line.491">                                    case ROOM_WALL_CHAOTIC:</a>
-<span class="sourceLineNo">492</span><a id="line.492">                                        if (PerlinNoise.noise(x * 6, y * 6) &gt; -0.2) {</a>
+<span class="sourceLineNo">492</span><a id="line.492">                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) &gt; -0.2) {</a>
 <span class="sourceLineNo">493</span><a id="line.493">                                            e2[x][y] = eHigh;</a>
 <span class="sourceLineNo">494</span><a id="line.494">                                            d2[x][y] = dHigh;</a>
 <span class="sourceLineNo">495</span><a id="line.495">                                        } else {</a>
@@ -543,7 +543,7 @@
 <span class="sourceLineNo">531</span><a id="line.531">                            case DungeonUtility.UNTOUCHED:</a>
 <span class="sourceLineNo">532</span><a id="line.532">                                switch (tempShapes &amp; 0xF) {</a>
 <span class="sourceLineNo">533</span><a id="line.533">                                    case ROOM_WALL_CHAOTIC:</a>
-<span class="sourceLineNo">534</span><a id="line.534">                                        if (PerlinNoise.noise(x * 6, y * 6) &gt; -0.2) {</a>
+<span class="sourceLineNo">534</span><a id="line.534">                                        if (SeededNoise.noise(x * 0.666, y * 0.666, 12456789) &gt; -0.2) {</a>
 <span class="sourceLineNo">535</span><a id="line.535">                                            e2[x][y] = eLow;</a>
 <span class="sourceLineNo">536</span><a id="line.536">                                            d2[x][y] = dLow;</a>
 <span class="sourceLineNo">537</span><a id="line.537">                                        } else {</a>

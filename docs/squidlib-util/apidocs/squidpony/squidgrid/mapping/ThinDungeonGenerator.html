@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class ThinDungeonGenerator" class="title">Class ThinDungeonGenerator</h1>
@@ -548,7 +543,7 @@ int&nbsp;caveShape)</span></div>
  a constant corresponding to the same kind of area, e.g. ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be
  given to roomShape but preferably would not be given to the others. If the combination of arguments is
  invalid, such as if they are all 0, this uses the default shapes: expanded room and corridor walls, and
- chaotic cave walls controlled by Perlin noise.
+ chaotic cave walls controlled by <a href="../../squidmath/SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a>.
  <br>
  Though there's no constructor that takes a single int which merges roomShape, corridorShape, and
  caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you
@@ -578,7 +573,7 @@ int&nbsp;caveShape)</span></div>
  clarity, the 3 fields should each be given a constant corresponding to the same kind of area, e.g.
  ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be given to roomShape but preferably would not be given to
  the others. If the combination of arguments is invalid, such as if they are all 0, this uses the default
- shapes: expanded room and corridor walls, and chaotic cave walls controlled by Perlin noise.
+ shapes: expanded room and corridor walls, and chaotic cave walls controlled by <a href="../../squidmath/SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a>.
  <br>
  Though there's no constructor that takes a single int which merges roomShape, corridorShape, and
  caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you
@@ -686,8 +681,8 @@ boolean&nbsp;doubleDoors)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -733,5 +728,7 @@ boolean&nbsp;doubleDoors)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

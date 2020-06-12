@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class WorldMapView" class="title">Class WorldMapView</h1>
@@ -150,7 +145,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper</code></td>
+<td class="colFirst"><code>protected <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator.DetailedBiomeMapper</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#biomeMapper">biomeMapper</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -315,7 +310,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected squidpony.squidgrid.mapping.WorldMapGenerator</code></td>
+<td class="colFirst"><code>protected <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#world">world</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -347,7 +342,7 @@ int&nbsp;height)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.mapping.WorldMapGenerator)">WorldMapView</a></span>&#8203;(squidpony.squidgrid.mapping.WorldMapGenerator&nbsp;worldMapGenerator)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.mapping.WorldMapGenerator)">WorldMapView</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a>&nbsp;worldMapGenerator)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -393,7 +388,7 @@ double&nbsp;heatMod)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i3">
-<td class="colFirst"><code>squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator.DetailedBiomeMapper</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBiomeMapper()">getBiomeMapper</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -413,7 +408,7 @@ double&nbsp;heatMod)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i7">
-<td class="colFirst"><code>squidpony.squidgrid.mapping.WorldMapGenerator</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWorld()">getWorld</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -460,12 +455,12 @@ com.badlogic.gdx.graphics.Color&nbsp;emptyColor)</code></th>
 </tr>
 <tr class="altColor" id="i12">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBiomeMapper(squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper)">setBiomeMapper</a></span>&#8203;(squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper&nbsp;biomeMapper)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBiomeMapper(squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper)">setBiomeMapper</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator.DetailedBiomeMapper</a>&nbsp;biomeMapper)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i13">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setWorld(squidpony.squidgrid.mapping.WorldMapGenerator)">setWorld</a></span>&#8203;(squidpony.squidgrid.mapping.WorldMapGenerator&nbsp;world)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setWorld(squidpony.squidgrid.mapping.WorldMapGenerator)">setWorld</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a>&nbsp;world)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i14">
@@ -516,13 +511,13 @@ com.badlogic.gdx.graphics.Color&nbsp;emptyColor)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="world">world</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">squidpony.squidgrid.mapping.WorldMapGenerator</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.15">world</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.15">world</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="biomeMapper">biomeMapper</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.16">biomeMapper</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator.DetailedBiomeMapper</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.16">biomeMapper</a></span></div>
 </section>
 </li>
 <li class="blockList">
@@ -808,7 +803,7 @@ com.badlogic.gdx.graphics.Color&nbsp;emptyColor)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.WorldMapGenerator)">WorldMapView</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.52">WorldMapView</a></span>&#8203;(<span class="arguments">squidpony.squidgrid.mapping.WorldMapGenerator&nbsp;worldMapGenerator)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.52">WorldMapView</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a>&nbsp;worldMapGenerator)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -850,25 +845,25 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBiomeMapper()">getBiomeMapper</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.30">getBiomeMapper</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator.DetailedBiomeMapper</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.30">getBiomeMapper</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setBiomeMapper(squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper)">setBiomeMapper</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.34">setBiomeMapper</a></span>&#8203;(<span class="arguments">squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper&nbsp;biomeMapper)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.34">setBiomeMapper</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator.DetailedBiomeMapper</a>&nbsp;biomeMapper)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getWorld()">getWorld</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidgrid.mapping.WorldMapGenerator</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.38">getWorld</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.38">getWorld</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setWorld(squidpony.squidgrid.mapping.WorldMapGenerator)">setWorld</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.42">setWorld</a></span>&#8203;(<span class="arguments">squidpony.squidgrid.mapping.WorldMapGenerator&nbsp;world)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/WorldMapView.html#line.42">setWorld</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WorldMapGenerator</a>&nbsp;world)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -908,7 +903,7 @@ com.badlogic.gdx.graphics.Color&nbsp;emptyColor)</span></div>
  Each parameter may be null to use the default for an Earth-like world; otherwise it should be a libGDX
  <code>Color</code> or some subclass, like <a href="SColor.html" title="class in squidpony.squidgrid.gui.gdx"><code>SColor</code></a>. All non-null parameters should probably be fully opaque,
  except <code>emptyColor</code>, which is only used for world maps that show empty space (like a globe, as produced by
- <code>WorldMapGenerator.RotatingSpaceMap</code>).</div>
+ <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>WorldMapGenerator.RotatingSpaceMap</code></a>).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>desertColor</code> - hot, dry, barren land; may be sandy, but many real-world deserts don't have much sand</dd>
@@ -975,8 +970,8 @@ double&nbsp;heatMod)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -1021,5 +1016,7 @@ double&nbsp;heatMod)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

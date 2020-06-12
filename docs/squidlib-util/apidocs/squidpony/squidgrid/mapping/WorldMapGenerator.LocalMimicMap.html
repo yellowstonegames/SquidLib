@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class WorldMapGenerator.LocalMimicMap" class="title">Class WorldMapGenerator.LocalMimicMap</h1>
@@ -109,7 +104,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.4860">WorldMapGenerator.LocalMimicMap</a>
+<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.4847">WorldMapGenerator.LocalMimicMap</a>
 extends <a href="WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></pre>
 <div class="block">An unusual map generator that imitates an existing local map (such as a map of Australia, which it can do by
  default), without applying any projection or changing heat levels in the polar regions or equator.
@@ -336,25 +331,25 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="earth">earth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4862">earth</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4849">earth</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shallow">shallow</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4863">shallow</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4850">shallow</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="coast">coast</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4864">coast</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4851">coast</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="earthOriginal">earthOriginal</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4865">earthOriginal</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4852">earthOriginal</a></span></div>
 </section>
 </li>
 </ul>
@@ -370,7 +365,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4873">LocalMimicMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4860">LocalMimicMap</a></span>()</div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should look like Australia, without projecting the
  land positions or changing heat by latitude. Always makes a 256x256 map.
  Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -381,7 +376,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.GreasedRegion)">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4887">LocalMimicMap</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4874">LocalMimicMap</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
  given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
  The initial seed is set to the same large long every time, and it's likely that you would set the seed when
@@ -396,7 +391,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,squidpony.squidmath.GreasedRegion)">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4902">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4889">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 <a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
  given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
@@ -414,7 +409,7 @@ int&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,squidpony.squidmath.GreasedRegion,double)">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4919">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4906">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 <a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
 double&nbsp;octaveMultiplier)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
@@ -435,7 +430,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Noise.Noise2D)">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4939">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4926">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 <a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
 <a href="../../squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>&nbsp;noiseGenerator)</span></div>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
@@ -459,7 +454,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Noise.Noise2D,double)">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4963">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4950">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 <a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
 <a href="../../squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>&nbsp;noiseGenerator,
 double&nbsp;octaveMultiplier)</span></div>
@@ -489,7 +484,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,squidpony.squidmath.Noise.Noise2D,double)">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4977">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4964">LocalMimicMap</a></span>&#8203;(<span class="arguments">long&nbsp;initialSeed,
 <a href="../../squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>&nbsp;noiseGenerator,
 double&nbsp;octaveMultiplier)</span></div>
 <div class="block">Constructs a 256x256 unprojected local map that will use land forms with a similar shape to Australia.</div>
@@ -504,7 +499,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.WorldMapGenerator.LocalMimicMap)">LocalMimicMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4991">LocalMimicMap</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMimicMap</a>&nbsp;other)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4978">LocalMimicMap</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMimicMap</a>&nbsp;other)</span></div>
 <div class="block">Copies the LocalMimicMap <code>other</code> to construct a new one that is exactly the same. References will only
  be shared to Noise classes.</div>
 <dl>
@@ -526,7 +521,7 @@ double&nbsp;octaveMultiplier)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="regenerate(int,int,int,int,double,double,int,int)">regenerate</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.5002">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html#line.4989">regenerate</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
 int&nbsp;startY,
 int&nbsp;usedWidth,
 int&nbsp;usedHeight,
@@ -546,8 +541,8 @@ int&nbsp;stateB)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -593,5 +588,7 @@ int&nbsp;stateB)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

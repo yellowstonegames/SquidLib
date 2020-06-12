@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class MapUtility" class="title">Class MapUtility</h1>
@@ -258,7 +253,7 @@ char[][]&nbsp;map,
 double&nbsp;frame)</code></th>
 <td class="colLast">
 <div class="block">Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,
- accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
+ accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired.</div>
 </td>
 </tr>
 <tr class="altColor" id="i10">
@@ -270,7 +265,7 @@ char&nbsp;deepLiquid,
 char&nbsp;shallowLiquid)</code></th>
 <td class="colLast">
 <div class="block">Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,
- accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
+ accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i11">
@@ -423,7 +418,7 @@ float&nbsp;valueChange)</code></th>
 double&nbsp;frame)</code></th>
 <td class="colLast">
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
+ animation frame if rippling water and waving grass using SeededNoise are desired.</div>
 </td>
 </tr>
 <tr class="altColor" id="i26">
@@ -434,7 +429,7 @@ char&nbsp;deepLiquid,
 char&nbsp;shallowLiquid)</code></th>
 <td class="colLast">
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
+ animation frame if rippling water and waving grass using SeededNoise are desired.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i27">
@@ -518,7 +513,7 @@ com.badlogic.gdx.graphics.Color&nbsp;deepColor,
 char&nbsp;shallowChar,
 com.badlogic.gdx.graphics.Color&nbsp;shallowColor)</span></div>
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
- This overload also takes a char that corresponds to deep non-water lakes (which <code>SectionDungeonGenerator</code>
+ This overload also takes a char that corresponds to deep non-water lakes (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a>
  can produce) and a Color to use for that deep liquid, as well as a char for shallow lakes and a Color for that
  shallow liquid.
  <br>
@@ -536,9 +531,9 @@ com.badlogic.gdx.graphics.Color&nbsp;shallowColor)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the Color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the Color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D array of Colors with the same size as map, that can be used for the corresponding chars</dd>
@@ -608,7 +603,7 @@ float&nbsp;shallowColor)</span></div>
 <div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
  Each float represents a color in an efficient way; <a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily uses this kind of packed float
  to represent colors, and <a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> uses it internally. This overload also takes a char that corresponds
- to deep non-water lakes (which <code>SectionDungeonGenerator</code> can produce) and a
+ to deep non-water lakes (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a
  packed float color to use for that deep liquid, as well as a char for shallow lakes and another packed float
  color for that shallow liquid.
  <br>
@@ -626,9 +621,9 @@ float&nbsp;shallowColor)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D float array with the same size as map, containing packed floats that can be used for the corresponding chars</dd>
@@ -647,7 +642,7 @@ float&nbsp;shallowColor)</span></div>
 <div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
  Each float represents a color in an efficient way; <a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily uses this kind of packed float
  to represent colors, and <a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> uses it internally. This overload also takes a char that corresponds
- to deep non-water lakes (which <code>SectionDungeonGenerator</code> can produce) and a
+ to deep non-water lakes (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a
  packed float color to use for that deep liquid, as well as a char for shallow lakes and another packed float
  color for that shallow liquid.
  <br>
@@ -666,9 +661,9 @@ float&nbsp;shallowColor)</span></div>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packed</code> - a float[][] that will be modified, filled with packed float colors; must match map's size</dd>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D float array with the same size as map, containing packed floats that can be used for the corresponding chars</dd>
@@ -756,7 +751,7 @@ float&nbsp;valueChange)</span></div>
  Each float represents a color in an efficient way and the version this uses can be altered by the specified hue,
  saturation, and value changes; <a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily uses this kind of packed float
  to represent colors, and <a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> uses it internally. This overload also takes a char that corresponds
- to deep non-water lakes (which <code>SectionDungeonGenerator</code> can produce) and a
+ to deep non-water lakes (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a
  packed float color to use for that deep liquid, as well as a char for shallow lakes and another packed float
  color for that shallow liquid.
  <br>
@@ -774,9 +769,9 @@ float&nbsp;valueChange)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dd><code>hueChange</code> - a float from -1f to 1f that will be added to the hues of colors this uses</dd>
 <dd><code>saturationChange</code> - a float from -1f to 1f that will be added to the saturation of colors this uses</dd>
@@ -802,7 +797,7 @@ float&nbsp;valueChange)</span></div>
  Each float represents a color in an efficient way and the version this uses can be altered by the specified hue,
  saturation, and value changes; <a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily uses this kind of packed float
  to represent colors, and <a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> uses it internally. This overload also takes a char that corresponds
- to deep non-water lakes (which <code>SectionDungeonGenerator</code> can produce) and a
+ to deep non-water lakes (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a
  packed float color to use for that deep liquid, as well as a char for shallow lakes and another packed float
  color for that shallow liquid.
  <br>
@@ -821,9 +816,9 @@ float&nbsp;valueChange)</span></div>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packed</code> - a float[][] that will be modified, filled with packed float colors; must match map's size</dd>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dd><code>hueChange</code> - a float from -1f to 1f that will be added to the hues of colors this uses</dd>
 <dd><code>saturationChange</code> - a float from -1f to 1f that will be added to the saturation of colors this uses</dd>
@@ -862,7 +857,7 @@ char&nbsp;shallowChar,
 com.badlogic.gdx.graphics.Color&nbsp;shallowColor)</span></div>
 <div class="block">Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
  chars in map. This overload also takes a char that corresponds to deep non-water lakes (which
- <code>SectionDungeonGenerator</code> can produce) and a Color to use for that deep liquid,
+ <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a Color to use for that deep liquid,
  as well as a char for shallow lakes and a Color for that shallow liquid.
  <br>
  This takes its values from <a href="SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
@@ -877,9 +872,9 @@ com.badlogic.gdx.graphics.Color&nbsp;shallowColor)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the Color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the Color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D array of background Colors with the same size as map, that can be used for the corresponding chars</dd>
@@ -946,7 +941,7 @@ char&nbsp;shallowChar,
 float&nbsp;shallowColor)</span></div>
 <div class="block">Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
  usual meanings of the chars in map. This overload also takes a char that corresponds to deep non-water lakes
- (which <code>SectionDungeonGenerator</code> can produce) and a packed float color to use
+ (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a packed float color to use
  for that deep liquid,  as well as a char for shallow lakes and a packed float color for that shallow liquid.
  <br>
  This takes its values from <a href="SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
@@ -964,9 +959,9 @@ float&nbsp;shallowColor)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D array of background packed float colors with the same size as map, that can be used for the corresponding chars</dd>
@@ -984,7 +979,7 @@ char&nbsp;shallowChar,
 float&nbsp;shallowColor)</span></div>
 <div class="block">Fills an existing float[][] with packed float colors that correspond to appropriate default background colors for
  the usual meanings of the chars in map. This overload also takes a char that corresponds to deep non-water lakes
- (which <code>SectionDungeonGenerator</code> can produce) and a packed float color to use
+ (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a packed float color to use
  for that deep liquid,  as well as a char for shallow lakes and a packed float color for that shallow liquid. The
  sizes of packed and map should be identical.
  <br>
@@ -1004,9 +999,9 @@ float&nbsp;shallowColor)</span></div>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packed</code> - a float[][] that will be modified, filled with packed float colors; must match map's size</dd>
 <dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D array of background packed float colors with the same size as map, that can be used for the corresponding chars</dd>
@@ -1090,7 +1085,7 @@ float&nbsp;valueChange)</span></div>
  usual meanings of the chars in map. Each float represents a color in an efficient way and the version this uses
  can be altered by the specified hue, saturation, and value changes. This overload also takes a char that
  corresponds to deep non-water lakes
- (which <code>SectionDungeonGenerator</code> can produce) and a packed float color to use
+ (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a packed float color to use
  for that deep liquid,  as well as a char for shallow lakes and a packed float color for that shallow liquid.
  <br>
  This takes its values from <a href="SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
@@ -1108,9 +1103,9 @@ float&nbsp;valueChange)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dd><code>hueChange</code> - a float from -1f to 1f that will be added to the hues of colors this uses</dd>
 <dd><code>saturationChange</code> - a float from -1f to 1f that will be added to the saturation of colors this uses</dd>
@@ -1136,7 +1131,7 @@ float&nbsp;valueChange)</span></div>
  the usual meanings of the chars in map. Each float represents a color in an efficient way and the version this
  uses can be altered by the specified hue, saturation, and value changes. This overload also takes a char that
  corresponds to deep non-water lakes
- (which <code>SectionDungeonGenerator</code> can produce) and a packed float color to use
+ (which <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a> can produce) and a packed float color to use
  for that deep liquid,  as well as a char for shallow lakes and a packed float color for that shallow liquid. The
  sizes of packed and map should be identical.
  <br>
@@ -1156,9 +1151,9 @@ float&nbsp;valueChange)</span></div>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packed</code> - a float[][] that will be modified, filled with packed float colors; must match map's size</dd>
 <dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
 <dd><code>hueChange</code> - a float from -1f to 1f that will be added to the hues of colors this uses</dd>
 <dd><code>saturationChange</code> - a float from -1f to 1f that will be added to the saturation of colors this uses</dd>
@@ -1201,7 +1196,7 @@ char[][]&nbsp;map)</span></div>
 <div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1159">generateLightnessModifiers</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 double&nbsp;frame)</span></div>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
+ animation frame if rippling water and waving grass using SeededNoise are desired.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] that you want to be find background lightness modifiers for</dd>
@@ -1221,7 +1216,7 @@ double&nbsp;frame)</span></div>
 char[][]&nbsp;map,
 double&nbsp;frame)</span></div>
 <div class="block">Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,
- accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
+ accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>lights</code> - an int[][] that will be modified, filled with lighting ints; must match map's size</dd>
@@ -1243,7 +1238,7 @@ double&nbsp;frame,
 char&nbsp;deepLiquid,
 char&nbsp;shallowLiquid)</span></div>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars
+ animation frame if rippling water and waving grass using SeededNoise are desired. Also allows additional chars
  to be treated like deep and shallow liquid regarding the ripple animation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1268,7 +1263,7 @@ double&nbsp;frame,
 char&nbsp;deepLiquid,
 char&nbsp;shallowLiquid)</span></div>
 <div class="block">Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,
- accepting a parameter for animation frame if rippling water and waving grass using Perlin Noise are desired. Also
+ accepting a parameter for animation frame if rippling water and waving grass using SeededNoise are desired. Also
  allows additional chars to be treated like deep and shallow liquid regarding the ripple animation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1339,8 +1334,8 @@ float[][]&nbsp;colors)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -1385,5 +1380,7 @@ float[][]&nbsp;colors)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

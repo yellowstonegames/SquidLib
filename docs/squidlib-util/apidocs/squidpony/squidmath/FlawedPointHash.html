@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -67,20 +67,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Interface FlawedPointHash" class="title">Interface FlawedPointHash</h1>
@@ -97,11 +92,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public interface <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.12">FlawedPointHash</a>
+public interface <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.15">FlawedPointHash</a>
 extends <a href="IPointHash.html" title="interface in squidpony.squidmath">IPointHash</a>, <a href="IFlawed.html" title="interface in squidpony.squidmath">IFlawed</a></pre>
 <div class="block">An interface for point hashes that are statistically biased, as well as a holder for inner classes that implement
  this. The point hashes here are mostly chosen because they are aesthetically interesting, at least on some of their
  output bits.
+ <br>
+ Don't count on this class giving reliable output; it is marked Beta and will remain so. If you want to ensure a
+ particular behavior of a FlawedPointHash can be replicated, copy the implementation into your own code.
  <br>
  Created by Tommy Ettinger on 4/14/2020.</div>
 </section>
@@ -182,8 +180,8 @@ extends <a href="IPointHash.html" title="interface in squidpony.squidmath">IPoin
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -229,5 +227,7 @@ extends <a href="IPointHash.html" title="interface in squidpony.squidmath">IPoin
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

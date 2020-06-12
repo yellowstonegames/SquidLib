@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class StarterKit" class="title">Class StarterKit</h1>
@@ -168,7 +163,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>squidpony.squidmath.GWTRNG</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GWTRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GWTRNG</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rng">rng</a></span></code></th>
 <td class="colLast">
 <div class="block">Almost all of SquidLib comes into contact with randomness at some point, so this is a good place to show one
@@ -402,17 +397,17 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.squidmath.GWTRNG</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.85">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GWTRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.85">rng</a></span></div>
 <div class="block">Almost all of SquidLib comes into contact with randomness at some point, so this is a good place to show one
- way of handling that randomness. GWTRNG acts as a normal implementation of <code>IRNG</code>,
+ way of handling that randomness. GWTRNG acts as a normal implementation of <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>IRNG</code></a>,
  can be "seeded" at the start to set the initial state, like any other RNG, but it can also have the current state
- acquired later with <code>GWTRNG.getState()</code> or have the current state set in-place with
- <code>GWTRNG.setState(long)</code> (note, this doesn't create a new RNG, like you would have to do to re-seed with
+ acquired later with <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GWTRNG.html?is-external=true#getState()" title="class or interface in squidpony.squidmath" class="externalLink"><code>GWTRNG.getState()</code></a> or have the current state set in-place with
+ <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GWTRNG.html?is-external=true#setState(long)" title="class or interface in squidpony.squidmath" class="externalLink"><code>GWTRNG.setState(long)</code></a> (note, this doesn't create a new RNG, like you would have to do to re-seed with
  java.util.Random). This can be useful to get a snapshot of the random sequence where you might want to take an
  action, undo it back to the snapshot, and try again. It can also be useful for saving the game and reloading it
  exactly, though the optional serialization in squidlib-extra also does this. You can pass a GWTRNG to anything
  that expects an IRNG, and you'll encounter a lot of methods that employ IRNG (and some that specifically require
- or prefer <code>IStatefulRNG</code>, which includes GWTRNG) throughout squidlib-util.
+ or prefer <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IStatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>IStatefulRNG</code></a>, which includes GWTRNG) throughout squidlib-util.
  <br>
  This field defaults to a GWTRNG seeded with the number SQUIDLIB (written in base 36), or 2252637788195L in
  base 10. Its algorithm can produce 2 to the 64 minus 1 numbers before repeating, and as the name might suggest,
@@ -557,8 +552,8 @@ int&nbsp;height)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -603,5 +598,7 @@ int&nbsp;height)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

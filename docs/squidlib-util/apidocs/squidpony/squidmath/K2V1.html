@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class K2V1" class="title">Class K2V1&lt;A,&#8203;B,&#8203;Q&gt;</h1>
@@ -96,15 +91,24 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="inheritance">squidpony.squidmath.K2V1&lt;A,&#8203;B,&#8203;Q&gt;</div>
 </div>
 <section class="description">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
+</dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/K2V1.html#line.17">K2V1</a>&lt;A,&#8203;B,&#8203;Q&gt;
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<pre>public class <a href="../../src-html/squidpony/squidmath/K2V1.html#line.18">K2V1</a>&lt;A,&#8203;B,&#8203;Q&gt;
+extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">An ordered multi-directional map-like data structure with two sets of keys and one list of values.
 
  This is structured so that the two keys, of types A and B, are always associated with each other and the same value,
  of type Q, but may have their index in the ordering change. You can look up a B key with an A key or index, an A key
  with a B key or index, and a Q value with an A key, B key, or index.
  Created by Tommy Ettinger on 10/27/2016.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../serialized-form.html#squidpony.squidmath.K2V1">Serialized Form</a></dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -564,13 +568,13 @@ float&nbsp;f)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="keys">keys</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.18">keys</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2.html" title="class in squidpony.squidmath">K2</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.20">keys</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="values">values</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.19">values</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.21">values</a></span></div>
 </section>
 </li>
 </ul>
@@ -586,14 +590,14 @@ float&nbsp;f)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">K2V1</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.24">K2V1</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.26">K2V1</a></span>()</div>
 <div class="block">Constructs an empty K2V1 with the default parameters: 32 expected indices and a load factor of 0.5f.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int)">K2V1</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.33">K2V1</a></span>&#8203;(<span class="arguments">int&nbsp;expected)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.35">K2V1</a></span>&#8203;(<span class="arguments">int&nbsp;expected)</span></div>
 <div class="block">Constructs an empty K2V1 that can hold <code>expected</code> indices before resizing and has a load factor of 0.5f.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -604,7 +608,7 @@ float&nbsp;f)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,float)">K2V1</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.43">K2V1</a></span>&#8203;(<span class="arguments">int&nbsp;expected,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.45">K2V1</a></span>&#8203;(<span class="arguments">int&nbsp;expected,
 float&nbsp;f)</span></div>
 <div class="block">Constructs an empty K2V1 that can hold <code>expected</code> indices before resizing and has load factor <code>f</code>.</div>
 <dl>
@@ -617,7 +621,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.Iterable,java.lang.Iterable,java.lang.Iterable)">K2V1</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.60">K2V1</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;aKeys,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.62">K2V1</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;aKeys,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;&nbsp;bKeys,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;qValues)</span></div>
 <div class="block">Constructs a K2V1 from an A iterable, a B iterable, and a Q iterable, where the A and B items should be unique
@@ -637,7 +641,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.K2V1)">K2V1</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.72">K2V1</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;other)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.74">K2V1</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;other)</span></div>
 <div class="block">Constructs a K2V1 from another K2V1 with ths same A, B, and Q types. This will have an expected size equal to the
  current size of other, use the same load factor (f) as other, and will have the same items put into it in the
  same order.</div>
@@ -662,7 +666,7 @@ float&nbsp;f)</span></div>
 <h3><a id="containsA(java.lang.Object)">
 <!--   -->
 </a><a id="containsA(A)">containsA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.82">containsA</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.84">containsA</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;key)</span></div>
 <div class="block">Returns true if this contains the A, key, in its collection of A items, or false otherwise.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -677,7 +681,7 @@ float&nbsp;f)</span></div>
 <h3><a id="containsB(java.lang.Object)">
 <!--   -->
 </a><a id="containsB(B)">containsB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.88">containsB</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.90">containsB</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;key)</span></div>
 <div class="block">Returns true if this contains the B, key, in its collection of B items, or false otherwise.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -692,7 +696,7 @@ float&nbsp;f)</span></div>
 <h3><a id="containsQ(java.lang.Object)">
 <!--   -->
 </a><a id="containsQ(Q)">containsQ</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.95">containsQ</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">Q</a>&nbsp;value)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.97">containsQ</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">Q</a>&nbsp;value)</span></div>
 <div class="block">Returns true if this contains at least one Q value, or false otherwise</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -705,7 +709,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="containsIndex(int)">containsIndex</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.102">containsIndex</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.104">containsIndex</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Returns true if index is between 0 (inclusive) and <a href="#size()"><code>size()</code></a> (exclusive), or false otherwise.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -718,7 +722,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="indexOfA(java.lang.Object)">indexOfA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.110">indexOfA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.112">indexOfA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given an A object key, finds the position in the ordering which that A has, or -1 if key is not present.
  Unlike <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true#indexOf(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
 <dl>
@@ -732,7 +736,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="indexOfB(java.lang.Object)">indexOfB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.120">indexOfB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.122">indexOfB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given a B object key, finds the position in the ordering which that B has, or -1 if key is not present.
  Unlike <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true#indexOf(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>List.indexOf(Object)</code></a>, this runs in constant time.</div>
 <dl>
@@ -746,7 +750,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="indexOfQ(java.lang.Object)">indexOfQ</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.131">indexOfQ</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.133">indexOfQ</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value)</span></div>
 <div class="block">Given a Q value, finds the first position in the ordering which contains that value, or -1 if not present.
  Runs in linear time normally, since this uses <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true#indexOf(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>ArrayList.indexOf(Object)</code></a> to search the values.</div>
 <dl>
@@ -760,7 +764,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAAt(int)">getAAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.141">getAAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.143">getAAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Given an int index, finds the associated A key (using index as a point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -773,7 +777,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBAt(int)">getBAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.150">getBAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.152">getBAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Given an int index, finds the associated B key (using index as a point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -786,7 +790,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getQAt(int)">getQAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.160">getQAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.162">getQAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Given an int index, finds the associated Q value (using index as a point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -799,7 +803,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBFromA(java.lang.Object)">getBFromA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.172">getBFromA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.174">getBFromA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given an A object, finds the associated B object (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -812,7 +816,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAFromB(java.lang.Object)">getAFromB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.182">getAFromB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.184">getAFromB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given a B object, finds the associated A object (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -825,7 +829,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getQFromA(java.lang.Object)">getQFromA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.191">getQFromA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.193">getQFromA</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given an A object, finds the associated Q value (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -838,7 +842,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getQFromB(java.lang.Object)">getQFromB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.203">getQFromB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.205">getQFromB</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;key)</span></div>
 <div class="block">Given a B object, finds the associated Q value (it will be at the same point in the ordering).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -851,7 +855,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomA(squidpony.squidmath.IRNG)">randomA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.216">randomA</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">A</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.218">randomA</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
 <div class="block">Gets a random A from this K2V1 using the given IRNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -864,7 +868,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomB(squidpony.squidmath.IRNG)">randomB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.226">randomB</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">B</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.228">randomB</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
 <div class="block">Gets a random B from this K2V1 using the given IRNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -877,7 +881,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomQ(squidpony.squidmath.IRNG)">randomQ</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.236">randomQ</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="type parameter in K2V1">Q</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.238">randomQ</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
 <div class="block">Gets a random Q from this K2V1 using the given IRNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -892,7 +896,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alterA(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="alterA(A,A)">alterA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.250">alterA</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;past,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.252">alterA</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;past,
 <a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;future)</span></div>
 <div class="block">Changes an existing A key, <code>past</code>, to another A key, <code>future</code>, if past exists in this K2V1
  and future does not yet exist in this K2V1. This will retain past's point in the ordering for future, so
@@ -911,7 +915,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alterB(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="alterB(B,B)">alterB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.264">alterB</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;past,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.266">alterB</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;past,
 <a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;future)</span></div>
 <div class="block">Changes an existing B key, <code>past</code>, to another B key, <code>future</code>, if past exists in this K2V1
  and future does not yet exist in this K2V1. This will retain past's point in the ordering for future, so
@@ -930,7 +934,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alterAAt(int,java.lang.Object)">
 <!--   -->
 </a><a id="alterAAt(int,A)">alterAAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.279">alterAAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.281">alterAAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
 <a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;future)</span></div>
 <div class="block">Changes the A key at <code>index</code> to another A key, <code>future</code>, if index is valid and future does not
  yet exist in this K2V1. The position in the ordering for future will be the same as index, and the same
@@ -950,7 +954,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alterBAt(int,java.lang.Object)">
 <!--   -->
 </a><a id="alterBAt(int,B)">alterBAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.295">alterBAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.297">alterBAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
 <a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;future)</span></div>
 <div class="block">Changes the B key at <code>index</code> to another B key, <code>future</code>, if index is valid and future does not
  yet exist in this K2V1. The position in the ordering for future will be the same as index, and the same
@@ -970,7 +974,7 @@ float&nbsp;f)</span></div>
 <h3><a id="alterQAt(int,java.lang.Object)">
 <!--   -->
 </a><a id="alterQAt(int,Q)">alterQAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.309">alterQAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.311">alterQAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
 <a href="K2V1.html" title="type parameter in K2V1">Q</a>&nbsp;future)</span></div>
 <div class="block">Changes the Q value at <code>index</code> to another Q value, <code>future</code>, if index is valid. The position in the
  ordering for future will be the same as index, and the same as the key this replaced, if this succeeds, so the
@@ -989,7 +993,7 @@ float&nbsp;f)</span></div>
 <h3><a id="put(java.lang.Object,java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="put(A,B,Q)">put</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.324">put</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;aKey,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.326">put</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;aKey,
 <a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;bKey,
 <a href="K2V1.html" title="type parameter in K2V1">Q</a>&nbsp;qValue)</span></div>
 <div class="block">Adds an A key, a B key, and a Q value at the same point in the ordering (the end) to this K2V1. Neither aKey nor
@@ -1010,7 +1014,7 @@ float&nbsp;f)</span></div>
 <h3><a id="putAt(int,java.lang.Object,java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="putAt(int,A,B,Q)">putAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.345">putAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.347">putAt</a></span>&#8203;(<span class="arguments">int&nbsp;index,
 <a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;a,
 <a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;b,
 <a href="K2V1.html" title="type parameter in K2V1">Q</a>&nbsp;q)</span></div>
@@ -1032,7 +1036,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putAll(java.lang.Iterable,java.lang.Iterable,java.lang.Iterable)">putAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.354">putAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;aKeys,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.356">putAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;&nbsp;aKeys,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;&nbsp;bKeys,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;qValues)</span></div>
 </section>
@@ -1040,7 +1044,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putAll(squidpony.squidmath.K2V1)">putAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.374">putAll</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;other)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.376">putAll</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;&nbsp;other)</span></div>
 <div class="block">Puts all unique A and B keys in <code>other</code> into this K2V1, respecting other's ordering. If an A or a B in other
  is already present when this would add one, this will not put the A and B keys at that point in the iteration
  order, and will place the next unique A and B it finds in the arguments at that position instead.</div>
@@ -1057,7 +1061,7 @@ float&nbsp;f)</span></div>
 <h3><a id="removeA(java.lang.Object)">
 <!--   -->
 </a><a id="removeA(A)">removeA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.390">removeA</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;removing)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.392">removeA</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">A</a>&nbsp;removing)</span></div>
 <div class="block">Removes a given A key, if <code>removing</code> exists in this K2V1's A keys, and also removes any B key or Q value
  associated with its point in the ordering.</div>
 <dl>
@@ -1073,7 +1077,7 @@ float&nbsp;f)</span></div>
 <h3><a id="removeB(java.lang.Object)">
 <!--   -->
 </a><a id="removeB(B)">removeB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.406">removeB</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;removing)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.408">removeB</a></span>&#8203;(<span class="arguments"><a href="K2V1.html" title="type parameter in K2V1">B</a>&nbsp;removing)</span></div>
 <div class="block">Removes a given B key, if <code>removing</code> exists in this K2V1's B keys, and also removes any A key or Q value
  associated with its point in the ordering.</div>
 <dl>
@@ -1087,7 +1091,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAt(int)">removeAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.420">removeAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.422">removeAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Removes a given point in the ordering, if <code>index</code> is at least 0 and less than <a href="#size()"><code>size()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1100,7 +1104,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="reorder(int...)">reorder</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.439">reorder</a></span>&#8203;(<span class="arguments">int...&nbsp;ordering)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.441">reorder</a></span>&#8203;(<span class="arguments">int...&nbsp;ordering)</span></div>
 <div class="block">Reorders this K2V1 using <code>ordering</code>, which have the same length as this K2V1's <a href="#size()"><code>size()</code></a>
  and can be generated with <a href="../ArrayTools.html#range(int)"><code>ArrayTools.range(int)</code></a> (which, if applied, would produce no
  change to the current ordering), <a href="IRNG.html#randomOrdering(int)"><code>IRNG.randomOrdering(int)</code></a> (which gives a random ordering, and if
@@ -1118,7 +1122,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shuffle(squidpony.squidmath.IRNG)">shuffle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.452">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="K2V1.html" title="class in squidpony.squidmath">K2V1</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">B</a>,&#8203;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.454">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Generates a random ordering with rng and applies the same ordering to all keys and values this has; they will
  maintain their current association to other keys and values but their ordering/indices will change.</div>
 <dl>
@@ -1132,7 +1136,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="iteratorA()">iteratorA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.465">iteratorA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.467">iteratorA</a></span>()</div>
 <div class="block">Creates a new iterator over the A keys this holds. This can be problematic for garbage collection if called very
  frequently; it may be better to access items by index (which also lets you access other keys associated with that
  index) using <a href="#getAAt(int)"><code>getAAt(int)</code></a> in a for(int i=0...) loop.</div>
@@ -1145,7 +1149,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="iteratorB()">iteratorB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.476">iteratorB</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.478">iteratorB</a></span>()</div>
 <div class="block">Creates a new iterator over the B keys this holds. This can be problematic for garbage collection if called very
  frequently; it may be better to access items by index (which also lets you access other keys associated with that
  index) using <a href="#getBAt(int)"><code>getBAt(int)</code></a> in a for(int i=0...) loop.</div>
@@ -1158,7 +1162,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="iteratorQ()">iteratorQ</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.487">iteratorQ</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.489">iteratorQ</a></span>()</div>
 <div class="block">Creates a new iterator over the Q values this holds. This can be problematic for garbage collection if called
  very frequently; it may be better to access values by index (which also lets you access other keys associated
  with that index) using <a href="#getQAt(int)"><code>getQAt(int)</code></a> in a for(int i=0...) loop.</div>
@@ -1171,7 +1175,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSetA()">getSetA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.498">getSetA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.500">getSetA</a></span>()</div>
 <div class="block">Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set). It retains the
  current ordering. This Set is shared with this collection; it is not a copy, and changes to the returned Set will
  affect this data structure.</div>
@@ -1184,7 +1188,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSetB()">getSetB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.509">getSetB</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.511">getSetB</a></span>()</div>
 <div class="block">Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set). It retains the
  current ordering. This Set is shared with this collection; it is not a copy, and changes to the returned Set will
  affect this data structure.</div>
@@ -1197,7 +1201,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getOrderedSetA()">getOrderedSetA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.520">getOrderedSetA</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">A</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.522">getOrderedSetA</a></span>()</div>
 <div class="block">Returns a separate (shallow) copy of the set of A keys as an <a href="OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a>.
  To be called sparingly, since this allocates a new OrderedSet instead of reusing one. This can be useful if you
  were going to copy the set produced by <a href="#getSetA()"><code>getSetA()</code></a> anyway.</div>
@@ -1210,7 +1214,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getOrderedSetB()">getOrderedSetB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.530">getOrderedSetB</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">B</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.532">getOrderedSetB</a></span>()</div>
 <div class="block">Returns a separate (shallow) copy of the set of B keys as an <a href="OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a>.
  To be called sparingly, since this allocates a new OrderedSet instead of reusing one. This can be useful if you
  were going to copy the set produced by <a href="#getSetB()"><code>getSetB()</code></a> anyway.</div>
@@ -1223,7 +1227,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getListQ()">getListQ</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.540">getListQ</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.542">getListQ</a></span>()</div>
 <div class="block">Gets the Q values as a shared reference to the ArrayList of Q this uses; like <a href="#getSetA()"><code>getSetA()</code></a> and
  <a href="#getSetB()"><code>getSetB()</code></a>, changes made to the returned list will also change this data structure.
  It retains the current ordering.</div>
@@ -1236,7 +1240,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getArrayListQ()">getArrayListQ</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.550">getArrayListQ</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="K2V1.html" title="type parameter in K2V1">Q</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.552">getArrayListQ</a></span>()</div>
 <div class="block">Gets the Q values as a freshly-copied ArrayList of Q; unlike <a href="#getSetA()"><code>getSetA()</code></a> or <a href="#getSetB()"><code>getSetB()</code></a>, this does
  not cache the value list. It retains the current ordering.</div>
 <dl>
@@ -1248,7 +1252,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="size()">size</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.560">size</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.562">size</a></span>()</div>
 <div class="block">Gets the size of this collection. That's the number of A keys, which is always the same as the number of B keys,
  which is always the same as the number of indices, which is also always the same as the size of the values List.</div>
 <dl>
@@ -1260,7 +1264,7 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="isEmpty()">isEmpty</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.569">isEmpty</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.571">isEmpty</a></span>()</div>
 <div class="block">I think you can guess what this does.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1271,13 +1275,13 @@ float&nbsp;f)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="keyCount()">keyCount</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.574">keyCount</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.576">keyCount</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="valueCount()">valueCount</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.577">valueCount</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/K2V1.html#line.579">valueCount</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -1286,8 +1290,8 @@ float&nbsp;f)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -1333,5 +1337,7 @@ float&nbsp;f)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

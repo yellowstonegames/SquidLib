@@ -13,100 +13,175 @@
 <pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.mapping;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
 <span class="sourceLineNo">003</span><a id="line.3"></a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.annotation.Beta;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import squidpony.ArrayTools;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidgrid.Direction;</a>
 <span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.Coord;</a>
 <span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidmath.GWTRNG;</a>
 <span class="sourceLineNo">008</span><a id="line.8">import squidpony.squidmath.IRNG;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">import java.util.ArrayList;</a>
-<span class="sourceLineNo">011</span><a id="line.11"></a>
-<span class="sourceLineNo">012</span><a id="line.12">/**</a>
-<span class="sourceLineNo">013</span><a id="line.13"> *</a>
-<span class="sourceLineNo">014</span><a id="line.14"> *</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * Based in part on code from http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm</a>
-<span class="sourceLineNo">016</span><a id="line.16"> *</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * @author Eben Howard - http://squidpony.com - howard@squidpony.com</a>
-<span class="sourceLineNo">018</span><a id="line.18"> */</a>
-<span class="sourceLineNo">019</span><a id="line.19">@Beta</a>
-<span class="sourceLineNo">020</span><a id="line.20">public class GrowingTreeMazeGenerator {</a>
-<span class="sourceLineNo">021</span><a id="line.21"></a>
-<span class="sourceLineNo">022</span><a id="line.22">    private IRNG rng;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    private int width, height;</a>
-<span class="sourceLineNo">024</span><a id="line.24"></a>
-<span class="sourceLineNo">025</span><a id="line.25">    public GrowingTreeMazeGenerator(int width, int height) {</a>
-<span class="sourceLineNo">026</span><a id="line.26">        this.width = width;</a>
-<span class="sourceLineNo">027</span><a id="line.27">        this.height = height;</a>
-<span class="sourceLineNo">028</span><a id="line.28">        rng = new GWTRNG();</a>
-<span class="sourceLineNo">029</span><a id="line.29">    }</a>
-<span class="sourceLineNo">030</span><a id="line.30">    public GrowingTreeMazeGenerator(int width, int height, IRNG rng) {</a>
-<span class="sourceLineNo">031</span><a id="line.31">        this.width = width;</a>
-<span class="sourceLineNo">032</span><a id="line.32">        this.height = height;</a>
-<span class="sourceLineNo">033</span><a id="line.33">        this.rng = rng;</a>
-<span class="sourceLineNo">034</span><a id="line.34">    }</a>
-<span class="sourceLineNo">035</span><a id="line.35"></a>
-<span class="sourceLineNo">036</span><a id="line.36">    /**</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * Builds and returns a boolean mapping of a maze using the provided chooser method object.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * </a>
-<span class="sourceLineNo">039</span><a id="line.39">     * @param choosing the callback object for making the split decision</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * @return </a>
+<span class="sourceLineNo">009</span><a id="line.9">import squidpony.squidmath.OrderedSet;</a>
+<span class="sourceLineNo">010</span><a id="line.10"></a>
+<span class="sourceLineNo">011</span><a id="line.11">import java.util.ArrayList;</a>
+<span class="sourceLineNo">012</span><a id="line.12"></a>
+<span class="sourceLineNo">013</span><a id="line.13">/**</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * A maze generator that can be configured using a {@link ChoosingMethod}, which can be customized for the app.</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * Based in part on code from &lt;a href="http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm"&gt;Jamis Buck's blog&lt;/a&gt;.</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * @author Eben Howard - http://squidpony.com - howard@squidpony.com</a>
+<span class="sourceLineNo">017</span><a id="line.17"> */</a>
+<span class="sourceLineNo">018</span><a id="line.18">public class GrowingTreeMazeGenerator implements IDungeonGenerator {</a>
+<span class="sourceLineNo">019</span><a id="line.19"></a>
+<span class="sourceLineNo">020</span><a id="line.20">    private IRNG rng;</a>
+<span class="sourceLineNo">021</span><a id="line.21">    private int width, height;</a>
+<span class="sourceLineNo">022</span><a id="line.22">    public char[][] dungeon;</a>
+<span class="sourceLineNo">023</span><a id="line.23">    </a>
+<span class="sourceLineNo">024</span><a id="line.24">    public GrowingTreeMazeGenerator(int width, int height) {</a>
+<span class="sourceLineNo">025</span><a id="line.25">        this.width = width;</a>
+<span class="sourceLineNo">026</span><a id="line.26">        this.height = height;</a>
+<span class="sourceLineNo">027</span><a id="line.27">        rng = new GWTRNG();</a>
+<span class="sourceLineNo">028</span><a id="line.28">    }</a>
+<span class="sourceLineNo">029</span><a id="line.29">    public GrowingTreeMazeGenerator(int width, int height, IRNG rng) {</a>
+<span class="sourceLineNo">030</span><a id="line.30">        this.width = width;</a>
+<span class="sourceLineNo">031</span><a id="line.31">        this.height = height;</a>
+<span class="sourceLineNo">032</span><a id="line.32">        this.rng = rng;</a>
+<span class="sourceLineNo">033</span><a id="line.33">    }</a>
+<span class="sourceLineNo">034</span><a id="line.34"></a>
+<span class="sourceLineNo">035</span><a id="line.35">    /**</a>
+<span class="sourceLineNo">036</span><a id="line.36">     * Gets the most recently-produced dungeon as a 2D char array, usually produced by calling {@link #generate()} or</a>
+<span class="sourceLineNo">037</span><a id="line.37">     * some similar method present in a specific implementation. This normally passes a direct reference and not a copy,</a>
+<span class="sourceLineNo">038</span><a id="line.38">     * so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</a>
+<span class="sourceLineNo">039</span><a id="line.39">     *</a>
+<span class="sourceLineNo">040</span><a id="line.40">     * @return the most recently-produced dungeon/map as a 2D char array</a>
 <span class="sourceLineNo">041</span><a id="line.41">     */</a>
-<span class="sourceLineNo">042</span><a id="line.42">    public boolean[][] create(ChoosingMethod choosing) {</a>
-<span class="sourceLineNo">043</span><a id="line.43">        boolean[][] map = new boolean[width][height];</a>
-<span class="sourceLineNo">044</span><a id="line.44">        boolean[][] visited = new boolean[width][height];</a>
-<span class="sourceLineNo">045</span><a id="line.45"></a>
-<span class="sourceLineNo">046</span><a id="line.46">        int x = rng.nextInt(width / 2);</a>
-<span class="sourceLineNo">047</span><a id="line.47">        int y = rng.nextInt(height / 2);</a>
-<span class="sourceLineNo">048</span><a id="line.48">        x *= 2;</a>
-<span class="sourceLineNo">049</span><a id="line.49">        y *= 2;</a>
-<span class="sourceLineNo">050</span><a id="line.50"></a>
-<span class="sourceLineNo">051</span><a id="line.51">        ArrayList&lt;Coord&gt; deck = new ArrayList&lt;&gt;();</a>
-<span class="sourceLineNo">052</span><a id="line.52">        deck.add(Coord.get(x, y));</a>
-<span class="sourceLineNo">053</span><a id="line.53"></a>
-<span class="sourceLineNo">054</span><a id="line.54">        Direction[] dirs = Direction.CARDINALS;</a>
-<span class="sourceLineNo">055</span><a id="line.55">        while (!deck.isEmpty()) {</a>
-<span class="sourceLineNo">056</span><a id="line.56">            int i = choosing.chooseIndex(deck.size());</a>
-<span class="sourceLineNo">057</span><a id="line.57">            Coord p = deck.get(i);</a>
-<span class="sourceLineNo">058</span><a id="line.58">            dirs = rng.shuffle(dirs, new Direction[dirs.length]);</a>
-<span class="sourceLineNo">059</span><a id="line.59"></a>
-<span class="sourceLineNo">060</span><a id="line.60">            boolean foundNeighbor = false;</a>
-<span class="sourceLineNo">061</span><a id="line.61">            for (Direction dir : dirs) {</a>
-<span class="sourceLineNo">062</span><a id="line.62">                x = p.x + dir.deltaX * 2;</a>
-<span class="sourceLineNo">063</span><a id="line.63">                y = p.y + dir.deltaY * 2;</a>
-<span class="sourceLineNo">064</span><a id="line.64">                if (x &gt;= 0 &amp;&amp; x &lt; width &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; height) {</a>
-<span class="sourceLineNo">065</span><a id="line.65">                    if (!visited[x][y]) {</a>
-<span class="sourceLineNo">066</span><a id="line.66">                        foundNeighbor = true;</a>
-<span class="sourceLineNo">067</span><a id="line.67">//                        if (rng.nextBoolean()) {</a>
-<span class="sourceLineNo">068</span><a id="line.68">                            visited[x][y] = true;</a>
-<span class="sourceLineNo">069</span><a id="line.69">//                        }</a>
-<span class="sourceLineNo">070</span><a id="line.70">                        map[x][y] = true;</a>
-<span class="sourceLineNo">071</span><a id="line.71">                        map[p.x + dir.deltaX][p.y + dir.deltaY] = true;</a>
-<span class="sourceLineNo">072</span><a id="line.72">                        deck.add(Coord.get(x, y));</a>
-<span class="sourceLineNo">073</span><a id="line.73">                        break;</a>
-<span class="sourceLineNo">074</span><a id="line.74">                    }</a>
-<span class="sourceLineNo">075</span><a id="line.75">                }</a>
-<span class="sourceLineNo">076</span><a id="line.76">            }</a>
-<span class="sourceLineNo">077</span><a id="line.77"></a>
-<span class="sourceLineNo">078</span><a id="line.78">            if (!foundNeighbor) {</a>
-<span class="sourceLineNo">079</span><a id="line.79">                deck.remove(p);</a>
-<span class="sourceLineNo">080</span><a id="line.80">            }</a>
-<span class="sourceLineNo">081</span><a id="line.81">        }</a>
-<span class="sourceLineNo">082</span><a id="line.82"></a>
-<span class="sourceLineNo">083</span><a id="line.83">        return map;</a>
-<span class="sourceLineNo">084</span><a id="line.84">    }</a>
-<span class="sourceLineNo">085</span><a id="line.85"></a>
-<span class="sourceLineNo">086</span><a id="line.86">    public interface ChoosingMethod {</a>
-<span class="sourceLineNo">087</span><a id="line.87"></a>
-<span class="sourceLineNo">088</span><a id="line.88">        /**</a>
-<span class="sourceLineNo">089</span><a id="line.89">         * Given the size to choose from, will return a single value smaller than the passed in value and greater than</a>
-<span class="sourceLineNo">090</span><a id="line.90">         * or equal to 0. The value chosen is dependant on the individual implementation.</a>
-<span class="sourceLineNo">091</span><a id="line.91">         *</a>
-<span class="sourceLineNo">092</span><a id="line.92">         * @param size</a>
-<span class="sourceLineNo">093</span><a id="line.93">         * @return</a>
-<span class="sourceLineNo">094</span><a id="line.94">         */</a>
-<span class="sourceLineNo">095</span><a id="line.95">        int chooseIndex(int size);</a>
-<span class="sourceLineNo">096</span><a id="line.96">    }</a>
-<span class="sourceLineNo">097</span><a id="line.97">}</a>
+<span class="sourceLineNo">042</span><a id="line.42">    @Override</a>
+<span class="sourceLineNo">043</span><a id="line.43">    public char[][] getDungeon() {</a>
+<span class="sourceLineNo">044</span><a id="line.44">        return dungeon;</a>
+<span class="sourceLineNo">045</span><a id="line.45">    }</a>
+<span class="sourceLineNo">046</span><a id="line.46"></a>
+<span class="sourceLineNo">047</span><a id="line.47">    /**</a>
+<span class="sourceLineNo">048</span><a id="line.48">     * Builds and returns a 2D char array maze by using {@link #newest} with {@link #generate(ChoosingMethod)}.</a>
+<span class="sourceLineNo">049</span><a id="line.49">     * </a>
+<span class="sourceLineNo">050</span><a id="line.50">     * @return {@link #dungeon}, after filling it with a maze</a>
+<span class="sourceLineNo">051</span><a id="line.51">     */</a>
+<span class="sourceLineNo">052</span><a id="line.52">    @Override</a>
+<span class="sourceLineNo">053</span><a id="line.53">    public char[][] generate() {</a>
+<span class="sourceLineNo">054</span><a id="line.54">        return generate(newest);</a>
+<span class="sourceLineNo">055</span><a id="line.55">    }</a>
+<span class="sourceLineNo">056</span><a id="line.56"></a>
+<span class="sourceLineNo">057</span><a id="line.57">    /**</a>
+<span class="sourceLineNo">058</span><a id="line.58">     * Builds and returns a 2D char array maze using the provided chooser method object. The most maze-like dungeons</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * use {@link #newest}, the least maze-like use {@link #oldest}, and the most jumbled use {@link #random} or a</a>
+<span class="sourceLineNo">060</span><a id="line.60">     * mix of others using {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}.</a>
+<span class="sourceLineNo">061</span><a id="line.61">     * </a>
+<span class="sourceLineNo">062</span><a id="line.62">     * @param choosing the callback object for making the split decision</a>
+<span class="sourceLineNo">063</span><a id="line.63">     * @return {@link #dungeon}, after filling it with a maze</a>
+<span class="sourceLineNo">064</span><a id="line.64">     */</a>
+<span class="sourceLineNo">065</span><a id="line.65">    public char[][] generate(ChoosingMethod choosing) {</a>
+<span class="sourceLineNo">066</span><a id="line.66">        if(dungeon == null || dungeon.length != width || dungeon[0].length != height)</a>
+<span class="sourceLineNo">067</span><a id="line.67">            dungeon = ArrayTools.fill('#', width, height);</a>
+<span class="sourceLineNo">068</span><a id="line.68">        else </a>
+<span class="sourceLineNo">069</span><a id="line.69">            ArrayTools.fill(dungeon, '#');</a>
+<span class="sourceLineNo">070</span><a id="line.70">        </a>
+<span class="sourceLineNo">071</span><a id="line.71">        int x = rng.between(1, width / 2);</a>
+<span class="sourceLineNo">072</span><a id="line.72">        int y = rng.between(1, height / 2);</a>
+<span class="sourceLineNo">073</span><a id="line.73">        x *= 2;</a>
+<span class="sourceLineNo">074</span><a id="line.74">        y *= 2;</a>
+<span class="sourceLineNo">075</span><a id="line.75"></a>
+<span class="sourceLineNo">076</span><a id="line.76">        OrderedSet&lt;Coord&gt; deck = new OrderedSet&lt;&gt;();</a>
+<span class="sourceLineNo">077</span><a id="line.77">        deck.add(Coord.get(x, y));</a>
+<span class="sourceLineNo">078</span><a id="line.78"></a>
+<span class="sourceLineNo">079</span><a id="line.79">        Direction[] dirs = new Direction[4];</a>
+<span class="sourceLineNo">080</span><a id="line.80">        System.arraycopy(Direction.CARDINALS, 0, dirs, 0, 4);</a>
+<span class="sourceLineNo">081</span><a id="line.81">        OUTER:</a>
+<span class="sourceLineNo">082</span><a id="line.82">        while (!deck.isEmpty()) {</a>
+<span class="sourceLineNo">083</span><a id="line.83">            int i = choosing.chooseIndex(deck.size());</a>
+<span class="sourceLineNo">084</span><a id="line.84">            Coord p = deck.getAt(i);</a>
+<span class="sourceLineNo">085</span><a id="line.85">            rng.shuffleInPlace(dirs);</a>
+<span class="sourceLineNo">086</span><a id="line.86"></a>
+<span class="sourceLineNo">087</span><a id="line.87">            for (Direction dir : dirs) {</a>
+<span class="sourceLineNo">088</span><a id="line.88">                x = p.x + dir.deltaX * 2;</a>
+<span class="sourceLineNo">089</span><a id="line.89">                y = p.y + dir.deltaY * 2;</a>
+<span class="sourceLineNo">090</span><a id="line.90">                if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {</a>
+<span class="sourceLineNo">091</span><a id="line.91">                    if (dungeon[x][y] == '#' &amp;&amp; deck.add(Coord.get(x, y))) {</a>
+<span class="sourceLineNo">092</span><a id="line.92">                        dungeon[x][y] = '.';</a>
+<span class="sourceLineNo">093</span><a id="line.93">                        dungeon[p.x + dir.deltaX][p.y + dir.deltaY] = '.';</a>
+<span class="sourceLineNo">094</span><a id="line.94">                        continue OUTER;</a>
+<span class="sourceLineNo">095</span><a id="line.95">                    }</a>
+<span class="sourceLineNo">096</span><a id="line.96">                }</a>
+<span class="sourceLineNo">097</span><a id="line.97">            }</a>
+<span class="sourceLineNo">098</span><a id="line.98">            </a>
+<span class="sourceLineNo">099</span><a id="line.99">            deck.remove(p);</a>
+<span class="sourceLineNo">100</span><a id="line.100">        }</a>
+<span class="sourceLineNo">101</span><a id="line.101"></a>
+<span class="sourceLineNo">102</span><a id="line.102">        return dungeon;</a>
+<span class="sourceLineNo">103</span><a id="line.103">    }</a>
+<span class="sourceLineNo">104</span><a id="line.104"></a>
+<span class="sourceLineNo">105</span><a id="line.105">    /**</a>
+<span class="sourceLineNo">106</span><a id="line.106">     * A way to configure how {@link #generate(ChoosingMethod)} places paths through the maze. Most often, you'll want</a>
+<span class="sourceLineNo">107</span><a id="line.107">     * to at least start with {@link #newest}, since it generates the most maze-like dungeons, and try the other</a>
+<span class="sourceLineNo">108</span><a id="line.108">     * predefined ChoosingMethods eventually. You can use {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}</a>
+<span class="sourceLineNo">109</span><a id="line.109">     * to mix two ChoosingMethods, which can be a good way to add a little variety to a maze.</a>
+<span class="sourceLineNo">110</span><a id="line.110">     */</a>
+<span class="sourceLineNo">111</span><a id="line.111">    public interface ChoosingMethod {</a>
+<span class="sourceLineNo">112</span><a id="line.112"></a>
+<span class="sourceLineNo">113</span><a id="line.113">        /**</a>
+<span class="sourceLineNo">114</span><a id="line.114">         * Given the size to choose from, will return a single value smaller than the passed in value and greater than</a>
+<span class="sourceLineNo">115</span><a id="line.115">         * or equal to 0. The value chosen is dependent on the individual implementation.</a>
+<span class="sourceLineNo">116</span><a id="line.116">         *</a>
+<span class="sourceLineNo">117</span><a id="line.117">         * @param size the exclusive upper bound for results; always at least 1</a>
+<span class="sourceLineNo">118</span><a id="line.118">         * @return an int between 0 (inclusive) and {@code size} (exclusive)</a>
+<span class="sourceLineNo">119</span><a id="line.119">         */</a>
+<span class="sourceLineNo">120</span><a id="line.120">        int chooseIndex(int size);</a>
+<span class="sourceLineNo">121</span><a id="line.121">    }</a>
+<span class="sourceLineNo">122</span><a id="line.122"></a>
+<span class="sourceLineNo">123</span><a id="line.123">    /**</a>
+<span class="sourceLineNo">124</span><a id="line.124">     * Produces high-quality mazes that are very similar to those produced by a recursive back-tracking algorithm.</a>
+<span class="sourceLineNo">125</span><a id="line.125">     */</a>
+<span class="sourceLineNo">126</span><a id="line.126">    public final ChoosingMethod newest = new ChoosingMethod() {</a>
+<span class="sourceLineNo">127</span><a id="line.127">        @Override</a>
+<span class="sourceLineNo">128</span><a id="line.128">        public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">129</span><a id="line.129">            return size - 1;</a>
+<span class="sourceLineNo">130</span><a id="line.130">        }</a>
+<span class="sourceLineNo">131</span><a id="line.131">    };</a>
+<span class="sourceLineNo">132</span><a id="line.132">    /**</a>
+<span class="sourceLineNo">133</span><a id="line.133">     * Produces mostly straight corridors that dead-end at the map's edge; probably only useful with {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}.</a>
+<span class="sourceLineNo">134</span><a id="line.134">     */</a>
+<span class="sourceLineNo">135</span><a id="line.135">    public final ChoosingMethod oldest = new ChoosingMethod() {</a>
+<span class="sourceLineNo">136</span><a id="line.136">        @Override</a>
+<span class="sourceLineNo">137</span><a id="line.137">        public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">138</span><a id="line.138">            return 0;</a>
+<span class="sourceLineNo">139</span><a id="line.139">        }</a>
+<span class="sourceLineNo">140</span><a id="line.140">    };</a>
+<span class="sourceLineNo">141</span><a id="line.141">    /**</a>
+<span class="sourceLineNo">142</span><a id="line.142">     * Produces chaotic, jumbled spans of corridors that are similar to those produced by Prim's algorithm.</a>
+<span class="sourceLineNo">143</span><a id="line.143">     */</a>
+<span class="sourceLineNo">144</span><a id="line.144">    public final ChoosingMethod random = new ChoosingMethod() {</a>
+<span class="sourceLineNo">145</span><a id="line.145">        @Override</a>
+<span class="sourceLineNo">146</span><a id="line.146">        public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">147</span><a id="line.147">            return rng.nextSignedInt(size);</a>
+<span class="sourceLineNo">148</span><a id="line.148">        }</a>
+<span class="sourceLineNo">149</span><a id="line.149">    };</a>
+<span class="sourceLineNo">150</span><a id="line.150"></a>
+<span class="sourceLineNo">151</span><a id="line.151">    /**</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * Mixes two ChoosingMethod values, like {@link #newest} and {@link #random}, given a weight for each, and produces</a>
+<span class="sourceLineNo">153</span><a id="line.153">     * a new ChoosingMethod that randomly (respecting weight) picks one of those ChoosingMethods each time it is used.</a>
+<span class="sourceLineNo">154</span><a id="line.154">     * @param methodA the first ChoosingMethod to mix; must not be null</a>
+<span class="sourceLineNo">155</span><a id="line.155">     * @param chanceA the weight to favor choosing methodA</a>
+<span class="sourceLineNo">156</span><a id="line.156">     * @param methodB the second ChoosingMethod to mix; must not be null</a>
+<span class="sourceLineNo">157</span><a id="line.157">     * @param chanceB the weight to favor choosing methodB</a>
+<span class="sourceLineNo">158</span><a id="line.158">     * @return a ChoosingMethod that randomly picks between {@code methodA} and {@code methodB} each time it is used</a>
+<span class="sourceLineNo">159</span><a id="line.159">     */</a>
+<span class="sourceLineNo">160</span><a id="line.160">    public ChoosingMethod mix(final ChoosingMethod methodA, final double chanceA,</a>
+<span class="sourceLineNo">161</span><a id="line.161">                              final ChoosingMethod methodB, final double chanceB) {</a>
+<span class="sourceLineNo">162</span><a id="line.162">        final double a = Math.max(0.0, chanceA);</a>
+<span class="sourceLineNo">163</span><a id="line.163">        final double sum = a + Math.max(0.0, chanceB);</a>
+<span class="sourceLineNo">164</span><a id="line.164">        if(sum &lt;= 0.0) return random;</a>
+<span class="sourceLineNo">165</span><a id="line.165">        return new ChoosingMethod() {</a>
+<span class="sourceLineNo">166</span><a id="line.166">            @Override</a>
+<span class="sourceLineNo">167</span><a id="line.167">            public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">168</span><a id="line.168">                return rng.nextDouble(sum) &lt; a ? methodA.chooseIndex(size) : methodB.chooseIndex(size);</a>
+<span class="sourceLineNo">169</span><a id="line.169">            }</a>
+<span class="sourceLineNo">170</span><a id="line.170">        };</a>
+<span class="sourceLineNo">171</span><a id="line.171">    }</a>
+<span class="sourceLineNo">172</span><a id="line.172">}</a>
 
 
 

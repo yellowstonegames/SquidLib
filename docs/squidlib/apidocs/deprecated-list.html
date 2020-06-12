@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,61 +51,23 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Deprecated API" class="title">Deprecated API</h1>
 <h2 title="Contents">Contents</h2>
 <ul>
-<li><a href="#class">Classes</a></li>
 <li><a href="#field">Fields</a></li>
 <li><a href="#method">Methods</a></li>
 </ul>
 </div>
-<div class="contentContainer"><a id="class">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<div class="deprecatedSummary">
-<table>
-<caption><span>Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">squidpony.squidgrid.gui.gdx.LinesPanel</a></th>
-<td class="colLast">
-<div class="deprecationComment">You should prefer <a href="squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextPanel</code></a> for new code.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">squidpony.squidgrid.gui.gdx.SColorFactory</a></th>
-<td class="colLast">
-<div class="deprecationComment">You should use <a href="squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidColorCenter</code></a> or pure SColor methods on floats instead.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-</ul>
-<a id="field">
+<div class="contentContainer"><a id="field">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -183,24 +145,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </thead>
 <tbody>
 <tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidgrid/gui/gdx/SColorFactory.html#addPallet(java.lang.String,java.util.ArrayList)">squidpony.squidgrid.gui.gdx.SColorFactory.addPallet&#8203;(String, ArrayList&lt;SColor&gt;)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Prefer addPalette over this misspelled version; they are equivalent.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidgrid/gui/gdx/SColorFactory.html#fromPallet(java.lang.String,float)">squidpony.squidgrid.gui.gdx.SColorFactory.fromPallet&#8203;(String, float)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Prefer fromPalette over this misspelled version; they are equivalent.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidgrid/gui/gdx/SColorFactory.html#pallet(java.lang.String)">squidpony.squidgrid.gui.gdx.SColorFactory.pallet&#8203;(String)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Prefer palette over this misspelled version.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidgrid/gui/gdx/TextCellFactory.html#antialias(boolean)">squidpony.squidgrid.gui.gdx.TextCellFactory.antialias&#8203;(boolean)</a></th>
 <td class="colLast">
 <div class="deprecationComment">AA is the wave of the future!</div>
@@ -240,5 +184,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

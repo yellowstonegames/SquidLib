@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class ClassicNoise" class="title">Class ClassicNoise</h1>
@@ -101,24 +96,28 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code>, <code><a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code>, <code><a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code>, <code><a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.28">ClassicNoise</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.31">ClassicNoise</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></pre>
-<div class="block">"Classic Perlin" noise, as opposed to the Simplex Noise also created by Ken Perlin (which is in <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>).
+<div class="block">"Classic Perlin" noise, as opposed to the Simplex Noise also created by Ken Perlin (which is produced by
+ <a href="SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a>; both can be produced by <a href="FastNoise.html" title="class in squidpony.squidmath"><code>FastNoise</code></a>).
  This noise can in theory be scaled up to arbitrary dimensions, but in practice uses unreasonably hefty amounts of
  memory when dimensionality exceeds 10 or so, since it needs to hash <code>Math.pow(2, dimensionality)</code> points per
  sample of noise, which involves over a thousand points in 10 dimensions and over a million points in 20 dimensions.
  For that reason, it's limited to 6D noise here, and also implements 2D, 3D, and 4D. Its performance is surprisingly
  good at 2D, 3D, and 4D but trails off quickly at 6D. Its quality is worse than normal simplex noise in 2D, but you
  can use <a href="JitterNoise.html" title="class in squidpony.squidmath"><code>JitterNoise</code></a> (which takes the same algorithm and distorts the grid pseudo-randomly) to get unusually
- high-quality 2D noise. The 3D and higher dimensionality versions don't seem to need jitter to avoid grid artifacts,
- at least most of the time. This uses different gradient vectors than what was recommended in the "Improved Perlin
- Noise" paper, since the ones this uses avoid 45-degree angular artifacts in all dimensions implemented.
+ high-quality 2D noise. The quality is actually quite good in 4D and higher; there's often some rhythmic patterns in
+ 3D when time is z, but with 4 or 6 dimensions this can have fewer artifacts than Simplex in the same dimension. The
+ 3D and higher dimensionality versions don't seem to need jitter to avoid grid artifacts, at least most of the time.
+ This uses different gradient vectors than what was recommended in the "Improved Perlin Noise" paper, since the ones
+ this uses avoid 45-degree angular artifacts in all dimensions implemented.
  <br>
- ClassicNoise is recommended for most usage in <a href="../squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that needs a
- Noise3D implementation, and it tends to about as fast as <a href="WhirlingNoise.html" title="class in squidpony.squidmath"><code>WhirlingNoise</code></a> in 3D. It is not recommended for 2D
- use; prefer <a href="JitterNoise.html" title="class in squidpony.squidmath"><code>JitterNoise</code></a> or <a href="WhirlingNoise.html" title="class in squidpony.squidmath"><code>WhirlingNoise</code></a> for that.</div>
+ ClassicNoise is a good choice with parts of <a href="../squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that need a
+ Noise3D implementation, and it tends to about as fast as <a href="SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a> in 3D. It is not recommended for 2D
+ use; prefer <a href="JitterNoise.html" title="class in squidpony.squidmath"><code>JitterNoise</code></a> or <a href="SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a> for that. You can also use <a href="FastNoise.html" title="class in squidpony.squidmath"><code>FastNoise</code></a> with
+ <a href="FastNoise.html#PERLIN_FRACTAL"><code>FastNoise.PERLIN_FRACTAL</code></a> as the noiseType if you primarily want to use float input and get float output.
+ If you want higher-dimensional noise than this supports, you can use <a href="PhantomNoise.html" title="class in squidpony.squidmath"><code>PhantomNoise</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -342,13 +341,13 @@ double&nbsp;vd)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="instance">instance</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.30">instance</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="ClassicNoise.html" title="class in squidpony.squidmath">ClassicNoise</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.32">instance</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="seed">seed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.31">seed</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.33">seed</a></span></div>
 </section>
 </li>
 </ul>
@@ -364,13 +363,13 @@ double&nbsp;vd)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">ClassicNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.32">ClassicNoise</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.34">ClassicNoise</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">ClassicNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.36">ClassicNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.38">ClassicNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 </section>
 </li>
 </ul>
@@ -386,7 +385,7 @@ double&nbsp;vd)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="gradCoord2D(long,int,int,double,double)">gradCoord2D</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.39">gradCoord2D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.41">gradCoord2D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;x,
 int&nbsp;y,
 double&nbsp;xd,
@@ -396,7 +395,7 @@ double&nbsp;yd)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="gradCoord3D(long,int,int,int,double,double,double)">gradCoord3D</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.46">gradCoord3D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.48">gradCoord3D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
@@ -408,7 +407,7 @@ double&nbsp;zd)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="gradCoord4D(long,int,int,int,int,double,double,double,double)">gradCoord4D</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.52">gradCoord4D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.54">gradCoord4D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
@@ -422,7 +421,7 @@ double&nbsp;wd)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="gradCoord6D(long,int,int,int,int,int,int,double,double,double,double,double,double)">gradCoord6D</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.59">gradCoord6D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.61">gradCoord6D</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
@@ -440,7 +439,7 @@ double&nbsp;vd)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.75">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.77">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -451,7 +450,7 @@ double&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.80">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.82">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 long&nbsp;seed)</span></div>
 <dl>
@@ -463,7 +462,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.96">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.98">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z)</span></div>
 <dl>
@@ -475,7 +474,7 @@ double&nbsp;z)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.101">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.103">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 long&nbsp;seed)</span></div>
@@ -488,7 +487,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.122">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.124">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</span></div>
@@ -501,7 +500,7 @@ double&nbsp;w)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.127">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.129">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -515,7 +514,7 @@ long&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoise(double,double,double,double,double,double)">getNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.160">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.162">getNoise</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -530,7 +529,7 @@ double&nbsp;v)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getNoiseWithSeed(double,double,double,double,double,double,long)">getNoiseWithSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.165">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ClassicNoise.html#line.167">getNoiseWithSeed</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w,
@@ -549,8 +548,8 @@ long&nbsp;seed)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -596,5 +595,7 @@ long&nbsp;seed)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

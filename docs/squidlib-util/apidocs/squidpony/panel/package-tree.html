@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 class="title">Hierarchy For Package squidpony.panel</h1>
@@ -80,7 +75,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">squidpony.panel.<a href="IColoredString.Bucket.html" title="class in squidpony.panel"><span class="typeNameLink">IColoredString.Bucket</span></a>&lt;T&gt;</li>
 <li class="circle">squidpony.panel.<a href="IColoredString.Impl.html" title="class in squidpony.panel"><span class="typeNameLink">IColoredString.Impl</span></a>&lt;T&gt; (implements squidpony.panel.<a href="IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;)</li>
-<li class="circle">squidpony.panel.<a href="ICombinedPanel.Impl.html" title="class in squidpony.panel"><span class="typeNameLink">ICombinedPanel.Impl</span></a>&lt;T&gt; (implements squidpony.panel.<a href="ICombinedPanel.html" title="interface in squidpony.panel">ICombinedPanel</a>&lt;T&gt;)</li>
 <li class="circle">squidpony.panel.<a href="IMarkup.StringMarkup.html" title="class in squidpony.panel"><span class="typeNameLink">IMarkup.StringMarkup</span></a> (implements squidpony.panel.<a href="IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;T&gt;)</li>
 </ul>
 </li>
@@ -89,26 +83,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li class="circle">squidpony.panel.<a href="ICombinedPanel.html" title="interface in squidpony.panel"><span class="typeNameLink">ICombinedPanel</span></a>&lt;T&gt;</li>
 <li class="circle">squidpony.panel.<a href="IMarkup.html" title="interface in squidpony.panel"><span class="typeNameLink">IMarkup</span></a>&lt;T&gt;</li>
-<li class="circle">squidpony.panel.<a href="ISquidPanel.html" title="interface in squidpony.panel"><span class="typeNameLink">ISquidPanel</span></a>&lt;T&gt;</li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Iterable</span></a>&lt;T&gt;
 <ul>
 <li class="circle">squidpony.panel.<a href="IColoredString.html" title="interface in squidpony.panel"><span class="typeNameLink">IColoredString</span></a>&lt;T&gt;</li>
-</ul>
-</li>
-</ul>
-</section>
-<section class="hierarchy">
-<h2 title="Enum Hierarchy">Enum Hierarchy</h2>
-<ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Object</span></a>
-<ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Enum</span></a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/constant/Constable.html?is-external=true" title="class or interface in java.lang.constant" class="externalLink">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)
-<ul>
-<li class="circle">squidpony.panel.<a href="ICombinedPanel.What.html" title="enum in squidpony.panel"><span class="typeNameLink">ICombinedPanel.What</span></a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -143,5 +121,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

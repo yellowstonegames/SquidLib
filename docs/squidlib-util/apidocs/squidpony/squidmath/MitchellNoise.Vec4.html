@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class MitchellNoise.Vec4" class="title">Class MitchellNoise.Vec4</h1>
@@ -101,7 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="MitchellNoise.html" title="class in squidpony.squidmath">MitchellNoise</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.42">MitchellNoise.Vec4</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.44">MitchellNoise.Vec4</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 </section>
 <section class="summary">
@@ -236,25 +231,25 @@ double&nbsp;ow)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="x">x</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.43">x</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.45">x</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="y">y</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.43">y</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.45">y</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="z">z</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.43">z</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.45">z</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="w">w</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.43">w</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.45">w</a></span></div>
 </section>
 </li>
 </ul>
@@ -270,13 +265,13 @@ double&nbsp;ow)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">Vec4</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.45">Vec4</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.47">Vec4</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(double,double,double,double)">Vec4</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.49">Vec4</a></span>&#8203;(<span class="arguments">double&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.51">Vec4</a></span>&#8203;(<span class="arguments">double&nbsp;x,
 double&nbsp;y,
 double&nbsp;z,
 double&nbsp;w)</span></div>
@@ -295,13 +290,13 @@ double&nbsp;w)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dot(squidpony.squidmath.MitchellNoise.Vec4)">dot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.56">dot</a></span>&#8203;(<span class="arguments"><a href="MitchellNoise.Vec4.html" title="class in squidpony.squidmath">MitchellNoise.Vec4</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.58">dot</a></span>&#8203;(<span class="arguments"><a href="MitchellNoise.Vec4.html" title="class in squidpony.squidmath">MitchellNoise.Vec4</a>&nbsp;o)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dot(double,double,double,double)">dot</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.60">dot</a></span>&#8203;(<span class="arguments">double&nbsp;ox,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.Vec4.html#line.62">dot</a></span>&#8203;(<span class="arguments">double&nbsp;ox,
 double&nbsp;oy,
 double&nbsp;oz,
 double&nbsp;ow)</span></div>
@@ -313,8 +308,8 @@ double&nbsp;ow)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -360,5 +355,7 @@ double&nbsp;ow)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

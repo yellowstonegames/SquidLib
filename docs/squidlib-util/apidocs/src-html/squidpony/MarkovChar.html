@@ -15,301 +15,299 @@
 <span class="sourceLineNo">003</span><a id="line.3">import regexodus.Category;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import regexodus.Matcher;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import regexodus.Pattern;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.annotation.Beta;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidmath.Arrangement;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import squidpony.squidmath.IntIntOrderedMap;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import squidpony.squidmath.IntVLA;</a>
-<span class="sourceLineNo">010</span><a id="line.10"></a>
-<span class="sourceLineNo">011</span><a id="line.11">import java.io.Serializable;</a>
-<span class="sourceLineNo">012</span><a id="line.12">import java.util.ArrayList;</a>
-<span class="sourceLineNo">013</span><a id="line.13"></a>
-<span class="sourceLineNo">014</span><a id="line.14">/**</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * A simple Markov chain text generator; call {@link #analyze(CharSequence)} once on a large sample text, then you can</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * call {@link #chain(long)} many times to get odd-sounding "remixes" of the sample text. This is meant to allow easy</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * serialization of the necessary data to call chain(); if you can store the {@link #chars} and {@link #processed}</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * arrays in some serialized form, then you can reassign them to the same fields to avoid calling analyze(). One way to</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * do this conveniently is to use {@link #serializeToString()} after calling analyze() once and to save the resulting</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * String; then, rather than calling analyze() again on future runs, you would call</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * {@link #deserializeFromString(String)} to create the MarkovText without needing any repeated analysis.</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * &lt;br&gt;</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * Created by Tommy Ettinger on 1/30/2018.</a>
-<span class="sourceLineNo">024</span><a id="line.24"> */</a>
-<span class="sourceLineNo">025</span><a id="line.25">@Beta</a>
-<span class="sourceLineNo">026</span><a id="line.26">public class MarkovChar implements Serializable {</a>
-<span class="sourceLineNo">027</span><a id="line.27">    private static final long serialVersionUID = 1L;</a>
-<span class="sourceLineNo">028</span><a id="line.28"></a>
-<span class="sourceLineNo">029</span><a id="line.29">    /**</a>
-<span class="sourceLineNo">030</span><a id="line.30">     * All chars (case-sensitive and only counting chars that are letters in Unicode) that this encountered during the </a>
-<span class="sourceLineNo">031</span><a id="line.31">     * latest call to {@link #analyze(CharSequence)}. Will be null if {@link #analyze(CharSequence)} was never called.</a>
-<span class="sourceLineNo">032</span><a id="line.32">     */</a>
-<span class="sourceLineNo">033</span><a id="line.33">    public char[] chars;</a>
-<span class="sourceLineNo">034</span><a id="line.34"></a>
-<span class="sourceLineNo">035</span><a id="line.35">    /**</a>
-<span class="sourceLineNo">036</span><a id="line.36">     * Map of all pairs of chars encountered to the position in the order they were encountered. Pairs are stored using</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * their 16-bit {@link #chars} indices placed into the most-significant bits for the first word and the</a>
-<span class="sourceLineNo">038</span><a id="line.38">     * least-significant bits for the second word. The size of this IntIntOrderedMap is likely to be larger than the</a>
-<span class="sourceLineNo">039</span><a id="line.39">     * char array {@link #chars}, but should be equal to {@code processed.length}. Will be null if</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * {@link #analyze(CharSequence)} was never called.</a>
-<span class="sourceLineNo">041</span><a id="line.41">     */</a>
-<span class="sourceLineNo">042</span><a id="line.42">    public IntIntOrderedMap pairs;</a>
-<span class="sourceLineNo">043</span><a id="line.43">    /**</a>
-<span class="sourceLineNo">044</span><a id="line.44">     * Complicated data that mixes probabilities of chars using their indices in {@link #chars} and the indices of char</a>
-<span class="sourceLineNo">045</span><a id="line.45">     * pairs in {@link #pairs}, generated during the latest call to {@link #analyze(CharSequence)}. This is a jagged 2D</a>
-<span class="sourceLineNo">046</span><a id="line.46">     * array. Will be null if {@link #analyze(CharSequence)} was never called.</a>
-<span class="sourceLineNo">047</span><a id="line.47">     */</a>
-<span class="sourceLineNo">048</span><a id="line.48">    public int[][] processed;</a>
-<span class="sourceLineNo">049</span><a id="line.49"></a>
-<span class="sourceLineNo">050</span><a id="line.50">    private static final Character INITIAL = '^', END = ' ';</a>
-<span class="sourceLineNo">051</span><a id="line.51">    private static final Matcher matcher = Pattern.compile("[\\p{L}']").matcher();</a>
-<span class="sourceLineNo">052</span><a id="line.52">    public MarkovChar()</a>
-<span class="sourceLineNo">053</span><a id="line.53">    {</a>
-<span class="sourceLineNo">054</span><a id="line.54">    }</a>
-<span class="sourceLineNo">055</span><a id="line.55"></a>
-<span class="sourceLineNo">056</span><a id="line.56">    /**</a>
-<span class="sourceLineNo">057</span><a id="line.57">     * This is the main necessary step before using a MarkovText; you must call this method at some point before you can</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * call any other methods. You can serialize this MarkovText after calling to avoid needing to call this again on later</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * runs, or even include serialized MarkovText objects with a game to only need to call this during pre-processing.</a>
-<span class="sourceLineNo">060</span><a id="line.60">     * This method analyzes the pairings of words in a (typically large) corpus text, including some punctuation as part</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * of words and some kinds as their own "words." It only uses one preceding word to determine the subsequent word.</a>
-<span class="sourceLineNo">062</span><a id="line.62">     * When it finishes processing, it stores the results in {@link #chars} and {@link #processed}, which allows other</a>
-<span class="sourceLineNo">063</span><a id="line.63">     * methods to be called (they will throw a {@link NullPointerException} if analyze() hasn't been called).</a>
-<span class="sourceLineNo">064</span><a id="line.64">     * @param corpus a typically-large sample text in the style that should be mimicked</a>
-<span class="sourceLineNo">065</span><a id="line.65">     */</a>
-<span class="sourceLineNo">066</span><a id="line.66">    public void analyze(CharSequence corpus)</a>
-<span class="sourceLineNo">067</span><a id="line.67">    {</a>
-<span class="sourceLineNo">068</span><a id="line.68">        final int clen = corpus.length();</a>
-<span class="sourceLineNo">069</span><a id="line.69">        Arrangement&lt;Character&gt; body = new Arrangement&lt;&gt;((clen &gt;&gt; 4) + 5);</a>
-<span class="sourceLineNo">070</span><a id="line.70">        pairs = new IntIntOrderedMap(clen / 5 + 5);</a>
-<span class="sourceLineNo">071</span><a id="line.71">        ArrayList&lt;IntVLA&gt; working = new ArrayList&lt;&gt;(clen / 5 + 5);</a>
-<span class="sourceLineNo">072</span><a id="line.72">        body.add(INITIAL);</a>
-<span class="sourceLineNo">073</span><a id="line.73">        working.add(new IntVLA(128));</a>
-<span class="sourceLineNo">074</span><a id="line.74">        pairs.put(0, 0);</a>
-<span class="sourceLineNo">075</span><a id="line.75">        body.add(END);</a>
-<span class="sourceLineNo">076</span><a id="line.76">//        working.add(new IntVLA(links));</a>
-<span class="sourceLineNo">077</span><a id="line.77"></a>
-<span class="sourceLineNo">078</span><a id="line.78">        //matcher.setTarget(corpus);</a>
-<span class="sourceLineNo">079</span><a id="line.79">        int current = 0, pair = 0, pre = 0, post;</a>
-<span class="sourceLineNo">080</span><a id="line.80">        for (int i = 0; i &lt; clen; i++) {</a>
-<span class="sourceLineNo">081</span><a id="line.81">            char c = corpus.charAt(i);</a>
-<span class="sourceLineNo">082</span><a id="line.82">            if('\'' != c &amp;&amp; !Category.L.contains(c))</a>
-<span class="sourceLineNo">083</span><a id="line.83">                c = END;</a>
-<span class="sourceLineNo">084</span><a id="line.84">            current = body.addOrIndex(c);</a>
-<span class="sourceLineNo">085</span><a id="line.85">            pair = pair &lt;&lt; 16 | (current &amp; 0xFFFF);</a>
-<span class="sourceLineNo">086</span><a id="line.86">            if(pair == 1)</a>
-<span class="sourceLineNo">087</span><a id="line.87">                continue;</a>
-<span class="sourceLineNo">088</span><a id="line.88">            post = pairs.putIfAbsent(pair, pairs.size());</a>
-<span class="sourceLineNo">089</span><a id="line.89">            if(working.size() != pairs.size())</a>
-<span class="sourceLineNo">090</span><a id="line.90">            {</a>
-<span class="sourceLineNo">091</span><a id="line.91">                working.add(new IntVLA(16));</a>
-<span class="sourceLineNo">092</span><a id="line.92">            }</a>
-<span class="sourceLineNo">093</span><a id="line.93">            working.get(pre).add(current);</a>
-<span class="sourceLineNo">094</span><a id="line.94">            if(current == 1)</a>
-<span class="sourceLineNo">095</span><a id="line.95">            {</a>
-<span class="sourceLineNo">096</span><a id="line.96">                working.get(post).add(0);</a>
-<span class="sourceLineNo">097</span><a id="line.97">                pair = 0;</a>
-<span class="sourceLineNo">098</span><a id="line.98">                pre = 0;</a>
-<span class="sourceLineNo">099</span><a id="line.99">            }</a>
-<span class="sourceLineNo">100</span><a id="line.100">            else</a>
-<span class="sourceLineNo">101</span><a id="line.101">            {</a>
-<span class="sourceLineNo">102</span><a id="line.102">                pre = post;</a>
-<span class="sourceLineNo">103</span><a id="line.103">            }</a>
-<span class="sourceLineNo">104</span><a id="line.104">        }</a>
-<span class="sourceLineNo">105</span><a id="line.105">        IntVLA w = working.get(pre), v;</a>
-<span class="sourceLineNo">106</span><a id="line.106">        if(w.size == 0) w.add(0);</a>
-<span class="sourceLineNo">107</span><a id="line.107">        final int len = body.size(), pairLen = working.size();</a>
-<span class="sourceLineNo">108</span><a id="line.108">        chars = new char[len];</a>
-<span class="sourceLineNo">109</span><a id="line.109">        for (int i = 0; i &lt; len; i++) {</a>
-<span class="sourceLineNo">110</span><a id="line.110">            chars[i] = body.keyAt(i);</a>
-<span class="sourceLineNo">111</span><a id="line.111">        }</a>
-<span class="sourceLineNo">112</span><a id="line.112"></a>
-<span class="sourceLineNo">113</span><a id="line.113">        processed = new int[pairLen][];</a>
-<span class="sourceLineNo">114</span><a id="line.114">        w = new IntVLA(128);</a>
-<span class="sourceLineNo">115</span><a id="line.115">        IntVLA small = new IntVLA(128);</a>
-<span class="sourceLineNo">116</span><a id="line.116">        IntVLA large = new IntVLA(128);</a>
-<span class="sourceLineNo">117</span><a id="line.117">        IntVLA probabilities = new IntVLA(128);</a>
-<span class="sourceLineNo">118</span><a id="line.118">        for(int iv = 0; iv &lt; pairLen; iv++ )</a>
-<span class="sourceLineNo">119</span><a id="line.119">        {</a>
-<span class="sourceLineNo">120</span><a id="line.120">            v = working.get(iv);</a>
-<span class="sourceLineNo">121</span><a id="line.121">            w.clear();</a>
-<span class="sourceLineNo">122</span><a id="line.122">            probabilities.clear();</a>
-<span class="sourceLineNo">123</span><a id="line.123">            if(v.size &lt;= 0)</a>
-<span class="sourceLineNo">124</span><a id="line.124">            {</a>
-<span class="sourceLineNo">125</span><a id="line.125">                v.add(1);</a>
-<span class="sourceLineNo">126</span><a id="line.126">            }</a>
-<span class="sourceLineNo">127</span><a id="line.127">            int vv, sum = 0;</a>
-<span class="sourceLineNo">128</span><a id="line.128">            final int vs = v.size;</a>
-<span class="sourceLineNo">129</span><a id="line.129">            OUTER:</a>
-<span class="sourceLineNo">130</span><a id="line.130">            for (int i = 0; i &lt; vs; ++i) {</a>
-<span class="sourceLineNo">131</span><a id="line.131">                vv = v.get(i);</a>
-<span class="sourceLineNo">132</span><a id="line.132">                for (int j = 0; j &lt; w.size; j++) {</a>
-<span class="sourceLineNo">133</span><a id="line.133">                    if (w.get(j) == vv) {</a>
-<span class="sourceLineNo">134</span><a id="line.134">                        probabilities.incr(j, 0x10000);</a>
-<span class="sourceLineNo">135</span><a id="line.135">                        sum += 0x10000;</a>
-<span class="sourceLineNo">136</span><a id="line.136">                        continue OUTER;</a>
-<span class="sourceLineNo">137</span><a id="line.137">                    }</a>
-<span class="sourceLineNo">138</span><a id="line.138">                }</a>
-<span class="sourceLineNo">139</span><a id="line.139">                w.add(vv);</a>
-<span class="sourceLineNo">140</span><a id="line.140">                probabilities.add(0x10000);</a>
-<span class="sourceLineNo">141</span><a id="line.141">                sum += 0x10000;</a>
-<span class="sourceLineNo">142</span><a id="line.142">            }</a>
-<span class="sourceLineNo">143</span><a id="line.143">            int iAverage = (sum / w.size);</a>
-<span class="sourceLineNo">144</span><a id="line.144"></a>
-<span class="sourceLineNo">145</span><a id="line.145">            small.clear();</a>
-<span class="sourceLineNo">146</span><a id="line.146">            large.clear();</a>
-<span class="sourceLineNo">147</span><a id="line.147">            /* Populate the stacks with the input probabilities. */</a>
-<span class="sourceLineNo">148</span><a id="line.148">            for (int i = 0; i &lt; probabilities.size; i++) {</a>
-<span class="sourceLineNo">149</span><a id="line.149">                /* If the probability is below the average probability, then we add</a>
-<span class="sourceLineNo">150</span><a id="line.150">                 * it to the small list; otherwise we add it to the large list.</a>
-<span class="sourceLineNo">151</span><a id="line.151">                 */</a>
-<span class="sourceLineNo">152</span><a id="line.152">                if (probabilities.get(i) &gt;= iAverage)</a>
-<span class="sourceLineNo">153</span><a id="line.153">                    large.add(i);</a>
-<span class="sourceLineNo">154</span><a id="line.154">                else</a>
-<span class="sourceLineNo">155</span><a id="line.155">                    small.add(i);</a>
-<span class="sourceLineNo">156</span><a id="line.156">            }</a>
+<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.Arrangement;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidmath.IntIntOrderedMap;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import squidpony.squidmath.IntVLA;</a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10">import java.io.Serializable;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import java.util.ArrayList;</a>
+<span class="sourceLineNo">012</span><a id="line.12"></a>
+<span class="sourceLineNo">013</span><a id="line.13">/**</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * A simple Markov chain text generator; call {@link #analyze(CharSequence)} once on a large sample text, then you can</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * call {@link #chain(long)} many times to get odd-sounding "remixes" of the sample text. This is meant to allow easy</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * serialization of the necessary data to call chain(); if you can store the {@link #chars} and {@link #processed}</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * arrays in some serialized form, then you can reassign them to the same fields to avoid calling analyze(). One way to</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * do this conveniently is to use {@link #serializeToString()} after calling analyze() once and to save the resulting</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * String; then, rather than calling analyze() again on future runs, you would call</a>
+<span class="sourceLineNo">020</span><a id="line.20"> * {@link #deserializeFromString(String)} to create the MarkovText without needing any repeated analysis.</a>
+<span class="sourceLineNo">021</span><a id="line.21"> * &lt;br&gt;</a>
+<span class="sourceLineNo">022</span><a id="line.22"> * Created by Tommy Ettinger on 1/30/2018.</a>
+<span class="sourceLineNo">023</span><a id="line.23"> */</a>
+<span class="sourceLineNo">024</span><a id="line.24">public class MarkovChar implements Serializable {</a>
+<span class="sourceLineNo">025</span><a id="line.25">    private static final long serialVersionUID = 1L;</a>
+<span class="sourceLineNo">026</span><a id="line.26"></a>
+<span class="sourceLineNo">027</span><a id="line.27">    /**</a>
+<span class="sourceLineNo">028</span><a id="line.28">     * All chars (case-sensitive and only counting chars that are letters in Unicode) that this encountered during the </a>
+<span class="sourceLineNo">029</span><a id="line.29">     * latest call to {@link #analyze(CharSequence)}. Will be null if {@link #analyze(CharSequence)} was never called.</a>
+<span class="sourceLineNo">030</span><a id="line.30">     */</a>
+<span class="sourceLineNo">031</span><a id="line.31">    public char[] chars;</a>
+<span class="sourceLineNo">032</span><a id="line.32"></a>
+<span class="sourceLineNo">033</span><a id="line.33">    /**</a>
+<span class="sourceLineNo">034</span><a id="line.34">     * Map of all pairs of chars encountered to the position in the order they were encountered. Pairs are stored using</a>
+<span class="sourceLineNo">035</span><a id="line.35">     * their 16-bit {@link #chars} indices placed into the most-significant bits for the first word and the</a>
+<span class="sourceLineNo">036</span><a id="line.36">     * least-significant bits for the second word. The size of this IntIntOrderedMap is likely to be larger than the</a>
+<span class="sourceLineNo">037</span><a id="line.37">     * char array {@link #chars}, but should be equal to {@code processed.length}. Will be null if</a>
+<span class="sourceLineNo">038</span><a id="line.38">     * {@link #analyze(CharSequence)} was never called.</a>
+<span class="sourceLineNo">039</span><a id="line.39">     */</a>
+<span class="sourceLineNo">040</span><a id="line.40">    public IntIntOrderedMap pairs;</a>
+<span class="sourceLineNo">041</span><a id="line.41">    /**</a>
+<span class="sourceLineNo">042</span><a id="line.42">     * Complicated data that mixes probabilities of chars using their indices in {@link #chars} and the indices of char</a>
+<span class="sourceLineNo">043</span><a id="line.43">     * pairs in {@link #pairs}, generated during the latest call to {@link #analyze(CharSequence)}. This is a jagged 2D</a>
+<span class="sourceLineNo">044</span><a id="line.44">     * array. Will be null if {@link #analyze(CharSequence)} was never called.</a>
+<span class="sourceLineNo">045</span><a id="line.45">     */</a>
+<span class="sourceLineNo">046</span><a id="line.46">    public int[][] processed;</a>
+<span class="sourceLineNo">047</span><a id="line.47"></a>
+<span class="sourceLineNo">048</span><a id="line.48">    private static final Character INITIAL = '^', END = ' ';</a>
+<span class="sourceLineNo">049</span><a id="line.49">    private static final Matcher matcher = Pattern.compile("[\\p{L}']").matcher();</a>
+<span class="sourceLineNo">050</span><a id="line.50">    public MarkovChar()</a>
+<span class="sourceLineNo">051</span><a id="line.51">    {</a>
+<span class="sourceLineNo">052</span><a id="line.52">    }</a>
+<span class="sourceLineNo">053</span><a id="line.53"></a>
+<span class="sourceLineNo">054</span><a id="line.54">    /**</a>
+<span class="sourceLineNo">055</span><a id="line.55">     * This is the main necessary step before using a MarkovText; you must call this method at some point before you can</a>
+<span class="sourceLineNo">056</span><a id="line.56">     * call any other methods. You can serialize this MarkovText after calling to avoid needing to call this again on later</a>
+<span class="sourceLineNo">057</span><a id="line.57">     * runs, or even include serialized MarkovText objects with a game to only need to call this during pre-processing.</a>
+<span class="sourceLineNo">058</span><a id="line.58">     * This method analyzes the pairings of words in a (typically large) corpus text, including some punctuation as part</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * of words and some kinds as their own "words." It only uses one preceding word to determine the subsequent word.</a>
+<span class="sourceLineNo">060</span><a id="line.60">     * When it finishes processing, it stores the results in {@link #chars} and {@link #processed}, which allows other</a>
+<span class="sourceLineNo">061</span><a id="line.61">     * methods to be called (they will throw a {@link NullPointerException} if analyze() hasn't been called).</a>
+<span class="sourceLineNo">062</span><a id="line.62">     * @param corpus a typically-large sample text in the style that should be mimicked</a>
+<span class="sourceLineNo">063</span><a id="line.63">     */</a>
+<span class="sourceLineNo">064</span><a id="line.64">    public void analyze(CharSequence corpus)</a>
+<span class="sourceLineNo">065</span><a id="line.65">    {</a>
+<span class="sourceLineNo">066</span><a id="line.66">        final int clen = corpus.length();</a>
+<span class="sourceLineNo">067</span><a id="line.67">        Arrangement&lt;Character&gt; body = new Arrangement&lt;&gt;((clen &gt;&gt; 4) + 5);</a>
+<span class="sourceLineNo">068</span><a id="line.68">        pairs = new IntIntOrderedMap(clen / 5 + 5);</a>
+<span class="sourceLineNo">069</span><a id="line.69">        ArrayList&lt;IntVLA&gt; working = new ArrayList&lt;&gt;(clen / 5 + 5);</a>
+<span class="sourceLineNo">070</span><a id="line.70">        body.add(INITIAL);</a>
+<span class="sourceLineNo">071</span><a id="line.71">        working.add(new IntVLA(128));</a>
+<span class="sourceLineNo">072</span><a id="line.72">        pairs.put(0, 0);</a>
+<span class="sourceLineNo">073</span><a id="line.73">        body.add(END);</a>
+<span class="sourceLineNo">074</span><a id="line.74">//        working.add(new IntVLA(links));</a>
+<span class="sourceLineNo">075</span><a id="line.75"></a>
+<span class="sourceLineNo">076</span><a id="line.76">        //matcher.setTarget(corpus);</a>
+<span class="sourceLineNo">077</span><a id="line.77">        int current = 0, pair = 0, pre = 0, post;</a>
+<span class="sourceLineNo">078</span><a id="line.78">        for (int i = 0; i &lt; clen; i++) {</a>
+<span class="sourceLineNo">079</span><a id="line.79">            char c = corpus.charAt(i);</a>
+<span class="sourceLineNo">080</span><a id="line.80">            if('\'' != c &amp;&amp; !Category.L.contains(c))</a>
+<span class="sourceLineNo">081</span><a id="line.81">                c = END;</a>
+<span class="sourceLineNo">082</span><a id="line.82">            current = body.addOrIndex(c);</a>
+<span class="sourceLineNo">083</span><a id="line.83">            pair = pair &lt;&lt; 16 | (current &amp; 0xFFFF);</a>
+<span class="sourceLineNo">084</span><a id="line.84">            if(pair == 1)</a>
+<span class="sourceLineNo">085</span><a id="line.85">                continue;</a>
+<span class="sourceLineNo">086</span><a id="line.86">            post = pairs.putIfAbsent(pair, pairs.size());</a>
+<span class="sourceLineNo">087</span><a id="line.87">            if(working.size() != pairs.size())</a>
+<span class="sourceLineNo">088</span><a id="line.88">            {</a>
+<span class="sourceLineNo">089</span><a id="line.89">                working.add(new IntVLA(16));</a>
+<span class="sourceLineNo">090</span><a id="line.90">            }</a>
+<span class="sourceLineNo">091</span><a id="line.91">            working.get(pre).add(current);</a>
+<span class="sourceLineNo">092</span><a id="line.92">            if(current == 1)</a>
+<span class="sourceLineNo">093</span><a id="line.93">            {</a>
+<span class="sourceLineNo">094</span><a id="line.94">                working.get(post).add(0);</a>
+<span class="sourceLineNo">095</span><a id="line.95">                pair = 0;</a>
+<span class="sourceLineNo">096</span><a id="line.96">                pre = 0;</a>
+<span class="sourceLineNo">097</span><a id="line.97">            }</a>
+<span class="sourceLineNo">098</span><a id="line.98">            else</a>
+<span class="sourceLineNo">099</span><a id="line.99">            {</a>
+<span class="sourceLineNo">100</span><a id="line.100">                pre = post;</a>
+<span class="sourceLineNo">101</span><a id="line.101">            }</a>
+<span class="sourceLineNo">102</span><a id="line.102">        }</a>
+<span class="sourceLineNo">103</span><a id="line.103">        IntVLA w = working.get(pre), v;</a>
+<span class="sourceLineNo">104</span><a id="line.104">        if(w.size == 0) w.add(0);</a>
+<span class="sourceLineNo">105</span><a id="line.105">        final int len = body.size(), pairLen = working.size();</a>
+<span class="sourceLineNo">106</span><a id="line.106">        chars = new char[len];</a>
+<span class="sourceLineNo">107</span><a id="line.107">        for (int i = 0; i &lt; len; i++) {</a>
+<span class="sourceLineNo">108</span><a id="line.108">            chars[i] = body.keyAt(i);</a>
+<span class="sourceLineNo">109</span><a id="line.109">        }</a>
+<span class="sourceLineNo">110</span><a id="line.110"></a>
+<span class="sourceLineNo">111</span><a id="line.111">        processed = new int[pairLen][];</a>
+<span class="sourceLineNo">112</span><a id="line.112">        w = new IntVLA(128);</a>
+<span class="sourceLineNo">113</span><a id="line.113">        IntVLA small = new IntVLA(128);</a>
+<span class="sourceLineNo">114</span><a id="line.114">        IntVLA large = new IntVLA(128);</a>
+<span class="sourceLineNo">115</span><a id="line.115">        IntVLA probabilities = new IntVLA(128);</a>
+<span class="sourceLineNo">116</span><a id="line.116">        for(int iv = 0; iv &lt; pairLen; iv++ )</a>
+<span class="sourceLineNo">117</span><a id="line.117">        {</a>
+<span class="sourceLineNo">118</span><a id="line.118">            v = working.get(iv);</a>
+<span class="sourceLineNo">119</span><a id="line.119">            w.clear();</a>
+<span class="sourceLineNo">120</span><a id="line.120">            probabilities.clear();</a>
+<span class="sourceLineNo">121</span><a id="line.121">            if(v.size &lt;= 0)</a>
+<span class="sourceLineNo">122</span><a id="line.122">            {</a>
+<span class="sourceLineNo">123</span><a id="line.123">                v.add(1);</a>
+<span class="sourceLineNo">124</span><a id="line.124">            }</a>
+<span class="sourceLineNo">125</span><a id="line.125">            int vv, sum = 0;</a>
+<span class="sourceLineNo">126</span><a id="line.126">            final int vs = v.size;</a>
+<span class="sourceLineNo">127</span><a id="line.127">            OUTER:</a>
+<span class="sourceLineNo">128</span><a id="line.128">            for (int i = 0; i &lt; vs; ++i) {</a>
+<span class="sourceLineNo">129</span><a id="line.129">                vv = v.get(i);</a>
+<span class="sourceLineNo">130</span><a id="line.130">                for (int j = 0; j &lt; w.size; j++) {</a>
+<span class="sourceLineNo">131</span><a id="line.131">                    if (w.get(j) == vv) {</a>
+<span class="sourceLineNo">132</span><a id="line.132">                        probabilities.incr(j, 0x10000);</a>
+<span class="sourceLineNo">133</span><a id="line.133">                        sum += 0x10000;</a>
+<span class="sourceLineNo">134</span><a id="line.134">                        continue OUTER;</a>
+<span class="sourceLineNo">135</span><a id="line.135">                    }</a>
+<span class="sourceLineNo">136</span><a id="line.136">                }</a>
+<span class="sourceLineNo">137</span><a id="line.137">                w.add(vv);</a>
+<span class="sourceLineNo">138</span><a id="line.138">                probabilities.add(0x10000);</a>
+<span class="sourceLineNo">139</span><a id="line.139">                sum += 0x10000;</a>
+<span class="sourceLineNo">140</span><a id="line.140">            }</a>
+<span class="sourceLineNo">141</span><a id="line.141">            int iAverage = (sum / w.size);</a>
+<span class="sourceLineNo">142</span><a id="line.142"></a>
+<span class="sourceLineNo">143</span><a id="line.143">            small.clear();</a>
+<span class="sourceLineNo">144</span><a id="line.144">            large.clear();</a>
+<span class="sourceLineNo">145</span><a id="line.145">            /* Populate the stacks with the input probabilities. */</a>
+<span class="sourceLineNo">146</span><a id="line.146">            for (int i = 0; i &lt; probabilities.size; i++) {</a>
+<span class="sourceLineNo">147</span><a id="line.147">                /* If the probability is below the average probability, then we add</a>
+<span class="sourceLineNo">148</span><a id="line.148">                 * it to the small list; otherwise we add it to the large list.</a>
+<span class="sourceLineNo">149</span><a id="line.149">                 */</a>
+<span class="sourceLineNo">150</span><a id="line.150">                if (probabilities.get(i) &gt;= iAverage)</a>
+<span class="sourceLineNo">151</span><a id="line.151">                    large.add(i);</a>
+<span class="sourceLineNo">152</span><a id="line.152">                else</a>
+<span class="sourceLineNo">153</span><a id="line.153">                    small.add(i);</a>
+<span class="sourceLineNo">154</span><a id="line.154">            }</a>
+<span class="sourceLineNo">155</span><a id="line.155"></a>
+<span class="sourceLineNo">156</span><a id="line.156">            processed[iv] = new int[w.size * 3];</a>
 <span class="sourceLineNo">157</span><a id="line.157"></a>
-<span class="sourceLineNo">158</span><a id="line.158">            processed[iv] = new int[w.size * 3];</a>
-<span class="sourceLineNo">159</span><a id="line.159"></a>
-<span class="sourceLineNo">160</span><a id="line.160">            while (!small.isEmpty() &amp;&amp; !large.isEmpty()) {</a>
-<span class="sourceLineNo">161</span><a id="line.161">                /* Get the index of the small and the large probabilities. */</a>
-<span class="sourceLineNo">162</span><a id="line.162">                int less = small.pop(), less2 = less * 3;</a>
-<span class="sourceLineNo">163</span><a id="line.163">                int more = large.pop();</a>
-<span class="sourceLineNo">164</span><a id="line.164"></a>
-<span class="sourceLineNo">165</span><a id="line.165">                /* These probabilities have not yet been scaled up to be such that</a>
-<span class="sourceLineNo">166</span><a id="line.166">                 * sum/n is given weight 1.0.  We do this here instead.</a>
-<span class="sourceLineNo">167</span><a id="line.167">                 */</a>
-<span class="sourceLineNo">168</span><a id="line.168">                processed[iv][less2] = (probabilities.size * probabilities.get(less)) / (sum &gt;&gt; 16);</a>
-<span class="sourceLineNo">169</span><a id="line.169">                processed[iv][less2+1] = w.get(less);</a>
-<span class="sourceLineNo">170</span><a id="line.170">                processed[iv][less2+2] = w.get(more);</a>
-<span class="sourceLineNo">171</span><a id="line.171">                vv = probabilities.get(less) - iAverage;</a>
-<span class="sourceLineNo">172</span><a id="line.172">                probabilities.incr(more, vv);</a>
-<span class="sourceLineNo">173</span><a id="line.173">                if (probabilities.get(more) &gt;= iAverage)</a>
-<span class="sourceLineNo">174</span><a id="line.174">                    large.add(more);</a>
-<span class="sourceLineNo">175</span><a id="line.175">                else</a>
-<span class="sourceLineNo">176</span><a id="line.176">                    small.add(more);</a>
-<span class="sourceLineNo">177</span><a id="line.177">            }</a>
-<span class="sourceLineNo">178</span><a id="line.178">            int t;</a>
-<span class="sourceLineNo">179</span><a id="line.179">            while (!small.isEmpty())</a>
-<span class="sourceLineNo">180</span><a id="line.180">            {</a>
-<span class="sourceLineNo">181</span><a id="line.181">                processed[iv][(t = small.pop()) * 3] = 0xFFFF;</a>
-<span class="sourceLineNo">182</span><a id="line.182">                processed[iv][t * 3 + 1] = processed[iv][t * 3 + 2] = w.get(t);</a>
-<span class="sourceLineNo">183</span><a id="line.183">            }</a>
-<span class="sourceLineNo">184</span><a id="line.184">            while (!large.isEmpty())</a>
-<span class="sourceLineNo">185</span><a id="line.185">            {</a>
-<span class="sourceLineNo">186</span><a id="line.186">                processed[iv][(t = large.pop()) * 3] = 0xFFFF;</a>
-<span class="sourceLineNo">187</span><a id="line.187">                processed[iv][t * 3 + 1] = processed[iv][t * 3 + 2] = w.get(t);</a>
-<span class="sourceLineNo">188</span><a id="line.188">            }</a>
-<span class="sourceLineNo">189</span><a id="line.189">        }</a>
-<span class="sourceLineNo">190</span><a id="line.190">    }</a>
-<span class="sourceLineNo">191</span><a id="line.191"></a>
-<span class="sourceLineNo">192</span><a id="line.192">    /**</a>
-<span class="sourceLineNo">193</span><a id="line.193">     * Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using</a>
-<span class="sourceLineNo">194</span><a id="line.194">     * {@link #analyze(CharSequence)}) that terminates when stop punctuation is used (".", "!", "?", or "..."), or once</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * the length would be greater than 200 characters without encountering stop punctuation(it terminates such a</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * sentence with "." or "...").</a>
-<span class="sourceLineNo">197</span><a id="line.197">     * @param seed the seed for the random decisions this makes, as a long; any long can be used</a>
-<span class="sourceLineNo">198</span><a id="line.198">     * @return a String generated from the analyzed corpus text's word placement, usually a small sentence</a>
-<span class="sourceLineNo">199</span><a id="line.199">     */</a>
-<span class="sourceLineNo">200</span><a id="line.200">    public String chain(long seed) {</a>
-<span class="sourceLineNo">201</span><a id="line.201">        return chain(seed, 200);</a>
-<span class="sourceLineNo">202</span><a id="line.202">    }</a>
-<span class="sourceLineNo">203</span><a id="line.203"></a>
-<span class="sourceLineNo">204</span><a id="line.204">    /**</a>
-<span class="sourceLineNo">205</span><a id="line.205">     * Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using</a>
-<span class="sourceLineNo">206</span><a id="line.206">     * {@link #analyze(CharSequence)}) that terminates when stop punctuation is used (".", "!", "?", or "...") or once</a>
-<span class="sourceLineNo">207</span><a id="line.207">     * the maxLength would be exceeded by any other words (it terminates such a sentence with "." or "...").</a>
-<span class="sourceLineNo">208</span><a id="line.208">     * @param seed the seed for the random decisions this makes, as a long; any long can be used</a>
-<span class="sourceLineNo">209</span><a id="line.209">     * @param maxLength the maximum length for the generated String, in number of characters</a>
-<span class="sourceLineNo">210</span><a id="line.210">     * @return a String generated from the analyzed corpus text's word placement, usually a small sentence</a>
-<span class="sourceLineNo">211</span><a id="line.211">     */</a>
-<span class="sourceLineNo">212</span><a id="line.212">    public String chain(long seed, int maxLength) {</a>
-<span class="sourceLineNo">213</span><a id="line.213">        int before = 0, pair = 0;</a>
-<span class="sourceLineNo">214</span><a id="line.214">        boolean later;</a>
-<span class="sourceLineNo">215</span><a id="line.215">        long state;</a>
-<span class="sourceLineNo">216</span><a id="line.216">        StringBuilder sb = new StringBuilder(1000);</a>
-<span class="sourceLineNo">217</span><a id="line.217">        int[] rf;</a>
-<span class="sourceLineNo">218</span><a id="line.218">        while (sb.length() &lt; maxLength) {</a>
-<span class="sourceLineNo">219</span><a id="line.219">            later = (pair != 0);</a>
-<span class="sourceLineNo">220</span><a id="line.220">            rf = processed[pairs.get(pair)];</a>
-<span class="sourceLineNo">221</span><a id="line.221">            // This is LightRNG's algorithm to generate a random long given sequential states</a>
-<span class="sourceLineNo">222</span><a id="line.222">            state = ((state = ((state = ((seed += 0x9E3779B97F4A7C15L) ^ seed &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31);</a>
-<span class="sourceLineNo">223</span><a id="line.223">            // get a random int (using half the bits of our previously-calculated state) that is less than size</a>
-<span class="sourceLineNo">224</span><a id="line.224">            int column = (int) ((rf.length * (state &amp; 0xFFFFFFFFL)) / 0x300000000L) * 3; // divide by 2^32, round down to multiple of 3</a>
-<span class="sourceLineNo">225</span><a id="line.225">            // use the other half of the bits of state to get a double, compare to probability and choose either the</a>
-<span class="sourceLineNo">226</span><a id="line.226">            // current column or the alias for that column based on that probability</a>
-<span class="sourceLineNo">227</span><a id="line.227">            //before = ((state &gt;&gt;&gt; 33) &gt; rf[column]) ? rf[column + 1] : rf[column + 2];</a>
-<span class="sourceLineNo">228</span><a id="line.228">            if((state &gt;&gt;&gt; 48) &gt; rf[column])</a>
-<span class="sourceLineNo">229</span><a id="line.229">                before = rf[column + 1];</a>
-<span class="sourceLineNo">230</span><a id="line.230">            else</a>
-<span class="sourceLineNo">231</span><a id="line.231">                before = rf[column + 2];</a>
-<span class="sourceLineNo">232</span><a id="line.232">            if(before &gt; 1)</a>
-<span class="sourceLineNo">233</span><a id="line.233">            {</a>
-<span class="sourceLineNo">234</span><a id="line.234">                if(sb.length() + 1 &lt; maxLength)</a>
-<span class="sourceLineNo">235</span><a id="line.235">                {</a>
-<span class="sourceLineNo">236</span><a id="line.236">                    sb.append(chars[before]);</a>
-<span class="sourceLineNo">237</span><a id="line.237">                    pair = pair &lt;&lt; 16 | (before &amp; 0xFFFF);</a>
-<span class="sourceLineNo">238</span><a id="line.238">                }</a>
-<span class="sourceLineNo">239</span><a id="line.239">                else</a>
-<span class="sourceLineNo">240</span><a id="line.240">                {</a>
-<span class="sourceLineNo">241</span><a id="line.241">                    break;</a>
-<span class="sourceLineNo">242</span><a id="line.242">                }</a>
-<span class="sourceLineNo">243</span><a id="line.243">            }</a>
-<span class="sourceLineNo">244</span><a id="line.244">            else</a>
-<span class="sourceLineNo">245</span><a id="line.245">            {</a>
-<span class="sourceLineNo">246</span><a id="line.246">                break;</a>
-<span class="sourceLineNo">247</span><a id="line.247">            }</a>
-<span class="sourceLineNo">248</span><a id="line.248">            </a>
-<span class="sourceLineNo">249</span><a id="line.249">        }</a>
-<span class="sourceLineNo">250</span><a id="line.250">        return sb.toString();</a>
-<span class="sourceLineNo">251</span><a id="line.251">    }</a>
-<span class="sourceLineNo">252</span><a id="line.252"></a>
-<span class="sourceLineNo">253</span><a id="line.253">    /**</a>
-<span class="sourceLineNo">254</span><a id="line.254">     * Returns a representation of this MarkovText as a String; use {@link #deserializeFromString(String)} to get a</a>
-<span class="sourceLineNo">255</span><a id="line.255">     * MarkovText back from this String. The {@link #chars} and {@link #processed} fields must have been given values by</a>
-<span class="sourceLineNo">256</span><a id="line.256">     * either direct assignment, calling {@link #analyze(CharSequence)}, or building this MarkovTest with the</a>
-<span class="sourceLineNo">257</span><a id="line.257">     * aforementioned deserializeToString method. Uses spaces to separate words and a tab to separate the two fields.</a>
-<span class="sourceLineNo">258</span><a id="line.258">     * @return a String that can be used to store the analyzed words and frequencies in this MarkovText</a>
-<span class="sourceLineNo">259</span><a id="line.259">     */</a>
-<span class="sourceLineNo">260</span><a id="line.260">    public String serializeToString()</a>
-<span class="sourceLineNo">261</span><a id="line.261">    {</a>
-<span class="sourceLineNo">262</span><a id="line.262">        return String.valueOf(chars) + "\t" + StringKit.join(",", pairs.keysAsArray()) + "\t" + Converters.convertArrayInt2D.stringify(processed);</a>
-<span class="sourceLineNo">263</span><a id="line.263">    }</a>
-<span class="sourceLineNo">264</span><a id="line.264"></a>
-<span class="sourceLineNo">265</span><a id="line.265">    /**</a>
-<span class="sourceLineNo">266</span><a id="line.266">     * Recreates an already-analyzed MarkovText given a String produced by {@link #serializeToString()}.</a>
-<span class="sourceLineNo">267</span><a id="line.267">     * @param data a String returned by {@link #serializeToString()}</a>
-<span class="sourceLineNo">268</span><a id="line.268">     * @return a MarkovText that is ready to generate text with {@link #chain(long)}</a>
-<span class="sourceLineNo">269</span><a id="line.269">     */</a>
-<span class="sourceLineNo">270</span><a id="line.270">    public static MarkovChar deserializeFromString(String data)</a>
-<span class="sourceLineNo">271</span><a id="line.271">    {</a>
-<span class="sourceLineNo">272</span><a id="line.272">        int split = data.indexOf('\t');</a>
-<span class="sourceLineNo">273</span><a id="line.273">        MarkovChar markov = new MarkovChar();</a>
-<span class="sourceLineNo">274</span><a id="line.274">        markov.chars = data.substring(0, split).toCharArray();</a>
-<span class="sourceLineNo">275</span><a id="line.275">        int[] arr = Converters.convertArrayInt.restore(data.substring(split+1, split = data.indexOf('\t', split + 1)));</a>
-<span class="sourceLineNo">276</span><a id="line.276">        markov.pairs = new IntIntOrderedMap(arr, ArrayTools.range(arr.length));</a>
-<span class="sourceLineNo">277</span><a id="line.277">        markov.processed = Converters.convertArrayInt2D.restore(data.substring(split + 1));</a>
-<span class="sourceLineNo">278</span><a id="line.278">        return markov;</a>
-<span class="sourceLineNo">279</span><a id="line.279">    }</a>
-<span class="sourceLineNo">280</span><a id="line.280"></a>
-<span class="sourceLineNo">281</span><a id="line.281">    /**</a>
-<span class="sourceLineNo">282</span><a id="line.282">     * Copies the String array {@link #chars} and the 2D jagged int array {@link #processed} into a new MarkovText.</a>
-<span class="sourceLineNo">283</span><a id="line.283">     * None of the arrays will be equivalent references, but the Strings (being immutable) will be the same objects in</a>
-<span class="sourceLineNo">284</span><a id="line.284">     * both MarkovText instances.</a>
-<span class="sourceLineNo">285</span><a id="line.285">     * @return a copy of this MarkovText</a>
-<span class="sourceLineNo">286</span><a id="line.286">     */</a>
-<span class="sourceLineNo">287</span><a id="line.287">    public MarkovChar copy()</a>
-<span class="sourceLineNo">288</span><a id="line.288">    {</a>
-<span class="sourceLineNo">289</span><a id="line.289">        MarkovChar other = new MarkovChar();</a>
-<span class="sourceLineNo">290</span><a id="line.290">        other.chars = new char[chars.length];</a>
-<span class="sourceLineNo">291</span><a id="line.291">        System.arraycopy(chars, 0, other.chars, 0, chars.length);</a>
-<span class="sourceLineNo">292</span><a id="line.292">        other.processed = new int[processed.length][];</a>
-<span class="sourceLineNo">293</span><a id="line.293">        int len;</a>
-<span class="sourceLineNo">294</span><a id="line.294">        for (int i = 0; i &lt; processed.length; i++) {</a>
-<span class="sourceLineNo">295</span><a id="line.295">            other.processed[i] = new int[len = processed[i].length];</a>
-<span class="sourceLineNo">296</span><a id="line.296">            System.arraycopy(processed[i], 0, other.processed[i], 0, len);</a>
-<span class="sourceLineNo">297</span><a id="line.297">        }</a>
-<span class="sourceLineNo">298</span><a id="line.298">        return other;</a>
-<span class="sourceLineNo">299</span><a id="line.299">    }</a>
-<span class="sourceLineNo">300</span><a id="line.300">}</a>
+<span class="sourceLineNo">158</span><a id="line.158">            while (!small.isEmpty() &amp;&amp; !large.isEmpty()) {</a>
+<span class="sourceLineNo">159</span><a id="line.159">                /* Get the index of the small and the large probabilities. */</a>
+<span class="sourceLineNo">160</span><a id="line.160">                int less = small.pop(), less2 = less * 3;</a>
+<span class="sourceLineNo">161</span><a id="line.161">                int more = large.pop();</a>
+<span class="sourceLineNo">162</span><a id="line.162"></a>
+<span class="sourceLineNo">163</span><a id="line.163">                /* These probabilities have not yet been scaled up to be such that</a>
+<span class="sourceLineNo">164</span><a id="line.164">                 * sum/n is given weight 1.0.  We do this here instead.</a>
+<span class="sourceLineNo">165</span><a id="line.165">                 */</a>
+<span class="sourceLineNo">166</span><a id="line.166">                processed[iv][less2] = (probabilities.size * probabilities.get(less)) / (sum &gt;&gt; 16);</a>
+<span class="sourceLineNo">167</span><a id="line.167">                processed[iv][less2+1] = w.get(less);</a>
+<span class="sourceLineNo">168</span><a id="line.168">                processed[iv][less2+2] = w.get(more);</a>
+<span class="sourceLineNo">169</span><a id="line.169">                vv = probabilities.get(less) - iAverage;</a>
+<span class="sourceLineNo">170</span><a id="line.170">                probabilities.incr(more, vv);</a>
+<span class="sourceLineNo">171</span><a id="line.171">                if (probabilities.get(more) &gt;= iAverage)</a>
+<span class="sourceLineNo">172</span><a id="line.172">                    large.add(more);</a>
+<span class="sourceLineNo">173</span><a id="line.173">                else</a>
+<span class="sourceLineNo">174</span><a id="line.174">                    small.add(more);</a>
+<span class="sourceLineNo">175</span><a id="line.175">            }</a>
+<span class="sourceLineNo">176</span><a id="line.176">            int t;</a>
+<span class="sourceLineNo">177</span><a id="line.177">            while (!small.isEmpty())</a>
+<span class="sourceLineNo">178</span><a id="line.178">            {</a>
+<span class="sourceLineNo">179</span><a id="line.179">                processed[iv][(t = small.pop()) * 3] = 0xFFFF;</a>
+<span class="sourceLineNo">180</span><a id="line.180">                processed[iv][t * 3 + 1] = processed[iv][t * 3 + 2] = w.get(t);</a>
+<span class="sourceLineNo">181</span><a id="line.181">            }</a>
+<span class="sourceLineNo">182</span><a id="line.182">            while (!large.isEmpty())</a>
+<span class="sourceLineNo">183</span><a id="line.183">            {</a>
+<span class="sourceLineNo">184</span><a id="line.184">                processed[iv][(t = large.pop()) * 3] = 0xFFFF;</a>
+<span class="sourceLineNo">185</span><a id="line.185">                processed[iv][t * 3 + 1] = processed[iv][t * 3 + 2] = w.get(t);</a>
+<span class="sourceLineNo">186</span><a id="line.186">            }</a>
+<span class="sourceLineNo">187</span><a id="line.187">        }</a>
+<span class="sourceLineNo">188</span><a id="line.188">    }</a>
+<span class="sourceLineNo">189</span><a id="line.189"></a>
+<span class="sourceLineNo">190</span><a id="line.190">    /**</a>
+<span class="sourceLineNo">191</span><a id="line.191">     * Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using</a>
+<span class="sourceLineNo">192</span><a id="line.192">     * {@link #analyze(CharSequence)}) that terminates when stop punctuation is used (".", "!", "?", or "..."), or once</a>
+<span class="sourceLineNo">193</span><a id="line.193">     * the length would be greater than 200 characters without encountering stop punctuation(it terminates such a</a>
+<span class="sourceLineNo">194</span><a id="line.194">     * sentence with "." or "...").</a>
+<span class="sourceLineNo">195</span><a id="line.195">     * @param seed the seed for the random decisions this makes, as a long; any long can be used</a>
+<span class="sourceLineNo">196</span><a id="line.196">     * @return a String generated from the analyzed corpus text's word placement, usually a small sentence</a>
+<span class="sourceLineNo">197</span><a id="line.197">     */</a>
+<span class="sourceLineNo">198</span><a id="line.198">    public String chain(long seed) {</a>
+<span class="sourceLineNo">199</span><a id="line.199">        return chain(seed, 200);</a>
+<span class="sourceLineNo">200</span><a id="line.200">    }</a>
+<span class="sourceLineNo">201</span><a id="line.201"></a>
+<span class="sourceLineNo">202</span><a id="line.202">    /**</a>
+<span class="sourceLineNo">203</span><a id="line.203">     * Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using</a>
+<span class="sourceLineNo">204</span><a id="line.204">     * {@link #analyze(CharSequence)}) that terminates when stop punctuation is used (".", "!", "?", or "...") or once</a>
+<span class="sourceLineNo">205</span><a id="line.205">     * the maxLength would be exceeded by any other words (it terminates such a sentence with "." or "...").</a>
+<span class="sourceLineNo">206</span><a id="line.206">     * @param seed the seed for the random decisions this makes, as a long; any long can be used</a>
+<span class="sourceLineNo">207</span><a id="line.207">     * @param maxLength the maximum length for the generated String, in number of characters</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * @return a String generated from the analyzed corpus text's word placement, usually a small sentence</a>
+<span class="sourceLineNo">209</span><a id="line.209">     */</a>
+<span class="sourceLineNo">210</span><a id="line.210">    public String chain(long seed, int maxLength) {</a>
+<span class="sourceLineNo">211</span><a id="line.211">        int before = 0, pair = 0;</a>
+<span class="sourceLineNo">212</span><a id="line.212">        boolean later;</a>
+<span class="sourceLineNo">213</span><a id="line.213">        long state;</a>
+<span class="sourceLineNo">214</span><a id="line.214">        StringBuilder sb = new StringBuilder(1000);</a>
+<span class="sourceLineNo">215</span><a id="line.215">        int[] rf;</a>
+<span class="sourceLineNo">216</span><a id="line.216">        while (sb.length() &lt; maxLength) {</a>
+<span class="sourceLineNo">217</span><a id="line.217">            later = (pair != 0);</a>
+<span class="sourceLineNo">218</span><a id="line.218">            rf = processed[pairs.get(pair)];</a>
+<span class="sourceLineNo">219</span><a id="line.219">            // This is LightRNG's algorithm to generate a random long given sequential states</a>
+<span class="sourceLineNo">220</span><a id="line.220">            state = ((state = ((state = ((seed += 0x9E3779B97F4A7C15L) ^ seed &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31);</a>
+<span class="sourceLineNo">221</span><a id="line.221">            // get a random int (using half the bits of our previously-calculated state) that is less than size</a>
+<span class="sourceLineNo">222</span><a id="line.222">            int column = (int) ((rf.length * (state &amp; 0xFFFFFFFFL)) / 0x300000000L) * 3; // divide by 2^32, round down to multiple of 3</a>
+<span class="sourceLineNo">223</span><a id="line.223">            // use the other half of the bits of state to get a double, compare to probability and choose either the</a>
+<span class="sourceLineNo">224</span><a id="line.224">            // current column or the alias for that column based on that probability</a>
+<span class="sourceLineNo">225</span><a id="line.225">            //before = ((state &gt;&gt;&gt; 33) &gt; rf[column]) ? rf[column + 1] : rf[column + 2];</a>
+<span class="sourceLineNo">226</span><a id="line.226">            if((state &gt;&gt;&gt; 48) &gt; rf[column])</a>
+<span class="sourceLineNo">227</span><a id="line.227">                before = rf[column + 1];</a>
+<span class="sourceLineNo">228</span><a id="line.228">            else</a>
+<span class="sourceLineNo">229</span><a id="line.229">                before = rf[column + 2];</a>
+<span class="sourceLineNo">230</span><a id="line.230">            if(before &gt; 1)</a>
+<span class="sourceLineNo">231</span><a id="line.231">            {</a>
+<span class="sourceLineNo">232</span><a id="line.232">                if(sb.length() + 1 &lt; maxLength)</a>
+<span class="sourceLineNo">233</span><a id="line.233">                {</a>
+<span class="sourceLineNo">234</span><a id="line.234">                    sb.append(chars[before]);</a>
+<span class="sourceLineNo">235</span><a id="line.235">                    pair = pair &lt;&lt; 16 | (before &amp; 0xFFFF);</a>
+<span class="sourceLineNo">236</span><a id="line.236">                }</a>
+<span class="sourceLineNo">237</span><a id="line.237">                else</a>
+<span class="sourceLineNo">238</span><a id="line.238">                {</a>
+<span class="sourceLineNo">239</span><a id="line.239">                    break;</a>
+<span class="sourceLineNo">240</span><a id="line.240">                }</a>
+<span class="sourceLineNo">241</span><a id="line.241">            }</a>
+<span class="sourceLineNo">242</span><a id="line.242">            else</a>
+<span class="sourceLineNo">243</span><a id="line.243">            {</a>
+<span class="sourceLineNo">244</span><a id="line.244">                break;</a>
+<span class="sourceLineNo">245</span><a id="line.245">            }</a>
+<span class="sourceLineNo">246</span><a id="line.246">            </a>
+<span class="sourceLineNo">247</span><a id="line.247">        }</a>
+<span class="sourceLineNo">248</span><a id="line.248">        return sb.toString();</a>
+<span class="sourceLineNo">249</span><a id="line.249">    }</a>
+<span class="sourceLineNo">250</span><a id="line.250"></a>
+<span class="sourceLineNo">251</span><a id="line.251">    /**</a>
+<span class="sourceLineNo">252</span><a id="line.252">     * Returns a representation of this MarkovText as a String; use {@link #deserializeFromString(String)} to get a</a>
+<span class="sourceLineNo">253</span><a id="line.253">     * MarkovText back from this String. The {@link #chars} and {@link #processed} fields must have been given values by</a>
+<span class="sourceLineNo">254</span><a id="line.254">     * either direct assignment, calling {@link #analyze(CharSequence)}, or building this MarkovTest with the</a>
+<span class="sourceLineNo">255</span><a id="line.255">     * aforementioned deserializeToString method. Uses spaces to separate words and a tab to separate the two fields.</a>
+<span class="sourceLineNo">256</span><a id="line.256">     * @return a String that can be used to store the analyzed words and frequencies in this MarkovText</a>
+<span class="sourceLineNo">257</span><a id="line.257">     */</a>
+<span class="sourceLineNo">258</span><a id="line.258">    public String serializeToString()</a>
+<span class="sourceLineNo">259</span><a id="line.259">    {</a>
+<span class="sourceLineNo">260</span><a id="line.260">        return String.valueOf(chars) + "\t" + StringKit.join(",", pairs.keysAsArray()) + "\t" + Converters.convertArrayInt2D.stringify(processed);</a>
+<span class="sourceLineNo">261</span><a id="line.261">    }</a>
+<span class="sourceLineNo">262</span><a id="line.262"></a>
+<span class="sourceLineNo">263</span><a id="line.263">    /**</a>
+<span class="sourceLineNo">264</span><a id="line.264">     * Recreates an already-analyzed MarkovText given a String produced by {@link #serializeToString()}.</a>
+<span class="sourceLineNo">265</span><a id="line.265">     * @param data a String returned by {@link #serializeToString()}</a>
+<span class="sourceLineNo">266</span><a id="line.266">     * @return a MarkovText that is ready to generate text with {@link #chain(long)}</a>
+<span class="sourceLineNo">267</span><a id="line.267">     */</a>
+<span class="sourceLineNo">268</span><a id="line.268">    public static MarkovChar deserializeFromString(String data)</a>
+<span class="sourceLineNo">269</span><a id="line.269">    {</a>
+<span class="sourceLineNo">270</span><a id="line.270">        int split = data.indexOf('\t');</a>
+<span class="sourceLineNo">271</span><a id="line.271">        MarkovChar markov = new MarkovChar();</a>
+<span class="sourceLineNo">272</span><a id="line.272">        markov.chars = data.substring(0, split).toCharArray();</a>
+<span class="sourceLineNo">273</span><a id="line.273">        int[] arr = Converters.convertArrayInt.restore(data.substring(split+1, split = data.indexOf('\t', split + 1)));</a>
+<span class="sourceLineNo">274</span><a id="line.274">        markov.pairs = new IntIntOrderedMap(arr, ArrayTools.range(arr.length));</a>
+<span class="sourceLineNo">275</span><a id="line.275">        markov.processed = Converters.convertArrayInt2D.restore(data.substring(split + 1));</a>
+<span class="sourceLineNo">276</span><a id="line.276">        return markov;</a>
+<span class="sourceLineNo">277</span><a id="line.277">    }</a>
+<span class="sourceLineNo">278</span><a id="line.278"></a>
+<span class="sourceLineNo">279</span><a id="line.279">    /**</a>
+<span class="sourceLineNo">280</span><a id="line.280">     * Copies the String array {@link #chars} and the 2D jagged int array {@link #processed} into a new MarkovText.</a>
+<span class="sourceLineNo">281</span><a id="line.281">     * None of the arrays will be equivalent references, but the Strings (being immutable) will be the same objects in</a>
+<span class="sourceLineNo">282</span><a id="line.282">     * both MarkovText instances.</a>
+<span class="sourceLineNo">283</span><a id="line.283">     * @return a copy of this MarkovText</a>
+<span class="sourceLineNo">284</span><a id="line.284">     */</a>
+<span class="sourceLineNo">285</span><a id="line.285">    public MarkovChar copy()</a>
+<span class="sourceLineNo">286</span><a id="line.286">    {</a>
+<span class="sourceLineNo">287</span><a id="line.287">        MarkovChar other = new MarkovChar();</a>
+<span class="sourceLineNo">288</span><a id="line.288">        other.chars = new char[chars.length];</a>
+<span class="sourceLineNo">289</span><a id="line.289">        System.arraycopy(chars, 0, other.chars, 0, chars.length);</a>
+<span class="sourceLineNo">290</span><a id="line.290">        other.processed = new int[processed.length][];</a>
+<span class="sourceLineNo">291</span><a id="line.291">        int len;</a>
+<span class="sourceLineNo">292</span><a id="line.292">        for (int i = 0; i &lt; processed.length; i++) {</a>
+<span class="sourceLineNo">293</span><a id="line.293">            other.processed[i] = new int[len = processed[i].length];</a>
+<span class="sourceLineNo">294</span><a id="line.294">            System.arraycopy(processed[i], 0, other.processed[i], 0, len);</a>
+<span class="sourceLineNo">295</span><a id="line.295">        }</a>
+<span class="sourceLineNo">296</span><a id="line.296">        return other;</a>
+<span class="sourceLineNo">297</span><a id="line.297">    }</a>
+<span class="sourceLineNo">298</span><a id="line.298">}</a>
 
 
 

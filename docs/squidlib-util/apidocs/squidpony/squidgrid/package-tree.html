@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 class="title">Hierarchy For Package squidpony.squidgrid</h1>
@@ -89,18 +84,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </ul>
 </li>
 <li class="circle">squidpony.squidgrid.<a href="DetailedMimic.html" title="class in squidpony.squidgrid"><span class="typeNameLink">DetailedMimic</span></a></li>
-<li class="circle">squidpony.squidgrid.<a href="FOV.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOV</span></a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)
-<ul>
-<li class="circle">squidpony.squidgrid.<a href="BevelFOV.html" title="class in squidpony.squidgrid"><span class="typeNameLink">BevelFOV</span></a></li>
-<li class="circle">squidpony.squidgrid.<a href="FOVCache.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOVCache</span></a></li>
-</ul>
-</li>
-<li class="circle">squidpony.squidgrid.<a href="FOVCache.FOVUnit.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOVCache.FOVUnit</span></a> (implements java.util.concurrent.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/concurrent/Callable.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">Callable</a>&lt;V&gt;)</li>
-<li class="circle">squidpony.squidgrid.<a href="FOVCache.LOSUnit.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOVCache.LOSUnit</span></a> (implements java.util.concurrent.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/concurrent/Callable.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">Callable</a>&lt;V&gt;)</li>
-<li class="circle">squidpony.squidgrid.<a href="FOVCache.PerformanceUnit.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOVCache.PerformanceUnit</span></a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>)</li>
-<li class="circle">squidpony.squidgrid.<a href="FOVCache.QualityUnit.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOVCache.QualityUnit</span></a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>)</li>
-<li class="circle">squidpony.squidgrid.<a href="FOVCache.RefreshUnit.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOVCache.RefreshUnit</span></a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>)</li>
-<li class="circle">squidpony.squidgrid.<a href="FOVCache.SymmetryUnit.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOVCache.SymmetryUnit</span></a> (implements java.util.concurrent.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/concurrent/Callable.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">Callable</a>&lt;V&gt;)</li>
+<li class="circle">squidpony.squidgrid.<a href="FOV.html" title="class in squidpony.squidgrid"><span class="typeNameLink">FOV</span></a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)</li>
 <li class="circle">squidpony.squidgrid.<a href="LOS.html" title="class in squidpony.squidgrid"><span class="typeNameLink">LOS</span></a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)</li>
 <li class="circle">squidpony.squidgrid.<a href="MimicFill.html" title="class in squidpony.squidgrid"><span class="typeNameLink">MimicFill</span></a></li>
 <li class="circle">squidpony.squidgrid.<a href="MimicWFC.html" title="class in squidpony.squidgrid"><span class="typeNameLink">MimicWFC</span></a></li>
@@ -165,5 +149,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class AStarSearch" class="title">Class AStarSearch</h1>
@@ -101,7 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.40">AStarSearch</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.30">AStarSearch</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">Performs A* search.
@@ -110,29 +105,18 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  value to reduce the total search space. If the heuristic is too large then
  the optimal path is not guaranteed to be returned.
  <br>
- This implementation outperforms DijkstraMap (it can be about 8x faster) on relatively short
- paths (8 or less cells), but when an especially long path is requested (20 or more cells),
- this can be slower by a significant degree (it can be 10x slower for paths of 40-50 cells).
- This replaces an earlier version of AStarSearch that was almost always slower than
- DijkstraMap and had serious issues. One issue was recursion-related, and previously led to
- very long paths taking 200x as much time as DijkstraMap instead of this version's comparably
- modest 10x slowdown on the same paths. That recursion-related issue could have caused
- StackOverflowExceptions to be thrown when finding very long paths, though that may not have
- occurred "in the wild." The only caveat to the optimizations here is that an AStarSearch
- object has slightly more state that it stores now, though it also reuses more state and
- produces less garbage data to collect.
- <br>
- If you want pathfinding over an arbitrary graph or need really fast searches, you may want
- to use gdx-ai's pathfinding code in its <code>com.badlogic.gdx.ai.pfa</code> package. Their
- <code>IndexedAStarPathFinder</code> class outperforms all of the pathfinders in squidlib in all
- cases tested, though it has less features than DijkstraMap. You would need a dependency on
- gdx-ai and libGDX, which the squidlib-util module does not have, but if you use the squidlib
- display module, then you already depend on libGDX.</div>
+ This implementation is a thin wrapper around <a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar"><code>Pathfinder</code></a> and the other code in the
+ <code>squidpony.squidai.astar</code> package; it replaces an older, much-less-efficient A* implementation with one based
+ on GDX-AI's IndexedAStarPathFinder class. The only major change in the API is that this version returns an ArrayList
+ of Coord instead of a Queue of Coord. Typical usage of this class involves
+ <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D,java.util.Map,double)"><code>DungeonUtility.generateAStarCostMap(char[][], Map, double)</code></a> to generate the cost
+ map; if you used the old AStarSearch, then be advised that the default cost is now 1.0 instead of 0.0.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Eben Howard - http://squidpony.com - howard@squidpony.com, Tommy Ettinger - optimized code</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>a sometimes-faster pathfinding algorithm that can pathfind to multiple goals</code></a>, 
+<dd><a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar"><code>the pathfinding class this is based on; Pathfinder can be used independently</code></a>, 
+<a href="../squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>a sometimes-faster pathfinding algorithm that can pathfind to multiple goals</code></a>, 
 <a href="../squidai/CustomDijkstraMap.html" title="class in squidpony.squidai"><code>an alternative to DijkstraMap; faster and supports complex adjacency rules</code></a>, 
 <a href="../../serialized-form.html#squidpony.squidmath.AStarSearch">Serialized Form</a></dd>
 </dl>
@@ -186,33 +170,23 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#dirs">dirs</a></span></code></th>
+<td class="colFirst"><code>protected <a href="../squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#graph">graph</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected double[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gCache">gCache</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#height">height</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected double[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map">map</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#open">open</a></span></code></th>
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#path">path</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected byte[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parent">parent</a></span></code></th>
+<td class="colFirst"><code>protected <a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pathfinder">pathfinder</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -294,49 +268,17 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#changeCellWeight(int,int,double)">changeCellWeight</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y,
-double&nbsp;d)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor" id="i1">
-<td class="colFirst"><code>protected double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#f(int,int)">f</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y)</code></th>
-<td class="colLast">
-<div class="block">Combines g and h to get the estimated distance from start to goal going on the current route.</div>
-</td>
-</tr>
-<tr class="altColor" id="i2">
-<td class="colFirst"><code>protected double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#g(int,int)">g</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y)</code></th>
-<td class="colLast">
-<div class="block">Finds the g value (start to current) for the given location.</div>
-</td>
-</tr>
-<tr class="rowColor" id="i3">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHeight()">getHeight</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i4">
+<tr class="rowColor" id="i1">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWidth()">getWidth</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i5">
-<td class="colFirst"><code>protected double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#h(int,int)">h</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y)</code></th>
-<td class="colLast">
-<div class="block">Returns the heuristic distance from the current cell to the goal location\
- using the current calculation type.</div>
-</td>
-</tr>
-<tr class="altColor" id="i6">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<tr class="altColor" id="i2">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#path(int,int,int,int)">path</a></span>&#8203;(int&nbsp;startx,
 int&nbsp;starty,
 int&nbsp;targetx,
@@ -345,20 +287,15 @@ int&nbsp;targety)</code></th>
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i7">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<tr class="rowColor" id="i3">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#path(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">path</a></span>&#8203;(<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
 <td class="colLast">
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="altColor" id="i8">
-<td class="colFirst"><code>protected <a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#smallestF()">smallestF</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor" id="i9">
+<tr class="altColor" id="i4">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -387,62 +324,50 @@ int&nbsp;targety)</code></th>
 <ul class="blockList">
 <li class="blockList">
 <section class="detail">
-<h3><a id="map">map</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.68">map</a></span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="open">open</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.69">open</a></span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.70">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.62">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.70">height</a></span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="parent">parent</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">byte[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.71">parent</a></span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="gCache">gCache</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.72">gCache</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.62">height</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="start">start</a></h3>
-<div class="memberSignature"><span class="modifiers">protected transient</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.73">start</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.63">start</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="target">target</a></h3>
-<div class="memberSignature"><span class="modifiers">protected transient</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.73">target</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.63">target</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="type">type</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.74">type</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.64">type</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="dirs">dirs</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.75">dirs</a></span></div>
+<h3><a id="graph">graph</a></h3>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.66">graph</a></span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="pathfinder">pathfinder</a></h3>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.67">pathfinder</a></span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="path">path</a></h3>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.68">path</a></span></div>
 </section>
 </li>
 </ul>
@@ -458,13 +383,13 @@ int&nbsp;targety)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">AStarSearch</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.80">AStarSearch</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.71">AStarSearch</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(double[][],squidpony.squidmath.AStarSearch.SearchType)">AStarSearch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.108">AStarSearch</a></span>&#8203;(<span class="arguments">double[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.93">AStarSearch</a></span>&#8203;(<span class="arguments">double[][]&nbsp;map,
 <a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</span></div>
 <div class="block">Builds a pathing object to run searches on.
 
@@ -496,7 +421,7 @@ int&nbsp;targety)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="path(int,int,int,int)">path</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.143">path</a></span>&#8203;(<span class="arguments">int&nbsp;startx,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.114">path</a></span>&#8203;(<span class="arguments">int&nbsp;startx,
 int&nbsp;starty,
 int&nbsp;targetx,
 int&nbsp;targety)</span></div>
@@ -509,14 +434,14 @@ int&nbsp;targety)</span></div>
 <dd><code>targetx</code> - the x coordinate of the target location</dd>
 <dd><code>targety</code> - the y coordinate of the target location</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the shortest path, or null</dd>
+<dd>the shortest path, or null if no path is possible</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="path(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">path</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.154">path</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.125">path</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</span></div>
 <div class="block">Finds an A* path to the target from the start. If no path is possible,
  returns null.</div>
@@ -525,93 +450,26 @@ int&nbsp;targety)</span></div>
 <dd><code>start</code> - the start location</dd>
 <dd><code>target</code> - the target location</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the shortest path, or null</dd>
+<dd>the shortest path, or null if no path is possible</dd>
 </dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="changeCellWeight(int,int,double)">changeCellWeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.225">changeCellWeight</a></span>&#8203;(<span class="arguments">int&nbsp;x,
-int&nbsp;y,
-double&nbsp;d)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getWidth()">getWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.229">getWidth</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.135">getWidth</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getHeight()">getHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.233">getHeight</a></span>()</div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="g(int,int)">g</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.246">g</a></span>&#8203;(<span class="arguments">int&nbsp;x,
-int&nbsp;y)</span></div>
-<div class="block">Finds the g value (start to current) for the given location.
-
- If the given location is not valid or not attached to the pathfinding
- then -1 is returned.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - coordinate</dd>
-<dd><code>y</code> - coordinate</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="h(int,int)">h</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.274">h</a></span>&#8203;(<span class="arguments">int&nbsp;x,
-int&nbsp;y)</span></div>
-<div class="block">Returns the heuristic distance from the current cell to the goal location\
- using the current calculation type.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - coordinate</dd>
-<dd><code>y</code> - coordinate</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>distance</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="f(int,int)">f</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.301">f</a></span>&#8203;(<span class="arguments">int&nbsp;x,
-int&nbsp;y)</span></div>
-<div class="block">Combines g and h to get the estimated distance from start to goal going on the current route.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - coordinate</dd>
-<dd><code>y</code> - coordinate</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The current known shortest distance to the start position from
-         the given position. If the current position cannot reach the
-         start position or is invalid, -1 is returned.</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="smallestF()">smallestF</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.312">smallestF</a></span>()</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current open point with the smallest F</dd>
-</dl>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.139">getHeight</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.335">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.143">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -624,8 +482,8 @@ int&nbsp;y)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -671,5 +529,7 @@ int&nbsp;y)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

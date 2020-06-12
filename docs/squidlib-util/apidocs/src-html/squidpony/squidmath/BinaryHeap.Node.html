@@ -30,8 +30,8 @@
 <span class="sourceLineNo">018</span><a id="line.18"></a>
 <span class="sourceLineNo">019</span><a id="line.19">import java.util.Arrays;</a>
 <span class="sourceLineNo">020</span><a id="line.20"></a>
-<span class="sourceLineNo">021</span><a id="line.21">/** A binary heap that stores nodes which each have a float value and are sorted either lowest first or highest first. The</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * {@link Node} class can be extended to store additional information.</a>
+<span class="sourceLineNo">021</span><a id="line.21">/** A binary heap that stores nodes which each have a double value and are sorted either lowest first or highest first.</a>
+<span class="sourceLineNo">022</span><a id="line.22"> * The {@link Node} class can be extended to store additional information.</a>
 <span class="sourceLineNo">023</span><a id="line.23"> * @author Nathan Sweet */</a>
 <span class="sourceLineNo">024</span><a id="line.24">public class BinaryHeap&lt;T extends BinaryHeap.Node&gt; {</a>
 <span class="sourceLineNo">025</span><a id="line.25">        public int size;</a>
@@ -64,7 +64,7 @@
 <span class="sourceLineNo">052</span><a id="line.52">        }</a>
 <span class="sourceLineNo">053</span><a id="line.53"></a>
 <span class="sourceLineNo">054</span><a id="line.54">        /** Sets the node's value and adds it to the heap. The node should not already be in the heap. */</a>
-<span class="sourceLineNo">055</span><a id="line.55">        public T add (T node, float value) {</a>
+<span class="sourceLineNo">055</span><a id="line.55">        public T add (T node, double value) {</a>
 <span class="sourceLineNo">056</span><a id="line.56">                node.value = value;</a>
 <span class="sourceLineNo">057</span><a id="line.57">                return add(node);</a>
 <span class="sourceLineNo">058</span><a id="line.58">        }</a>
@@ -133,8 +133,8 @@
 <span class="sourceLineNo">121</span><a id="line.121">        }</a>
 <span class="sourceLineNo">122</span><a id="line.122"></a>
 <span class="sourceLineNo">123</span><a id="line.123">        /** Changes the value of the node, which should already be in the heap. */</a>
-<span class="sourceLineNo">124</span><a id="line.124">        public void setValue (T node, float value) {</a>
-<span class="sourceLineNo">125</span><a id="line.125">                float oldValue = node.value;</a>
+<span class="sourceLineNo">124</span><a id="line.124">        public void setValue (T node, double value) {</a>
+<span class="sourceLineNo">125</span><a id="line.125">                double oldValue = node.value;</a>
 <span class="sourceLineNo">126</span><a id="line.126">                node.value = value;</a>
 <span class="sourceLineNo">127</span><a id="line.127">                if (value &lt; oldValue ^ isMaxHeap)</a>
 <span class="sourceLineNo">128</span><a id="line.128">                        up(node.index);</a>
@@ -145,7 +145,7 @@
 <span class="sourceLineNo">133</span><a id="line.133">        private void up (int index) {</a>
 <span class="sourceLineNo">134</span><a id="line.134">                Node[] nodes = this.nodes;</a>
 <span class="sourceLineNo">135</span><a id="line.135">                Node node = nodes[index];</a>
-<span class="sourceLineNo">136</span><a id="line.136">                float value = node.value;</a>
+<span class="sourceLineNo">136</span><a id="line.136">                double value = node.value;</a>
 <span class="sourceLineNo">137</span><a id="line.137">                while (index &gt; 0) {</a>
 <span class="sourceLineNo">138</span><a id="line.138">                        int parentIndex = (index - 1) &gt;&gt; 1;</a>
 <span class="sourceLineNo">139</span><a id="line.139">                        Node parent = nodes[parentIndex];</a>
@@ -165,7 +165,7 @@
 <span class="sourceLineNo">153</span><a id="line.153">                int size = this.size;</a>
 <span class="sourceLineNo">154</span><a id="line.154"></a>
 <span class="sourceLineNo">155</span><a id="line.155">                Node node = nodes[index];</a>
-<span class="sourceLineNo">156</span><a id="line.156">                float value = node.value;</a>
+<span class="sourceLineNo">156</span><a id="line.156">                double value = node.value;</a>
 <span class="sourceLineNo">157</span><a id="line.157"></a>
 <span class="sourceLineNo">158</span><a id="line.158">                while (true) {</a>
 <span class="sourceLineNo">159</span><a id="line.159">                        int leftIndex = 1 + (index &lt;&lt; 1);</a>
@@ -174,14 +174,14 @@
 <span class="sourceLineNo">162</span><a id="line.162"></a>
 <span class="sourceLineNo">163</span><a id="line.163">                        // Always has a left child.</a>
 <span class="sourceLineNo">164</span><a id="line.164">                        Node leftNode = nodes[leftIndex];</a>
-<span class="sourceLineNo">165</span><a id="line.165">                        float leftValue = leftNode.value;</a>
+<span class="sourceLineNo">165</span><a id="line.165">                        double leftValue = leftNode.value;</a>
 <span class="sourceLineNo">166</span><a id="line.166"></a>
 <span class="sourceLineNo">167</span><a id="line.167">                        // May have a right child.</a>
 <span class="sourceLineNo">168</span><a id="line.168">                        Node rightNode;</a>
-<span class="sourceLineNo">169</span><a id="line.169">                        float rightValue;</a>
+<span class="sourceLineNo">169</span><a id="line.169">                        double rightValue;</a>
 <span class="sourceLineNo">170</span><a id="line.170">                        if (rightIndex &gt;= size) {</a>
 <span class="sourceLineNo">171</span><a id="line.171">                                rightNode = null;</a>
-<span class="sourceLineNo">172</span><a id="line.172">                                rightValue = isMaxHeap ? -Float.MAX_VALUE : Float.MAX_VALUE;</a>
+<span class="sourceLineNo">172</span><a id="line.172">                                rightValue = isMaxHeap ? -Double.MAX_VALUE : Double.MAX_VALUE;</a>
 <span class="sourceLineNo">173</span><a id="line.173">                        } else {</a>
 <span class="sourceLineNo">174</span><a id="line.174">                                rightNode = nodes[rightIndex];</a>
 <span class="sourceLineNo">175</span><a id="line.175">                                rightValue = rightNode.value;</a>
@@ -230,7 +230,7 @@
 <span class="sourceLineNo">218</span><a id="line.218">                int h = 1;</a>
 <span class="sourceLineNo">219</span><a id="line.219">                Node[] nodes = this.nodes;</a>
 <span class="sourceLineNo">220</span><a id="line.220">                for (int i = 0, n = size; i &lt; n; i++)</a>
-<span class="sourceLineNo">221</span><a id="line.221">                        h = h * 31 + Float.floatToIntBits(nodes[i].value);</a>
+<span class="sourceLineNo">221</span><a id="line.221">                        h = h * 31 + NumberTools.doubleToMixedIntBits(nodes[i].value);</a>
 <span class="sourceLineNo">222</span><a id="line.222">                return h;</a>
 <span class="sourceLineNo">223</span><a id="line.223">        }</a>
 <span class="sourceLineNo">224</span><a id="line.224"></a>
@@ -251,21 +251,21 @@
 <span class="sourceLineNo">239</span><a id="line.239">        /** A binary heap node.</a>
 <span class="sourceLineNo">240</span><a id="line.240">         * @author Nathan Sweet */</a>
 <span class="sourceLineNo">241</span><a id="line.241">        static public class Node {</a>
-<span class="sourceLineNo">242</span><a id="line.242">                public float value;</a>
+<span class="sourceLineNo">242</span><a id="line.242">                public double value;</a>
 <span class="sourceLineNo">243</span><a id="line.243">                public int index;</a>
 <span class="sourceLineNo">244</span><a id="line.244"></a>
-<span class="sourceLineNo">245</span><a id="line.245">                /** @param value The initial value for the node. To change the value, use {@link BinaryHeap#add(Node, float)} if the node is</a>
-<span class="sourceLineNo">246</span><a id="line.246">                 *           not in the heap, or {@link BinaryHeap#setValue(Node, float)} if the node is in the heap. */</a>
-<span class="sourceLineNo">247</span><a id="line.247">                public Node (float value) {</a>
+<span class="sourceLineNo">245</span><a id="line.245">                /** @param value The initial value for the node. To change the value, use {@link BinaryHeap#add(Node, double)} if the node is</a>
+<span class="sourceLineNo">246</span><a id="line.246">                 *           not in the heap, or {@link BinaryHeap#setValue(Node, double)} if the node is in the heap. */</a>
+<span class="sourceLineNo">247</span><a id="line.247">                public Node (double value) {</a>
 <span class="sourceLineNo">248</span><a id="line.248">                        this.value = value;</a>
 <span class="sourceLineNo">249</span><a id="line.249">                }</a>
 <span class="sourceLineNo">250</span><a id="line.250"></a>
-<span class="sourceLineNo">251</span><a id="line.251">                public float getValue () {</a>
+<span class="sourceLineNo">251</span><a id="line.251">                public double getValue () {</a>
 <span class="sourceLineNo">252</span><a id="line.252">                        return value;</a>
 <span class="sourceLineNo">253</span><a id="line.253">                }</a>
 <span class="sourceLineNo">254</span><a id="line.254"></a>
 <span class="sourceLineNo">255</span><a id="line.255">                public String toString () {</a>
-<span class="sourceLineNo">256</span><a id="line.256">                        return Float.toString(value);</a>
+<span class="sourceLineNo">256</span><a id="line.256">                        return Double.toString(value);</a>
 <span class="sourceLineNo">257</span><a id="line.257">                }</a>
 <span class="sourceLineNo">258</span><a id="line.258">        }</a>
 <span class="sourceLineNo">259</span><a id="line.259">}</a>

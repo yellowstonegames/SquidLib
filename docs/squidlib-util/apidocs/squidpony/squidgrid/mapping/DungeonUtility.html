@@ -19,8 +19,8 @@
 <script type="text/javascript" src="../../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":41,"i8":41,"i9":41,"i10":41,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+<script type="text/javascript">var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class DungeonUtility" class="title">Class DungeonUtility</h1>
@@ -97,7 +92,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.18">DungeonUtility</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.28">DungeonUtility</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">A static class that can be used to modify the char[][] dungeons that other generators produce.
  Includes various utilities for random floor-finding, but also provides ways to take dungeons that use '#'
@@ -230,7 +225,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </a>
 <h2>Method Summary</h2>
 <div class="memberSummary">
-<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t1" class="tableTab" onclick="show(1);">Static Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t6" class="tableTab" onclick="show(32);">Deprecated Methods</button></div>
+<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t1" class="tableTab" onclick="show(1);">Static Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button></div>
 <div id="memberSummary_tabpanel" role="tabpanel">
 <table aria-labelledby="t0">
 <thead>
@@ -304,46 +299,6 @@ char...&nbsp;blocking)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i7">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fill(boolean%5B%5D%5B%5D,boolean)">fill</a></span>&#8203;(boolean[][]&nbsp;array2d,
-boolean&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(boolean%5B%5D%5B%5D,boolean)"><code>ArrayTools.fill(boolean[][], boolean)</code></a> instead</div>
-</div>
-</td>
-</tr>
-<tr class="altColor" id="i8">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fill(char%5B%5D%5B%5D,char)">fill</a></span>&#8203;(char[][]&nbsp;array2d,
-char&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(char%5B%5D%5B%5D,char)"><code>ArrayTools.fill(char[][], char)</code></a> instead</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor" id="i9">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fill(double%5B%5D%5B%5D,double)">fill</a></span>&#8203;(double[][]&nbsp;array2d,
-double&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(double%5B%5D%5B%5D,double)"><code>ArrayTools.fill(double[][], double)</code></a> instead</div>
-</div>
-</td>
-</tr>
-<tr class="altColor" id="i10">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fill(int%5B%5D%5B%5D,int)">fill</a></span>&#8203;(int[][]&nbsp;array2d,
-int&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(int%5B%5D%5B%5D,int)"><code>ArrayTools.fill(int[][], int)</code></a> instead</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor" id="i11">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateAStarCostMap(char%5B%5D%5B%5D,java.util.Map,double)">generateAStarCostMap</a></span>&#8203;(char[][]&nbsp;map,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;&nbsp;costs,
@@ -353,27 +308,7 @@ double&nbsp;defaultValue)</code></th>
  a double value for unhandled characters, produces a double[][] that can be used as a map by AStarSearch.</div>
 </td>
 </tr>
-<tr class="altColor" id="i12">
-<td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateBGPaletteIndices(char%5B%5D%5B%5D)">generateBGPaletteIndices</a></span>&#8203;(char[][]&nbsp;map)</code></th>
-<td class="colLast">
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method, but meant for the background palette.</div>
-</td>
-</tr>
-<tr class="rowColor" id="i13">
-<td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateBGPaletteIndices(char%5B%5D%5B%5D,char,int,char,int)">generateBGPaletteIndices</a></span>&#8203;(char[][]&nbsp;map,
-char&nbsp;deepChar,
-int&nbsp;deepIndex,
-char&nbsp;shallowChar,
-int&nbsp;shallowIndex)</code></th>
-<td class="colLast">
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method, but meant for the background palette.</div>
-</td>
-</tr>
-<tr class="altColor" id="i14">
+<tr class="altColor" id="i8">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateCostMap(char%5B%5D%5B%5D,java.util.Map,double)">generateCostMap</a></span>&#8203;(char[][]&nbsp;map,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;&nbsp;costs,
@@ -383,61 +318,14 @@ double&nbsp;defaultValue)</code></th>
  a double value for unhandled characters, produces a double[][] that can be used as a costMap by DijkstraMap.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i15">
-<td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateLightnessModifiers(char%5B%5D%5B%5D)">generateLightnessModifiers</a></span>&#8203;(char[][]&nbsp;map)</code></th>
-<td class="colLast">
-<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
-</td>
-</tr>
-<tr class="altColor" id="i16">
-<td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateLightnessModifiers(char%5B%5D%5B%5D,double)">generateLightnessModifiers</a></span>&#8203;(char[][]&nbsp;map,
-double&nbsp;frame)</code></th>
-<td class="colLast">
-<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
-</td>
-</tr>
-<tr class="rowColor" id="i17">
-<td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateLightnessModifiers(char%5B%5D%5B%5D,double,char,char)">generateLightnessModifiers</a></span>&#8203;(char[][]&nbsp;map,
-double&nbsp;frame,
-char&nbsp;deepLiquid,
-char&nbsp;shallowLiquid)</code></th>
-<td class="colLast">
-<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
-</td>
-</tr>
-<tr class="altColor" id="i18">
-<td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generatePaletteIndices(char%5B%5D%5B%5D)">generatePaletteIndices</a></span>&#8203;(char[][]&nbsp;map)</code></th>
-<td class="colLast">
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method.</div>
-</td>
-</tr>
-<tr class="rowColor" id="i19">
-<td class="colFirst"><code>static int[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generatePaletteIndices(char%5B%5D%5B%5D,char,int,char,int)">generatePaletteIndices</a></span>&#8203;(char[][]&nbsp;map,
-char&nbsp;deepChar,
-int&nbsp;deepIndex,
-char&nbsp;shallowChar,
-int&nbsp;shallowIndex)</code></th>
-<td class="colLast">
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method.</div>
-</td>
-</tr>
-<tr class="altColor" id="i20">
+<tr class="rowColor" id="i9">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateResistances(char%5B%5D%5B%5D)">generateResistances</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
 <div class="block">Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV().</div>
 </td>
 </tr>
-<tr class="rowColor" id="i21">
+<tr class="altColor" id="i10">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateResistances3x3(char%5B%5D%5B%5D)">generateResistances3x3</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -446,7 +334,7 @@ int&nbsp;shallowIndex)</code></th>
  used with FOV.calculateFOV() in classes that use subcell lighting.</div>
 </td>
 </tr>
-<tr class="altColor" id="i22">
+<tr class="rowColor" id="i11">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateSimpleResistances(char%5B%5D%5B%5D)">generateSimpleResistances</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -454,7 +342,7 @@ int&nbsp;shallowIndex)</code></th>
  any cells as partly transparent, only fully-blocking or fully-permitting light.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i23">
+<tr class="altColor" id="i12">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateSimpleResistances3x3(char%5B%5D%5B%5D)">generateSimpleResistances3x3</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -463,7 +351,7 @@ int&nbsp;shallowIndex)</code></th>
  used with FOV.calculateFOV() in classes that use subcell lighting.</div>
 </td>
 </tr>
-<tr class="altColor" id="i24">
+<tr class="rowColor" id="i13">
 <td class="colFirst"><code>static <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRandomCell(squidpony.squidmath.IRNG,char%5B%5D%5B%5D,java.util.Set,int)">getRandomCell</a></span>&#8203;(<a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 char[][]&nbsp;map,
@@ -471,7 +359,7 @@ char[][]&nbsp;map,
 int&nbsp;frustration)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i25">
+<tr class="altColor" id="i14">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashesToLines(char%5B%5D%5B%5D)">hashesToLines</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -480,7 +368,7 @@ int&nbsp;frustration)</code></th>
  filled with more walls before) with space characters, ' '.</div>
 </td>
 </tr>
-<tr class="altColor" id="i26">
+<tr class="rowColor" id="i15">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashesToLines(char%5B%5D%5B%5D,boolean)">hashesToLines</a></span>&#8203;(char[][]&nbsp;map,
 boolean&nbsp;keepSingleHashes)</code></th>
@@ -490,53 +378,53 @@ boolean&nbsp;keepSingleHashes)</code></th>
  filled with more walls before) with space characters, ' '.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i27">
+<tr class="altColor" id="i16">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inLevel(char%5B%5D%5B%5D,int,int)">inLevel</a></span>&#8203;(char[][]&nbsp;level,
 int&nbsp;x,
 int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i28">
+<tr class="rowColor" id="i17">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inLevel(char%5B%5D%5B%5D,squidpony.squidmath.Coord)">inLevel</a></span>&#8203;(char[][]&nbsp;level,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i29">
+<tr class="altColor" id="i18">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inLevel(double%5B%5D%5B%5D,int,int)">inLevel</a></span>&#8203;(double[][]&nbsp;level,
 int&nbsp;x,
 int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i30">
+<tr class="rowColor" id="i19">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inLevel(double%5B%5D%5B%5D,squidpony.squidmath.Coord)">inLevel</a></span>&#8203;(double[][]&nbsp;level,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i31">
+<tr class="altColor" id="i20">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inLevel(T%5B%5D%5B%5D,int,int)">inLevel</a></span>&#8203;(T[][]&nbsp;level,
 int&nbsp;x,
 int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i32">
+<tr class="rowColor" id="i21">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inLevel(T%5B%5D%5B%5D,squidpony.squidmath.Coord)">inLevel</a></span>&#8203;(T[][]&nbsp;level,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i33">
+<tr class="altColor" id="i22">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#linesToHashes(char%5B%5D%5B%5D)">linesToHashes</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
 <div class="block">Reverses most of the effects of hashesToLines().</div>
 </td>
 </tr>
-<tr class="altColor" id="i34">
+<tr class="rowColor" id="i23">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openDoors(char%5B%5D%5B%5D)">openDoors</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -544,35 +432,35 @@ int&nbsp;y)</code></th>
  horizontal doors ('+' for vertical and '/' for horizontal).</div>
 </td>
 </tr>
-<tr class="rowColor" id="i35">
+<tr class="altColor" id="i24">
 <td class="colFirst"><code>static short[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#packedFloors(char%5B%5D%5B%5D)">packedFloors</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
 <div class="block">A convenience wrapper for getting a packed-data representation of all floors ('.') in map, for randomCell().</div>
 </td>
 </tr>
-<tr class="altColor" id="i36">
+<tr class="rowColor" id="i25">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pointPath(int,int,squidpony.squidmath.IRNG)">pointPath</a></span>&#8203;(int&nbsp;width,
 int&nbsp;height,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i37">
+<tr class="altColor" id="i26">
 <td class="colFirst"><code><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#randomCell(short%5B%5D)">randomCell</a></span>&#8203;(short[]&nbsp;packed)</code></th>
 <td class="colLast">
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location that is encoded as "on" in packed.</div>
 </td>
 </tr>
-<tr class="altColor" id="i38">
+<tr class="rowColor" id="i27">
 <td class="colFirst"><code><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#randomFloor(char%5B%5D%5B%5D)">randomFloor</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i39">
+<tr class="altColor" id="i28">
 <td class="colFirst"><code><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#randomFloorLarge(char%5B%5D%5B%5D,int)">randomFloorLarge</a></span>&#8203;(char[][]&nbsp;map,
 int&nbsp;size)</code></th>
@@ -582,7 +470,7 @@ int&nbsp;size)</code></th>
  '.' as their values.</div>
 </td>
 </tr>
-<tr class="altColor" id="i40">
+<tr class="rowColor" id="i29">
 <td class="colFirst"><code><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#randomMatchingTile(char%5B%5D%5B%5D,char)">randomMatchingTile</a></span>&#8203;(char[][]&nbsp;map,
 char&nbsp;tile)</code></th>
@@ -591,7 +479,7 @@ char&nbsp;tile)</code></th>
  parameter tile.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i41">
+<tr class="altColor" id="i30">
 <td class="colFirst"><code><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#randomStep(char%5B%5D%5B%5D,squidpony.squidmath.Coord,boolean)">randomStep</a></span>&#8203;(char[][]&nbsp;map,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
@@ -600,7 +488,7 @@ boolean&nbsp;eightWay)</code></th>
 <div class="block">Gets a random Coord that is adjacent to start, validating whether the position can exist on the given map.</div>
 </td>
 </tr>
-<tr class="altColor" id="i42">
+<tr class="rowColor" id="i31">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#simplifyDungeon(char%5B%5D%5B%5D)">simplifyDungeon</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -608,17 +496,17 @@ boolean&nbsp;eightWay)</code></th>
  chars changed to '#' and everything else changed to '.' .</div>
 </td>
 </tr>
-<tr class="rowColor" id="i43">
+<tr class="altColor" id="i32">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translateAStarToDijkstra(double%5B%5D%5B%5D)">translateAStarToDijkstra</a></span>&#8203;(double[][]&nbsp;astar)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i44">
+<tr class="rowColor" id="i33">
 <td class="colFirst"><code>static double[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translateDijkstraToAStar(double%5B%5D%5B%5D)">translateDijkstraToAStar</a></span>&#8203;(double[][]&nbsp;dijkstra)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i45">
+<tr class="altColor" id="i34">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#transposeLines(char%5B%5D%5B%5D)">transposeLines</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -626,7 +514,7 @@ boolean&nbsp;eightWay)</code></th>
  connect as you expect.</div>
 </td>
 </tr>
-<tr class="altColor" id="i46">
+<tr class="rowColor" id="i35">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unDoubleWidth(char%5B%5D%5B%5D)">unDoubleWidth</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -634,7 +522,7 @@ boolean&nbsp;eightWay)</code></th>
  character in each cell.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i47">
+<tr class="altColor" id="i36">
 <td class="colFirst"><code>static char[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#wallWrap(char%5B%5D%5B%5D)">wallWrap</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
@@ -666,7 +554,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="UNTOUCHED">UNTOUCHED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.24">UNTOUCHED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.34">UNTOUCHED</a></span></div>
 <div class="block">Constant for environment tiles that are not near a cave, room, or corridor. Value is 0.
  Used by several classes that distinguish types of dungeon environment, like <a href="SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>.</div>
 <dl>
@@ -678,7 +566,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ROOM_FLOOR">ROOM_FLOOR</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.29">ROOM_FLOOR</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.39">ROOM_FLOOR</a></span></div>
 <div class="block">Constant for environment tiles that are floors for a room. Value is 1.
  Used by several classes that distinguish types of dungeon environment, like <a href="SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>.</div>
 <dl>
@@ -690,7 +578,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ROOM_WALL">ROOM_WALL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.34">ROOM_WALL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.44">ROOM_WALL</a></span></div>
 <div class="block">Constant for environment tiles that are walls near a room. Value is 2.
  Used by several classes that distinguish types of dungeon environment, like <a href="SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>.</div>
 <dl>
@@ -702,7 +590,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CAVE_FLOOR">CAVE_FLOOR</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.39">CAVE_FLOOR</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.49">CAVE_FLOOR</a></span></div>
 <div class="block">Constant for environment tiles that are floors for a cave. Value is 3.
  Used by several classes that distinguish types of dungeon environment, like <a href="SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>.</div>
 <dl>
@@ -714,7 +602,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CAVE_WALL">CAVE_WALL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.44">CAVE_WALL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.54">CAVE_WALL</a></span></div>
 <div class="block">Constant for environment tiles that are walls near a cave. Value is 4.
  Used by several classes that distinguish types of dungeon environment, like <a href="SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>.</div>
 <dl>
@@ -726,7 +614,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CORRIDOR_FLOOR">CORRIDOR_FLOOR</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.49">CORRIDOR_FLOOR</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.59">CORRIDOR_FLOOR</a></span></div>
 <div class="block">Constant for environment tiles that are floors for a corridor. Value is 5.
  Used by several classes that distinguish types of dungeon environment, like <a href="SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>.</div>
 <dl>
@@ -738,7 +626,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CORRIDOR_WALL">CORRIDOR_WALL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.54">CORRIDOR_WALL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.64">CORRIDOR_WALL</a></span></div>
 <div class="block">Constant for environment tiles that are walls near a corridor. Value is 6.
  Used by several classes that distinguish types of dungeon environment, like <a href="SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>.</div>
 <dl>
@@ -750,7 +638,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.71">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.81">rng</a></span></div>
 <div class="block">The random number generator that will be used for all methods in this class with a random component.</div>
 </section>
 </li>
@@ -767,19 +655,19 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">DungeonUtility</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.56">DungeonUtility</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.66">DungeonUtility</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.IStatefulRNG)">DungeonUtility</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.60">DungeonUtility</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.70">DungeonUtility</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.IRNG)">DungeonUtility</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.64">DungeonUtility</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.74">DungeonUtility</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 </section>
 </li>
 </ul>
@@ -795,7 +683,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomFloor(char[][])">randomFloor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.85">randomFloor</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.95">randomFloor</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.
  Uses this class' rng field for pseudo-random number generation. May fail if there are very few floor tiles;
  use <a href="#randomCell(short%5B%5D)"><code>randomCell(short[])</code></a> given <a href="#packedFloors(char%5B%5D%5B%5D)"><code>packedFloors(char[][])</code></a> to get a floor cell guaranteed if there is
@@ -813,7 +701,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomCell(short[])">randomCell</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.129">randomCell</a></span>&#8203;(<span class="arguments">short[]&nbsp;packed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.139">randomCell</a></span>&#8203;(<span class="arguments">short[]&nbsp;packed)</span></div>
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location that is encoded as "on" in packed.
  This is useful when you have used <code>DungeonUtility.packedFloors(char[][] map)</code> to encode all floors in map,
  or <code>CoordPacker.pack(char[][] map, char... yes)</code> to encode all cells in a char[][] map that match a
@@ -833,7 +721,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="packedFloors(char[][])">packedFloors</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">short[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.142">packedFloors</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">short[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.152">packedFloors</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">A convenience wrapper for getting a packed-data representation of all floors ('.') in map, for randomCell().
  If you want other chars or more chars than just the period, you can use CoordPacker.pack() with a char[][] map
  and one or more chars to find as the parameters. This is the same as calling <code>CoordPacker.pack(map, '.')</code>.</div>
@@ -848,7 +736,7 @@ boolean&nbsp;eightWay)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomMatchingTile(char[][],char)">randomMatchingTile</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.155">randomMatchingTile</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.165">randomMatchingTile</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 char&nbsp;tile)</span></div>
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has the same value as the
  parameter tile. Uses this class' rng field for pseudo-random number generation.</div>
@@ -864,7 +752,7 @@ char&nbsp;tile)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomStep(char[][],squidpony.squidmath.Coord,boolean)">randomStep</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.197">randomStep</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.207">randomStep</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 boolean&nbsp;eightWay)</span></div>
 <div class="block">Gets a random Coord that is adjacent to start, validating whether the position can exist on the given map.
@@ -884,7 +772,7 @@ boolean&nbsp;eightWay)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomFloorLarge(char[][],int)">randomFloorLarge</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.239">randomFloorLarge</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.249">randomFloorLarge</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 int&nbsp;size)</span></div>
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value,
  and a square of cells extending in the positive x and y directions with a side length of size must also have
@@ -902,7 +790,7 @@ int&nbsp;size)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashesToLines(char[][])">hashesToLines</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.296">hashesToLines</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.306">hashesToLines</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
  drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
  filled with more walls before) with space characters, ' '. If the lines "point the wrong way," such as having
@@ -924,7 +812,7 @@ int&nbsp;size)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashesToLines(char[][],boolean)">hashesToLines</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.337">hashesToLines</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.347">hashesToLines</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 boolean&nbsp;keepSingleHashes)</span></div>
 <div class="block">Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
  drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
@@ -949,7 +837,7 @@ boolean&nbsp;keepSingleHashes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="linesToHashes(char[][])">linesToHashes</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.397">linesToHashes</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.407">linesToHashes</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Reverses most of the effects of hashesToLines(). The only things that will not be reversed are the placement of
  space characters in unreachable wall-cells-behind-wall-cells, which remain as spaces. This is useful if you
  have a modified map that contains wall characters of conflicting varieties, as described in hashesToLines().</div>
@@ -964,7 +852,7 @@ boolean&nbsp;keepSingleHashes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="transposeLines(char[][])">transposeLines</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.437">transposeLines</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.447">transposeLines</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">If you call hashesToLines() on a map that uses [y][x] conventions instead of [x][y], it will have the lines not
  connect as you expect. Use this function to change the directions of the box-drawing characters only, without
  altering the dimensions in any way. This returns a new char[][], instead of modifying the parameter in place.
@@ -981,7 +869,7 @@ boolean&nbsp;keepSingleHashes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="closeDoors(char[][])">closeDoors</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.489">closeDoors</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.499">closeDoors</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and
  horizontal doors ('+' for vertical and '/' for horizontal).  This makes all doors '+', which is useful if you
  want '/' to be used for a different purpose and/or to distinguish open and closed doors.</div>
@@ -996,7 +884,7 @@ boolean&nbsp;keepSingleHashes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="openDoors(char[][])">openDoors</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.512">openDoors</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.522">openDoors</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and
  horizontal doors ('+' for vertical and '/' for horizontal).  This makes all doors '/', which is useful if you
  want '+' to be used for a different purpose and/or to distinguish open and closed doors.</div>
@@ -1011,7 +899,7 @@ boolean&nbsp;keepSingleHashes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="simplifyDungeon(char[][])">simplifyDungeon</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.534">simplifyDungeon</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.544">simplifyDungeon</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Takes a char[][] dungeon map and returns a copy with all box drawing chars, special placeholder chars, or '#'
  chars changed to '#' and everything else changed to '.' .</div>
 <dl>
@@ -1025,7 +913,7 @@ boolean&nbsp;keepSingleHashes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="doubleWidth(char[][])">doubleWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.577">doubleWidth</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.587">doubleWidth</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Takes a dungeon map with either '#' as the only wall character or the unicode box drawing characters used by
  hashesToLines(), and returns a new char[][] dungeon map with two characters per cell, mostly filling the spaces
  next to non-walls with space characters, and only doing anything different if a box-drawing character would
@@ -1043,7 +931,7 @@ boolean&nbsp;keepSingleHashes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="unDoubleWidth(char[][])">unDoubleWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.623">unDoubleWidth</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.633">unDoubleWidth</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Takes a dungeon map that uses two characters per cell, and condenses it to use only the left (lower index)
  character in each cell. This should (probably) only be called on the result of doubleWidth(), and will throw an
  exception if called on a map with an odd number of characters for width, such as "#...#" .</div>
@@ -1057,142 +945,14 @@ boolean&nbsp;keepSingleHashes)</span></div>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="generatePaletteIndices(char[][])">generatePaletteIndices</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.647">generatePaletteIndices</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
- white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
- hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, 6 for traps, and
- 20 for grass.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - a char[][] containing foreground characters that you want foreground palette indices for</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of ints that can be used as indices into a palette; palettes are available in related modules</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="generatePaletteIndices(char[][],char,int,char,int)">generatePaletteIndices</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.706">generatePaletteIndices</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
-char&nbsp;deepChar,
-int&nbsp;deepIndex,
-char&nbsp;shallowChar,
-int&nbsp;shallowIndex)</span></div>
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
- white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
- hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, 6 for traps, and
- 20 for grass.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - a char[][] containing foreground characters that you want foreground palette indices for</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of ints that can be used as indices into a palette; palettes are available in related modules</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="generateBGPaletteIndices(char[][])">generateBGPaletteIndices</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.772">generateBGPaletteIndices</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method, but meant for the background palette. This will produce 0 for most characters, but deep water
- (represented by '~') will produce 24 (in the default palette, this is dark blue-green), shallow water
- (represented by ',') will produce 23 (medium blue-green), and grass (represented by '"') will produce 21 (dark
- green). If you use SquidLayers, you can cause the lightness of water and grass to vary as if currents or wind
- are moving their surface using getLightnessModifiers() and a frame count argument.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - a char[][] containing foreground characters that you want background palette indices for</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of ints that can be used as indices into a palette; palettes are available in related modules</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="generateBGPaletteIndices(char[][],char,int,char,int)">generateBGPaletteIndices</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.837">generateBGPaletteIndices</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
-char&nbsp;deepChar,
-int&nbsp;deepIndex,
-char&nbsp;shallowChar,
-int&nbsp;shallowIndex)</span></div>
-<div class="block">Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
- rendering method, but meant for the background palette. This will produce 0 for most characters, but deep water
- (represented by '~') will produce 24 (in the default palette, this is dark blue-green), shallow water
- (represented by ',') will produce 23 (medium blue-green), and grass (represented by '"') will produce 21 (dark
- green). If you use SquidLayers, you can cause the lightness of water and grass to vary as if currents or wind
- are moving their surface using getLightnessModifiers() and a frame count argument.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - a char[][] containing foreground characters that you want background palette indices for</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of ints that can be used as indices into a palette; palettes are available in related modules</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="generateLightnessModifiers(char[][])">generateLightnessModifiers</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.901">generateLightnessModifiers</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
-<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - a char[][] that you want to be find background lightness modifiers for</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="generateLightnessModifiers(char[][],double)">generateLightnessModifiers</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.962">generateLightnessModifiers</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
-double&nbsp;frame)</span></div>
-<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - a char[][] that you want to be find background lightness modifiers for</dd>
-<dd><code>frame</code> - a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
-              water and grass move more</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="generateLightnessModifiers(char[][],double,char,char)">generateLightnessModifiers</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1026">generateLightnessModifiers</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
-double&nbsp;frame,
-char&nbsp;deepLiquid,
-char&nbsp;shallowLiquid)</span></div>
-<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars
- to be treated like deep and shallow water regarding the ripple animation.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - a char[][] that you want to be find background lightness modifiers for</dd>
-<dd><code>frame</code> - a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
-                      water and grass move more</dd>
-<dd><code>deepLiquid</code> - a char that will be treated like deep water when animating ripples</dd>
-<dd><code>shallowLiquid</code> - a char that will be treated like shallow water when animating ripples</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
 <h3><a id="generateResistances(char[][])">generateResistances</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1091">generateResistances</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.659">generateResistances</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(). It expects any
  doors to be represented by '+' if closed or '/' if open (which can be caused by calling
  DungeonUtility.closeDoors() ), any walls to be '#' or box drawing characters, and it doesn't care what other
- chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).</div>
+ chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).
+ <br>
+ This is here for backwards-compatibility; this method delegates to <a href="../FOV.html#generateResistances(char%5B%5D%5B%5D)"><code>FOV.generateResistances(char[][])</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</dd>
@@ -1204,14 +964,17 @@ char&nbsp;shallowLiquid)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generateResistances3x3(char[][])">generateResistances3x3</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1144">generateResistances3x3</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.678">generateResistances3x3</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Given a char[][] for the map that should use box drawing characters (as produced by
  <a href="#hashesToLines(char%5B%5D%5B%5D,boolean)"><code>hashesToLines(char[][], boolean)</code></a>), produces a double[][] with triple width and triple height that can be
- used with FOV.calculateFOV() in classes that use subcell lighting. It expects any doors to be represented by '+'
- if closed or '/' if open (which can be caused by calling DungeonUtility.closeDoors() ), thick vegetation or other
- concealing obstructions to be '"', any normal walls to be box drawing characters, any cells that block all
- subcells to be '#', and it doesn't care what other chars are used (only doors, including open ones, vegetation,
- and walls obscure light and thus have a resistance by default).</div>
+ used with FOV.calculateFOV() in classes that use subcell lighting. Importantly, this only considers a "thin line"
+ of wall to be blocking (matching the box drawing character), instead of the whole 3x3 area. This expects any
+ doors to be represented by '+' if closed or '/' if open (which can be caused by calling
+ <a href="#closeDoors(char%5B%5D%5B%5D)"><code>closeDoors(char[][])</code></a>), thick vegetation or other concealing obstructions to be '"', any normal walls to
+ be box drawing characters, any cells that block all subcells to be '#', and it doesn't care what other chars are
+ used (only doors, including open ones, vegetation, and walls obscure light and thus have a resistance normally).
+ <br>
+ This is here for backwards-compatibility; this method delegates to <a href="../FOV.html#generateResistances3x3(char%5B%5D%5B%5D)"><code>FOV.generateResistances3x3(char[][])</code></a></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</dd>
@@ -1223,14 +986,16 @@ char&nbsp;shallowLiquid)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generateSimpleResistances(char[][])">generateSimpleResistances</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1253">generateSimpleResistances</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.696">generateSimpleResistances</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(), but does not treat
  any cells as partly transparent, only fully-blocking or fully-permitting light. This is mainly useful if you
  expect the FOV radius to be very high or (effectively) infinite, since anything less than complete blockage would
  be passed through by infinite-radius FOV. This expects any doors to be represented by '+' if closed or '/' if
  open (most door placement defaults to a mix of '+' and '/', so by calling
  <a href="#closeDoors(char%5B%5D%5B%5D)"><code>closeDoors(char[][])</code></a> you can close all doors at the start), and any walls to be '#' or
- box drawing characters. This will assign 1.0 resistance to walls and closed doors or 0.0 for any other cell.</div>
+ box drawing characters. This will assign 1.0 resistance to walls and closed doors or 0.0 for any other cell.
+ <br>
+ This is here for backwards-compatibility; this method delegates to <a href="../FOV.html#generateSimpleResistances(char%5B%5D%5B%5D)"><code>FOV.generateSimpleResistances(char[][])</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</dd>
@@ -1242,14 +1007,16 @@ char&nbsp;shallowLiquid)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generateSimpleResistances3x3(char[][])">generateSimpleResistances3x3</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1296">generateSimpleResistances3x3</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.714">generateSimpleResistances3x3</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Given a char[][] for the map that should use box drawing characters (as produced by
  <a href="#hashesToLines(char%5B%5D%5B%5D,boolean)"><code>hashesToLines(char[][], boolean)</code></a>), produces a double[][] with triple width and triple height that can be
  used with FOV.calculateFOV() in classes that use subcell lighting. This expects any doors to be represented by
  '+' if closed or '/' if open (most door placement defaults to a mix of '+' and '/', so by calling
  <a href="#closeDoors(char%5B%5D%5B%5D)"><code>closeDoors(char[][])</code></a> you can close all doors at the start), any walls to be box drawing
  characters, and any cells that block all subcells within their area to be '#'. This will assign 1.0 resistance to
- walls and closed doors where a line of the box drawing char would block light, or 0.0 for any other subcell.</div>
+ walls and closed doors where a line of the box drawing char would block light, or 0.0 for any other subcell.
+ <br>
+ This is here for backwards-compatibility; this method delegates to <a href="../FOV.html#generateSimpleResistances3x3(char%5B%5D%5B%5D)"><code>FOV.generateSimpleResistances3x3(char[][])</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()</dd>
@@ -1261,7 +1028,7 @@ char&nbsp;shallowLiquid)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generateCostMap(char[][],java.util.Map,double)">generateCostMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1418">generateCostMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.747">generateCostMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;&nbsp;costs,
 double&nbsp;defaultValue)</span></div>
 <div class="block">Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and
@@ -1299,7 +1066,7 @@ double&nbsp;defaultValue)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generateAStarCostMap(char[][],java.util.Map,double)">generateAStarCostMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1484">generateAStarCostMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.813">generateAStarCostMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Double.html?is-external=true" title="class or interface in java.lang" class="externalLink">Double</a>&gt;&nbsp;costs,
 double&nbsp;defaultValue)</span></div>
 <div class="block">Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and
@@ -1311,9 +1078,9 @@ double&nbsp;defaultValue)</span></div>
  number, meaning it is impassable for AStarSearch. For any other entry in costs, a char in the 2D char array that
  matches the key will correspond (at the same x,y position in the returned 2D double array) to that key's value in
  costs. If a char is used in the map but does not have a corresponding key in costs, it will be given the value of
- the parameter defaultValue, which is typically 0 unless a creature is limited to only moving in some terrain.
+ the parameter defaultValue, which is typically 1 unless a creature is limited to only moving in some terrain.
  <p/>
- The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 0 is the
+ The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 1 is the
  cost for a normal walkable tile, and higher numbers are harder to enter.
  <p/>
  An example use for this would be to make a creature unable to enter any non-water cell (like a fish),
@@ -1336,19 +1103,19 @@ double&nbsp;defaultValue)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="translateAStarToDijkstra(double[][])">translateAStarToDijkstra</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1522">translateAStarToDijkstra</a></span>&#8203;(<span class="arguments">double[][]&nbsp;astar)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.851">translateAStarToDijkstra</a></span>&#8203;(<span class="arguments">double[][]&nbsp;astar)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="translateDijkstraToAStar(double[][])">translateDijkstraToAStar</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1538">translateDijkstraToAStar</a></span>&#8203;(<span class="arguments">double[][]&nbsp;dijkstra)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">double[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.867">translateDijkstraToAStar</a></span>&#8203;(<span class="arguments">double[][]&nbsp;dijkstra)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getRandomCell(squidpony.squidmath.IRNG,char[][],java.util.Set,int)">getRandomCell</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1563">getRandomCell</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.892">getRandomCell</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 char[][]&nbsp;map,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;acceptable,
 int&nbsp;frustration)</span></div>
@@ -1368,7 +1135,7 @@ int&nbsp;frustration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="inLevel(char[][],squidpony.squidmath.Coord)">inLevel</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1587">inLevel</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.916">inLevel</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1382,7 +1149,7 @@ int&nbsp;frustration)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="inLevel(char[][],int,int)">inLevel</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1597">inLevel</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.926">inLevel</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level,
 int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
@@ -1398,7 +1165,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="inLevel(double[][],squidpony.squidmath.Coord)">inLevel</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1606">inLevel</a></span>&#8203;(<span class="arguments">double[][]&nbsp;level,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.935">inLevel</a></span>&#8203;(<span class="arguments">double[][]&nbsp;level,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1412,7 +1179,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="inLevel(double[][],int,int)">inLevel</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1616">inLevel</a></span>&#8203;(<span class="arguments">double[][]&nbsp;level,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.945">inLevel</a></span>&#8203;(<span class="arguments">double[][]&nbsp;level,
 int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
@@ -1430,7 +1197,7 @@ int&nbsp;y)</span></div>
 <h3><a id="inLevel(java.lang.Object[][][],squidpony.squidmath.Coord)">
 <!--   -->
 </a><a id="inLevel(T[][],squidpony.squidmath.Coord)">inLevel</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1625">inLevel</a></span>&#8203;(<span class="arguments">T[][]&nbsp;level,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.954">inLevel</a></span>&#8203;(<span class="arguments">T[][]&nbsp;level,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1446,7 +1213,7 @@ int&nbsp;y)</span></div>
 <h3><a id="inLevel(java.lang.Object[][][],int,int)">
 <!--   -->
 </a><a id="inLevel(T[][],int,int)">inLevel</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1635">inLevel</a></span>&#8203;(<span class="arguments">T[][]&nbsp;level,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="typeParameters">&lt;T&gt;</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.964">inLevel</a></span>&#8203;(<span class="arguments">T[][]&nbsp;level,
 int&nbsp;x,
 int&nbsp;y)</span></div>
 <dl>
@@ -1462,7 +1229,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="countCells(char[][],char)">countCells</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1646">countCells</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.975">countCells</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level,
 char&nbsp;match)</span></div>
 <div class="block">Quickly counts the number of char elements in level that are equal to match.</div>
 <dl>
@@ -1477,7 +1244,7 @@ char&nbsp;match)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="debugPrint(char[][])">debugPrint</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1663">debugPrint</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.992">debugPrint</a></span>&#8203;(<span class="arguments">char[][]&nbsp;level)</span></div>
 <div class="block">For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1488,7 +1255,7 @@ char&nbsp;match)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wallWrap(char[][])">wallWrap</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1683">wallWrap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1012">wallWrap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Changes the outer edge of a char[][] to the wall char, '#'.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1501,7 +1268,7 @@ char&nbsp;match)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="pointPath(int,int,squidpony.squidmath.IRNG)">pointPath</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1696">pointPath</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1025">pointPath</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 </section>
@@ -1509,7 +1276,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="ensurePath(char[][],squidpony.squidmath.IRNG,char,char...)">ensurePath</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1757">ensurePath</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1086">ensurePath</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 char&nbsp;replacement,
 char...&nbsp;blocking)</span></div>
@@ -1532,14 +1299,14 @@ char...&nbsp;blocking)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="allMatching(char[][],char...)">allMatching</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1773">allMatching</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1102">allMatching</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 char...&nbsp;matching)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="circle(int,int,int,java.util.List)">circle</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1808">circle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1137">circle</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;radius,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;buf)</span></div>
@@ -1565,82 +1332,14 @@ int&nbsp;radius,
 </dl>
 </section>
 </li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="fill(boolean[][],boolean)">fill</a></h3>
-<div class="memberSignature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1826">fill</a></span>&#8203;(<span class="arguments">boolean[][]&nbsp;array2d,
-boolean&nbsp;value)</span></div>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(boolean%5B%5D%5B%5D,boolean)"><code>ArrayTools.fill(boolean[][], boolean)</code></a> instead</div>
-</div>
-<div class="block">Fills <code>array2d</code> with <code>value</code>; delegates to ArrayTools, and using ArrayTools is preferred.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
-<dd><code>value</code> - the value to fill all of array2D with</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="fill(char[][],char)">fill</a></h3>
-<div class="memberSignature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1836">fill</a></span>&#8203;(<span class="arguments">char[][]&nbsp;array2d,
-char&nbsp;value)</span></div>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(char%5B%5D%5B%5D,char)"><code>ArrayTools.fill(char[][], char)</code></a> instead</div>
-</div>
-<div class="block">Fills <code>array2d</code> with <code>value</code>; delegates to ArrayTools, and using ArrayTools is preferred.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
-<dd><code>value</code> - the value to fill all of array2D with</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="fill(int[][],int)">fill</a></h3>
-<div class="memberSignature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1846">fill</a></span>&#8203;(<span class="arguments">int[][]&nbsp;array2d,
-int&nbsp;value)</span></div>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(int%5B%5D%5B%5D,int)"><code>ArrayTools.fill(int[][], int)</code></a> instead</div>
-</div>
-<div class="block">Fills <code>array2d</code> with <code>value</code>; delegates to ArrayTools, and using ArrayTools is preferred.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
-<dd><code>value</code> - the value to fill all of array2D with</dd>
-</dl>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="fill(double[][],double)">fill</a></h3>
-<div class="memberSignature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/DungeonUtility.html#line.1856">fill</a></span>&#8203;(<span class="arguments">double[][]&nbsp;array2d,
-double&nbsp;value)</span></div>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../../ArrayTools.html#fill(double%5B%5D%5B%5D,double)"><code>ArrayTools.fill(double[][], double)</code></a> instead</div>
-</div>
-<div class="block">Fills <code>array2d</code> with <code>value</code>; delegates to ArrayTools, and using ArrayTools is preferred.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
-<dd><code>value</code> - the value to fill all of array2D with</dd>
-</dl>
-</section>
-</li>
 </ul>
 </section>
 </li>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -1686,5 +1385,7 @@ double&nbsp;value)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

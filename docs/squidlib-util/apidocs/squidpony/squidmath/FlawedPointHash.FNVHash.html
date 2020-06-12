@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class FlawedPointHash.FNVHash" class="title">Class FlawedPointHash.FNVHash</h1>
@@ -107,7 +102,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FlawedPointHash.html" title="interface in squidpony.squidmath">FlawedPointHash</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.327">FlawedPointHash.FNVHash</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.330">FlawedPointHash.FNVHash</a>
 extends <a href="IPointHash.IntImpl.html" title="class in squidpony.squidmath">IPointHash.IntImpl</a>
 implements <a href="FlawedPointHash.html" title="interface in squidpony.squidmath">FlawedPointHash</a></pre>
 <div class="block">FNV32a is OK as a hash for bytes when used in some hash tables, but it has major issues on its low-order bits
@@ -269,13 +264,13 @@ int&nbsp;state)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">FNVHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.329">FNVHash</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.332">FNVHash</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int)">FNVHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.333">FNVHash</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.336">FNVHash</a></span>&#8203;(<span class="arguments">int&nbsp;state)</span></div>
 </section>
 </li>
 </ul>
@@ -291,13 +286,13 @@ int&nbsp;state)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getState()">getState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.337">getState</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.340">getState</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.340">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.343">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;state)</span></div>
 <dl>
@@ -309,7 +304,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.345">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.348">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;state)</span></div>
@@ -322,7 +317,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.350">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.353">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;w,
@@ -336,7 +331,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.355">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.FNVHash.html#line.358">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;w,
@@ -355,8 +350,8 @@ int&nbsp;state)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -402,5 +397,7 @@ int&nbsp;state)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

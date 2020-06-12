@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Interface squidpony.squidmath.RandomnessSource" class="title">Uses of Interface<br>squidpony.squidmath.RandomnessSource</h1>
@@ -474,8 +469,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></span></code></th>
 <td class="colLast">
-<div class="block">Highly experimental RNG that can be configured to smoothly transition between producing mostly values in the center
- of its range, to producing more values at or near the extremes, as well as favoring high or low results.</div>
+<div class="block">Somewhat experimental RNG that can be configured to smoothly transition between producing mostly values in the
+ center of its range, to producing more values at or near the extremes, as well as favoring high or low results.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -820,5 +815,7 @@ int&nbsp;height)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

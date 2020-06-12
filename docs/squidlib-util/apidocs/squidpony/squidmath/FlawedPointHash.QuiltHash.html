@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class FlawedPointHash.QuiltHash" class="title">Class FlawedPointHash.QuiltHash</h1>
@@ -107,7 +102,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FlawedPointHash.html" title="interface in squidpony.squidmath">FlawedPointHash</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.90">FlawedPointHash.QuiltHash</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/FlawedPointHash.html#line.93">FlawedPointHash.QuiltHash</a>
 extends <a href="IPointHash.LongImpl.html" title="class in squidpony.squidmath">IPointHash.LongImpl</a>
 implements <a href="FlawedPointHash.html" title="interface in squidpony.squidmath">FlawedPointHash</a></pre>
 <div class="block">Extremely flawed if you're using this as a point hash, but meant to be aesthetically interesting, this produces
@@ -318,19 +313,19 @@ int&nbsp;state)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">QuiltHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.93">QuiltHash</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.96">QuiltHash</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">QuiltHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.96">QuiltHash</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.99">QuiltHash</a></span>&#8203;(<span class="arguments">long&nbsp;state)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int)">QuiltHash</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.100">QuiltHash</a></span>&#8203;(<span class="arguments">long&nbsp;state,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.103">QuiltHash</a></span>&#8203;(<span class="arguments">long&nbsp;state,
 int&nbsp;size)</span></div>
 </section>
 </li>
@@ -347,25 +342,25 @@ int&nbsp;size)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getState()">getState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.105">getState</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.108">getState</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSize()">getSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.109">getSize</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.112">getSize</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setSize(int)">setSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.113">setSize</a></span>&#8203;(<span class="arguments">int&nbsp;size)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.116">setSize</a></span>&#8203;(<span class="arguments">int&nbsp;size)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.118">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.121">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;s)</span></div>
 </section>
@@ -373,7 +368,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.137">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.140">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;z,
 long&nbsp;s)</span></div>
@@ -382,7 +377,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.177">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.180">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;z,
 long&nbsp;w,
@@ -392,7 +387,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashLongs(long,long,long,long,long,long,long)">hashLongs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.181">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.184">hashLongs</a></span>&#8203;(<span class="arguments">long&nbsp;x,
 long&nbsp;y,
 long&nbsp;z,
 long&nbsp;w,
@@ -404,7 +399,7 @@ long&nbsp;s)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.185">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.188">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;state)</span></div>
 <dl>
@@ -416,7 +411,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.190">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.193">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;state)</span></div>
@@ -429,7 +424,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.195">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.198">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;w,
@@ -443,7 +438,7 @@ int&nbsp;state)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashWithState(int,int,int,int,int,int,int)">hashWithState</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.200">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/FlawedPointHash.QuiltHash.html#line.203">hashWithState</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y,
 int&nbsp;z,
 int&nbsp;w,
@@ -462,8 +457,8 @@ int&nbsp;state)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -509,5 +504,7 @@ int&nbsp;state)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

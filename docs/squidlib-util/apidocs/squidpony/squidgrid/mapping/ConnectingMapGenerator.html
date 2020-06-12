@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class ConnectingMapGenerator" class="title">Class ConnectingMapGenerator</h1>
@@ -101,8 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.79">ConnectingMapGenerator</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.83">ConnectingMapGenerator</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
 <div class="block">A room placing algorithm developed by Rayvolution for his game Fail To Hero, this was simple to implement but
@@ -366,55 +360,55 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.82">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.85">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.83">height</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.86">height</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="roomWidth">roomWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.84">roomWidth</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.87">roomWidth</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="roomHeight">roomHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.85">roomHeight</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.88">roomHeight</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wallThickness">wallThickness</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.86">wallThickness</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.89">wallThickness</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dungeon">dungeon</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.87">dungeon</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.90">dungeon</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="environment">environment</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.88">environment</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.91">environment</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="region">region</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.89">region</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.92">region</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.91">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.94">rng</a></span></div>
 </section>
 </li>
 </ul>
@@ -430,7 +424,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">ConnectingMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.97">ConnectingMapGenerator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.100">ConnectingMapGenerator</a></span>()</div>
 <div class="block">Calls <a href="#%3Cinit%3E(int,int,int,int,squidpony.squidmath.IRNG,int)"><code>ConnectingMapGenerator(int, int, int, int, IRNG, int)</code></a> with width 80, height 80, roomWidth 8,
  roomHeight 8, a new <a href="../../squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> for random, and wallThickness 2.</div>
 </section>
@@ -438,7 +432,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidmath.IRNG)">ConnectingMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.108">ConnectingMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.111">ConnectingMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</span></div>
 <div class="block">Determines room width and room height by dividing width or height by 10; wallThickness is 2.</div>
@@ -453,7 +447,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,squidpony.squidmath.IRNG)">ConnectingMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.120">ConnectingMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.123">ConnectingMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;roomWidth,
 int&nbsp;roomHeight,
@@ -472,7 +466,7 @@ int&nbsp;roomHeight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,squidpony.squidmath.IRNG,int)">ConnectingMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.135">ConnectingMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.138">ConnectingMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;roomWidth,
 int&nbsp;roomHeight,
@@ -503,7 +497,7 @@ int&nbsp;wallThickness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate()">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.155">generate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.158">generate</a></span>()</div>
 <div class="block">Generates a dungeon or other map as a 2D char array. Uses the convention of '#' representing a wall and '.'
  representing a bare floor, and also fills <a href="#environment"><code>environment</code></a> with appropriate constants from DungeonUtility,
  like <a href="DungeonUtility.html#ROOM_FLOOR"><code>DungeonUtility.ROOM_FLOOR</code></a> and <a href="DungeonUtility.html#ROOM_WALL"><code>DungeonUtility.ROOM_WALL</code></a>.</div>
@@ -518,7 +512,7 @@ int&nbsp;wallThickness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDungeon()">getDungeon</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.282">getDungeon</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.285">getDungeon</a></span>()</div>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="#generate()"><code>generate()</code></a> or
  some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
  so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</div>
@@ -533,7 +527,7 @@ int&nbsp;wallThickness)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getEnvironment()">getEnvironment</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.302">getEnvironment</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ConnectingMapGenerator.html#line.305">getEnvironment</a></span>()</div>
 <div class="block">Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
  DungeonUtility. This array will have the same size as the last char 2D array produced by generate(); the value
  of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
@@ -558,8 +552,8 @@ int&nbsp;wallThickness)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -605,5 +599,7 @@ int&nbsp;wallThickness)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

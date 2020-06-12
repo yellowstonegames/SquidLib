@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":9,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":9};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":9,"i36":9,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class Coord" class="title">Class Coord</h1>
@@ -270,7 +265,7 @@ int&nbsp;y)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cantorHashCode(int,int)">cantorHashCode</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y)</code></th>
 <td class="colLast">
-<div class="block">A static version of the current <a href="#hashCode()"><code>hashCode()</code></a> method of this class, taking x and y as parameters instead of
+<div class="block">A static version of an earlier <a href="#hashCode()"><code>hashCode()</code></a> method of this class, taking x and y as parameters instead of
  requiring a Coord object.</div>
 </td>
 </tr>
@@ -416,8 +411,8 @@ int&nbsp;y)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
- generate, but instead uses a highly-specific technique based on Cantor's pairing function, xorshifts,
- xor-rotate-xor-rotate, and an XLCG step at the end.</div>
+ generate, but instead uses a highly-specific technique based on the Rosenberg-Strong pairing function, a Gray
+ code, and two XLCG steps at the end.</div>
 </td>
 </tr>
 <tr class="altColor" id="i26">
@@ -498,27 +493,36 @@ int&nbsp;y)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i36">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rosenbergStrongHashCode(int,int)">rosenbergStrongHashCode</a></span>&#8203;(int&nbsp;x,
+int&nbsp;y)</code></th>
+<td class="colLast">
+<div class="block">A static version of the current <a href="#hashCode()"><code>hashCode()</code></a> method of this class, taking x and y as parameters instead of
+ requiring a Coord object.</div>
+</td>
+</tr>
+<tr class="rowColor" id="i37">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scale(int)">scale</a></span>&#8203;(int&nbsp;i)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i37">
+<tr class="altColor" id="i38">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scale(int,int)">scale</a></span>&#8203;(int&nbsp;i,
 int&nbsp;j)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i38">
+<tr class="rowColor" id="i39">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setX(int)">setX</a></span>&#8203;(int&nbsp;x)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i39">
+<tr class="altColor" id="i40">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setY(int)">setY</a></span>&#8203;(int&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i40">
+<tr class="rowColor" id="i41">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subtract(double)">subtract</a></span>&#8203;(double&nbsp;operand)</code></th>
 <td class="colLast">
@@ -526,7 +530,7 @@ int&nbsp;j)</code></th>
  and y and producing a different Coord as their "difference."</div>
 </td>
 </tr>
-<tr class="rowColor" id="i41">
+<tr class="altColor" id="i42">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subtract(int)">subtract</a></span>&#8203;(int&nbsp;operand)</code></th>
 <td class="colLast">
@@ -534,7 +538,7 @@ int&nbsp;j)</code></th>
  "difference."</div>
 </td>
 </tr>
-<tr class="altColor" id="i42">
+<tr class="rowColor" id="i43">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subtract(squidpony.squidmath.Coord)">subtract</a></span>&#8203;(<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code></th>
 <td class="colLast">
@@ -542,7 +546,7 @@ int&nbsp;j)</code></th>
  "difference."</div>
 </td>
 </tr>
-<tr class="rowColor" id="i43">
+<tr class="altColor" id="i44">
 <td class="colFirst"><code><a href="../squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toGoTo(squidpony.squidmath.Coord)">toGoTo</a></span>&#8203;(<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;adjacent)</code></th>
 <td class="colLast">
@@ -550,12 +554,12 @@ int&nbsp;j)</code></th>
  <code>adjacent</code>.</div>
 </td>
 </tr>
-<tr class="altColor" id="i44">
+<tr class="rowColor" id="i45">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i45">
+<tr class="altColor" id="i46">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translate(int,int)">translate</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y)</code></th>
@@ -563,12 +567,12 @@ int&nbsp;y)</code></th>
 <div class="block">Takes this Coord, adds x to its x and y to its y, and returns the Coord at that position.</div>
 </td>
 </tr>
-<tr class="altColor" id="i46">
+<tr class="rowColor" id="i47">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translate(squidpony.squidgrid.Direction)">translate</a></span>&#8203;(<a href="../squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i47">
+<tr class="altColor" id="i48">
 <td class="colFirst"><code><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translateCapped(int,int,int,int)">translateCapped</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -579,7 +583,7 @@ int&nbsp;height)</code></th>
  and returns the Coord at that position.</div>
 </td>
 </tr>
-<tr class="altColor" id="i48">
+<tr class="rowColor" id="i49">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#xoroHashCode(int,int)">xoroHashCode</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y)</code></th>
@@ -1121,21 +1125,26 @@ int&nbsp;maxY)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.463">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.468">hashCode</a></span>()</div>
 <div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
- generate, but instead uses a highly-specific technique based on Cantor's pairing function, xorshifts,
- xor-rotate-xor-rotate, and an XLCG step at the end. It manages to get extremely low collision rates under many
- circumstances, and very frequently manages to avoid colliding on more than 25% of Coords (making the load factor
- of most hash-based collections fine at a default of 0.75) while often having 0 collisions with some data sets.
- It tolerates negative x and y for Coords fairly well.
+ generate, but instead uses a highly-specific technique based on the Rosenberg-Strong pairing function, a Gray
+ code, and two XLCG steps at the end. It manages to get extremely low collision rates under many circumstances,
+ and very frequently manages to avoid colliding on more than 25% of Coords (making the load factor of most
+ hash-based collections fine at a default of 0.75) while often having 0 collisions with some data sets.
+ It does much better when Coords are in the default pooled range of -3 or greater.
  <br>
- This gets comparable collision rates to a previous version used by SquidLib, around 3% across a wide variety of
- rectangular areas, but has much better results when used for seeding procedural generation based on a Coord (a
- reasonable usage of this method). The previous method changed bits in large checkerboard patterns, leaving heavy
- square-shaped biases in generated results, while this version only has checkerboard-reminiscent patterns in the
- lowest 4 or 5 bits, and even then has some chaotic scattering.
+ This gets slightly better collision rates than previous versions used by SquidLib, around 4% across a wide
+ variety of rectangular areas (most earlier hashes got about-5%-range collision rates, and using
+ <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Objects.html?is-external=true#hash(java.lang.Object...)" title="class or interface in java.util" class="externalLink"><code>Objects.hash(Object...)</code></a> gives more than a 75% collision rate). The previous version, which is
+ still available as <a href="#cantorHashCode(int,int)"><code>cantorHashCode(int, int)</code></a>, has slightly better results when used for seeding
+ procedural generation based on a Coord (a reasonable usage of this method), but both this hash code and the
+ Cantor-based one have excellent randomness in the upper bits of the hash (so if you use a hashCode() result as a
+ whole int, then it should be pretty good as a seed). The method before the Cantor-based one,
+ <a href="#xoroHashCode(int,int)"><code>xoroHashCode(int, int)</code></a> was structured a little like xoroshiro (<a href="XoRoRNG.html" title="class in squidpony.squidmath"><code>XoRoRNG</code></a> uses the 64-bit version
+ of xoroshiro), and while it had pretty low collision rates (low 5% range), its hash codes changed bits in large
+ checkerboard patterns, leaving heavy square-shaped biases in generated results.
  <br>
- This changed at least six times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
+ This changed at least 7 times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
  same across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
  unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
  <a href="OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> and <a href="OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>; if you use the ordered kinds, then the only things that matter about
@@ -1148,20 +1157,46 @@ int&nbsp;maxY)</span></div>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an int that should, for most different Coord values, be significantly different from the other hash codes</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#cantorHashCode(int,int)"><code>A static method that gets the same result as this method without involving a Coord</code></a></dd>
+<dd><a href="#rosenbergStrongHashCode(int,int)"><code>A static method that gets the same result as this method without involving a Coord</code></a></dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="cantorHashCode(int,int)">cantorHashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.483">cantorHashCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.498">cantorHashCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+int&nbsp;y)</span></div>
+<div class="block">A static version of an earlier <a href="#hashCode()"><code>hashCode()</code></a> method of this class, taking x and y as parameters instead of
+ requiring a Coord object. Like the earlier hashCode() method, this involves the close-to-optimal mathematical
+ Cantor pairing function to distribute x and y without overlap until they get very large. Cantor's pairing
+ function can be written simply as <code>((x + y) * (x + y + 1)) / 2 + y</code>; it produces sequential results for a
+ sequence of positive points traveling in diagonal stripes away from the origin. The finalization steps this
+ performs improve the randomness of the lower bits, but also worsen collision rates; most cases involving Coords
+ will see lower collision rates from <a href="#rosenbergStrongHashCode(int,int)"><code>rosenbergStrongHashCode(int, int)</code></a>, but more random results from this
+ method.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - the x coordinate of the "imaginary Coord" to hash</dd>
+<dd><code>y</code> - the y coordinate of the "imaginary Coord" to hash</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the equivalent to the hashCode() of an "imaginary Coord"</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="rosenbergStrongHashCode(int,int)">rosenbergStrongHashCode</a></h3>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.519">rosenbergStrongHashCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">A static version of the current <a href="#hashCode()"><code>hashCode()</code></a> method of this class, taking x and y as parameters instead of
  requiring a Coord object. Like the current hashCode() method, this involves the close-to-optimal mathematical
- Cantor pairing function to distribute x and y without overlap until they get very large. Cantor's pairing
- function can be written simply as <code>((x + y) * (x + y + 1)) / 2 + y</code>; it produces sequential results for a
- sequence of positive points traveling in diagonal stripes away from the origin.</div>
+ Rosenberg-Strong pairing function to distribute x and y without overlap until they get very large. The
+ Rosenberg-Strong pairing function can be written simply as <code>((x &gt;= y) ? x * (x + 2) - y : y * y + x)</code>; it
+ produces sequential results for a sequence of positive points traveling in square "shells" away from the origin.
+ <a href="https://hbfs.wordpress.com/2018/08/07/moeud-deux/">the algorithm is discussed more here</a>; the only
+ changes this makes are adding 3 to x and y (to account for the minimum of -3 in most cases for a Coord), and some
+ finalizing steps that help randomize the upper bits of the hash code (the lower bits are quite non-random because
+ they can't permit any gaps while optimizing collision rates).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - the x coordinate of the "imaginary Coord" to hash</dd>
@@ -1174,7 +1209,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="xoroHashCode(int,int)">xoroHashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.501">xoroHashCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.545">xoroHashCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">An earlier hashCode() implementation used by this class, now standalone in case you want to replicate the results
  of the older code. This uses only bitwise operations, which tend to be fairly fast on all platforms, and when
@@ -1194,7 +1229,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="encode()">encode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.514">encode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.558">encode</a></span>()</div>
 <div class="block">Something like hashCode(), but reversible with <code>Coord.decode()</code>. Works for Coords between roughly -256 and
  32000 in each of x and y, but will probably only decode to pooled Coords if x and y are both between -3 and 255
  (inclusive for both).</div>
@@ -1207,7 +1242,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="pureEncode(int,int)">pureEncode</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.526">pureEncode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.570">pureEncode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">An alternative to getting a Coord with Coord.get() only to encode() it as the next step. This doesn't create a
  Coord in the middle step. Can be decoded with Coord.decode() to get the (x,y) Coord.</div>
@@ -1223,7 +1258,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="decode(int)">decode</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.539">decode</a></span>&#8203;(<span class="arguments">int&nbsp;code)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.583">decode</a></span>&#8203;(<span class="arguments">int&nbsp;code)</span></div>
 <div class="block">This can take an int produced by <code>someCoord.encode()</code> and get the original Coord back out of it. It
  works for all pooled Coords where the pool hasn't been expanded past about 32,000 in either dimension. It even
  works for Coords with negative x or y as well, if they are no lower than -256 in either dimension. This will
@@ -1240,7 +1275,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.544">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.588">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -1250,7 +1285,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getCacheWidth()">getCacheWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.572">getCacheWidth</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.616">getCacheWidth</a></span>()</div>
 <div class="block">Gets the width of the pool used as a cache for Coords, not including negative Coords.
  Unless expandPool() has been called, this should be 256.
  Useful for finding the upper (exclusive) bound for x values that can be used efficiently in Coords.
@@ -1266,7 +1301,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getCacheHeight()">getCacheHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.586">getCacheHeight</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.630">getCacheHeight</a></span>()</div>
 <div class="block">Gets the height of the pool used as a cache for Coords, not including negative Coords.
  Unless expandPool() has been called, this should be 256.
  Useful for finding the upper (exclusive) bound for y values that can be used efficiently in Coords.
@@ -1282,7 +1317,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="expandPoolTo(int,int)">expandPoolTo</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.604">expandPoolTo</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.648">expandPoolTo</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height)</span></div>
 <div class="block">Enlarges the pool of cached Coords to the given width and height, and doesn't change
  a dimension if it would be reduced in size.
@@ -1303,7 +1338,7 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="expandPool(int,int)">expandPool</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.619">expandPool</a></span>&#8203;(<span class="arguments">int&nbsp;xIncrease,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.663">expandPool</a></span>&#8203;(<span class="arguments">int&nbsp;xIncrease,
 int&nbsp;yIncrease)</span></div>
 <div class="block">Enlarges the pool of cached Coords by the given amount of expansion for x and y.
  Cached Coord values will be reused by Coord.get instead of re-allocated each time.
@@ -1321,7 +1356,7 @@ int&nbsp;yIncrease)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="interpolate(squidpony.squidmath.Coord,float)">interpolate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.641">interpolate</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord.html#line.685">interpolate</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
 float&nbsp;amountTraveled)</span></div>
 </section>
 </li>
@@ -1331,8 +1366,8 @@ float&nbsp;amountTraveled)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -1378,5 +1413,7 @@ float&nbsp;amountTraveled)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

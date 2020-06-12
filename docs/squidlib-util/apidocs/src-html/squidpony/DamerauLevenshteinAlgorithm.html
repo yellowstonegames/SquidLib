@@ -12,147 +12,145 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.annotation.Beta;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import java.util.HashMap;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import java.util.Map;</a>
-<span class="sourceLineNo">007</span><a id="line.7"></a>
-<span class="sourceLineNo">008</span><a id="line.8">/**</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * The Damerau-Levenshtein Algorithm is an extension to the Levenshtein</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * Algorithm which solves the edit distance problem between a source string and</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * a target string with the following operations:</a>
-<span class="sourceLineNo">012</span><a id="line.12"> *</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * &lt;ul&gt;</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * &lt;li&gt;Character Insertion&lt;/li&gt;</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * &lt;li&gt;Character Deletion&lt;/li&gt;</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * &lt;li&gt;Character Replacement&lt;/li&gt;</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * &lt;li&gt;Adjacent Character Swap&lt;/li&gt;</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * &lt;/ul&gt;</a>
-<span class="sourceLineNo">019</span><a id="line.19"> *</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * Note that the adjacent character swap operation is an edit that may be</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * applied when two adjacent characters in the source string match two adjacent</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * characters in the target string, but in reverse order, rather than a general</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * allowance for adjacent character swaps.</a>
-<span class="sourceLineNo">024</span><a id="line.24"> *</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * This implementation allows the client to specify the costs of the various</a>
-<span class="sourceLineNo">026</span><a id="line.26"> * edit operations with the restriction that the cost of two swap operations</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * must not be less than the cost of a delete operation followed by an insert</a>
-<span class="sourceLineNo">028</span><a id="line.28"> * operation. This restriction is required to preclude two swaps involving the</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * same character being required for optimality which, in turn, enables a fast</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * dynamic programming solution.</a>
-<span class="sourceLineNo">031</span><a id="line.31"> *</a>
-<span class="sourceLineNo">032</span><a id="line.32"> * The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is</a>
-<span class="sourceLineNo">033</span><a id="line.33"> * the length of the source string and m is the length of the target string.</a>
-<span class="sourceLineNo">034</span><a id="line.34"> * This implementation consumes O(n*m) space.</a>
-<span class="sourceLineNo">035</span><a id="line.35"> * </a>
-<span class="sourceLineNo">036</span><a id="line.36">* @author Kevin L. Stern</a>
-<span class="sourceLineNo">037</span><a id="line.37"> */</a>
-<span class="sourceLineNo">038</span><a id="line.38">@Beta</a>
-<span class="sourceLineNo">039</span><a id="line.39">public class DamerauLevenshteinAlgorithm {</a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.util.HashMap;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import java.util.Map;</a>
+<span class="sourceLineNo">005</span><a id="line.5"></a>
+<span class="sourceLineNo">006</span><a id="line.6">/**</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * The Damerau-Levenshtein Algorithm is an extension to the Levenshtein</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * Algorithm which solves the edit distance problem between a source string and</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * a target string with the following operations:</a>
+<span class="sourceLineNo">010</span><a id="line.10"> *</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * &lt;ul&gt;</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * &lt;li&gt;Character Insertion&lt;/li&gt;</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * &lt;li&gt;Character Deletion&lt;/li&gt;</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * &lt;li&gt;Character Replacement&lt;/li&gt;</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * &lt;li&gt;Adjacent Character Swap&lt;/li&gt;</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * &lt;/ul&gt;</a>
+<span class="sourceLineNo">017</span><a id="line.17"> *</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * Note that the adjacent character swap operation is an edit that may be</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * applied when two adjacent characters in the source string match two adjacent</a>
+<span class="sourceLineNo">020</span><a id="line.20"> * characters in the target string, but in reverse order, rather than a general</a>
+<span class="sourceLineNo">021</span><a id="line.21"> * allowance for adjacent character swaps.</a>
+<span class="sourceLineNo">022</span><a id="line.22"> *</a>
+<span class="sourceLineNo">023</span><a id="line.23"> * This implementation allows the client to specify the costs of the various</a>
+<span class="sourceLineNo">024</span><a id="line.24"> * edit operations with the restriction that the cost of two swap operations</a>
+<span class="sourceLineNo">025</span><a id="line.25"> * must not be less than the cost of a delete operation followed by an insert</a>
+<span class="sourceLineNo">026</span><a id="line.26"> * operation. This restriction is required to preclude two swaps involving the</a>
+<span class="sourceLineNo">027</span><a id="line.27"> * same character being required for optimality which, in turn, enables a fast</a>
+<span class="sourceLineNo">028</span><a id="line.28"> * dynamic programming solution.</a>
+<span class="sourceLineNo">029</span><a id="line.29"> *</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is</a>
+<span class="sourceLineNo">031</span><a id="line.31"> * the length of the source string and m is the length of the target string.</a>
+<span class="sourceLineNo">032</span><a id="line.32"> * This implementation consumes O(n*m) space, none of which is cached for</a>
+<span class="sourceLineNo">033</span><a id="line.33"> * future executions. Heavy usage may be taxing on the garbage collector.</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * </a>
+<span class="sourceLineNo">035</span><a id="line.35">* @author Kevin L. Stern</a>
+<span class="sourceLineNo">036</span><a id="line.36"> */</a>
+<span class="sourceLineNo">037</span><a id="line.37">public class DamerauLevenshteinAlgorithm {</a>
+<span class="sourceLineNo">038</span><a id="line.38"></a>
+<span class="sourceLineNo">039</span><a id="line.39">    private final int deleteCost, insertCost, replaceCost, swapCost;</a>
 <span class="sourceLineNo">040</span><a id="line.40"></a>
-<span class="sourceLineNo">041</span><a id="line.41">    private final int deleteCost, insertCost, replaceCost, swapCost;</a>
-<span class="sourceLineNo">042</span><a id="line.42"></a>
-<span class="sourceLineNo">043</span><a id="line.43">    /**</a>
-<span class="sourceLineNo">044</span><a id="line.44">     * Constructor.</a>
-<span class="sourceLineNo">045</span><a id="line.45">     *     </a>
-<span class="sourceLineNo">046</span><a id="line.46">* @param deleteCost the cost of deleting a character.</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * @param insertCost the cost of inserting a character.</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * @param replaceCost the cost of replacing a character.</a>
-<span class="sourceLineNo">049</span><a id="line.49">     * @param swapCost the cost of swapping two adjacent characters.</a>
-<span class="sourceLineNo">050</span><a id="line.50">     */</a>
-<span class="sourceLineNo">051</span><a id="line.51">    public DamerauLevenshteinAlgorithm(int deleteCost, int insertCost, int replaceCost, int swapCost) {</a>
-<span class="sourceLineNo">052</span><a id="line.52">        /*</a>
-<span class="sourceLineNo">053</span><a id="line.53">         * Required to facilitate the premise to the algorithm that two swaps of</a>
-<span class="sourceLineNo">054</span><a id="line.54">         * the same character are never required for optimality.</a>
-<span class="sourceLineNo">055</span><a id="line.55">         */</a>
-<span class="sourceLineNo">056</span><a id="line.56">        if (2 * swapCost &lt; insertCost + deleteCost) {</a>
-<span class="sourceLineNo">057</span><a id="line.57">            throw new IllegalArgumentException("Unsupported cost assignment");</a>
-<span class="sourceLineNo">058</span><a id="line.58">        }</a>
-<span class="sourceLineNo">059</span><a id="line.59">        this.deleteCost = deleteCost;</a>
-<span class="sourceLineNo">060</span><a id="line.60">        this.insertCost = insertCost;</a>
-<span class="sourceLineNo">061</span><a id="line.61">        this.replaceCost = replaceCost;</a>
-<span class="sourceLineNo">062</span><a id="line.62">        this.swapCost = swapCost;</a>
-<span class="sourceLineNo">063</span><a id="line.63">    }</a>
-<span class="sourceLineNo">064</span><a id="line.64"></a>
-<span class="sourceLineNo">065</span><a id="line.65">    /**</a>
-<span class="sourceLineNo">066</span><a id="line.66">     * Compute the Damerau-Levenshtein distance between the specified source</a>
-<span class="sourceLineNo">067</span><a id="line.67">     * string and the specified target string.</a>
-<span class="sourceLineNo">068</span><a id="line.68">     */</a>
-<span class="sourceLineNo">069</span><a id="line.69">    public int execute(CharSequence source, CharSequence target) {</a>
-<span class="sourceLineNo">070</span><a id="line.70">        if (source.length() == 0) {</a>
-<span class="sourceLineNo">071</span><a id="line.71">            return target.length() * insertCost;</a>
-<span class="sourceLineNo">072</span><a id="line.72">        }</a>
-<span class="sourceLineNo">073</span><a id="line.73"></a>
-<span class="sourceLineNo">074</span><a id="line.74">        if (target.length() == 0) {</a>
-<span class="sourceLineNo">075</span><a id="line.75">            return source.length() * deleteCost;</a>
-<span class="sourceLineNo">076</span><a id="line.76">        }</a>
-<span class="sourceLineNo">077</span><a id="line.77"></a>
-<span class="sourceLineNo">078</span><a id="line.78">        int[][] table = new int[source.length()][target.length()];</a>
-<span class="sourceLineNo">079</span><a id="line.79">        Map&lt;Character, Integer&gt; sourceIndexByCharacter = new HashMap&lt;&gt;();</a>
-<span class="sourceLineNo">080</span><a id="line.80"></a>
-<span class="sourceLineNo">081</span><a id="line.81">        if (source.charAt(0) != target.charAt(0)) {</a>
-<span class="sourceLineNo">082</span><a id="line.82">            table[0][0] = Math.min(replaceCost, deleteCost + insertCost);</a>
-<span class="sourceLineNo">083</span><a id="line.83">        }</a>
+<span class="sourceLineNo">041</span><a id="line.41">    /**</a>
+<span class="sourceLineNo">042</span><a id="line.42">     * Constructor.</a>
+<span class="sourceLineNo">043</span><a id="line.43">     *     </a>
+<span class="sourceLineNo">044</span><a id="line.44">* @param deleteCost the cost of deleting a character.</a>
+<span class="sourceLineNo">045</span><a id="line.45">     * @param insertCost the cost of inserting a character.</a>
+<span class="sourceLineNo">046</span><a id="line.46">     * @param replaceCost the cost of replacing a character.</a>
+<span class="sourceLineNo">047</span><a id="line.47">     * @param swapCost the cost of swapping two adjacent characters.</a>
+<span class="sourceLineNo">048</span><a id="line.48">     */</a>
+<span class="sourceLineNo">049</span><a id="line.49">    public DamerauLevenshteinAlgorithm(int deleteCost, int insertCost, int replaceCost, int swapCost) {</a>
+<span class="sourceLineNo">050</span><a id="line.50">        /*</a>
+<span class="sourceLineNo">051</span><a id="line.51">         * Required to facilitate the premise to the algorithm that two swaps of</a>
+<span class="sourceLineNo">052</span><a id="line.52">         * the same character are never required for optimality.</a>
+<span class="sourceLineNo">053</span><a id="line.53">         */</a>
+<span class="sourceLineNo">054</span><a id="line.54">        if (2 * swapCost &lt; insertCost + deleteCost) {</a>
+<span class="sourceLineNo">055</span><a id="line.55">            throw new IllegalArgumentException("Unsupported cost assignment");</a>
+<span class="sourceLineNo">056</span><a id="line.56">        }</a>
+<span class="sourceLineNo">057</span><a id="line.57">        this.deleteCost = deleteCost;</a>
+<span class="sourceLineNo">058</span><a id="line.58">        this.insertCost = insertCost;</a>
+<span class="sourceLineNo">059</span><a id="line.59">        this.replaceCost = replaceCost;</a>
+<span class="sourceLineNo">060</span><a id="line.60">        this.swapCost = swapCost;</a>
+<span class="sourceLineNo">061</span><a id="line.61">    }</a>
+<span class="sourceLineNo">062</span><a id="line.62"></a>
+<span class="sourceLineNo">063</span><a id="line.63">    /**</a>
+<span class="sourceLineNo">064</span><a id="line.64">     * Compute the Damerau-Levenshtein distance between the specified source</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * string and the specified target string.</a>
+<span class="sourceLineNo">066</span><a id="line.66">     */</a>
+<span class="sourceLineNo">067</span><a id="line.67">    public int execute(CharSequence source, CharSequence target) {</a>
+<span class="sourceLineNo">068</span><a id="line.68">        if (source.length() == 0) {</a>
+<span class="sourceLineNo">069</span><a id="line.69">            return target.length() * insertCost;</a>
+<span class="sourceLineNo">070</span><a id="line.70">        }</a>
+<span class="sourceLineNo">071</span><a id="line.71"></a>
+<span class="sourceLineNo">072</span><a id="line.72">        if (target.length() == 0) {</a>
+<span class="sourceLineNo">073</span><a id="line.73">            return source.length() * deleteCost;</a>
+<span class="sourceLineNo">074</span><a id="line.74">        }</a>
+<span class="sourceLineNo">075</span><a id="line.75"></a>
+<span class="sourceLineNo">076</span><a id="line.76">        int[][] table = new int[source.length()][target.length()];</a>
+<span class="sourceLineNo">077</span><a id="line.77">        Map&lt;Character, Integer&gt; sourceIndexByCharacter = new HashMap&lt;&gt;();</a>
+<span class="sourceLineNo">078</span><a id="line.78"></a>
+<span class="sourceLineNo">079</span><a id="line.79">        if (source.charAt(0) != target.charAt(0)) {</a>
+<span class="sourceLineNo">080</span><a id="line.80">            table[0][0] = Math.min(replaceCost, deleteCost + insertCost);</a>
+<span class="sourceLineNo">081</span><a id="line.81">        }</a>
+<span class="sourceLineNo">082</span><a id="line.82"></a>
+<span class="sourceLineNo">083</span><a id="line.83">        sourceIndexByCharacter.put(source.charAt(0), 0);</a>
 <span class="sourceLineNo">084</span><a id="line.84"></a>
-<span class="sourceLineNo">085</span><a id="line.85">        sourceIndexByCharacter.put(source.charAt(0), 0);</a>
-<span class="sourceLineNo">086</span><a id="line.86"></a>
-<span class="sourceLineNo">087</span><a id="line.87">        for (int i = 1; i &lt; source.length(); i++) {</a>
-<span class="sourceLineNo">088</span><a id="line.88">            int deleteDistance = table[i - 1][0] + deleteCost;</a>
-<span class="sourceLineNo">089</span><a id="line.89">            int insertDistance = (i + 1) * deleteCost + insertCost;</a>
-<span class="sourceLineNo">090</span><a id="line.90">            int matchDistance = i * deleteCost</a>
-<span class="sourceLineNo">091</span><a id="line.91">                    + (source.charAt(i) == target.charAt(0) ? 0 : replaceCost);</a>
-<span class="sourceLineNo">092</span><a id="line.92">            table[i][0] = Math.min(Math.min(deleteDistance, insertDistance),</a>
-<span class="sourceLineNo">093</span><a id="line.93">                    matchDistance);</a>
-<span class="sourceLineNo">094</span><a id="line.94">        }</a>
-<span class="sourceLineNo">095</span><a id="line.95"></a>
-<span class="sourceLineNo">096</span><a id="line.96">        for (int j = 1; j &lt; target.length(); j++) {</a>
-<span class="sourceLineNo">097</span><a id="line.97">            int deleteDistance = table[0][j - 1] + insertCost;</a>
-<span class="sourceLineNo">098</span><a id="line.98">            int insertDistance = (j + 1) * insertCost + deleteCost;</a>
-<span class="sourceLineNo">099</span><a id="line.99">            int matchDistance = j * insertCost</a>
-<span class="sourceLineNo">100</span><a id="line.100">                    + (source.charAt(0) == target.charAt(j) ? 0 : replaceCost);</a>
-<span class="sourceLineNo">101</span><a id="line.101">            table[0][j] = Math.min(Math.min(deleteDistance, insertDistance),</a>
-<span class="sourceLineNo">102</span><a id="line.102">                    matchDistance);</a>
-<span class="sourceLineNo">103</span><a id="line.103">        }</a>
-<span class="sourceLineNo">104</span><a id="line.104"></a>
-<span class="sourceLineNo">105</span><a id="line.105">        for (int i = 1; i &lt; source.length(); i++) {</a>
-<span class="sourceLineNo">106</span><a id="line.106">            int maxSourceLetterMatchIndex = source.charAt(i) == target</a>
-<span class="sourceLineNo">107</span><a id="line.107">                    .charAt(0) ? 0 : -1;</a>
-<span class="sourceLineNo">108</span><a id="line.108">            for (int j = 1; j &lt; target.length(); j++) {</a>
-<span class="sourceLineNo">109</span><a id="line.109">                Integer candidateSwapIndex = sourceIndexByCharacter.get(target</a>
-<span class="sourceLineNo">110</span><a id="line.110">                        .charAt(j));</a>
-<span class="sourceLineNo">111</span><a id="line.111">                int jSwap = maxSourceLetterMatchIndex;</a>
-<span class="sourceLineNo">112</span><a id="line.112">                int deleteDistance = table[i - 1][j] + deleteCost;</a>
-<span class="sourceLineNo">113</span><a id="line.113">                int insertDistance = table[i][j - 1] + insertCost;</a>
-<span class="sourceLineNo">114</span><a id="line.114">                int matchDistance = table[i - 1][j - 1];</a>
-<span class="sourceLineNo">115</span><a id="line.115">                if (source.charAt(i) != target.charAt(j)) {</a>
-<span class="sourceLineNo">116</span><a id="line.116">                    matchDistance += replaceCost;</a>
-<span class="sourceLineNo">117</span><a id="line.117">                } else {</a>
-<span class="sourceLineNo">118</span><a id="line.118">                    maxSourceLetterMatchIndex = j;</a>
-<span class="sourceLineNo">119</span><a id="line.119">                }</a>
-<span class="sourceLineNo">120</span><a id="line.120">                int swapDistance;</a>
-<span class="sourceLineNo">121</span><a id="line.121">                if (candidateSwapIndex != null &amp;&amp; jSwap != -1) {</a>
-<span class="sourceLineNo">122</span><a id="line.122">                    int iSwap = candidateSwapIndex;</a>
-<span class="sourceLineNo">123</span><a id="line.123">                    int preSwapCost;</a>
-<span class="sourceLineNo">124</span><a id="line.124">                    if (iSwap == 0 &amp;&amp; jSwap == 0) {</a>
-<span class="sourceLineNo">125</span><a id="line.125">                        preSwapCost = 0;</a>
-<span class="sourceLineNo">126</span><a id="line.126">                    } else {</a>
-<span class="sourceLineNo">127</span><a id="line.127">                        preSwapCost = table[Math.max(0, iSwap - 1)][Math.max(0,</a>
-<span class="sourceLineNo">128</span><a id="line.128">                                jSwap - 1)];</a>
-<span class="sourceLineNo">129</span><a id="line.129">                    }</a>
-<span class="sourceLineNo">130</span><a id="line.130">                    swapDistance = preSwapCost + (i - iSwap - 1) * deleteCost</a>
-<span class="sourceLineNo">131</span><a id="line.131">                            + (j - jSwap - 1) * insertCost + swapCost;</a>
-<span class="sourceLineNo">132</span><a id="line.132">                } else {</a>
-<span class="sourceLineNo">133</span><a id="line.133">                    swapDistance = Integer.MAX_VALUE;</a>
-<span class="sourceLineNo">134</span><a id="line.134">                }</a>
-<span class="sourceLineNo">135</span><a id="line.135">                table[i][j] = Math.min(</a>
-<span class="sourceLineNo">136</span><a id="line.136">                        Math.min(Math.min(deleteDistance, insertDistance),</a>
-<span class="sourceLineNo">137</span><a id="line.137">                                matchDistance), swapDistance);</a>
-<span class="sourceLineNo">138</span><a id="line.138">            }</a>
-<span class="sourceLineNo">139</span><a id="line.139">            sourceIndexByCharacter.put(source.charAt(i), i);</a>
-<span class="sourceLineNo">140</span><a id="line.140">        }</a>
-<span class="sourceLineNo">141</span><a id="line.141">        return table[source.length() - 1][target.length() - 1];</a>
-<span class="sourceLineNo">142</span><a id="line.142">    }</a>
-<span class="sourceLineNo">143</span><a id="line.143">}</a>
+<span class="sourceLineNo">085</span><a id="line.85">        for (int i = 1; i &lt; source.length(); i++) {</a>
+<span class="sourceLineNo">086</span><a id="line.86">            int deleteDistance = table[i - 1][0] + deleteCost;</a>
+<span class="sourceLineNo">087</span><a id="line.87">            int insertDistance = (i + 1) * deleteCost + insertCost;</a>
+<span class="sourceLineNo">088</span><a id="line.88">            int matchDistance = i * deleteCost</a>
+<span class="sourceLineNo">089</span><a id="line.89">                    + (source.charAt(i) == target.charAt(0) ? 0 : replaceCost);</a>
+<span class="sourceLineNo">090</span><a id="line.90">            table[i][0] = Math.min(Math.min(deleteDistance, insertDistance),</a>
+<span class="sourceLineNo">091</span><a id="line.91">                    matchDistance);</a>
+<span class="sourceLineNo">092</span><a id="line.92">        }</a>
+<span class="sourceLineNo">093</span><a id="line.93"></a>
+<span class="sourceLineNo">094</span><a id="line.94">        for (int j = 1; j &lt; target.length(); j++) {</a>
+<span class="sourceLineNo">095</span><a id="line.95">            int deleteDistance = table[0][j - 1] + insertCost;</a>
+<span class="sourceLineNo">096</span><a id="line.96">            int insertDistance = (j + 1) * insertCost + deleteCost;</a>
+<span class="sourceLineNo">097</span><a id="line.97">            int matchDistance = j * insertCost</a>
+<span class="sourceLineNo">098</span><a id="line.98">                    + (source.charAt(0) == target.charAt(j) ? 0 : replaceCost);</a>
+<span class="sourceLineNo">099</span><a id="line.99">            table[0][j] = Math.min(Math.min(deleteDistance, insertDistance),</a>
+<span class="sourceLineNo">100</span><a id="line.100">                    matchDistance);</a>
+<span class="sourceLineNo">101</span><a id="line.101">        }</a>
+<span class="sourceLineNo">102</span><a id="line.102"></a>
+<span class="sourceLineNo">103</span><a id="line.103">        for (int i = 1; i &lt; source.length(); i++) {</a>
+<span class="sourceLineNo">104</span><a id="line.104">            int maxSourceLetterMatchIndex = source.charAt(i) == target</a>
+<span class="sourceLineNo">105</span><a id="line.105">                    .charAt(0) ? 0 : -1;</a>
+<span class="sourceLineNo">106</span><a id="line.106">            for (int j = 1; j &lt; target.length(); j++) {</a>
+<span class="sourceLineNo">107</span><a id="line.107">                Integer candidateSwapIndex = sourceIndexByCharacter.get(target</a>
+<span class="sourceLineNo">108</span><a id="line.108">                        .charAt(j));</a>
+<span class="sourceLineNo">109</span><a id="line.109">                int jSwap = maxSourceLetterMatchIndex;</a>
+<span class="sourceLineNo">110</span><a id="line.110">                int deleteDistance = table[i - 1][j] + deleteCost;</a>
+<span class="sourceLineNo">111</span><a id="line.111">                int insertDistance = table[i][j - 1] + insertCost;</a>
+<span class="sourceLineNo">112</span><a id="line.112">                int matchDistance = table[i - 1][j - 1];</a>
+<span class="sourceLineNo">113</span><a id="line.113">                if (source.charAt(i) != target.charAt(j)) {</a>
+<span class="sourceLineNo">114</span><a id="line.114">                    matchDistance += replaceCost;</a>
+<span class="sourceLineNo">115</span><a id="line.115">                } else {</a>
+<span class="sourceLineNo">116</span><a id="line.116">                    maxSourceLetterMatchIndex = j;</a>
+<span class="sourceLineNo">117</span><a id="line.117">                }</a>
+<span class="sourceLineNo">118</span><a id="line.118">                int swapDistance;</a>
+<span class="sourceLineNo">119</span><a id="line.119">                if (candidateSwapIndex != null &amp;&amp; jSwap != -1) {</a>
+<span class="sourceLineNo">120</span><a id="line.120">                    int iSwap = candidateSwapIndex;</a>
+<span class="sourceLineNo">121</span><a id="line.121">                    int preSwapCost;</a>
+<span class="sourceLineNo">122</span><a id="line.122">                    if (iSwap == 0 &amp;&amp; jSwap == 0) {</a>
+<span class="sourceLineNo">123</span><a id="line.123">                        preSwapCost = 0;</a>
+<span class="sourceLineNo">124</span><a id="line.124">                    } else {</a>
+<span class="sourceLineNo">125</span><a id="line.125">                        preSwapCost = table[Math.max(0, iSwap - 1)][Math.max(0,</a>
+<span class="sourceLineNo">126</span><a id="line.126">                                jSwap - 1)];</a>
+<span class="sourceLineNo">127</span><a id="line.127">                    }</a>
+<span class="sourceLineNo">128</span><a id="line.128">                    swapDistance = preSwapCost + (i - iSwap - 1) * deleteCost</a>
+<span class="sourceLineNo">129</span><a id="line.129">                            + (j - jSwap - 1) * insertCost + swapCost;</a>
+<span class="sourceLineNo">130</span><a id="line.130">                } else {</a>
+<span class="sourceLineNo">131</span><a id="line.131">                    swapDistance = Integer.MAX_VALUE;</a>
+<span class="sourceLineNo">132</span><a id="line.132">                }</a>
+<span class="sourceLineNo">133</span><a id="line.133">                table[i][j] = Math.min(</a>
+<span class="sourceLineNo">134</span><a id="line.134">                        Math.min(Math.min(deleteDistance, insertDistance),</a>
+<span class="sourceLineNo">135</span><a id="line.135">                                matchDistance), swapDistance);</a>
+<span class="sourceLineNo">136</span><a id="line.136">            }</a>
+<span class="sourceLineNo">137</span><a id="line.137">            sourceIndexByCharacter.put(source.charAt(i), i);</a>
+<span class="sourceLineNo">138</span><a id="line.138">        }</a>
+<span class="sourceLineNo">139</span><a id="line.139">        return table[source.length() - 1][target.length() - 1];</a>
+<span class="sourceLineNo">140</span><a id="line.140">    }</a>
+<span class="sourceLineNo">141</span><a id="line.141">}</a>
 
 
 

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class Dice" class="title">Class Dice</h1>
@@ -101,14 +96,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/Dice.html#line.22">Dice</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/Dice.html#line.23">Dice</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">Class for emulating various traditional RPG-style dice rolls.
  Supports rolling multiple virtual dice of arbitrary size, summing all, the highest <i>n</i>, or the lowest <i>n</i>
  dice, treating dice as "exploding" as in some tabletop games (where the max result is rolled again and added),
  getting value from inside a range, and applying simple arithmetic modifiers to the result (like adding a number).
+ Typically you'll want to use the <a href="#roll(java.lang.String)"><code>roll(String)</code></a> method if you have a String like <code>"2d8+6"</code>, or the
+ various other methods if you have int variables for things like "number of dice to roll" and "sides on each die."
  <br>
  Based on code from the Blacken library.</div>
 <dl>
@@ -267,14 +263,14 @@ int&nbsp;dice,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">Dice</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.33">Dice</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.34">Dice</a></span>()</div>
 <div class="block">Creates a new dice roller that uses a random RNG seed for an RNG that it owns.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.IRNG)">Dice</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.43">Dice</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.44">Dice</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Creates a new dice roller that uses the given IRNG, which can be seeded before it's given here. The IRNG will be
  shared, not copied, so requesting a random number from the same IRNG in another place may change the value of the
  next die roll this makes, and dice rolls this makes will change the state of the shared IRNG.</div>
@@ -287,7 +283,7 @@ int&nbsp;dice,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">Dice</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.52">Dice</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.53">Dice</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -298,7 +294,7 @@ int&nbsp;dice,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String)">Dice</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.60">Dice</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.61">Dice</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;seed)</span></div>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -319,7 +315,7 @@ int&nbsp;dice,
 <li class="blockList">
 <section class="detail">
 <h3><a id="setRandom(squidpony.squidmath.IRNG)">setRandom</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.72">setRandom</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.73">setRandom</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Sets the random number generator to be used.
 
  This method does not need to be called before using the methods of this
@@ -333,7 +329,7 @@ int&nbsp;dice,
 <li class="blockList">
 <section class="detail">
 <h3><a id="bestOf(int,int,java.lang.String)">bestOf</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.195">bestOf</a></span>&#8203;(<span class="arguments">int&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.196">bestOf</a></span>&#8203;(<span class="arguments">int&nbsp;n,
 int&nbsp;dice,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;group)</span></div>
 <div class="block">Find the best n totals from the provided number of dice rolled according
@@ -351,7 +347,7 @@ int&nbsp;dice,
 <li class="blockList">
 <section class="detail">
 <h3><a id="worstOf(int,int,java.lang.String)">worstOf</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.215">worstOf</a></span>&#8203;(<span class="arguments">int&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.216">worstOf</a></span>&#8203;(<span class="arguments">int&nbsp;n,
 int&nbsp;dice,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;group)</span></div>
 <div class="block">Find the worst n totals from the provided number of dice rolled according
@@ -369,7 +365,7 @@ int&nbsp;dice,
 <li class="blockList">
 <section class="detail">
 <h3><a id="rollDice(int,int)">rollDice</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.233">rollDice</a></span>&#8203;(<span class="arguments">int&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.234">rollDice</a></span>&#8203;(<span class="arguments">int&nbsp;n,
 int&nbsp;sides)</span></div>
 <div class="block">Emulate a dice roll and return the sum.</div>
 <dl>
@@ -384,7 +380,7 @@ int&nbsp;sides)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rollExplodingDice(int,int)">rollExplodingDice</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.248">rollExplodingDice</a></span>&#8203;(<span class="arguments">int&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.249">rollExplodingDice</a></span>&#8203;(<span class="arguments">int&nbsp;n,
 int&nbsp;sides)</span></div>
 <div class="block">Emulate an exploding dice roll and return the sum.</div>
 <dl>
@@ -399,7 +395,7 @@ int&nbsp;sides)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="independentRolls(int,int)">independentRolls</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.266">independentRolls</a></span>&#8203;(<span class="arguments">int&nbsp;n,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.267">independentRolls</a></span>&#8203;(<span class="arguments">int&nbsp;n,
 int&nbsp;sides)</span></div>
 <div class="block">Get a list of the independent results of n rolls of dice with the given
  number of sides.</div>
@@ -415,7 +411,7 @@ int&nbsp;sides)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="roll(java.lang.String)">roll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.325">roll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;rollCode)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Dice.html#line.326">roll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;rollCode)</span></div>
 <div class="block">Evaluate the String <code>rollCode</code> as dice roll notation and roll to get a random result of that dice roll.
  This is the main way of using the Dice class. This effectively allows rolling one or more dice and performing
  certain operations on the dice and their result. One of the more frequent uses is rolling some amount of dice and
@@ -477,8 +473,8 @@ int&nbsp;sides)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -524,5 +520,7 @@ int&nbsp;sides)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

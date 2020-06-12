@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class MarkovChar" class="title">Class MarkovChar</h1>
@@ -101,8 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../src-html/squidpony/MarkovChar.html#line.25">MarkovChar</a>
+<pre>public class <a href="../src-html/squidpony/MarkovChar.html#line.24">MarkovChar</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A simple Markov chain text generator; call <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a> once on a large sample text, then you can
@@ -284,7 +278,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="chars">chars</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.33">chars</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.31">chars</a></span></div>
 <div class="block">All chars (case-sensitive and only counting chars that are letters in Unicode) that this encountered during the 
  latest call to <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>. Will be null if <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a> was never called.</div>
 </section>
@@ -292,7 +286,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="pairs">pairs</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.42">pairs</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.40">pairs</a></span></div>
 <div class="block">Map of all pairs of chars encountered to the position in the order they were encountered. Pairs are stored using
  their 16-bit <a href="#chars"><code>chars</code></a> indices placed into the most-significant bits for the first word and the
  least-significant bits for the second word. The size of this IntIntOrderedMap is likely to be larger than the
@@ -303,7 +297,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="processed">processed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.48">processed</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.46">processed</a></span></div>
 <div class="block">Complicated data that mixes probabilities of chars using their indices in <a href="#chars"><code>chars</code></a> and the indices of char
  pairs in <a href="#pairs"><code>pairs</code></a>, generated during the latest call to <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>. This is a jagged 2D
  array. Will be null if <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a> was never called.</div>
@@ -322,7 +316,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">MarkovChar</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.52">MarkovChar</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.50">MarkovChar</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -338,7 +332,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="analyze(java.lang.CharSequence)">analyze</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.66">analyze</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;corpus)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.64">analyze</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;corpus)</span></div>
 <div class="block">This is the main necessary step before using a MarkovText; you must call this method at some point before you can
  call any other methods. You can serialize this MarkovText after calling to avoid needing to call this again on later
  runs, or even include serialized MarkovText objects with a game to only need to call this during pre-processing.
@@ -355,7 +349,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="chain(long)">chain</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.200">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.198">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using
  <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>) that terminates when stop punctuation is used (".", "!", "?", or "..."), or once
  the length would be greater than 200 characters without encountering stop punctuation(it terminates such a
@@ -371,7 +365,7 @@ int&nbsp;maxLength)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="chain(long,int)">chain</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.212">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.210">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;maxLength)</span></div>
 <div class="block">Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using
  <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>) that terminates when stop punctuation is used (".", "!", "?", or "...") or once
@@ -388,7 +382,7 @@ int&nbsp;maxLength)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="serializeToString()">serializeToString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.260">serializeToString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.258">serializeToString</a></span>()</div>
 <div class="block">Returns a representation of this MarkovText as a String; use <a href="#deserializeFromString(java.lang.String)"><code>deserializeFromString(String)</code></a> to get a
  MarkovText back from this String. The <a href="#chars"><code>chars</code></a> and <a href="#processed"><code>processed</code></a> fields must have been given values by
  either direct assignment, calling <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a>, or building this MarkovTest with the
@@ -402,7 +396,7 @@ int&nbsp;maxLength)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="deserializeFromString(java.lang.String)">deserializeFromString</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="MarkovChar.html" title="class in squidpony">MarkovChar</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.270">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="MarkovChar.html" title="class in squidpony">MarkovChar</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.268">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</span></div>
 <div class="block">Recreates an already-analyzed MarkovText given a String produced by <a href="#serializeToString()"><code>serializeToString()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -415,7 +409,7 @@ int&nbsp;maxLength)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MarkovChar.html" title="class in squidpony">MarkovChar</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.287">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MarkovChar.html" title="class in squidpony">MarkovChar</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovChar.html#line.285">copy</a></span>()</div>
 <div class="block">Copies the String array <a href="#chars"><code>chars</code></a> and the 2D jagged int array <a href="#processed"><code>processed</code></a> into a new MarkovText.
  None of the arrays will be equivalent references, but the Strings (being immutable) will be the same objects in
  both MarkovText instances.</div>
@@ -431,8 +425,8 @@ int&nbsp;maxLength)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -478,5 +472,7 @@ int&nbsp;maxLength)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

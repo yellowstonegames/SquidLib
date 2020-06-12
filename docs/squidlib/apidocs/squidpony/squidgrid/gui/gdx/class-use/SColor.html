@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,18 +51,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.gui.gdx.SColor" class="title">Uses of Class<br>squidpony.squidgrid.gui.gdx.SColor</h1>
@@ -7516,148 +7511,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#add(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor)">add</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Adds the two colors together.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#asSColor(float,float,float,float)">asSColor</a></span>&#8203;(float&nbsp;a,
-float&nbsp;r,
-float&nbsp;g,
-float&nbsp;b)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns the cached color that matches the desired rgb value.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#asSColor(int)">asSColor</a></span>&#8203;(int&nbsp;argb)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns the cached color that matches the desired rgb value.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#asSColor(int,int,int)">asSColor</a></span>&#8203;(int&nbsp;r,
-int&nbsp;g,
-int&nbsp;b)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is opaque.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#asSColor(int,int,int,int)">asSColor</a></span>&#8203;(int&nbsp;a,
-int&nbsp;r,
-int&nbsp;g,
-int&nbsp;b)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor with the given values, with those values clamped
- between 0 and 255.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#asSColor(com.badlogic.gdx.graphics.Color)">asSColor</a></span>&#8203;(com.badlogic.gdx.graphics.Color&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor representation of the provided Color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#blend(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor,double)">blend</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2,
-double&nbsp;coef)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the given distance from the first color to the
- second color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#colorForValue(int)">colorForValue</a></span>&#8203;(int&nbsp;argb)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns the SColor whose value matches the one passed in.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#desaturate(squidpony.squidgrid.gui.gdx.SColor,double)">desaturate</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
-double&nbsp;percent)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the version of the provided color desaturated
- the given amount.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#desaturated(squidpony.squidgrid.gui.gdx.SColor)">desaturated</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the fully desaturated (greyscale) version of
- the provided color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#dim(squidpony.squidgrid.gui.gdx.SColor)">dim</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a slightly dimmer version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#dimmer(squidpony.squidgrid.gui.gdx.SColor)">dimmer</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a somewhat dimmer version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#dimmest(squidpony.squidgrid.gui.gdx.SColor)">dimmest</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a lot darker version of the provided color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#fromPalette(java.lang.String,float)">fromPalette</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-float&nbsp;percent)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns the SColor that is the provided percent towards the end of the
- palette.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#fromPallet(java.lang.String,float)">fromPallet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-float&nbsp;percent)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Prefer fromPalette over this misspelled version; they are equivalent.</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#indexedColorWheel(int)">indexedColorWheel</a></span>&#8203;(int&nbsp;idx)</code></th>
 <td class="colLast">
@@ -7665,7 +7518,7 @@ float&nbsp;percent)</code></th>
  ensure similar index values usually return very different colors.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#indexedColorWheel(int,int)">indexedColorWheel</a></span>&#8203;(int&nbsp;idx,
 int&nbsp;sat)</code></th>
@@ -7675,7 +7528,7 @@ int&nbsp;sat)</code></th>
  index values usually return very different colors.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#indexedColorWheel(int,int,int)">indexedColorWheel</a></span>&#8203;(int&nbsp;idx,
 int&nbsp;bright,
@@ -7686,58 +7539,9 @@ int&nbsp;sat)</code></th>
  2 is fully saturated), using the given index to ensure similar index values usually return very different colors.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#light(squidpony.squidgrid.gui.gdx.SColor)">light</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a slightly lighter version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#lighter(squidpony.squidgrid.gui.gdx.SColor)">lighter</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a somewhat lighter version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#lightest(squidpony.squidgrid.gui.gdx.SColor)">lightest</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a lot lighter version of the provided color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#lightWith(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor)">lightWith</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;light)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Uses the second color as a light source, meaning that each of the red,
- green, and blue values of the first color are multiplied by the lighting
- color's percentage of full value (1.0).</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#randomBlend(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor,double,double)">randomBlend</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2,
-double&nbsp;min,
-double&nbsp;max)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is randomly chosen from the color line between the
- two provided colors from the two provided points.</div>
-</td>
-</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorWheel(squidpony.squidmath.IRNG)">randomColorWheel</a></span>&#8203;(squidpony.squidmath.IRNG&nbsp;rng)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorWheel(squidpony.squidmath.IRNG)">randomColorWheel</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Gets a random color from the palette <a href="../SColor.html#COLOR_WHEEL_PALETTE_REDUCED"><code>COLOR_WHEEL_PALETTE_REDUCED</code></a>, using the specified IRNG to determine
  saturation, brightness, and hue.</div>
@@ -7745,7 +7549,7 @@ double&nbsp;max)</code></th>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorWheel(squidpony.squidmath.IRNG,int,int)">randomColorWheel</a></span>&#8203;(squidpony.squidmath.IRNG&nbsp;rng,
+<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorWheel(squidpony.squidmath.IRNG,int,int)">randomColorWheel</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng,
 int&nbsp;bright,
 int&nbsp;sat)</code></th>
 <td class="colLast">
@@ -7769,35 +7573,7 @@ int&nbsp;sat)</code></th>
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#asGradient(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor)">asGradient</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns a list of colors starting at the first color and moving to the
- second color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#palette(java.lang.String)">palette</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns the palette associate with the provided name, or null if there is
- no such palette.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#pallet(java.lang.String)">pallet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Prefer palette over this misspelled version.</div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static squidpony.squidmath.GapShuffler&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GapShuffler</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence()">randomColorSequence</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../SColor.html#COLOR_WHEEL_PALETTE"><code>COLOR_WHEEL_PALETTE</code></a>, with
@@ -7805,8 +7581,8 @@ int&nbsp;sat)</code></th>
  in quick succession).</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static squidpony.squidmath.GapShuffler&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GapShuffler</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence(int,int)">randomColorSequence</a></span>&#8203;(int&nbsp;bright,
 int&nbsp;sat)</code></th>
 <td class="colLast">
@@ -7815,8 +7591,8 @@ int&nbsp;sat)</code></th>
  in quick succession).</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static squidpony.squidmath.GapShuffler&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GapShuffler</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence(java.lang.CharSequence)">randomColorSequence</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;seed)</code></th>
 <td class="colLast">
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../SColor.html#COLOR_WHEEL_PALETTE"><code>COLOR_WHEEL_PALETTE</code></a>, with
@@ -7824,8 +7600,8 @@ int&nbsp;sat)</code></th>
  in quick succession).</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static squidpony.squidmath.GapShuffler&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GapShuffler</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence(java.lang.CharSequence,int,int)">randomColorSequence</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;seed,
 int&nbsp;bright,
 int&nbsp;sat)</code></th>
@@ -7835,195 +7611,24 @@ int&nbsp;sat)</code></th>
  in quick succession).</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static squidpony.squidmath.GapShuffler&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence(squidpony.squidmath.IRNG)">randomColorSequence</a></span>&#8203;(squidpony.squidmath.IRNG&nbsp;rng)</code></th>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GapShuffler</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence(squidpony.squidmath.IRNG)">randomColorSequence</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng)</code></th>
 <td class="colLast">
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../SColor.html#COLOR_WHEEL_PALETTE"><code>COLOR_WHEEL_PALETTE</code></a>, with
  measures taken to avoid returning the same exact SColor twice in a row (but two similar colors could be returned
  in quick succession).</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static squidpony.squidmath.GapShuffler&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence(squidpony.squidmath.IRNG,int,int)">randomColorSequence</a></span>&#8203;(squidpony.squidmath.IRNG&nbsp;rng,
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GapShuffler</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">SColor.</span><code><span class="memberNameLink"><a href="../SColor.html#randomColorSequence(squidpony.squidmath.IRNG,int,int)">randomColorSequence</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">IRNG</a>&nbsp;rng,
 int&nbsp;bright,
 int&nbsp;sat)</code></th>
 <td class="colLast">
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../SColor.html#COLOR_WHEEL_PALETTE"><code>COLOR_WHEEL_PALETTE</code></a>, with
  measures taken to avoid returning the same hue of SColor twice in a row (but two similar hues could be returned
  in quick succession).</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="useSummary">
-<table>
-<caption><span>Methods in <a href="../package-summary.html">squidpony.squidgrid.gui.gdx</a> with parameters of type <a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#add(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor)">add</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Adds the two colors together.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#asGradient(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor)">asGradient</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns a list of colors starting at the first color and moving to the
- second color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#blend(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor,double)">blend</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2,
-double&nbsp;coef)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the given distance from the first color to the
- second color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#desaturate(squidpony.squidgrid.gui.gdx.SColor,double)">desaturate</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
-double&nbsp;percent)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the version of the provided color desaturated
- the given amount.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#desaturated(squidpony.squidgrid.gui.gdx.SColor)">desaturated</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the fully desaturated (greyscale) version of
- the provided color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#dim(squidpony.squidgrid.gui.gdx.SColor)">dim</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a slightly dimmer version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#dimmer(squidpony.squidgrid.gui.gdx.SColor)">dimmer</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a somewhat dimmer version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#dimmest(squidpony.squidgrid.gui.gdx.SColor)">dimmest</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a lot darker version of the provided color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#light(squidpony.squidgrid.gui.gdx.SColor)">light</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a slightly lighter version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#lighter(squidpony.squidgrid.gui.gdx.SColor)">lighter</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a somewhat lighter version of the provided
- color.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#lightest(squidpony.squidgrid.gui.gdx.SColor)">lightest</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a lot lighter version of the provided color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#lightWith(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor)">lightWith</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;light)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Uses the second color as a light source, meaning that each of the red,
- green, and blue values of the first color are multiplied by the lighting
- color's percentage of full value (1.0).</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#randomBlend(squidpony.squidgrid.gui.gdx.SColor,squidpony.squidgrid.gui.gdx.SColor,double,double)">randomBlend</a></span>&#8203;(<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
-<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2,
-double&nbsp;min,
-double&nbsp;max)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is randomly chosen from the color line between the
- two provided colors from the two provided points.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="useSummary">
-<table>
-<caption><span>Method parameters in <a href="../package-summary.html">squidpony.squidgrid.gui.gdx</a> with type arguments of type <a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#addPalette(java.lang.String,java.util.ArrayList)">addPalette</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;palette)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Places the palette into the cache, along with each of the member colors.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">SColorFactory.</span><code><span class="memberNameLink"><a href="../SColorFactory.html#addPallet(java.lang.String,java.util.ArrayList)">addPallet</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;palette)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Prefer addPalette over this misspelled version; they are equivalent.</div>
-</div>
 </td>
 </tr>
 </tbody>
@@ -8062,5 +7667,7 @@ double&nbsp;max)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

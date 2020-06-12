@@ -19,8 +19,8 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":42,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai</a></div>
 <h1 title="Class ConeAOE" class="title">Class ConeAOE</h1>
@@ -164,7 +159,7 @@ double&nbsp;span,
 </a>
 <h2>Method Summary</h2>
 <div class="memberSummary">
-<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t6" class="tableTab" onclick="show(32);">Deprecated Methods</button></div>
+<div role="tablist" aria-orientation="horizontal"><button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t2" class="tableTab" onclick="show(2);">Instance Methods</button><button role="tab" aria-selected="false" aria-controls="memberSummary_tabpanel" tabindex="-1" onkeydown="switchTab(event)" id="t4" class="tableTab" onclick="show(8);">Concrete Methods</button></div>
 <div id="memberSummary_tabpanel" role="tabpanel">
 <table aria-labelledby="t0">
 <thead>
@@ -286,19 +281,10 @@ double&nbsp;span,
 </tr>
 <tr class="rowColor" id="i15">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCache(squidpony.squidgrid.FOV)">setCache</a></span>&#8203;(<a href="../squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-</td>
-</tr>
-<tr class="altColor" id="i16">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEndCenter(squidpony.squidmath.Coord)">setEndCenter</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;endCenter)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i17">
+<tr class="altColor" id="i16">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLimitType(squidpony.squidai.AimLimit)">setLimitType</a></span>&#8203;(<a href="AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;limitType)</code></th>
 <td class="colLast">
@@ -312,21 +298,21 @@ double&nbsp;span,
      axis.</div>
 </td>
 </tr>
-<tr class="altColor" id="i18">
+<tr class="rowColor" id="i17">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMap(char%5B%5D%5B%5D)">setMap</a></span>&#8203;(char[][]&nbsp;map)</code></th>
 <td class="colLast">
 <div class="block">This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i19">
+<tr class="altColor" id="i18">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxRange(int)">setMaxRange</a></span>&#8203;(int&nbsp;maxRange)</code></th>
 <td class="colLast">
 <div class="block">The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 </td>
 </tr>
-<tr class="altColor" id="i20">
+<tr class="rowColor" id="i19">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMetric(squidpony.squidgrid.Radius)">setMetric</a></span>&#8203;(<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code></th>
 <td class="colLast">
@@ -334,14 +320,14 @@ double&nbsp;span,
  of minRange and maxRange.</div>
 </td>
 </tr>
-<tr class="rowColor" id="i21">
+<tr class="altColor" id="i20">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMinRange(int)">setMinRange</a></span>&#8203;(int&nbsp;minRange)</code></th>
 <td class="colLast">
 <div class="block">The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 </td>
 </tr>
-<tr class="altColor" id="i22">
+<tr class="rowColor" id="i21">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOrigin(squidpony.squidmath.Coord)">setOrigin</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</code></th>
 <td class="colLast">
@@ -351,29 +337,29 @@ double&nbsp;span,
  have a maxRange at which they can deliver that effect).</div>
 </td>
 </tr>
-<tr class="rowColor" id="i23">
+<tr class="altColor" id="i22">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRadius(double)">setRadius</a></span>&#8203;(double&nbsp;radius)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor" id="i24">
+<tr class="rowColor" id="i23">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRadiusType(squidpony.squidgrid.Radius)">setRadiusType</a></span>&#8203;(<a href="../squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i25">
+<tr class="altColor" id="i24">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReach(squidpony.squidai.Reach)">setReach</a></span>&#8203;(<a href="Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;reach)</code></th>
 <td class="colLast">
 <div class="block">Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.</div>
 </td>
 </tr>
-<tr class="altColor" id="i26">
+<tr class="rowColor" id="i25">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSpan(double)">setSpan</a></span>&#8203;(double&nbsp;span)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor" id="i27">
+<tr class="altColor" id="i26">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shift(squidpony.squidmath.Coord)">shift</a></span>&#8203;(<a href="../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</code></th>
 <td class="colLast">
@@ -814,32 +800,14 @@ double&nbsp;span,
 </dl>
 </section>
 </li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="setCache(squidpony.squidgrid.FOV)">setCache</a></h3>
-<div class="memberSignature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidai/ConeAOE.html#line.636">setCache</a></span>&#8203;(<span class="arguments"><a href="../squidgrid/FOV.html" title="class in squidpony.squidgrid">FOV</a>&nbsp;cache)</span></div>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</div>
-<div class="block">Unused because FOVCache rarely provides a speed boost and usually does the opposite. The implementation for this
- method should be a no-op.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AOE.html#setCache(squidpony.squidgrid.FOV)">setCache</a></code>&nbsp;in interface&nbsp;<code><a href="AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cache</code> - an FOV that could be an FOVCache for the current level; can be null to stop using the cache</dd>
-</dl>
-</section>
-</li>
 </ul>
 </section>
 </li>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -885,5 +853,7 @@ double&nbsp;span,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidmath.CoordDouble" class="title">Uses of Class<br>squidpony.squidmath.CoordDouble</h1>
@@ -167,11 +162,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.MultiCoord.</span><code><span class="memberNameLink"><a href="../Delaunay3D.MultiCoord.html#flat">flat</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Voronoi.Polygon.</span><code><span class="memberNameLink"><a href="../Voronoi.Polygon.html#vertices">vertices</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -337,62 +327,47 @@ double&nbsp;y)</code></th>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.Triangle.</span><code><span class="memberNameLink"><a href="../Delaunay3D.Triangle.html#contains(squidpony.squidmath.CoordDouble)">contains</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</code></th>
-<td class="colLast">
-<div class="block">Tests if a 2D point lies inside this 2D triangle.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DelaunayTriangulator.Triangle.</span><code><span class="memberNameLink"><a href="../DelaunayTriangulator.Triangle.html#contains(squidpony.squidmath.CoordDouble)">contains</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">Tests if a 2D point lies inside this 2D triangle.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Voronoi.Triangle.</span><code><span class="memberNameLink"><a href="../Voronoi.Triangle.html#contains(squidpony.squidmath.CoordDouble)">contains</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">Tests if a 2D point lies inside this 2D triangle.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordDouble.</span><code><span class="memberNameLink"><a href="../CoordDouble.html#cross(squidpony.squidmath.CoordDouble)">cross</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code></th>
 <td class="colLast">
 <div class="block">Gets the cross product of this CoordDouble and <code>other</code>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordDouble.</span><code><span class="memberNameLink"><a href="../CoordDouble.html#distance(squidpony.squidmath.CoordDouble)">distance</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordDouble.</span><code><span class="memberNameLink"><a href="../CoordDouble.html#distanceSq(squidpony.squidmath.CoordDouble)">distanceSq</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordDouble.</span><code><span class="memberNameLink"><a href="../CoordDouble.html#divide(squidpony.squidmath.CoordDouble)">divide</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code></th>
 <td class="colLast">
 <div class="block">Divides the x component of this CoordDouble by <code>other.x</code> and the y component by <code>other.y</code>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordDouble.</span><code><span class="memberNameLink"><a href="../CoordDouble.html#dot(squidpony.squidmath.CoordDouble)">dot</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code></th>
 <td class="colLast">
 <div class="block">Gets the dot product of this CoordDouble and <code>other</code>.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../Delaunay3D.Triangle.html" title="class in squidpony.squidmath">Delaunay3D.Triangle</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.</span><code><span class="memberNameLink"><a href="../Delaunay3D.html#findContainingTriangle(squidpony.squidmath.CoordDouble)">findContainingTriangle</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</code></th>
-<td class="colLast">
-<div class="block">Returns the triangle from this triangle soup that contains the specified
- point or null if no triangle from the triangle soup contains the point.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -404,45 +379,30 @@ double&nbsp;y)</code></th>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../Delaunay3D.Edge.html" title="class in squidpony.squidmath">Delaunay3D.Edge</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.</span><code><span class="memberNameLink"><a href="../Delaunay3D.html#findNearestEdge(squidpony.squidmath.CoordDouble)">findNearestEdge</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</code></th>
-<td class="colLast">
-<div class="block">Returns the edge from the triangle soup nearest to the specified point.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../DelaunayTriangulator.Edge.html" title="class in squidpony.squidmath">DelaunayTriangulator.Edge</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DelaunayTriangulator.</span><code><span class="memberNameLink"><a href="../DelaunayTriangulator.html#findNearestEdge(squidpony.squidmath.CoordDouble)">findNearestEdge</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">Returns the edge from the triangle soup nearest to the specified point.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DelaunayTriangulator.</span><code><span class="memberNameLink"><a href="../DelaunayTriangulator.html#findNeighbor(squidpony.squidmath.DelaunayTriangulator.Triangle,squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">findNeighbor</a></span>&#8203;(<a href="../DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&nbsp;triangle,
 <a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;ea,
 <a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;eb)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DelaunayTriangulator.Triangle.</span><code><span class="memberNameLink"><a href="../DelaunayTriangulator.Triangle.html#getNonEdgeVertex(squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">getNonEdgeVertex</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;ea,
 <a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;eb)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Voronoi.Triangle.</span><code><span class="memberNameLink"><a href="../Voronoi.Triangle.html#getNonEdgeVertex(squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">getNonEdgeVertex</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;ea,
 <a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;eb)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.Triangle.</span><code><span class="memberNameLink"><a href="../Delaunay3D.Triangle.html#hasVertex(squidpony.squidmath.CoordDouble)">hasVertex</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;vertex)</code></th>
-<td class="colLast">
-<div class="block">Returns true if the given vertex is one of the vertices describing this
- triangle.</div>
-</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -462,28 +422,15 @@ double&nbsp;y)</code></th>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.Triangle.</span><code><span class="memberNameLink"><a href="../Delaunay3D.Triangle.html#isNeighbor(squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">isNeighbor</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;ea,
-<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;eb)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DelaunayTriangulator.Triangle.</span><code><span class="memberNameLink"><a href="../DelaunayTriangulator.Triangle.html#isNeighbor(squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">isNeighbor</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;ea,
 <a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;eb)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Voronoi.Triangle.</span><code><span class="memberNameLink"><a href="../Voronoi.Triangle.html#isNeighbor(squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">isNeighbor</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;ea,
 <a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;eb)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Delaunay3D.Triangle.</span><code><span class="memberNameLink"><a href="../Delaunay3D.Triangle.html#isPointInCircumcircle(squidpony.squidmath.CoordDouble)">isPointInCircumcircle</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</code></th>
-<td class="colLast">
-<div class="block">Tests if a given point lies in the circumcircle of this triangle.</div>
-</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -550,21 +497,8 @@ double&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../Delaunay3D.MultiCoord.html#%3Cinit%3E(squidpony.squidmath.CoordDouble)">MultiCoord</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;flatCoord)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../Voronoi.Polygon.html#%3Cinit%3E(squidpony.squidmath.CoordDouble...)">Polygon</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>...&nbsp;vertices)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../Delaunay3D.Triangle.html#%3Cinit%3E(squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">Triangle</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;a,
-<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;b,
-<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;c)</code></th>
-<td class="colLast">
-<div class="block">Constructor of the 2D triangle class used to create a new triangle
- instance from three 2D vectors describing the triangle's vertices.</div>
-</td>
 </tr>
 <tr class="altColor">
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../DelaunayTriangulator.Triangle.html#%3Cinit%3E(squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">Triangle</a></span>&#8203;(<a href="../CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;a,
@@ -646,5 +580,7 @@ double&nbsp;y)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

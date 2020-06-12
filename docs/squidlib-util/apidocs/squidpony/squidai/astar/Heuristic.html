@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidai.astar</a></div>
 <h1 title="Interface Heuristic" class="title">Interface Heuristic&lt;N&gt;</h1>
@@ -98,13 +93,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>N</code> - Type of node</dd>
 </dl>
 <hr>
-<pre>public interface <a href="../../../src-html/squidpony/squidai/astar/Heuristic.html#line.29">Heuristic</a>&lt;N&gt;</pre>
+<pre>public interface <a href="../../../src-html/squidpony/squidai/astar/Heuristic.html#line.38">Heuristic</a>&lt;N&gt;</pre>
 <div class="block">A <code>Heuristic</code> generates estimates of the cost to move from a given node to the goal.
  <p>
- With a heuristic function pathfinding algorithms can choose the node that is most likely to lead to the optimal path. The
- notion of "most likely" is controlled by a heuristic. If the heuristic is accurate, then the algorithm will be efficient. If
- the heuristic is terrible, then it can perform even worse than other algorithms that don't use any heuristic function such as
- Dijkstra.</div>
+ With a heuristic function pathfinding algorithms can choose the node that is most likely to lead to the optimal path.
+ The notion of "most likely" is controlled by a heuristic. If the heuristic is accurate, then the algorithm will be
+ efficient. If the heuristic is terrible, then it can perform even worse than other algorithms that don't use any
+ heuristic function such as Dijkstra. SquidLib's <a href="../DijkstraMap.html" title="class in squidpony.squidai"><code>DijkstraMap</code></a> is specialized for some cases
+ that A* isn't, so there are reasons to prefer DijkstraMap when, for instance, you have multiple goals, or the goal is
+ unchanging for some section of usage but the start point changes often (this is useful for mouse tracking when the
+ path is reversed). The astar package should be significantly faster when paths are short and always have one goal,
+ unless you compare it to DijkstraMap when it can reuse a scan and call
+ <a href="../DijkstraMap.html#findPathPreScanned(java.util.ArrayList,squidpony.squidmath.Coord)"><code>DijkstraMap.findPathPreScanned(ArrayList, Coord)</code></a>.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>davebaol</dd>
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
-<td class="colFirst"><code>float</code></td>
+<td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#estimate(N,N)">estimate</a></span>&#8203;(<a href="Heuristic.html" title="type parameter in Heuristic">N</a>&nbsp;node,
 <a href="Heuristic.html" title="type parameter in Heuristic">N</a>&nbsp;endNode)</code></th>
 <td class="colLast">
@@ -160,7 +160,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h3><a id="estimate(java.lang.Object,java.lang.Object)">
 <!--   -->
 </a><a id="estimate(N,N)">estimate</a></h3>
-<div class="memberSignature"><span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Heuristic.html#line.35">estimate</a></span>&#8203;(<span class="arguments"><a href="Heuristic.html" title="type parameter in Heuristic">N</a>&nbsp;node,
+<div class="memberSignature"><span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidai/astar/Heuristic.html#line.44">estimate</a></span>&#8203;(<span class="arguments"><a href="Heuristic.html" title="type parameter in Heuristic">N</a>&nbsp;node,
 <a href="Heuristic.html" title="type parameter in Heuristic">N</a>&nbsp;endNode)</span></div>
 <div class="block">Calculates an estimated cost to reach the goal node from the given node.</div>
 <dl>
@@ -178,8 +178,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -225,5 +225,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

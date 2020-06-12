@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Package squidpony.annotation" class="title">Uses of Package<br>squidpony.annotation</h1>
@@ -92,30 +87,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="#squidpony.panel">squidpony.panel</a></th>
-<td class="colLast">
-<div class="block">Interfaces for panels in GUIs/TUIs; these do not depend on any particular implementation of a color type.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="#squidpony.squidai">squidpony.squidai</a></th>
-<td class="colLast">
-<div class="block">Tools for finding paths, optimizing targets for area-of-effect (AOE) abilities, and evaluating influence on a grid.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colFirst" scope="row"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></th>
-<td class="colLast">
-<div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></th>
 <td class="colLast">
 <div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidmath">squidpony.squidmath</a></th>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -171,90 +148,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colLast">
 <div class="block">Signifies that a public API (public class, method or field) is subject to
  incompatible changes, or even removal, in a future release.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail"><a id="squidpony.panel">
-<!--   -->
-</a>
-<div class="useSummary">
-<table>
-<caption><span>Classes in <a href="package-summary.html">squidpony.annotation</a> used by <a href="../panel/package-summary.html">squidpony.panel</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<th class="colFirst" scope="row"><a href="class-use/Beta.html#squidpony.panel">Beta</a></th>
-<td class="colLast">
-<div class="block">Signifies that a public API (public class, method or field) is subject to
- incompatible changes, or even removal, in a future release.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail"><a id="squidpony.squidai">
-<!--   -->
-</a>
-<div class="useSummary">
-<table>
-<caption><span>Classes in <a href="package-summary.html">squidpony.annotation</a> used by <a href="../squidai/package-summary.html">squidpony.squidai</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<th class="colFirst" scope="row"><a href="class-use/Beta.html#squidpony.squidai">Beta</a></th>
-<td class="colLast">
-<div class="block">Signifies that a public API (public class, method or field) is subject to
- incompatible changes, or even removal, in a future release.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail"><a id="squidpony.squidgrid">
-<!--   -->
-</a>
-<div class="useSummary">
-<table>
-<caption><span>Classes in <a href="package-summary.html">squidpony.annotation</a> used by <a href="../squidgrid/package-summary.html">squidpony.squidgrid</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<th class="colFirst" scope="row"><a href="class-use/Beta.html#squidpony.squidgrid">Beta</a></th>
-<td class="colLast">
-<div class="block">Signifies that a public API (public class, method or field) is subject to
- incompatible changes, or even removal, in a future release.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="class-use/GwtIncompatible.html#squidpony.squidgrid">GwtIncompatible</a></th>
-<td class="colLast">
-<div class="block">An annotation for the GWT compiler.</div>
 </td>
 </tr>
 </tbody>
@@ -352,5 +245,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

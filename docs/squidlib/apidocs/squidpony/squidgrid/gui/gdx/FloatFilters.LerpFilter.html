@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class FloatFilters.LerpFilter" class="title">Class FloatFilters.LerpFilter</h1>
@@ -102,7 +97,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FloatFilters.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.426">FloatFilters.LerpFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.427">FloatFilters.LerpFilter</a>
 extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></pre>
 <div class="block">A FloatFilter that linearly interpolates (lerps) any color it is given toward a specified color by a specified
  amount. Uses <a href="SColor.html#lerpFloatColorsBlended(float,float,float)"><code>SColor.lerpFloatColorsBlended(float, float, float)</code></a> to mix a requested color with the target
@@ -232,13 +227,13 @@ float&nbsp;amount)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="target">target</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.427">target</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.428">target</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="amount">amount</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.427">amount</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.428">amount</a></span></div>
 </section>
 </li>
 </ul>
@@ -254,7 +249,7 @@ float&nbsp;amount)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(com.badlogic.gdx.graphics.Color,float)">LerpFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.436">LerpFilter</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;target,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.437">LerpFilter</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;target,
 float&nbsp;amount)</span></div>
 <div class="block">Builds a LerpFilter with a Color (which will be converted to a packed float color) and an amount as a float.
  The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an
@@ -269,7 +264,7 @@ float&nbsp;amount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(float,float)">LerpFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.449">LerpFilter</a></span>&#8203;(<span class="arguments">float&nbsp;target,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.450">LerpFilter</a></span>&#8203;(<span class="arguments">float&nbsp;target,
 float&nbsp;amount)</span></div>
 <div class="block">Builds a LerpFilter with a packed float color and an amount as a float.
  The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an
@@ -294,7 +289,7 @@ float&nbsp;amount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="alter(float)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.461">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.LerpFilter.html#line.462">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <div class="block">Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -312,8 +307,8 @@ float&nbsp;amount)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -358,5 +353,7 @@ float&nbsp;amount)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

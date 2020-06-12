@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class MarkovText" class="title">Class MarkovText</h1>
@@ -101,12 +96,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../src-html/squidpony/MarkovText.html#line.25">MarkovText</a>
+<pre>public class <a href="../src-html/squidpony/MarkovText.html#line.26">MarkovText</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A simple Markov chain text generator; call <a href="#analyze(java.lang.CharSequence)"><code>analyze(CharSequence)</code></a> once on a large sample text, then you can
- call <a href="#chain(long)"><code>chain(long)</code></a> many times to get odd-sounding "remixes" of the sample text. This is meant to allow easy
+ call <a href="#chain(long)"><code>chain(long)</code></a> many times to get odd-sounding "remixes" of the sample text. This is an order-2 Markov
+ chain, so it chooses the next word based on the previous two words; <a href="MarkovTextLimited.html" title="class in squidpony"><code>MarkovTextLimited</code></a> is an order-1 Markov
+ chain, and is faster, but produces lousy output because it only uses one previous word. This is meant to allow easy
  serialization of the necessary data to call chain(); if you can store the <a href="#words"><code>words</code></a> and <a href="#processed"><code>processed</code></a>
  arrays in some serialized form, then you can reassign them to the same fields to avoid calling analyze(). One way to
  do this conveniently is to use <a href="#serializeToString()"><code>serializeToString()</code></a> after calling analyze() once and to save the resulting
@@ -457,8 +453,8 @@ int&nbsp;maxLength)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -504,5 +500,7 @@ int&nbsp;maxLength)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class NeuralParticle" class="title">Class NeuralParticle</h1>
@@ -102,26 +97,25 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.28">NeuralParticle</a>
+public class <a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.26">NeuralParticle</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">Creates a field of particles that tend to form a neuron image type
  distribution. The distribution tends to reach towards the largest area of
  empty space, but features many nice branches and curls as well.
-
  If no points are added before the populate method is run, the center of the
  area is chosen as the single pre-populated point.
-
- Based on work by Nolithius
-
- http://www.nolithius.com/game-development/neural-particle-deposition
-
- Source code is available on GitHub:
- https://github.com/Nolithius/neural-particle as well as Google Code
- (now archived): http://code.google.com/p/neural-particle/</div>
+ <br>
+ <a href="http://www.nolithius.com/game-development/neural-particle-deposition">Based on work by Nolithius</a>
+ <br>
+ Source code is available on <a href="https://github.com/Nolithius/neural-particle">GitHub</a>,
+ as well as <a href="http://code.google.com/p/neural-particle/">Google Code (now archived)</a>
+ <br>
+ This class is marked Beta because no test or demo was ever written to use it.
+ Who could be to blame for this omission...</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>, Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
+<dd>Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../serialized-form.html#squidpony.squidmath.NeuralParticle">Serialized Form</a></dd>
 </dl>
@@ -235,7 +229,7 @@ int&nbsp;maxDistance,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,squidpony.squidmath.IRNG)">NeuralParticle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.36">NeuralParticle</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.34">NeuralParticle</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;maxDistance,
 <a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
@@ -254,7 +248,7 @@ int&nbsp;maxDistance,
 <li class="blockList">
 <section class="detail">
 <h3><a id="populate(int)">populate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.49">populate</a></span>&#8203;(<span class="arguments">int&nbsp;quantity)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.47">populate</a></span>&#8203;(<span class="arguments">int&nbsp;quantity)</span></div>
 <div class="block">Populates the field with given number of points.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -265,7 +259,7 @@ int&nbsp;maxDistance,
 <li class="blockList">
 <section class="detail">
 <h3><a id="asList()">asList</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.60">asList</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.58">asList</a></span>()</div>
 <div class="block">Returns a list of the current distribution.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -276,7 +270,7 @@ int&nbsp;maxDistance,
 <li class="blockList">
 <section class="detail">
 <h3><a id="asIntMap(int)">asIntMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.70">asIntMap</a></span>&#8203;(<span class="arguments">int&nbsp;scale)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.68">asIntMap</a></span>&#8203;(<span class="arguments">int&nbsp;scale)</span></div>
 <div class="block">Returns an integer mapping of the current distribution.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -289,7 +283,7 @@ int&nbsp;maxDistance,
 <li class="blockList">
 <section class="detail">
 <h3><a id="add(squidpony.squidmath.Coord)">add</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.83">add</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.81">add</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</span></div>
 <div class="block">Adds a single specific point to the distribution.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -300,7 +294,7 @@ int&nbsp;maxDistance,
 <li class="blockList">
 <section class="detail">
 <h3><a id="createPoint()">createPoint</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.93">createPoint</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/NeuralParticle.html#line.91">createPoint</a></span>()</div>
 <div class="block">Creates a pip that falls within the required distance from the current
  distribution. Does not add the pip to the distribution.</div>
 <dl>
@@ -315,8 +309,8 @@ int&nbsp;maxDistance,
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -362,5 +356,7 @@ int&nbsp;maxDistance,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

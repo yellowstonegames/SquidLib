@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class MarkovObject" class="title">Class MarkovObject&lt;T&gt;</h1>
@@ -101,8 +96,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../src-html/squidpony/MarkovObject.html#line.23">MarkovObject</a>&lt;T&gt;
+<pre>public class <a href="../src-html/squidpony/MarkovObject.html#line.22">MarkovObject</a>&lt;T&gt;
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A simple Markov chain generator that works with Lists of some type instead of text like <a href="MarkovTextLimited.html" title="class in squidpony"><code>MarkovTextLimited</code></a>.
@@ -274,7 +268,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="body">body</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.31">body</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.29">body</a></span></div>
 <div class="block">All unique T items that this encountered during the latest call to <a href="#analyze(java.lang.Iterable)"><code>analyze(Iterable)</code></a>.
  Will be null if analyze() was never called.</div>
 </section>
@@ -282,7 +276,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="processed">processed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.36">processed</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.34">processed</a></span></div>
 <div class="block">Complicated data that mixes probabilities and the indices of items in <a href="#body"><code>body</code></a>, generated during the latest
  call to <a href="#analyze(java.lang.Iterable)"><code>analyze(Iterable)</code></a>. Will be null if analyze() was never called.</div>
 </section>
@@ -290,7 +284,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="raw">raw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.37">raw</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.35">raw</a></span></div>
 </section>
 </li>
 </ul>
@@ -306,7 +300,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">MarkovObject</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.39">MarkovObject</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.37">MarkovObject</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -322,7 +316,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="analyze(java.lang.Iterable)">analyze</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.59">analyze</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;&nbsp;corpus)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.57">analyze</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;&nbsp;corpus)</span></div>
 <div class="block">This is the main necessary step before using a MarkovObject; you must call this method at some point before you
  can call any other methods. This method analyzes the pairings of items in a (typically large) corpus Iterable.
  It only uses one preceding item to determine the subsequent word. It does not store any items as special stop
@@ -346,7 +340,7 @@ boolean&nbsp;canStopEarly,
 <h3><a id="analyze(java.lang.Object[])">
 <!--   -->
 </a><a id="analyze(T[])">analyze</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.185">analyze</a></span>&#8203;(<span class="arguments"><a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>[]&nbsp;corpus)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.183">analyze</a></span>&#8203;(<span class="arguments"><a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>[]&nbsp;corpus)</span></div>
 <div class="block">This is the main necessary step before using a MarkovObject; you must call this method at some point before you
  can call any other methods. This method analyzes the pairings of items in a (typically large) corpus array of T.
  It only uses one preceding item to determine the subsequent word. It does not store any items as special stop
@@ -368,7 +362,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="chain(long)">chain</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.302">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.300">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Generates a 32-element List of T based on the given seed and previously analyzed corpus data (using
  <a href="#analyze(java.lang.Iterable)"><code>analyze(Iterable)</code></a>). This can't stop before generating a chain of 32 items unless analyze() hasn't been
  called or it was called on an empty or invalid Iterable/array (i.e. all null).</div>
@@ -383,7 +377,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="chain(long,int,boolean,java.util.List)">chain</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.321">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.319">chain</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;maxLength,
 boolean&nbsp;canStopEarly,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;&nbsp;buffer)</span></div>
@@ -409,7 +403,7 @@ boolean&nbsp;canStopEarly,
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MarkovObject.html" title="class in squidpony">MarkovObject</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.355">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MarkovObject.html" title="class in squidpony">MarkovObject</a>&lt;<a href="MarkovObject.html" title="type parameter in MarkovObject">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/MarkovObject.html#line.353">copy</a></span>()</div>
 <div class="block">Copies the T items in <a href="#body"><code>body</code></a> and the int-based data structure <a href="#processed"><code>processed</code></a> into a new MarkovObject.
  None of the inner values, such as IntVLA values in processed, will be equivalent references, but the items in
  body will be the same objects in both MarkovObject instances.</div>
@@ -425,8 +419,8 @@ boolean&nbsp;canStopEarly,
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -472,5 +466,7 @@ boolean&nbsp;canStopEarly,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

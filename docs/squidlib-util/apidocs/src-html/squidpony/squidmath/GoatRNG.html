@@ -119,87 +119,75 @@
 <span class="sourceLineNo">107</span><a id="line.107">     */</a>
 <span class="sourceLineNo">108</span><a id="line.108">    @Override</a>
 <span class="sourceLineNo">109</span><a id="line.109">    public final int next(final int bits) {</a>
-<span class="sourceLineNo">110</span><a id="line.110">//        long s = (stateA += 0xD1342543DE82EF95L);</a>
-<span class="sourceLineNo">111</span><a id="line.111">//        s ^= s &gt;&gt;&gt; 31;</a>
-<span class="sourceLineNo">112</span><a id="line.112">//        if(s &lt; 0x31E131D6149D9795L) {</a>
-<span class="sourceLineNo">113</span><a id="line.113">//            final long t = (stateB += 0xC6BC279692B5C323L);</a>
-<span class="sourceLineNo">114</span><a id="line.114">//            s *= ((t ^ t &gt;&gt;&gt; 29 ^ t &lt;&lt; 11) | 1L);</a>
-<span class="sourceLineNo">115</span><a id="line.115">//            return (int)(s ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);</a>
-<span class="sourceLineNo">116</span><a id="line.116">//        }</a>
-<span class="sourceLineNo">117</span><a id="line.117">//        else {</a>
-<span class="sourceLineNo">118</span><a id="line.118">//            final long t = stateB;</a>
-<span class="sourceLineNo">119</span><a id="line.119">//            s *= ((t ^ t &gt;&gt;&gt; 29 ^ t &lt;&lt; 11) | 1L);</a>
-<span class="sourceLineNo">120</span><a id="line.120">//            return (int)(s ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);</a>
-<span class="sourceLineNo">121</span><a id="line.121">//        }</a>
-<span class="sourceLineNo">122</span><a id="line.122">        long s = (stateA += 0xD1342543DE82EF95L);</a>
-<span class="sourceLineNo">123</span><a id="line.123">        s ^= s &gt;&gt;&gt; 31 ^ s &gt;&gt;&gt; 23;</a>
-<span class="sourceLineNo">124</span><a id="line.124">        if(s &lt; 0x46BC279692B5C323L) {</a>
-<span class="sourceLineNo">125</span><a id="line.125">            final long t = stateB;</a>
-<span class="sourceLineNo">126</span><a id="line.126">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
-<span class="sourceLineNo">127</span><a id="line.127">            return (int)(s ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);</a>
-<span class="sourceLineNo">128</span><a id="line.128">        }</a>
-<span class="sourceLineNo">129</span><a id="line.129">        else {</a>
-<span class="sourceLineNo">130</span><a id="line.130">            final long t = (stateB += 0xB1E131D6149D9795L);</a>
-<span class="sourceLineNo">131</span><a id="line.131">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
-<span class="sourceLineNo">132</span><a id="line.132">            return (int)(s ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);</a>
-<span class="sourceLineNo">133</span><a id="line.133">        }</a>
-<span class="sourceLineNo">134</span><a id="line.134">    }</a>
-<span class="sourceLineNo">135</span><a id="line.135">    /**</a>
-<span class="sourceLineNo">136</span><a id="line.136">     * Using this method, any algorithm that needs to efficiently generate more</a>
-<span class="sourceLineNo">137</span><a id="line.137">     * than 32 bits of random data can interface with this randomness source.</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * &lt;p&gt;</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).</a>
-<span class="sourceLineNo">140</span><a id="line.140">     *</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)</a>
-<span class="sourceLineNo">142</span><a id="line.142">     */</a>
-<span class="sourceLineNo">143</span><a id="line.143">    @Override</a>
-<span class="sourceLineNo">144</span><a id="line.144">    public final long nextLong() {</a>
-<span class="sourceLineNo">145</span><a id="line.145">        long s = (stateA += 0xD1342543DE82EF95L);</a>
-<span class="sourceLineNo">146</span><a id="line.146">        s ^= s &gt;&gt;&gt; 31 ^ s &gt;&gt;&gt; 23;</a>
-<span class="sourceLineNo">147</span><a id="line.147">        if(s &lt; 0x46BC279692B5C323L) {</a>
-<span class="sourceLineNo">148</span><a id="line.148">            final long t = stateB;</a>
-<span class="sourceLineNo">149</span><a id="line.149">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
-<span class="sourceLineNo">150</span><a id="line.150">            return s ^ s &gt;&gt;&gt; 25;</a>
-<span class="sourceLineNo">151</span><a id="line.151">        }</a>
-<span class="sourceLineNo">152</span><a id="line.152">        else {</a>
-<span class="sourceLineNo">153</span><a id="line.153">            final long t = (stateB += 0xB1E131D6149D9795L);</a>
-<span class="sourceLineNo">154</span><a id="line.154">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
-<span class="sourceLineNo">155</span><a id="line.155">            return s ^ s &gt;&gt;&gt; 25;</a>
-<span class="sourceLineNo">156</span><a id="line.156">        }</a>
+<span class="sourceLineNo">110</span><a id="line.110">        long s = (stateA += 0xD1342543DE82EF95L);</a>
+<span class="sourceLineNo">111</span><a id="line.111">        s ^= s &gt;&gt;&gt; 31 ^ s &gt;&gt;&gt; 23;</a>
+<span class="sourceLineNo">112</span><a id="line.112">        if(s &lt; 0x46BC279692B5C323L) {</a>
+<span class="sourceLineNo">113</span><a id="line.113">            final long t = stateB;</a>
+<span class="sourceLineNo">114</span><a id="line.114">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
+<span class="sourceLineNo">115</span><a id="line.115">            return (int)(s ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);</a>
+<span class="sourceLineNo">116</span><a id="line.116">        }</a>
+<span class="sourceLineNo">117</span><a id="line.117">        else {</a>
+<span class="sourceLineNo">118</span><a id="line.118">            final long t = (stateB += 0xB1E131D6149D9795L);</a>
+<span class="sourceLineNo">119</span><a id="line.119">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
+<span class="sourceLineNo">120</span><a id="line.120">            return (int)(s ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);</a>
+<span class="sourceLineNo">121</span><a id="line.121">        }</a>
+<span class="sourceLineNo">122</span><a id="line.122">    }</a>
+<span class="sourceLineNo">123</span><a id="line.123">    /**</a>
+<span class="sourceLineNo">124</span><a id="line.124">     * Using this method, any algorithm that needs to efficiently generate more</a>
+<span class="sourceLineNo">125</span><a id="line.125">     * than 32 bits of random data can interface with this randomness source.</a>
+<span class="sourceLineNo">126</span><a id="line.126">     * &lt;p&gt;</a>
+<span class="sourceLineNo">127</span><a id="line.127">     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).</a>
+<span class="sourceLineNo">128</span><a id="line.128">     *</a>
+<span class="sourceLineNo">129</span><a id="line.129">     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)</a>
+<span class="sourceLineNo">130</span><a id="line.130">     */</a>
+<span class="sourceLineNo">131</span><a id="line.131">    @Override</a>
+<span class="sourceLineNo">132</span><a id="line.132">    public final long nextLong() {</a>
+<span class="sourceLineNo">133</span><a id="line.133">        long s = (stateA += 0xD1342543DE82EF95L);</a>
+<span class="sourceLineNo">134</span><a id="line.134">        s ^= s &gt;&gt;&gt; 31 ^ s &gt;&gt;&gt; 23;</a>
+<span class="sourceLineNo">135</span><a id="line.135">        if(s &lt; 0x46BC279692B5C323L) {</a>
+<span class="sourceLineNo">136</span><a id="line.136">            final long t = stateB;</a>
+<span class="sourceLineNo">137</span><a id="line.137">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
+<span class="sourceLineNo">138</span><a id="line.138">            return s ^ s &gt;&gt;&gt; 25;</a>
+<span class="sourceLineNo">139</span><a id="line.139">        }</a>
+<span class="sourceLineNo">140</span><a id="line.140">        else {</a>
+<span class="sourceLineNo">141</span><a id="line.141">            final long t = (stateB += 0xB1E131D6149D9795L);</a>
+<span class="sourceLineNo">142</span><a id="line.142">            s *= ((t ^ t &lt;&lt; 9) | 1L);</a>
+<span class="sourceLineNo">143</span><a id="line.143">            return s ^ s &gt;&gt;&gt; 25;</a>
+<span class="sourceLineNo">144</span><a id="line.144">        }</a>
+<span class="sourceLineNo">145</span><a id="line.145">    }</a>
+<span class="sourceLineNo">146</span><a id="line.146"></a>
+<span class="sourceLineNo">147</span><a id="line.147">    /**</a>
+<span class="sourceLineNo">148</span><a id="line.148">     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the</a>
+<span class="sourceLineNo">149</span><a id="line.149">     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.</a>
+<span class="sourceLineNo">151</span><a id="line.151">     *</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @return a copy of this RandomnessSource</a>
+<span class="sourceLineNo">153</span><a id="line.153">     */</a>
+<span class="sourceLineNo">154</span><a id="line.154">    @Override</a>
+<span class="sourceLineNo">155</span><a id="line.155">    public GoatRNG copy() {</a>
+<span class="sourceLineNo">156</span><a id="line.156">        return new GoatRNG(stateA, stateB);</a>
 <span class="sourceLineNo">157</span><a id="line.157">    }</a>
-<span class="sourceLineNo">158</span><a id="line.158"></a>
-<span class="sourceLineNo">159</span><a id="line.159">    /**</a>
-<span class="sourceLineNo">160</span><a id="line.160">     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.</a>
-<span class="sourceLineNo">163</span><a id="line.163">     *</a>
-<span class="sourceLineNo">164</span><a id="line.164">     * @return a copy of this RandomnessSource</a>
-<span class="sourceLineNo">165</span><a id="line.165">     */</a>
-<span class="sourceLineNo">166</span><a id="line.166">    @Override</a>
-<span class="sourceLineNo">167</span><a id="line.167">    public GoatRNG copy() {</a>
-<span class="sourceLineNo">168</span><a id="line.168">        return new GoatRNG(stateA, stateB);</a>
-<span class="sourceLineNo">169</span><a id="line.169">    }</a>
-<span class="sourceLineNo">170</span><a id="line.170">    @Override</a>
-<span class="sourceLineNo">171</span><a id="line.171">    public String toString() {</a>
-<span class="sourceLineNo">172</span><a id="line.172">        return "GoatRNG with stateA 0x" + StringKit.hex(stateA) + "L and stateB 0x" + StringKit.hex(stateB) + 'L';</a>
-<span class="sourceLineNo">173</span><a id="line.173">    }</a>
-<span class="sourceLineNo">174</span><a id="line.174"></a>
-<span class="sourceLineNo">175</span><a id="line.175">    @Override</a>
-<span class="sourceLineNo">176</span><a id="line.176">    public boolean equals(Object o) {</a>
-<span class="sourceLineNo">177</span><a id="line.177">        if (this == o) return true;</a>
-<span class="sourceLineNo">178</span><a id="line.178">        if (o == null || getClass() != o.getClass()) return false;</a>
-<span class="sourceLineNo">179</span><a id="line.179"></a>
-<span class="sourceLineNo">180</span><a id="line.180">        GoatRNG goatRNG = (GoatRNG) o;</a>
-<span class="sourceLineNo">181</span><a id="line.181"></a>
-<span class="sourceLineNo">182</span><a id="line.182">        return stateA == goatRNG.stateA &amp;&amp; stateB == goatRNG.stateB;</a>
-<span class="sourceLineNo">183</span><a id="line.183">    }</a>
-<span class="sourceLineNo">184</span><a id="line.184"></a>
-<span class="sourceLineNo">185</span><a id="line.185">    @Override</a>
-<span class="sourceLineNo">186</span><a id="line.186">    public int hashCode() {</a>
-<span class="sourceLineNo">187</span><a id="line.187">        return (int) (31L * (stateA ^ (stateA &gt;&gt;&gt; 32)) + (stateB ^ stateB &gt;&gt;&gt; 32));</a>
-<span class="sourceLineNo">188</span><a id="line.188">    }</a>
-<span class="sourceLineNo">189</span><a id="line.189">    </a>
-<span class="sourceLineNo">190</span><a id="line.190">}</a>
+<span class="sourceLineNo">158</span><a id="line.158">    @Override</a>
+<span class="sourceLineNo">159</span><a id="line.159">    public String toString() {</a>
+<span class="sourceLineNo">160</span><a id="line.160">        return "GoatRNG with stateA 0x" + StringKit.hex(stateA) + "L and stateB 0x" + StringKit.hex(stateB) + 'L';</a>
+<span class="sourceLineNo">161</span><a id="line.161">    }</a>
+<span class="sourceLineNo">162</span><a id="line.162"></a>
+<span class="sourceLineNo">163</span><a id="line.163">    @Override</a>
+<span class="sourceLineNo">164</span><a id="line.164">    public boolean equals(Object o) {</a>
+<span class="sourceLineNo">165</span><a id="line.165">        if (this == o) return true;</a>
+<span class="sourceLineNo">166</span><a id="line.166">        if (o == null || getClass() != o.getClass()) return false;</a>
+<span class="sourceLineNo">167</span><a id="line.167"></a>
+<span class="sourceLineNo">168</span><a id="line.168">        GoatRNG goatRNG = (GoatRNG) o;</a>
+<span class="sourceLineNo">169</span><a id="line.169"></a>
+<span class="sourceLineNo">170</span><a id="line.170">        return stateA == goatRNG.stateA &amp;&amp; stateB == goatRNG.stateB;</a>
+<span class="sourceLineNo">171</span><a id="line.171">    }</a>
+<span class="sourceLineNo">172</span><a id="line.172"></a>
+<span class="sourceLineNo">173</span><a id="line.173">    @Override</a>
+<span class="sourceLineNo">174</span><a id="line.174">    public int hashCode() {</a>
+<span class="sourceLineNo">175</span><a id="line.175">        return (int) (31L * (stateA ^ (stateA &gt;&gt;&gt; 32)) + (stateB ^ stateB &gt;&gt;&gt; 32));</a>
+<span class="sourceLineNo">176</span><a id="line.176">    }</a>
+<span class="sourceLineNo">177</span><a id="line.177">    </a>
+<span class="sourceLineNo">178</span><a id="line.178">}</a>
 
 
 

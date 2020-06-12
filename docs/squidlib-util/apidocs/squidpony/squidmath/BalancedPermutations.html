@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class BalancedPermutations" class="title">Class BalancedPermutations</h1>
@@ -97,12 +92,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.10">BalancedPermutations</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.7">BalancedPermutations</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Based on <a href="http://extremelearning.com.au/isotropic-blue-noise-point-sets/">Martin Roberts' blog post about
- blue noise point sets</a>, this class generates "balanced" permutations of a specific size with good performance.
- It may be added to later to include the rest of that blog post.</div>
+ blue noise point sets</a>, this class generates "balanced" permutations of a specific size with good performance.</div>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -229,7 +222,7 @@ long&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="size">size</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.12">size</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.8">size</a></span></div>
 </section>
 </li>
 </ul>
@@ -245,13 +238,13 @@ long&nbsp;stateB)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">BalancedPermutations</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.24">BalancedPermutations</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.20">BalancedPermutations</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,long,long)">BalancedPermutations</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.31">BalancedPermutations</a></span>&#8203;(<span class="arguments">int&nbsp;size,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.27">BalancedPermutations</a></span>&#8203;(<span class="arguments">int&nbsp;size,
 long&nbsp;stateA,
 long&nbsp;stateB)</span></div>
 </section>
@@ -269,7 +262,7 @@ long&nbsp;stateB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fill(int[])">fill</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.78">fill</a></span>&#8203;(<span class="arguments">int[]&nbsp;items)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.74">fill</a></span>&#8203;(<span class="arguments">int[]&nbsp;items)</span></div>
 <div class="block">Fills <code>items</code> with a balanced permutation from 0 to <code>size - 1</code>. The length of <code>items</code> must be
  at least <code>size</code>. This may take a while if size is large; half a second is reasonable for when size is 48,
  with smaller sizes taking much less time and larger ones taking much more.</div>
@@ -282,19 +275,19 @@ long&nbsp;stateB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rotatedGrid()">rotatedGrid</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.115">rotatedGrid</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.111">rotatedGrid</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shuffledGrid()">shuffledGrid</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.129">shuffledGrid</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.125">shuffledGrid</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shuffledGridMultiple(int)">shuffledGridMultiple</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.146">shuffledGridMultiple</a></span>&#8203;(<span class="arguments">int&nbsp;repeats)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/BalancedPermutations.html#line.142">shuffledGridMultiple</a></span>&#8203;(<span class="arguments">int&nbsp;repeats)</span></div>
 </section>
 </li>
 </ul>
@@ -303,8 +296,8 @@ long&nbsp;stateB)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -350,5 +343,7 @@ long&nbsp;stateB)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

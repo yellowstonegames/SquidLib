@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,18 +51,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Interface squidpony.squidgrid.gui.gdx.ICellVisible" class="title">Uses of Interface<br>squidpony.squidgrid.gui.gdx.ICellVisible</h1>
@@ -194,7 +189,7 @@ float&nbsp;background)</code></th>
 </thead>
 <tbody>
 <tr class="altColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../WildMapView.html#%3Cinit%3E(squidpony.squidgrid.mapping.WildMap,java.util.Map)">WildMapView</a></span>&#8203;(squidpony.squidgrid.mapping.WildMap&nbsp;wildMap,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../WildMapView.html#%3Cinit%3E(squidpony.squidgrid.mapping.WildMap,java.util.Map)">WildMapView</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/mapping/WildMap.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping" class="externalLink">WildMap</a>&nbsp;wildMap,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;? extends <a href="../ICellVisible.html" title="interface in squidpony.squidgrid.gui.gdx">ICellVisible</a>&gt;&nbsp;viewer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -234,5 +229,7 @@ float&nbsp;background)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

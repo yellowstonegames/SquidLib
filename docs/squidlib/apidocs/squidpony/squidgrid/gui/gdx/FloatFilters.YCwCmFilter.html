@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class FloatFilters.YCwCmFilter" class="title">Class FloatFilters.YCwCmFilter</h1>
@@ -102,7 +97,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FloatFilters.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.351">FloatFilters.YCwCmFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.352">FloatFilters.YCwCmFilter</a>
 extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></pre>
 <div class="block">Like <a href="FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a> or  <a href="FloatFilters.YCoCgFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCoCgFilter</code></a>, but edits its input colors in YCwCm color space, which is very
  similar to YCoCg but has chroma/chrominance components that are useful aesthetically on their own. You may often
@@ -273,37 +268,37 @@ float&nbsp;cmAdd)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="yMul">yMul</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.352">yMul</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.353">yMul</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="cwMul">cwMul</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.352">cwMul</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.353">cwMul</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="cmMul">cmMul</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.352">cmMul</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.353">cmMul</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="yAdd">yAdd</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.352">yAdd</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.353">yAdd</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="cwAdd">cwAdd</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.352">cwAdd</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.353">cwAdd</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="cmAdd">cmAdd</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.352">cmAdd</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.353">cmAdd</a></span></div>
 </section>
 </li>
 </ul>
@@ -319,7 +314,7 @@ float&nbsp;cmAdd)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(float,float,float)">YCwCmFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.354">YCwCmFilter</a></span>&#8203;(<span class="arguments">float&nbsp;yMul,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.355">YCwCmFilter</a></span>&#8203;(<span class="arguments">float&nbsp;yMul,
 float&nbsp;cwMul,
 float&nbsp;cmMul)</span></div>
 </section>
@@ -327,7 +322,7 @@ float&nbsp;cmMul)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(float,float,float,float,float,float)">YCwCmFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.357">YCwCmFilter</a></span>&#8203;(<span class="arguments">float&nbsp;yMul,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.358">YCwCmFilter</a></span>&#8203;(<span class="arguments">float&nbsp;yMul,
 float&nbsp;cwMul,
 float&nbsp;cmMul,
 float&nbsp;yAdd,
@@ -348,7 +343,7 @@ float&nbsp;cmAdd)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="alter(float)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.372">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html#line.373">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <div class="block">Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -366,8 +361,8 @@ float&nbsp;cmAdd)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -412,5 +407,7 @@ float&nbsp;cmAdd)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

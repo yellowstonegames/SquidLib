@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class WildMap" class="title">Class WildMap</h1>
@@ -106,25 +101,33 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.38">WildMap</a>
+public class <a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.46">WildMap</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
-<div class="block">A finite 2D area map for some kind of wilderness, with specifics handled by subclasses.
+<div class="block">A finite 2D area map for some kind of wilderness, adapting to different ecosystems by changing its output.
  Regional maps for wilderness areas have very different requirements from mostly-artificial dungeons. This is intended
- to work alongside <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> and <a href="WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.DetailedBiomeMapper</code></a> to produce blends
- between biomes where a strict line can't be drawn between, say, woodland and grassland.
+ to work alongside <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> and <a href="WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.DetailedBiomeMapper</code></a> to produce, for
+ example, very sparse maps with an occasional cactus in a desert, or very dense maps with many trees and shrubs for a
+ forest.
  <br>
- Using this code mostly involves constructing a subclass, adding kinds of game objects that you want to appear
- in this type of map to <a href="#contentTypes"><code>contentTypes</code></a>, and only then calling <a href="#generate()"><code>generate()</code></a>, which is implemented by
- subclasses only. You can use just about any type for <code>T</code>, including <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>Object</code></a>; all this code uses is the
- number of items in <a href="#contentTypes"><code>contentTypes</code></a> to put correct indices into <a href="#content"><code>content</code></a>. Because contentTypes is an
- ArrayList, you can have and are encouraged to have duplicates when an object should appear more often. An index of -1
- in content indicates nothing of note is present there. There is also a String array of <a href="#floorTypes"><code>floorTypes</code></a> that is
- not typically user-set unless you subclass WildMap yourself; it is used to look up the indices in <a href="#floors"><code>floors</code></a>.
- The floors are set to reasonable values for the particular subclass, so a forest might have "dirt" and "leaves" among
- others, while a desert might only have "sand". Again, only the indices matter, so you could change the values in
- <a href="#floorTypes"><code>floorTypes</code></a> to match names of textures in a graphical game and make lookup easier, or to a char followed by
- the name of a color (as in SColor in the display module) for a text-based game.
+ Using this code mostly involves constructing a WildMap with a width, height, biome, and optionally a random number
+ generator, an ArrayList of floor types (as Strings) that can appear, and an ArrayList of terrain content that can
+ appear (also as Strings). Then you can call <a href="#generate()"><code>generate()</code></a>, which assigns indices into <a href="#content"><code>content</code></a> and
+ <a href="#floors"><code>floors</code></a>, where an index can look up a value from <a href="#contentTypes"><code>contentTypes</code></a> or <a href="#floorTypes"><code>floorTypes</code></a>. The biome is
+ usually an index into <a href="WorldMapGenerator.DetailedBiomeMapper.html#biomeTable"><code>WorldMapGenerator.DetailedBiomeMapper.biomeTable</code></a>, but can
+ be some other index if you don't use DetailedBiomeMapper (you would probably use a subclass then). The
+ <a href="#contentTypes"><code>contentTypes</code></a> field is an ArrayList; you can have and are encouraged to have duplicates when an object should
+ appear more often. An index of -1 in content indicates nothing of note is present there. There is also a String array
+ of <a href="#floorTypes"><code>floorTypes</code></a> that is not typically user-set unless you subclass WildMap yourself; it is used to look up the
+ indices in <a href="#floors"><code>floors</code></a>. The floors are set to reasonable values for the particular biome, so a forest has "dirt"
+ and "leaves" among others, while a desert might only have "sand". Again, only the indices matter, so you could change
+ the values in <a href="#floorTypes"><code>floorTypes</code></a> to match names of textures in a graphical game and make lookup easier, or to a char
+ followed by the name of a color (as in SColor in the display module) for a text-based game.
+ <br>
+ This is marked Beta because there's still some work to be done, and the actual output will change even if the API
+ doesn't have any breaks. While the wilderness maps this produces are usable, they don't have paths or areas that a
+ character would have to find a way around (like a cliff). This is meant to be added at some point, probably in
+ conjunction with some system for connecting WildMaps.
  <br>
  Created by Tommy Ettinger on 10/16/2019.</div>
 <dl>
@@ -154,7 +157,9 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="WildMap.MixedWildMap.html" title="class in squidpony.squidgrid.mapping">WildMap.MixedWildMap</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">A subclass of <a href="WildMap.html" title="class in squidpony.squidgrid.mapping"><code>WildMap</code></a> that serves as a ragged edge between 2, 3, or 4 WildMaps in a square intersection.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -308,13 +313,17 @@ int&nbsp;biome,
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#contentByBiome(int,squidpony.squidmath.IRNG)">contentByBiome</a></span>&#8203;(int&nbsp;biome,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets a list of Strings that are really just the names of types of terrain feature for wilderness areas.</div>
+</td>
 </tr>
 <tr class="rowColor" id="i1">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#floorsByBiome(int,squidpony.squidmath.IRNG)">floorsByBiome</a></span>&#8203;(int&nbsp;biome,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets a list of Strings that are really just the names of types of floor tile for wilderness areas.</div>
+</td>
 </tr>
 <tr class="altColor" id="i2">
 <td class="colFirst"><code>void</code></td>
@@ -348,7 +357,9 @@ double&nbsp;monoculture,
 <tr class="altColor" id="i6">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pathsByBiome(int)">pathsByBiome</a></span>&#8203;(int&nbsp;biome)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets a list of Strings that are really just the names of types of path tile for wilderness areas.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -375,49 +386,49 @@ double&nbsp;monoculture,
 <li class="blockList">
 <section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.41">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.49">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.41">height</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.49">height</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="biome">biome</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.42">biome</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.50">biome</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.43">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.51">rng</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="contentTypes">contentTypes</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.44">contentTypes</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.52">contentTypes</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="floorTypes">floorTypes</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.45">floorTypes</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.53">floorTypes</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="content">content</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.46">content</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.54">content</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="floors">floors</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.46">floors</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.54">floors</a></span></div>
 </section>
 </li>
 </ul>
@@ -433,13 +444,13 @@ double&nbsp;monoculture,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">WildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.347">WildMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.371">WildMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int)">WildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.351">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.375">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;biome)</span></div>
 </section>
@@ -447,7 +458,7 @@ int&nbsp;biome)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int,int)">WildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.355">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.379">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;biome,
 int&nbsp;seedA,
@@ -457,7 +468,7 @@ int&nbsp;seedB)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,squidpony.squidmath.IStatefulRNG)">WildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.359">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.383">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;biome,
 <a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng)</span></div>
@@ -466,7 +477,7 @@ int&nbsp;biome,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,squidpony.squidmath.IStatefulRNG,java.util.ArrayList)">WildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.363">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.387">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;biome,
 <a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng,
@@ -476,7 +487,7 @@ int&nbsp;biome,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,squidpony.squidmath.IStatefulRNG,java.util.ArrayList,java.util.ArrayList)">WildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.367">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.391">WildMap</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 int&nbsp;biome,
 <a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng,
@@ -497,7 +508,7 @@ int&nbsp;biome,
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeRepeats(java.lang.Object...)">makeRepeats</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.55">makeRepeats</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>...&nbsp;rest)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.63">makeRepeats</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>...&nbsp;rest)</span></div>
 <div class="block">Meant for generating large ArrayLists of Strings where an individual String may occur quite a few times.
  The rest parameter is a vararg (it may also be an Object array) of alternating String and Integer values, where
  an Integer is how many times to repeat the preceding String in the returned ArrayList.</div>
@@ -512,14 +523,14 @@ int&nbsp;biome,
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeShuffledRepeats(squidpony.squidmath.IRNG,java.lang.Object...)">makeShuffledRepeats</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.75">makeShuffledRepeats</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.83">makeShuffledRepeats</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>...&nbsp;rest)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeVegetation(squidpony.squidmath.IRNG,int,double,squidpony.FakeLanguageGen)">makeVegetation</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.81">makeVegetation</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.89">makeVegetation</a></span>&#8203;(<span class="arguments"><a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 int&nbsp;size,
 double&nbsp;monoculture,
 <a href="../../FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;naming)</span></div>
@@ -528,27 +539,51 @@ double&nbsp;monoculture,
 <li class="blockList">
 <section class="detail">
 <h3><a id="floorsByBiome(int,squidpony.squidmath.IRNG)">floorsByBiome</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.96">floorsByBiome</a></span>&#8203;(<span class="arguments">int&nbsp;biome,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.110">floorsByBiome</a></span>&#8203;(<span class="arguments">int&nbsp;biome,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="block">Gets a list of Strings that are really just the names of types of floor tile for wilderness areas.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>biome</code> - an index into <a href="WorldMapGenerator.DetailedBiomeMapper.html#biomeTable"><code>WorldMapGenerator.DetailedBiomeMapper.biomeTable</code></a>, or some other index if you don't use DetailedBiomeMapper</dd>
+<dd><code>rng</code> - an IRNG, like <a href="../../squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a> or <a href="../../squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a shuffled ArrayList that typically contains repeats of the kinds of floor that can appear here</dd>
+</dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="pathsByBiome(int)">pathsByBiome</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.177">pathsByBiome</a></span>&#8203;(<span class="arguments">int&nbsp;biome)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.196">pathsByBiome</a></span>&#8203;(<span class="arguments">int&nbsp;biome)</span></div>
+<div class="block">Gets a list of Strings that are really just the names of types of path tile for wilderness areas.
+ Not currently used.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>biome</code> - an index into <a href="WorldMapGenerator.DetailedBiomeMapper.html#biomeTable"><code>WorldMapGenerator.DetailedBiomeMapper.biomeTable</code></a>, or some other index if you don't use DetailedBiomeMapper</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList that typically contains just the one or few types of path that can appear here</dd>
+</dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="contentByBiome(int,squidpony.squidmath.IRNG)">contentByBiome</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.254">contentByBiome</a></span>&#8203;(<span class="arguments">int&nbsp;biome,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.278">contentByBiome</a></span>&#8203;(<span class="arguments">int&nbsp;biome,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="block">Gets a list of Strings that are really just the names of types of terrain feature for wilderness areas.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>biome</code> - an index into <a href="WorldMapGenerator.DetailedBiomeMapper.html#biomeTable"><code>WorldMapGenerator.DetailedBiomeMapper.biomeTable</code></a>, or some other index if you don't use DetailedBiomeMapper</dd>
+<dd><code>rng</code> - an IRNG, like <a href="../../squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a> or <a href="../../squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a shuffled ArrayList that typically contains repeats of the kinds of terrain feature that can appear here</dd>
+</dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate()">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.388">generate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.412">generate</a></span>()</div>
 <div class="block">Produces a map by filling the <a href="#floors"><code>floors</code></a> 2D array with indices into <a href="#floorTypes"><code>floorTypes</code></a>, and similarly
  filling the <a href="#content"><code>content</code></a> 2D array with indices into <a href="#contentTypes"><code>contentTypes</code></a>. You only need to call this method
  when you first generate a map with the specific parameters you want, such as biome, and later if you want another
@@ -564,8 +599,8 @@ double&nbsp;monoculture,
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -611,5 +646,7 @@ double&nbsp;monoculture,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

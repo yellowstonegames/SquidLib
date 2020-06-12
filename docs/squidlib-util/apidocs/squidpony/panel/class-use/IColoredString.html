@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Interface squidpony.panel.IColoredString" class="title">Uses of Interface<br>squidpony.panel.IColoredString</h1>
@@ -315,51 +310,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a href="../IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;&nbsp;two)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ICombinedPanel.Impl.</span><code><span class="memberNameLink"><a href="../ICombinedPanel.Impl.html#put(int,int,T,squidpony.panel.IColoredString)">put</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y,
-<a href="../ICombinedPanel.Impl.html" title="type parameter in ICombinedPanel.Impl">T</a>&nbsp;bgc,
-<a href="../IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../ICombinedPanel.Impl.html" title="type parameter in ICombinedPanel.Impl">T</a>&gt;&nbsp;cs)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ICombinedPanel.</span><code><span class="memberNameLink"><a href="../ICombinedPanel.html#put(int,int,T,squidpony.panel.IColoredString)">put</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y,
-<a href="../ICombinedPanel.html" title="type parameter in ICombinedPanel">T</a>&nbsp;bgc,
-<a href="../IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../ICombinedPanel.html" title="type parameter in ICombinedPanel">T</a>&gt;&nbsp;cs)</code></th>
-<td class="colLast">
-<div class="block">Put <code>cs</code> at (x,y) using <code>bgc</code> for the background.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ISquidPanel.</span><code><span class="memberNameLink"><a href="../ISquidPanel.html#put(int,int,squidpony.panel.IColoredString)">put</a></span>&#8203;(int&nbsp;xOffset,
-int&nbsp;yOffset,
-<a href="../IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;? extends <a href="../ISquidPanel.html" title="type parameter in ISquidPanel">T</a>&gt;&nbsp;cs)</code></th>
-<td class="colLast">
-<div class="block">Puts the given string horizontally with the first character at the given
- offset, using the colors that <code>cs</code> provides.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ICombinedPanel.Impl.</span><code><span class="memberNameLink"><a href="../ICombinedPanel.Impl.html#putFG(int,int,squidpony.panel.IColoredString)">putFG</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y,
-<a href="../IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../ICombinedPanel.Impl.html" title="type parameter in ICombinedPanel.Impl">T</a>&gt;&nbsp;cs)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">ICombinedPanel.</span><code><span class="memberNameLink"><a href="../ICombinedPanel.html#putFG(int,int,squidpony.panel.IColoredString)">putFG</a></span>&#8203;(int&nbsp;x,
-int&nbsp;y,
-<a href="../IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../ICombinedPanel.html" title="type parameter in ICombinedPanel">T</a>&gt;&nbsp;cs)</code></th>
-<td class="colLast">
-<div class="block">Puts the given string horizontally with the first character at the given
- offset.</div>
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -423,5 +373,7 @@ int&nbsp;y,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

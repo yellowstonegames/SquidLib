@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,23 +51,18 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1>Index</h1>
 </div>
-<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:D">
+<div class="contentContainer"><a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a><span class="verticalSeparator">|</span><a href="../allpackages-index.html">All&nbsp;Packages</a><a id="I:D">
 <!--   -->
 </a>
 <h2 class="title">D</h2>
@@ -515,21 +510,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html#desaturate(squidpony.squidgrid.gui.gdx.SColor,double)">desaturate(SColor, double)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the version of the provided color desaturated
- the given amount.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html#desaturated(com.badlogic.gdx.graphics.Color)">desaturated(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a></dt>
 <dd>
 <div class="block">Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html#desaturated(squidpony.squidgrid.gui.gdx.SColor)">desaturated(SColor)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is the fully desaturated (greyscale) version of
- the provided color.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#descent">descent</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
 <dd>&nbsp;</dd>
@@ -539,18 +522,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/WorldMapView.html#desertColor">desertColor</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/WorldMapView.html" title="class in squidpony.squidgrid.gui.gdx">WorldMapView</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#difference(int,int)">difference(int, int)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
-<dd>
-<div class="block">Color difference metric; returns large numbers even for smallish differences.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#difference(int,int,int,int)">difference(int, int, int, int)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
-<dd>
-<div class="block">Color difference metric; returns large numbers even for smallish differences.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#difference(int,int,int,int,int,int)">difference(int, int, int, int, int, int)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
-<dd>
-<div class="block">Color difference metric; returns large numbers even for smallish differences.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#difference2(float,float)">difference2(float, float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">A color distance metric between two colors as packed floats, without performing a square root on the result.</div>
@@ -582,30 +553,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Darkens a color by the specified degree and returns the new color (mixed with black).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html#dim(squidpony.squidgrid.gui.gdx.SColor)">dim(SColor)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a slightly dimmer version of the provided
- color.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html#dimmer(com.badlogic.gdx.graphics.Color)">dimmer(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a></dt>
 <dd>
 <div class="block">Darkens a color significantly and returns the new color (30% mix with black).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html#dimmer(squidpony.squidgrid.gui.gdx.SColor)">dimmer(SColor)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a somewhat dimmer version of the provided
- color.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html#dimmest(com.badlogic.gdx.graphics.Color)">dimmest(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a></dt>
 <dd>
 <div class="block">Darkens a color massively and returns the new color (70% mix with black).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html#dimmest(squidpony.squidgrid.gui.gdx.SColor)">dimmest(SColor)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Returns an SColor that is a lot darker version of the provided color.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#directionGlyph">directionGlyph</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
 <dd>&nbsp;</dd>
@@ -633,20 +587,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">This color constant "Disappearing Purple" has RGB code <code>0x3F313A</code>, red 0.24705882, green 0.19215687, blue 0.22745098, alpha 1, hue 0.89285713, saturation 0.22222221, and value 0.24705882.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AnimatedPNG.html#dispose()">dispose()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AnimatedPNG.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedPNG</a></dt>
-<dd>
-<div class="block">Disposal should probably be done explicitly, especially if using JRE versions after 8.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/DefaultResources.html#dispose()">dispose()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx">DefaultResources</a></dt>
 <dd>
 <div class="block">Called when the <code>Application</code> is about to be disposed</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/FilterBatch.html#dispose()">dispose()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/FilterBatch.html" title="class in squidpony.squidgrid.gui.gdx">FilterBatch</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PNG8.html#dispose()">dispose()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PNG8.html" title="class in squidpony.squidgrid.gui.gdx">PNG8</a></dt>
-<dd>
-<div class="block">Should probably be done explicitly; finalize() has been scheduled for removal from the JVM.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#dispose()">dispose()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
 <dd>
 <div class="block">Releases all resources of this object.</div>
@@ -792,11 +738,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Draws this ImageSquidPanel and any <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a> it has, and calls <code>Actor.act(float)</code> for each
  AnimatedEntity this contains in <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#animatedEntities"><code>SquidPanel.animatedEntities</code></a> or <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html#draw(com.badlogic.gdx.graphics.g2d.Batch,float)">draw(Batch, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">LinesPanel</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">Draws this LinesPanel using the given Batch.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#draw(com.badlogic.gdx.graphics.g2d.Batch,float)">draw(Batch, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
 <dd>
@@ -983,11 +924,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Draws the border.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html#drawBottomUp">drawBottomUp</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">LinesPanel</a></dt>
-<dd>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
-<div class="block">If <code>true</code>, draws:</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/UIUtil.html#drawLimitedWidthText(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.BitmapFont,java.lang.String,com.badlogic.gdx.graphics.Color,int,float,float,float)">drawLimitedWidthText(Batch, BitmapFont, String, Color, int, float, float, float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/UIUtil.html" title="class in squidpony.squidgrid.gui.gdx">UIUtil</a></dt>
 <dd>
 <div class="block">Writes <code>text</code> at <code>(x, y)</code> by cutting off using "…" if it gets
@@ -1023,7 +959,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">This color constant "Dull Blue" has RGB code <code>0x4F4944</code>, red 0.30980393, green 0.28627452, blue 0.26666668, alpha 1, hue 0.07575774, saturation 0.13924049, and value 0.30980393.</div>
 </dd>
 </dl>
-<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a>&nbsp;<a href="../allpackages-index.html">All&nbsp;Packages</a></div>
+<a href="index-1.html">A</a>&nbsp;<a href="index-2.html">B</a>&nbsp;<a href="index-3.html">C</a>&nbsp;<a href="index-4.html">D</a>&nbsp;<a href="index-5.html">E</a>&nbsp;<a href="index-6.html">F</a>&nbsp;<a href="index-7.html">G</a>&nbsp;<a href="index-8.html">H</a>&nbsp;<a href="index-9.html">I</a>&nbsp;<a href="index-10.html">J</a>&nbsp;<a href="index-11.html">K</a>&nbsp;<a href="index-12.html">L</a>&nbsp;<a href="index-13.html">M</a>&nbsp;<a href="index-14.html">N</a>&nbsp;<a href="index-15.html">O</a>&nbsp;<a href="index-16.html">P</a>&nbsp;<a href="index-17.html">Q</a>&nbsp;<a href="index-18.html">R</a>&nbsp;<a href="index-19.html">S</a>&nbsp;<a href="index-20.html">T</a>&nbsp;<a href="index-21.html">U</a>&nbsp;<a href="index-22.html">V</a>&nbsp;<a href="index-23.html">W</a>&nbsp;<a href="index-24.html">X</a>&nbsp;<a href="index-25.html">Y</a>&nbsp;<a href="index-26.html">Z</a>&nbsp;<br><a href="../allclasses-index.html">All&nbsp;Classes</a><span class="verticalSeparator">|</span><a href="../allpackages-index.html">All&nbsp;Packages</a></div>
 </main>
 <footer role="contentinfo">
 <nav role="navigation">
@@ -1052,5 +988,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

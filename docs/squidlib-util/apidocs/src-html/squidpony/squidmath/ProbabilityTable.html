@@ -12,417 +12,423 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.annotation.Beta;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import java.io.Serializable;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import java.util.ArrayList;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import java.util.SortedSet;</a>
-<span class="sourceLineNo">008</span><a id="line.8"></a>
-<span class="sourceLineNo">009</span><a id="line.9">/**</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * A generic method of holding a probability table to determine weighted random</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * outcomes.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> *</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * The weights do not need to add up to any particular value, they will be</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * normalized when choosing a random entry.</a>
-<span class="sourceLineNo">015</span><a id="line.15"> *</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * @author Eben Howard - http://squidpony.com - howard@squidpony.com</a>
-<span class="sourceLineNo">017</span><a id="line.17"> *</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * @param &lt;T&gt; The type of object to be held in the table</a>
-<span class="sourceLineNo">019</span><a id="line.19"> */</a>
-<span class="sourceLineNo">020</span><a id="line.20">@Beta</a>
-<span class="sourceLineNo">021</span><a id="line.21">public class ProbabilityTable&lt;T&gt; implements Serializable {</a>
-<span class="sourceLineNo">022</span><a id="line.22">    private static final long serialVersionUID = -1307656083434154736L;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    /**</a>
-<span class="sourceLineNo">024</span><a id="line.24">     * The set of items that can be produced directly from {@link #random()} (without additional lookups).</a>
-<span class="sourceLineNo">025</span><a id="line.25">     */</a>
-<span class="sourceLineNo">026</span><a id="line.26">    public final Arrangement&lt;T&gt; table;</a>
-<span class="sourceLineNo">027</span><a id="line.27">    /**</a>
-<span class="sourceLineNo">028</span><a id="line.28">     * The list of items that can be produced indirectly from {@link #random()} (looking up values from inside</a>
-<span class="sourceLineNo">029</span><a id="line.29">     * the nested tables).</a>
-<span class="sourceLineNo">030</span><a id="line.30">     */</a>
-<span class="sourceLineNo">031</span><a id="line.31">    public final ArrayList&lt;ProbabilityTable&lt;T&gt;&gt; extraTable;</a>
-<span class="sourceLineNo">032</span><a id="line.32">    public final IntVLA weights;</a>
-<span class="sourceLineNo">033</span><a id="line.33">    public GWTRNG rng;</a>
-<span class="sourceLineNo">034</span><a id="line.34">    protected int total, normalTotal;</a>
-<span class="sourceLineNo">035</span><a id="line.35"></a>
-<span class="sourceLineNo">036</span><a id="line.36">    /**</a>
-<span class="sourceLineNo">037</span><a id="line.37">     * Creates a new probability table with a random seed.</a>
-<span class="sourceLineNo">038</span><a id="line.38">     */</a>
-<span class="sourceLineNo">039</span><a id="line.39">    public ProbabilityTable() {</a>
-<span class="sourceLineNo">040</span><a id="line.40">        this((RandomnessSource) null);</a>
-<span class="sourceLineNo">041</span><a id="line.41">    }</a>
-<span class="sourceLineNo">042</span><a id="line.42"></a>
-<span class="sourceLineNo">043</span><a id="line.43">    /**</a>
-<span class="sourceLineNo">044</span><a id="line.44">     * Creates a new probability table with the provided source of randomness</a>
-<span class="sourceLineNo">045</span><a id="line.45">     * used.</a>
-<span class="sourceLineNo">046</span><a id="line.46">     *</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * @param rng the source of randomness</a>
-<span class="sourceLineNo">048</span><a id="line.48">     */</a>
-<span class="sourceLineNo">049</span><a id="line.49">    public ProbabilityTable(RandomnessSource rng) {</a>
-<span class="sourceLineNo">050</span><a id="line.50">        this.rng = rng == null ? new GWTRNG() : new GWTRNG(rng.next(32), rng.next(32));</a>
-<span class="sourceLineNo">051</span><a id="line.51">        table = new Arrangement&lt;&gt;(64, 0.75f);</a>
-<span class="sourceLineNo">052</span><a id="line.52">        extraTable = new ArrayList&lt;&gt;(16);</a>
-<span class="sourceLineNo">053</span><a id="line.53">        weights = new IntVLA(64);</a>
-<span class="sourceLineNo">054</span><a id="line.54">        total = 0;</a>
-<span class="sourceLineNo">055</span><a id="line.55">        normalTotal = 0;</a>
-<span class="sourceLineNo">056</span><a id="line.56">    }</a>
-<span class="sourceLineNo">057</span><a id="line.57"></a>
-<span class="sourceLineNo">058</span><a id="line.58">    /**</a>
-<span class="sourceLineNo">059</span><a id="line.59">     * Creates a new probability table with the provided long seed used.</a>
-<span class="sourceLineNo">060</span><a id="line.60">     *</a>
-<span class="sourceLineNo">061</span><a id="line.61">     * @param seed the RNG seed as a long</a>
-<span class="sourceLineNo">062</span><a id="line.62">     */</a>
-<span class="sourceLineNo">063</span><a id="line.63">    public ProbabilityTable(long seed) {</a>
-<span class="sourceLineNo">064</span><a id="line.64">        this.rng = new GWTRNG(seed);</a>
-<span class="sourceLineNo">065</span><a id="line.65">        table = new Arrangement&lt;&gt;(64, 0.75f);</a>
-<span class="sourceLineNo">066</span><a id="line.66">        extraTable = new ArrayList&lt;&gt;(16);</a>
-<span class="sourceLineNo">067</span><a id="line.67">        weights = new IntVLA(64);</a>
-<span class="sourceLineNo">068</span><a id="line.68">        total = 0;</a>
-<span class="sourceLineNo">069</span><a id="line.69">        normalTotal = 0;</a>
-<span class="sourceLineNo">070</span><a id="line.70">    }</a>
-<span class="sourceLineNo">071</span><a id="line.71"></a>
-<span class="sourceLineNo">072</span><a id="line.72">    /**</a>
-<span class="sourceLineNo">073</span><a id="line.73">     * Creates a new probability table with the provided String seed used.</a>
-<span class="sourceLineNo">074</span><a id="line.74">     *</a>
-<span class="sourceLineNo">075</span><a id="line.75">     * @param seed the RNG seed as a String</a>
-<span class="sourceLineNo">076</span><a id="line.76">     */</a>
-<span class="sourceLineNo">077</span><a id="line.77">    public ProbabilityTable(String seed) {</a>
-<span class="sourceLineNo">078</span><a id="line.78">        this(CrossHash.hash64(seed));</a>
-<span class="sourceLineNo">079</span><a id="line.79">    }</a>
-<span class="sourceLineNo">080</span><a id="line.80"></a>
-<span class="sourceLineNo">081</span><a id="line.81">    /**</a>
-<span class="sourceLineNo">082</span><a id="line.82">     * Returns an object randomly based on assigned weights.</a>
-<span class="sourceLineNo">083</span><a id="line.83">     *</a>
-<span class="sourceLineNo">084</span><a id="line.84">     * Returns null if no elements have been put in the table.</a>
-<span class="sourceLineNo">085</span><a id="line.85">     *</a>
-<span class="sourceLineNo">086</span><a id="line.86">     * @return the chosen object or null</a>
-<span class="sourceLineNo">087</span><a id="line.87">     */</a>
-<span class="sourceLineNo">088</span><a id="line.88">    public T random() {</a>
-<span class="sourceLineNo">089</span><a id="line.89">        if (table.isEmpty()) {</a>
-<span class="sourceLineNo">090</span><a id="line.90">            return null;</a>
-<span class="sourceLineNo">091</span><a id="line.91">        }</a>
-<span class="sourceLineNo">092</span><a id="line.92">        int index = (int) ((total * ((long)rng.next(31))) &gt;&gt;&gt; 31), sz = table.size();</a>
-<span class="sourceLineNo">093</span><a id="line.93">        for (int i = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">094</span><a id="line.94">            index -= weights.get(i);</a>
-<span class="sourceLineNo">095</span><a id="line.95">            if (index &lt; 0)</a>
-<span class="sourceLineNo">096</span><a id="line.96">                return table.keyAt(i);</a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.io.Serializable;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import java.util.ArrayList;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import java.util.SortedSet;</a>
+<span class="sourceLineNo">006</span><a id="line.6"></a>
+<span class="sourceLineNo">007</span><a id="line.7">/**</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * A generic method of holding a probability table to determine weighted random</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * outcomes.</a>
+<span class="sourceLineNo">010</span><a id="line.10"> *</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * The weights do not need to add up to any particular value; they will be</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * normalized when choosing a random entry. This class allows adding {@code T} items and the weights for</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * those items after the ProbabilityTable has been constructed with {@link #add(Object, int)} or</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * {@link #addAll(OrderedMap)}, as well as removing items entirely with {@link #remove(Object)} or</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * adjusting the weight for an existing item with {@link #add(Object, int)} or {@link #remove(Object, int)}.</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * You can also add a nested ProbabilityTable, which has its own weight and can be chosen like any other</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * item, except it makes its own random choice of its own {@code T} items; you can use the nested table</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * with {@link #add(ProbabilityTable, int)} and {@link #addAllNested(OrderedMap)}. Actually getting a</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * randomly-selected item is easy; just use {@link #random()}.</a>
+<span class="sourceLineNo">020</span><a id="line.20"> * </a>
+<span class="sourceLineNo">021</span><a id="line.21"> * @see WeightedTable An alternative for when you want to track the items separately from their weights.</a>
+<span class="sourceLineNo">022</span><a id="line.22"> * </a>
+<span class="sourceLineNo">023</span><a id="line.23"> * @author Eben Howard - http://squidpony.com - howard@squidpony.com</a>
+<span class="sourceLineNo">024</span><a id="line.24"> * </a>
+<span class="sourceLineNo">025</span><a id="line.25"> * @param &lt;T&gt; The type of object to be held in the table</a>
+<span class="sourceLineNo">026</span><a id="line.26"> */</a>
+<span class="sourceLineNo">027</span><a id="line.27">public class ProbabilityTable&lt;T&gt; implements Serializable {</a>
+<span class="sourceLineNo">028</span><a id="line.28">    private static final long serialVersionUID = -1307656083434154736L;</a>
+<span class="sourceLineNo">029</span><a id="line.29">    /**</a>
+<span class="sourceLineNo">030</span><a id="line.30">     * The set of items that can be produced directly from {@link #random()} (without additional lookups).</a>
+<span class="sourceLineNo">031</span><a id="line.31">     */</a>
+<span class="sourceLineNo">032</span><a id="line.32">    public final Arrangement&lt;T&gt; table;</a>
+<span class="sourceLineNo">033</span><a id="line.33">    /**</a>
+<span class="sourceLineNo">034</span><a id="line.34">     * The list of items that can be produced indirectly from {@link #random()} (looking up values from inside</a>
+<span class="sourceLineNo">035</span><a id="line.35">     * the nested tables).</a>
+<span class="sourceLineNo">036</span><a id="line.36">     */</a>
+<span class="sourceLineNo">037</span><a id="line.37">    public final ArrayList&lt;ProbabilityTable&lt;T&gt;&gt; extraTable;</a>
+<span class="sourceLineNo">038</span><a id="line.38">    public final IntVLA weights;</a>
+<span class="sourceLineNo">039</span><a id="line.39">    public GWTRNG rng;</a>
+<span class="sourceLineNo">040</span><a id="line.40">    protected int total, normalTotal;</a>
+<span class="sourceLineNo">041</span><a id="line.41"></a>
+<span class="sourceLineNo">042</span><a id="line.42">    /**</a>
+<span class="sourceLineNo">043</span><a id="line.43">     * Creates a new probability table with a random seed.</a>
+<span class="sourceLineNo">044</span><a id="line.44">     */</a>
+<span class="sourceLineNo">045</span><a id="line.45">    public ProbabilityTable() {</a>
+<span class="sourceLineNo">046</span><a id="line.46">        this((RandomnessSource) null);</a>
+<span class="sourceLineNo">047</span><a id="line.47">    }</a>
+<span class="sourceLineNo">048</span><a id="line.48"></a>
+<span class="sourceLineNo">049</span><a id="line.49">    /**</a>
+<span class="sourceLineNo">050</span><a id="line.50">     * Creates a new probability table with the provided source of randomness</a>
+<span class="sourceLineNo">051</span><a id="line.51">     * used.</a>
+<span class="sourceLineNo">052</span><a id="line.52">     *</a>
+<span class="sourceLineNo">053</span><a id="line.53">     * @param rng the source of randomness</a>
+<span class="sourceLineNo">054</span><a id="line.54">     */</a>
+<span class="sourceLineNo">055</span><a id="line.55">    public ProbabilityTable(RandomnessSource rng) {</a>
+<span class="sourceLineNo">056</span><a id="line.56">        this.rng = rng == null ? new GWTRNG() : new GWTRNG(rng.next(32), rng.next(32));</a>
+<span class="sourceLineNo">057</span><a id="line.57">        table = new Arrangement&lt;&gt;(64, 0.75f);</a>
+<span class="sourceLineNo">058</span><a id="line.58">        extraTable = new ArrayList&lt;&gt;(16);</a>
+<span class="sourceLineNo">059</span><a id="line.59">        weights = new IntVLA(64);</a>
+<span class="sourceLineNo">060</span><a id="line.60">        total = 0;</a>
+<span class="sourceLineNo">061</span><a id="line.61">        normalTotal = 0;</a>
+<span class="sourceLineNo">062</span><a id="line.62">    }</a>
+<span class="sourceLineNo">063</span><a id="line.63"></a>
+<span class="sourceLineNo">064</span><a id="line.64">    /**</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * Creates a new probability table with the provided long seed used.</a>
+<span class="sourceLineNo">066</span><a id="line.66">     *</a>
+<span class="sourceLineNo">067</span><a id="line.67">     * @param seed the RNG seed as a long</a>
+<span class="sourceLineNo">068</span><a id="line.68">     */</a>
+<span class="sourceLineNo">069</span><a id="line.69">    public ProbabilityTable(long seed) {</a>
+<span class="sourceLineNo">070</span><a id="line.70">        this.rng = new GWTRNG(seed);</a>
+<span class="sourceLineNo">071</span><a id="line.71">        table = new Arrangement&lt;&gt;(64, 0.75f);</a>
+<span class="sourceLineNo">072</span><a id="line.72">        extraTable = new ArrayList&lt;&gt;(16);</a>
+<span class="sourceLineNo">073</span><a id="line.73">        weights = new IntVLA(64);</a>
+<span class="sourceLineNo">074</span><a id="line.74">        total = 0;</a>
+<span class="sourceLineNo">075</span><a id="line.75">        normalTotal = 0;</a>
+<span class="sourceLineNo">076</span><a id="line.76">    }</a>
+<span class="sourceLineNo">077</span><a id="line.77"></a>
+<span class="sourceLineNo">078</span><a id="line.78">    /**</a>
+<span class="sourceLineNo">079</span><a id="line.79">     * Creates a new probability table with the provided String seed used.</a>
+<span class="sourceLineNo">080</span><a id="line.80">     *</a>
+<span class="sourceLineNo">081</span><a id="line.81">     * @param seed the RNG seed as a String</a>
+<span class="sourceLineNo">082</span><a id="line.82">     */</a>
+<span class="sourceLineNo">083</span><a id="line.83">    public ProbabilityTable(String seed) {</a>
+<span class="sourceLineNo">084</span><a id="line.84">        this(CrossHash.hash64(seed));</a>
+<span class="sourceLineNo">085</span><a id="line.85">    }</a>
+<span class="sourceLineNo">086</span><a id="line.86"></a>
+<span class="sourceLineNo">087</span><a id="line.87">    /**</a>
+<span class="sourceLineNo">088</span><a id="line.88">     * Returns an object randomly based on assigned weights.</a>
+<span class="sourceLineNo">089</span><a id="line.89">     *</a>
+<span class="sourceLineNo">090</span><a id="line.90">     * Returns null if no elements have been put in the table.</a>
+<span class="sourceLineNo">091</span><a id="line.91">     *</a>
+<span class="sourceLineNo">092</span><a id="line.92">     * @return the chosen object or null</a>
+<span class="sourceLineNo">093</span><a id="line.93">     */</a>
+<span class="sourceLineNo">094</span><a id="line.94">    public T random() {</a>
+<span class="sourceLineNo">095</span><a id="line.95">        if (table.isEmpty()) {</a>
+<span class="sourceLineNo">096</span><a id="line.96">            return null;</a>
 <span class="sourceLineNo">097</span><a id="line.97">        }</a>
-<span class="sourceLineNo">098</span><a id="line.98">        for (int i = 0; i &lt; extraTable.size(); i++) {</a>
-<span class="sourceLineNo">099</span><a id="line.99">            index -= weights.get(sz + i);</a>
-<span class="sourceLineNo">100</span><a id="line.100">            if(index &lt; 0)</a>
-<span class="sourceLineNo">101</span><a id="line.101">                return extraTable.get(i).random();</a>
-<span class="sourceLineNo">102</span><a id="line.102">        }</a>
-<span class="sourceLineNo">103</span><a id="line.103">        return null;//something went wrong, shouldn't have been able to get all the way through without finding an item</a>
-<span class="sourceLineNo">104</span><a id="line.104">    }</a>
-<span class="sourceLineNo">105</span><a id="line.105"></a>
-<span class="sourceLineNo">106</span><a id="line.106">    /**</a>
-<span class="sourceLineNo">107</span><a id="line.107">     * Adds the given item to the table.</a>
-<span class="sourceLineNo">108</span><a id="line.108">     *</a>
-<span class="sourceLineNo">109</span><a id="line.109">     * Weight must be greater than 0.</a>
-<span class="sourceLineNo">110</span><a id="line.110">     *</a>
-<span class="sourceLineNo">111</span><a id="line.111">     * @param item the object to be added</a>
-<span class="sourceLineNo">112</span><a id="line.112">     * @param weight the weight to be given to the added object</a>
-<span class="sourceLineNo">113</span><a id="line.113">     * @return this for chaining</a>
-<span class="sourceLineNo">114</span><a id="line.114">     */</a>
-<span class="sourceLineNo">115</span><a id="line.115">    public ProbabilityTable&lt;T&gt; add(T item, int weight) {</a>
-<span class="sourceLineNo">116</span><a id="line.116">        if(weight &lt;= 0)</a>
-<span class="sourceLineNo">117</span><a id="line.117">            return this;</a>
-<span class="sourceLineNo">118</span><a id="line.118">        int i = table.getInt(item);</a>
-<span class="sourceLineNo">119</span><a id="line.119">        if (i &lt; 0) {</a>
-<span class="sourceLineNo">120</span><a id="line.120">            weights.insert(table.size, Math.max(0, weight));</a>
-<span class="sourceLineNo">121</span><a id="line.121">            table.add(item);</a>
-<span class="sourceLineNo">122</span><a id="line.122">            int w = Math.max(0, weight);</a>
-<span class="sourceLineNo">123</span><a id="line.123">            total += w;</a>
-<span class="sourceLineNo">124</span><a id="line.124">            normalTotal += w;</a>
-<span class="sourceLineNo">125</span><a id="line.125">        } else {</a>
-<span class="sourceLineNo">126</span><a id="line.126">            int i2 = weights.get(i);</a>
-<span class="sourceLineNo">127</span><a id="line.127">            int w = Math.max(0, i2 + weight);</a>
-<span class="sourceLineNo">128</span><a id="line.128">            weights.set(i, w);</a>
-<span class="sourceLineNo">129</span><a id="line.129">            total += w - i2;</a>
-<span class="sourceLineNo">130</span><a id="line.130">            normalTotal += w - i2;</a>
-<span class="sourceLineNo">131</span><a id="line.131">        }</a>
-<span class="sourceLineNo">132</span><a id="line.132">        return this;</a>
-<span class="sourceLineNo">133</span><a id="line.133">    }</a>
-<span class="sourceLineNo">134</span><a id="line.134"></a>
-<span class="sourceLineNo">135</span><a id="line.135">    /**</a>
-<span class="sourceLineNo">136</span><a id="line.136">     * Given an OrderedMap of T element keys and Integer weight values, adds all T keys with their corresponding weights</a>
-<span class="sourceLineNo">137</span><a id="line.137">     * into this ProbabilityTable. You may want to use {@link OrderedMap#makeMap(Object, Object, Object...)} to produce</a>
-<span class="sourceLineNo">138</span><a id="line.138">     * the parameter, unless you already have one.</a>
-<span class="sourceLineNo">139</span><a id="line.139">     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item this can retrieve</a>
-<span class="sourceLineNo">140</span><a id="line.140">     *                        and a value will be its weight</a>
-<span class="sourceLineNo">141</span><a id="line.141">     * @return this for chaining</a>
-<span class="sourceLineNo">142</span><a id="line.142">     */</a>
-<span class="sourceLineNo">143</span><a id="line.143">    public ProbabilityTable&lt;T&gt; addAll(OrderedMap&lt;T, Integer&gt; itemsAndWeights)</a>
-<span class="sourceLineNo">144</span><a id="line.144">    {</a>
-<span class="sourceLineNo">145</span><a id="line.145">        if(itemsAndWeights == null) return this;</a>
-<span class="sourceLineNo">146</span><a id="line.146">        int sz = itemsAndWeights.size;</a>
-<span class="sourceLineNo">147</span><a id="line.147">        for (int i = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">148</span><a id="line.148">            add(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));</a>
-<span class="sourceLineNo">149</span><a id="line.149">        }</a>
-<span class="sourceLineNo">150</span><a id="line.150">        return this;</a>
-<span class="sourceLineNo">151</span><a id="line.151">    }</a>
-<span class="sourceLineNo">152</span><a id="line.152"></a>
-<span class="sourceLineNo">153</span><a id="line.153">    /**</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * Removes the possibility of generating the given T item, except by nested ProbabilityTable results.</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * Returns true iff the item was removed.</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * @param item the item to make less likely or impossible</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * @return true if the probability changed or false if nothing changed</a>
-<span class="sourceLineNo">158</span><a id="line.158">     */</a>
-<span class="sourceLineNo">159</span><a id="line.159">    public boolean remove(T item)</a>
-<span class="sourceLineNo">160</span><a id="line.160">    {</a>
-<span class="sourceLineNo">161</span><a id="line.161">        return remove(item, weight(item));</a>
-<span class="sourceLineNo">162</span><a id="line.162">    }</a>
-<span class="sourceLineNo">163</span><a id="line.163"></a>
-<span class="sourceLineNo">164</span><a id="line.164">    /**</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * Reduces the likelihood of generating the given T item by the given weight, which can reduce the chance below 0</a>
-<span class="sourceLineNo">166</span><a id="line.166">     * and thus remove the item entirely. Does not affect nested ProbabilityTables. The value for weight must be greater</a>
-<span class="sourceLineNo">167</span><a id="line.167">     * than 0, otherwise this simply returns false without doing anything. Returns true iff the probabilities changed.</a>
-<span class="sourceLineNo">168</span><a id="line.168">     * @param item the item to make less likely or impossible</a>
-<span class="sourceLineNo">169</span><a id="line.169">     * @param weight how much to reduce the item's weight by, as a positive non-zero int (greater values here subtract</a>
-<span class="sourceLineNo">170</span><a id="line.170">     *               more from the item's weight)</a>
-<span class="sourceLineNo">171</span><a id="line.171">     * @return true if the probability changed or false if nothing changed</a>
-<span class="sourceLineNo">172</span><a id="line.172">     */</a>
-<span class="sourceLineNo">173</span><a id="line.173">    public boolean remove(T item, int weight)</a>
-<span class="sourceLineNo">174</span><a id="line.174">    {</a>
-<span class="sourceLineNo">175</span><a id="line.175">        if(weight &lt;= 0)</a>
-<span class="sourceLineNo">176</span><a id="line.176">            return false;</a>
-<span class="sourceLineNo">177</span><a id="line.177">        int idx = table.getInt(item);</a>
-<span class="sourceLineNo">178</span><a id="line.178">        if(idx &lt; 0)</a>
-<span class="sourceLineNo">179</span><a id="line.179">            return false;</a>
-<span class="sourceLineNo">180</span><a id="line.180">        int o = weights.get(idx);</a>
-<span class="sourceLineNo">181</span><a id="line.181">        weights.incr(idx, -weight);</a>
-<span class="sourceLineNo">182</span><a id="line.182">        int w = weights.get(idx);</a>
-<span class="sourceLineNo">183</span><a id="line.183">        if(w &lt;= 0)</a>
-<span class="sourceLineNo">184</span><a id="line.184">        {</a>
-<span class="sourceLineNo">185</span><a id="line.185">            table.removeAt(idx);</a>
-<span class="sourceLineNo">186</span><a id="line.186">            weights.removeIndex(idx);</a>
-<span class="sourceLineNo">187</span><a id="line.187">        }</a>
-<span class="sourceLineNo">188</span><a id="line.188">        w = Math.min(o, o - w);</a>
-<span class="sourceLineNo">189</span><a id="line.189">        total -= w;</a>
-<span class="sourceLineNo">190</span><a id="line.190">        normalTotal -= w;</a>
-<span class="sourceLineNo">191</span><a id="line.191">        return true;</a>
-<span class="sourceLineNo">192</span><a id="line.192">    }</a>
-<span class="sourceLineNo">193</span><a id="line.193"></a>
-<span class="sourceLineNo">194</span><a id="line.194">    /**</a>
-<span class="sourceLineNo">195</span><a id="line.195">     * Given an Iterable of T item keys to remove, this tries to remove each item in items, though it can't affect items</a>
-<span class="sourceLineNo">196</span><a id="line.196">     * in nested ProbabilityTables, and returns true if any probabilities were changed.</a>
-<span class="sourceLineNo">197</span><a id="line.197">     * @param items an Iterable of T items that will all be removed from the normal (non-nested) items in this</a>
-<span class="sourceLineNo">198</span><a id="line.198">     * @return true if the probabilities changed, or false otherwise</a>
-<span class="sourceLineNo">199</span><a id="line.199">     */</a>
-<span class="sourceLineNo">200</span><a id="line.200">    public boolean removeAll(Iterable&lt;T&gt; items)</a>
-<span class="sourceLineNo">201</span><a id="line.201">    {</a>
-<span class="sourceLineNo">202</span><a id="line.202">        boolean changed = false;</a>
-<span class="sourceLineNo">203</span><a id="line.203">        for(T t : items)</a>
-<span class="sourceLineNo">204</span><a id="line.204">        {</a>
-<span class="sourceLineNo">205</span><a id="line.205">            changed |= remove(t);</a>
-<span class="sourceLineNo">206</span><a id="line.206">        }</a>
-<span class="sourceLineNo">207</span><a id="line.207">        return changed;</a>
-<span class="sourceLineNo">208</span><a id="line.208">    }</a>
-<span class="sourceLineNo">209</span><a id="line.209"></a>
-<span class="sourceLineNo">210</span><a id="line.210">    /**</a>
-<span class="sourceLineNo">211</span><a id="line.211">     * Given an OrderedMap of T item keys and Integer weight values, reduces the weights in this ProbabilityTable for</a>
-<span class="sourceLineNo">212</span><a id="line.212">     * all T keys by their corresponding weights, removing them if the weight becomes 0 or less. You may want to use</a>
-<span class="sourceLineNo">213</span><a id="line.213">     * {@link OrderedMap#makeMap(Object, Object, Object...)} to produce the parameter, unless you already have one.</a>
-<span class="sourceLineNo">214</span><a id="line.214">     * Returns true iff the probabilities changed.</a>
-<span class="sourceLineNo">215</span><a id="line.215">     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item that should be</a>
-<span class="sourceLineNo">216</span><a id="line.216">     *                        reduced in weight or removed and a value will be that item's weight</a>
-<span class="sourceLineNo">217</span><a id="line.217">     * @return true if the probabilities changed or false otherwise</a>
-<span class="sourceLineNo">218</span><a id="line.218">     */</a>
-<span class="sourceLineNo">219</span><a id="line.219">    public boolean removeAll(OrderedMap&lt;T, Integer&gt; itemsAndWeights)</a>
-<span class="sourceLineNo">220</span><a id="line.220">    {</a>
-<span class="sourceLineNo">221</span><a id="line.221">        if(itemsAndWeights == null) return false;</a>
-<span class="sourceLineNo">222</span><a id="line.222">        boolean changed = false;</a>
-<span class="sourceLineNo">223</span><a id="line.223">        int sz = itemsAndWeights.size;</a>
-<span class="sourceLineNo">224</span><a id="line.224">        for (int i = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">225</span><a id="line.225">            changed |= remove(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));</a>
-<span class="sourceLineNo">226</span><a id="line.226">        }</a>
-<span class="sourceLineNo">227</span><a id="line.227">        return changed;</a>
-<span class="sourceLineNo">228</span><a id="line.228">    }</a>
-<span class="sourceLineNo">229</span><a id="line.229"></a>
-<span class="sourceLineNo">230</span><a id="line.230">    /**</a>
-<span class="sourceLineNo">231</span><a id="line.231">     * Adds the given probability table as a possible set of results for this table.</a>
-<span class="sourceLineNo">232</span><a id="line.232">     * The table parameter should not be the same object as this ProbabilityTable, nor should it contain cycles</a>
-<span class="sourceLineNo">233</span><a id="line.233">     * that could reference this object from inside the values of table. This could cause serious issues that would</a>
-<span class="sourceLineNo">234</span><a id="line.234">     * eventually terminate in a StackOverflowError if the cycles randomly repeated for too long. Only the first case</a>
-<span class="sourceLineNo">235</span><a id="line.235">     * is checked for (if the contents of this and table are equivalent, it returns without doing anything; this also</a>
-<span class="sourceLineNo">236</span><a id="line.236">     * happens if table is empty or null).</a>
-<span class="sourceLineNo">237</span><a id="line.237">     *</a>
-<span class="sourceLineNo">238</span><a id="line.238">     * Weight must be greater than 0.</a>
-<span class="sourceLineNo">239</span><a id="line.239">     *</a>
-<span class="sourceLineNo">240</span><a id="line.240">     * @param table the ProbabilityTable to be added; should not be the same as this object (avoid cycles)</a>
-<span class="sourceLineNo">241</span><a id="line.241">     * @param weight the weight to be given to the added table</a>
-<span class="sourceLineNo">242</span><a id="line.242">     * @return this for chaining</a>
-<span class="sourceLineNo">243</span><a id="line.243">     */</a>
-<span class="sourceLineNo">244</span><a id="line.244">    public ProbabilityTable&lt;T&gt; add(ProbabilityTable&lt;T&gt; table, int weight) {</a>
-<span class="sourceLineNo">245</span><a id="line.245">        if(weight &lt;= 0 || table == null || contentEquals(table) || table.total &lt;= 0)</a>
-<span class="sourceLineNo">246</span><a id="line.246">            return this;</a>
-<span class="sourceLineNo">247</span><a id="line.247">        weights.add(Math.max(0, weight));</a>
-<span class="sourceLineNo">248</span><a id="line.248">        extraTable.add(table);</a>
-<span class="sourceLineNo">249</span><a id="line.249">        total += Math.max(0, weight);</a>
-<span class="sourceLineNo">250</span><a id="line.250">        return this;</a>
-<span class="sourceLineNo">251</span><a id="line.251">    }</a>
-<span class="sourceLineNo">252</span><a id="line.252"></a>
-<span class="sourceLineNo">253</span><a id="line.253">    /**</a>
-<span class="sourceLineNo">254</span><a id="line.254">     * Given an OrderedMap of ProbabilityTable keys and Integer weight values, adds all keys as nested tables with their</a>
-<span class="sourceLineNo">255</span><a id="line.255">     * corresponding weights into this ProbabilityTable. All ProbabilityTable keys should have the same T type as this</a>
-<span class="sourceLineNo">256</span><a id="line.256">     * ProbabilityTable. You may want to use {@link OrderedMap#makeMap(Object, Object, Object...)} to produce the</a>
-<span class="sourceLineNo">257</span><a id="line.257">     * parameter, unless you already have one.</a>
-<span class="sourceLineNo">258</span><a id="line.258">     *</a>
-<span class="sourceLineNo">259</span><a id="line.259">     * The same rules apply to this as apply to {@link #add(ProbabilityTable, int)}; that is, no key in itemsAndWeights</a>
-<span class="sourceLineNo">260</span><a id="line.260">     * can be the same object as this ProbabilityTable, nor should any key contain cycles that could reference this</a>
-<span class="sourceLineNo">261</span><a id="line.261">     * object from inside the values of a key. This could cause serious issues that would eventually terminate in a</a>
-<span class="sourceLineNo">262</span><a id="line.262">     * StackOverflowError if the cycles randomly repeated for too long. Only the first case is checked for (if the</a>
-<span class="sourceLineNo">263</span><a id="line.263">     * contents of this and a key are equivalent, it ignores that key; this also</a>
-<span class="sourceLineNo">264</span><a id="line.264">     * happens if a key is empty or null).</a>
-<span class="sourceLineNo">265</span><a id="line.265"></a>
-<span class="sourceLineNo">266</span><a id="line.266">     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item this can retrieve</a>
-<span class="sourceLineNo">267</span><a id="line.267">     *                        and a value will be its weight</a>
-<span class="sourceLineNo">268</span><a id="line.268">     * @return this for chaining</a>
-<span class="sourceLineNo">269</span><a id="line.269">     */</a>
-<span class="sourceLineNo">270</span><a id="line.270">    public ProbabilityTable&lt;T&gt; addAllNested(OrderedMap&lt;ProbabilityTable&lt;T&gt;, Integer&gt; itemsAndWeights)</a>
-<span class="sourceLineNo">271</span><a id="line.271">    {</a>
-<span class="sourceLineNo">272</span><a id="line.272">        if(itemsAndWeights == null) return this;</a>
-<span class="sourceLineNo">273</span><a id="line.273">        int sz = itemsAndWeights.size;</a>
-<span class="sourceLineNo">274</span><a id="line.274">        for (int i = 0; i &lt; sz; i++) {</a>
-<span class="sourceLineNo">275</span><a id="line.275">            add(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));</a>
-<span class="sourceLineNo">276</span><a id="line.276">        }</a>
-<span class="sourceLineNo">277</span><a id="line.277">        return this;</a>
-<span class="sourceLineNo">278</span><a id="line.278">    }</a>
-<span class="sourceLineNo">279</span><a id="line.279"></a>
-<span class="sourceLineNo">280</span><a id="line.280">    /**</a>
-<span class="sourceLineNo">281</span><a id="line.281">     * Returns the weight of the item if the item is in the table. Returns zero</a>
-<span class="sourceLineNo">282</span><a id="line.282">     * if the item is not in the table.</a>
-<span class="sourceLineNo">283</span><a id="line.283">     *</a>
-<span class="sourceLineNo">284</span><a id="line.284">     * @param item the item searched for</a>
-<span class="sourceLineNo">285</span><a id="line.285">     * @return the weight of the item, or zero</a>
-<span class="sourceLineNo">286</span><a id="line.286">     */</a>
-<span class="sourceLineNo">287</span><a id="line.287">    public int weight(T item) {</a>
-<span class="sourceLineNo">288</span><a id="line.288">        int i = table.getInt(item);</a>
-<span class="sourceLineNo">289</span><a id="line.289">        return i &lt; 0 ? 0 : weights.get(i);</a>
-<span class="sourceLineNo">290</span><a id="line.290">    }</a>
-<span class="sourceLineNo">291</span><a id="line.291"></a>
-<span class="sourceLineNo">292</span><a id="line.292">    /**</a>
-<span class="sourceLineNo">293</span><a id="line.293">     * Returns the weight of the extra table if present. Returns zero</a>
-<span class="sourceLineNo">294</span><a id="line.294">     * if the extra table is not present.</a>
-<span class="sourceLineNo">295</span><a id="line.295">     *</a>
-<span class="sourceLineNo">296</span><a id="line.296">     * @param item the extra ProbabilityTable to search for</a>
-<span class="sourceLineNo">297</span><a id="line.297">     * @return the weight of the ProbabilityTable, or zero</a>
-<span class="sourceLineNo">298</span><a id="line.298">     */</a>
-<span class="sourceLineNo">299</span><a id="line.299">    public int weight(ProbabilityTable&lt;T&gt; item) {</a>
-<span class="sourceLineNo">300</span><a id="line.300">        int i = extraTable.indexOf(item);</a>
-<span class="sourceLineNo">301</span><a id="line.301">        return i &lt; 0 ? 0 : weights.get(i + table.size());</a>
-<span class="sourceLineNo">302</span><a id="line.302">    }</a>
-<span class="sourceLineNo">303</span><a id="line.303"></a>
-<span class="sourceLineNo">304</span><a id="line.304">    /**</a>
-<span class="sourceLineNo">305</span><a id="line.305">     * Provides a set of the items in this table, without reference to their</a>
-<span class="sourceLineNo">306</span><a id="line.306">     * weight. Includes nested ProbabilityTable values, but as is the case throughout</a>
-<span class="sourceLineNo">307</span><a id="line.307">     * this class, cyclical references to ProbabilityTable values that reference this</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * table will result in significant issues (such as a {@link StackOverflowError}</a>
-<span class="sourceLineNo">309</span><a id="line.309">     * crashing your program).</a>
-<span class="sourceLineNo">310</span><a id="line.310">     *</a>
-<span class="sourceLineNo">311</span><a id="line.311">     * @return an OrderedSet of all items stored; iteration order should be predictable</a>
-<span class="sourceLineNo">312</span><a id="line.312">     */</a>
-<span class="sourceLineNo">313</span><a id="line.313">    public OrderedSet&lt;T&gt; items() {</a>
-<span class="sourceLineNo">314</span><a id="line.314">        OrderedSet&lt;T&gt; os = table.keysAsOrderedSet();</a>
-<span class="sourceLineNo">315</span><a id="line.315">        for (int i = 0; i &lt; extraTable.size(); i++) {</a>
-<span class="sourceLineNo">316</span><a id="line.316">            os.addAll(extraTable.get(i).items());</a>
-<span class="sourceLineNo">317</span><a id="line.317">        }</a>
-<span class="sourceLineNo">318</span><a id="line.318">        return os;</a>
-<span class="sourceLineNo">319</span><a id="line.319">    }</a>
-<span class="sourceLineNo">320</span><a id="line.320"></a>
-<span class="sourceLineNo">321</span><a id="line.321">    /**</a>
-<span class="sourceLineNo">322</span><a id="line.322">     * Provides a set of the items in this table that are not in nested tables, without</a>
-<span class="sourceLineNo">323</span><a id="line.323">     * reference to their weight. These are the items that are simple to access, hence</a>
-<span class="sourceLineNo">324</span><a id="line.324">     * the name. If you want the items that are in both the top-level and nested tables,</a>
-<span class="sourceLineNo">325</span><a id="line.325">     * you can use {@link #items()}.</a>
-<span class="sourceLineNo">326</span><a id="line.326">     * @return a predictably-ordered set of the items in the top-level table</a>
-<span class="sourceLineNo">327</span><a id="line.327">     */</a>
-<span class="sourceLineNo">328</span><a id="line.328">    public SortedSet&lt;T&gt; simpleItems()</a>
-<span class="sourceLineNo">329</span><a id="line.329">    {</a>
-<span class="sourceLineNo">330</span><a id="line.330">        return table.keySet();</a>
-<span class="sourceLineNo">331</span><a id="line.331">    }</a>
-<span class="sourceLineNo">332</span><a id="line.332"></a>
-<span class="sourceLineNo">333</span><a id="line.333">    /**</a>
-<span class="sourceLineNo">334</span><a id="line.334">     * Provides a set of the nested ProbabilityTable values in this table, without reference</a>
-<span class="sourceLineNo">335</span><a id="line.335">     * to their weight. Does not include normal values (non-table); for that, use items().</a>
-<span class="sourceLineNo">336</span><a id="line.336">     *</a>
-<span class="sourceLineNo">337</span><a id="line.337">     * @return a "sorted" set of all nested tables stored, really sorted in insertion order</a>
-<span class="sourceLineNo">338</span><a id="line.338">     */</a>
-<span class="sourceLineNo">339</span><a id="line.339">    public ArrayList&lt;ProbabilityTable&lt;T&gt;&gt; tables() {</a>
-<span class="sourceLineNo">340</span><a id="line.340">        return extraTable;</a>
-<span class="sourceLineNo">341</span><a id="line.341">    }</a>
-<span class="sourceLineNo">342</span><a id="line.342"></a>
-<span class="sourceLineNo">343</span><a id="line.343">    /**</a>
-<span class="sourceLineNo">344</span><a id="line.344">     * Sets the current random number generator to the given GWTRNG.</a>
-<span class="sourceLineNo">345</span><a id="line.345">     * @param random an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass</a>
-<span class="sourceLineNo">346</span><a id="line.346">     */</a>
-<span class="sourceLineNo">347</span><a id="line.347">    public void setRandom(GWTRNG random)</a>
-<span class="sourceLineNo">348</span><a id="line.348">    {</a>
-<span class="sourceLineNo">349</span><a id="line.349">        if(random != null)</a>
-<span class="sourceLineNo">350</span><a id="line.350">            rng = random;</a>
-<span class="sourceLineNo">351</span><a id="line.351">    }</a>
-<span class="sourceLineNo">352</span><a id="line.352"></a>
-<span class="sourceLineNo">353</span><a id="line.353">    /**</a>
-<span class="sourceLineNo">354</span><a id="line.354">     * Gets the random number generator (a RandomnessSource) this uses.</a>
-<span class="sourceLineNo">355</span><a id="line.355">     * @return the RandomnessSource used by this class, which is always a GWTRNG</a>
-<span class="sourceLineNo">356</span><a id="line.356">     */</a>
-<span class="sourceLineNo">357</span><a id="line.357">    public GWTRNG getRandom()</a>
-<span class="sourceLineNo">358</span><a id="line.358">    {</a>
-<span class="sourceLineNo">359</span><a id="line.359">        return rng;</a>
-<span class="sourceLineNo">360</span><a id="line.360">    }</a>
-<span class="sourceLineNo">361</span><a id="line.361"></a>
-<span class="sourceLineNo">362</span><a id="line.362">    /**</a>
-<span class="sourceLineNo">363</span><a id="line.363">     * Copies this ProbabilityTable so nothing in the copy is shared with the original, except for the T items (which</a>
-<span class="sourceLineNo">364</span><a id="line.364">     * might not be possible to copy). The RNG is also copied.</a>
-<span class="sourceLineNo">365</span><a id="line.365">     * @return a copy of this ProbabilityTable; no references should be shared except for T items</a>
-<span class="sourceLineNo">366</span><a id="line.366">     */</a>
-<span class="sourceLineNo">367</span><a id="line.367">    public ProbabilityTable&lt;T&gt; copy()</a>
-<span class="sourceLineNo">368</span><a id="line.368">    {</a>
-<span class="sourceLineNo">369</span><a id="line.369">        ProbabilityTable&lt;T&gt; n = new ProbabilityTable&lt;&gt;(rng.getState());</a>
-<span class="sourceLineNo">370</span><a id="line.370">        n.weights.addAll(weights);</a>
-<span class="sourceLineNo">371</span><a id="line.371">        n.table.putAll(table);</a>
-<span class="sourceLineNo">372</span><a id="line.372">        for (int i = 0; i &lt; extraTable.size(); i++) {</a>
-<span class="sourceLineNo">373</span><a id="line.373">            n.extraTable.add(extraTable.get(i).copy());</a>
-<span class="sourceLineNo">374</span><a id="line.374">        }</a>
-<span class="sourceLineNo">375</span><a id="line.375">        n.total = total;</a>
-<span class="sourceLineNo">376</span><a id="line.376">        n.normalTotal = normalTotal;</a>
-<span class="sourceLineNo">377</span><a id="line.377">        return n;</a>
-<span class="sourceLineNo">378</span><a id="line.378">    }</a>
-<span class="sourceLineNo">379</span><a id="line.379"></a>
-<span class="sourceLineNo">380</span><a id="line.380">    @Override</a>
-<span class="sourceLineNo">381</span><a id="line.381">    public boolean equals(Object o) {</a>
-<span class="sourceLineNo">382</span><a id="line.382">        if (this == o) return true;</a>
-<span class="sourceLineNo">383</span><a id="line.383">        if (o == null || getClass() != o.getClass()) return false;</a>
-<span class="sourceLineNo">384</span><a id="line.384"></a>
-<span class="sourceLineNo">385</span><a id="line.385">        ProbabilityTable&lt;?&gt; that = (ProbabilityTable&lt;?&gt;) o;</a>
-<span class="sourceLineNo">386</span><a id="line.386"></a>
-<span class="sourceLineNo">387</span><a id="line.387">        if (!table.equals(that.table)) return false;</a>
-<span class="sourceLineNo">388</span><a id="line.388">        if (!extraTable.equals(that.extraTable)) return false;</a>
-<span class="sourceLineNo">389</span><a id="line.389">        return weights.equals(that.weights);</a>
-<span class="sourceLineNo">390</span><a id="line.390">    }</a>
-<span class="sourceLineNo">391</span><a id="line.391"></a>
-<span class="sourceLineNo">392</span><a id="line.392">    /**</a>
-<span class="sourceLineNo">393</span><a id="line.393">     * Can avoid some checks that {@link #equals(Object)} needs because this always takes a ProbabilityTable.</a>
-<span class="sourceLineNo">394</span><a id="line.394">     * @param o another ProbabilityTable</a>
-<span class="sourceLineNo">395</span><a id="line.395">     * @return true if both ProbabilityTables are equivalent in contents and likelihoods, not necessarily random state</a>
-<span class="sourceLineNo">396</span><a id="line.396">     */</a>
-<span class="sourceLineNo">397</span><a id="line.397">    public boolean contentEquals(ProbabilityTable&lt;T&gt; o) {</a>
-<span class="sourceLineNo">398</span><a id="line.398">        if (this == o) return true;</a>
-<span class="sourceLineNo">399</span><a id="line.399">        if (o == null) return false;</a>
-<span class="sourceLineNo">400</span><a id="line.400"></a>
-<span class="sourceLineNo">401</span><a id="line.401">        if (!table.equals(o.table)) return false;</a>
-<span class="sourceLineNo">402</span><a id="line.402">        if (!extraTable.equals(o.extraTable)) return false;</a>
-<span class="sourceLineNo">403</span><a id="line.403">        return weights.equals(o.weights);</a>
-<span class="sourceLineNo">404</span><a id="line.404">    }</a>
-<span class="sourceLineNo">405</span><a id="line.405"></a>
-<span class="sourceLineNo">406</span><a id="line.406">    @Override</a>
-<span class="sourceLineNo">407</span><a id="line.407">    public int hashCode() {</a>
-<span class="sourceLineNo">408</span><a id="line.408">        int result = table.hashCode();</a>
-<span class="sourceLineNo">409</span><a id="line.409">        result = 31 * result + extraTable.hashCode() | 0;</a>
-<span class="sourceLineNo">410</span><a id="line.410">        result = 31 * result + weights.hashHive() | 0;</a>
-<span class="sourceLineNo">411</span><a id="line.411">        return result;</a>
-<span class="sourceLineNo">412</span><a id="line.412">    }</a>
-<span class="sourceLineNo">413</span><a id="line.413">}</a>
+<span class="sourceLineNo">098</span><a id="line.98">        int index = (int) ((total * ((long)rng.next(31))) &gt;&gt;&gt; 31), sz = table.size();</a>
+<span class="sourceLineNo">099</span><a id="line.99">        for (int i = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">100</span><a id="line.100">            index -= weights.get(i);</a>
+<span class="sourceLineNo">101</span><a id="line.101">            if (index &lt; 0)</a>
+<span class="sourceLineNo">102</span><a id="line.102">                return table.keyAt(i);</a>
+<span class="sourceLineNo">103</span><a id="line.103">        }</a>
+<span class="sourceLineNo">104</span><a id="line.104">        for (int i = 0; i &lt; extraTable.size(); i++) {</a>
+<span class="sourceLineNo">105</span><a id="line.105">            index -= weights.get(sz + i);</a>
+<span class="sourceLineNo">106</span><a id="line.106">            if(index &lt; 0)</a>
+<span class="sourceLineNo">107</span><a id="line.107">                return extraTable.get(i).random();</a>
+<span class="sourceLineNo">108</span><a id="line.108">        }</a>
+<span class="sourceLineNo">109</span><a id="line.109">        return null;//something went wrong, shouldn't have been able to get all the way through without finding an item</a>
+<span class="sourceLineNo">110</span><a id="line.110">    }</a>
+<span class="sourceLineNo">111</span><a id="line.111"></a>
+<span class="sourceLineNo">112</span><a id="line.112">    /**</a>
+<span class="sourceLineNo">113</span><a id="line.113">     * Adds the given item to the table.</a>
+<span class="sourceLineNo">114</span><a id="line.114">     *</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * Weight must be greater than 0.</a>
+<span class="sourceLineNo">116</span><a id="line.116">     *</a>
+<span class="sourceLineNo">117</span><a id="line.117">     * @param item the object to be added</a>
+<span class="sourceLineNo">118</span><a id="line.118">     * @param weight the weight to be given to the added object</a>
+<span class="sourceLineNo">119</span><a id="line.119">     * @return this for chaining</a>
+<span class="sourceLineNo">120</span><a id="line.120">     */</a>
+<span class="sourceLineNo">121</span><a id="line.121">    public ProbabilityTable&lt;T&gt; add(T item, int weight) {</a>
+<span class="sourceLineNo">122</span><a id="line.122">        if(weight &lt;= 0)</a>
+<span class="sourceLineNo">123</span><a id="line.123">            return this;</a>
+<span class="sourceLineNo">124</span><a id="line.124">        int i = table.getInt(item);</a>
+<span class="sourceLineNo">125</span><a id="line.125">        if (i &lt; 0) {</a>
+<span class="sourceLineNo">126</span><a id="line.126">            weights.insert(table.size, Math.max(0, weight));</a>
+<span class="sourceLineNo">127</span><a id="line.127">            table.add(item);</a>
+<span class="sourceLineNo">128</span><a id="line.128">            int w = Math.max(0, weight);</a>
+<span class="sourceLineNo">129</span><a id="line.129">            total += w;</a>
+<span class="sourceLineNo">130</span><a id="line.130">            normalTotal += w;</a>
+<span class="sourceLineNo">131</span><a id="line.131">        } else {</a>
+<span class="sourceLineNo">132</span><a id="line.132">            int i2 = weights.get(i);</a>
+<span class="sourceLineNo">133</span><a id="line.133">            int w = Math.max(0, i2 + weight);</a>
+<span class="sourceLineNo">134</span><a id="line.134">            weights.set(i, w);</a>
+<span class="sourceLineNo">135</span><a id="line.135">            total += w - i2;</a>
+<span class="sourceLineNo">136</span><a id="line.136">            normalTotal += w - i2;</a>
+<span class="sourceLineNo">137</span><a id="line.137">        }</a>
+<span class="sourceLineNo">138</span><a id="line.138">        return this;</a>
+<span class="sourceLineNo">139</span><a id="line.139">    }</a>
+<span class="sourceLineNo">140</span><a id="line.140"></a>
+<span class="sourceLineNo">141</span><a id="line.141">    /**</a>
+<span class="sourceLineNo">142</span><a id="line.142">     * Given an OrderedMap of T element keys and Integer weight values, adds all T keys with their corresponding weights</a>
+<span class="sourceLineNo">143</span><a id="line.143">     * into this ProbabilityTable. You may want to use {@link OrderedMap#makeMap(Object, Object, Object...)} to produce</a>
+<span class="sourceLineNo">144</span><a id="line.144">     * the parameter, unless you already have one.</a>
+<span class="sourceLineNo">145</span><a id="line.145">     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item this can retrieve</a>
+<span class="sourceLineNo">146</span><a id="line.146">     *                        and a value will be its weight</a>
+<span class="sourceLineNo">147</span><a id="line.147">     * @return this for chaining</a>
+<span class="sourceLineNo">148</span><a id="line.148">     */</a>
+<span class="sourceLineNo">149</span><a id="line.149">    public ProbabilityTable&lt;T&gt; addAll(OrderedMap&lt;T, Integer&gt; itemsAndWeights)</a>
+<span class="sourceLineNo">150</span><a id="line.150">    {</a>
+<span class="sourceLineNo">151</span><a id="line.151">        if(itemsAndWeights == null) return this;</a>
+<span class="sourceLineNo">152</span><a id="line.152">        int sz = itemsAndWeights.size;</a>
+<span class="sourceLineNo">153</span><a id="line.153">        for (int i = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">154</span><a id="line.154">            add(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));</a>
+<span class="sourceLineNo">155</span><a id="line.155">        }</a>
+<span class="sourceLineNo">156</span><a id="line.156">        return this;</a>
+<span class="sourceLineNo">157</span><a id="line.157">    }</a>
+<span class="sourceLineNo">158</span><a id="line.158"></a>
+<span class="sourceLineNo">159</span><a id="line.159">    /**</a>
+<span class="sourceLineNo">160</span><a id="line.160">     * Removes the possibility of generating the given T item, except by nested ProbabilityTable results.</a>
+<span class="sourceLineNo">161</span><a id="line.161">     * Returns true iff the item was removed.</a>
+<span class="sourceLineNo">162</span><a id="line.162">     * @param item the item to make less likely or impossible</a>
+<span class="sourceLineNo">163</span><a id="line.163">     * @return true if the probability changed or false if nothing changed</a>
+<span class="sourceLineNo">164</span><a id="line.164">     */</a>
+<span class="sourceLineNo">165</span><a id="line.165">    public boolean remove(T item)</a>
+<span class="sourceLineNo">166</span><a id="line.166">    {</a>
+<span class="sourceLineNo">167</span><a id="line.167">        return remove(item, weight(item));</a>
+<span class="sourceLineNo">168</span><a id="line.168">    }</a>
+<span class="sourceLineNo">169</span><a id="line.169"></a>
+<span class="sourceLineNo">170</span><a id="line.170">    /**</a>
+<span class="sourceLineNo">171</span><a id="line.171">     * Reduces the likelihood of generating the given T item by the given weight, which can reduce the chance below 0</a>
+<span class="sourceLineNo">172</span><a id="line.172">     * and thus remove the item entirely. Does not affect nested ProbabilityTables. The value for weight must be greater</a>
+<span class="sourceLineNo">173</span><a id="line.173">     * than 0, otherwise this simply returns false without doing anything. Returns true iff the probabilities changed.</a>
+<span class="sourceLineNo">174</span><a id="line.174">     * @param item the item to make less likely or impossible</a>
+<span class="sourceLineNo">175</span><a id="line.175">     * @param weight how much to reduce the item's weight by, as a positive non-zero int (greater values here subtract</a>
+<span class="sourceLineNo">176</span><a id="line.176">     *               more from the item's weight)</a>
+<span class="sourceLineNo">177</span><a id="line.177">     * @return true if the probability changed or false if nothing changed</a>
+<span class="sourceLineNo">178</span><a id="line.178">     */</a>
+<span class="sourceLineNo">179</span><a id="line.179">    public boolean remove(T item, int weight)</a>
+<span class="sourceLineNo">180</span><a id="line.180">    {</a>
+<span class="sourceLineNo">181</span><a id="line.181">        if(weight &lt;= 0)</a>
+<span class="sourceLineNo">182</span><a id="line.182">            return false;</a>
+<span class="sourceLineNo">183</span><a id="line.183">        int idx = table.getInt(item);</a>
+<span class="sourceLineNo">184</span><a id="line.184">        if(idx &lt; 0)</a>
+<span class="sourceLineNo">185</span><a id="line.185">            return false;</a>
+<span class="sourceLineNo">186</span><a id="line.186">        int o = weights.get(idx);</a>
+<span class="sourceLineNo">187</span><a id="line.187">        weights.incr(idx, -weight);</a>
+<span class="sourceLineNo">188</span><a id="line.188">        int w = weights.get(idx);</a>
+<span class="sourceLineNo">189</span><a id="line.189">        if(w &lt;= 0)</a>
+<span class="sourceLineNo">190</span><a id="line.190">        {</a>
+<span class="sourceLineNo">191</span><a id="line.191">            table.removeAt(idx);</a>
+<span class="sourceLineNo">192</span><a id="line.192">            weights.removeIndex(idx);</a>
+<span class="sourceLineNo">193</span><a id="line.193">        }</a>
+<span class="sourceLineNo">194</span><a id="line.194">        w = Math.min(o, o - w);</a>
+<span class="sourceLineNo">195</span><a id="line.195">        total -= w;</a>
+<span class="sourceLineNo">196</span><a id="line.196">        normalTotal -= w;</a>
+<span class="sourceLineNo">197</span><a id="line.197">        return true;</a>
+<span class="sourceLineNo">198</span><a id="line.198">    }</a>
+<span class="sourceLineNo">199</span><a id="line.199"></a>
+<span class="sourceLineNo">200</span><a id="line.200">    /**</a>
+<span class="sourceLineNo">201</span><a id="line.201">     * Given an Iterable of T item keys to remove, this tries to remove each item in items, though it can't affect items</a>
+<span class="sourceLineNo">202</span><a id="line.202">     * in nested ProbabilityTables, and returns true if any probabilities were changed.</a>
+<span class="sourceLineNo">203</span><a id="line.203">     * @param items an Iterable of T items that will all be removed from the normal (non-nested) items in this</a>
+<span class="sourceLineNo">204</span><a id="line.204">     * @return true if the probabilities changed, or false otherwise</a>
+<span class="sourceLineNo">205</span><a id="line.205">     */</a>
+<span class="sourceLineNo">206</span><a id="line.206">    public boolean removeAll(Iterable&lt;T&gt; items)</a>
+<span class="sourceLineNo">207</span><a id="line.207">    {</a>
+<span class="sourceLineNo">208</span><a id="line.208">        boolean changed = false;</a>
+<span class="sourceLineNo">209</span><a id="line.209">        for(T t : items)</a>
+<span class="sourceLineNo">210</span><a id="line.210">        {</a>
+<span class="sourceLineNo">211</span><a id="line.211">            changed |= remove(t);</a>
+<span class="sourceLineNo">212</span><a id="line.212">        }</a>
+<span class="sourceLineNo">213</span><a id="line.213">        return changed;</a>
+<span class="sourceLineNo">214</span><a id="line.214">    }</a>
+<span class="sourceLineNo">215</span><a id="line.215"></a>
+<span class="sourceLineNo">216</span><a id="line.216">    /**</a>
+<span class="sourceLineNo">217</span><a id="line.217">     * Given an OrderedMap of T item keys and Integer weight values, reduces the weights in this ProbabilityTable for</a>
+<span class="sourceLineNo">218</span><a id="line.218">     * all T keys by their corresponding weights, removing them if the weight becomes 0 or less. You may want to use</a>
+<span class="sourceLineNo">219</span><a id="line.219">     * {@link OrderedMap#makeMap(Object, Object, Object...)} to produce the parameter, unless you already have one.</a>
+<span class="sourceLineNo">220</span><a id="line.220">     * Returns true iff the probabilities changed.</a>
+<span class="sourceLineNo">221</span><a id="line.221">     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item that should be</a>
+<span class="sourceLineNo">222</span><a id="line.222">     *                        reduced in weight or removed and a value will be that item's weight</a>
+<span class="sourceLineNo">223</span><a id="line.223">     * @return true if the probabilities changed or false otherwise</a>
+<span class="sourceLineNo">224</span><a id="line.224">     */</a>
+<span class="sourceLineNo">225</span><a id="line.225">    public boolean removeAll(OrderedMap&lt;T, Integer&gt; itemsAndWeights)</a>
+<span class="sourceLineNo">226</span><a id="line.226">    {</a>
+<span class="sourceLineNo">227</span><a id="line.227">        if(itemsAndWeights == null) return false;</a>
+<span class="sourceLineNo">228</span><a id="line.228">        boolean changed = false;</a>
+<span class="sourceLineNo">229</span><a id="line.229">        int sz = itemsAndWeights.size;</a>
+<span class="sourceLineNo">230</span><a id="line.230">        for (int i = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">231</span><a id="line.231">            changed |= remove(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));</a>
+<span class="sourceLineNo">232</span><a id="line.232">        }</a>
+<span class="sourceLineNo">233</span><a id="line.233">        return changed;</a>
+<span class="sourceLineNo">234</span><a id="line.234">    }</a>
+<span class="sourceLineNo">235</span><a id="line.235"></a>
+<span class="sourceLineNo">236</span><a id="line.236">    /**</a>
+<span class="sourceLineNo">237</span><a id="line.237">     * Adds the given probability table as a possible set of results for this table.</a>
+<span class="sourceLineNo">238</span><a id="line.238">     * The table parameter should not be the same object as this ProbabilityTable, nor should it contain cycles</a>
+<span class="sourceLineNo">239</span><a id="line.239">     * that could reference this object from inside the values of table. This could cause serious issues that would</a>
+<span class="sourceLineNo">240</span><a id="line.240">     * eventually terminate in a StackOverflowError if the cycles randomly repeated for too long. Only the first case</a>
+<span class="sourceLineNo">241</span><a id="line.241">     * is checked for (if the contents of this and table are equivalent, it returns without doing anything; this also</a>
+<span class="sourceLineNo">242</span><a id="line.242">     * happens if table is empty or null).</a>
+<span class="sourceLineNo">243</span><a id="line.243">     *</a>
+<span class="sourceLineNo">244</span><a id="line.244">     * Weight must be greater than 0.</a>
+<span class="sourceLineNo">245</span><a id="line.245">     *</a>
+<span class="sourceLineNo">246</span><a id="line.246">     * @param table the ProbabilityTable to be added; should not be the same as this object (avoid cycles)</a>
+<span class="sourceLineNo">247</span><a id="line.247">     * @param weight the weight to be given to the added table</a>
+<span class="sourceLineNo">248</span><a id="line.248">     * @return this for chaining</a>
+<span class="sourceLineNo">249</span><a id="line.249">     */</a>
+<span class="sourceLineNo">250</span><a id="line.250">    public ProbabilityTable&lt;T&gt; add(ProbabilityTable&lt;T&gt; table, int weight) {</a>
+<span class="sourceLineNo">251</span><a id="line.251">        if(weight &lt;= 0 || table == null || contentEquals(table) || table.total &lt;= 0)</a>
+<span class="sourceLineNo">252</span><a id="line.252">            return this;</a>
+<span class="sourceLineNo">253</span><a id="line.253">        weights.add(Math.max(0, weight));</a>
+<span class="sourceLineNo">254</span><a id="line.254">        extraTable.add(table);</a>
+<span class="sourceLineNo">255</span><a id="line.255">        total += Math.max(0, weight);</a>
+<span class="sourceLineNo">256</span><a id="line.256">        return this;</a>
+<span class="sourceLineNo">257</span><a id="line.257">    }</a>
+<span class="sourceLineNo">258</span><a id="line.258"></a>
+<span class="sourceLineNo">259</span><a id="line.259">    /**</a>
+<span class="sourceLineNo">260</span><a id="line.260">     * Given an OrderedMap of ProbabilityTable keys and Integer weight values, adds all keys as nested tables with their</a>
+<span class="sourceLineNo">261</span><a id="line.261">     * corresponding weights into this ProbabilityTable. All ProbabilityTable keys should have the same T type as this</a>
+<span class="sourceLineNo">262</span><a id="line.262">     * ProbabilityTable. You may want to use {@link OrderedMap#makeMap(Object, Object, Object...)} to produce the</a>
+<span class="sourceLineNo">263</span><a id="line.263">     * parameter, unless you already have one.</a>
+<span class="sourceLineNo">264</span><a id="line.264">     *</a>
+<span class="sourceLineNo">265</span><a id="line.265">     * The same rules apply to this as apply to {@link #add(ProbabilityTable, int)}; that is, no key in itemsAndWeights</a>
+<span class="sourceLineNo">266</span><a id="line.266">     * can be the same object as this ProbabilityTable, nor should any key contain cycles that could reference this</a>
+<span class="sourceLineNo">267</span><a id="line.267">     * object from inside the values of a key. This could cause serious issues that would eventually terminate in a</a>
+<span class="sourceLineNo">268</span><a id="line.268">     * StackOverflowError if the cycles randomly repeated for too long. Only the first case is checked for (if the</a>
+<span class="sourceLineNo">269</span><a id="line.269">     * contents of this and a key are equivalent, it ignores that key; this also</a>
+<span class="sourceLineNo">270</span><a id="line.270">     * happens if a key is empty or null).</a>
+<span class="sourceLineNo">271</span><a id="line.271"></a>
+<span class="sourceLineNo">272</span><a id="line.272">     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item this can retrieve</a>
+<span class="sourceLineNo">273</span><a id="line.273">     *                        and a value will be its weight</a>
+<span class="sourceLineNo">274</span><a id="line.274">     * @return this for chaining</a>
+<span class="sourceLineNo">275</span><a id="line.275">     */</a>
+<span class="sourceLineNo">276</span><a id="line.276">    public ProbabilityTable&lt;T&gt; addAllNested(OrderedMap&lt;ProbabilityTable&lt;T&gt;, Integer&gt; itemsAndWeights)</a>
+<span class="sourceLineNo">277</span><a id="line.277">    {</a>
+<span class="sourceLineNo">278</span><a id="line.278">        if(itemsAndWeights == null) return this;</a>
+<span class="sourceLineNo">279</span><a id="line.279">        int sz = itemsAndWeights.size;</a>
+<span class="sourceLineNo">280</span><a id="line.280">        for (int i = 0; i &lt; sz; i++) {</a>
+<span class="sourceLineNo">281</span><a id="line.281">            add(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));</a>
+<span class="sourceLineNo">282</span><a id="line.282">        }</a>
+<span class="sourceLineNo">283</span><a id="line.283">        return this;</a>
+<span class="sourceLineNo">284</span><a id="line.284">    }</a>
+<span class="sourceLineNo">285</span><a id="line.285"></a>
+<span class="sourceLineNo">286</span><a id="line.286">    /**</a>
+<span class="sourceLineNo">287</span><a id="line.287">     * Returns the weight of the item if the item is in the table. Returns zero</a>
+<span class="sourceLineNo">288</span><a id="line.288">     * if the item is not in the table.</a>
+<span class="sourceLineNo">289</span><a id="line.289">     *</a>
+<span class="sourceLineNo">290</span><a id="line.290">     * @param item the item searched for</a>
+<span class="sourceLineNo">291</span><a id="line.291">     * @return the weight of the item, or zero</a>
+<span class="sourceLineNo">292</span><a id="line.292">     */</a>
+<span class="sourceLineNo">293</span><a id="line.293">    public int weight(T item) {</a>
+<span class="sourceLineNo">294</span><a id="line.294">        int i = table.getInt(item);</a>
+<span class="sourceLineNo">295</span><a id="line.295">        return i &lt; 0 ? 0 : weights.get(i);</a>
+<span class="sourceLineNo">296</span><a id="line.296">    }</a>
+<span class="sourceLineNo">297</span><a id="line.297"></a>
+<span class="sourceLineNo">298</span><a id="line.298">    /**</a>
+<span class="sourceLineNo">299</span><a id="line.299">     * Returns the weight of the extra table if present. Returns zero</a>
+<span class="sourceLineNo">300</span><a id="line.300">     * if the extra table is not present.</a>
+<span class="sourceLineNo">301</span><a id="line.301">     *</a>
+<span class="sourceLineNo">302</span><a id="line.302">     * @param item the extra ProbabilityTable to search for</a>
+<span class="sourceLineNo">303</span><a id="line.303">     * @return the weight of the ProbabilityTable, or zero</a>
+<span class="sourceLineNo">304</span><a id="line.304">     */</a>
+<span class="sourceLineNo">305</span><a id="line.305">    public int weight(ProbabilityTable&lt;T&gt; item) {</a>
+<span class="sourceLineNo">306</span><a id="line.306">        int i = extraTable.indexOf(item);</a>
+<span class="sourceLineNo">307</span><a id="line.307">        return i &lt; 0 ? 0 : weights.get(i + table.size());</a>
+<span class="sourceLineNo">308</span><a id="line.308">    }</a>
+<span class="sourceLineNo">309</span><a id="line.309"></a>
+<span class="sourceLineNo">310</span><a id="line.310">    /**</a>
+<span class="sourceLineNo">311</span><a id="line.311">     * Provides a set of the items in this table, without reference to their</a>
+<span class="sourceLineNo">312</span><a id="line.312">     * weight. Includes nested ProbabilityTable values, but as is the case throughout</a>
+<span class="sourceLineNo">313</span><a id="line.313">     * this class, cyclical references to ProbabilityTable values that reference this</a>
+<span class="sourceLineNo">314</span><a id="line.314">     * table will result in significant issues (such as a {@link StackOverflowError}</a>
+<span class="sourceLineNo">315</span><a id="line.315">     * crashing your program).</a>
+<span class="sourceLineNo">316</span><a id="line.316">     *</a>
+<span class="sourceLineNo">317</span><a id="line.317">     * @return an OrderedSet of all items stored; iteration order should be predictable</a>
+<span class="sourceLineNo">318</span><a id="line.318">     */</a>
+<span class="sourceLineNo">319</span><a id="line.319">    public OrderedSet&lt;T&gt; items() {</a>
+<span class="sourceLineNo">320</span><a id="line.320">        OrderedSet&lt;T&gt; os = table.keysAsOrderedSet();</a>
+<span class="sourceLineNo">321</span><a id="line.321">        for (int i = 0; i &lt; extraTable.size(); i++) {</a>
+<span class="sourceLineNo">322</span><a id="line.322">            os.addAll(extraTable.get(i).items());</a>
+<span class="sourceLineNo">323</span><a id="line.323">        }</a>
+<span class="sourceLineNo">324</span><a id="line.324">        return os;</a>
+<span class="sourceLineNo">325</span><a id="line.325">    }</a>
+<span class="sourceLineNo">326</span><a id="line.326"></a>
+<span class="sourceLineNo">327</span><a id="line.327">    /**</a>
+<span class="sourceLineNo">328</span><a id="line.328">     * Provides a set of the items in this table that are not in nested tables, without</a>
+<span class="sourceLineNo">329</span><a id="line.329">     * reference to their weight. These are the items that are simple to access, hence</a>
+<span class="sourceLineNo">330</span><a id="line.330">     * the name. If you want the items that are in both the top-level and nested tables,</a>
+<span class="sourceLineNo">331</span><a id="line.331">     * you can use {@link #items()}.</a>
+<span class="sourceLineNo">332</span><a id="line.332">     * @return a predictably-ordered set of the items in the top-level table</a>
+<span class="sourceLineNo">333</span><a id="line.333">     */</a>
+<span class="sourceLineNo">334</span><a id="line.334">    public SortedSet&lt;T&gt; simpleItems()</a>
+<span class="sourceLineNo">335</span><a id="line.335">    {</a>
+<span class="sourceLineNo">336</span><a id="line.336">        return table.keySet();</a>
+<span class="sourceLineNo">337</span><a id="line.337">    }</a>
+<span class="sourceLineNo">338</span><a id="line.338"></a>
+<span class="sourceLineNo">339</span><a id="line.339">    /**</a>
+<span class="sourceLineNo">340</span><a id="line.340">     * Provides a set of the nested ProbabilityTable values in this table, without reference</a>
+<span class="sourceLineNo">341</span><a id="line.341">     * to their weight. Does not include normal values (non-table); for that, use items().</a>
+<span class="sourceLineNo">342</span><a id="line.342">     *</a>
+<span class="sourceLineNo">343</span><a id="line.343">     * @return a "sorted" set of all nested tables stored, really sorted in insertion order</a>
+<span class="sourceLineNo">344</span><a id="line.344">     */</a>
+<span class="sourceLineNo">345</span><a id="line.345">    public ArrayList&lt;ProbabilityTable&lt;T&gt;&gt; tables() {</a>
+<span class="sourceLineNo">346</span><a id="line.346">        return extraTable;</a>
+<span class="sourceLineNo">347</span><a id="line.347">    }</a>
+<span class="sourceLineNo">348</span><a id="line.348"></a>
+<span class="sourceLineNo">349</span><a id="line.349">    /**</a>
+<span class="sourceLineNo">350</span><a id="line.350">     * Sets the current random number generator to the given GWTRNG.</a>
+<span class="sourceLineNo">351</span><a id="line.351">     * @param random an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass</a>
+<span class="sourceLineNo">352</span><a id="line.352">     */</a>
+<span class="sourceLineNo">353</span><a id="line.353">    public void setRandom(GWTRNG random)</a>
+<span class="sourceLineNo">354</span><a id="line.354">    {</a>
+<span class="sourceLineNo">355</span><a id="line.355">        if(random != null)</a>
+<span class="sourceLineNo">356</span><a id="line.356">            rng = random;</a>
+<span class="sourceLineNo">357</span><a id="line.357">    }</a>
+<span class="sourceLineNo">358</span><a id="line.358"></a>
+<span class="sourceLineNo">359</span><a id="line.359">    /**</a>
+<span class="sourceLineNo">360</span><a id="line.360">     * Gets the random number generator (a RandomnessSource) this uses.</a>
+<span class="sourceLineNo">361</span><a id="line.361">     * @return the RandomnessSource used by this class, which is always a GWTRNG</a>
+<span class="sourceLineNo">362</span><a id="line.362">     */</a>
+<span class="sourceLineNo">363</span><a id="line.363">    public GWTRNG getRandom()</a>
+<span class="sourceLineNo">364</span><a id="line.364">    {</a>
+<span class="sourceLineNo">365</span><a id="line.365">        return rng;</a>
+<span class="sourceLineNo">366</span><a id="line.366">    }</a>
+<span class="sourceLineNo">367</span><a id="line.367"></a>
+<span class="sourceLineNo">368</span><a id="line.368">    /**</a>
+<span class="sourceLineNo">369</span><a id="line.369">     * Copies this ProbabilityTable so nothing in the copy is shared with the original, except for the T items (which</a>
+<span class="sourceLineNo">370</span><a id="line.370">     * might not be possible to copy). The RNG is also copied.</a>
+<span class="sourceLineNo">371</span><a id="line.371">     * @return a copy of this ProbabilityTable; no references should be shared except for T items</a>
+<span class="sourceLineNo">372</span><a id="line.372">     */</a>
+<span class="sourceLineNo">373</span><a id="line.373">    public ProbabilityTable&lt;T&gt; copy()</a>
+<span class="sourceLineNo">374</span><a id="line.374">    {</a>
+<span class="sourceLineNo">375</span><a id="line.375">        ProbabilityTable&lt;T&gt; n = new ProbabilityTable&lt;&gt;(rng.getState());</a>
+<span class="sourceLineNo">376</span><a id="line.376">        n.weights.addAll(weights);</a>
+<span class="sourceLineNo">377</span><a id="line.377">        n.table.putAll(table);</a>
+<span class="sourceLineNo">378</span><a id="line.378">        for (int i = 0; i &lt; extraTable.size(); i++) {</a>
+<span class="sourceLineNo">379</span><a id="line.379">            n.extraTable.add(extraTable.get(i).copy());</a>
+<span class="sourceLineNo">380</span><a id="line.380">        }</a>
+<span class="sourceLineNo">381</span><a id="line.381">        n.total = total;</a>
+<span class="sourceLineNo">382</span><a id="line.382">        n.normalTotal = normalTotal;</a>
+<span class="sourceLineNo">383</span><a id="line.383">        return n;</a>
+<span class="sourceLineNo">384</span><a id="line.384">    }</a>
+<span class="sourceLineNo">385</span><a id="line.385"></a>
+<span class="sourceLineNo">386</span><a id="line.386">    @Override</a>
+<span class="sourceLineNo">387</span><a id="line.387">    public boolean equals(Object o) {</a>
+<span class="sourceLineNo">388</span><a id="line.388">        if (this == o) return true;</a>
+<span class="sourceLineNo">389</span><a id="line.389">        if (o == null || getClass() != o.getClass()) return false;</a>
+<span class="sourceLineNo">390</span><a id="line.390"></a>
+<span class="sourceLineNo">391</span><a id="line.391">        ProbabilityTable&lt;?&gt; that = (ProbabilityTable&lt;?&gt;) o;</a>
+<span class="sourceLineNo">392</span><a id="line.392"></a>
+<span class="sourceLineNo">393</span><a id="line.393">        if (!table.equals(that.table)) return false;</a>
+<span class="sourceLineNo">394</span><a id="line.394">        if (!extraTable.equals(that.extraTable)) return false;</a>
+<span class="sourceLineNo">395</span><a id="line.395">        return weights.equals(that.weights);</a>
+<span class="sourceLineNo">396</span><a id="line.396">    }</a>
+<span class="sourceLineNo">397</span><a id="line.397"></a>
+<span class="sourceLineNo">398</span><a id="line.398">    /**</a>
+<span class="sourceLineNo">399</span><a id="line.399">     * Can avoid some checks that {@link #equals(Object)} needs because this always takes a ProbabilityTable.</a>
+<span class="sourceLineNo">400</span><a id="line.400">     * @param o another ProbabilityTable</a>
+<span class="sourceLineNo">401</span><a id="line.401">     * @return true if both ProbabilityTables are equivalent in contents and likelihoods, not necessarily random state</a>
+<span class="sourceLineNo">402</span><a id="line.402">     */</a>
+<span class="sourceLineNo">403</span><a id="line.403">    public boolean contentEquals(ProbabilityTable&lt;T&gt; o) {</a>
+<span class="sourceLineNo">404</span><a id="line.404">        if (this == o) return true;</a>
+<span class="sourceLineNo">405</span><a id="line.405">        if (o == null) return false;</a>
+<span class="sourceLineNo">406</span><a id="line.406"></a>
+<span class="sourceLineNo">407</span><a id="line.407">        if (!table.equals(o.table)) return false;</a>
+<span class="sourceLineNo">408</span><a id="line.408">        if (!extraTable.equals(o.extraTable)) return false;</a>
+<span class="sourceLineNo">409</span><a id="line.409">        return weights.equals(o.weights);</a>
+<span class="sourceLineNo">410</span><a id="line.410">    }</a>
+<span class="sourceLineNo">411</span><a id="line.411"></a>
+<span class="sourceLineNo">412</span><a id="line.412">    @Override</a>
+<span class="sourceLineNo">413</span><a id="line.413">    public int hashCode() {</a>
+<span class="sourceLineNo">414</span><a id="line.414">        int result = table.hashCode();</a>
+<span class="sourceLineNo">415</span><a id="line.415">        result = 31 * result + extraTable.hashCode() | 0;</a>
+<span class="sourceLineNo">416</span><a id="line.416">        result = 31 * result + weights.hashHive() | 0;</a>
+<span class="sourceLineNo">417</span><a id="line.417">        return result;</a>
+<span class="sourceLineNo">418</span><a id="line.418">    }</a>
+<span class="sourceLineNo">419</span><a id="line.419">}</a>
 
 
 

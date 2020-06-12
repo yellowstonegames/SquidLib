@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -67,20 +67,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class Voronoi.Polygon" class="title">Class Voronoi.Polygon</h1>
@@ -99,7 +94,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="Voronoi.html" title="class in squidpony.squidmath">Voronoi</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/Voronoi.html#line.555">Voronoi.Polygon</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/Voronoi.html#line.552">Voronoi.Polygon</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <dl>
@@ -193,13 +188,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="centroid">centroid</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.Polygon.html#line.557">centroid</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.Polygon.html#line.554">centroid</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="vertices">vertices</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.Polygon.html#line.558">vertices</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.Polygon.html#line.555">vertices</a></span></div>
 </section>
 </li>
 </ul>
@@ -215,7 +210,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.CoordDouble...)">Polygon</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.Polygon.html#line.560">Polygon</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>...&nbsp;vertices)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Voronoi.Polygon.html#line.557">Polygon</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>...&nbsp;vertices)</span></div>
 </section>
 </li>
 </ul>
@@ -224,8 +219,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -271,5 +266,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

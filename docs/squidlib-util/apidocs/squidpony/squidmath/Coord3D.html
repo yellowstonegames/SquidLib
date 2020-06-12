@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class Coord3D" class="title">Class Coord3D</h1>
@@ -220,8 +215,8 @@ int&nbsp;z)</code></th>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
- generate, but instead uses a highly-specific technique based on Cantor's pairing function, xorshifts,
- xor-rotate-xor-rotate, and an XLCG step at the end.</div>
+ generate, but instead uses a highly-specific technique based on the Rosenberg-Strong pairing function, a Gray
+ code, and two XLCG steps at the end.</div>
 </td>
 </tr>
 <tr class="altColor" id="i4">
@@ -259,7 +254,7 @@ int&nbsp;z)</code></th>
 <h3>Methods inherited from class&nbsp;squidpony.squidmath.<a href="Coord.html" title="class in squidpony.squidmath">Coord</a></h3>
 <a id="methods.inherited.from.class.squidpony.squidmath.Coord">
 <!--   -->
-</a><code><a href="Coord.html#add(double)">add</a>, <a href="Coord.html#add(int)">add</a>, <a href="Coord.html#add(squidpony.squidmath.Coord)">add</a>, <a href="Coord.html#average(squidpony.squidmath.Coord)">average</a>, <a href="Coord.html#cantorHashCode(int,int)">cantorHashCode</a>, <a href="Coord.html#decode(int)">decode</a>, <a href="Coord.html#degrees(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">degrees</a>, <a href="Coord.html#distance(double,double)">distance</a>, <a href="Coord.html#distance(squidpony.squidmath.Coord)">distance</a>, <a href="Coord.html#distanceSq(double,double)">distanceSq</a>, <a href="Coord.html#distanceSq(squidpony.squidmath.Coord)">distanceSq</a>, <a href="Coord.html#divide(double)">divide</a>, <a href="Coord.html#divide(int)">divide</a>, <a href="Coord.html#divide(squidpony.squidmath.Coord)">divide</a>, <a href="Coord.html#divideRounding(double)">divideRounding</a>, <a href="Coord.html#encode()">encode</a>, <a href="Coord.html#expandPool(int,int)">expandPool</a>, <a href="Coord.html#expandPoolTo(int,int)">expandPoolTo</a>, <a href="Coord.html#get(int,int)">get</a>, <a href="Coord.html#getCacheHeight()">getCacheHeight</a>, <a href="Coord.html#getCacheWidth()">getCacheWidth</a>, <a href="Coord.html#getLocation()">getLocation</a>, <a href="Coord.html#getX()">getX</a>, <a href="Coord.html#getY()">getY</a>, <a href="Coord.html#interpolate(squidpony.squidmath.Coord,float)">interpolate</a>, <a href="Coord.html#isAdjacent(squidpony.squidmath.Coord)">isAdjacent</a>, <a href="Coord.html#isWithin(int,int)">isWithin</a>, <a href="Coord.html#isWithinRectangle(int,int,int,int)">isWithinRectangle</a>, <a href="Coord.html#makeEven()">makeEven</a>, <a href="Coord.html#makeOdd()">makeOdd</a>, <a href="Coord.html#multiply(double)">multiply</a>, <a href="Coord.html#multiply(int)">multiply</a>, <a href="Coord.html#multiply(squidpony.squidmath.Coord)">multiply</a>, <a href="Coord.html#pureEncode(int,int)">pureEncode</a>, <a href="Coord.html#scale(int)">scale</a>, <a href="Coord.html#scale(int,int)">scale</a>, <a href="Coord.html#setX(int)">setX</a>, <a href="Coord.html#setY(int)">setY</a>, <a href="Coord.html#subtract(double)">subtract</a>, <a href="Coord.html#subtract(int)">subtract</a>, <a href="Coord.html#subtract(squidpony.squidmath.Coord)">subtract</a>, <a href="Coord.html#toGoTo(squidpony.squidmath.Coord)">toGoTo</a>, <a href="Coord.html#translate(int,int)">translate</a>, <a href="Coord.html#translate(squidpony.squidgrid.Direction)">translate</a>, <a href="Coord.html#translateCapped(int,int,int,int)">translateCapped</a>, <a href="Coord.html#xoroHashCode(int,int)">xoroHashCode</a></code></div>
+</a><code><a href="Coord.html#add(double)">add</a>, <a href="Coord.html#add(int)">add</a>, <a href="Coord.html#add(squidpony.squidmath.Coord)">add</a>, <a href="Coord.html#average(squidpony.squidmath.Coord)">average</a>, <a href="Coord.html#cantorHashCode(int,int)">cantorHashCode</a>, <a href="Coord.html#decode(int)">decode</a>, <a href="Coord.html#degrees(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">degrees</a>, <a href="Coord.html#distance(double,double)">distance</a>, <a href="Coord.html#distance(squidpony.squidmath.Coord)">distance</a>, <a href="Coord.html#distanceSq(double,double)">distanceSq</a>, <a href="Coord.html#distanceSq(squidpony.squidmath.Coord)">distanceSq</a>, <a href="Coord.html#divide(double)">divide</a>, <a href="Coord.html#divide(int)">divide</a>, <a href="Coord.html#divide(squidpony.squidmath.Coord)">divide</a>, <a href="Coord.html#divideRounding(double)">divideRounding</a>, <a href="Coord.html#encode()">encode</a>, <a href="Coord.html#expandPool(int,int)">expandPool</a>, <a href="Coord.html#expandPoolTo(int,int)">expandPoolTo</a>, <a href="Coord.html#get(int,int)">get</a>, <a href="Coord.html#getCacheHeight()">getCacheHeight</a>, <a href="Coord.html#getCacheWidth()">getCacheWidth</a>, <a href="Coord.html#getLocation()">getLocation</a>, <a href="Coord.html#getX()">getX</a>, <a href="Coord.html#getY()">getY</a>, <a href="Coord.html#interpolate(squidpony.squidmath.Coord,float)">interpolate</a>, <a href="Coord.html#isAdjacent(squidpony.squidmath.Coord)">isAdjacent</a>, <a href="Coord.html#isWithin(int,int)">isWithin</a>, <a href="Coord.html#isWithinRectangle(int,int,int,int)">isWithinRectangle</a>, <a href="Coord.html#makeEven()">makeEven</a>, <a href="Coord.html#makeOdd()">makeOdd</a>, <a href="Coord.html#multiply(double)">multiply</a>, <a href="Coord.html#multiply(int)">multiply</a>, <a href="Coord.html#multiply(squidpony.squidmath.Coord)">multiply</a>, <a href="Coord.html#pureEncode(int,int)">pureEncode</a>, <a href="Coord.html#rosenbergStrongHashCode(int,int)">rosenbergStrongHashCode</a>, <a href="Coord.html#scale(int)">scale</a>, <a href="Coord.html#scale(int,int)">scale</a>, <a href="Coord.html#setX(int)">setX</a>, <a href="Coord.html#setY(int)">setY</a>, <a href="Coord.html#subtract(double)">subtract</a>, <a href="Coord.html#subtract(int)">subtract</a>, <a href="Coord.html#subtract(squidpony.squidmath.Coord)">subtract</a>, <a href="Coord.html#toGoTo(squidpony.squidmath.Coord)">toGoTo</a>, <a href="Coord.html#translate(int,int)">translate</a>, <a href="Coord.html#translate(squidpony.squidgrid.Direction)">translate</a>, <a href="Coord.html#translateCapped(int,int,int,int)">translateCapped</a>, <a href="Coord.html#xoroHashCode(int,int)">xoroHashCode</a></code></div>
 <div class="inheritedList">
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <a id="methods.inherited.from.class.java.lang.Object">
@@ -385,19 +380,24 @@ int&nbsp;z)</span></div>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/Coord3D.html#line.81">hashCode</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Coord.html#hashCode()">Coord</a></code></span></div>
 <div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
- generate, but instead uses a highly-specific technique based on Cantor's pairing function, xorshifts,
- xor-rotate-xor-rotate, and an XLCG step at the end. It manages to get extremely low collision rates under many
- circumstances, and very frequently manages to avoid colliding on more than 25% of Coords (making the load factor
- of most hash-based collections fine at a default of 0.75) while often having 0 collisions with some data sets.
- It tolerates negative x and y for Coords fairly well.
+ generate, but instead uses a highly-specific technique based on the Rosenberg-Strong pairing function, a Gray
+ code, and two XLCG steps at the end. It manages to get extremely low collision rates under many circumstances,
+ and very frequently manages to avoid colliding on more than 25% of Coords (making the load factor of most
+ hash-based collections fine at a default of 0.75) while often having 0 collisions with some data sets.
+ It does much better when Coords are in the default pooled range of -3 or greater.
  <br>
- This gets comparable collision rates to a previous version used by SquidLib, around 3% across a wide variety of
- rectangular areas, but has much better results when used for seeding procedural generation based on a Coord (a
- reasonable usage of this method). The previous method changed bits in large checkerboard patterns, leaving heavy
- square-shaped biases in generated results, while this version only has checkerboard-reminiscent patterns in the
- lowest 4 or 5 bits, and even then has some chaotic scattering.
+ This gets slightly better collision rates than previous versions used by SquidLib, around 4% across a wide
+ variety of rectangular areas (most earlier hashes got about-5%-range collision rates, and using
+ <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Objects.html?is-external=true#hash(java.lang.Object...)" title="class or interface in java.util" class="externalLink"><code>Objects.hash(Object...)</code></a> gives more than a 75% collision rate). The previous version, which is
+ still available as <a href="Coord.html#cantorHashCode(int,int)"><code>Coord.cantorHashCode(int, int)</code></a>, has slightly better results when used for seeding
+ procedural generation based on a Coord (a reasonable usage of this method), but both this hash code and the
+ Cantor-based one have excellent randomness in the upper bits of the hash (so if you use a hashCode() result as a
+ whole int, then it should be pretty good as a seed). The method before the Cantor-based one,
+ <a href="Coord.html#xoroHashCode(int,int)"><code>Coord.xoroHashCode(int, int)</code></a> was structured a little like xoroshiro (<a href="XoRoRNG.html" title="class in squidpony.squidmath"><code>XoRoRNG</code></a> uses the 64-bit version
+ of xoroshiro), and while it had pretty low collision rates (low 5% range), its hash codes changed bits in large
+ checkerboard patterns, leaving heavy square-shaped biases in generated results.
  <br>
- This changed at least six times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
+ This changed at least 7 times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
  same across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
  unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
  <a href="OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> and <a href="OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>; if you use the ordered kinds, then the only things that matter about
@@ -410,7 +410,7 @@ int&nbsp;z)</span></div>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an int that should, for most different Coord values, be significantly different from the other hash codes</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="Coord.html#cantorHashCode(int,int)"><code>A static method that gets the same result as this method without involving a Coord</code></a></dd>
+<dd><a href="Coord.html#rosenbergStrongHashCode(int,int)"><code>A static method that gets the same result as this method without involving a Coord</code></a></dd>
 </dl>
 </section>
 </li>
@@ -440,8 +440,8 @@ int&nbsp;z)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -487,5 +487,7 @@ int&nbsp;z)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

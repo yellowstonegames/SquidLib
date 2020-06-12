@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class ModularMapGenerator" class="title">Class ModularMapGenerator</h1>
@@ -102,13 +97,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.18">ModularMapGenerator</a>
+public class <a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.29">ModularMapGenerator</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
 <div class="block">Generator for maps of high-tech areas like space stations or starships, with repeated modules laid out in random ways.
  Different from traditional fantasy dungeon generation in that it should seem generally less chaotic in how it's laid
  out, and repeated elements with minor tweaks should be especially common. May also be useful in fantasy games for
  regimented areas built by well-organized military forces.
+ <br>
+ This is marked Beta because both <a href="MapModule.html" title="class in squidpony.squidgrid.mapping"><code>MapModule</code></a> and ModularMapGenerator need improvement to be actually usable,
+ but it might be a while before there's a clear pathway towards how they can be improved. 
  <br>
  Preview: https://gist.github.com/tommyettinger/c711f8fc83fa9919245d88092444bf7f
  Created by Tommy Ettinger on 4/2/2016.</div>
@@ -343,61 +341,61 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="utility">utility</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.20">utility</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.31">utility</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.21">height</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.32">height</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.21">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.32">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.22">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.33">rng</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rebuildSeed">rebuildSeed</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.23">rebuildSeed</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.34">rebuildSeed</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="map">map</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.25">map</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.36">map</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="environment">environment</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.26">environment</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.37">environment</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="layout">layout</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/RegionMap.html" title="class in squidpony.squidmath">RegionMap</a>&lt;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.28">layout</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/RegionMap.html" title="class in squidpony.squidmath">RegionMap</a>&lt;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.39">layout</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="modules">modules</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.29">modules</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.40">modules</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="displacement">displacement</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.30">displacement</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,&#8203;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.41">displacement</a></span></div>
 </section>
 </li>
 </ul>
@@ -413,14 +411,14 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">ModularMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.95">ModularMapGenerator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.106">ModularMapGenerator</a></span>()</div>
 <div class="block">Make a ModularMapGenerator with a GWTRNG using a random seed, height 30, and width 60.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">ModularMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.106">ModularMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.117">ModularMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height)</span></div>
 <div class="block">Make a ModularMapGenerator with the given height and width; the RNG used for generating a dungeon and
  adding features will be a GWTRNG using a random seed.</div>
@@ -434,7 +432,7 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidmath.IRNG)">ModularMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.118">ModularMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.129">ModularMapGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Make a ModularMapGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.</div>
@@ -450,7 +448,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.ModularMapGenerator)">ModularMapGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.138">ModularMapGenerator</a></span>&#8203;(<span class="arguments"><a href="ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a>&nbsp;copying)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.149">ModularMapGenerator</a></span>&#8203;(<span class="arguments"><a href="ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a>&nbsp;copying)</span></div>
 <div class="block">Copies all fields from copying and makes a new DungeonGenerator.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -471,7 +469,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMap()">getMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.158">getMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.169">getMap</a></span>()</div>
 <div class="block">Get the most recently generated char[][] map out of this class. The
  map may be null if generate() or setMap() have not been called.</div>
 <dl>
@@ -483,7 +481,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDungeon()">getDungeon</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.167">getDungeon</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.178">getDungeon</a></span>()</div>
 <div class="block">Get the most recently generated char[][] map out of this class. The
  map may be null if generate() or setMap() have not been called.</div>
 <dl>
@@ -497,7 +495,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBareMap()">getBareMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.177">getBareMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.188">getBareMap</a></span>()</div>
 <div class="block">Get the most recently generated char[][] map out of this class without any chars other than '#' or '.', for
  walls and floors respectively. The map may be null if generate() or setMap() have not been called.</div>
 <dl>
@@ -509,7 +507,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate()">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.181">generate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.192">generate</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="IDungeonGenerator.html#generate()">IDungeonGenerator</a></code></span></div>
 <div class="block">Generates a dungeon or other map as a 2D char array. Any implementation may allow its own configuration and
  customization of how dungeons are generated, but each must provide this as a sane default. Most implementations
@@ -526,7 +524,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="setMap(char[][])">setMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.364">setMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.375">setMap</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Change the underlying char[][]; only affects the toString method, and of course getMap</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -537,7 +535,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getHeight()">getHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.381">getHeight</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.392">getHeight</a></span>()</div>
 <div class="block">Height of the map in cells.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -548,7 +546,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getWidth()">getWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.390">getWidth</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.401">getWidth</a></span>()</div>
 <div class="block">Width of the map in cells.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -559,7 +557,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="getEnvironment()">getEnvironment</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.399">getEnvironment</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.410">getEnvironment</a></span>()</div>
 <div class="block">Gets the environment int 2D array for use with classes like RoomFinder.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -570,7 +568,7 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="setEnvironment(int[][])">setEnvironment</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.408">setEnvironment</a></span>&#8203;(<span class="arguments">int[][]&nbsp;environment)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/ModularMapGenerator.html#line.419">setEnvironment</a></span>&#8203;(<span class="arguments">int[][]&nbsp;environment)</span></div>
 <div class="block">Sets the environment int 2D array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -584,8 +582,8 @@ int&nbsp;height,
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -631,5 +629,7 @@ int&nbsp;height,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

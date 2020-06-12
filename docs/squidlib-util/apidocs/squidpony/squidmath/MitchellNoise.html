@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class MitchellNoise" class="title">Class MitchellNoise</h1>
@@ -97,16 +92,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.13">MitchellNoise</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.15">MitchellNoise</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">An arbitrary-dimensional noise generator; it's not suitable for real-time use, but could be very useful when used
- with unconventional axes, particularly during level generation. It produces smooth, cloudy gradient noise.
+ with unconventional axes, particularly during level generation. It produces smooth, non-artifact-prone gradient noise
+ with lots of rounded "raindrops on a window" shapes. It is very biased toward central results (near 0.0) and only
+ rarely returns results near -1.0 or 1.0, the extremes of its range.
  <br>
- It currently is capable of exceeding its normal -1.0 to 1.0 range, so you may want to wrap its result in
- <a href="NumberTools.html#sway(double)"><code>NumberTools.sway(double)</code></a> with a 0.5 offset.
+ <a href="https://i.imgur.com/WR062LY.png">Sample of 2D MitchellNoise</a>.
  <br>
  Created by Tommy Ettinger on 11/6/2019 using
  <a href="https://twitter.com/DonaldM38768041/status/1191771541354078208">code by Donald Mitchell</a>.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="PhantomNoise.html" title="class in squidpony.squidmath"><code>PhantomNoise also produces arbitrary-dimensional noise, is faster, and is less centrally-biased</code></a></dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -269,25 +269,25 @@ long&nbsp;lattice)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="MAX_DIM">MAX_DIM</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.14">MAX_DIM</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.16">MAX_DIM</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="coef">coef</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="MitchellNoise.Vec4.html" title="class in squidpony.squidmath">MitchellNoise.Vec4</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.16">coef</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="MitchellNoise.Vec4.html" title="class in squidpony.squidmath">MitchellNoise.Vec4</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.18">coef</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="floors">floors</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.17">floors</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.19">floors</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="seed">seed</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.18">seed</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.20">seed</a></span></div>
 </section>
 </li>
 </ul>
@@ -303,13 +303,13 @@ long&nbsp;lattice)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">MitchellNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.20">MitchellNoise</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.22">MitchellNoise</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long,int)">MitchellNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.31">MitchellNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.33">MitchellNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;maxDimension)</span></div>
 </section>
 </li>
@@ -326,20 +326,20 @@ int&nbsp;maxDimension)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="latticeValue(long)">latticeValue</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.65">latticeValue</a></span>&#8203;(<span class="arguments">long&nbsp;lat)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.67">latticeValue</a></span>&#8203;(<span class="arguments">long&nbsp;lat)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="spline(int,long)">spline</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.70">spline</a></span>&#8203;(<span class="arguments">int&nbsp;dim,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.72">spline</a></span>&#8203;(<span class="arguments">int&nbsp;dim,
 long&nbsp;lattice)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="arbitraryNoise(long,double...)">arbitraryNoise</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.97">arbitraryNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/MitchellNoise.html#line.99">arbitraryNoise</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 double...&nbsp;points)</span></div>
 </section>
 </li>
@@ -349,8 +349,8 @@ double...&nbsp;points)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -396,5 +396,7 @@ double...&nbsp;points)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

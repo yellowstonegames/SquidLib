@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,18 +51,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.gui.gdx.SquidLayers" class="title">Uses of Class<br>squidpony.squidgrid.gui.gdx.SquidLayers</h1>
@@ -98,7 +93,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../SquidLayers.html#autoLight()">autoLight</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -106,7 +101,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../SquidLayers.html#autoLight(double)">autoLight</a></span>&#8203;(double&nbsp;frame)</code></th>
 <td class="colLast">
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -116,7 +111,7 @@ char&nbsp;deepLiquid,
 char&nbsp;shallowLiquid)</code></th>
 <td class="colLast">
 <div class="block">Alters the lightnesses that affect the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>PerlinNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -124,7 +119,7 @@ char&nbsp;shallowLiquid)</code></th>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../SquidLayers.html#bump(int,int,int,squidpony.squidgrid.Direction,float)">bump</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
 int&nbsp;layer,
-squidpony.squidgrid.Direction&nbsp;dir,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir,
 float&nbsp;duration)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -132,21 +127,21 @@ float&nbsp;duration)</code></th>
 <td class="colFirst"><code><a href="../SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../SquidLayers.html#bump(int,int,squidpony.squidgrid.Direction)">bump</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
-squidpony.squidgrid.Direction&nbsp;dir)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../SquidLayers.html#bump(squidpony.squidgrid.gui.gdx.AnimatedEntity,int,squidpony.squidgrid.Direction,float)">bump</a></span>&#8203;(<a href="../AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
 int&nbsp;layer,
-squidpony.squidgrid.Direction&nbsp;dir,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir,
 float&nbsp;duration)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../SquidLayers.html#bump(squidpony.squidgrid.gui.gdx.AnimatedEntity,squidpony.squidgrid.Direction)">bump</a></span>&#8203;(<a href="../AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
-squidpony.squidgrid.Direction&nbsp;dir)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidgrid/Direction.html?is-external=true" title="class or interface in squidpony.squidgrid" class="externalLink">Direction</a>&nbsp;dir)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -565,5 +560,7 @@ float&nbsp;duration)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

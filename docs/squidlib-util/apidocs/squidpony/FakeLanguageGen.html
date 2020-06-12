@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class FakeLanguageGen" class="title">Class FakeLanguageGen</h1>
@@ -101,18 +96,28 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../src-html/squidpony/FakeLanguageGen.html#line.28">FakeLanguageGen</a>
+<pre>public class <a href="../src-html/squidpony/FakeLanguageGen.html#line.37">FakeLanguageGen</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A text generator for producing sentences and/or words in nonsense languages that fit a theme. This does not use an
  existing word list as a basis for its output, so it may or may not produce existing words occasionally, but you can
  safely assume it won't generate a meaningful sentence except in the absolute unlikeliest of cases.
+ <br>
+ This supports a lot of language styles in predefined constants. There's a registry of these constants in
+ <a href="#registered"><code>registered</code></a> and their names in <a href="#registeredNames"><code>registeredNames</code></a>, plus the languages that would make sense for
+ real-world cultures to use (and all use the Latin alphabet, so they can be swapped around) are in
+ <a href="#romanizedHumanLanguages"><code>romanizedHumanLanguages</code></a>. You can make a new language with a constructor, but it's pretty time-consuming; the
+ recommended ways are generating a random language with <a href="#randomLanguage(long)"><code>randomLanguage(long)</code></a> (when you don't care too much
+ about exactly how it should sound), or blending two or more languages with <a href="#mixAll(java.lang.Object...)"><code>mixAll(Object...)</code></a> or
+ <a href="#mix(double,squidpony.FakeLanguageGen,double,java.lang.Object...)"><code>mix(double, FakeLanguageGen, double, Object...)</code></a> (when you have a sound in mind that isn't quite met by an
+ existing language).
+ <br>
  Created by Tommy Ettinger on 11/29/2015.</div>
 <dl>
-<dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>Tommy Ettinger</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../serialized-form.html#squidpony.FakeLanguageGen">Serialized Form</a></dd>
+<dd><a href="NaturalLanguageCipher.html" title="class in squidpony"><code>NaturalLanguageCipher uses a FakeLanguageGen to reversibly translate English text to nonsense.</code></a>, 
+<a href="Thesaurus.html" title="class in squidpony"><code>Thesaurus uses this class a lot to generate things like plant names and the titles of nations.</code></a>, 
+<a href="../serialized-form.html#squidpony.FakeLanguageGen">Serialized Form</a></dd>
 </dl>
 </section>
 <section class="summary">
@@ -518,13 +523,18 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#name">name</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NORSE">NORSE</a></span></code></th>
 <td class="colLast">
 <div class="block">Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NORSE_SIMPLIFIED">NORSE_SIMPLIFIED</a></span></code></th>
 <td class="colLast">
@@ -532,17 +542,17 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  US-ASCII keyboard.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openingConsonants">openingConsonants</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openingVowels">openingVowels</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registered">registered</a></span></code></th>
 <td class="colLast">
@@ -550,17 +560,17 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  nor does it store modifications or mixes of languages.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registeredNames">registeredNames</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static regexodus.Pattern</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeats">repeats</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#romanizedHumanLanguages">romanizedHumanLanguages</a></span></code></th>
 <td class="colLast">
@@ -568,26 +578,26 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  script (like English) with maybe some accents.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RUSSIAN_AUTHENTIC">RUSSIAN_AUTHENTIC</a></span></code></th>
 <td class="colLast">
 <div class="block">Imitation modern Russian, using the authentic Cyrillic alphabet used in Russia and other countries.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RUSSIAN_ROMANIZED">RUSSIAN_ROMANIZED</a></span></code></th>
 <td class="colLast">
 <div class="block">Imitation modern Russian, romanized to use the Latin alphabet.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>regexodus.Pattern[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sanityChecks">sanityChecks</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SIMPLISH">SIMPLISH</a></span></code></th>
 <td class="colLast">
@@ -596,14 +606,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  looks somewhat similar to English, and tries to be pronounceable without too much effort.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SOMALI">SOMALI</a></span></code></th>
 <td class="colLast">
 <div class="block">Imitation Somali, using the Latin alphabet.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SPANISH">SPANISH</a></span></code></th>
 <td class="colLast">
@@ -611,17 +621,17 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  American forms of Spanish).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#srng">srng</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#summary">summary</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#SWAHILI">SWAHILI</a></span></code></th>
 <td class="colLast">
@@ -629,22 +639,22 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  that is often learned after becoming fluent in one of many other (vaguely-similar) languages of the area.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syllableEndFrequency">syllableEndFrequency</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syllableFrequencies">syllableFrequencies</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#totalSyllableFrequency">totalSyllableFrequency</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#VIETNAMESE">VIETNAMESE</a></span></code></th>
 <td class="colLast">
@@ -652,27 +662,27 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  but that are rare in fonts.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static regexodus.Pattern</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#vowelClusters">vowelClusters</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#vowelEndFrequency">vowelEndFrequency</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#vowelSplitFrequency">vowelSplitFrequency</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#vowelSplitters">vowelSplitters</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#vowelStartFrequency">vowelStartFrequency</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -1182,115 +1192,121 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="openingVowels">openingVowels</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.30">openingVowels</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">openingVowels</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="midVowels">midVowels</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.30">midVowels</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">midVowels</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="openingConsonants">openingConsonants</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.30">openingConsonants</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">openingConsonants</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="midConsonants">midConsonants</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.30">midConsonants</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">midConsonants</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="closingConsonants">closingConsonants</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.30">closingConsonants</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">closingConsonants</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="vowelSplitters">vowelSplitters</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.30">vowelSplitters</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">vowelSplitters</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="closingSyllables">closingSyllables</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.30">closingSyllables</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">closingSyllables</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clean">clean</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.32">clean</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.41">clean</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="syllableFrequencies">syllableFrequencies</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.34">syllableFrequencies</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.42">syllableFrequencies</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="totalSyllableFrequency">totalSyllableFrequency</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.35">totalSyllableFrequency</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.43">totalSyllableFrequency</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="vowelStartFrequency">vowelStartFrequency</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.36">vowelStartFrequency</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.44">vowelStartFrequency</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="vowelEndFrequency">vowelEndFrequency</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.36">vowelEndFrequency</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.44">vowelEndFrequency</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="vowelSplitFrequency">vowelSplitFrequency</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.36">vowelSplitFrequency</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.44">vowelSplitFrequency</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="syllableEndFrequency">syllableEndFrequency</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.36">syllableEndFrequency</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.44">syllableEndFrequency</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sanityChecks">sanityChecks</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">regexodus.Pattern[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.37">sanityChecks</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">regexodus.Pattern[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.45">sanityChecks</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="modifiers">modifiers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.38">modifiers</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.46">modifiers</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="srng">srng</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.39">srng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.47">srng</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="summary">summary</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.41">summary</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.49">summary</a></span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="name">name</a></h3>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.50">name</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="anyVowel">anyVowel</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.49">anyVowel</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.58">anyVowel</a></span></div>
 <div class="block">A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
  and Cyrillic; for use when a String will be interpreted as a regex (as in <a href="FakeLanguageGen.Alteration.html" title="class in squidpony"><code>FakeLanguageGen.Alteration</code></a>).</div>
 <dl>
@@ -1302,7 +1318,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="anyVowelCluster">anyVowelCluster</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.49">anyVowelCluster</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.58">anyVowelCluster</a></span></div>
 <div class="block">A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
  and Cyrillic; for use when a String will be interpreted as a regex (as in <a href="FakeLanguageGen.Alteration.html" title="class in squidpony"><code>FakeLanguageGen.Alteration</code></a>).</div>
 <dl>
@@ -1314,7 +1330,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="anyConsonant">anyConsonant</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.49">anyConsonant</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.58">anyConsonant</a></span></div>
 <div class="block">A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
  and Cyrillic; for use when a String will be interpreted as a regex (as in <a href="FakeLanguageGen.Alteration.html" title="class in squidpony"><code>FakeLanguageGen.Alteration</code></a>).</div>
 <dl>
@@ -1326,7 +1342,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="anyConsonantCluster">anyConsonantCluster</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.49">anyConsonantCluster</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.58">anyConsonantCluster</a></span></div>
 <div class="block">A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
  and Cyrillic; for use when a String will be interpreted as a regex (as in <a href="FakeLanguageGen.Alteration.html" title="class in squidpony"><code>FakeLanguageGen.Alteration</code></a>).</div>
 <dl>
@@ -1338,29 +1354,30 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="repeats">repeats</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">regexodus.Pattern</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.68">repeats</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">regexodus.Pattern</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.77">repeats</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="vowelClusters">vowelClusters</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">regexodus.Pattern</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.68">vowelClusters</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">regexodus.Pattern</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.77">vowelClusters</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="consonantClusters">consonantClusters</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">regexodus.Pattern</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.68">consonantClusters</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected static final</span>&nbsp;<span class="returnType">regexodus.Pattern</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.77">consonantClusters</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="LOVECRAFT">LOVECRAFT</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.458">LOVECRAFT</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.468">LOVECRAFT</a></span></div>
 <div class="block">Ia! Ia! Cthulhu Rl'yeh ftaghn! Useful for generating cultist ramblings or unreadable occult texts. You may want
  to consider mixing this with multiple other languages using <a href="#mixAll(java.lang.Object...)"><code>mixAll(Object...)</code></a>; using some very different
- languages in low amounts relative to the amount used for this, like <a href="#NAHUATL"><code>NAHUATL</code></a>, <a href="#INUKTITUT"><code>INUKTITUT</code></a>, and
- <a href="#SOMALI"><code>SOMALI</code></a>, can alter the aesthetic of the generated text in ways that may help distinguish magic styles.
+ languages in low amounts relative to the amount used for this, like <a href="#NAHUATL"><code>NAHUATL</code></a>, <a href="#INUKTITUT"><code>INUKTITUT</code></a>,
+ <a href="#SOMALI"><code>SOMALI</code></a>, <a href="#DEEP_SPEECH"><code>DEEP_SPEECH</code></a>, and <a href="#INSECT"><code>INSECT</code></a> can alter the aesthetic of the generated text in ways
+ that may help distinguish magic styles.
  <br>
  Zvrugg pialuk, ya'as irlemrugle'eith iposh hmo-es nyeighi, glikreirk shaivro'ei!</div>
 </section>
@@ -1368,7 +1385,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ENGLISH">ENGLISH</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.511">ENGLISH</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.521">ENGLISH</a></span></div>
 <div class="block">Imitation English; may seem closer to Dutch in some generated text, and is not exactly the best imitation.
  Should seem pretty fake to many readers; does not filter out dictionary words but does perform basic vulgarity
  filtering. If you want to avoid generating other words, you can subclass FakeLanguageGen and modify word() .
@@ -1380,7 +1397,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="GREEK_ROMANIZED">GREEK_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.533">GREEK_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.543">GREEK_ROMANIZED</a></span></div>
 <div class="block">Imitation ancient Greek, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
  <br>
  Psuilas alor; aipeomarta le liaspa...</div>
@@ -1389,7 +1406,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="GREEK_AUTHENTIC">GREEK_AUTHENTIC</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.555">GREEK_AUTHENTIC</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.565">GREEK_AUTHENTIC</a></span></div>
 <div class="block">Imitation ancient Greek, using the original Greek alphabet. People may try to translate it and get gibberish.
  Make sure the font you use to render this supports the Greek alphabet! In the GDX display module, most
  fonts support all the Greek you need for this.
@@ -1400,7 +1417,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="FRENCH">FRENCH</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.605">FRENCH</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.615">FRENCH</a></span></div>
 <div class="block">Imitation modern French, using the (many) accented vowels that are present in the language. Translating it
  will produce gibberish if it produces anything at all. In the GDX display module, most
  fonts support all the accented characters you need for this.
@@ -1411,7 +1428,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="RUSSIAN_ROMANIZED">RUSSIAN_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.627">RUSSIAN_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.637">RUSSIAN_ROMANIZED</a></span></div>
 <div class="block">Imitation modern Russian, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
  <br>
  Zhydotuf ruts pitsas, gogutiar shyskuchebab - gichapofeglor giunuz ieskaziuzhin.</div>
@@ -1420,7 +1437,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="RUSSIAN_AUTHENTIC">RUSSIAN_AUTHENTIC</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.651">RUSSIAN_AUTHENTIC</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.661">RUSSIAN_AUTHENTIC</a></span></div>
 <div class="block">Imitation modern Russian, using the authentic Cyrillic alphabet used in Russia and other countries.
  Make sure the font you use to render this supports the Cyrillic alphabet!
  In the GDX display module, the "smooth" fonts support all the Cyrillic alphabet you need for this.
@@ -1431,7 +1448,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="JAPANESE_ROMANIZED">JAPANESE_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.679">JAPANESE_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.689">JAPANESE_ROMANIZED</a></span></div>
 <div class="block">Imitation Japanese, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
  <br>
  Narurehyounan nikase keho...</div>
@@ -1440,7 +1457,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="SWAHILI">SWAHILI</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.801">SWAHILI</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.811">SWAHILI</a></span></div>
 <div class="block">Swahili is one of the more commonly-spoken languages in sub-Saharan Africa, and serves mainly as a shared language
  that is often learned after becoming fluent in one of many other (vaguely-similar) languages of the area. An
  example sentence in Swahili, that this might try to imitate aesthetically, is "Mtoto mdogo amekisoma," meaning
@@ -1463,7 +1480,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="SOMALI">SOMALI</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.855">SOMALI</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.865">SOMALI</a></span></div>
 <div class="block">Imitation Somali, using the Latin alphabet. Due to uncommon word structure, unusual allowed combinations of
  letters, and no common word roots with most familiar languages, this may seem like an unidentifiable or "alien"
  language to most readers. However, it's based on the Latin writing system for the Somali language (probably
@@ -1480,7 +1497,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="HINDI_ROMANIZED">HINDI_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1225">HINDI_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1235">HINDI_ROMANIZED</a></span></div>
 <div class="block">Imitation Hindi, romanized to use the Latin alphabet using accented glyphs similar to the IAST standard.
  Most fonts do not support the glyphs that IAST-standard romanization of Hindi needs, so this uses alternate
  glyphs from at most Latin Extended-A. Relative to the IAST standard, the glyphs <code>"ṛṝḷḹḍṭṅṇṣṃḥ"</code> become
@@ -1497,7 +1514,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ARABIC_ROMANIZED">ARABIC_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1288">ARABIC_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1298">ARABIC_ROMANIZED</a></span></div>
 <div class="block">Imitation Arabic, using mostly the Latin alphabet but with some Greek letters for tough transliteration topics.
  It's hard to think of a more different (widely-spoken) language to romanize than Arabic. Written Arabic does not
  ordinarily use vowels (the writing system is called an abjad, in contrast to an alphabet), and it has more than a
@@ -1523,7 +1540,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="INUKTITUT">INUKTITUT</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1355">INUKTITUT</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1365">INUKTITUT</a></span></div>
 <div class="block">Imitation text from an approximation of one of the Inuktitut languages spoken by various people of the Arctic and
  nearby areas. This is likely to be hard to pronounce. Inuktitut is the name accepted in Canada for one language
  family of that area, but other parts of the Arctic circle speak languages with varying levels of difference from
@@ -1537,7 +1554,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="NORSE">NORSE</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1421">NORSE</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1431">NORSE</a></span></div>
 <div class="block">Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules. Not
  to be confused with the language(s) of Norway, where the Norwegian languages are called norsk, and are further
  distinguished into Bokmål and Nynorsk. This should not be likely to seem like any form of Norwegian, since it
@@ -1553,7 +1570,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="NAHUATL">NAHUATL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1450">NAHUATL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1460">NAHUATL</a></span></div>
 <div class="block">Imitation text from an approximation of the language spoken by the Aztec people and also over a million
  contemporary people in parts of Mexico. This is may be hard to pronounce, since it uses "tl" as a normal
  consonant (it can start or end words), but is mostly a fairly recognizable style of language.
@@ -1564,7 +1581,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="MONGOLIAN">MONGOLIAN</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1479">MONGOLIAN</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1489">MONGOLIAN</a></span></div>
 <div class="block">Imitation text from an approximation of one of the languages spoken in the 13th-century Mongol Empire. Can be
  hard to pronounce. This is closest to Middle Mongolian, and is probably not the best way to approximate modern
  Mongolian, which was written for many years in the Cyrillic alphabet (same alphabet as Russian) and has changed a
@@ -1576,7 +1593,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="FANTASY_NAME">FANTASY_NAME</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1487">FANTASY_NAME</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1497">FANTASY_NAME</a></span></div>
 <div class="block">A mix of four different languages, using only ASCII characters, that is meant for generating single words for
  creature or place names in fantasy settings.
  <br>
@@ -1586,7 +1603,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="FANCY_FANTASY_NAME">FANCY_FANTASY_NAME</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1498">FANCY_FANTASY_NAME</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1508">FANCY_FANTASY_NAME</a></span></div>
 <div class="block">A mix of four different languages with some accented characters added onto an ASCII base, that can be good for
  generating single words for creature or place names in fantasy settings that should have a "fancy" feeling from
  having unnecessary accents added primarily for visual reasons.
@@ -1597,7 +1614,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="GOBLIN">GOBLIN</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1551">GOBLIN</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1561">GOBLIN</a></span></div>
 <div class="block">Fantasy language that might be suitable for stealthy humanoids, such as goblins, or as a secret language used
  by humans who want to avoid notice. Uses no "hard" sounds like "t" and "k", but also tries to avoid the flowing
  aesthetic of fantasy languages associated with elves. Tends toward clusters of consonants like "bl", "gm", "dg",
@@ -1609,7 +1626,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ELF">ELF</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1596">ELF</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1606">ELF</a></span></div>
 <div class="block">Fantasy language that tries to imitate the various languages spoken by elves in J.R.R. Tolkien's works, using
  accented vowels occasionally and aiming for long, flowing, vowel-heavy words. It's called ELF because there isn't
  a consistent usage across fantasy and mythological sources of either "elvish", "elfish", "elven", "elfin", or any
@@ -1622,7 +1639,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="DEMONIC">DEMONIC</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1662">DEMONIC</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1672">DEMONIC</a></span></div>
 <div class="block">Fantasy language that might be suitable for a language spoken by demons, aggressive warriors, or people who seek
  to emulate or worship similar groups. The tendency here is for DEMONIC to be the language used by creatures that
  are considered evil because of their violence, while INFERNAL would be the language used by creatures that are
@@ -1637,7 +1654,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="INFERNAL">INFERNAL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1705">INFERNAL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1715">INFERNAL</a></span></div>
 <div class="block">Fantasy language that might be suitable for a language spoken by fiends, users of witchcraft, or people who seek
  to emulate or worship similar groups. The tendency here is for DEMONIC to be the language used by creatures that
  are considered evil because of their violence, while INFERNAL is the language used by creatures that are
@@ -1656,7 +1673,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="SIMPLISH">SIMPLISH</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1761">SIMPLISH</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1771">SIMPLISH</a></span></div>
 <div class="block">English-like language that omits complex spelling and doesn't include any of the uncommon word endings of English
  like "ought" or "ation." A good choice when you want something that doesn't use any non-US-keyboard letters,
  looks somewhat similar to English, and tries to be pronounceable without too much effort. This doesn't have any
@@ -1669,7 +1686,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ALIEN_A">ALIEN_A</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1814">ALIEN_A</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1824">ALIEN_A</a></span></div>
 <div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
  an alien species. This alien language emphasizes unusual consonant groups and prefers the vowels 'a' and 'i',
  sometimes with two different vowels in one syllable, like with 'ea', but never two of the same vowel, like 'ee'.
@@ -1683,7 +1700,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="KOREAN_ROMANIZED">KOREAN_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1881">KOREAN_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1891">KOREAN_ROMANIZED</a></span></div>
 <div class="block">Imitation text from an approximation of Korean, using the Revised Romanization method that is official in South
  Korea today and is easier to type. The text this makes may be hard to pronounce. Korean is interesting as a
  language to imitate for a number of reasons; many of the sounds in it are rarely found elsewhere, it can cluster
@@ -1700,7 +1717,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ALIEN_E">ALIEN_E</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1947">ALIEN_E</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1957">ALIEN_E</a></span></div>
 <div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
  an alien species. This alien language emphasizes hard sounds and prefers the vowels 'e' and 'a', sometimes with
  two of the same vowel, like 'ee', but never with two different vowels in one syllable, like with 'ea'.
@@ -1716,7 +1733,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ALIEN_I">ALIEN_I</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1988">ALIEN_I</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.1998">ALIEN_I</a></span></div>
 <div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
  an alien species. This alien language emphasizes "liquid" sounds such as 'l', 'r', and mixes with those and other
  consonants, and prefers the vowels 'i' and 'o', never with two of the same vowel, like 'ee', nor with two
@@ -1729,7 +1746,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ALIEN_O">ALIEN_O</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2062">ALIEN_O</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2072">ALIEN_O</a></span></div>
 <div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
  an alien species. This alien language emphasizes large clusters of vowels, typically with 2 or 3 vowel sounds
  between consonants, though some vowel groups could be interpreted in multiple ways (such as English "maim" and
@@ -1745,7 +1762,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ALIEN_U">ALIEN_U</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2110">ALIEN_U</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2120">ALIEN_U</a></span></div>
 <div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
  an alien species. This alien language is meant to have an abrupt change mid-word for many words, with the suffix
  of roughly half of words using the letter "e", which is absent from the rest of the language; these suffixes can
@@ -1761,7 +1778,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="DRAGON">DRAGON</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2197">DRAGON</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2207">DRAGON</a></span></div>
 <div class="block">Fantasy language that tries to sound like the speech of a powerful and pompous dragon, using long, complex words
  and a mix of hard consonants like "t" and "k", "liquid" consonants like "l" and "r", and sometimes vowel groups
  like "ie" and "aa". It frequently uses consonant clusters involving "r". It uses no accented characters.
@@ -1772,7 +1789,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="KOBOLD">KOBOLD</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2213">KOBOLD</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2223">KOBOLD</a></span></div>
 <div class="block">Fantasy language based closely on <a href="#DRAGON"><code>DRAGON</code></a>, but with much shorter words normally and closing syllables
  that may sound "rushed" or "crude", though it has the same general frequency of most consonants and vowels.
  This means it still uses lots of "t", "k", and "r", can group two vowels sometimes, and when there's a consonant
@@ -1790,7 +1807,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="INSECT">INSECT</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2261">INSECT</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2271">INSECT</a></span></div>
 <div class="block">Fantasy/sci-fi language that would typically be fitting for an insect-like species without a close equivalent to
  human lips. This language emphasizes hard sounds such as 't' and 'k', uses some sibilants such as 's', 'sh', and
  'x', uses lots of 'r' sounds, includes trill sounds using 'rr' (as in Spanish), and uses primarily 'a' and 'i'
@@ -1803,7 +1820,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="MAORI">MAORI</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2326">MAORI</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2336">MAORI</a></span></div>
 <div class="block">Imitation text from an approximation of the Maori language, spoken in New Zealand both today and historically,
  and closely related to some other Polynesian languages. This version uses the current standard orthographic
  standard of representing a long "a" with the letter "ā" (adding a macron diacritic).
@@ -1814,7 +1831,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="SPANISH">SPANISH</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2377">SPANISH</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2387">SPANISH</a></span></div>
 <div class="block">Imitation text from an approximation of Spanish (not using the variations spoken in Spain, but closer to Latin
  American forms of Spanish). This isn't as close as possible, but it abides by most of the orthographic rules that
  Spanish uses. It uses the acute accent on the vowels á, é, í, ó, and ú, as well as the consonant ñ.
@@ -1825,7 +1842,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="DEEP_SPEECH">DEEP_SPEECH</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2434">DEEP_SPEECH</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2444">DEEP_SPEECH</a></span></div>
 <div class="block">Fantasy/sci-fi language that would potentially be fitting for a trade language spoken by various very-different
  groups, such as creatures with tentacled faces who need to communicate with spider-elves and living crystals.
  This language tries to use relatively few sounds so vocally-restricted species can speak it or approximate it,
@@ -1842,7 +1859,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="NORSE_SIMPLIFIED">NORSE_SIMPLIFIED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2448">NORSE_SIMPLIFIED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2458">NORSE_SIMPLIFIED</a></span></div>
 <div class="block">Somewhat close to Old Norse, which is itself very close to Icelandic, but changed to avoid letters not on a
  US-ASCII keyboard. Not to be confused with the language(s) of Norway, where the Norwegian languages are called
  norsk, and are further distinguished into Bokmål and Nynorsk. This just applies <a href="FakeLanguageGen.Modifier.html#SIMPLIFY_NORSE"><code>FakeLanguageGen.Modifier.SIMPLIFY_NORSE</code></a>
@@ -1859,7 +1876,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="HLETKIP">HLETKIP</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2500">HLETKIP</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2510">HLETKIP</a></span></div>
 <div class="block">A fictional language that could ostensibly be spoken by some group of humans, but that isn't closely based on any
  one real-world language. It is meant to have a mix of hard and flowing sounds, roughly like Hebrew or Turkish,
  but with a very different set of consonants and consonant blends. Importantly, consonant sounds are always paired
@@ -1872,7 +1889,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="ANCIENT_EGYPTIAN">ANCIENT_EGYPTIAN</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2565">ANCIENT_EGYPTIAN</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2575">ANCIENT_EGYPTIAN</a></span></div>
 <div class="block">A (necessarily) very rough anglicization of Old Egyptian, a language that has no precisely known pronunciation
  rules and was written with hieroglyphics. This is meant to serve as an analogue for any ancient language with few
  contemporary speakers.
@@ -1883,7 +1900,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CROW">CROW</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2616">CROW</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2626">CROW</a></span></div>
 <div class="block">A rough imitation of the Crow language of the American Midwest, using some tone marks. Some of the orthography
  rules aren't clear across Internet information about the language, so this really is a "fake" language it will be
  generating, not the real thing at all. This considers 'x' to be the rough back-of-throat noise that isn't in
@@ -1899,7 +1916,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="IMP">IMP</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2650">IMP</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2660">IMP</a></span></div>
 <div class="block">A fantasy language meant for obnoxious screeching annoying enemies more-so than for intelligent friends or foes.
  Uses accented vowels to mean "louder or higher-pitched" and up to three repeats of any vowel to lengthen it.
  <br>
@@ -1909,7 +1926,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="MALAY">MALAY</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2727">MALAY</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2737">MALAY</a></span></div>
 <div class="block">An approximation of the Malay language or any of its close relatives, such as Indonesian. This differs from Malay
  as it is normally written by using "ch" for what Malay writes as "c" (it is pronounced like the start of "chow"),
  and "sh" for what Malay writes as "sy" (pronounced like the start of "shoe").
@@ -1920,7 +1937,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CELESTIAL">CELESTIAL</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2784">CELESTIAL</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2794">CELESTIAL</a></span></div>
 <div class="block">Fantasy language that is meant to sound like it could be spoken by divine or (magical) otherworldly beings.
  Sometimes uses the breve mark (as in <code>ăĕĭŏ</code>) over vowels and rarely splits consonants with <code>'</code>.
  Uses very few harsh sounds, and may be easy to confuse with <a href="#ELF"><code>ELF</code></a> (this tends to use much shorter words).
@@ -1934,7 +1951,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CHINESE_ROMANIZED">CHINESE_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2903">CHINESE_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2913">CHINESE_ROMANIZED</a></span></div>
 <div class="block">An approximation of Hanyu Pinyin, a Romanization technique used for Mandarin Chinese that has been in common use
  since the 1980s. This makes some slight changes so the vulgarity filters this uses can understand how some
  letters sound; Pinyin's letter c becomes ts, and this replaces the u with umlaut, ü, in all cases with yu.
@@ -1945,7 +1962,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="CHEROKEE_ROMANIZED">CHEROKEE_ROMANIZED</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2961">CHEROKEE_ROMANIZED</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.2971">CHEROKEE_ROMANIZED</a></span></div>
 <div class="block">A rough imitation of the Cherokee language, using an attempt at romanizing the syllabary the language is often
  written with, using only the parts of the language that are usually written down. Some of the orthography
  rules aren't clear across Internet information about the language, so this really is a "fake" language it will be
@@ -1958,7 +1975,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="VIETNAMESE">VIETNAMESE</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3064">VIETNAMESE</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3074">VIETNAMESE</a></span></div>
 <div class="block">A very rough imitation of the Vietnamese language, without using the accurate characters Vietnamese really uses
  but that are rare in fonts. Since so many letters in correct Vietnamese aren't available in most fonts, this
  can't represent most of the accented vowels in the language, but it tries, with 6 accents for each of a, e, i, o,
@@ -1972,7 +1989,7 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="registered">registered</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3074">registered</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3084">registered</a></span></div>
 <div class="block">An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
  nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric
  codes for languages in the <a href="#serializeToString()"><code>serializeToString()</code></a> output, but neither is dependent on the other if this
@@ -1984,13 +2001,13 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="registeredNames">registeredNames</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3075">registeredNames</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3085">registeredNames</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="romanizedHumanLanguages">romanizedHumanLanguages</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3121">romanizedHumanLanguages</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3131">romanizedHumanLanguages</a></span></div>
 <div class="block">FakeLanguageGen constants that are meant to sound like specific real-world languages, and that all use the Latin
  script (like English) with maybe some accents.</div>
 </section>
@@ -2008,14 +2025,14 @@ long...&nbsp;reseeds)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">FakeLanguageGen</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3130">FakeLanguageGen</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3140">FakeLanguageGen</a></span>()</div>
 <div class="block">Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],int[],double[],double,double,double,double)">FakeLanguageGen</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3208">FakeLanguageGen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;openingVowels,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3218">FakeLanguageGen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;openingVowels,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midVowels,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;openingConsonants,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midConsonants,
@@ -2067,7 +2084,7 @@ double&nbsp;syllableEndFrequency)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],java.lang.String[],int[],double[],double,double,double,double,regexodus.Pattern[],boolean)">FakeLanguageGen</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3255">FakeLanguageGen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;openingVowels,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3265">FakeLanguageGen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;openingVowels,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midVowels,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;openingConsonants,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midConsonants,
@@ -2135,7 +2152,7 @@ boolean&nbsp;clean)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAccents(java.lang.CharSequence)">removeAccents</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.419">removeAccents</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;str)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.428">removeAccents</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;str)</span></div>
 <div class="block">Removes accented Latin-script characters from a string; if the "base" characters are non-English anyway then the
  result won't be an ASCII string, but otherwise it probably will be.</div>
 <dl>
@@ -2149,7 +2166,7 @@ boolean&nbsp;clean)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="get(java.lang.String)">get</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3092">get</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3102">get</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</span></div>
 <div class="block">If a FakeLanguageGen is known and is in <a href="#registered"><code>registered</code></a>, this allows you to look up that FakeLanguageGen by
  name (using a name from <a href="#registeredNames"><code>registeredNames</code></a>).</div>
 <dl>
@@ -2163,7 +2180,7 @@ boolean&nbsp;clean)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAt(int)">getAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3102">getAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3112">getAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">If a FakeLanguageGen is known and is in <a href="#registered"><code>registered</code></a>, this allows you to look up that FakeLanguageGen by
  index, from 0 to <code>FakeLanguageGen.registered.length - 1</code>.</div>
 <dl>
@@ -2177,7 +2194,7 @@ boolean&nbsp;clean)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="nameAt(int)">nameAt</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3112">nameAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3122">nameAt</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">If a FakeLanguageGen is known and is in <a href="#registered"><code>registered</code></a>, this allows you to look up that FakeLanguageGen's
  name by index, from 0 to <code>FakeLanguageGen.registeredNames.length - 1</code>.</div>
 <dl>
@@ -2191,26 +2208,26 @@ boolean&nbsp;clean)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomLanguage(squidpony.squidmath.IRNG)">randomLanguage</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3488">randomLanguage</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3498">randomLanguage</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="randomLanguage(long)">randomLanguage</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3492">randomLanguage</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3502">randomLanguage</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="checkAll(java.lang.CharSequence,regexodus.Pattern[])">checkAll</a></h3>
-<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3636">checkAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;testing,
+<div class="memberSignature"><span class="modifiers">protected static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3646">checkAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;testing,
 regexodus.Pattern[]&nbsp;checks)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="checkVulgarity(java.lang.CharSequence)">checkVulgarity</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3653">checkVulgarity</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;testing)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3663">checkVulgarity</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;testing)</span></div>
 <div class="block">Checks a CharSequence, such as a String, against an overzealous vulgarity filter, returning true if the text
  could contain vulgar elements or words that could seem vulgar or juvenile. The idea here is that false positives
  are OK as long as there are very few false negatives (missed vulgar words). Does not check punctuation or numbers
@@ -2226,7 +2243,7 @@ regexodus.Pattern[]&nbsp;checks)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(boolean)">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3672">word</a></span>&#8203;(<span class="arguments">boolean&nbsp;capitalize)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3682">word</a></span>&#8203;(<span class="arguments">boolean&nbsp;capitalize)</span></div>
 <div class="block">Generate a word from this FakeLanguageGen, using and changing the current seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2239,7 +2256,7 @@ regexodus.Pattern[]&nbsp;checks)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(long,boolean)">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3684">word</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3694">word</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 boolean&nbsp;capitalize)</span></div>
 <div class="block">Generate a word from this FakeLanguageGen using the specified long seed to use for a shared StatefulRNG.
  If seed is the same, a FakeLanguageGen should produce the same word every time with this method.</div>
@@ -2255,7 +2272,7 @@ boolean&nbsp;capitalize)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(squidpony.squidmath.IRNG,boolean)">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3696">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3706">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 boolean&nbsp;capitalize)</span></div>
 <div class="block">Generate a word from this FakeLanguageGen using the specified RNG.</div>
 <dl>
@@ -2270,7 +2287,7 @@ boolean&nbsp;capitalize)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(long,boolean,int)">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3813">word</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3823">word</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 boolean&nbsp;capitalize,
 int&nbsp;approxSyllables)</span></div>
 <div class="block">Generate a word from this FakeLanguageGen with an approximate number of syllables using the specified long seed 
@@ -2290,7 +2307,7 @@ int&nbsp;approxSyllables)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(squidpony.squidmath.IRNG,boolean,int)">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3826">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3836">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 boolean&nbsp;capitalize,
 int&nbsp;approxSyllables)</span></div>
 <div class="block">Generate a word from this FakeLanguageGen using the specified RNG with an approximate number of syllables.</div>
@@ -2307,7 +2324,7 @@ int&nbsp;approxSyllables)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(long,boolean,int,regexodus.Pattern[])">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3842">word</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3852">word</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 boolean&nbsp;capitalize,
 int&nbsp;approxSyllables,
 regexodus.Pattern[]&nbsp;additionalChecks)</span></div>
@@ -2330,7 +2347,7 @@ regexodus.Pattern[]&nbsp;additionalChecks)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(squidpony.squidmath.IRNG,boolean,int,regexodus.Pattern[])">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3858">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3868">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 boolean&nbsp;capitalize,
 int&nbsp;approxSyllables,
 regexodus.Pattern[]&nbsp;additionalChecks)</span></div>
@@ -2351,7 +2368,7 @@ regexodus.Pattern[]&nbsp;additionalChecks)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="word(squidpony.squidmath.IStatefulRNG,boolean,int,long...)">word</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3971">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.3981">word</a></span>&#8203;(<span class="arguments"><a href="squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng,
 boolean&nbsp;capitalize,
 int&nbsp;approxSyllables,
 long...&nbsp;reseeds)</span></div>
@@ -2372,7 +2389,7 @@ long...&nbsp;reseeds)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(int,int)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4086">sentence</a></span>&#8203;(<span class="arguments">int&nbsp;minWords,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4096">sentence</a></span>&#8203;(<span class="arguments">int&nbsp;minWords,
 int&nbsp;maxWords)</span></div>
 <div class="block">Generate a sentence from this FakeLanguageGen, using and changing the current seed, with the length in words
  between minWords and maxWords, both inclusive. This can use commas and semicolons between words, and can end a
@@ -2389,7 +2406,7 @@ int&nbsp;maxWords)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(long,int,int)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4100">sentence</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4110">sentence</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;minWords,
 int&nbsp;maxWords)</span></div>
 <div class="block">Generate a sentence from this FakeLanguageGen, using the given seed as a long, with the length in words between
@@ -2408,7 +2425,7 @@ int&nbsp;maxWords)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(squidpony.squidmath.IRNG,int,int)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4115">sentence</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4125">sentence</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 int&nbsp;minWords,
 int&nbsp;maxWords)</span></div>
 <div class="block">Generate a sentence from this FakeLanguageGen, using the given RNG, with the length in words between minWords and
@@ -2427,7 +2444,7 @@ int&nbsp;maxWords)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(int,int,java.lang.String[],java.lang.String[],double)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4136">sentence</a></span>&#8203;(<span class="arguments">int&nbsp;minWords,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4146">sentence</a></span>&#8203;(<span class="arguments">int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;endPunctuation,
@@ -2454,7 +2471,7 @@ double&nbsp;midPunctuationFrequency)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(long,int,int,java.lang.String[],java.lang.String[],double)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4157">sentence</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4167">sentence</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
@@ -2483,7 +2500,7 @@ double&nbsp;midPunctuationFrequency)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(squidpony.squidmath.IRNG,int,int,java.lang.String[],java.lang.String[],double)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4180">sentence</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4190">sentence</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
@@ -2512,7 +2529,7 @@ double&nbsp;midPunctuationFrequency)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(int,int,java.lang.String[],java.lang.String[],double,int)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4227">sentence</a></span>&#8203;(<span class="arguments">int&nbsp;minWords,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4237">sentence</a></span>&#8203;(<span class="arguments">int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;endPunctuation,
@@ -2542,7 +2559,7 @@ int&nbsp;maxChars)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(long,int,int,java.lang.String[],java.lang.String[],double,int)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4251">sentence</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4261">sentence</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
@@ -2574,7 +2591,7 @@ int&nbsp;maxChars)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="sentence(squidpony.squidmath.IRNG,int,int,java.lang.String[],java.lang.String[],double,int)">sentence</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4276">sentence</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4286">sentence</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 int&nbsp;minWords,
 int&nbsp;maxWords,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;midPunctuation,
@@ -2606,7 +2623,7 @@ int&nbsp;maxChars)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="merge1000(squidpony.squidmath.IRNG,java.lang.String[],java.lang.String[],double)">merge1000</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4343">merge1000</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4353">merge1000</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;me,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;other,
 double&nbsp;otherInfluence)</span></div>
@@ -2615,7 +2632,7 @@ double&nbsp;otherInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="accentVowels(squidpony.squidmath.IRNG,java.lang.String[],double)">accentVowels</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4371">accentVowels</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4381">accentVowels</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;me,
 double&nbsp;influence)</span></div>
 </section>
@@ -2623,7 +2640,7 @@ double&nbsp;influence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="accentConsonants(squidpony.squidmath.IRNG,java.lang.String[],double)">accentConsonants</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4399">accentConsonants</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4409">accentConsonants</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;me,
 double&nbsp;influence)</span></div>
 </section>
@@ -2631,7 +2648,7 @@ double&nbsp;influence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="accentBoth(squidpony.squidmath.IRNG,java.lang.String[],double,double)">accentBoth</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4444">accentBoth</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4454">accentBoth</a></span>&#8203;(<span class="arguments"><a href="squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;me,
 double&nbsp;vowelInfluence,
 double&nbsp;consonantInfluence)</span></div>
@@ -2640,11 +2657,15 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="mix(squidpony.FakeLanguageGen,double)">mix</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4543">mix</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;other,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4557">mix</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;other,
 double&nbsp;otherInfluence)</span></div>
 <div class="block">Makes a new FakeLanguageGen that mixes this object with <code>other</code>, mingling the consonants and vowels they
  use as well as any word suffixes or other traits, and favoring the qualities in <code>other</code> by
- <code>otherInfluence</code>, which will value both languages evenly if it is 0.5 .</div>
+ <code>otherInfluence</code>, which will value both languages evenly if it is 0.5 . 
+ <br>
+ You should generally prefer <a href="#mix(double,squidpony.FakeLanguageGen,double,java.lang.Object...)"><code>mix(double, FakeLanguageGen, double, Object...)</code></a> or
+ <a href="#mixAll(java.lang.Object...)"><code>mixAll(Object...)</code></a> if you ever mix 3 or more languages. Chaining this mix() method can be very
+ counter-intuitive because the weights are relative, while in the other mix() and mixAll() they are absolute.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>other</code> - another FakeLanguageGen to mix along with this one into a new language</dd>
@@ -2657,7 +2678,7 @@ double&nbsp;otherInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="mix(double,squidpony.FakeLanguageGen,double,java.lang.Object...)">mix</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4615">mix</a></span>&#8203;(<span class="arguments">double&nbsp;myWeight,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4629">mix</a></span>&#8203;(<span class="arguments">double&nbsp;myWeight,
 <a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;other1,
 double&nbsp;weight1,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>...&nbsp;pairs)</span></div>
@@ -2676,10 +2697,10 @@ double&nbsp;weight1,
  3 equal weights with this, whereas with mix chaining you would need to mix the first two with 0.5 and the third
  with 0.33 .
  <br>
- Unlike the static method <a href="#mixAll(java.lang.Object...)"><code>mixAll(Object...)</code></a>, this _is_ intended for external use, in part because the
- technique for mixing languages by weight is so much more intuitive, but also because this assigns valid data for
- serializing and deserializing this FakeLanguageGen that allows it to use significantly less space (less than 1/72
- the bytes used in one not-quite-simple test).</div>
+ It's up to you whether you want to use <a href="#mixAll(java.lang.Object...)"><code>mixAll(Object...)</code></a> or this method; they call the same code and
+ produce the same result, including the summary for serialization support. You probably shouldn't use
+ <a href="#mix(squidpony.FakeLanguageGen,double)"><code>mix(FakeLanguageGen, double)</code></a> with two arguments in new code, since it's easy to make mistakes when
+ mixing three or more languages (calling that twice or more).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>myWeight</code> - the weight to assign this FakeLanguageGen in the mix</dd>
@@ -2694,7 +2715,7 @@ double&nbsp;weight1,
 <li class="blockList">
 <section class="detail">
 <h3><a id="mixAll(java.lang.Object...)">mixAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4685">mixAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>...&nbsp;pairs)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4702">mixAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>...&nbsp;pairs)</span></div>
 <div class="block">Produces a FakeLanguageGen from a group of FakeLanguageGen parameters and the weights for those parameters.
  Requires the first Object in pairs to be a FakeLanguageGen, the next to be a number of some kind that will be the
  weight for the previous FakeLanguageGen(this method can handle non-Double weights, and converts them to Double
@@ -2707,7 +2728,10 @@ double&nbsp;weight1,
  3 equal weights with this, whereas with mix chaining you would need to mix the first two with 0.5 and the third
  with 0.33 .
  <br>
- Not intended for external use, but it could be useful. Used internally in the deserialization code.</div>
+ This is probably the most intuitive way to mix languages here, though there's also
+ <a href="#mix(double,squidpony.FakeLanguageGen,double,java.lang.Object...)"><code>mix(double, FakeLanguageGen, double, Object...)</code></a>, which is very similar but doesn't take its parameters
+ in quite the same way (it isn't static, and treats the FakeLanguageGen object like the first item in pairs here).
+ Used internally in the deserialization code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pairs</code> - should have at least one item, and must alternate between FakeLanguageGen and number (weight) elements</dd>
@@ -2719,7 +2743,7 @@ double&nbsp;weight1,
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAccents(double,double)">addAccents</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4706">addAccents</a></span>&#8203;(<span class="arguments">double&nbsp;vowelInfluence,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4723">addAccents</a></span>&#8203;(<span class="arguments">double&nbsp;vowelInfluence,
 double&nbsp;consonantInfluence)</span></div>
 <div class="block">Produces a new FakeLanguageGen like this one but with extra vowels and/or consonants possible, adding from a wide
  selection of accented vowels (if vowelInfluence is above 0.0) and/or consonants (if consonantInfluence is above
@@ -2737,7 +2761,7 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAccents()">removeAccents</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4740">removeAccents</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4757">removeAccents</a></span>()</div>
 <div class="block">Useful for cases with limited fonts, this produces a new FakeLanguageGen like this one but with all accented
  characters removed (including almost all non-ASCII Latin-alphabet characters, but only some Greek and Cyrillic
  characters). This will replace letters like "A with a ring" with just "A". Some of the letters chosen as
@@ -2751,7 +2775,7 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getName()">getName</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4781">getName</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4798">getName</a></span>()</div>
 <div class="block">Returns the name of this FakeLanguageGen, such as "English" or "Deep Speech", if one was registered for this.
  In the case of hybrid languages produced by <a href="#mix(squidpony.FakeLanguageGen,double)"><code>mix(FakeLanguageGen, double)</code></a> or related methods, this should
  produce a String like "English/French" (or "English/French/Maori" if more are mixed together). If no name was
@@ -2765,7 +2789,7 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addModifiers(java.util.Collection)">addModifiers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4798">addModifiers</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&gt;&nbsp;mods)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4815">addModifiers</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&gt;&nbsp;mods)</span></div>
 <div class="block">Adds the specified Modifier objects from a Collection to a copy of this FakeLanguageGen and returns it.
  You can obtain a Modifier with the static constants in the FakeLanguageGen.Modifier nested class, the
  FakeLanguageGen.modifier() method, or Modifier's constructor.</div>
@@ -2780,7 +2804,7 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addModifiers(squidpony.FakeLanguageGen.Modifier...)">addModifiers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4812">addModifiers</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>...&nbsp;mods)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4829">addModifiers</a></span>&#8203;(<span class="arguments"><a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>...&nbsp;mods)</span></div>
 <div class="block">Adds the specified Modifier objects to a copy of this FakeLanguageGen and returns it.
  You can obtain a Modifier with the static constants in the FakeLanguageGen.Modifier nested class, the
  FakeLanguageGen.modifier() method, or Modifier's constructor.</div>
@@ -2795,7 +2819,7 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeModifiers()">removeModifiers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4823">removeModifiers</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4840">removeModifiers</a></span>()</div>
 <div class="block">Creates a copy of this FakeLanguageGen with no modifiers.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2806,7 +2830,7 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="modifier(java.lang.String,java.lang.String)">modifier</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4835">modifier</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pattern,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4852">modifier</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pattern,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;replacement)</span></div>
 <div class="block">Convenience method that just calls <a href="FakeLanguageGen.Modifier.html#%3Cinit%3E(java.lang.String,java.lang.String)"><code>Modifier(String, String)</code></a>.</div>
 <dl>
@@ -2821,7 +2845,7 @@ double&nbsp;consonantInfluence)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="modifier(java.lang.String,java.lang.String,double)">modifier</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4845">modifier</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pattern,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4862">modifier</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pattern,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;replacement,
 double&nbsp;chance)</span></div>
 <div class="block">Convenience method that just calls <a href="FakeLanguageGen.Modifier.html#%3Cinit%3E(java.lang.String,java.lang.String,double)"><code>Modifier(String, String, double)</code></a>.</div>
@@ -2838,7 +2862,7 @@ double&nbsp;chance)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4849">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4866">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -2848,7 +2872,7 @@ double&nbsp;chance)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4882">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4899">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -2858,13 +2882,13 @@ double&nbsp;chance)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hash64()">hash64</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4910">hash64</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4927">hash64</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4935">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4952">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -2874,19 +2898,19 @@ double&nbsp;chance)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4957">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4974">copy</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="serializeToString()">serializeToString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4965">serializeToString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4982">serializeToString</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="deserializeFromString(java.lang.String)">deserializeFromString</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4969">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/FakeLanguageGen.html#line.4986">deserializeFromString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;data)</span></div>
 </section>
 </li>
 </ul>
@@ -2895,8 +2919,8 @@ double&nbsp;chance)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -2942,5 +2966,7 @@ double&nbsp;chance)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

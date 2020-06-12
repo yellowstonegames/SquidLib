@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class MapModule" class="title">Class MapModule</h1>
@@ -101,10 +96,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Comparable</a>&lt;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;</code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.15">MapModule</a>
+<pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
+public class <a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.20">MapModule</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Comparable</a>&lt;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;, <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A subsection of a (typically modern-day or sci-fi) area map that can be placed by ModularMapGenerator.
+ <br>
+ This is marked Beta because both MapModule and <a href="ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>ModularMapGenerator</code></a> need improvement to be actually usable,
+ but it might be a while before there's a clear pathway towards how they can be improved. 
+ <br>
  Created by Tommy Ettinger on 4/4/2016.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -303,21 +303,21 @@ boolean&nbsp;flipUpDown)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="map">map</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.21">map</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.27">map</a></span></div>
 <div class="block">The contents of this section of map.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="environment">environment</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.25">environment</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.31">environment</a></span></div>
 <div class="block">The room/cave/corridor/wall status for each cell of this section of map.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="validDoors">validDoors</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.30">validDoors</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.36">validDoors</a></span></div>
 <div class="block">Stores Coords just outside the contents of the MapModule, where doors are allowed to connect into this.
  Uses Coord positions that are relative to this MapModule's map field, not whatever this is being placed into.</div>
 </section>
@@ -325,45 +325,45 @@ boolean&nbsp;flipUpDown)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="min">min</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.34">min</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">min</a></span></div>
 <div class="block">The minimum point on the bounding rectangle of the room, including walls.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="max">max</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.38">max</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.44">max</a></span></div>
 <div class="block">The maximum point on the bounding rectangle of the room, including walls.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="leftDoors">leftDoors</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">leftDoors</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.46">leftDoors</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rightDoors">rightDoors</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">rightDoors</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.46">rightDoors</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="topDoors">topDoors</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">topDoors</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.46">topDoors</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bottomDoors">bottomDoors</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.40">bottomDoors</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.46">bottomDoors</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="category">category</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.42">category</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.48">category</a></span></div>
 </section>
 </li>
 </ul>
@@ -379,13 +379,13 @@ boolean&nbsp;flipUpDown)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">MapModule</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.47">MapModule</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.53">MapModule</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(char[][])">MapModule</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.60">MapModule</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.66">MapModule</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map)</span></div>
 <div class="block">Constructs a MapModule given only a 2D char array as the contents of this section of map. The actual MapModule
  will use doors in the 2D char array as '+' or '/' if present. Otherwise, the valid locations for doors will be
  any outer wall adjacent to a floor ('.'), shallow water (','), grass ('"'), trap  ('^'), or staircase (less than
@@ -400,7 +400,7 @@ boolean&nbsp;flipUpDown)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(char[][],squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">MapModule</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.96">MapModule</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.102">MapModule</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
 <a href="../../squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;validDoors,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;min,
 <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;max)</span></div>
@@ -418,7 +418,7 @@ boolean&nbsp;flipUpDown)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.MapModule)">MapModule</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.120">MapModule</a></span>&#8203;(<span class="arguments"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;other)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.126">MapModule</a></span>&#8203;(<span class="arguments"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;other)</span></div>
 <div class="block">Copies another MapModule and uses it to construct a new one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -439,7 +439,7 @@ boolean&nbsp;flipUpDown)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rotate(int)">rotate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.133">rotate</a></span>&#8203;(<span class="arguments">int&nbsp;turns)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.139">rotate</a></span>&#8203;(<span class="arguments">int&nbsp;turns)</span></div>
 <div class="block">Rotates a copy of this MapModule by the given number of 90-degree turns. Describing the turns as clockwise or
  counter-clockwise depends on whether the y-axis "points up" or "points down." If higher values for y are toward the
  bottom of the screen (the default for when 2D arrays are printed), a turn of 1 is clockwise 90 degrees, but if the
@@ -455,14 +455,14 @@ boolean&nbsp;flipUpDown)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="flip(boolean,boolean)">flip</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.192">flip</a></span>&#8203;(<span class="arguments">boolean&nbsp;flipLeftRight,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.198">flip</a></span>&#8203;(<span class="arguments">boolean&nbsp;flipLeftRight,
 boolean&nbsp;flipUpDown)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="compareTo(squidpony.squidgrid.mapping.MapModule)">compareTo</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.267">compareTo</a></span>&#8203;(<span class="arguments"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/MapModule.html#line.273">compareTo</a></span>&#8203;(<span class="arguments"><a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Comparable.html?is-external=true#compareTo(T)" title="class or interface in java.lang" class="externalLink">compareTo</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Comparable</a>&lt;<a href="MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a>&gt;</code></dd>
@@ -475,8 +475,8 @@ boolean&nbsp;flipUpDown)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -522,5 +522,7 @@ boolean&nbsp;flipUpDown)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

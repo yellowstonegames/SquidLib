@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class DelaunayTriangulator" class="title">Class DelaunayTriangulator</h1>
@@ -101,14 +96,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.41">DelaunayTriangulator</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.40">DelaunayTriangulator</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A Java implementation of an incremental 2D Delaunay triangulation algorithm.
  This is a port of <a href="https://github.com/jdiemke/delaunay-triangulator">Johannes Diemke's code</a>, with
  some substantial non-algorithmic changes to better work in SquidLib and to reduce allocations. You should consider
- using the <code>com.badlogic.gdx.math.DelaunayTriangulator</code> class if you use libGDX, which allocates fewer objects.</div>
+ using the <code>com.badlogic.gdx.math.DelaunayTriangulator</code> class if you use libGDX, which allocates fewer objects,
+ or <a href="IndexedDelaunayTriangulator.html" title="class in squidpony.squidmath"><code>IndexedDelaunayTriangulator</code></a> for a version of that libGDX class ported to use doubles.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Johannes Diemke, Tommy Ettinger</dd>
@@ -303,7 +298,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">DelaunayTriangulator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.52">DelaunayTriangulator</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.50">DelaunayTriangulator</a></span>()</div>
 <div class="block">Constructs a triangulator instance but does not insert any points; you should add points to
  <a href="#getPoints()"><code>getPoints()</code></a>, which is an array that can hold 256 points, before running <a href="#triangulate()"><code>triangulate()</code></a>.</div>
 </section>
@@ -311,7 +306,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.util.Collection)">DelaunayTriangulator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.62">DelaunayTriangulator</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;&nbsp;points)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.60">DelaunayTriangulator</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&gt;&nbsp;points)</span></div>
 <div class="block">Constructs a new triangulator instance using the specified point set.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -332,7 +327,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="findContainingTriangle(squidpony.squidmath.CoordDouble)">findContainingTriangle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.75">findContainingTriangle</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.73">findContainingTriangle</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</span></div>
 <div class="block">Returns the triangle from this triangle soup that contains the specified
  point or null if no triangle from the triangle soup contains the point.</div>
 <dl>
@@ -347,7 +342,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="findNeighbor(squidpony.squidmath.DelaunayTriangulator.Triangle,squidpony.squidmath.DelaunayTriangulator.Edge)">findNeighbor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.95">findNeighbor</a></span>&#8203;(<span class="arguments"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&nbsp;triangle,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.93">findNeighbor</a></span>&#8203;(<span class="arguments"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&nbsp;triangle,
 <a href="DelaunayTriangulator.Edge.html" title="class in squidpony.squidmath">DelaunayTriangulator.Edge</a>&nbsp;edge)</span></div>
 <div class="block">Returns the neighbor triangle of the specified triangle sharing the same
  edge as specified. If no neighbor sharing the same edge exists null is
@@ -365,7 +360,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="findNeighbor(squidpony.squidmath.DelaunayTriangulator.Triangle,squidpony.squidmath.CoordDouble,squidpony.squidmath.CoordDouble)">findNeighbor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.103">findNeighbor</a></span>&#8203;(<span class="arguments"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&nbsp;triangle,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.101">findNeighbor</a></span>&#8203;(<span class="arguments"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&nbsp;triangle,
 <a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;ea,
 <a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;eb)</span></div>
 </section>
@@ -373,7 +368,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="findOneTriangleSharing(squidpony.squidmath.DelaunayTriangulator.Edge)">findOneTriangleSharing</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.122">findOneTriangleSharing</a></span>&#8203;(<span class="arguments"><a href="DelaunayTriangulator.Edge.html" title="class in squidpony.squidmath">DelaunayTriangulator.Edge</a>&nbsp;edge)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.120">findOneTriangleSharing</a></span>&#8203;(<span class="arguments"><a href="DelaunayTriangulator.Edge.html" title="class in squidpony.squidmath">DelaunayTriangulator.Edge</a>&nbsp;edge)</span></div>
 <div class="block">Returns one of the possible triangles sharing the specified edge. Based
  on the ordering of the triangles in this triangle soup the returned
  triangle may differ. To find the other triangle that shares this edge use
@@ -389,7 +384,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="findNearestEdge(squidpony.squidmath.CoordDouble)">findNearestEdge</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Edge.html" title="class in squidpony.squidmath">DelaunayTriangulator.Edge</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.138">findNearestEdge</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="DelaunayTriangulator.Edge.html" title="class in squidpony.squidmath">DelaunayTriangulator.Edge</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.136">findNearestEdge</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;point)</span></div>
 <div class="block">Returns the edge from the triangle soup nearest to the specified point.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -402,7 +397,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeTrianglesUsing(squidpony.squidmath.CoordDouble)">removeTrianglesUsing</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.168">removeTrianglesUsing</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;vertex)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.166">removeTrianglesUsing</a></span>&#8203;(<span class="arguments"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;vertex)</span></div>
 <div class="block">Removes all triangles from this triangle soup that contain the specified
  vertex.</div>
 <dl>
@@ -414,7 +409,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="triangulate()">triangulate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.182">triangulate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.180">triangulate</a></span>()</div>
 <div class="block">This method generates a Delaunay triangulation from the specified point
  set.</div>
 </section>
@@ -422,7 +417,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="shuffle(squidpony.squidmath.IRNG)">shuffle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.326">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.324">shuffle</a></span>&#8203;(<span class="arguments"><a href="IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 <div class="block">Creates a random permutation of the specified point set. Based on the
  implementation of the Delaunay algorithm this can speed up the
  computation.</div>
@@ -431,7 +426,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="getPoints()">getPoints</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.335">getPoints</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>[]</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.333">getPoints</a></span>()</div>
 <div class="block">Returns the point set in form of a vector of 2D vectors.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -442,7 +437,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="getTriangles()">getTriangles</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.345">getTriangles</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/DelaunayTriangulator.html#line.343">getTriangles</a></span>()</div>
 <div class="block">Returns the triangles of the triangulation in form of a list of 2D
  triangles.</div>
 <dl>
@@ -457,8 +452,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -504,5 +499,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

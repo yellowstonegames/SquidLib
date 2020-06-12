@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class GDXMarkup" class="title">Class GDXMarkup</h1>
@@ -97,12 +92,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="description">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IMarkup</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
 </dl>
 <hr>
 <pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.47">GDXMarkup</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
+implements <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IMarkup</a>&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <div class="block">GDXMarkup implements IMarkup for libGDX Color objects, and can start blocks of markup that libGDX understands that
  display text in a given Color. Typically, the singleton <a href="#instance"><code>instance</code></a> would be passed to a class that uses
  IMarkup of Color, and then anything else will be handled internally as Colors are given to the using class. This does
@@ -146,10 +141,10 @@ implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 </a>
 <h2>Nested Class Summary</h2>
 <div class="inheritedList">
-<h2>Nested classes/interfaces inherited from interface&nbsp;squidpony.panel.IMarkup</h2>
+<h2>Nested classes/interfaces inherited from interface&nbsp;squidpony.panel.<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IMarkup</a></h2>
 <a id="nested.classes.inherited.from.class.squidpony.panel.IMarkup">
 <!--   -->
-</a><code>squidpony.panel.IMarkup.StringMarkup</code></div>
+</a><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.StringMarkup.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IMarkup.StringMarkup</a></code></div>
 </section>
 </li>
 <!-- =========== FIELD SUMMARY =========== -->
@@ -228,7 +223,7 @@ implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor" id="i1">
-<td class="colFirst"><code>squidpony.panel.IColoredString&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IColoredString</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#colorString(java.lang.CharSequence)">colorString</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;markupString)</code></th>
 <td class="colLast">
 <div class="block">Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
@@ -248,7 +243,7 @@ implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 </td>
 </tr>
 <tr class="rowColor" id="i3">
-<td class="colFirst"><code>squidpony.panel.IColoredString&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
+<td class="colFirst"><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IColoredString</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#colorStringOnly(java.lang.CharSequence)">colorStringOnly</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;markupString)</code></th>
 <td class="colLast">
 <div class="block">Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
@@ -367,7 +362,7 @@ boolean&nbsp;italic)</code></th>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.61">getMarkup</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;value)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>getMarkup</code>&nbsp;in interface&nbsp;<code>squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.html?is-external=true#getMarkup(T)" title="class or interface in squidpony.panel" class="externalLink">getMarkup</a></code>&nbsp;in interface&nbsp;<code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IMarkup</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -377,7 +372,7 @@ boolean&nbsp;italic)</code></th>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.66">closeMarkup</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>closeMarkup</code>&nbsp;in interface&nbsp;<code>squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
+<dd><code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.html?is-external=true#closeMarkup()" title="class or interface in squidpony.panel" class="externalLink">closeMarkup</a></code>&nbsp;in interface&nbsp;<code><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IMarkup</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -398,7 +393,7 @@ boolean&nbsp;italic)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="colorString(java.lang.CharSequence)">colorString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.panel.IColoredString&lt;com.badlogic.gdx.graphics.Color&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.103">colorString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;markupString)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IColoredString</a>&lt;com.badlogic.gdx.graphics.Color&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.103">colorString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;markupString)</span></div>
 <div class="block">Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
  produces an IColoredString (of Color) with the color markup tags used to mark text in colors in the resulting
  IColoredString, and any style markup tags used to mark sections of text as bold or italic for a TextFamily to
@@ -414,7 +409,7 @@ boolean&nbsp;italic)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="colorStringOnly(java.lang.CharSequence)">colorStringOnly</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">squidpony.panel.IColoredString&lt;com.badlogic.gdx.graphics.Color&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.202">colorStringOnly</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;markupString)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IColoredString</a>&lt;com.badlogic.gdx.graphics.Color&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.202">colorStringOnly</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;markupString)</span></div>
 <div class="block">Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
  produces an IColoredString (of Color) with the color markup tags used to mark text in colors in the resulting
  IColoredString, but with both bold and italic style markup tags ignored (so normal TextCellFactory objects can
@@ -528,8 +523,8 @@ boolean&nbsp;italic)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -574,5 +569,7 @@ boolean&nbsp;italic)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

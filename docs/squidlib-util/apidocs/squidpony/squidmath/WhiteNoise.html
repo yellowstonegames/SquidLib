@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class WhiteNoise" class="title">Class WhiteNoise</h1>
@@ -106,7 +101,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 implements <a href="Noise.Noise1D.html" title="interface in squidpony.squidmath">Noise.Noise1D</a>, <a href="Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></pre>
 <div class="block">Performance-oriented white noise generator for 1D, 2D, 3D, 4D, and 6D. Produces noise values from -1.0 inclusive
  to 1.0 exclusive. Should produce a completely different double even for extremely-nearby points, so this is not a
- kind of continuous noise like <a href="PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>. It is not actually random, and the value is always determined by
+ kind of continuous noise like <a href="SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a>. It is not actually random, and the value is always determined by
  the exact double positions (and possibly a long seed) given to it. Even a slight change should drastically alter the
  returned value, though below some very small epsilon the results might not be different between two very close points
  in space. The output should look like "TV static" if rendered as grayscale pixels.
@@ -482,8 +477,8 @@ long&nbsp;seed)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -529,5 +524,7 @@ long&nbsp;seed)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

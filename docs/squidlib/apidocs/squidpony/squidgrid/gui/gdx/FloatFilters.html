@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -66,20 +66,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class FloatFilters" class="title">Class FloatFilters</h1>
@@ -90,7 +85,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre>public final class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.15">FloatFilters</a>
+<pre>public final class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.16">FloatFilters</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Pre-made FloatFilter classes that you can use to filter colors without producing extra Color objects.
  <br>
@@ -191,7 +186,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="FloatFilters.PaletteReducerFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.PaletteReducerFilter</a></span></code></th>
 <td class="colLast">
-<div class="block">A FloatFilter that limits the colors it can return to a fixed palette as determined by a <a href="PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx"><code>PaletteReducer</code></a>,
+<div class="block">A FloatFilter that limits the colors it can return to a fixed palette as determined by a <code>PaletteReducer</code>,
  and won't return any colors that are missing from that palette (although it can always return fully-transparent).</div>
 </td>
 </tr>
@@ -279,7 +274,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="identityFilter">identityFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FloatFilters.IdentityFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.IdentityFilter</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.192">identityFilter</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="FloatFilters.IdentityFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.IdentityFilter</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.193">identityFilter</a></span></div>
 <div class="block">A static constant of the one possible IdentityFilter, to avoid needing to make duplicates.
  IdentityFilter makes no changes to the colors given to it.</div>
 </section>
@@ -290,8 +285,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -336,5 +331,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

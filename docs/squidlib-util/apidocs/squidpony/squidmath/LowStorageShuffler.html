@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class LowStorageShuffler" class="title">Class LowStorageShuffler</h1>
@@ -105,7 +100,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.35">LowStorageShuffler</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.33">LowStorageShuffler</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
@@ -128,9 +123,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
  two states, and that turns out to be just fine for a Feistel network. Using 4 rounds turns out to be overkill in this
  case. This also uses a different seed for each round.
  <br>
- This class is extremely similar to <a href="SwapOrNotShuffler.html" title="class in squidpony.squidmath"><code>SwapOrNotShuffler</code></a>; both are optimized for usage on GWT but
- SwapOrNotShuffler is meant to have higher quality in general, and performs many more rounds of encoding when the
- bound is large (which is slow). There's also <a href="ShuffledIntSequence.html" title="class in squidpony.squidmath"><code>ShuffledIntSequence</code></a>, which extends this class and uses different
+ This class is similar to <a href="ShuffledIntSequence.html" title="class in squidpony.squidmath"><code>ShuffledIntSequence</code></a>, which extends this class and uses different
  behavior so it "re-shuffles" the results when all results have been produced.
  <br>
  Created by Tommy Ettinger on 9/22/2018.</div>
@@ -340,49 +333,49 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bound">bound</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.37">bound</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.35">bound</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="index">index</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.38">index</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">index</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="pow4">pow4</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.38">pow4</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">pow4</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="halfBits">halfBits</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.38">halfBits</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">halfBits</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="leftMask">leftMask</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.38">leftMask</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">leftMask</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rightMask">rightMask</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.38">rightMask</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">rightMask</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="key0">key0</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.39">key0</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.37">key0</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="key1">key1</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.39">key1</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.37">key1</a></span></div>
 </section>
 </li>
 </ul>
@@ -398,14 +391,14 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">LowStorageShuffler</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.44">LowStorageShuffler</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.42">LowStorageShuffler</a></span>()</div>
 <div class="block">Constructs a LowStorageShuffler with a random seed and a bound of 10.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int)">LowStorageShuffler</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.51">LowStorageShuffler</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.49">LowStorageShuffler</a></span>&#8203;(<span class="arguments">int&nbsp;bound)</span></div>
 <div class="block">Constructs a LowStorageShuffler with the given exclusive upper bound and a random seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -416,7 +409,7 @@ int&nbsp;seed)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">LowStorageShuffler</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.61">LowStorageShuffler</a></span>&#8203;(<span class="arguments">int&nbsp;bound,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.59">LowStorageShuffler</a></span>&#8203;(<span class="arguments">int&nbsp;bound,
 int&nbsp;seed)</span></div>
 <div class="block">Constructs a LowStorageShuffler with the given exclusive upper bound and int seed.</div>
 <dl>
@@ -439,7 +432,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="next()">next</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.81">next</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.79">next</a></span>()</div>
 <div class="block">Gets the next distinct int in the sequence, or -1 if all distinct ints have been returned that are non-negative
  and less than <a href="#bound"><code>bound</code></a>.</div>
 <dl>
@@ -451,7 +444,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="previous()">previous</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.103">previous</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.101">previous</a></span>()</div>
 <div class="block">Gets the previous returned int from the sequence (as yielded by <a href="#next()"><code>next()</code></a>), or -1 if next() has never been
  called (or the LowStorageShuffler has reached the beginning from repeated calls to this method).</div>
 <dl>
@@ -463,14 +456,14 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="restart()">restart</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.124">restart</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.122">restart</a></span>()</div>
 <div class="block">Starts the same sequence over from the beginning.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="determine(int)">determine</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.135">determine</a></span>&#8203;(<span class="arguments">int&nbsp;z)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.133">determine</a></span>&#8203;(<span class="arguments">int&nbsp;z)</span></div>
 <div class="block">Used to rearrange the bits of seeds this is given in a way that should partly randomize them.
  A high-quality 32-bit input, 32-bit output unary hash is pretty hard to find.</div>
 <dl>
@@ -484,7 +477,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="restart(int)">restart</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.145">restart</a></span>&#8203;(<span class="arguments">int&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.143">restart</a></span>&#8203;(<span class="arguments">int&nbsp;seed)</span></div>
 <div class="block">Starts the sequence over, but can change the seed (completely changing the sequence). If <code>seed</code> is the same
  as the seed given in the constructor, this will use the same sequence, acting like <a href="#restart()"><code>restart()</code></a>.</div>
 <dl>
@@ -496,7 +489,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="round(int,int)">round</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.163">round</a></span>&#8203;(<span class="arguments">int&nbsp;data,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.161">round</a></span>&#8203;(<span class="arguments">int&nbsp;data,
 int&nbsp;seed)</span></div>
 <div class="block">An irreversible mixing function that seems to give good results; GWT-compatible.
  This is similar to <a href="SilkRNG.html" title="class in squidpony.squidmath"><code>SilkRNG</code></a>'s way of combining two states, but because this doesn't need to be reversible
@@ -514,7 +507,7 @@ int&nbsp;seed)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="encode(int)">encode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.202">encode</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.200">encode</a></span>&#8203;(<span class="arguments">int&nbsp;index)</span></div>
 <div class="block">Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method
  to use more or less rounds, but there must always be an even number.</div>
 <dl>
@@ -531,8 +524,8 @@ int&nbsp;seed)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -578,5 +571,7 @@ int&nbsp;seed)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

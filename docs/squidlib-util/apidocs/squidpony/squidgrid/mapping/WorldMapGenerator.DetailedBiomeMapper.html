@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class WorldMapGenerator.DetailedBiomeMapper" class="title">Class WorldMapGenerator.DetailedBiomeMapper</h1>
@@ -105,7 +100,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.946">WorldMapGenerator.DetailedBiomeMapper</a>
+<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.944">WorldMapGenerator.DetailedBiomeMapper</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a></pre>
 <div class="block">A way to get biome information for the cells on a map when you want an area's biome to be a combination of two
@@ -437,28 +432,28 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="heatCodeData">heatCodeData</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.951">heatCodeData</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.949">heatCodeData</a></span></div>
 <div class="block">The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="moistureCodeData">moistureCodeData</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.951">moistureCodeData</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.949">moistureCodeData</a></span></div>
 <div class="block">The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="biomeCodeData">biomeCodeData</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.951">biomeCodeData</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.949">biomeCodeData</a></span></div>
 <div class="block">The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="coldestValueLower">coldestValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">coldestValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">coldestValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.coldestValueLower">Constant Field Values</a></dd>
@@ -468,7 +463,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="coldestValueUpper">coldestValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">coldestValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">coldestValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.coldestValueUpper">Constant Field Values</a></dd>
@@ -478,7 +473,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="colderValueLower">colderValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">colderValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">colderValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.colderValueLower">Constant Field Values</a></dd>
@@ -488,7 +483,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="colderValueUpper">colderValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">colderValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">colderValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.colderValueUpper">Constant Field Values</a></dd>
@@ -498,7 +493,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="coldValueLower">coldValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">coldValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">coldValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.coldValueLower">Constant Field Values</a></dd>
@@ -508,7 +503,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="coldValueUpper">coldValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">coldValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">coldValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.coldValueUpper">Constant Field Values</a></dd>
@@ -518,7 +513,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="warmValueLower">warmValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">warmValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">warmValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.warmValueLower">Constant Field Values</a></dd>
@@ -528,7 +523,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="warmValueUpper">warmValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">warmValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">warmValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.warmValueUpper">Constant Field Values</a></dd>
@@ -538,7 +533,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="warmerValueLower">warmerValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">warmerValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">warmerValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.warmerValueLower">Constant Field Values</a></dd>
@@ -548,7 +543,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="warmerValueUpper">warmerValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">warmerValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">warmerValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.warmerValueUpper">Constant Field Values</a></dd>
@@ -558,7 +553,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="warmestValueLower">warmestValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">warmestValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">warmestValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.warmestValueLower">Constant Field Values</a></dd>
@@ -568,7 +563,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="warmestValueUpper">warmestValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">warmestValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">warmestValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.warmestValueUpper">Constant Field Values</a></dd>
@@ -578,7 +573,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="driestValueLower">driestValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">driestValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">driestValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.driestValueLower">Constant Field Values</a></dd>
@@ -588,7 +583,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="driestValueUpper">driestValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">driestValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">driestValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.driestValueUpper">Constant Field Values</a></dd>
@@ -598,7 +593,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="drierValueLower">drierValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">drierValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">drierValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.drierValueLower">Constant Field Values</a></dd>
@@ -608,7 +603,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="drierValueUpper">drierValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">drierValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">drierValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.drierValueUpper">Constant Field Values</a></dd>
@@ -618,7 +613,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dryValueLower">dryValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">dryValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">dryValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.dryValueLower">Constant Field Values</a></dd>
@@ -628,7 +623,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dryValueUpper">dryValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">dryValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">dryValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.dryValueUpper">Constant Field Values</a></dd>
@@ -638,7 +633,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wetValueLower">wetValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">wetValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">wetValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.wetValueLower">Constant Field Values</a></dd>
@@ -648,7 +643,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wetValueUpper">wetValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">wetValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">wetValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.wetValueUpper">Constant Field Values</a></dd>
@@ -658,7 +653,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wetterValueLower">wetterValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">wetterValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">wetterValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.wetterValueLower">Constant Field Values</a></dd>
@@ -668,7 +663,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wetterValueUpper">wetterValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">wetterValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">wetterValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.wetterValueUpper">Constant Field Values</a></dd>
@@ -678,7 +673,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wettestValueLower">wettestValueLower</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">wettestValueLower</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">wettestValueLower</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.wettestValueLower">Constant Field Values</a></dd>
@@ -688,7 +683,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wettestValueUpper">wettestValueUpper</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1005">wettestValueUpper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType">double</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1003">wettestValueUpper</a></span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.DetailedBiomeMapper.wettestValueUpper">Constant Field Values</a></dd>
@@ -698,7 +693,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="biomeTable">biomeTable</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1033">biomeTable</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1031">biomeTable</a></span></div>
 <div class="block">The default biome table to use with parts of biome codes from <a href="#biomeCodeData"><code>biomeCodeData</code></a>. Biomes are assigned by
  heat and moisture for the first 36 of 61 elements (coldest to warmest for each group of 6, with the first
  group as the dryest and the last group the wettest), then the next 6 are for coastlines (coldest to warmest),
@@ -725,7 +720,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">DetailedBiomeMapper</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1115">DetailedBiomeMapper</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1113">DetailedBiomeMapper</a></span>()</div>
 <div class="block">Simple constructor; pretty much does nothing. Make sure to call <a href="#makeBiomes(squidpony.squidgrid.mapping.WorldMapGenerator)"><code>makeBiomes(WorldMapGenerator)</code></a> before
  using fields like <a href="#biomeCodeData"><code>biomeCodeData</code></a>.</div>
 </section>
@@ -743,7 +738,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBiomeCode(int,int)">getBiomeCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.975">getBiomeCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.973">getBiomeCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Gets the biome code for the dominant biome at a given x,y position. This is equivalent to getting the raw
  biome code from <a href="#biomeCodeData"><code>biomeCodeData</code></a>, calling <a href="#extractMixAmount(int)"><code>extractMixAmount(int)</code></a> on that raw biome code, and
@@ -763,7 +758,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getHeatCode(int,int)">getHeatCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.982">getHeatCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.980">getHeatCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="WorldMapGenerator.BiomeMapper.html#getHeatCode(int,int)">WorldMapGenerator.BiomeMapper</a></code></span></div>
 <div class="block">Gets a heat code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
@@ -783,7 +778,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMoistureCode(int,int)">getMoistureCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.987">getMoistureCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.985">getMoistureCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="WorldMapGenerator.BiomeMapper.html#getMoistureCode(int,int)">WorldMapGenerator.BiomeMapper</a></code></span></div>
 <div class="block">Gets a moisture code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
@@ -806,7 +801,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBiomeNameTable()">getBiomeNameTable</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1000">getBiomeNameTable</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.998">getBiomeNameTable</a></span>()</div>
 <div class="block">Gets a String array where biome codes can be used as indices to look up a name for the biome they refer to.
  This table uses 6 levels of heat and 6 levels of moisture, and tracks rivers, coastlines, lakes, and oceans
  as potentially different types of terrain. Biome codes can be obtained with <a href="#getBiomeCode(int,int)"><code>getBiomeCode(int, int)</code></a>.
@@ -823,7 +818,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="extractPartA(int)">extractPartA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1055">extractPartA</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1053">extractPartA</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
 <div class="block">Gets the int stored in part A of the given biome code, which can be used as an index into other collections.
  This int should almost always range from 0 to 60 (both inclusive), so collections this is used as an index
  for should have a length of at least 61.</div>
@@ -838,7 +833,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="extractBiomeA(int)">extractBiomeA</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1064">extractBiomeA</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1062">extractBiomeA</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
 <div class="block">Gets a String from <a href="#biomeTable"><code>biomeTable</code></a> that names the appropriate biome in part A of the given biome code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -851,7 +846,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="extractPartB(int)">extractPartB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1078">extractPartB</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1076">extractPartB</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
 <div class="block">Gets the int stored in part B of the given biome code, which can be used as an index into other collections.
  This int should almost always range from 0 to 60 (both inclusive), so collections this is used as an index
  for should have a length of at least 61.</div>
@@ -866,7 +861,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="extractBiomeB(int)">extractBiomeB</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1088">extractBiomeB</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1086">extractBiomeB</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
 <div class="block">Gets a String from <a href="#biomeTable"><code>biomeTable</code></a> that names the appropriate biome in part B of the given biome code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -879,7 +874,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="extractMixAmount(int)">extractMixAmount</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1106">extractMixAmount</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1104">extractMixAmount</a></span>&#8203;(<span class="arguments">int&nbsp;biomeCode)</span></div>
 <div class="block">This gets the portion of a biome code that represents the amount of mixing between two biomes.
  Biome codes are normally obtained from the <a href="#biomeCodeData"><code>biomeCodeData</code></a> field, and aren't very usable on their own
  without calling methods like this, <a href="#extractBiomeA(int)"><code>extractBiomeA(int)</code></a>, and <a href="#extractBiomeB(int)"><code>extractBiomeB(int)</code></a>. This returns
@@ -897,7 +892,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeBiomes(squidpony.squidgrid.mapping.WorldMapGenerator)">makeBiomes</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1130">makeBiomes</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;world)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#line.1128">makeBiomes</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;world)</span></div>
 <div class="block">Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
  assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
  taken from <a href="#biomeCodeData"><code>biomeCodeData</code></a> and used with methods in this class like <a href="#extractBiomeA(int)"><code>extractBiomeA(int)</code></a>,
@@ -917,8 +912,8 @@ int&nbsp;y)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -964,5 +959,7 @@ int&nbsp;y)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

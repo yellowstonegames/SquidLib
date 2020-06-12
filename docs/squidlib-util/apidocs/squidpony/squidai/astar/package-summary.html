@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Package" class="title">Package&nbsp;squidpony.squidai.astar</h1>
@@ -116,22 +111,31 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </thead>
 <tbody>
 <tr class="altColor">
+<th class="colFirst" scope="row"><a href="CostlyConnection.html" title="class in squidpony.squidai.astar">CostlyConnection</a>&lt;N&gt;</th>
+<td class="colLast">
+<div class="block">A <code>CostlyConnection</code> is a <a href="Connection.html" title="interface in squidpony.squidai.astar"><code>Connection</code></a> that can have different costs for different instances.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a>&lt;N&gt;</th>
 <td class="colLast">
 <div class="block">A <code>DefaultConnection</code> is a <a href="Connection.html" title="interface in squidpony.squidai.astar"><code>Connection</code></a> whose cost is 1.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr class="altColor">
+<th class="colFirst" scope="row"><a href="DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></th>
+<td class="colLast">
+<div class="block">A convenient implementation of <a href="Graph.html" title="interface in squidpony.squidai.astar"><code>Graph</code></a> for <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> nodes; this also allows constructing a Graph with a
+ 2D char array like those produced all over SquidLib.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;N&gt;</th>
 <td class="colLast">
 <div class="block">An indexed A* pathfinder that works with a Graph of nodes (generic type <code>N</code>).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a></th>
 <td class="colLast">
 <div class="block">A class used by <a href="Pathfinder.html" title="class in squidpony.squidai.astar"><code>Pathfinder</code></a> to collect search metrics.</div>
@@ -173,5 +177,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

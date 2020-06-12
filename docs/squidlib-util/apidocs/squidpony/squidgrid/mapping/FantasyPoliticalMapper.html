@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class FantasyPoliticalMapper" class="title">Class FantasyPoliticalMapper</h1>
@@ -101,19 +96,22 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.25">FantasyPoliticalMapper</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.28">FantasyPoliticalMapper</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">When you have a world map as produced by <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a>, you may want to fill it with claims by various
  factions, where each faction may be hand-made and may consist of humans or some fantasy species, such as goblins,
  elves, or demons. This can assign contiguous areas of land to various factions, while acknowledging any preferences
  some species may have for specific types of land (elves may strongly prefer forest terrain, or flying demons may be
- the ideal residents for difficult mountainous terrain). This needs both a <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a>, preferably
- <a href="WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.TilingMap</code></a> or
- <a href="WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.EllipticalMap</code></a> because they distribute area equally across the
- map, and a <a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping"><code>WorldMapGenerator.BiomeMapper</code></a> to allocate biomes and height/moisture
- info.</div>
+ the ideal residents for difficult mountainous terrain). This needs both a <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> and a
+ <a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping"><code>WorldMapGenerator.BiomeMapper</code></a> to allocate biomes and height/moisture info.
+ The WorldMapGenerator is commonly a <a href="WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.SphereMap</code></a> or a
+ <a href="WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.EllipticalMap</code></a> for a world map because they are fairly familiar
+ map projections (<a href="WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.HyperellipticalMap</code></a> can look better if
+ important areas are in the corners of the rectangular area, but it's less familiar). If you're making a political map
+ for an island or isolated area, then you may want <a href="WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.LocalMap</code></a> or
+ <a href="WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.LocalMimicMap</code></a> instead, which don't have world-scale features
+ like polar ice caps or a warm equator.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#squidpony.squidgrid.mapping.FantasyPoliticalMapper">Serialized Form</a></dd>
@@ -345,55 +343,55 @@ double&nbsp;controlledFraction)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.259">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.261">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.260">height</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.262">height</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.261">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.263">rng</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="name">name</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.262">name</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.264">name</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="politicalMap">politicalMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.263">politicalMap</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.265">politicalMap</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="zoomedMap">zoomedMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.264">zoomedMap</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.266">zoomedMap</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="wmg">wmg</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.265">wmg</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.267">wmg</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="biomeMapper">biomeMapper</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.266">biomeMapper</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.268">biomeMapper</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="atlas">atlas</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="FantasyPoliticalMapper.Faction.html" title="class in squidpony.squidgrid.mapping">FantasyPoliticalMapper.Faction</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.281">atlas</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="../../squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="FantasyPoliticalMapper.Faction.html" title="class in squidpony.squidgrid.mapping">FantasyPoliticalMapper.Faction</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.283">atlas</a></span></div>
 <div class="block">Maps chars, as found in the returned array from generate(), to Strings that store the full name of nations.</div>
 </section>
 </li>
@@ -410,7 +408,7 @@ double&nbsp;controlledFraction)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">FantasyPoliticalMapper</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.287">FantasyPoliticalMapper</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.289">FantasyPoliticalMapper</a></span>()</div>
 <div class="block">Constructs a FantasyPoliticalMapper, but doesn't do anything with a map; you need to call
  <a href="#generate(long,squidpony.squidgrid.mapping.WorldMapGenerator,squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper,java.util.Collection,int,double)"><code>generate(long, WorldMapGenerator, WorldMapGenerator.BiomeMapper, Collection, int, double)</code></a> for results.</div>
 </section>
@@ -428,7 +426,7 @@ double&nbsp;controlledFraction)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate()">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.300">generate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.302">generate</a></span>()</div>
 <div class="block">For when you really don't care what arguments you give this, you can use this zero-parameter overload of
  generate() to produce a 128x128 <a href="WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.TilingMap</code></a> world map with a
  <a href="WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.SimpleBiomeMapper</code></a> biome mapper, filling it with 30 random
@@ -443,7 +441,7 @@ double&nbsp;controlledFraction)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate(long,squidpony.squidgrid.mapping.WorldMapGenerator,squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper,int)">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.325">generate</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.327">generate</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;wmg,
 <a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a>&nbsp;biomeMapper,
 int&nbsp;factionCount)</span></div>
@@ -471,7 +469,7 @@ int&nbsp;factionCount)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate(long,squidpony.squidgrid.mapping.WorldMapGenerator,squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper,int,double)">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.347">generate</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.349">generate</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;wmg,
 <a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a>&nbsp;biomeMapper,
 int&nbsp;factionCount,
@@ -501,7 +499,7 @@ double&nbsp;controlledFraction)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate(long,squidpony.squidgrid.mapping.WorldMapGenerator,squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper,java.util.Collection,int,double)">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.372">generate</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.374">generate</a></span>&#8203;(<span class="arguments">long&nbsp;seed,
 <a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;wmg,
 <a href="WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a>&nbsp;biomeMapper,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="FantasyPoliticalMapper.Faction.html" title="class in squidpony.squidgrid.mapping">FantasyPoliticalMapper.Faction</a>&gt;&nbsp;factions,
@@ -534,7 +532,7 @@ double&nbsp;controlledFraction)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="adjustZoom()">adjustZoom</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.531">adjustZoom</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/FantasyPoliticalMapper.html#line.533">adjustZoom</a></span>()</div>
 <div class="block">If the WorldMapGenerator used by
  <a href="#generate(long,squidpony.squidgrid.mapping.WorldMapGenerator,squidpony.squidgrid.mapping.WorldMapGenerator.BiomeMapper,java.util.Collection,int,double)"><code>generate(long, WorldMapGenerator, WorldMapGenerator.BiomeMapper, Collection, int, double)</code></a> zooms in or
  out, you can call this method to make the <a href="#zoomedMap"><code>zoomedMap</code></a> 2D char array match its zoom. The world-scale map,
@@ -556,8 +554,8 @@ double&nbsp;controlledFraction)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -603,5 +601,7 @@ double&nbsp;controlledFraction)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

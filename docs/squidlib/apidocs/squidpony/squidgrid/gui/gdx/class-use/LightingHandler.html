@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -51,18 +51,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Class squidpony.squidgrid.gui.gdx.LightingHandler" class="title">Uses of Class<br>squidpony.squidgrid.gui.gdx.LightingHandler</h1>
@@ -97,7 +92,7 @@ int&nbsp;y,
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#addLight(squidpony.squidmath.Coord,squidpony.squidgrid.gui.gdx.Radiance)">addLight</a></span>&#8203;(squidpony.squidmath.Coord&nbsp;position,
+<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#addLight(squidpony.squidmath.Coord,squidpony.squidgrid.gui.gdx.Radiance)">addLight</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;position,
 <a href="../Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;light)</code></th>
 <td class="colLast">
 <div class="block">Adds a Radiance as a light source at the given position.</div>
@@ -116,8 +111,8 @@ int&nbsp;newY)</code></th>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#moveLight(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">moveLight</a></span>&#8203;(squidpony.squidmath.Coord&nbsp;oldPosition,
-squidpony.squidmath.Coord&nbsp;newPosition)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#moveLight(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">moveLight</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;oldPosition,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;newPosition)</code></th>
 <td class="colLast">
 <div class="block">If a Radiance is present at oldPosition, this will move it to newPosition and overwrite any existing Radiance at
  newPosition.</div>
@@ -133,7 +128,7 @@ int&nbsp;y)</code></th>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#removeLight(squidpony.squidmath.Coord)">removeLight</a></span>&#8203;(squidpony.squidmath.Coord&nbsp;position)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">LightingHandler.</span><code><span class="memberNameLink"><a href="../LightingHandler.html#removeLight(squidpony.squidmath.Coord)">removeLight</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Removes a Radiance as a light source from the given position, if any is present.</div>
 </td>
@@ -174,5 +169,7 @@ int&nbsp;y)</code></th>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

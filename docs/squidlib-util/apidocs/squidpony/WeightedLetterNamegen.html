@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class WeightedLetterNamegen" class="title">Class WeightedLetterNamegen</h1>
@@ -97,8 +92,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <section class="description">
 <hr>
-<pre><a href="annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../src-html/squidpony/WeightedLetterNamegen.html#line.20">WeightedLetterNamegen</a>
+<pre>public class <a href="../src-html/squidpony/WeightedLetterNamegen.html#line.20">WeightedLetterNamegen</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Based on work by Nolithius available at the following two sites
  https://github.com/Nolithius/weighted-letter-namegen
@@ -106,6 +100,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="FakeLanguageGen.html" title="class in squidpony"><code>FakeLanguageGen is meant for generating more than just names, and can imitate language styles.</code></a></dd>
 </dl>
 </section>
 <section class="summary">
@@ -268,37 +264,37 @@ int&nbsp;consonantLimit,
 <li class="blockList">
 <section class="detail">
 <h3><a id="VIKING_STYLE_NAMES">VIKING_STYLE_NAMES</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.24">VIKING_STYLE_NAMES</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.23">VIKING_STYLE_NAMES</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="STAR_WARS_STYLE_NAMES">STAR_WARS_STYLE_NAMES</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.46">STAR_WARS_STYLE_NAMES</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.45">STAR_WARS_STYLE_NAMES</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="COMMON_USA_MALE_NAMES">COMMON_USA_MALE_NAMES</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.79">COMMON_USA_MALE_NAMES</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.78">COMMON_USA_MALE_NAMES</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="COMMON_USA_FEMALE_NAMES">COMMON_USA_FEMALE_NAMES</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.133">COMMON_USA_FEMALE_NAMES</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.132">COMMON_USA_FEMALE_NAMES</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="COMMON_USA_LAST_NAMES">COMMON_USA_LAST_NAMES</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.196">COMMON_USA_LAST_NAMES</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.195">COMMON_USA_LAST_NAMES</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="LOVECRAFT_MYTHOS_NAMES">LOVECRAFT_MYTHOS_NAMES</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.232">LOVECRAFT_MYTHOS_NAMES</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.231">LOVECRAFT_MYTHOS_NAMES</a></span></div>
 </section>
 </li>
 </ul>
@@ -314,7 +310,7 @@ int&nbsp;consonantLimit,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String[])">WeightedLetterNamegen</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.292">WeightedLetterNamegen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;names)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.291">WeightedLetterNamegen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;names)</span></div>
 <div class="block">Creates the generator by seeding the provided list of names.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -325,7 +321,7 @@ int&nbsp;consonantLimit,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String[],int)">WeightedLetterNamegen</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.302">WeightedLetterNamegen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;names,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.301">WeightedLetterNamegen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;names,
 int&nbsp;consonantLimit)</span></div>
 <div class="block">Creates the generator by seeding the provided list of names.</div>
 <dl>
@@ -338,7 +334,7 @@ int&nbsp;consonantLimit)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String[],int,squidpony.squidmath.IStatefulRNG)">WeightedLetterNamegen</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.315">WeightedLetterNamegen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;names,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.314">WeightedLetterNamegen</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;names,
 int&nbsp;consonantLimit,
 <a href="squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng)</span></div>
 <div class="block">Creates the generator by seeding the provided list of names. The given RNG will be used for
@@ -365,7 +361,7 @@ int&nbsp;consonantLimit,
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate()">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.419">generate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.418">generate</a></span>()</div>
 <div class="block">Gets one random String name.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -376,7 +372,7 @@ int&nbsp;consonantLimit,
 <li class="blockList">
 <section class="detail">
 <h3><a id="generateList(int)">generateList</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.428">generateList</a></span>&#8203;(<span class="arguments">int&nbsp;amountToGenerate)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.427">generateList</a></span>&#8203;(<span class="arguments">int&nbsp;amountToGenerate)</span></div>
 <div class="block">Gets an ArrayList of random String names, sized to match amountToGenerate.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -389,7 +385,7 @@ int&nbsp;consonantLimit,
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate(int)">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.445">generate</a></span>&#8203;(<span class="arguments">int&nbsp;amountToGenerate)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/WeightedLetterNamegen.html#line.444">generate</a></span>&#8203;(<span class="arguments">int&nbsp;amountToGenerate)</span></div>
 <div class="block">Gets an array of random String names, sized to match amountToGenerate.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -405,8 +401,8 @@ int&nbsp;consonantLimit,
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -452,5 +448,7 @@ int&nbsp;consonantLimit,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class TextCellFactory" class="title">Class TextCellFactory</h1>
@@ -104,7 +99,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.49">TextCellFactory</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.48">TextCellFactory</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements com.badlogic.gdx.utils.Disposable</pre>
 <div class="block">Class for creating text blocks.
@@ -251,7 +246,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;com.badlogic.gdx.graphics.g2d.TextureRegion&gt;</code></td>
+<td class="colFirst"><code>protected <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;com.badlogic.gdx.graphics.g2d.TextureRegion&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#glyphTextures">glyphTextures</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -308,7 +303,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
+<td class="colFirst"><code>protected <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scc">scc</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -436,7 +431,7 @@ char&nbsp;replace)</code></th>
 </tr>
 <tr class="rowColor" id="i3">
 <td class="colFirst"><code><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addSwaps(squidpony.squidmath.OrderedMap)">addSwaps</a></span>&#8203;(squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addSwaps(squidpony.squidmath.OrderedMap)">addSwaps</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
 <td class="colLast">
 <div class="block">Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the
  entries in a Map of Character keys to String values.</div>
@@ -1196,14 +1191,14 @@ float&nbsp;newHeight)</code></th>
 </tr>
 <tr class="altColor" id="i90">
 <td class="colFirst"><code><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAllSwaps(squidpony.squidmath.OrderedMap)">setAllSwaps</a></span>&#8203;(squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAllSwaps(squidpony.squidmath.OrderedMap)">setAllSwaps</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</code></th>
 <td class="colLast">
 <div class="block">Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.</div>
 </td>
 </tr>
 <tr class="rowColor" id="i91">
 <td class="colFirst"><code><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;icc)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColorCenter(squidpony.IColorCenter)">setColorCenter</a></span>&#8203;(<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;icc)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor" id="i92">
@@ -1309,7 +1304,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="DEFAULT_FITTING">DEFAULT_FITTING</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.60">DEFAULT_FITTING</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.59">DEFAULT_FITTING</a></span></div>
 <div class="block">The commonly used symbols in roguelike games.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1320,7 +1315,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="LINE_FITTING">LINE_FITTING</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.60">LINE_FITTING</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.59">LINE_FITTING</a></span></div>
 <div class="block">The commonly used symbols in roguelike games.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1331,7 +1326,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="SQUID_FITTING">SQUID_FITTING</a></h3>
-<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.60">SQUID_FITTING</a></span></div>
+<div class="memberSignature"><span class="modifiers">public static final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.59">SQUID_FITTING</a></span></div>
 <div class="block">The commonly used symbols in roguelike games.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1342,7 +1337,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="assetManager">assetManager</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.assets.AssetManager</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.68">assetManager</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.assets.AssetManager</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.67">assetManager</a></span></div>
 <div class="block">The <code>AssetManager</code> from where to load the font. Use it to share
  loading of a font's file across multiple factories.</div>
 </section>
@@ -1350,127 +1345,127 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bmpFont">bmpFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.BitmapFont</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.69">bmpFont</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.BitmapFont</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.68">bmpFont</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="block">block</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.70">block</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.69">block</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dirMarker">dirMarker</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.71">dirMarker</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.70">dirMarker</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fitting">fitting</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.72">fitting</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.71">fitting</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="scc">scc</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">scc</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.72">scc</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="leftPadding">leftPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.74">leftPadding</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">leftPadding</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rightPadding">rightPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.74">rightPadding</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">rightPadding</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="topPadding">topPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.74">topPadding</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">topPadding</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bottomPadding">bottomPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.74">bottomPadding</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">bottomPadding</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.75">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.74">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.75">height</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.74">height</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="actualCellWidth">actualCellWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.76">actualCellWidth</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.75">actualCellWidth</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="actualCellHeight">actualCellHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.76">actualCellHeight</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.75">actualCellHeight</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="distanceFieldScaleX">distanceFieldScaleX</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.77">distanceFieldScaleX</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.76">distanceFieldScaleX</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="distanceFieldScaleY">distanceFieldScaleY</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.77">distanceFieldScaleY</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.76">distanceFieldScaleY</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="initialized">initialized</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.78">initialized</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.77">initialized</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="initializedByFont">initializedByFont</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.78">initializedByFont</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.77">initializedByFont</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="initializedBySize">initializedBySize</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.78">initializedBySize</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.77">initializedBySize</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="distanceField">distanceField</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.79">distanceField</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.78">distanceField</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="msdf">msdf</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.80">msdf</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.79">msdf</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="shader">shader</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.glutils.ShaderProgram</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.85">shader</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.glutils.ShaderProgram</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.84">shader</a></span></div>
 <div class="block">For distance field and MSDF fonts, this is the ShaderProgram that will produce the intended effect.
  Usually should not be changed manually unless you know what you are doing.</div>
 </section>
@@ -1478,49 +1473,49 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="smoothingMultiplier">smoothingMultiplier</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.86">smoothingMultiplier</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.85">smoothingMultiplier</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="descent">descent</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.87">descent</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.86">descent</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="lineHeight">lineHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.87">lineHeight</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.86">lineHeight</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="style">style</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.88">style</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.87">style</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="swap">swap</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">regexodus.ds.CharCharMap</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.89">swap</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">regexodus.ds.CharCharMap</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.88">swap</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="directionGlyph">directionGlyph</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.93">directionGlyph</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.92">directionGlyph</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="glyphTextures">glyphTextures</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;com.badlogic.gdx.graphics.g2d.TextureRegion&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.94">glyphTextures</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;com.badlogic.gdx.graphics.g2d.TextureRegion&gt;</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.93">glyphTextures</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="mut">mut</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.96">mut</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.95">mut</a></span></div>
 </section>
 </li>
 </ul>
@@ -1536,7 +1531,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">TextCellFactory</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.102">TextCellFactory</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.101">TextCellFactory</a></span>()</div>
 <div class="block">Creates a default valued factory. One of the initialization methods must
  be called before this factory can be used!</div>
 </section>
@@ -1544,7 +1539,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(com.badlogic.gdx.assets.AssetManager)">TextCellFactory</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.117">TextCellFactory</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.assets.AssetManager&nbsp;assetManager)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.116">TextCellFactory</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.assets.AssetManager&nbsp;assetManager)</span></div>
 <div class="block">A default valued factory that uses the given <code>AssetManager</code> to load
  the font file. Use this constructor if you are likely to load the same
  font over and over (recall that, without an <code>AssetManager</code>, each
@@ -1571,20 +1566,20 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="supportedStyles()">supportedStyles</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.54">supportedStyles</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.53">supportedStyles</a></span>()</div>
 <div class="block">How many styles are supported by this TextCellFactory; always 1 unless changed in a subclass.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.123">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.122">copy</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="initByFont()">initByFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.163">initByFont</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.162">initByFont</a></span>()</div>
 <div class="block">Initializes the factory to then be able to create text cells on demand.
  <br>
  Will match the width and height to the space width of the font and the
@@ -1600,7 +1595,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="initBySize()">initBySize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.210">initBySize</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.209">initBySize</a></span>()</div>
 <div class="block">Initializes the factory to then be able to create text cells on demand.
  <br>
  Will strictly use the provided width and height values to size the cells.
@@ -1619,7 +1614,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="resetSize()">resetSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.267">resetSize</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.266">resetSize</a></span>()</div>
 <div class="block">Acts like calling <a href="#initBySize()"><code>initBySize()</code></a>, but doesn't create new ShaderPrograms or other objects if this has
  already been initialized. If this has not been initialized, simply returns initBySize(). This method is safe to
  call every frame if the font size continually changes, where initBySize() is not.</div>
@@ -1632,7 +1627,7 @@ float&nbsp;newHeight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="resetSize(float,float)">resetSize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.281">resetSize</a></span>&#8203;(<span class="arguments">float&nbsp;newWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.280">resetSize</a></span>&#8203;(<span class="arguments">float&nbsp;newWidth,
 float&nbsp;newHeight)</span></div>
 <div class="block">Acts like calling <a href="#width(float)"><code>width(float)</code></a>, <a href="#height(float)"><code>height(float)</code></a>, and <a href="#initBySize()"><code>initBySize()</code></a> in succession, but
  doesn't create new ShaderPrograms or other objects if this has already been initialized. If this has not been
@@ -1650,7 +1645,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="initVerbatim()">initVerbatim</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.303">initVerbatim</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.302">initVerbatim</a></span>()</div>
 <div class="block">Identical to <a href="#initBySize()"><code>initBySize()</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1663,7 +1658,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="font()">font</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.BitmapFont</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.312">font</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.BitmapFont</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.311">font</a></span>()</div>
 <div class="block">Returns the <code>BitmapFont</code> used by this factory.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1674,7 +1669,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="font(java.lang.String)">font</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.351">font</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fontpath)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.350">font</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fontpath)</span></div>
 <div class="block">Sets this factory to use the provided font.
 
  This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
@@ -1716,7 +1711,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="font(com.badlogic.gdx.graphics.g2d.BitmapFont)">font</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.407">font</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;bitmapFont)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.406">font</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;bitmapFont)</span></div>
 <div class="block">Sets this factory to use the provided BitmapFont as its font without re-constructing anything.
 
  This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
@@ -1757,7 +1752,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fontDistanceField(java.lang.String,java.lang.String)">fontDistanceField</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.442">fontDistanceField</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fontPath,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.441">fontDistanceField</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fontPath,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;texturePath)</span></div>
 <div class="block">Sets the font to a distance field font with the given String path to a .fnt file and String path to a texture.
  Distance field fonts should scale cleanly to multiple resolutions without artifacts. Does not use AssetManager
@@ -1791,7 +1786,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fontMultiDistanceField(java.lang.String,java.lang.String)">fontMultiDistanceField</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.480">fontMultiDistanceField</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fontPath,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.479">fontMultiDistanceField</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fontPath,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;texturePath)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1806,7 +1801,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="includedFont()">includedFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.526">includedFont</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.525">includedFont</a></span>()</div>
 <div class="block">Sets this factory to use the one font included with libGDX, which is Arial at size 15 px. Does it correctly
  display when used in a grid? Probably not as well as you'd hope. You should probably get some of the assets that
  accompany SquidLib, and can be downloaded directly from GitHub (not available as one monolithic jar via Maven
@@ -1822,7 +1817,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="defaultFont()">defaultFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.542">defaultFont</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.541">defaultFont</a></span>()</div>
 <div class="block">Sets this factory to use a default 12x24 font that supports Latin, Greek, Cyrillic, and many more, including
  box-drawing characters, zodiac signs, playing-card suits, and chess piece symbols. This is enough to support the
  output of anything that DungeonUtility can make for a dungeon or FakeLanguageGen can make for text with its
@@ -1840,7 +1835,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="defaultNarrowFont()">defaultNarrowFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.556">defaultNarrowFont</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.555">defaultNarrowFont</a></span>()</div>
 <div class="block">Sets this factory to use a default 12x24 font that renders very accurately, with no gaps between box-drawing
  characters and very geometric lines.
 
@@ -1855,7 +1850,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="defaultSquareFont()">defaultSquareFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.571">defaultSquareFont</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.570">defaultSquareFont</a></span>()</div>
 <div class="block">Sets this factory to use a default 12x12 font, which... is square, and doesn't look as bad as many square fonts
  do, plus it supports box-drawing characters with no gaps.
 
@@ -1870,7 +1865,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="defaultDistanceFieldFont()">defaultDistanceFieldFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.584">defaultDistanceFieldFont</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.583">defaultDistanceFieldFont</a></span>()</div>
 <div class="block">Sets the TextCellFactory to use a square distance field font that will resize to whatever size you request.
  You must configure the shader if you use a distance field font, unless a class does it for you, like SquidLayers.
  The configureShader(Batch) method of this class can be used to set up the shader if you don't use SquidLayers;
@@ -1884,7 +1879,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="defaultNarrowDistanceFieldFont()">defaultNarrowDistanceFieldFont</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.596">defaultNarrowDistanceFieldFont</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.595">defaultNarrowDistanceFieldFont</a></span>()</div>
 <div class="block">Sets the TextCellFactory to use a half-square distance field font that will resize to whatever size you request.
  You must configure the shader if you use a distance field font, unless a class does it for you, like SquidLayers.
  The configureShader(Batch) method of this class can be used to set up the shader if you don't use SquidLayers;
@@ -1898,7 +1893,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="width()">width</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.607">width</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.606">width</a></span>()</div>
 <div class="block">Returns the width of a single cell.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1909,7 +1904,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="width(float)">width</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.618">width</a></span>&#8203;(<span class="arguments">float&nbsp;width)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.617">width</a></span>&#8203;(<span class="arguments">float&nbsp;width)</span></div>
 <div class="block">Sets the factory's cell width to the provided value. Clamps at 1 on the
  lower bound to ensure valid calculations.</div>
 <dl>
@@ -1923,7 +1918,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height()">height</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.629">height</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.628">height</a></span>()</div>
 <div class="block">Returns the height of a single cell.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1934,7 +1929,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height(float)">height</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.640">height</a></span>&#8203;(<span class="arguments">float&nbsp;height)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.639">height</a></span>&#8203;(<span class="arguments">float&nbsp;height)</span></div>
 <div class="block">Sets the factory's cell height to the provided value. Clamps at 1 on the
  lower bound to ensure valid calculations.</div>
 <dl>
@@ -1948,7 +1943,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tweakWidth(float)">tweakWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.653">tweakWidth</a></span>&#8203;(<span class="arguments">float&nbsp;width)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.652">tweakWidth</a></span>&#8203;(<span class="arguments">float&nbsp;width)</span></div>
 <div class="block">Sets the factory's height used for text to the provided value, but does not change the size of a cell. Clamps at
  1 on the lower bound to ensure valid calculations.</div>
 <dl>
@@ -1962,7 +1957,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tweakHeight(float)">tweakHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.665">tweakHeight</a></span>&#8203;(<span class="arguments">float&nbsp;height)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.664">tweakHeight</a></span>&#8203;(<span class="arguments">float&nbsp;height)</span></div>
 <div class="block">Sets the factory's height used for text to the provided value, but does not change the size of a cell. Clamps at
  1 on the lower bound to ensure valid calculations.</div>
 <dl>
@@ -1976,7 +1971,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fit()">fit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.680">fit</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.679">fit</a></span>()</div>
 <div class="block">Returns the current String of code points that are used for sizing the
  cells.
 
@@ -1991,7 +1986,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="fit(java.lang.String)">fit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.691">fit</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fit)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.690">fit</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fit)</span></div>
 <div class="block">Sets the characters that will be guaranteed to fit to the provided ones.
  This will override any previously set string.</div>
 <dl>
@@ -2005,7 +2000,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addFit(java.lang.String)">addFit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.705">addFit</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fit)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.704">addFit</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;fit)</span></div>
 <div class="block">Adds the code points in the string to the list of characters that will be
  guaranteed to fit.</div>
 <dl>
@@ -2019,7 +2014,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="antialias()">antialias</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.718">antialias</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.717">antialias</a></span>()</div>
 <div class="block">Returns whether this factory is currently set to do antialiasing on the
  characters rendered, which is always true.</div>
 <dl>
@@ -2031,7 +2026,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="antialias(boolean)">antialias</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.729">antialias</a></span>&#8203;(<span class="arguments">boolean&nbsp;antialias)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.728">antialias</a></span>&#8203;(<span class="arguments">boolean&nbsp;antialias)</span></div>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
 <div class="deprecationComment">AA is the wave of the future!</div>
 </div>
@@ -2047,7 +2042,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="padding(int)">padding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.739">padding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.738">padding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
 <div class="block">Sets the amount of padding on all sides to the provided value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2060,7 +2055,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="leftPadding()">leftPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.752">leftPadding</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.751">leftPadding</a></span>()</div>
 <div class="block">Returns the padding on the left side.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2071,7 +2066,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="leftPadding(int)">leftPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.762">leftPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.761">leftPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
 <div class="block">Sets the amount of padding on the left side to the provided value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2084,7 +2079,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rightPadding()">rightPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.772">rightPadding</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.771">rightPadding</a></span>()</div>
 <div class="block">Returns the padding on the right side.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2095,7 +2090,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rightPadding(int)">rightPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.782">rightPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.781">rightPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
 <div class="block">Sets the amount of padding on the right side to the provided value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2108,7 +2103,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="topPadding()">topPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.792">topPadding</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.791">topPadding</a></span>()</div>
 <div class="block">Returns the padding on the top side.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2119,7 +2114,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="topPadding(int)">topPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.802">topPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.801">topPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
 <div class="block">Sets the amount of padding on the top side to the provided value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2132,7 +2127,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bottomPadding()">bottomPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.812">bottomPadding</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.811">bottomPadding</a></span>()</div>
 <div class="block">Returns the padding on the bottom side.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2143,7 +2138,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="bottomPadding(int)">bottomPadding</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.822">bottomPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.821">bottomPadding</a></span>&#8203;(<span class="arguments">int&nbsp;padding)</span></div>
 <div class="block">Sets the amount of padding on the bottom side to the provided value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2156,7 +2151,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setColorCenter(squidpony.IColorCenter)">setColorCenter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.834">setColorCenter</a></span>&#8203;(<span class="arguments">squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;icc)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.833">setColorCenter</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/IColorCenter.html?is-external=true" title="class or interface in squidpony" class="externalLink">IColorCenter</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;icc)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>icc</code> - The color center to use. Should not be <code>null</code>.</dd>
@@ -2170,7 +2165,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="initialized()">initialized</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.848">initialized</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.847">initialized</a></span>()</div>
 <div class="block">Returns true if this factory is fully initialized and ready to build text cells.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2181,7 +2176,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="willFit(int)">willFit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.862">willFit</a></span>&#8203;(<span class="arguments">int&nbsp;codepoint)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.861">willFit</a></span>&#8203;(<span class="arguments">int&nbsp;codepoint)</span></div>
 <div class="block">Returns true if the given character will fit inside the current cell
  dimensions with the current font.
 
@@ -2198,7 +2193,7 @@ float&nbsp;newHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,java.lang.CharSequence,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.890">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.889">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;s,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -2216,7 +2211,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,char,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.919">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.918">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 char&nbsp;c,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -2234,7 +2229,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,java.lang.CharSequence,float,float,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.951">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.950">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;s,
 float&nbsp;r,
 float&nbsp;g,
@@ -2260,7 +2255,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,java.lang.CharSequence,com.badlogic.gdx.graphics.Color,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.984">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.983">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 float&nbsp;x,
@@ -2281,7 +2276,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,java.lang.CharSequence,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1015">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1014">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang" class="externalLink">CharSequence</a>&nbsp;s,
 float&nbsp;encodedColor,
 float&nbsp;x,
@@ -2301,7 +2296,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,char,com.badlogic.gdx.graphics.Color,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1048">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1047">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 float&nbsp;x,
@@ -2321,7 +2316,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,char,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1076">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1075">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 char&nbsp;c,
 float&nbsp;encodedColor,
 float&nbsp;x,
@@ -2341,7 +2336,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1104">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1103">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -2360,7 +2355,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1129">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1128">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 float&nbsp;r,
 float&nbsp;g,
@@ -2387,7 +2382,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1158">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1157">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 float&nbsp;x,
@@ -2408,7 +2403,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1189">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1188">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 float&nbsp;encodedColor,
 float&nbsp;x,
@@ -2432,7 +2427,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1220">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1219">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 float&nbsp;x,
 float&nbsp;y,
@@ -2455,7 +2450,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float,float,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1247">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1246">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 float&nbsp;r,
 float&nbsp;g,
@@ -2486,7 +2481,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1278">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1277">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 float&nbsp;x,
@@ -2511,7 +2506,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1309">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1308">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 float&nbsp;encodedColor,
 float&nbsp;x,
@@ -2536,7 +2531,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,float[][],float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1335">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1334">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float[][]&nbsp;encodedColors,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -2554,7 +2549,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.Batch,float[][],float,float,int,int)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1365">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1364">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
 float[][]&nbsp;encodedColors,
 float&nbsp;x,
 float&nbsp;y,
@@ -2579,8 +2574,7 @@ int&nbsp;ySubCells)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Pixmap,float[][])">draw</a></h3>
-<div class="memberSignature"><span class="annotations">@Beta
-</span><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1394">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1393">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
 float[][]&nbsp;encodedColors)</span></div>
 <div class="block">Given a Pixmap and a 2D float array, uses each float in the array as an encoded color for a pixel in the Pixmap
  at a location determined by the float's position in the array. This is meant to be used to draw backgrounds that
@@ -2599,7 +2593,7 @@ float[][]&nbsp;encodedColors)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeWrappingString(java.lang.String)">makeWrappingString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Label</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1413">makeWrappingString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Label</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1411">makeWrappingString</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s)</span></div>
 <div class="block">Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects.</div>
 <dl>
@@ -2613,7 +2607,7 @@ float[][]&nbsp;encodedColors)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(java.lang.String,com.badlogic.gdx.graphics.Color)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1434">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1432">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <div class="block">Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects, and is used internally for this purpose.</div>
@@ -2629,7 +2623,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(java.lang.String,java.util.Collection)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1472">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1470">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors)</span></div>
 <div class="block">Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
  block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
@@ -2648,7 +2642,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(java.lang.String,java.util.Collection,float)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1486">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1484">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime)</span></div>
 <div class="block">Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
@@ -2669,7 +2663,7 @@ float&nbsp;loopTime)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(java.lang.String,java.util.Collection,float,boolean)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1501">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1499">makeActor</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;s,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime,
 boolean&nbsp;doubleWidth)</span></div>
@@ -2691,7 +2685,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(char,com.badlogic.gdx.graphics.Color)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1540">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1538">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <div class="block">Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects, and is used internally for this purpose.</div>
@@ -2707,7 +2701,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(char,float)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1570">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1568">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
 float&nbsp;encodedColor)</span></div>
 <div class="block">Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects, and is used internally for this purpose. Instead of a libGDX Color
@@ -2726,7 +2720,7 @@ float&nbsp;encodedColor)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(char,java.util.Collection)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1602">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1600">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors)</span></div>
 <div class="block">Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
  block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
@@ -2745,7 +2739,7 @@ float&nbsp;encodedColor)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(char,java.util.Collection,float)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1616">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1614">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime)</span></div>
 <div class="block">Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
@@ -2766,7 +2760,7 @@ float&nbsp;loopTime)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(char,java.util.Collection,float,boolean)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1631">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1629">makeActor</a></span>&#8203;(<span class="arguments">char&nbsp;c,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime,
 boolean&nbsp;doubleWidth)</span></div>
@@ -2788,14 +2782,14 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(com.badlogic.gdx.graphics.g2d.TextureRegion,java.util.Collection)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1657">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1655">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(com.badlogic.gdx.graphics.g2d.TextureRegion,java.util.Collection,float)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1661">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1659">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime)</span></div>
 </section>
@@ -2803,7 +2797,7 @@ float&nbsp;loopTime)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(com.badlogic.gdx.graphics.g2d.TextureRegion,java.util.Collection,float,boolean)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1675">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1673">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime,
 boolean&nbsp;doubleWidth)</span></div>
@@ -2824,7 +2818,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(com.badlogic.gdx.graphics.g2d.TextureRegion,java.util.Collection,float,boolean,float,float)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1690">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1688">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime,
 boolean&nbsp;doubleWidth,
@@ -2847,7 +2841,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeDirectionMarker(java.util.Collection,float,boolean)">makeDirectionMarker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Image</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1723">makeDirectionMarker</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Image</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1721">makeDirectionMarker</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime,
 boolean&nbsp;doubleWidth)</span></div>
 <div class="block">Creates a ColorChangeImage Actor that should look like the glyph '^' in this font, but will be rotate-able. The
@@ -2866,7 +2860,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeDirectionMarker(com.badlogic.gdx.graphics.Color)">makeDirectionMarker</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Image</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1745">makeDirectionMarker</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.ui.Image</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1743">makeDirectionMarker</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <div class="block">Creates a Image Actor that should look like the glyph '^' in this font, but will be rotate-able.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2879,7 +2873,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeGlyphImage(char,com.badlogic.gdx.graphics.Color)">makeGlyphImage</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1762">makeGlyphImage</a></span>&#8203;(<span class="arguments">char&nbsp;glyph,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1760">makeGlyphImage</a></span>&#8203;(<span class="arguments">char&nbsp;glyph,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <div class="block">Given a char and a Color, makes a ColorChangeImage of that colored char so it can be rotated and so on.</div>
 <dl>
@@ -2894,7 +2888,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeGlyphImage(char,com.badlogic.gdx.graphics.Color,boolean)">makeGlyphImage</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1774">makeGlyphImage</a></span>&#8203;(<span class="arguments">char&nbsp;glyph,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1772">makeGlyphImage</a></span>&#8203;(<span class="arguments">char&nbsp;glyph,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 boolean&nbsp;doubleWidth)</span></div>
 <div class="block">Given a char and a Color, makes a ColorChangeImage of that colored char so it can be rotated and so on.
@@ -2912,7 +2906,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeGlyphImage(char,java.util.Collection,float,boolean)">makeGlyphImage</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1808">makeGlyphImage</a></span>&#8203;(<span class="arguments">char&nbsp;glyph,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1806">makeGlyphImage</a></span>&#8203;(<span class="arguments">char&nbsp;glyph,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
 float&nbsp;loopTime,
 boolean&nbsp;doubleWidth)</span></div>
@@ -2934,7 +2928,7 @@ boolean&nbsp;doubleWidth)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1844">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1842">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <div class="block">Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be
  used for preparing images for animation effects. Stretches the TextureRegion to match a single cell's dimensions.</div>
@@ -2950,7 +2944,7 @@ com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeActor(com.badlogic.gdx.graphics.g2d.TextureRegion,com.badlogic.gdx.graphics.Color,float,float)">makeActor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1870">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.scenes.scene2d.Actor</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1868">makeActor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 float&nbsp;width,
 float&nbsp;height)</span></div>
@@ -2968,7 +2962,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSolid()">getSolid</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1893">getSolid</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.g2d.TextureRegion</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1891">getSolid</a></span>()</div>
 <div class="block">Returns a solid block of white, 1x1 pixel in size; can be drawn at other sizes by Batch.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2979,7 +2973,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="glyph(char,com.badlogic.gdx.graphics.Color,float,float)">glyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1910">glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1908">glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
 com.badlogic.gdx.graphics.Color&nbsp;color,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -3000,7 +2994,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="glyph(char,float,float,float)">glyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1925">glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1923">glyph</a></span>&#8203;(<span class="arguments">char&nbsp;shown,
 float&nbsp;encodedColor,
 float&nbsp;x,
 float&nbsp;y)</span></div>
@@ -3021,31 +3015,31 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="isMultiDistanceField()">isMultiDistanceField</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1930">isMultiDistanceField</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1928">isMultiDistanceField</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="isDistanceField()">isDistanceField</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1934">isDistanceField</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1932">isDistanceField</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDistanceFieldScaleX()">getDistanceFieldScaleX</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1938">getDistanceFieldScaleX</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1936">getDistanceFieldScaleX</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDistanceFieldScaleY()">getDistanceFieldScaleY</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1941">getDistanceFieldScaleY</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1939">getDistanceFieldScaleY</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSmoothingMultiplier()">getSmoothingMultiplier</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1950">getSmoothingMultiplier</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1948">getSmoothingMultiplier</a></span>()</div>
 <div class="block">If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
  numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</div>
 <dl>
@@ -3057,7 +3051,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setSmoothingMultiplier(float)">setSmoothingMultiplier</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1960">setSmoothingMultiplier</a></span>&#8203;(<span class="arguments">float&nbsp;smoothingMultiplier)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1958">setSmoothingMultiplier</a></span>&#8203;(<span class="arguments">float&nbsp;smoothingMultiplier)</span></div>
 <div class="block">If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
  numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</div>
 <dl>
@@ -3071,7 +3065,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="configureShader(com.badlogic.gdx.graphics.g2d.Batch)">configureShader</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1982">configureShader</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1980">configureShader</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</span></div>
 <div class="block">If using a distance field font, you MUST call this at some point while the batch has begun, or use code that
  calls it for you (which is now much of SquidLib). A typical point to call it is in the
  "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call
@@ -3094,7 +3088,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dispose()">dispose</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2001">dispose</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1999">dispose</a></span>()</div>
 <div class="block">Releases all resources of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -3105,7 +3099,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDescent()">getDescent</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2011">getDescent</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2009">getDescent</a></span>()</div>
 <div class="block">Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -3116,19 +3110,19 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDirectionGlyph()">getDirectionGlyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2015">getDirectionGlyph</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2013">getDirectionGlyph</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setDirectionGlyph(char)">setDirectionGlyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2019">setDirectionGlyph</a></span>&#8203;(<span class="arguments">char&nbsp;directionGlyph)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2017">setDirectionGlyph</a></span>&#8203;(<span class="arguments">char&nbsp;directionGlyph)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addSwap(java.lang.String,java.lang.String)">addSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2039">addSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2037">addSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;replace)</span></div>
 <div class="block">Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested
  to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and
@@ -3152,7 +3146,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addSwap(char,char)">addSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2061">addSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2059">addSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find,
 char&nbsp;replace)</span></div>
 <div class="block">Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is
  used instead.
@@ -3175,7 +3169,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeSwap(java.lang.String)">removeSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2083">removeSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2081">removeSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find)</span></div>
 <div class="block">Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text
  in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond
  the first char.
@@ -3197,7 +3191,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeSwap(char)">removeSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2102">removeSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2100">removeSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find)</span></div>
 <div class="block">Removes the replacement pair, if present, that searches for the given key, find.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3215,7 +3209,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAllSwaps()">getAllSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">regexodus.ds.CharCharMap</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2122">getAllSwaps</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">regexodus.ds.CharCharMap</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2120">getAllSwaps</a></span>()</div>
 <div class="block">Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their
  values in the <code>CharCharMap</code>. CharCharMap is a class from RegExodus (a dependency of squidlib-util that is
  used for text matching and Unicode support), which is used here to avoid making yet another primitive-backed
@@ -3236,7 +3230,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setAllSwaps(squidpony.squidmath.OrderedMap)">setAllSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2138">setAllSwaps</a></span>&#8203;(<span class="arguments">squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2136">setAllSwaps</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
 <div class="block">Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3256,7 +3250,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addSwaps(squidpony.squidmath.OrderedMap)">addSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2160">addSwaps</a></span>&#8203;(<span class="arguments">squidpony.squidmath.OrderedMap&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2158">addSwaps</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
 <div class="block">Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the
  entries in a Map of Character keys to String values.
  <br>
@@ -3277,7 +3271,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clearSwaps()">clearSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2179">clearSwaps</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2177">clearSwaps</a></span>()</div>
 <div class="block">Clears all replacement pairs this has been told to swap.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3295,7 +3289,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setStyle(int)">setStyle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2190">setStyle</a></span>&#8203;(<span class="arguments">int&nbsp;style)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2188">setStyle</a></span>&#8203;(<span class="arguments">int&nbsp;style)</span></div>
 <div class="block">Not implemented in this class; in subclasses that do, this should change the currently-used font style, such as
  from regular to italic or bold. Calling this method on a TextCellFactory does nothing, but won't cause problems.</div>
 <dl>
@@ -3310,8 +3304,8 @@ char&nbsp;replace)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -3356,5 +3350,7 @@ char&nbsp;replace)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class LanesMapGenerator" class="title">Class LanesMapGenerator</h1>
@@ -383,7 +378,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putCaveCarvers(int)">putCaveCarvers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.178">putCaveCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.179">putCaveCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
 <div class="block">Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves
  will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make
  caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically
@@ -400,7 +395,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putBoxRoomCarvers(int)">putBoxRoomCarvers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.194">putBoxRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.195">putBoxRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
  with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count
  is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher
@@ -420,7 +415,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putWalledBoxRoomCarvers(int)">putWalledBoxRoomCarvers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.211">putWalledBoxRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.212">putWalledBoxRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
  with a random size in a box shape at the start and end, and a small room at the corner if there is one. This also
  ensures walls will be placed around the room, only allowing corridors and small cave openings to pass. If count
@@ -441,7 +436,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putRoundRoomCarvers(int)">putRoundRoomCarvers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.227">putRoundRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.228">putRoundRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
  with a random size in a circle shape at the start and end, and a small circular room at the corner if there is
  one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,
@@ -461,7 +456,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="putWalledRoundRoomCarvers(int)">putWalledRoundRoomCarvers</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.245">putWalledRoundRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.246">putWalledRoundRoomCarvers</a></span>&#8203;(<span class="arguments">int&nbsp;count)</span></div>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
  with a random size in a circle shape at the start and end, and a small circular room at the corner if there is
  one. This also ensures walls will be placed around the room, only allowing corridors and small cave openings to
@@ -482,7 +477,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate()">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.259">generate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.260">generate</a></span>()</div>
 <div class="block">This generates a new map by stretching a 16x16 grid of potential rooms to fit the width and height passed to the
  constructor, randomly expanding columns and rows before contracting the whole to fit perfectly. This uses the
  Moore Curve, a space-filling curve that loops around on itself, to guarantee that the rooms will always have a
@@ -501,7 +496,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getEnvironment()">getEnvironment</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.279">getEnvironment</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.280">getEnvironment</a></span>()</div>
 <div class="block">Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
  MixedGenerator. This array will have the same size as the last char 2D array prduced by generate(), and the value
  of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
@@ -523,7 +518,7 @@ int&nbsp;lanes)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDungeon()">getDungeon</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.284">getDungeon</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/LanesMapGenerator.html#line.285">getDungeon</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="IDungeonGenerator.html#getDungeon()">IDungeonGenerator</a></code></span></div>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="IDungeonGenerator.html#generate()"><code>IDungeonGenerator.generate()</code></a> or
  some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
@@ -542,8 +537,8 @@ int&nbsp;lanes)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -589,5 +584,7 @@ int&nbsp;lanes)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

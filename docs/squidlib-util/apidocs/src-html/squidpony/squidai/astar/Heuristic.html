@@ -28,24 +28,33 @@
 <span class="sourceLineNo">016</span><a id="line.16"></a>
 <span class="sourceLineNo">017</span><a id="line.17">package squidpony.squidai.astar;</a>
 <span class="sourceLineNo">018</span><a id="line.18"></a>
-<span class="sourceLineNo">019</span><a id="line.19">/** A {@code Heuristic} generates estimates of the cost to move from a given node to the goal.</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * &lt;p&gt;</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * With a heuristic function pathfinding algorithms can choose the node that is most likely to lead to the optimal path. The</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * notion of "most likely" is controlled by a heuristic. If the heuristic is accurate, then the algorithm will be efficient. If</a>
-<span class="sourceLineNo">023</span><a id="line.23"> * the heuristic is terrible, then it can perform even worse than other algorithms that don't use any heuristic function such as</a>
-<span class="sourceLineNo">024</span><a id="line.24"> * Dijkstra.</a>
-<span class="sourceLineNo">025</span><a id="line.25"> * </a>
-<span class="sourceLineNo">026</span><a id="line.26"> * @param &lt;N&gt; Type of node</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * </a>
-<span class="sourceLineNo">028</span><a id="line.28"> * @author davebaol */</a>
-<span class="sourceLineNo">029</span><a id="line.29">public interface Heuristic&lt;N&gt; {</a>
-<span class="sourceLineNo">030</span><a id="line.30"></a>
-<span class="sourceLineNo">031</span><a id="line.31">        /** Calculates an estimated cost to reach the goal node from the given node.</a>
-<span class="sourceLineNo">032</span><a id="line.32">         * @param node the start node</a>
-<span class="sourceLineNo">033</span><a id="line.33">         * @param endNode the end node</a>
-<span class="sourceLineNo">034</span><a id="line.34">         * @return the estimated cost */</a>
-<span class="sourceLineNo">035</span><a id="line.35">        float estimate(N node, N endNode);</a>
-<span class="sourceLineNo">036</span><a id="line.36">}</a>
+<span class="sourceLineNo">019</span><a id="line.19">import squidpony.squidmath.Coord;</a>
+<span class="sourceLineNo">020</span><a id="line.20"></a>
+<span class="sourceLineNo">021</span><a id="line.21">import java.util.ArrayList;</a>
+<span class="sourceLineNo">022</span><a id="line.22"></a>
+<span class="sourceLineNo">023</span><a id="line.23">/** A {@code Heuristic} generates estimates of the cost to move from a given node to the goal.</a>
+<span class="sourceLineNo">024</span><a id="line.24"> * &lt;p&gt;</a>
+<span class="sourceLineNo">025</span><a id="line.25"> * With a heuristic function pathfinding algorithms can choose the node that is most likely to lead to the optimal path.</a>
+<span class="sourceLineNo">026</span><a id="line.26"> * The notion of "most likely" is controlled by a heuristic. If the heuristic is accurate, then the algorithm will be</a>
+<span class="sourceLineNo">027</span><a id="line.27"> * efficient. If the heuristic is terrible, then it can perform even worse than other algorithms that don't use any</a>
+<span class="sourceLineNo">028</span><a id="line.28"> * heuristic function such as Dijkstra. SquidLib's {@link squidpony.squidai.DijkstraMap} is specialized for some cases</a>
+<span class="sourceLineNo">029</span><a id="line.29"> * that A* isn't, so there are reasons to prefer DijkstraMap when, for instance, you have multiple goals, or the goal is</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * unchanging for some section of usage but the start point changes often (this is useful for mouse tracking when the</a>
+<span class="sourceLineNo">031</span><a id="line.31"> * path is reversed). The astar package should be significantly faster when paths are short and always have one goal,</a>
+<span class="sourceLineNo">032</span><a id="line.32"> * unless you compare it to DijkstraMap when it can reuse a scan and call</a>
+<span class="sourceLineNo">033</span><a id="line.33"> * {@link squidpony.squidai.DijkstraMap#findPathPreScanned(ArrayList, Coord)}.</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * </a>
+<span class="sourceLineNo">035</span><a id="line.35"> * @param &lt;N&gt; Type of node</a>
+<span class="sourceLineNo">036</span><a id="line.36"> * </a>
+<span class="sourceLineNo">037</span><a id="line.37"> * @author davebaol */</a>
+<span class="sourceLineNo">038</span><a id="line.38">public interface Heuristic&lt;N&gt; {</a>
+<span class="sourceLineNo">039</span><a id="line.39"></a>
+<span class="sourceLineNo">040</span><a id="line.40">        /** Calculates an estimated cost to reach the goal node from the given node.</a>
+<span class="sourceLineNo">041</span><a id="line.41">         * @param node the start node</a>
+<span class="sourceLineNo">042</span><a id="line.42">         * @param endNode the end node</a>
+<span class="sourceLineNo">043</span><a id="line.43">         * @return the estimated cost */</a>
+<span class="sourceLineNo">044</span><a id="line.44">        double estimate(N node, N endNode);</a>
+<span class="sourceLineNo">045</span><a id="line.45">}</a>
 
 
 

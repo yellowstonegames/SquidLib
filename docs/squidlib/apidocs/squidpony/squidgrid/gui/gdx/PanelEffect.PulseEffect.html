@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class PanelEffect.PulseEffect" class="title">Class PanelEffect.PulseEffect</h1>
@@ -112,8 +107,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dd>
 </dl>
 <hr>
-<pre>@Beta
-public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.575">PanelEffect.PulseEffect</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.576">PanelEffect.PulseEffect</a>
 extends <a href="PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a></pre>
 </section>
 <section class="summary">
@@ -173,23 +167,23 @@ extends <a href="PanelEffect.ExplosionEffect.html" title="class in squidpony.squ
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.Coord,int)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,double,double)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 double&nbsp;angle,
 double&nbsp;span)</code></th>
@@ -198,8 +192,8 @@ double&nbsp;span)</code></th>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,double,double,float%5B%5D)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 double&nbsp;angle,
 double&nbsp;span,
@@ -209,8 +203,8 @@ float[]&nbsp;coloring)</code></th>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,double,double,java.util.List)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 double&nbsp;angle,
 double&nbsp;span,
@@ -220,8 +214,8 @@ double&nbsp;span,
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,float%5B%5D)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 float[]&nbsp;coloring)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -229,15 +223,15 @@ float[]&nbsp;coloring)</code></th>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,java.util.List)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,squidpony.squidmath.Coord,int)">PulseEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -317,7 +311,7 @@ int&nbsp;radius)</code></th>
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,squidpony.squidmath.Coord,int)">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.578">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius)</span></div>
 </section>
 </li>
@@ -326,7 +320,7 @@ int&nbsp;radius)</span></div>
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.Coord,int)">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.582">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius)</span></div>
 </section>
 </li>
@@ -335,8 +329,8 @@ int&nbsp;radius)</span></div>
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int)">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.586">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius)</span></div>
 </section>
 </li>
@@ -345,8 +339,8 @@ int&nbsp;radius)</span></div>
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,java.util.List)">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.590">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</span></div>
 </section>
@@ -356,8 +350,8 @@ int&nbsp;radius,
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,float[])">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.594">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 float[]&nbsp;coloring)</span></div>
 </section>
@@ -367,8 +361,8 @@ float[]&nbsp;coloring)</span></div>
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,double,double)">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.598">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 double&nbsp;angle,
 double&nbsp;span)</span></div>
@@ -379,8 +373,8 @@ double&nbsp;span)</span></div>
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,double,double,java.util.List)">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.602">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 double&nbsp;angle,
 double&nbsp;span,
@@ -392,8 +386,8 @@ double&nbsp;span,
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,int,double,double,float[])">PulseEffect</a></h3>
 <div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html#line.606">PulseEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;center,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;center,
 int&nbsp;radius,
 double&nbsp;angle,
 double&nbsp;span,
@@ -431,8 +425,8 @@ float[]&nbsp;coloring)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -477,5 +471,7 @@ float[]&nbsp;coloring)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

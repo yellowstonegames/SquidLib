@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -57,13 +57,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class GrowingTreeMazeGenerator" class="title">Class GrowingTreeMazeGenerator</h1>
@@ -96,11 +91,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="inheritance">squidpony.squidgrid.mapping.GrowingTreeMazeGenerator</div>
 </div>
 <section class="description">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></code></dd>
+</dl>
 <hr>
-<pre><a href="../../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.19">GrowingTreeMazeGenerator</a>
-extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Based in part on code from http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm</div>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.18">GrowingTreeMazeGenerator</a>
+extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
+<div class="block">A maze generator that can be configured using a <a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping"><code>GrowingTreeMazeGenerator.ChoosingMethod</code></a>, which can be customized for the app.
+ Based in part on code from <a href="http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm">Jamis Buck's blog</a>.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
@@ -128,7 +128,57 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <tr class="altColor">
 <td class="colFirst"><code>static interface&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></span></code></th>
+<td class="colLast">
+<div class="block">A way to configure how <a href="#generate(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod)"><code>generate(ChoosingMethod)</code></a> places paths through the maze.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li class="blockList">
+<section class="fieldSummary"><a id="field.summary">
+<!--   -->
+</a>
+<h2>Field Summary</h2>
+<div class="memberSummary">
+<table>
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<thead>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>char[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#dungeon">dungeon</a></span></code></th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#newest">newest</a></span></code></th>
+<td class="colLast">
+<div class="block">Produces high-quality mazes that are very similar to those produced by a recursive back-tracking algorithm.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#oldest">oldest</a></span></code></th>
+<td class="colLast">
+<div class="block">Produces mostly straight corridors that dead-end at the map's edge; probably only useful with <a href="#mix(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double,squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double)"><code>mix(ChoosingMethod, double, ChoosingMethod, double)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#random">random</a></span></code></th>
+<td class="colLast">
+<div class="block">Produces chaotic, jumbled spans of corridors that are similar to those produced by Prim's algorithm.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -186,10 +236,36 @@ int&nbsp;height,
 </thead>
 <tbody>
 <tr class="altColor" id="i0">
-<td class="colFirst"><code>boolean[][]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod)">create</a></span>&#8203;(<a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;choosing)</code></th>
+<td class="colFirst"><code>char[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generate()">generate</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Builds and returns a boolean mapping of a maze using the provided chooser method object.</div>
+<div class="block">Builds and returns a 2D char array maze by using <a href="#newest"><code>newest</code></a> with <a href="#generate(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod)"><code>generate(ChoosingMethod)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor" id="i1">
+<td class="colFirst"><code>char[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generate(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod)">generate</a></span>&#8203;(<a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;choosing)</code></th>
+<td class="colLast">
+<div class="block">Builds and returns a 2D char array maze using the provided chooser method object.</div>
+</td>
+</tr>
+<tr class="altColor" id="i2">
+<td class="colFirst"><code>char[][]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDungeon()">getDungeon</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="#generate()"><code>generate()</code></a> or
+ some similar method present in a specific implementation.</div>
+</td>
+</tr>
+<tr class="rowColor" id="i3">
+<td class="colFirst"><code><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mix(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double,squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double)">mix</a></span>&#8203;(<a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;methodA,
+double&nbsp;chanceA,
+<a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;methodB,
+double&nbsp;chanceB)</code></th>
+<td class="colLast">
+<div class="block">Mixes two ChoosingMethod values, like <a href="#newest"><code>newest</code></a> and <a href="#random"><code>random</code></a>, given a weight for each, and produces
+ a new ChoosingMethod that randomly (respecting weight) picks one of those ChoosingMethods each time it is used.</div>
 </td>
 </tr>
 </tbody>
@@ -207,6 +283,43 @@ int&nbsp;height,
 </section>
 <section class="details">
 <ul class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<li class="blockList">
+<section class="fieldDetails"><a id="field.detail">
+<!--   -->
+</a>
+<h2>Field Details</h2>
+<ul class="blockList">
+<li class="blockList">
+<section class="detail">
+<h3><a id="dungeon">dungeon</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.22">dungeon</a></span></div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="newest">newest</a></h3>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.126">newest</a></span></div>
+<div class="block">Produces high-quality mazes that are very similar to those produced by a recursive back-tracking algorithm.</div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="oldest">oldest</a></h3>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.135">oldest</a></span></div>
+<div class="block">Produces mostly straight corridors that dead-end at the map's edge; probably only useful with <a href="#mix(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double,squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double)"><code>mix(ChoosingMethod, double, ChoosingMethod, double)</code></a>.</div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="random">random</a></h3>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.144">random</a></span></div>
+<div class="block">Produces chaotic, jumbled spans of corridors that are similar to those produced by Prim's algorithm.</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li class="blockList">
 <section class="constructorDetails"><a id="constructor.detail">
@@ -217,14 +330,14 @@ int&nbsp;height,
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int)">GrowingTreeMazeGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.25">GrowingTreeMazeGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.24">GrowingTreeMazeGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,squidpony.squidmath.IRNG)">GrowingTreeMazeGenerator</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.30">GrowingTreeMazeGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.29">GrowingTreeMazeGenerator</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height,
 <a href="../../squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</span></div>
 </section>
@@ -241,13 +354,64 @@ int&nbsp;height,
 <ul class="blockList">
 <li class="blockList">
 <section class="detail">
-<h3><a id="create(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod)">create</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.42">create</a></span>&#8203;(<span class="arguments"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;choosing)</span></div>
-<div class="block">Builds and returns a boolean mapping of a maze using the provided chooser method object.</div>
+<h3><a id="getDungeon()">getDungeon</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.42">getDungeon</a></span>()</div>
+<div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="#generate()"><code>generate()</code></a> or
+ some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
+ so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="IDungeonGenerator.html#getDungeon()">getDungeon</a></code>&nbsp;in interface&nbsp;<code><a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the most recently-produced dungeon/map as a 2D char array</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="generate()">generate</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.52">generate</a></span>()</div>
+<div class="block">Builds and returns a 2D char array maze by using <a href="#newest"><code>newest</code></a> with <a href="#generate(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod)"><code>generate(ChoosingMethod)</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="IDungeonGenerator.html#generate()">generate</a></code>&nbsp;in interface&nbsp;<code><a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><a href="#dungeon"><code>dungeon</code></a>, after filling it with a maze</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="generate(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod)">generate</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.65">generate</a></span>&#8203;(<span class="arguments"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;choosing)</span></div>
+<div class="block">Builds and returns a 2D char array maze using the provided chooser method object. The most maze-like dungeons
+ use <a href="#newest"><code>newest</code></a>, the least maze-like use <a href="#oldest"><code>oldest</code></a>, and the most jumbled use <a href="#random"><code>random</code></a> or a
+ mix of others using <a href="#mix(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double,squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double)"><code>mix(ChoosingMethod, double, ChoosingMethod, double)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>choosing</code> - the callback object for making the split decision</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd><a href="#dungeon"><code>dungeon</code></a>, after filling it with a maze</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="mix(squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double,squidpony.squidgrid.mapping.GrowingTreeMazeGenerator.ChoosingMethod,double)">mix</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a></span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/GrowingTreeMazeGenerator.html#line.160">mix</a></span>&#8203;(<span class="arguments"><a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;methodA,
+double&nbsp;chanceA,
+<a href="GrowingTreeMazeGenerator.ChoosingMethod.html" title="interface in squidpony.squidgrid.mapping">GrowingTreeMazeGenerator.ChoosingMethod</a>&nbsp;methodB,
+double&nbsp;chanceB)</span></div>
+<div class="block">Mixes two ChoosingMethod values, like <a href="#newest"><code>newest</code></a> and <a href="#random"><code>random</code></a>, given a weight for each, and produces
+ a new ChoosingMethod that randomly (respecting weight) picks one of those ChoosingMethods each time it is used.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>methodA</code> - the first ChoosingMethod to mix; must not be null</dd>
+<dd><code>chanceA</code> - the weight to favor choosing methodA</dd>
+<dd><code>methodB</code> - the second ChoosingMethod to mix; must not be null</dd>
+<dd><code>chanceB</code> - the weight to favor choosing methodB</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a ChoosingMethod that randomly picks between <code>methodA</code> and <code>methodB</code> each time it is used</dd>
 </dl>
 </section>
 </li>
@@ -257,8 +421,8 @@ int&nbsp;height,
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -285,13 +449,13 @@ int&nbsp;height,
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -304,5 +468,7 @@ int&nbsp;height,
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

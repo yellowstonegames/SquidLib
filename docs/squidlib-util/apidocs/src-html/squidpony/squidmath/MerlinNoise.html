@@ -12,22 +12,22 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidmath;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import squidpony.annotation.Beta;</a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.io.Serializable;</a>
 <span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import java.io.Serializable;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">/**</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * Really strange noise functions that typically produce curving black and white shapes when rendered.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * This technique uses no floating-point math, surprisingly, which helps its performance a little.</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * The shapes this produces &lt;a href="https://i.imgur.com/mp23254.png"&gt;look like this in 2D&lt;/a&gt; and</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * &lt;a href="https://i.imgur.com/qPLZw0k.gifv"&gt;look like this in 3D&lt;/a&gt;. MerlinNoise implements 2D and 3D noise</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * interfaces, allowing it to be used with the various support code in Noise like {@link Noise.Layered2D}.</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * &lt;br&gt;</a>
-<span class="sourceLineNo">014</span><a id="line.14"> * This is called Merlin noise because it has a roughly-similar implementation to "classic" Perlin Noise (with hashes</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * per grid point used to blend values), and because working with noise functions makes me feel like a wizard.</a>
-<span class="sourceLineNo">016</span><a id="line.16"> * This was a completely unrelated noise algorithm that also avoided floating-point math, but was really pretty awful.</a>
-<span class="sourceLineNo">017</span><a id="line.17"> */</a>
-<span class="sourceLineNo">018</span><a id="line.18">@Beta</a>
+<span class="sourceLineNo">005</span><a id="line.5">/**</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * Really strange noise functions that typically produce curving black and white shapes when rendered.</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * This technique uses no floating-point math, surprisingly, which helps its performance a little.</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * The shapes this produces &lt;a href="https://i.imgur.com/mp23254.png"&gt;look like this in 2D&lt;/a&gt; and</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * &lt;a href="https://i.imgur.com/qPLZw0k.gifv"&gt;look like this in 3D&lt;/a&gt;. MerlinNoise implements 2D and 3D noise</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * interfaces, allowing it to be used with the various support code in Noise like {@link Noise.Layered2D}.</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * &lt;br&gt;</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * MerlinNoise can be a good fit for some kinds of procedural generation that need smoothly-curving patterns that don't</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * look altogether organic, like paint jobs on a space ship. It does tend to produce a somewhat-noticeable grid.</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * &lt;br&gt;</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * This is called Merlin noise because it has a roughly-similar implementation to "classic" Perlin Noise (with hashes</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * per grid point used to blend values), and because working with noise functions makes me feel like a wizard.</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * This was a completely unrelated noise algorithm that also avoided floating-point math, but was really pretty awful.</a>
+<span class="sourceLineNo">018</span><a id="line.18"> */</a>
 <span class="sourceLineNo">019</span><a id="line.19">public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {</a>
 <span class="sourceLineNo">020</span><a id="line.20"></a>
 <span class="sourceLineNo">021</span><a id="line.21">    private static final long serialVersionUID = 2L;</a>

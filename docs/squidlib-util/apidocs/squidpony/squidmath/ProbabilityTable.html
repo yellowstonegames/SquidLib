@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidmath</a></div>
 <h1 title="Class ProbabilityTable" class="title">Class ProbabilityTable&lt;T&gt;</h1>
@@ -105,20 +100,27 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre><a href="../annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.20">ProbabilityTable</a>&lt;T&gt;
+<pre>public class <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.27">ProbabilityTable</a>&lt;T&gt;
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
 <div class="block">A generic method of holding a probability table to determine weighted random
  outcomes.
 
- The weights do not need to add up to any particular value, they will be
- normalized when choosing a random entry.</div>
+ The weights do not need to add up to any particular value; they will be
+ normalized when choosing a random entry. This class allows adding <code>T</code> items and the weights for
+ those items after the ProbabilityTable has been constructed with <a href="#add(T,int)"><code>add(Object, int)</code></a> or
+ <a href="#addAll(squidpony.squidmath.OrderedMap)"><code>addAll(OrderedMap)</code></a>, as well as removing items entirely with <a href="#remove(T)"><code>remove(Object)</code></a> or
+ adjusting the weight for an existing item with <a href="#add(T,int)"><code>add(Object, int)</code></a> or <a href="#remove(T,int)"><code>remove(Object, int)</code></a>.
+ You can also add a nested ProbabilityTable, which has its own weight and can be chosen like any other
+ item, except it makes its own random choice of its own <code>T</code> items; you can use the nested table
+ with <a href="#add(squidpony.squidmath.ProbabilityTable,int)"><code>add(ProbabilityTable, int)</code></a> and <a href="#addAllNested(squidpony.squidmath.OrderedMap)"><code>addAllNested(OrderedMap)</code></a>. Actually getting a
+ randomly-selected item is easy; just use <a href="#random()"><code>random()</code></a>.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../serialized-form.html#squidpony.squidmath.ProbabilityTable">Serialized Form</a></dd>
+<dd><a href="WeightedTable.html" title="class in squidpony.squidmath"><code>An alternative for when you want to track the items separately from their weights.</code></a>, 
+<a href="../../serialized-form.html#squidpony.squidmath.ProbabilityTable">Serialized Form</a></dd>
 </dl>
 </section>
 <section class="summary">
@@ -417,14 +419,14 @@ int&nbsp;weight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="table">table</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.26">table</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.32">table</a></span></div>
 <div class="block">The set of items that can be produced directly from <a href="#random()"><code>random()</code></a> (without additional lookups).</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="extraTable">extraTable</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.31">extraTable</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.37">extraTable</a></span></div>
 <div class="block">The list of items that can be produced indirectly from <a href="#random()"><code>random()</code></a> (looking up values from inside
  the nested tables).</div>
 </section>
@@ -432,25 +434,25 @@ int&nbsp;weight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="weights">weights</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.32">weights</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.38">weights</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.33">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.39">rng</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="total">total</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.34">total</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.40">total</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="normalTotal">normalTotal</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.34">normalTotal</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.40">normalTotal</a></span></div>
 </section>
 </li>
 </ul>
@@ -466,14 +468,14 @@ int&nbsp;weight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">ProbabilityTable</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.39">ProbabilityTable</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.45">ProbabilityTable</a></span>()</div>
 <div class="block">Creates a new probability table with a random seed.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidmath.RandomnessSource)">ProbabilityTable</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.49">ProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;rng)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.55">ProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;rng)</span></div>
 <div class="block">Creates a new probability table with the provided source of randomness
  used.</div>
 <dl>
@@ -485,7 +487,7 @@ int&nbsp;weight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(long)">ProbabilityTable</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.63">ProbabilityTable</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.69">ProbabilityTable</a></span>&#8203;(<span class="arguments">long&nbsp;seed)</span></div>
 <div class="block">Creates a new probability table with the provided long seed used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -496,7 +498,7 @@ int&nbsp;weight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(java.lang.String)">ProbabilityTable</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.77">ProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;seed)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.83">ProbabilityTable</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;seed)</span></div>
 <div class="block">Creates a new probability table with the provided String seed used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -517,7 +519,7 @@ int&nbsp;weight)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="random()">random</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.88">random</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.94">random</a></span>()</div>
 <div class="block">Returns an object randomly based on assigned weights.
 
  Returns null if no elements have been put in the table.</div>
@@ -532,7 +534,7 @@ int&nbsp;weight)</code></th>
 <h3><a id="add(java.lang.Object,int)">
 <!--   -->
 </a><a id="add(T,int)">add</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.115">add</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.121">add</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
 int&nbsp;weight)</span></div>
 <div class="block">Adds the given item to the table.
 
@@ -549,7 +551,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAll(squidpony.squidmath.OrderedMap)">addAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.143">addAll</a></span>&#8203;(<span class="arguments"><a href="OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;itemsAndWeights)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.149">addAll</a></span>&#8203;(<span class="arguments"><a href="OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;itemsAndWeights)</span></div>
 <div class="block">Given an OrderedMap of T element keys and Integer weight values, adds all T keys with their corresponding weights
  into this ProbabilityTable. You may want to use <a href="OrderedMap.html#makeMap(K,V,java.lang.Object...)"><code>OrderedMap.makeMap(Object, Object, Object...)</code></a> to produce
  the parameter, unless you already have one.</div>
@@ -567,7 +569,7 @@ int&nbsp;weight)</span></div>
 <h3><a id="remove(java.lang.Object)">
 <!--   -->
 </a><a id="remove(T)">remove</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.159">remove</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.165">remove</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item)</span></div>
 <div class="block">Removes the possibility of generating the given T item, except by nested ProbabilityTable results.
  Returns true iff the item was removed.</div>
 <dl>
@@ -583,7 +585,7 @@ int&nbsp;weight)</span></div>
 <h3><a id="remove(java.lang.Object,int)">
 <!--   -->
 </a><a id="remove(T,int)">remove</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.173">remove</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.179">remove</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item,
 int&nbsp;weight)</span></div>
 <div class="block">Reduces the likelihood of generating the given T item by the given weight, which can reduce the chance below 0
  and thus remove the item entirely. Does not affect nested ProbabilityTables. The value for weight must be greater
@@ -601,7 +603,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAll(java.lang.Iterable)">removeAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.200">removeAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;items)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.206">removeAll</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;items)</span></div>
 <div class="block">Given an Iterable of T item keys to remove, this tries to remove each item in items, though it can't affect items
  in nested ProbabilityTables, and returns true if any probabilities were changed.</div>
 <dl>
@@ -615,7 +617,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeAll(squidpony.squidmath.OrderedMap)">removeAll</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.219">removeAll</a></span>&#8203;(<span class="arguments"><a href="OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;itemsAndWeights)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.225">removeAll</a></span>&#8203;(<span class="arguments"><a href="OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;itemsAndWeights)</span></div>
 <div class="block">Given an OrderedMap of T item keys and Integer weight values, reduces the weights in this ProbabilityTable for
  all T keys by their corresponding weights, removing them if the weight becomes 0 or less. You may want to use
  <a href="OrderedMap.html#makeMap(K,V,java.lang.Object...)"><code>OrderedMap.makeMap(Object, Object, Object...)</code></a> to produce the parameter, unless you already have one.
@@ -632,7 +634,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="add(squidpony.squidmath.ProbabilityTable,int)">add</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.244">add</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;table,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.250">add</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;table,
 int&nbsp;weight)</span></div>
 <div class="block">Adds the given probability table as a possible set of results for this table.
  The table parameter should not be the same object as this ProbabilityTable, nor should it contain cycles
@@ -654,7 +656,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addAllNested(squidpony.squidmath.OrderedMap)">addAllNested</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.270">addAllNested</a></span>&#8203;(<span class="arguments"><a href="OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;itemsAndWeights)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.276">addAllNested</a></span>&#8203;(<span class="arguments"><a href="OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;itemsAndWeights)</span></div>
 <div class="block">Given an OrderedMap of ProbabilityTable keys and Integer weight values, adds all keys as nested tables with their
  corresponding weights into this ProbabilityTable. All ProbabilityTable keys should have the same T type as this
  ProbabilityTable. You may want to use <a href="OrderedMap.html#makeMap(K,V,java.lang.Object...)"><code>OrderedMap.makeMap(Object, Object, Object...)</code></a> to produce the
@@ -680,7 +682,7 @@ int&nbsp;weight)</span></div>
 <h3><a id="weight(java.lang.Object)">
 <!--   -->
 </a><a id="weight(T)">weight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.287">weight</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.293">weight</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&nbsp;item)</span></div>
 <div class="block">Returns the weight of the item if the item is in the table. Returns zero
  if the item is not in the table.</div>
 <dl>
@@ -694,7 +696,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="weight(squidpony.squidmath.ProbabilityTable)">weight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.299">weight</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;item)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.305">weight</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;item)</span></div>
 <div class="block">Returns the weight of the extra table if present. Returns zero
  if the extra table is not present.</div>
 <dl>
@@ -708,7 +710,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="items()">items</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.313">items</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.319">items</a></span>()</div>
 <div class="block">Provides a set of the items in this table, without reference to their
  weight. Includes nested ProbabilityTable values, but as is the case throughout
  this class, cyclical references to ProbabilityTable values that reference this
@@ -723,7 +725,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="simpleItems()">simpleItems</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.328">simpleItems</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/SortedSet.html?is-external=true" title="class or interface in java.util" class="externalLink">SortedSet</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.334">simpleItems</a></span>()</div>
 <div class="block">Provides a set of the items in this table that are not in nested tables, without
  reference to their weight. These are the items that are simple to access, hence
  the name. If you want the items that are in both the top-level and nested tables,
@@ -737,7 +739,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="tables()">tables</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.339">tables</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.345">tables</a></span>()</div>
 <div class="block">Provides a set of the nested ProbabilityTable values in this table, without reference
  to their weight. Does not include normal values (non-table); for that, use items().</div>
 <dl>
@@ -749,7 +751,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setRandom(squidpony.squidmath.GWTRNG)">setRandom</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.347">setRandom</a></span>&#8203;(<span class="arguments"><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a>&nbsp;random)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.353">setRandom</a></span>&#8203;(<span class="arguments"><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a>&nbsp;random)</span></div>
 <div class="block">Sets the current random number generator to the given GWTRNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -760,7 +762,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getRandom()">getRandom</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.357">getRandom</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.363">getRandom</a></span>()</div>
 <div class="block">Gets the random number generator (a RandomnessSource) this uses.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -771,7 +773,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="copy()">copy</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.367">copy</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.373">copy</a></span>()</div>
 <div class="block">Copies this ProbabilityTable so nothing in the copy is shared with the original, except for the T items (which
  might not be possible to copy). The RNG is also copied.</div>
 <dl>
@@ -783,7 +785,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="equals(java.lang.Object)">equals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.380">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.386">equals</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -793,7 +795,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="contentEquals(squidpony.squidmath.ProbabilityTable)">contentEquals</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.397">contentEquals</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.403">contentEquals</a></span>&#8203;(<span class="arguments"><a href="ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</span></div>
 <div class="block">Can avoid some checks that <a href="#equals(java.lang.Object)"><code>equals(Object)</code></a> needs because this always takes a ProbabilityTable.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -806,7 +808,7 @@ int&nbsp;weight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="hashCode()">hashCode</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.406">hashCode</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.412">hashCode</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -819,8 +821,8 @@ int&nbsp;weight)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -866,5 +868,7 @@ int&nbsp;weight)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

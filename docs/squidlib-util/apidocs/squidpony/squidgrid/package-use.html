@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Uses of Package squidpony.squidgrid" class="title">Uses of Package<br>squidpony.squidgrid</h1>
@@ -136,25 +131,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colFirst" scope="row"><a href="class-use/FOV.html#squidpony.squidai">FOV</a></th>
-<td class="colLast">
-<div class="block">This class provides methods for calculating Field of View in grids.</div>
-</td>
-</tr>
-<tr class="altColor">
 <th class="colFirst" scope="row"><a href="class-use/LOS.html#squidpony.squidai">LOS</a></th>
 <td class="colLast">
 <div class="block">Line of Sight (LOS) algorithms find if there is or is not a path between two
  given points.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="class-use/Measurement.html#squidpony.squidai">Measurement</a></th>
 <td class="colLast">
 <div class="block">A way of measuring what cells are adjacent and how much further any adjacent cells are from other adjacent cells.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="class-use/Radius.html#squidpony.squidai">Radius</a></th>
 <td class="colLast">
 <div class="block">Basic radius strategy implementations likely to be used for roguelikes.</div>
@@ -204,47 +193,41 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="class-use/FOV.html#squidpony.squidgrid">FOV</a></th>
-<td class="colLast">
-<div class="block">This class provides methods for calculating Field of View in grids.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="class-use/Measurement.html#squidpony.squidgrid">Measurement</a></th>
 <td class="colLast">
 <div class="block">A way of measuring what cells are adjacent and how much further any adjacent cells are from other adjacent cells.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="class-use/MultiSpill.html#squidpony.squidgrid">MultiSpill</a></th>
 <td class="colLast">
 <div class="block">A randomized flood-fill implementation that can be used for level generation (e.g.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="class-use/Radius.html#squidpony.squidgrid">Radius</a></th>
 <td class="colLast">
 <div class="block">Basic radius strategy implementations likely to be used for roguelikes.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="class-use/SoundMap.html#squidpony.squidgrid">SoundMap</a></th>
 <td class="colLast">
 <div class="block">This class is used to determine when a sound is audible on a map and at what positions.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="class-use/SpatialMap.html#squidpony.squidgrid">SpatialMap</a></th>
 <td class="colLast">
 <div class="block">A data structure that seems to be re-implemented often for games, this associates Coord positions and generic I
  identities with generic E elements.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="class-use/SpatialMap.SpatialTriple.html#squidpony.squidgrid">SpatialMap.SpatialTriple</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="class-use/Spill.html#squidpony.squidgrid">Spill</a></th>
 <td class="colLast">
 <div class="block">A randomized flood-fill implementation that can be used for level generation (e.g.</div>
@@ -377,5 +360,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

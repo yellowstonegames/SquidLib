@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -66,20 +66,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class PanelEffect.SteadyProjectileEffect" class="title">Class PanelEffect.SteadyProjectileEffect</h1>
@@ -106,8 +101,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dd>
 </dl>
 <hr>
-<pre>@Beta
-public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.784">PanelEffect.SteadyProjectileEffect</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.783">PanelEffect.SteadyProjectileEffect</a>
 extends <a href="PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a></pre>
 <div class="block">Almost exactly lke <a href="PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx"><code>PanelEffect.ProjectileEffect</code></a>, but its duration specifies the amount of time to spend crossing each
  cell (in seconds), not the duration of the entire effect. For ranged weapons like arrows, a fixed duration for
@@ -173,8 +167,8 @@ extends <a href="PanelEffect.ProjectileEffect.html" title="class in squidpony.sq
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">SteadyProjectileEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint)</code></th>
 <td class="colLast">
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for some fields.</div>
 </td>
@@ -182,9 +176,9 @@ squidpony.squidmath.Coord&nbsp;endPoint)</code></th>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">SteadyProjectileEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint)</code></th>
 <td class="colLast">
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for most fields.</div>
 </td>
@@ -192,9 +186,9 @@ squidpony.squidmath.Coord&nbsp;endPoint)</code></th>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,char,float)">SteadyProjectileEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint,
 char&nbsp;shown,
 float&nbsp;coloring)</code></th>
 <td class="colLast">
@@ -205,9 +199,9 @@ float&nbsp;coloring)</code></th>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,char,com.badlogic.gdx.graphics.Color)">SteadyProjectileEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint,
 char&nbsp;shown,
 com.badlogic.gdx.graphics.Color&nbsp;coloring)</code></th>
 <td class="colLast">
@@ -217,8 +211,8 @@ com.badlogic.gdx.graphics.Color&nbsp;coloring)</code></th>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.IPackedColorPanel,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">SteadyProjectileEffect</a></span>&#8203;(<a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint)</code></th>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint)</code></th>
 <td class="colLast">
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for some fields.</div>
 </td>
@@ -275,9 +269,9 @@ squidpony.squidmath.Coord&nbsp;endPoint)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">SteadyProjectileEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.796">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.794">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint)</span></div>
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for some fields. The valid cells this can affect will be
  the full expanse of the IPackedColorPanel. The duration will be 0.05 seconds per cell crossed.</div>
 <dl>
@@ -291,10 +285,10 @@ squidpony.squidmath.Coord&nbsp;endPoint)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">SteadyProjectileEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.809">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.807">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint)</span></div>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint)</span></div>
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for some fields. The valid cells this can affect will be
  the full expanse of the IPackedColorPanel.</div>
 <dl>
@@ -309,11 +303,11 @@ squidpony.squidmath.Coord&nbsp;endPoint)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord)">SteadyProjectileEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.822">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.820">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint)</span></div>
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint)</span></div>
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for most fields.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -328,11 +322,11 @@ squidpony.squidmath.Coord&nbsp;endPoint)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,char,com.badlogic.gdx.graphics.Color)">SteadyProjectileEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.838">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.836">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint,
 char&nbsp;shown,
 com.badlogic.gdx.graphics.Color&nbsp;coloring)</span></div>
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for most fields but also an alternate Color
@@ -352,11 +346,11 @@ com.badlogic.gdx.graphics.Color&nbsp;coloring)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.IPackedColorPanel,float,squidpony.squidmath.GreasedRegion,squidpony.squidmath.Coord,squidpony.squidmath.Coord,char,float)">SteadyProjectileEffect</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.854">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.SteadyProjectileEffect.html#line.852">SteadyProjectileEffect</a></span>&#8203;(<span class="arguments"><a href="IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
 float&nbsp;duration,
-squidpony.squidmath.GreasedRegion&nbsp;valid,
-squidpony.squidmath.Coord&nbsp;startPoint,
-squidpony.squidmath.Coord&nbsp;endPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GreasedRegion</a>&nbsp;valid,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;startPoint,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">Coord</a>&nbsp;endPoint,
 char&nbsp;shown,
 float&nbsp;coloring)</span></div>
 <div class="block">Constructs a SteadyProjectileEffect with explicit settings for most fields but also an alternate Color
@@ -379,8 +373,8 @@ float&nbsp;coloring)</span></div>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -425,5 +419,7 @@ float&nbsp;coloring)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

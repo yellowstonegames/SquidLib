@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,54 +52,22 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 title="Deprecated API" class="title">Deprecated API</h1>
 <h2 title="Contents">Contents</h2>
 <ul>
-<li><a href="#field">Fields</a></li>
 <li><a href="#method">Methods</a></li>
 </ul>
 </div>
-<div class="contentContainer"><a id="field">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<div class="deprecatedSummary">
-<table>
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_ARABIC">squidpony.FakeLanguageGen.Modifier.SIMPLIFY_ARABIC</a></th>
-<td class="colLast">
-<div class="deprecationComment">This Modifier doesn't do anything, and isn't needed.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</li>
-</ul>
-<a id="method">
+<div class="contentContainer"><a id="method">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -115,118 +83,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </thead>
 <tbody>
 <tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#charSpan(char,char)">squidpony.GwtCompatibility.charSpan&#8203;(char, char)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#charSpan(char,char)"><code>ArrayTools.charSpan(char, char)</code></a> instead.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#copy2D(char%5B%5D%5B%5D)">squidpony.GwtCompatibility.copy2D&#8203;(char[][])</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#copy(char%5B%5D%5B%5D)"><code>ArrayTools.copy(char[][])</code></a> instead.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#fill2D(char,int,int)">squidpony.GwtCompatibility.fill2D&#8203;(char, int, int)</a></th>
-<td class="colLast">
-<div class="deprecationComment">use <a href="squidpony/ArrayTools.html#fill(char,int,int)"><code>ArrayTools.fill(char, int, int)</code></a> instead.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#insert2D(char%5B%5D%5B%5D,char%5B%5D%5B%5D,int,int)">squidpony.GwtCompatibility.insert2D&#8203;(char[][], char[][], int, int)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#insert(char%5B%5D%5B%5D,char%5B%5D%5B%5D,int,int)"><code>ArrayTools.insert(char[][], char[][], int, int)</code></a> instead.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#invertOrdering(int%5B%5D)">squidpony.GwtCompatibility.invertOrdering&#8203;(int[])</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#invertOrdering(int%5B%5D)"><code>ArrayTools.invertOrdering(int[])</code></a> instead.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#letterSpan(int)">squidpony.GwtCompatibility.letterSpan&#8203;(int)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#letterSpan(int)"><code>ArrayTools.letterSpan(int)</code></a> instead.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#range(int)">squidpony.GwtCompatibility.range&#8203;(int)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#range(int)"><code>ArrayTools.range(int)</code></a> instead.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/GwtCompatibility.html#reorder(java.util.ArrayList,int...)">squidpony.GwtCompatibility.reorder&#8203;(ArrayList&lt;T&gt;, int...)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#reorder(java.util.ArrayList,int...)"><code>ArrayTools.reorder(ArrayList, int...)</code></a> instead.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/AOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.AOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/BeamAOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.BeamAOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/BlastAOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.BlastAOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/BurstAOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.BurstAOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/CloudAOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.CloudAOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/ConeAOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.ConeAOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/LineAOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.LineAOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidai/PointAOE.html#setCache(squidpony.squidgrid.FOV)">squidpony.squidai.PointAOE.setCache&#8203;(FOV)</a></th>
-<td class="colLast">
-<div class="deprecationComment">AOE doesn't really benefit from using an FOVCache</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidgrid/mapping/DungeonUtility.html#fill(boolean%5B%5D%5B%5D,boolean)">squidpony.squidgrid.mapping.DungeonUtility.fill&#8203;(boolean[][], boolean)</a></th>
-<td class="colLast">
-<div class="deprecationComment">Use <a href="squidpony/ArrayTools.html#fill(boolean%5B%5D%5B%5D,boolean)"><code>ArrayTools.fill(boolean[][], boolean)</code></a> instead</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidmath/Arrangement.html#put(K,java.lang.Integer)">squidpony.squidmath.Arrangement.put&#8203;(K, Integer)</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidmath/RNG.html#approximateBits(int)">squidpony.squidmath.RNG.approximateBits&#8203;(int)</a></th>
 <td class="colLast">
 <div class="deprecationComment">see the version in GreasedRegion, <a href="squidpony/squidmath/GreasedRegion.html#approximateBits(squidpony.squidmath.RandomnessSource,int)"><code>GreasedRegion.approximateBits(RandomnessSource, int)</code></a></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="squidpony/squidmath/RNG.html#randomInterleave()">squidpony.squidmath.RNG.randomInterleave()</a></th>
 <td class="colLast">
 <div class="deprecationComment">See <a href="squidpony/squidmath/GreasedRegion.html#randomInterleave(squidpony.squidmath.RandomnessSource)"><code>GreasedRegion.randomInterleave(RandomnessSource)</code></a> for where this will be moved</div>
@@ -267,5 +133,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

@@ -24,9 +24,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -52,18 +52,13 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
+<div class="flexContent">
 <main role="main">
 <div class="header">
 <h1 class="title">Hierarchy For Package squidpony.squidgrid.mapping</h1>
@@ -82,13 +77,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">squidpony.squidgrid.mapping.<a href="ClassicRogueMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">ClassicRogueMapGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">ConnectingMapGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">DenseRoomMapGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
-<li class="circle">squidpony.squidgrid.mapping.<a href="DividedMazeGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">DividedMazeGenerator</span></a></li>
+<li class="circle">squidpony.squidgrid.mapping.<a href="DividedMazeGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">DividedMazeGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="DungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">DungeonGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="DungeonUtility.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">DungeonUtility</span></a></li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="FantasyPoliticalMapper.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">FantasyPoliticalMapper</span></a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="FantasyPoliticalMapper.Faction.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">FantasyPoliticalMapper.Faction</span></a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="FlowingCaveGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">FlowingCaveGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
-<li class="circle">squidpony.squidgrid.mapping.<a href="GrowingTreeMazeGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">GrowingTreeMazeGenerator</span></a></li>
+<li class="circle">squidpony.squidgrid.mapping.<a href="GrowingTreeMazeGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">GrowingTreeMazeGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="HeightMapFactory.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">HeightMapFactory</span></a></li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="LanesMapGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">LanesMapGenerator</span></a> (implements squidpony.squidgrid.mapping.<a href="IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a>)</li>
 <li class="circle">squidpony.squidgrid.mapping.<a href="LineKit.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">LineKit</span></a></li>
@@ -225,5 +220,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

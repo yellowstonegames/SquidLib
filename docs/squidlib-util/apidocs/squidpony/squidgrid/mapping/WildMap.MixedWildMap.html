@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.mapping</a></div>
 <h1 title="Class WildMap.MixedWildMap" class="title">Class WildMap.MixedWildMap</h1>
@@ -107,9 +102,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.403">WildMap.MixedWildMap</a>
+<pre>public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.html#line.434">WildMap.MixedWildMap</a>
 extends <a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
+<div class="block">A subclass of <a href="WildMap.html" title="class in squidpony.squidgrid.mapping"><code>WildMap</code></a> that serves as a ragged edge between 2, 3, or 4 WildMaps in a square intersection.
+ You almost always supply 4 WildMaps to this (typically not other MixedWildMaps), one for each corner of the map,
+ and this generates an uneven border between them. Make sure to look up the indices in the <a href="WildMap.html#content"><code>WildMap.content</code></a> and
+ <a href="WildMap.html#floors"><code>WildMap.floors</code></a> using this MixedWildMap's <a href="WildMap.html#contentTypes"><code>WildMap.contentTypes</code></a> and <a href="WildMap.html#floorTypes"><code>WildMap.floorTypes</code></a>, not the ones in the
+ inner WildMaps, because the indices in the MixedWildMap are different.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#squidpony.squidgrid.mapping.WildMap.MixedWildMap">Serialized Form</a></dd>
@@ -281,37 +281,37 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="pieceMap">pieceMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.406">pieceMap</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType">int[][]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.437">pieceMap</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="pieces">pieces</a></h3>
-<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.407">pieces</a></span></div>
+<div class="memberSignature"><span class="modifiers">public final</span>&nbsp;<span class="returnType"><a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.438">pieces</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minFloors">minFloors</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.408">minFloors</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.439">minFloors</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxFloors">maxFloors</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.408">maxFloors</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.439">maxFloors</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="minContents">minContents</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.408">minContents</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.439">minContents</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxContents">maxContents</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.408">maxContents</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.439">maxContents</a></span></div>
 </section>
 </li>
 </ul>
@@ -327,13 +327,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">MixedWildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.410">MixedWildMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.441">MixedWildMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.mapping.WildMap,squidpony.squidgrid.mapping.WildMap,squidpony.squidgrid.mapping.WildMap,squidpony.squidgrid.mapping.WildMap,squidpony.squidmath.IStatefulRNG)">MixedWildMap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.415">MixedWildMap</a></span>&#8203;(<span class="arguments"><a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>&nbsp;northeast,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.446">MixedWildMap</a></span>&#8203;(<span class="arguments"><a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>&nbsp;northeast,
 <a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>&nbsp;southeast,
 <a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>&nbsp;southwest,
 <a href="WildMap.html" title="class in squidpony.squidgrid.mapping">WildMap</a>&nbsp;northwest,
@@ -353,13 +353,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <li class="blockList">
 <section class="detail">
 <h3><a id="preparePieceMap()">preparePieceMap</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.440">preparePieceMap</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.471">preparePieceMap</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="generate()">generate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.511">generate</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WildMap.MixedWildMap.html#line.542">generate</a></span>()</div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="WildMap.html#generate()">WildMap</a></code></span></div>
 <div class="block">Produces a map by filling the <a href="WildMap.html#floors"><code>WildMap.floors</code></a> 2D array with indices into <a href="WildMap.html#floorTypes"><code>WildMap.floorTypes</code></a>, and similarly
  filling the <a href="WildMap.html#content"><code>WildMap.content</code></a> 2D array with indices into <a href="WildMap.html#contentTypes"><code>WildMap.contentTypes</code></a>. You only need to call this method
@@ -380,8 +380,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -427,5 +427,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

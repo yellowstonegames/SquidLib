@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":6,"i1":6,"i2":6};
+<script type="text/javascript">var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Interface IPackedColorPanel" class="title">Interface IPackedColorPanel</h1>
@@ -93,16 +88,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="contentContainer">
 <section class="description">
 <dl>
-<dt>All Superinterfaces:</dt>
-<dd><code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
-</dl>
-<dl>
 <dt>All Known Implementing Classes:</dt>
 <dd><code><a href="ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></code>, <code><a href="SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></code>, <code><a href="SquidMessageBox.html" title="class in squidpony.squidgrid.gui.gdx">SquidMessageBox</a></code>, <code><a href="SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code>, <code><a href="SubcellLayers.html" title="class in squidpony.squidgrid.gui.gdx">SubcellLayers</a></code></dd>
 </dl>
 <hr>
-<pre>public interface <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.9">IPackedColorPanel</a>
-extends squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
+<pre>public interface <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.9">IPackedColorPanel</a></pre>
 <div class="block">Created by Tommy Ettinger on 8/5/2017.</div>
 </section>
 <section class="summary">
@@ -138,6 +128,59 @@ float&nbsp;mixBy)</code></th>
 </td>
 </tr>
 <tr class="rowColor" id="i1">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cellHeight()">cellHeight</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor" id="i2">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cellWidth()">cellWidth</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i3">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clear(int,int)">clear</a></span>&#8203;(int&nbsp;x,
+int&nbsp;y)</code></th>
+<td class="colLast">
+<div class="block">Removes the contents of this cell, leaving a transparent space.</div>
+</td>
+</tr>
+<tr class="altColor" id="i4">
+<td class="colFirst"><code>com.badlogic.gdx.graphics.Color</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultForegroundColor()">getDefaultForegroundColor</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i5">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gridHeight()">gridHeight</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor" id="i6">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gridWidth()">gridWidth</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i7">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasActiveAnimations()">hasActiveAnimations</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor" id="i8">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(char%5B%5D%5B%5D,com.badlogic.gdx.graphics.Color%5B%5D%5B%5D)">put</a></span>&#8203;(char[][]&nbsp;foregrounds,
+com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor" id="i9">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,char)">put</a></span>&#8203;(int&nbsp;x,
+int&nbsp;y,
+char&nbsp;c)</code></th>
+<td class="colLast">
+<div class="block">Puts the character <code>c</code> at <code>(x, y)</code>.</div>
+</td>
+</tr>
+<tr class="altColor" id="i10">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,char,float)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -148,7 +191,17 @@ float&nbsp;encodedColor)</code></th>
  the foreground characters, this will not affect it.</div>
 </td>
 </tr>
-<tr class="altColor" id="i2">
+<tr class="rowColor" id="i11">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,char,com.badlogic.gdx.graphics.Color)">put</a></span>&#8203;(int&nbsp;x,
+int&nbsp;y,
+char&nbsp;c,
+com.badlogic.gdx.graphics.Color&nbsp;color)</code></th>
+<td class="colLast">
+<div class="block">Puts the character <code>c</code> at <code>(x, y)</code> with some <code>color</code>.</div>
+</td>
+</tr>
+<tr class="altColor" id="i12">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,float)">put</a></span>&#8203;(int&nbsp;x,
 int&nbsp;y,
@@ -158,15 +211,47 @@ float&nbsp;color)</code></th>
  on the implementation.</div>
 </td>
 </tr>
+<tr class="rowColor" id="i13">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,com.badlogic.gdx.graphics.Color)">put</a></span>&#8203;(int&nbsp;x,
+int&nbsp;y,
+com.badlogic.gdx.graphics.Color&nbsp;color)</code></th>
+<td class="colLast">
+<div class="block">Puts <code>color</code> at <code>(x, y)</code> (in the cell's entirety, i.e.</div>
+</td>
+</tr>
+<tr class="altColor" id="i14">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color)">put</a></span>&#8203;(int&nbsp;xOffset,
+int&nbsp;yOffset,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;string,
+com.badlogic.gdx.graphics.Color&nbsp;foreground)</code></th>
+<td class="colLast">
+<div class="block">Puts the given string horizontally with the first character at the given
+ offset.</div>
+</td>
+</tr>
+<tr class="rowColor" id="i15">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#put(int,int,squidpony.panel.IColoredString)">put</a></span>&#8203;(int&nbsp;xOffset,
+int&nbsp;yOffset,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IColoredString</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;cs)</code></th>
+<td class="colLast">
+<div class="block">Puts the given string horizontally with the first character at the given
+ offset, using the colors that <code>cs</code> provides.</div>
+</td>
+</tr>
+<tr class="altColor" id="i16">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a></span>&#8203;(com.badlogic.gdx.graphics.Color&nbsp;color)</code></th>
+<td class="colLast">
+<div class="block">Sets the default foreground color.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
 </div>
-<div class="inheritedList">
-<h3>Methods inherited from interface&nbsp;squidpony.panel.ISquidPanel</h3>
-<a id="methods.inherited.from.class.squidpony.panel.ISquidPanel">
-<!--   -->
-</a><code>cellHeight, cellWidth, clear, getBacker, getDefaultForegroundColor, gridHeight, gridWidth, hasActiveAnimations, put, put, put, put, put, put, setColorCenter, setDefaultForeground</code></div>
 </section>
 </li>
 </ul>
@@ -236,14 +321,204 @@ float&nbsp;encodedColor)</span></div>
 </dl>
 </section>
 </li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="put(int,int,char)">put</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.50">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+int&nbsp;y,
+char&nbsp;c)</span></div>
+<div class="block">Puts the character <code>c</code> at <code>(x, y)</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - </dd>
+<dd><code>y</code> - </dd>
+<dd><code>c</code> - </dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="put(int,int,com.badlogic.gdx.graphics.Color)">put</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.60">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+int&nbsp;y,
+com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
+<div class="block">Puts <code>color</code> at <code>(x, y)</code> (in the cell's entirety, i.e. in the
+ background).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - </dd>
+<dd><code>y</code> - </dd>
+<dd><code>color</code> - </dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="put(int,int,java.lang.String,com.badlogic.gdx.graphics.Color)">put</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.79">put</a></span>&#8203;(<span class="arguments">int&nbsp;xOffset,
+int&nbsp;yOffset,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;string,
+com.badlogic.gdx.graphics.Color&nbsp;foreground)</span></div>
+<div class="block">Puts the given string horizontally with the first character at the given
+ offset.
+
+ Does not word wrap. Characters that are not renderable (due to being at
+ negative offsets or offsets greater than the grid size) will not be shown
+ but will not cause any malfunctions.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>xOffset</code> - the x coordinate of the first character</dd>
+<dd><code>yOffset</code> - the y coordinate of the first character</dd>
+<dd><code>string</code> - the characters to be displayed</dd>
+<dd><code>foreground</code> - the color to draw the characters</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="put(int,int,squidpony.panel.IColoredString)">put</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.96">put</a></span>&#8203;(<span class="arguments">int&nbsp;xOffset,
+int&nbsp;yOffset,
+<a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel" class="externalLink">IColoredString</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;cs)</span></div>
+<div class="block">Puts the given string horizontally with the first character at the given
+ offset, using the colors that <code>cs</code> provides.
+
+ Does not word wrap. Characters that are not renderable (due to being at
+ negative offsets or offsets greater than the grid size) will not be shown
+ but will not cause any malfunctions.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>xOffset</code> - the x coordinate of the first character</dd>
+<dd><code>yOffset</code> - the y coordinate of the first character</dd>
+<dd><code>cs</code> - The string to display, with its colors.</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="put(int,int,char,com.badlogic.gdx.graphics.Color)">put</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.106">put</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+int&nbsp;y,
+char&nbsp;c,
+com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
+<div class="block">Puts the character <code>c</code> at <code>(x, y)</code> with some <code>color</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - </dd>
+<dd><code>y</code> - </dd>
+<dd><code>c</code> - </dd>
+<dd><code>color</code> - </dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="put(char[][],com.badlogic.gdx.graphics.Color[][])">put</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.113">put</a></span>&#8203;(<span class="arguments">char[][]&nbsp;foregrounds,
+com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</span></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>foregrounds</code> - Can be <code>null</code>, indicating that only colors must be put.</dd>
+<dd><code>colors</code> - </dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="clear(int,int)">clear</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.121">clear</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+int&nbsp;y)</span></div>
+<div class="block">Removes the contents of this cell, leaving a transparent space.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - </dd>
+<dd><code>y</code> - </dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="gridWidth()">gridWidth</a></h3>
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.126">gridWidth</a></span>()</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The number of cells that this panel spans, horizontally.</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="gridHeight()">gridHeight</a></h3>
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.131">gridHeight</a></span>()</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The number of cells that this panel spans, vertically.</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="cellWidth()">cellWidth</a></h3>
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.136">cellWidth</a></span>()</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The width of a cell, in number of pixels.</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="cellHeight()">cellHeight</a></h3>
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.141">cellHeight</a></span>()</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The height of a cell, in number of pixels.</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="hasActiveAnimations()">hasActiveAnimations</a></h3>
+<div class="memberSignature"><span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.147">hasActiveAnimations</a></span>()</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Returns true if there are animations running when this method is
+         called.</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="setDefaultForeground(com.badlogic.gdx.graphics.Color)">setDefaultForeground</a></h3>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.154">setDefaultForeground</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;color)</span></div>
+<div class="block">Sets the default foreground color.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - </dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="getDefaultForegroundColor()">getDefaultForegroundColor</a></h3>
+<div class="memberSignature"><span class="returnType">com.badlogic.gdx.graphics.Color</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.162">getDefaultForegroundColor</a></span>()</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The default foreground color (if none was set with
+         <a href="#setDefaultForeground(com.badlogic.gdx.graphics.Color)"><code>setDefaultForeground(Color)</code></a>), or the last color set
+         with <a href="#setDefaultForeground(com.badlogic.gdx.graphics.Color)"><code>setDefaultForeground(Color)</code></a>. Cannot be
+         <code>null</code>.</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -288,5 +563,7 @@ float&nbsp;encodedColor)</span></div>
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

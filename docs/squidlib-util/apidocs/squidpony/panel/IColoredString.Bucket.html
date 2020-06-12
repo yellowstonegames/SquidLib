@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.panel</a></div>
 <h1 title="Class IColoredString.Bucket" class="title">Class IColoredString.Bucket&lt;T&gt;</h1>
@@ -105,7 +100,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="IColoredString.html" title="type parameter in IColoredString">T</a>&gt;</dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../src-html/squidpony/panel/IColoredString.html#line.840">IColoredString.Bucket</a>&lt;T&gt;
+<pre>public static class <a href="../../src-html/squidpony/panel/IColoredString.html#line.842">IColoredString.Bucket</a>&lt;T&gt;
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">A piece of a <a href="IColoredString.html" title="interface in squidpony.panel"><code>IColoredString</code></a>: a text and its color.</div>
 <dl>
@@ -251,13 +246,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="text">text</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.842">text</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.844">text</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="color">color</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.843">color</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.845">color</a></span></div>
 </section>
 </li>
 </ul>
@@ -275,7 +270,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <h3><a id="&lt;init&gt;(java.lang.String,java.lang.Object)">
 <!--   -->
 </a><a id="&lt;init&gt;(java.lang.String,T)">Bucket</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.845">Bucket</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.847">Bucket</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
 <a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&nbsp;color)</span></div>
 </section>
 </li>
@@ -292,7 +287,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="append(java.lang.String)">append</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.855">append</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.857">append</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</span></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>text</code> - </dd>
@@ -305,13 +300,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="length()">length</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.863">length</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.865">length</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setLength(int)">setLength</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.868">setLength</a></span>&#8203;(<span class="arguments">int&nbsp;l)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.870">setLength</a></span>&#8203;(<span class="arguments">int&nbsp;l)</span></div>
 </section>
 </li>
 <li class="blockList">
@@ -319,13 +314,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <h3><a id="setColor(java.lang.Object)">
 <!--   -->
 </a><a id="setColor(T)">setColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.876">setColor</a></span>&#8203;(<span class="arguments"><a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&nbsp;t)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.878">setColor</a></span>&#8203;(<span class="arguments"><a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a>&nbsp;t)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getText()">getText</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.883">getText</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.885">getText</a></span>()</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The text that this bucket contains.</dd>
@@ -335,7 +330,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="getColor()">getColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.890">getColor</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="IColoredString.Bucket.html" title="type parameter in IColoredString.Bucket">T</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.892">getColor</a></span>()</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The color of <a href="#getText()"><code>getText()</code></a>. Or <code>null</code> if none.</dd>
@@ -345,7 +340,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.894">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/panel/IColoredString.Bucket.html#line.896">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
@@ -358,8 +353,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -405,5 +400,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

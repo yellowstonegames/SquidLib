@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -73,20 +73,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony</a></div>
 <h1 title="Class ByteStringEncoding" class="title">Class ByteStringEncoding</h1>
@@ -98,11 +93,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section class="description">
 <hr>
 <pre><a href="annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public final class <a href="../src-html/squidpony/ByteStringEncoding.html#line.17">ByteStringEncoding</a>
+public final class <a href="../src-html/squidpony/ByteStringEncoding.html#line.20">ByteStringEncoding</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">An experimental variant on LZSEncoding to encode byte arrays to compressed Strings, and decode them back. This always
  uses UTF-16-safe encoding, which means it does not use half of all possible chars in the compressed Strings but makes
  sure the Strings are valid UTF-16 (so they can be written to and read from file more safely).
+ <br>
+ This class does work, since it can read back what it writes, but it still hasn't been strenuously tested, and it
+ could probably be optimized a lot.
  <br>
  Created by Tommy Ettinger on 1/11/2020.</div>
 </section>
@@ -161,13 +159,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="compress(byte[])">compress</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ByteStringEncoding.html#line.21">compress</a></span>&#8203;(<span class="arguments">byte[]&nbsp;uncompressed)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ByteStringEncoding.html#line.24">compress</a></span>&#8203;(<span class="arguments">byte[]&nbsp;uncompressed)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="decompress(java.lang.String)">decompress</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ByteStringEncoding.html#line.201">decompress</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;compressed)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">byte[]</span>&nbsp;<span class="memberName"><a href="../src-html/squidpony/ByteStringEncoding.html#line.204">decompress</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;compressed)</span></div>
 </section>
 </li>
 </ul>
@@ -176,8 +174,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -223,5 +221,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

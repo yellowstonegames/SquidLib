@@ -30,9 +30,9 @@ loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
 </noscript>
-<header role="banner">
+<div class="flexBox">
+<header role="banner" class="flexHeader">
 <nav role="navigation">
-<div class="fixedNav">
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav"><a id="navbar.top">
 <!--   -->
@@ -72,20 +72,15 @@ loadScripts(document, 'script');</script>
 <input type="reset" id="reset" value="reset" disabled="disabled">
 </div>
 </div>
-<a id="skip.navbar.top">
-<!--   -->
-</a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-</div>
-<div class="navPadding">&nbsp;</div>
-<script type="text/javascript"><!--
-$('.navPadding').css('padding-top', $('.fixedNav').css("height"));
-//-->
-</script>
+<div class="skipNav"><a id="skip.navbar.top">
+<!--   -->
+</a></div>
 </nav>
 </header>
-<!-- ======== START OF CLASS DATA ======== -->
+<div class="flexContent">
 <main role="main">
+<!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">squidpony.squidgrid.gui.gdx</a></div>
 <h1 title="Class FloatFilters.PaletteReducerFilter" class="title">Class FloatFilters.PaletteReducerFilter</h1>
@@ -102,9 +97,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="FloatFilters.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters</a></dd>
 </dl>
 <hr>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.583">FloatFilters.PaletteReducerFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.584">FloatFilters.PaletteReducerFilter</a>
 extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></pre>
-<div class="block">A FloatFilter that limits the colors it can return to a fixed palette as determined by a <a href="PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx"><code>PaletteReducer</code></a>,
+<div class="block">A FloatFilter that limits the colors it can return to a fixed palette as determined by a <code>PaletteReducer</code>,
  and won't return any colors that are missing from that palette (although it can always return fully-transparent).
  This is like <a href="FloatFilters.PaletteFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.PaletteFilter</code></a> but trades off memory usage (it uses about 33KB to store a large-ish lookup
  table) to improve speed on large palettes. This can't use a palette larger than 256 colors (including transparent
@@ -130,7 +125,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></code></td>
+<td class="colFirst"><code>com.github.tommyettinger.anim8.PaletteReducer</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reducer">reducer</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -169,7 +164,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(squidpony.squidgrid.gui.gdx.PaletteReducer)">PaletteReducerFilter</a></span>&#8203;(<a href="PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a>&nbsp;palette)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(com.github.tommyettinger.anim8.PaletteReducer)">PaletteReducerFilter</a></span>&#8203;(com.github.tommyettinger.anim8.PaletteReducer&nbsp;palette)</code></th>
 <td class="colLast">
 <div class="block">Builds a PaletteReducerFilter with the given PaletteReducer, which will be referenced without copying.</div>
 </td>
@@ -234,7 +229,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 <li class="blockList">
 <section class="detail">
 <h3><a id="reducer">reducer</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.584">reducer</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.github.tommyettinger.anim8.PaletteReducer</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.585">reducer</a></span></div>
 </section>
 </li>
 </ul>
@@ -250,16 +245,16 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">PaletteReducerFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.589">PaletteReducerFilter</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.590">PaletteReducerFilter</a></span>()</div>
 <div class="block">Builds a PaletteReducerFilter that will use the 256-color (including transparent) DawnBringer Aurora palette.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
-<h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.PaletteReducer)">PaletteReducerFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.600">PaletteReducerFilter</a></span>&#8203;(<span class="arguments"><a href="PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a>&nbsp;palette)</span></div>
+<h3><a id="&lt;init&gt;(com.github.tommyettinger.anim8.PaletteReducer)">PaletteReducerFilter</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.601">PaletteReducerFilter</a></span>&#8203;(<span class="arguments">com.github.tommyettinger.anim8.PaletteReducer&nbsp;palette)</span></div>
 <div class="block">Builds a PaletteReducerFilter with the given PaletteReducer, which will be referenced without copying. You
- can call <a href="PaletteReducer.html#exact(com.badlogic.gdx.graphics.Color%5B%5D)"><code>PaletteReducer.exact(Color[])</code></a> or other similar methods before this filter is used to set up
+ can call <code>PaletteReducer.exact(Color[])</code> or other similar methods before this filter is used to set up
  the palette, and this is often done before the PaletteReducer is passed here.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -270,7 +265,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(com.badlogic.gdx.graphics.Color...)">PaletteReducerFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.611">PaletteReducerFilter</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color...&nbsp;targets)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.612">PaletteReducerFilter</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color...&nbsp;targets)</span></div>
 <div class="block">Builds a PaletteReducerFilter with an array or vararg of libGDX colors (at most 256 colors, and often
  starting with a transparent color) that this will choose from. The array will have its contents read but will
  not be held onto, so later changes won't affect it.</div>
@@ -293,7 +288,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 <li class="blockList">
 <section class="detail">
 <h3><a id="alter(float)">alter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.622">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.623">alter</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <div class="block">Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -311,8 +306,8 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 </ul>
 </section>
 </div>
-</main>
 <!-- ========= END OF CLASS DATA ========= -->
+</main>
 <footer role="contentinfo">
 <nav role="navigation">
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -357,5 +352,7 @@ extends <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">
 </nav>
 <p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2020. All rights reserved.</small></p>
 </footer>
+</div>
+</div>
 </body>
 </html>

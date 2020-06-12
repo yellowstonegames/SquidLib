@@ -28,10 +28,10 @@
 <span class="sourceLineNo">016</span><a id="line.16">/**</a>
 <span class="sourceLineNo">017</span><a id="line.17"> * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.</a>
 <span class="sourceLineNo">018</span><a id="line.18"> * Supports filtering any colors that this creates using an {@link IFilter}, such as one from {@link Filters}.</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * This class largely supersedes the earlier {@link SColorFactory} class, and supports similar operations</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * while also allowing filters to modify the returned colors. Some things use different terms between the</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * two classes; {@link SColorFactory#blend(SColor, SColor, double)} is {@link #lerp(Color, Color, double)}</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * here, and {@link SColorFactory#setFloor(int)} is {@link #setGranularity(int)} (with different behavior).</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * This class largely supersedes the earlier SColorFactory class, and supports similar operations</a>
+<span class="sourceLineNo">020</span><a id="line.20"> * while also allowing filters to modify the returned colors. SColorFactory has been removed, so code transitioning</a>
+<span class="sourceLineNo">021</span><a id="line.21"> * to SquidColorCenter may need to change blend() to {@link #lerp(Color, Color, double)}, and setFloor() to</a>
+<span class="sourceLineNo">022</span><a id="line.22"> * {@link #setGranularity(int)} (with different behavior).</a>
 <span class="sourceLineNo">023</span><a id="line.23"> * @author smelC</a>
 <span class="sourceLineNo">024</span><a id="line.24"> * @author Tommy Ettinger</a>
 <span class="sourceLineNo">025</span><a id="line.25"> * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.</a>
