@@ -8,7 +8,12 @@ The software is provided "as is", without warranty of any kind, express or impli
 
 package squidpony.squidgrid;
 
-import squidpony.squidmath.*;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IntIntOrderedMap;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.OrderedMap;
 
 /**
  * A port of WaveFunctionCollapse by ExUtumno/mxgmn; takes a single sample of a grid to imitate and produces one or more
@@ -44,7 +49,7 @@ public class MimicWFC {
 
     private int order;
     private int[][] patterns;
-    private Arrangement<Integer> choices;
+    private IntIntOrderedMap choices;
     private int ground;
 
     public MimicWFC(int[][] itemGrid, int order, int width, int height, boolean periodicInput, boolean periodicOutput, int symmetry, int ground)
@@ -57,20 +62,20 @@ public class MimicWFC {
 
         int SMX = itemGrid.length, SMY = itemGrid[0].length;
         //colors = new List<Color>();
-        choices = new Arrangement<>(SMX * SMY);
+        choices = new IntIntOrderedMap(SMX * SMY);
         int[][] sample = new int[SMX][SMY];
         for (int y = 0; y < SMY; y++) {
             for (int x = 0; x < SMX; x++)
             {
                 int color = itemGrid[x][y];
-                int i = choices.addOrIndex(color);
+                int i = choices.getOrDefault(color, choices.size());
+                if(i == choices.size())
+                    choices.put(color, i);
                 sample[x][y] = i;
             }
         }
 
         int C = choices.size();
-        long W = MathExtras.raiseToPower(C, order * order);
-
 
 
 //        Dictionary<long, int> weights = new Dictionary<long, int>();
@@ -158,17 +163,6 @@ public class MimicWFC {
 
         return result;
     }
-
-//    int[] pattern (Func<int, int, byte> f)
-//    {
-//        int[] result = new int[order * order];
-//        for (int y = 0; y < order; y++) {
-//            for (int x = 0; x < order; x++){
-//                result[x + y * order] = f(x, y);
-//            }
-//        }
-//        return result;
-//    }
 
     private int[] patternFromSample(int x, int y, int[][] sample, int SMX, int SMY) {
         int[] result = new int[order * order];
@@ -446,8 +440,8 @@ public class MimicWFC {
             propagate();
         }
     }
-    private static int[] DX = { -1, 0, 1, 0 };
-    private static int[] DY = { 0, 1, 0, -1 };
-    private static int[] OPPOSITE = { 2, 3, 0, 1 };
+    private static final int[] DX = { -1, 0, 1, 0 };
+    private static final int[] DY = { 0, 1, 0, -1 };
+    private static final int[] OPPOSITE = { 2, 3, 0, 1 };
 
 }
