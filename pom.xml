@@ -55,7 +55,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.version>3.8.0</maven.compiler.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.javadoc.version>3.2.0</maven.javadoc.version>
         <maven.resources.version>3.1.0</maven.resources.version>
         <maven.source.version>3.2.1</maven.source.version>
@@ -68,7 +68,7 @@
         <gdx.version>1.9.10</gdx.version>
         <junit.version>4.12</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
-        <anim8.version>0.1.1</anim8.version>
+        <anim8.version>0.1.2</anim8.version>
     </properties>
 
     <issueManagement>
@@ -87,12 +87,12 @@
         <module>squidlib-extra</module>
         <module>squidlib-performance</module>
     </modules>
-    <repositories>
-        <repository>
-            <id>Maven Snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>Maven Snapshots</id>-->
+<!--            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
     <profiles>
         <profile>
             <id>jshell</id>
