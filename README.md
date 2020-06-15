@@ -349,17 +349,17 @@ Or these dependencies for Gradle:
 
 Core of SquidLib:
 ```
-compile 'com.squidpony:squidlib-util:3.0.0-b10'
+api 'com.squidpony:squidlib-util:3.0.0-b10'
 ```
 
 Optional Text-Based Display
 ```
-compile 'com.squidpony:squidlib:3.0.0-b10'
+api 'com.squidpony:squidlib:3.0.0-b10'
 ```
 
 Optional Serialization Support
 ```
-compile 'com.squidpony:squidlib-extra:3.0.0-b10'
+api 'com.squidpony:squidlib-extra:3.0.0-b10'
 ```
 
 If you want the latest version of SquidLib, which uses libGDX 1.9.10 and GWT 2.8.2 (if you use GWT), you can use JitPack
@@ -379,39 +379,57 @@ Or this for Gradle, which if you used SquidSetup, would be in the repositories b
 maven { url "https://jitpack.io" }
 ```
 
-Then the dependencies would be this for Maven (the first is needed, the others are optional); replace `9add4b83e9`
+Then the dependencies would be this for Maven (the first is needed, the others are optional); replace `5398d7c429`
 with any short commit from GitHub:
 
 ```
 	<dependency>
 	    <groupId>com.github.SquidPony.SquidLib</groupId>
 	    <artifactId>squidlib-util</artifactId>
-	    <version>9add4b83e9</version>
+	    <version>5398d7c429</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.github.SquidPony.SquidLib</groupId>
 	    <artifactId>squidlib</artifactId>
-	    <version>9add4b83e9</version>
+	    <version>5398d7c429</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.github.SquidPony.SquidLib</groupId>
 	    <artifactId>squidlib-extra</artifactId>
-	    <version>9add4b83e9</version>
+	    <version>5398d7c429</version>
 	</dependency>
 ```
 
-Or this for Gradle (the first two are needed, the others are optional); replace `9add4b83e9` with any short commit from GitHub:
+Or this for Gradle (the first two are needed, the others are optional); replace `5398d7c429` with any short commit from GitHub:
 ```
-    compile("com.github.SquidPony.SquidLib:squidlib-util:9add4b83e9")
-    compile("com.github.SquidPony.SquidLib:squidlib:9add4b83e9")
-    compile("com.github.SquidPony.SquidLib:squidlib-extra:9add4b83e9")
+    api "com.github.SquidPony.SquidLib:squidlib-util:5398d7c429"
+    api "com.github.SquidPony.SquidLib:squidlib:5398d7c429"
+    api "com.github.SquidPony.SquidLib:squidlib-extra:5398d7c429"
 ```
 
-If you use GWT, you should probably use SquidSetup to configure the project, though it might need some changes to
-GWT "inherits" configuration for your application. These should be present once in GdxDefinition.gwt.xml if you use GWT:
+If you use GWT, you should probably use SquidSetup to configure the project, since there's a lot of places where
+Maven or Gradle with GWT gets tricky. GWT needs the sources for all dependencies, but also needs the sources for
+regexodus 0.1.10 (because `squidlib-util` needs it) and possibly anim8-gdx 0.1.3 (because `squidlib` needs it; anim8-gdx
+is only needed if you depend on `squidlib`). The sources dependencies look like this for Gradle (I haven't really tried
+with Maven):
+```
+    implementation "com.github.SquidPony.SquidLib:squidlib-util:5398d7c429:sources"
+    // above depends on this:
+    implementation "com.github.tommyettinger:regexodus:0.1.10:sources"
+
+    implementation "com.github.SquidPony.SquidLib:squidlib:5398d7c429:sources"
+    // above depends on this:
+    implementation "com.github.tommyettinger:anim8-gdx:0.1.3:sources"
+
+    implementation "com.github.SquidPony.SquidLib:squidlib-extra:5398d7c429:sources"
+}
+```
+
+
+There's also the GWT "inherits" configuration for your application.
+These should be present once in GdxDefinition.gwt.xml if you use GWT:
 
 ```
-    <inherits name="regexodus" />
     <inherits name="squidlib-util" />
 ```
 
