@@ -16,7 +16,7 @@
         This source block should be removed when we update to 1.9.11, when it's released. 
         -->
     </source>
-    <inherits name="com.github.tommyettinger.anim8"/>
+    <inherits name="anim8"/>
     <inherits name="regexodus"/>
     <inherits name="squidlib-util"/>
     <source path="squidpony/squidgrid/gui/gdx"/>

@@ -68,7 +68,7 @@
         <gdx.version>1.9.10</gdx.version>
         <junit.version>4.12</junit.version>
         <regexodus.version>0.1.10</regexodus.version>
-        <anim8.version>0.1.2</anim8.version>
+        <anim8.version>0.1.3</anim8.version>
     </properties>
 
     <issueManagement>
@@ -85,7 +85,7 @@
         <module>squidlib-util</module>
         <module>squidlib</module>
         <module>squidlib-extra</module>
-        <module>squidlib-performance</module>
+<!--        <module>squidlib-performance</module>-->
     </modules>
 <!--    <repositories>-->
 <!--        <repository>-->
