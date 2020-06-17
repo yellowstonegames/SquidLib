@@ -1,7 +1,12 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -21,9 +26,14 @@ import squidpony.squidmath.NumberTools;
  * may be slower if used for Tiled map renderers in libGDX or for {@link com.badlogic.gdx.graphics.g2d.NinePatch}
  * instances, which both need to reset a Color object frequently, but not much else in libGDX specifically needs the
  * Color object {@link #getColor()} returns, and many things do fine with {@link #getPackedColor()}, which is faster.
+ * Note that for games that use 2D sprite graphics, there's very low overhead to 1.9.9's SpriteBatch, and it mostly has
+ * issues with overdraw (which every glyph of text drawn over a background contributes towards).
  * <br>
  * Most FloatFilter varieties don't have much overhead, and I encourage you to try some to quickly produce graphical
- * effects in a game. As an example, changing the warmth of a color (as well as its lightness) is relatively easy with a
+ * effects in a game. As a simple example, {@link FloatFilters#grayscaleFilter} is a constant FloatFilter that makes
+ * all colors, well, grayscale; you could apply it during things like flashback sequences or when the player is dazed.
+ * <br>
+ * As a more complex example, changing the warmth of a color (as well as its lightness) is relatively easy with a
  * {@link FloatFilters.YCwCmFilter} that adds to or subtracts from Cw (chromatic warmth) and may change Y (lightness).
  * With that same filter, if the protagonist is partially blinded, you could set the multipliers for Cw and Cm
  * (chromatic mildness; determines whether a color is closer to mild colors like green/yellow or bold colors like
@@ -38,7 +48,7 @@ public class FilterBatch implements Batch {
     
     public FloatFilter filter;
     
-    private Mesh mesh;
+    private final Mesh mesh;
 
     final float[] vertices;
     int idx = 0;
@@ -62,7 +72,7 @@ public class FilterBatch implements Batch {
     private boolean ownsShader;
 
     float color = Color.WHITE.toFloatBits();
-    private Color tempColor = new Color(1, 1, 1, 1);
+    private final Color tempColor = new Color(1, 1, 1, 1);
 
     /** Number of render calls since the last {@link #begin()}. **/
     public int renderCalls = 0;
