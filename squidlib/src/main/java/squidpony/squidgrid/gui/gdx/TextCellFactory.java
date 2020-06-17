@@ -1942,8 +1942,9 @@ public class TextCellFactory implements Disposable {
 
     /**
      * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
-     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.
-     * @return the current smoothing multiplier as a float, which starts at 1f.
+     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing. This starts
+     * at 1.2f, usually ({@link DefaultResources} notes when a different value is used).
+     * @return the current smoothing multiplier as a float, which starts at 1.2f for most fonts
      */
     public float getSmoothingMultiplier() {
         return smoothingMultiplier;
@@ -1951,7 +1952,8 @@ public class TextCellFactory implements Disposable {
 
     /**
      * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
-     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.
+     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing. Before this
+     * is called, the smoothing multiplier is usually 1.2f; {@link DefaultResources} notes when other values are used.
      * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.
      * @return this for chaining
      */

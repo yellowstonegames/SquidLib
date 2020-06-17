@@ -57,6 +57,7 @@ public class StarterKit {
      * Used to draw lots of things, but mostly handled internally by the Stage.
      * You may need to call {@code batch.begin()} and {@code batch.end()} in some cases where you want to
      * render something that isn't a child of stage but is an Actor or similar render-able object.
+     * This can apply a filter from {@link FloatFilters} (or a custom {@link FloatFilter}) to all drawn colors. 
      */
     public FilterBatch batch;
     /**
@@ -142,8 +143,8 @@ public class StarterKit {
                       int additionalWidth, int additionalHeight) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
-        this.textFactory = DefaultResources.getCrispLeanFamily();
-        layers = new SparseLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, textFactory);
+        this.textFactory = textFactory == null ? DefaultResources.getCrispLeanFamily() : textFactory;
+        layers = new SparseLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, this.textFactory);
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         batch = new FilterBatch();

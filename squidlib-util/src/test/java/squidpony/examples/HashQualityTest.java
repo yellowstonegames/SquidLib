@@ -857,6 +857,8 @@ public class HashQualityTest {
 //            else
 //                n = y * y + x;
 //        }
+        //return (x >= y) ? (((x & 1) == 1) ? x * x + y : x * (x + 2) - y) : (((y & 1) == 1) ? y * (y + 2) - x : y * y + x);
+        
         //// Gray code, XLCG, XLCG, xor (to stay within int range on GWT).
         //// The Gray code moves bits around just a little, but keeps the same power-of-two upper bound.
         //// the XLCGs together only really randomize the upper bits; they don't change the lower bit at all.

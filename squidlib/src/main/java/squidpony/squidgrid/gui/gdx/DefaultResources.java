@@ -869,6 +869,8 @@ public class DefaultResources implements LifecycleListener {
      * to many sizes. Unlike {@link #getStretchableSquareFont()}, the font this uses was made to be square initially,
      * and is not a distorted/stretched version of an existing font. Caches the result for later calls.
      * <br>
+     * Note: Uses a smoothing multiplier of 2.125f, instead of the default 1.2f. 
+     * <br>
      * <a href="https://i.imgur.com/nIjgTOp.png">Preview at 6x6 size, https://i.imgur.com/nIjgTOp.png</a>
      * <a href="https://i.imgur.com/lWaSgVN.png">Preview at much larger size, https://i.imgur.com/lWaSgVN.png</a>
      * <br>
@@ -911,6 +913,8 @@ public class DefaultResources implements LifecycleListener {
      * width and height to {@link TextCellFactory#tweakWidth(float)} and {@link TextCellFactory#tweakHeight(float)}.
      * Caches the result for later calls. The font is "square" by Wouter van Oortmerssen; it is available under a
      * CC-BY-3.0 license, which requires attribution to Wouter van Oortmerssen if you use it.
+     * <br>
+     * Note: Uses a smoothing multiplier of 6f, instead of the default 1.2f. 
      * <br>
      * <a href="https://i.imgur.com/nvHl64v.png">Preview at large size</a>
      * <br>
@@ -1053,6 +1057,8 @@ public class DefaultResources implements LifecycleListener {
      * which may be desirable to make square cells. The very high glyph count means the part of the image for each glyph
      * is smaller, though, so this may look slightly pixelated if it starts small and is resized to much larger. A cell
      * width of 19 and cell height of 20 is ideal; this allows the font to resize fairly well to larger sizes.
+     * <br>
+     * Note: Uses a smoothing multiplier of 1.125f, instead of the default 1.2f. 
      * <br>
      * Preview: https://i.imgur.com/g65jXxB.png
      * <br>
@@ -1337,6 +1343,8 @@ public class DefaultResources implements LifecycleListener {
      * futuristic look (based on the font Orbitron), and that should scale cleanly to many sizes. Meant to be used in
      * variable-width displays like TextPanel. Caches the result for later calls.
      * <br>
+     * Note: Uses a smoothing multiplier of 1.3f, instead of the default 1.2f. 
+     * <br>
      * Preview: http://i.imgur.com/grJhoMs.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
@@ -1370,12 +1378,14 @@ public class DefaultResources implements LifecycleListener {
      * slightly jumbled without certain layout features. Meant to be used in variable-width displays like TextPanel, but
      * currently you should prefer getStretchablePrintFont() for legibility. Caches the result for later calls.
      * <br>
+     * Note: Uses a smoothing multiplier of 0.8, instead of the default 1.2f. If you set the smoothing multiplier
+     * yourself, it should be similarly smaller than what other fonts use (most fonts are 1.2, so multiplying whatever
+     * you would normally set the smoothing multiplier to by 0.66f should work).
+     * <br>
      * Preview: http://i.imgur.com/GF5qQxn.png
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work. Sets the smoothing multiplier to 0.8f; if you set the smoothing
-     * multiplier yourself, it should be similarly smaller than what other fonts use (most fonts are 1.0, so multiplying
-     * whatever you would normally set the smoothing multiplier to by 0.8f should work).
+     * distance field font technique this uses can work.
      * <br>
      * Needs files:
      * <ul>
@@ -1390,6 +1400,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)
                         .setSmoothingMultiplier(0.8f).height(30).width(5);
+                instance.distanceClean.bmpFont.setUseIntegerPositions(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1567,10 +1578,10 @@ public class DefaultResources implements LifecycleListener {
      * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
      * normal Signed Distance Field technique, which should allow sharper edges. It has been updated so it is laid out
      * mostly-correctly now; some glyphs may be a little wide, such as {@code @}, but the line height, baseline, and the
-     * width for most glyphs seem correct. You may need to tweak the size more for width than for height (recommended to
-     * have box drawing characters line up is, after giving an initially-sized TextCellFactory to a class like
-     * SquidLayers, SparseLayers, or SquidPanel, to call {@link TextCellFactory#tweakWidth(float)} with 1.125f times the
-     * original width and {@link TextCellFactory#tweakHeight(float)} with 1.075f times the original height).
+     * width for most glyphs seem correct. If you find the box drawing characters don't line up, try 
+     * {@link TextCellFactory#tweakWidth(float)} with values like 1.125f; the exact value may depend on size.
+     * <br>
+     * Note: Uses a smoothing multiplier of 1f, instead of the default 1.2f. 
      * <br>
      * Preview: <a href="https://i.imgur.com/SCwhduv.png">Image link</a>
      * <br>
@@ -1830,7 +1841,7 @@ public class DefaultResources implements LifecycleListener {
      * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
      * version SquidLib has with an MSDF effect, {@link #getCrispLeanFamily()}.
      * <br>
-     * This TextFamily has its smoothing multiplier set to 1.55 instead of the default 1.2, which helps it stay sharp.
+     * Note: Uses a smoothing multiplier of 1.55f, instead of the default 1.2f. 
      * <br>
      * Preview: <a href="https://i.imgur.com/wRNlpL5.png">image link</a>, with bold at the bottom.
      * <br>
@@ -1869,6 +1880,8 @@ public class DefaultResources implements LifecycleListener {
      * supports 4 styles (regular, bold, italic, and bold italic). Caches the result for later calls. The font used is 
      * Noto Serif, which is OFL-licensed by Google, and looks very legible in normal use. Meant to be used in
      * variable-width displays like TextPanel.
+     * <br>
+     * Note: Uses a smoothing multiplier of 1.5f, instead of the default 1.2f. 
      * <br>
      * Preview: <a href="https://i.imgur.com/WsDqSfJ.png">In the foreground message box in ZoneDemo</a>
      * <br>
@@ -1909,6 +1922,8 @@ public class DefaultResources implements LifecycleListener {
      * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
      * sharper edges and precise corners instead of rounded tips on strokes.
      * <br>
+     * Note: Uses a smoothing multiplier of 1f, instead of the default 1.2f. 
+     * <br>
      * Preview: <a href="https://i.imgur.com/zaqgHTW.png">Image link</a>
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
@@ -1947,6 +1962,8 @@ public class DefaultResources implements LifecycleListener {
      * but not box drawing characters because this is variable-width. This uses the Multi-channel Signed Distance
      * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
      * sharper edges and precise corners instead of rounded tips on strokes.
+     * <br>
+     * Note: Uses a smoothing multiplier of 2f, instead of the default 1.2f. 
      * <br>
      * Preview: <a href="https://i.imgur.com/ASjdjc6.png">Image link when scaled to a small size</a>
      * <br>
@@ -2278,6 +2295,10 @@ public class DefaultResources implements LifecycleListener {
             msdfCurvySquare.dispose();
             msdfCurvySquare = null;
         }
+        if(msdfRoboto != null) {
+            msdfRoboto.dispose();
+            msdfRoboto = null;
+        }
         if(msdfIcons != null) {
             msdfIcons.dispose();
             msdfIcons = null;
@@ -2297,6 +2318,14 @@ public class DefaultResources implements LifecycleListener {
         if(lessTiny != null){
             lessTiny.dispose();
             lessTiny = null;
+        }
+        if(computerSaysNo != null){
+            computerSaysNo.dispose();
+            computerSaysNo = null;
+        }
+        if(sevenTwelve != null){
+            sevenTwelve.dispose();
+            sevenTwelve = null;
         }
         if(familyLean != null) {
             familyLean.dispose();

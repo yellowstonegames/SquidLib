@@ -130,7 +130,7 @@ public final class FloatFilters {
 //            else
 //                return color;
             final int bits = NumberTools.floatToIntBits(color);
-            final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
+            final float opacity = (bits >>> 25) * 0.007874016f;
             float luma = (
                     (bits & 0x000000ff) * (0x1.010102p-8f * 0.299f) +
                             (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
@@ -211,9 +211,11 @@ public final class FloatFilters {
             color = (bits & 0x000000ff) * (0x1.010102p-8f * 0.299f) +
                     (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
                     (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f);
-            return floatGet(color, color, color, (bits >>> 24 & 0xFE) * 0.003937008f);
+            return floatGet(color, color, color, (bits >>> 25) * 0.007874016f);
         }
     }
+    
+    public static final GrayscaleFilter grayscaleFilter = new GrayscaleFilter();
 
     /**
      * Like {@link HSVFilter}, but edits its input colors in YCbCr color space, and multiplies rather than adds.
@@ -255,7 +257,7 @@ public final class FloatFilters {
         @Override
         public float alter(float color) {
             final int bits = NumberTools.floatToIntBits(color);
-            final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
+            final float opacity = (bits >>> 25) * 0.007874016f;
             float luma = yMul * (
                     (bits & 0x000000ff) * (0x1.010102p-8f * 0.299f) +
                             (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
@@ -311,7 +313,7 @@ public final class FloatFilters {
         @Override
         public float alter(float color) {
             final int bits = NumberTools.floatToIntBits(color);
-            final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
+            final float opacity = (bits >>> 25) * 0.007874016f;
             final float y = yMul * (((bits & 0x000000ff) + ((bits & 0x0000ff00) >>> 7) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f);
             final float co = coMul * (((bits & 0x000000ff) - ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-9f);
             final float cg = cgMul * ((((bits & 0x0000ff00) >>> 7) - (bits & 0x000000ff) - ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f);
@@ -373,7 +375,7 @@ public final class FloatFilters {
         @Override
         public float alter(float color) {
             final int bits = NumberTools.floatToIntBits(color);
-            final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
+            final float opacity = (bits >>> 25) * 0.007874016f;
             final float luma = yAdd + yMul * ((bits & 0xFF) * 0x3p-11f + (bits >>> 8 & 0xFF) * 0x1p-9f + (bits >>> 16 & 0xFF) * 0x1p-11f);
             final float warm = (cwAdd + cwMul * (((bits & 0xFF) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f));
             final float mild = 0.5f * (cmAdd + cmMul * (((bits >>> 8 & 0xff) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f));
