@@ -1,7 +1,10 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests.old;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -140,4 +143,16 @@ public class ImageDemo extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 	}
+	
+    public static void main (String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "SquidLib GDX Image Demo";
+        config.width = 30 * 2 * 18;
+        config.height = 20 * 36;
+        config.forceExit = false;
+        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
+        new LwjglApplication(new ImageDemo(), config);
+    }
 }

@@ -110,7 +110,7 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         }
 
         public int getSize() {
-            return size;
+            return 1 << size;
         }
 
         public void setSize(int size) {
@@ -230,7 +230,7 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         }
 
         public int getSize() {
-            return size;
+            return 1 << size;
         }
 
         public void setSize(int size) {
@@ -239,12 +239,12 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         }
 
         public long hashLongs(long x, long y, long s) {
-            x &= mask >>> 1;
-            y &= mask >>> 1;
+            x &= mask;
+            y &= mask;
             x *= x * 0xC13FA9A902A6328FL;
             y *= y * 0x91E10DA5C79E7B1DL;
-            x = x >>> 1 & mask;
-            y = y >>> 1 & mask;
+            x &= mask;
+            y &= mask;
             long t;
             if (x < y) {
                 t = x;
@@ -258,18 +258,18 @@ public interface FlawedPointHash extends IPointHash, IFlawed {
         }
 
         public long hashLongs(long x, long y, long z, long s) {
-            x &= mask >>> 1;
-            y &= mask >>> 1;
-            z &= mask >>> 1;
+            x &= mask;
+            y &= mask;
+            z &= mask;
 //            s ^= (x) * 0xD1B54A32D192ED03L;
 //            s ^= (y) * 0xABC98388FB8FAC03L;
 //            s ^= (z) * 0x8CB92BA72F3D8DD7L;
             x *= x * 0xD1B54A32D192ED03L;
             y *= y * 0xABC98388FB8FAC03L;
             z *= z * 0x8CB92BA72F3D8DD7L;
-            x = x & mask >>> 1;
-            y = y & mask >>> 1;
-            z = z & mask >>> 1;
+            x = x & mask;
+            y = y & mask;
+            z = z & mask;
             long t;
             if (x < y) {
                 t = x;

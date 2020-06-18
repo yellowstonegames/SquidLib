@@ -375,7 +375,7 @@ public class DijkstraDemo extends ApplicationAdapter {
 //                screenY += player.y - (gridHeight >> 1);
                 // we also need to check if screenX or screenY is out of bounds.
                 if(screenX < 0 || screenY < 0 || screenX >= bigWidth || screenY >= bigHeight ||
-                        (cursor.x == screenX && cursor.y == screenY))
+                        (cursor.x == screenX && cursor.y == screenY) || bareDungeon[screenX][screenY] != '.')
                 {
                     return false;
                 }

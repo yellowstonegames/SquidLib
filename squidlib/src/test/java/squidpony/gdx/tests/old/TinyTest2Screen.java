@@ -1,4 +1,4 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests.old;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;

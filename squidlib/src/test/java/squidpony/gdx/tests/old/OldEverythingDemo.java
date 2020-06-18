@@ -1,9 +1,8 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests.old;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -32,7 +31,7 @@ import squidpony.squidmath.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EverythingDemo extends ApplicationAdapter {
+public class OldEverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
 
     private static class Monster {
@@ -249,7 +248,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
 
         //NOTE: cellWidth and cellHeight are assigned values that are significantly larger than the corresponding sizes
-        //in the EverythingDemoLauncher's main method. Because they are scaled up by an integer here, they can be scaled
+        //in this class' main method. Because they are scaled up by an integer here, they can be scaled
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         //values are high) or rendering fewer pixels for speed (when values are low). Using 1 seems to work well with
@@ -1087,4 +1086,21 @@ public class EverythingDemo extends ApplicationAdapter {
         viewport.update(width, height, false);
         viewport.setScreenBounds(0, (int)messages.getHeight(), width, height - (int)messages.getHeight());
     }
+    
+    public static void main (String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "SquidLib GDX Everything Demo";
+        config.width = 90 * 13;
+        config.height = 30 * 23;
+        config.foregroundFPS = 0;
+        config.backgroundFPS = 30;
+        config.vSyncEnabled = true;
+        config.forceExit = false;
+
+        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
+        new LwjglApplication(new OldEverythingDemo(), config);
+    }
+
 }

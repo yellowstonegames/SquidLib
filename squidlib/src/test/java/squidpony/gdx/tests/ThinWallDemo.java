@@ -32,7 +32,7 @@ import static squidpony.squidgrid.mapping.ThinDungeonGenerator.*;
 /**
  * This should look like http://i.imgur.com/FrbsCul.png at runtime.
  * Other comments are not updated yet; this started in RotationDemo, and is similar to it, but that demo wasn't fully
- * updated in its comments from EverythingDemo.
+ * updated in its comments from OldEverythingDemo.
  */
 public class ThinWallDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
