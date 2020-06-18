@@ -20,9 +20,7 @@
  *   out of or in connection with the Software or the use or other dealings in the
  *   Software.
  */
-package squidpony.gdx.tests;
-
-import squidpony.squidgrid.gui.gdx.SColor;
+package squidpony.gdx.tools;
 
 public final class Fft {
 	
@@ -34,8 +32,8 @@ public final class Fft {
 		int n = real.length;
 		if (n != imag.length)
 			throw new IllegalArgumentException("Mismatched lengths");
-		if (n == 0)
-			return;
+		if (n == 0) {
+		}
 		else if ((n & (n - 1)) == 0)  // Is power of 2
 			transformRadix2(real, imag);
 		else  // More complicated algorithm for arbitrary sizes

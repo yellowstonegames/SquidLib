@@ -1,7 +1,9 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests.old;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 /**
  * Test to diagnose SquidLib's GitHub issue #178; code is by gotoss08 .
@@ -23,4 +25,15 @@ public class TinyTest2 extends Game {
     public void dispose() {
         getScreen().dispose();
     }
+
+    public static void main(String[] args) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
+        config.width = 640;
+        config.height = 480;
+        config.forceExit = false;
+
+        new LwjglApplication(new TinyTest2(), config);
+    }
+
 }

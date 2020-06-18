@@ -1,4 +1,4 @@
-package squidpony.gdx.tests;
+package squidpony.gdx.tools;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;

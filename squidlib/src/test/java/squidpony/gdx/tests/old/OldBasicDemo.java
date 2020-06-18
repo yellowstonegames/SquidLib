@@ -1,9 +1,8 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests.old;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BasicDemo extends ApplicationAdapter {
+public class OldBasicDemo extends ApplicationAdapter {
     private FilterBatch batch;
 
     private IRNG rng;
@@ -481,4 +480,17 @@ public class BasicDemo extends ApplicationAdapter {
         //very important to have the mouse behave correctly if the user fullscreens or resizes the game!
 		input.getMouse().reinitialize((float) width / this.gridWidth, (float)height / (this.gridHeight + 8), this.gridWidth, this.gridHeight, 0, 0);
 	}
+
+    public static void main (String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "SquidLib GDX Basic Demo";
+        config.width = 80 * 10;
+        config.height = 32 * 22;
+        config.forceExit = false;
+        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
+        new LwjglApplication(new OldBasicDemo(), config);
+    }
+
 }

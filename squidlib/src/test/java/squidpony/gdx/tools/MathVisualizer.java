@@ -1,4 +1,4 @@
-package squidpony.gdx.tests;
+package squidpony.gdx.tools;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
