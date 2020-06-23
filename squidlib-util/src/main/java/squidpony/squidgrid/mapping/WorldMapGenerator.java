@@ -2,10 +2,16 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.LZSPlus;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.Noise;
 import squidpony.squidmath.Noise.Noise2D;
 import squidpony.squidmath.Noise.Noise3D;
 import squidpony.squidmath.Noise.Noise4D;
+import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
 import java.util.Arrays;

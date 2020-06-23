@@ -13489,7 +13489,7 @@ public class SColor extends Color implements Serializable {
      */
     public static float floatGetI(int r, int g, int b) {
         return NumberTools.intBitsToFloat((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
-                | 0xfe000000); //rgbToFloatColor((b & 0xff) | (g << 8 & 0xff00) | (r << 16));
+                | 0xfe000000);
     }
 
     /**
