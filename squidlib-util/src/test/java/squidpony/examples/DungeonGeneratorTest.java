@@ -1,7 +1,10 @@
 package squidpony.examples;
 
 import squidpony.ArrayTools;
+import squidpony.Maker;
+import squidpony.StringKit;
 import squidpony.squidai.WaypointPathfinder;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
@@ -10,6 +13,8 @@ import squidpony.squidmath.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Sample output: <pre>
@@ -141,6 +146,35 @@ public class DungeonGeneratorTest {
             System.out.println(dungeonGenerator);
             System.out.println("------------------------------------------------------------");
         }
+
+        System.out.println("Wiggly Path Generator");
+        rng.setState(1L);
+        map = mazeGenerator.generate();
+        Coord start = Coord.get(rng.between(2, 39) & -2, 2), end = Coord.get(rng.between(2, 39) & -2, 18);
+        ArrayList<Coord> path = new AStarSearch(DungeonUtility.generateAStarCostMap(map, Maker.makeHM('.', 1.0), 1.0), AStarSearch.SearchType.MANHATTAN)
+                .path(start, end);
+        sdungeon = ArrayTools.fill(' ', 38, 18);
+        for (int i = 1; i < path.size(); i++) {
+            Coord prev = path.get(i - 1), next = path.get(i); 
+            switch (Direction.toGoTo(prev, next)){
+                case LEFT: sdungeon[prev.x-2][prev.y-2] = '←';
+                break;
+                case UP: sdungeon[prev.x-2][prev.y-2] = '↑';
+                break;
+                case RIGHT: sdungeon[prev.x-2][prev.y-2] = '→';
+                break;
+                case DOWN: sdungeon[prev.x-2][prev.y-2] = '↓';
+                break;
+                default: sdungeon[prev.x-2][prev.y-2] = '*';
+                break;
+            }
+        }
+        end = path.get(path.size()-1);
+        sdungeon[end.x-2][end.y-2] = '*';
+
+        dungeonGenerator.setDungeon(sdungeon);
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
         System.out.println("SerpentMapGenerator\n");
 
 
