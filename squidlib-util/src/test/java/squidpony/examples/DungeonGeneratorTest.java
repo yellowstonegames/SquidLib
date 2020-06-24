@@ -122,7 +122,7 @@ public class DungeonGeneratorTest {
 
         char[][] map, sdungeon;
 
-        GrowingTreeMazeGenerator mazeGenerator = new GrowingTreeMazeGenerator(40, 20, rng);
+        GrowingTreeMazeGenerator mazeGenerator = new GrowingTreeMazeGenerator(39, 20, rng);
         int methodIndex = 0;
         String[] methodNames = {"Newest", "Oldest", "Random", "Newest/Random"};
         for(GrowingTreeMazeGenerator.ChoosingMethod method : new GrowingTreeMazeGenerator.ChoosingMethod[]{
@@ -130,7 +130,7 @@ public class DungeonGeneratorTest {
             System.out.println("GrowingTreeMazeGenerator " + methodNames[methodIndex++] + "\n");
             rng.setState(2252637788195L);
 
-            dungeonGenerator = new DungeonGenerator(40, 20, rng);
+            dungeonGenerator = new DungeonGenerator(39, 20, rng);
 //            dungeonGenerator.addDoors(9, false);
 //            dungeonGenerator.addWater(5);
 //            dungeonGenerator.addGrass(9);
@@ -150,27 +150,28 @@ public class DungeonGeneratorTest {
         System.out.println("Wiggly Path Generator");
         rng.setState(1L);
         map = mazeGenerator.generate();
-        Coord start = Coord.get(rng.between(2, 39) & -2, 2), end = Coord.get(rng.between(2, 39) & -2, 18);
-        ArrayList<Coord> path = new AStarSearch(DungeonUtility.generateAStarCostMap(map, Maker.makeHM('.', 1.0), 1.0), AStarSearch.SearchType.MANHATTAN)
+        Coord start = Coord.get(rng.between(1, 38) | 1, 1), end = Coord.get(rng.between(1, 38) | 1, 17);
+        ArrayList<Coord> path = new AStarSearch(map, AStarSearch.SearchType.MANHATTAN)
                 .path(start, end);
-        sdungeon = ArrayTools.fill(' ', 38, 18);
+        sdungeon = ArrayTools.fill(' ', 39, 20);
         for (int i = 1; i < path.size(); i++) {
             Coord prev = path.get(i - 1), next = path.get(i); 
             switch (Direction.toGoTo(prev, next)){
-                case LEFT: sdungeon[prev.x-2][prev.y-2] = '←';
+                case LEFT: sdungeon[prev.x][prev.y] = '←';
                 break;
-                case UP: sdungeon[prev.x-2][prev.y-2] = '↑';
+                case UP: sdungeon[prev.x][prev.y] = '↑';
                 break;
-                case RIGHT: sdungeon[prev.x-2][prev.y-2] = '→';
+                case RIGHT: sdungeon[prev.x][prev.y] = '→';
                 break;
-                case DOWN: sdungeon[prev.x-2][prev.y-2] = '↓';
+                case DOWN: sdungeon[prev.x][prev.y] = '↓';
                 break;
-                default: sdungeon[prev.x-2][prev.y-2] = '*';
+                default: sdungeon[prev.x][prev.y] = '*';
                 break;
             }
         }
         end = path.get(path.size()-1);
-        sdungeon[end.x-2][end.y-2] = '*';
+        sdungeon[start.x][start.y] = 'S';
+        sdungeon[end.x][end.y] = 'E';
 
         dungeonGenerator.setDungeon(sdungeon);
         System.out.println(dungeonGenerator);
