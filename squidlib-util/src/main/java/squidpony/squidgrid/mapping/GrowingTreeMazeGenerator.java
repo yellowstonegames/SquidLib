@@ -68,10 +68,8 @@ public class GrowingTreeMazeGenerator implements IDungeonGenerator {
         else 
             ArrayTools.fill(dungeon, '#');
         
-        int x = rng.between(1, width / 2);
-        int y = rng.between(1, height / 2);
-        x *= 2;
-        y *= 2;
+        int x = rng.nextInt(width - 1) | 1;
+        int y = rng.nextInt(height - 1) | 1;
 
         OrderedSet<Coord> deck = new OrderedSet<>();
         deck.add(Coord.get(x, y));

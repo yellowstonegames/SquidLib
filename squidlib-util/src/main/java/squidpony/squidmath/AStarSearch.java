@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.squidai.astar.DefaultGraph;
 import squidpony.squidai.astar.Heuristic;
 import squidpony.squidai.astar.Pathfinder;
+import squidpony.squidgrid.mapping.DungeonGenerator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,8 +19,10 @@ import java.util.Map;
  * This implementation is a thin wrapper around {@link Pathfinder} and the other code in the
  * {@code squidpony.squidai.astar} package; it replaces an older, much-less-efficient A* implementation with one based
  * on GDX-AI's IndexedAStarPathFinder class. The only major change in the API is that this version returns an ArrayList
- * of Coord instead of a Queue of Coord. Typical usage of this class involves
- * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} to generate the cost
+ * of Coord instead of a Queue of Coord. Typical usage of this class involves either the simpler technique of only using
+ * {@code '#'} for walls or obstructions and calling {@link #AStarSearch(char[][], SearchType)}, or the more complex
+ * technique that allows variable costs for different types of terrain, using
+ * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} to generate a cost
  * map; if you used the old AStarSearch, then be advised that the default cost is now 1.0 instead of 0.0.
  * @see squidpony.squidai.astar.Pathfinder the pathfinding class this is based on; Pathfinder can be used independently
  * @see squidpony.squidai.DijkstraMap a sometimes-faster pathfinding algorithm that can pathfind to multiple goals
@@ -50,7 +53,7 @@ public class AStarSearch implements Serializable {
         EUCLIDEAN(DefaultGraph.EUCLIDEAN),
         /**
          * Full space search. Least efficient but guaranteed to return a path if
-         * one exists. See also DijkstraMap class.
+         * one exists. See also {@link squidpony.squidai.DijkstraMap}.
          */
         DIJKSTRA(DefaultGraph.DIJKSTRA);
         Heuristic<Coord> heuristic;
@@ -59,9 +62,9 @@ public class AStarSearch implements Serializable {
         }
     }
 
-    protected final int width, height;
+    protected int width, height;
     protected Coord start, target;
-    protected final SearchType type;
+    protected SearchType type;
     
     protected DefaultGraph graph;
     protected Pathfinder<Coord> pathfinder;
@@ -76,18 +79,17 @@ public class AStarSearch implements Serializable {
     }
     /**
      * Builds a pathing object to run searches on.
+     * <br>
+     * Values in the map are treated as positive values being legal weights, with higher values being harder to pass
+     * through. Any negative value is treated as being an impassible space. A weight of 0 can be moved through at no
+     * cost, but this should be used very carefully, if at all. Cost maps are commonly built using the
+     * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} and
+     * {@link  squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])} methods from a 2D char array.
+     * <br>
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * based on diagonal and cardinal pathing (8-way).
      *
-     * Values in the map are treated as positive values (and 0) being legal
-     * weights, with higher values being harder to pass through. Any negative
-     * value is treated as being an impassible space.
-     *
-     * If the type is Manhattan, only the cardinal directions will be used. All
-     * other search types will return results based on intercardinal and
-     * cardinal pathing.
-     *
-     * @param map
-     *            the search map. It is not modified by this class, hence you can
-     *            share this map among multiple instances.
+     * @param map the search map, as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])}
      * @param type the manner of search
      */
     public AStarSearch(double[][] map, SearchType type) {
@@ -95,10 +97,83 @@ public class AStarSearch implements Serializable {
             throw new NullPointerException("map should not be null when building an AStarSearch");
         width = map.length;
         height = width == 0 ? 0 : map[0].length;
-        this.type = type == null ? SearchType.DIJKSTRA : type;         
+        this.type = type == null ? SearchType.EUCLIDEAN : type;         
         graph = new DefaultGraph(map, (this.type != SearchType.MANHATTAN));
         pathfinder = new Pathfinder<>(graph, true);
         path = new ArrayList<>(width + height);
+    }
+    /**
+     * Builds a pathing object to run searches on.
+     * <br>
+     * Values in the map are all considered equally passable unless the char is {@code '#'}, in which case it is
+     * considered an impassable wall. The {@link DungeonGenerator#getBareDungeon()} method is a common way to get a map
+     * where only '#' is used to mean a wall.
+     * <br>
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * based on diagonal and cardinal pathing (8-way).
+     *
+     * @param map a 2D char array where only {@code '#'} represents a wall, and anything else is equally passable
+     * @param type the manner of search
+     */
+    public AStarSearch(char[][] map, SearchType type) {
+        if (map == null)
+            throw new NullPointerException("map should not be null when building an AStarSearch");
+        width = map.length;
+        height = width == 0 ? 0 : map[0].length;
+        this.type = type == null ? SearchType.EUCLIDEAN : type;
+        graph = new DefaultGraph(map, (this.type != SearchType.MANHATTAN));
+        pathfinder = new Pathfinder<>(graph, true);
+        path = new ArrayList<>(width + height);
+    }
+
+    /**
+     * Resets this pathing object to use a different map and optionally a different SearchType.
+     * <br>
+     * Values in the map are treated as positive values being legal weights, with higher values being harder to pass
+     * through. Any negative value is treated as being an impassible space. A weight of 0 can be moved through at no
+     * cost, but this should be used very carefully, if at all. Cost maps are commonly built using the
+     * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} and
+     * {@link  squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])} methods from a 2D char array.
+     * <br>
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * based on diagonal and cardinal pathing (8-way).
+     *
+     * @param map the search map, as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])}
+     * @param type the manner of search
+     */
+    public AStarSearch reinitialize(double[][] map, SearchType type){
+        if (map == null)
+            throw new NullPointerException("map should not be null when building an AStarSearch");
+        width = map.length;
+        height = width == 0 ? 0 : map[0].length;
+        this.type = type == null ? SearchType.EUCLIDEAN : type;
+        graph.init(map, this.type != SearchType.MANHATTAN);
+        pathfinder = new Pathfinder<>(graph, true);
+        return this;
+    }
+
+    /**
+     * Resets this pathing object to use a different map and optionally a different SearchType.
+     * <br>
+     * Values in the map are all considered equally passable unless the char is {@code '#'}, in which case it is
+     * considered an impassable wall. The {@link DungeonGenerator#getBareDungeon()} method is a common way to get a map
+     * where only '#' is used to mean a wall.
+     * <br>
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * based on diagonal and cardinal pathing (8-way).
+     *
+     * @param map a 2D char array where only {@code '#'} represents a wall, and anything else is equally passable
+     * @param type the manner of search
+     */
+    public AStarSearch reinitialize(char[][] map, SearchType type){
+        if (map == null)
+            throw new NullPointerException("map should not be null when building an AStarSearch");
+        width = map.length;
+        height = width == 0 ? 0 : map[0].length;
+        this.type = type == null ? SearchType.EUCLIDEAN : type;
+        graph.init(map, this.type != SearchType.MANHATTAN);
+        pathfinder = new Pathfinder<>(graph, true);
+        return this;
     }
 
     /**
@@ -151,45 +226,4 @@ public class AStarSearch implements Serializable {
         }
         return result.toString();
     }
-    /*
-    public static final int DIMENSION = 40, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
-    public static DungeonGenerator dungeonGen =
-            new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
-    public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
-            new StatefulRNG(0x1337BEEFDEAL));
-    public static char[][] mp;
-    public static double[][] astarMap;
-    public static GreasedRegion floors;
-    public static void main(String[] args)
-    {
-        serpent.putWalledBoxRoomCarvers(1);
-        mp = dungeonGen.generate(serpent.generate());
-        floors = new GreasedRegion(mp, '.');
-        astarMap = DungeonUtility.generateAStarCostMap(mp, Collections.<Character, Double>emptyMap(), 1);
-        long time = System.currentTimeMillis(), len;
-        len = doPathAStar2();
-        System.out.println(System.currentTimeMillis() - time);
-        System.out.println(len);
-    }
-    public static long doPathAStar2()
-    {
-        AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
-        Coord r;
-        long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
-        Queue<Coord> latestPath;
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (mp[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                r = floors.singleRandom(utility.rng);
-                latestPath = astar.path(r, Coord.get(x, y));
-                scanned+= latestPath.size();
-            }
-        }
-        return scanned;
-    }
-    */
 }

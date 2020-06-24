@@ -783,6 +783,47 @@ public class DungeonUtility {
     }
 
     /**
+     * Given a char[][] for the map, produces a double[][] that can be used as a map by AStarSearch. It
+     * expects any doors to be represented by '+' if closed or '/' if open (which can be ensured by calling
+     * {@link #closeDoors(char[][])}) and any walls to be '#' or box drawing characters. Any wall or closed door will be
+     * assigned a negative number, meaning it is impassable for AStarSearch, and all other chars will be assigned 1.0,
+     * giving them a normal cost.
+     *
+     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .
+     * @return a cost map suitable for use with AStarSearch
+     */
+    public static double[][] generateAStarCostMap(char[][] map) {
+        int width = map.length;
+        int height = map[0].length;
+        double[][] portion = new double[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                    case '+':
+                        portion[i][j] = -1;
+                        break;
+                    default:
+                        portion[i][j] = 1;
+                }
+            }
+        }
+        return portion;
+    }
+
+    /**
      * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and
      * a double value for unhandled characters, produces a double[][] that can be used as a map by AStarSearch. It
      * expects any doors to be represented by '+' if closed or '/' if open (which can be caused by calling
