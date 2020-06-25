@@ -178,16 +178,38 @@ public class DungeonGeneratorTest {
         System.out.println("------------------------------------------------------------");
 
         System.out.println("Opened Maze Generator");
-        for (int i = 2020; i < 2030; i++) {
+        mazeGenerator = new GrowingTreeMazeGenerator(29, 29, rng);
+        for (int i = 2000; i < 2020; i++) {
             rng.setState(i);
             map = mazeGenerator.generate();
 
             GreasedRegion walls = new GreasedRegion(map, '#');
-            walls.deteriorate(rng, 0.8);
-            walls.or(new GreasedRegion(mazeGenerator.generate(), '#').deteriorate(rng, 0.8));
+            GreasedRegion temp = walls.copy();
+            walls.deteriorate(rng, 0.85);
+            walls.or(temp.refill(mazeGenerator.generate(), '#').deteriorate(rng, 0.85));
             walls.andNot(walls.copy().neighborDownRight()).removeIsolated().not().removeEdges().intoChars(map, '.', '#');
             dungeonGenerator.setDungeon(DungeonUtility.hashesToLines(map));
             System.out.println(dungeonGenerator);
+            System.out.println("Vertical walls  : " + temp.refill(dungeonGenerator.getDungeon(), '│').size());
+            System.out.println("Horizontal walls: " + temp.refill(dungeonGenerator.getDungeon(), '─').size());
+            System.out.println("Corners         : " + temp.refill(dungeonGenerator.getDungeon(), "┌┐└┘".toCharArray()).size());
+            System.out.println("Junctions       : " + temp.refill(dungeonGenerator.getDungeon(), "├┤┬┴┼".toCharArray()).size());
+            System.out.println("------------------------------------------------------------");
+        }
+        System.out.println("Less Opened Maze Generator");
+        for (int i = 2000; i < 2020; i++) {
+            rng.setState(i);
+            map = mazeGenerator.generate();
+
+            GreasedRegion walls = new GreasedRegion(map, '#');
+            GreasedRegion temp = walls.copy();
+            walls.separatedRegionBlue(0.85).removeIsolated().not().removeEdges().intoChars(map, '.', '#');
+            dungeonGenerator.setDungeon(DungeonUtility.hashesToLines(map));
+            System.out.println(dungeonGenerator);
+            System.out.println("Vertical walls  : " + temp.refill(dungeonGenerator.getDungeon(), '│').size());
+            System.out.println("Horizontal walls: " + temp.refill(dungeonGenerator.getDungeon(), '─').size());
+            System.out.println("Corners         : " + temp.refill(dungeonGenerator.getDungeon(), "┌┐└┘".toCharArray()).size());
+            System.out.println("Junctions       : " + temp.refill(dungeonGenerator.getDungeon(), "├┤┬┴┼".toCharArray()).size());
             System.out.println("------------------------------------------------------------");
         }
         System.out.println("SerpentMapGenerator\n");
