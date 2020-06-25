@@ -122,7 +122,7 @@ public class DungeonGeneratorTest {
 
         char[][] map, sdungeon;
 
-        GrowingTreeMazeGenerator mazeGenerator = new GrowingTreeMazeGenerator(39, 20, rng);
+        GrowingTreeMazeGenerator mazeGenerator = new GrowingTreeMazeGenerator(39, 19, rng);
         int methodIndex = 0;
         String[] methodNames = {"Newest", "Oldest", "Random", "Newest/Random"};
         for(GrowingTreeMazeGenerator.ChoosingMethod method : new GrowingTreeMazeGenerator.ChoosingMethod[]{
@@ -130,7 +130,7 @@ public class DungeonGeneratorTest {
             System.out.println("GrowingTreeMazeGenerator " + methodNames[methodIndex++] + "\n");
             rng.setState(2252637788195L);
 
-            dungeonGenerator = new DungeonGenerator(39, 20, rng);
+            dungeonGenerator = new DungeonGenerator(39, 19, rng);
 //            dungeonGenerator.addDoors(9, false);
 //            dungeonGenerator.addWater(5);
 //            dungeonGenerator.addGrass(9);
@@ -153,20 +153,20 @@ public class DungeonGeneratorTest {
         Coord start = Coord.get(rng.between(1, 38) | 1, 1), end = Coord.get(rng.between(1, 38) | 1, 17);
         ArrayList<Coord> path = new AStarSearch(map, AStarSearch.SearchType.MANHATTAN)
                 .path(start, end);
-        sdungeon = ArrayTools.fill(' ', 39, 20);
+        sdungeon = ArrayTools.fill(' ', 39, 19);
         for (int i = 1; i < path.size(); i++) {
-            Coord prev = path.get(i - 1), next = path.get(i); 
+            Coord prev = path.get(i - 1), next = path.get(i);
             switch (Direction.toGoTo(prev, next)){
                 case LEFT: sdungeon[prev.x][prev.y] = '←';
-                break;
+                    break;
                 case UP: sdungeon[prev.x][prev.y] = '↑';
-                break;
+                    break;
                 case RIGHT: sdungeon[prev.x][prev.y] = '→';
-                break;
+                    break;
                 case DOWN: sdungeon[prev.x][prev.y] = '↓';
-                break;
+                    break;
                 default: sdungeon[prev.x][prev.y] = '*';
-                break;
+                    break;
             }
         }
         end = path.get(path.size()-1);
@@ -176,6 +176,20 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(sdungeon);
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
+
+        System.out.println("Opened Maze Generator");
+        for (int i = 2020; i < 2030; i++) {
+            rng.setState(i);
+            map = mazeGenerator.generate();
+
+            GreasedRegion walls = new GreasedRegion(map, '#');
+            walls.deteriorate(rng, 0.8);
+            walls.or(new GreasedRegion(mazeGenerator.generate(), '#').deteriorate(rng, 0.8));
+            walls.andNot(walls.copy().neighborDownRight()).removeIsolated().not().removeEdges().intoChars(map, '.', '#');
+            dungeonGenerator.setDungeon(DungeonUtility.hashesToLines(map));
+            System.out.println(dungeonGenerator);
+            System.out.println("------------------------------------------------------------");
+        }
         System.out.println("SerpentMapGenerator\n");
 
 
