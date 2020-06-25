@@ -13501,7 +13501,7 @@
 <span class="sourceLineNo">13489</span><a id="line.13489">     */</a>
 <span class="sourceLineNo">13490</span><a id="line.13490">    public static float floatGetI(int r, int g, int b) {</a>
 <span class="sourceLineNo">13491</span><a id="line.13491">        return NumberTools.intBitsToFloat((r &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (b &lt;&lt; 16 &amp; 0xff0000)</a>
-<span class="sourceLineNo">13492</span><a id="line.13492">                | 0xfe000000); //rgbToFloatColor((b &amp; 0xff) | (g &lt;&lt; 8 &amp; 0xff00) | (r &lt;&lt; 16));</a>
+<span class="sourceLineNo">13492</span><a id="line.13492">                | 0xfe000000);</a>
 <span class="sourceLineNo">13493</span><a id="line.13493">    }</a>
 <span class="sourceLineNo">13494</span><a id="line.13494"></a>
 <span class="sourceLineNo">13495</span><a id="line.13495">    /**</a>

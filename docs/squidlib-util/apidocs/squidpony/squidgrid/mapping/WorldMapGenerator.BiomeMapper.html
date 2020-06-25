@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dd>
 </dl>
 <hr>
-<pre>public static interface <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.697">WorldMapGenerator.BiomeMapper</a></pre>
+<pre>public static interface <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.703">WorldMapGenerator.BiomeMapper</a></pre>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -178,7 +178,7 @@ int&nbsp;y)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBiomeCode(int,int)">getBiomeCode</a></h3>
-<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.710">getBiomeCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.716">getBiomeCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Gets the most relevant biome code for a given x,y point on the map. Some mappers can store more than one
  biome at a location, but only the one with the highest influence will be returned by this method. Biome codes
@@ -198,7 +198,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getHeatCode(int,int)">getHeatCode</a></h3>
-<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.720">getHeatCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.726">getHeatCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Gets a heat code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
  implementations may use more or less detail for heat codes, but 0 is always the coldest code used, and the
@@ -215,7 +215,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getMoistureCode(int,int)">getMoistureCode</a></h3>
-<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.732">getMoistureCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
+<div class="memberSignature"><span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.738">getMoistureCode</a></span>&#8203;(<span class="arguments">int&nbsp;x,
 int&nbsp;y)</span></div>
 <div class="block">Gets a moisture code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
  implementations may use more or less detail for moisture codes, but 0 is always the driest code used, and the
@@ -235,7 +235,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBiomeNameTable()">getBiomeNameTable</a></h3>
-<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.743">getBiomeNameTable</a></span>()</div>
+<div class="memberSignature"><span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.749">getBiomeNameTable</a></span>()</div>
 <div class="block">Gets a String array where biome codes can be used as indices to look up a name for the biome they refer to. A
  sample table is in <a href="WorldMapGenerator.SimpleBiomeMapper.html#biomeTable"><code>WorldMapGenerator.SimpleBiomeMapper.biomeTable</code></a>; the 61-element array format documented for that
  field is encouraged for implementing classes if they use 6 levels of heat and 6 levels of moisture, and track
@@ -251,7 +251,7 @@ int&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="makeBiomes(squidpony.squidgrid.mapping.WorldMapGenerator)">makeBiomes</a></h3>
-<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.751">makeBiomes</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;world)</span></div>
+<div class="memberSignature"><span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.757">makeBiomes</a></span>&#8203;(<span class="arguments"><a href="WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;world)</span></div>
 <div class="block">Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
  assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
  retrieved with <a href="#getBiomeCode(int,int)"><code>getBiomeCode(int, int)</code></a> and used as indices into <a href="#getBiomeNameTable()"><code>getBiomeNameTable()</code></a> or a

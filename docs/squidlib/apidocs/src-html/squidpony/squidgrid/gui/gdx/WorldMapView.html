@@ -13,9 +13,9 @@
 <pre><span class="sourceLineNo">001</span><a id="line.1">package squidpony.squidgrid.gui.gdx;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
 <span class="sourceLineNo">003</span><a id="line.3">import com.badlogic.gdx.graphics.Color;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import squidpony.squidgrid.mapping.WorldMapGenerator;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidmath.DiverRNG;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.MathExtras;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.badlogic.gdx.math.MathUtils;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import squidpony.squidgrid.mapping.WorldMapGenerator;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import squidpony.squidmath.DiverRNG;</a>
 <span class="sourceLineNo">007</span><a id="line.7">import squidpony.squidmath.NumberTools;</a>
 <span class="sourceLineNo">008</span><a id="line.8"></a>
 <span class="sourceLineNo">009</span><a id="line.9">/**</a>
@@ -93,7 +93,7 @@
 <span class="sourceLineNo">081</span><a id="line.81">            Ocean                  = 13,</a>
 <span class="sourceLineNo">082</span><a id="line.82">            Empty                  = 14;</a>
 <span class="sourceLineNo">083</span><a id="line.83"></a>
-<span class="sourceLineNo">084</span><a id="line.84">    public static float iceColor = SColor.ALICE_BLUE.toFloatBits();</a>
+<span class="sourceLineNo">084</span><a id="line.84">    public static float iceColor = SColor.floatGetI(240, 248, 255);</a>
 <span class="sourceLineNo">085</span><a id="line.85">    public static float desertColor = SColor.floatGetI(248, 229, 180);</a>
 <span class="sourceLineNo">086</span><a id="line.86">    public static float savannaColor = SColor.floatGetI(181, 200, 100);</a>
 <span class="sourceLineNo">087</span><a id="line.87">    public static float tropicalRainforestColor = SColor.floatGetI(66, 123, 25);</a>
@@ -105,7 +105,7 @@
 <span class="sourceLineNo">093</span><a id="line.93">    public static float woodlandColor = SColor.floatGetI(122, 170, 90);</a>
 <span class="sourceLineNo">094</span><a id="line.94">    public static float rockyColor = SColor.floatGetI(171, 175, 145);</a>
 <span class="sourceLineNo">095</span><a id="line.95">    public static float beachColor = SColor.floatGetI(255, 235, 180);</a>
-<span class="sourceLineNo">096</span><a id="line.96">    public static float emptyColor = SColor.DB_INK.toFloatBits();</a>
+<span class="sourceLineNo">096</span><a id="line.96">    public static float emptyColor = SColor.floatGetI(34, 32, 52);</a>
 <span class="sourceLineNo">097</span><a id="line.97"></a>
 <span class="sourceLineNo">098</span><a id="line.98">    // water colors</a>
 <span class="sourceLineNo">099</span><a id="line.99">    public static float deepColor =    SColor.floatGetI(0, 42, 88);</a>
@@ -347,7 +347,7 @@
 <span class="sourceLineNo">335</span><a id="line.335">                    case 3:</a>
 <span class="sourceLineNo">336</span><a id="line.336">                        colorMap[x][y] = SColor.lerpFloatColors(</a>
 <span class="sourceLineNo">337</span><a id="line.337">                                BIOME_COLOR_TABLE[56], BIOME_COLOR_TABLE[43],</a>
-<span class="sourceLineNo">338</span><a id="line.338">                                (MathExtras.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));</a>
+<span class="sourceLineNo">338</span><a id="line.338">                                (MathUtils.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));</a>
 <span class="sourceLineNo">339</span><a id="line.339">                        break;</a>
 <span class="sourceLineNo">340</span><a id="line.340">                    default:</a>
 <span class="sourceLineNo">341</span><a id="line.341">                        colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeMapper.extractPartB(bc)],</a>

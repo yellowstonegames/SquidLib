@@ -122,7 +122,7 @@
 <span class="sourceLineNo">110</span><a id="line.110">        }</a>
 <span class="sourceLineNo">111</span><a id="line.111"></a>
 <span class="sourceLineNo">112</span><a id="line.112">        public int getSize() {</a>
-<span class="sourceLineNo">113</span><a id="line.113">            return size;</a>
+<span class="sourceLineNo">113</span><a id="line.113">            return 1 &lt;&lt; size;</a>
 <span class="sourceLineNo">114</span><a id="line.114">        }</a>
 <span class="sourceLineNo">115</span><a id="line.115"></a>
 <span class="sourceLineNo">116</span><a id="line.116">        public void setSize(int size) {</a>
@@ -242,7 +242,7 @@
 <span class="sourceLineNo">230</span><a id="line.230">        }</a>
 <span class="sourceLineNo">231</span><a id="line.231"></a>
 <span class="sourceLineNo">232</span><a id="line.232">        public int getSize() {</a>
-<span class="sourceLineNo">233</span><a id="line.233">            return size;</a>
+<span class="sourceLineNo">233</span><a id="line.233">            return 1 &lt;&lt; size;</a>
 <span class="sourceLineNo">234</span><a id="line.234">        }</a>
 <span class="sourceLineNo">235</span><a id="line.235"></a>
 <span class="sourceLineNo">236</span><a id="line.236">        public void setSize(int size) {</a>
@@ -251,12 +251,12 @@
 <span class="sourceLineNo">239</span><a id="line.239">        }</a>
 <span class="sourceLineNo">240</span><a id="line.240"></a>
 <span class="sourceLineNo">241</span><a id="line.241">        public long hashLongs(long x, long y, long s) {</a>
-<span class="sourceLineNo">242</span><a id="line.242">            x &amp;= mask &gt;&gt;&gt; 1;</a>
-<span class="sourceLineNo">243</span><a id="line.243">            y &amp;= mask &gt;&gt;&gt; 1;</a>
+<span class="sourceLineNo">242</span><a id="line.242">            x &amp;= mask;</a>
+<span class="sourceLineNo">243</span><a id="line.243">            y &amp;= mask;</a>
 <span class="sourceLineNo">244</span><a id="line.244">            x *= x * 0xC13FA9A902A6328FL;</a>
 <span class="sourceLineNo">245</span><a id="line.245">            y *= y * 0x91E10DA5C79E7B1DL;</a>
-<span class="sourceLineNo">246</span><a id="line.246">            x = x &gt;&gt;&gt; 1 &amp; mask;</a>
-<span class="sourceLineNo">247</span><a id="line.247">            y = y &gt;&gt;&gt; 1 &amp; mask;</a>
+<span class="sourceLineNo">246</span><a id="line.246">            x &amp;= mask;</a>
+<span class="sourceLineNo">247</span><a id="line.247">            y &amp;= mask;</a>
 <span class="sourceLineNo">248</span><a id="line.248">            long t;</a>
 <span class="sourceLineNo">249</span><a id="line.249">            if (x &lt; y) {</a>
 <span class="sourceLineNo">250</span><a id="line.250">                t = x;</a>
@@ -270,18 +270,18 @@
 <span class="sourceLineNo">258</span><a id="line.258">        }</a>
 <span class="sourceLineNo">259</span><a id="line.259"></a>
 <span class="sourceLineNo">260</span><a id="line.260">        public long hashLongs(long x, long y, long z, long s) {</a>
-<span class="sourceLineNo">261</span><a id="line.261">            x &amp;= mask &gt;&gt;&gt; 1;</a>
-<span class="sourceLineNo">262</span><a id="line.262">            y &amp;= mask &gt;&gt;&gt; 1;</a>
-<span class="sourceLineNo">263</span><a id="line.263">            z &amp;= mask &gt;&gt;&gt; 1;</a>
+<span class="sourceLineNo">261</span><a id="line.261">            x &amp;= mask;</a>
+<span class="sourceLineNo">262</span><a id="line.262">            y &amp;= mask;</a>
+<span class="sourceLineNo">263</span><a id="line.263">            z &amp;= mask;</a>
 <span class="sourceLineNo">264</span><a id="line.264">//            s ^= (x) * 0xD1B54A32D192ED03L;</a>
 <span class="sourceLineNo">265</span><a id="line.265">//            s ^= (y) * 0xABC98388FB8FAC03L;</a>
 <span class="sourceLineNo">266</span><a id="line.266">//            s ^= (z) * 0x8CB92BA72F3D8DD7L;</a>
 <span class="sourceLineNo">267</span><a id="line.267">            x *= x * 0xD1B54A32D192ED03L;</a>
 <span class="sourceLineNo">268</span><a id="line.268">            y *= y * 0xABC98388FB8FAC03L;</a>
 <span class="sourceLineNo">269</span><a id="line.269">            z *= z * 0x8CB92BA72F3D8DD7L;</a>
-<span class="sourceLineNo">270</span><a id="line.270">            x = x &amp; mask &gt;&gt;&gt; 1;</a>
-<span class="sourceLineNo">271</span><a id="line.271">            y = y &amp; mask &gt;&gt;&gt; 1;</a>
-<span class="sourceLineNo">272</span><a id="line.272">            z = z &amp; mask &gt;&gt;&gt; 1;</a>
+<span class="sourceLineNo">270</span><a id="line.270">            x = x &amp; mask;</a>
+<span class="sourceLineNo">271</span><a id="line.271">            y = y &amp; mask;</a>
+<span class="sourceLineNo">272</span><a id="line.272">            z = z &amp; mask;</a>
 <span class="sourceLineNo">273</span><a id="line.273">            long t;</a>
 <span class="sourceLineNo">274</span><a id="line.274">            if (x &lt; y) {</a>
 <span class="sourceLineNo">275</span><a id="line.275">                t = x;</a>
