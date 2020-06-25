@@ -124,8 +124,6 @@ public class WorldBenchmark {
         blackhole.consume(see);
     }
 
-//    private WMG.HyperellipticalMap hem = new WMG.HyperellipticalMap(0x1337L, 1000, 500, FastNoise.instance, 1.5, 0.125, 2.5);
-//    private WMG.HyperellipticalFNMap fnm = new WMG.HyperellipticalFNMap(0x1337L, 1000, 500, 1.5, 0.125, 2.5);
 //    private WorldMapGenerator.HyperellipticalMap mai = new WorldMapGenerator.HyperellipticalMap(0x1337L, 1000, 500, FastNoise.instance, 1.5, 0.125, 2.5);
 //
 //    @Benchmark
