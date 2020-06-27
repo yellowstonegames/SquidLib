@@ -41,7 +41,6 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import space.earlygrey.simplegraphs.UndirectedGraph;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidai.astar.DefaultGraph;
@@ -58,6 +57,8 @@ import squidpony.squidmath.StatefulRNG;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+
+//import space.earlygrey.simplegraphs.UndirectedGraph;
 
 import static squidpony.squidgrid.Measurement.CHEBYSHEV;
 
@@ -184,8 +185,8 @@ public class DijkstraBenchmark {
         public GraphPath<Coord> dgp;
         public ArrayList<Coord> path;
 
-        public UndirectedGraph<Coord> simpleGraph;
-        public space.earlygrey.simplegraphs.Heuristic<Coord> simpleHeu;
+//        public UndirectedGraph<Coord> simpleGraph;
+//        public space.earlygrey.simplegraphs.Heuristic<Coord> simpleHeu;
         @Setup(Level.Trial)
         public void setup() {
             Coord.expandPoolTo(DIMENSION, DIMENSION);
@@ -225,24 +226,24 @@ public class DijkstraBenchmark {
             iasSquid = new Pathfinder<>(dg, false);
             path = new ArrayList<>(DIMENSION << 2);
             
-            simpleGraph = new UndirectedGraph<>(floors);
-            simpleHeu = new space.earlygrey.simplegraphs.Heuristic<Coord>() {
-                @Override
-                public float getEstimate(Coord currentNode, Coord targetNode) {
-                    return Math.max(currentNode.x - targetNode.x, currentNode.y - targetNode.y);
-                }
-            };
-            Coord center;
-            Direction[] outer = Direction.CLOCKWISE;
-            Direction dir;
-            for (int i = floorCount - 1; i >= 0; i--) {
-                center = floorArray[i];
-                for (int j = 0; j < 8; j++) {
-                    dir = outer[j];
-                    if(floors.contains(center.x + dir.deltaX, center.y + dir.deltaY))
-                        simpleGraph.addEdge(center, center.translate(dir));
-                }
-            }
+//            simpleGraph = new UndirectedGraph<>(floors);
+//            simpleHeu = new space.earlygrey.simplegraphs.Heuristic<Coord>() {
+//                @Override
+//                public float getEstimate(Coord currentNode, Coord targetNode) {
+//                    return Math.max(currentNode.x - targetNode.x, currentNode.y - targetNode.y);
+//                }
+//            };
+//            Coord center;
+//            Direction[] outer = Direction.CLOCKWISE;
+//            Direction dir;
+//            for (int i = floorCount - 1; i >= 0; i--) {
+//                center = floorArray[i];
+//                for (int j = 0; j < 8; j++) {
+//                    dir = outer[j];
+//                    if(floors.contains(center.x + dir.deltaX, center.y + dir.deltaY))
+//                        simpleGraph.addEdge(center, center.translate(dir));
+//                }
+//            }
         }
 
     }
@@ -683,46 +684,46 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-
-    @Benchmark
-    public long doPathSimple(BenchmarkState state)
-    {
-        Coord r;
-        long scanned = 0;
-        for (int x = 1; x < state.DIMENSION - 1; x++) {
-            for (int y = 1; y < state.DIMENSION - 1; y++) {
-                if (state.map[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                state.srng.setState((x << 22) | (y << 16) | (x * y));
-                r = state.srng.getRandomElement(state.floorArray);
-                state.path.clear();
-                if(state.simpleGraph.findShortestPath(r, Coord.get(x, y), state.path, state.simpleHeu))
-                    scanned += state.path.size();
-            }
-        }
-        return scanned;
-    }
-
-    @Benchmark
-    public long doTinyPathSimple(BenchmarkState state)
-    {
-        Coord r;
-        long scanned = 0;
-        for (int x = 1; x < state.DIMENSION - 1; x++) {
-            for (int y = 1; y < state.DIMENSION - 1; y++) {
-                if (state.map[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                //state.srng.setState((x << 22) | (y << 16) | (x * y));
-                r = state.nearbyMap[x][y];
-                state.path.clear();
-                if(state.simpleGraph.findShortestPath(r, Coord.get(x, y), state.path, state.simpleHeu))
-                    scanned += state.path.size();
-            }
-        }
-        return scanned;
-    }
+//
+//    @Benchmark
+//    public long doPathSimple(BenchmarkState state)
+//    {
+//        Coord r;
+//        long scanned = 0;
+//        for (int x = 1; x < state.DIMENSION - 1; x++) {
+//            for (int y = 1; y < state.DIMENSION - 1; y++) {
+//                if (state.map[x][y] == '#')
+//                    continue;
+//                // this should ensure no blatant correlation between R and W
+//                state.srng.setState((x << 22) | (y << 16) | (x * y));
+//                r = state.srng.getRandomElement(state.floorArray);
+//                state.path.clear();
+//                if(state.simpleGraph.findShortestPath(r, Coord.get(x, y), state.path, state.simpleHeu))
+//                    scanned += state.path.size();
+//            }
+//        }
+//        return scanned;
+//    }
+//
+//    @Benchmark
+//    public long doTinyPathSimple(BenchmarkState state)
+//    {
+//        Coord r;
+//        long scanned = 0;
+//        for (int x = 1; x < state.DIMENSION - 1; x++) {
+//            for (int y = 1; y < state.DIMENSION - 1; y++) {
+//                if (state.map[x][y] == '#')
+//                    continue;
+//                // this should ensure no blatant correlation between R and W
+//                //state.srng.setState((x << 22) | (y << 16) | (x * y));
+//                r = state.nearbyMap[x][y];
+//                state.path.clear();
+//                if(state.simpleGraph.findShortestPath(r, Coord.get(x, y), state.path, state.simpleHeu))
+//                    scanned += state.path.size();
+//            }
+//        }
+//        return scanned;
+//    }
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
