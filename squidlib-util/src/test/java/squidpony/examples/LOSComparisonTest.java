@@ -7,6 +7,7 @@ import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.TwistedLine;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,7 @@ public class LOSComparisonTest {
                     outside = flooded.copy().expand8way(1), temp = new GreasedRegion(width, height);
             char[][] dungeon;
             ArrayList<Coord> targets = new ArrayList<>(4);
+            TwistedLine twist = new TwistedLine(width, height, rng);
             for (int i = 0; i < 4; i++) {
                 Coord end = temp.empty().insert(start).flood8way(floors, 4).notAnd(flooded).singleRandom(rng);
                 if(end == null || end.x == -1)
@@ -39,7 +41,7 @@ public class LOSComparisonTest {
                 flooded.remove(end);
                 targets.add(end);
             }
-            for (int l : new int[]{LOS.BRESENHAM, LOS.ELIAS, LOS.RAY, LOS.ORTHO, LOS.DDA, LOS.THICK, 7, 8, 9}) {
+            for (int l : new int[]{LOS.BRESENHAM, LOS.ELIAS, LOS.RAY, LOS.ORTHO, LOS.DDA, LOS.THICK, 7, 8, 9, 10}) {
                 ArrayList<Coord> allSeen = new ArrayList<>(128);
                 LOS los;
                 if (l < 7) los = new LOS(l);
@@ -49,14 +51,21 @@ public class LOSComparisonTest {
                     if (l < 7) {
                         if (los.isReachable(bare, start.x, start.y, end.x, end.y))
                             allSeen.addAll(los.getLastPath());
-                    } else {
+                    } else if (l < 10){
                         if (los.spreadReachable(bare, start.x, start.y, end.x, end.y, Radius.CIRCLE, l - 7))
                             allSeen.addAll(los.getLastPath());
+                    }
+                    else {
+                        if(!twist.line(start, end).isEmpty())
+                        {
+                            allSeen.addAll(twist.getLastPath());
+                            break;
+                        }
                     }
                 }
                 dungeon = outside.mask(baseDungeon, ' ');
                 for (Coord c : allSeen) {
-                    if (dungeon[c.x][c.y] == '.')
+                    if (dungeon[c.x][c.y] == '.' || l == 10)
                         dungeon[c.x][c.y] = '*'; // on the way to a visible target
                 }
                 for (Coord c : targets) {
@@ -70,7 +79,7 @@ public class LOSComparisonTest {
                 System.out.println("ALGORITHM " + l + ": ");
                 System.out.println(dungeonGenerator);
             }
-            for (int l : new int[]{LOS.BRESENHAM, LOS.ELIAS, LOS.RAY, LOS.ORTHO, LOS.DDA, LOS.THICK, 7, 8, 9}) {
+            for (int l : new int[]{LOS.BRESENHAM, LOS.ELIAS, LOS.RAY, LOS.ORTHO, LOS.DDA, LOS.THICK, 7, 8, 9, 10}) {
                 ArrayList<Coord> allSeen = new ArrayList<>(128);
                 LOS los;
                 if (l < 7) los = new LOS(l);
@@ -81,14 +90,21 @@ public class LOSComparisonTest {
                     if (l < 7) {
                         if (los.isReachable(bare, start.x, start.y, end.x, end.y))
                             allSeen.addAll(los.getLastPath());
-                    } else {
+                    } else if (l < 10){
                         if (los.spreadReachable(bare, start.x, start.y, end.x, end.y, Radius.CIRCLE, l - 7))
                             allSeen.addAll(los.getLastPath());
+                    }
+                    else {
+                        if(!twist.line(start, end).isEmpty())
+                        {
+                            allSeen.addAll(twist.getLastPath());
+                            break;
+                        }
                     }
                 }
                 dungeon = outside.mask(baseDungeon, ' ');
                 for (Coord c : allSeen) {
-                    if (dungeon[c.x][c.y] == '.')
+                    if (dungeon[c.x][c.y] == '.' || l == 10)
                         dungeon[c.x][c.y] = '*'; // on the way to a visible target
                 }
                 for (Coord c : targets) {

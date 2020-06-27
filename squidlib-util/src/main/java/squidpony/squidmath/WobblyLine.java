@@ -5,14 +5,20 @@ import squidpony.squidgrid.Direction;
 import java.util.ArrayList;
 
 /**
- * A drunkard's-walk-like algorithm for line drawing "wobbly" paths.
+ * A drunkard's-walk-like algorithm for line-drawing "wobbly" paths.
+ * This produces lines as {@link ArrayList} of {@link Coord}, where Coords that are adjacent in the ArrayList are
+ * guaranteed to be orthogonally adjacent, but the path as a whole is not guaranteed to have all unique Coords (that is,
+ * the line may cross over its previous path). If you don't want the line to cross itself, you can use
+ * {@link TwistedLine}, though the API is different.
+ * <br>
  * The line() methods here use an IRNG (and will make their own if they don't take one as a parameter) to make a choice
  * between orthogonal directions to travel in. Because they can go around the target instead of straight to it, they
  * also need a width and height for the map so they don't wander over the edge. You can also pass a weight to one of the
  * line() methods, which affects how straight the wobbly path will be (1.0 being just about perfectly straight, 0.5
- * being very chaotic, and less than 0.5 being almost unrecognizable as a path).
+ * being very chaotic, and less than 0.5 being almost unrecognizable as a path). Lower weights make the case where the
+ * path crosses itself more likely.
  * <br>
- * Based on Michael Patraw's C code, used for cave carving in his map generator. http://mpatraw.github.io/libdrunkard/
+ * Based on Michael Patraw's C code, used for cave carving in his map generator. https://github.com/mpatraw/butterfly
  * Created by Tommy Ettinger on 1/10/2016.
  */
 public class WobblyLine {
