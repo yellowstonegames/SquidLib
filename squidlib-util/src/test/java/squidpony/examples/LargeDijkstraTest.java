@@ -10,25 +10,22 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
+import static squidpony.examples.TestConfiguration.PRINTING;
+
 /**
  * Created by Tommy Ettinger on 4/5/2015.
  */
 public class LargeDijkstraTest {
     public static void debugPrint(DijkstraMap d)
     {
+        if(!PRINTING) return;
         int high = d.height;
         int wide = d.width;
         double[][] dungeon = d.gradientMap;
-        double[][] trans = new double[high][wide];
-        for (int x = 0; x < wide; x++) {
-            for (int y = 0; y < high; y++) {
-                trans[y][x] = dungeon[x][y];
-            }
-        }
         StringBuffer sb = new StringBuffer();
         for (int row = 0; row < high; row++) {
             for (int col = 0; col < wide; col++) {
-                sb.append(String.format("%06.0f ", trans[row][col]));
+                sb.append(String.format("%06.0f ", dungeon[col][row]));
             }
             sb.append('\n');
         }

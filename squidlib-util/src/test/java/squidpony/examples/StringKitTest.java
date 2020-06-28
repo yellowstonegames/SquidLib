@@ -14,10 +14,11 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Tommy Ettinger on 8/9/2017.
  */
-public class StringKitTest {
-    //@Test
+public class StringKitTest { 
+    @Test
     public void testWrapping()
     {
+        if(!TestConfiguration.PRINTING) return;
         String[] ad = new String[]{
                 // I needed some text that would make sense with unorthodox punctuation.
                 // Naturally, Always Sunny in Philadelphia came to mind, with Charlie Day's
@@ -106,6 +107,7 @@ public class StringKitTest {
     @Test
     public void testArrays()
     {
+        if(!TestConfiguration.PRINTING) return;
         char[][] arr = new char[80][20];
         ArrayTools.randomFill(arr, StringKit.LATIN_LETTERS_LOWER, 0xFEDCBA9876543210L);
         DungeonUtility.debugPrint(arr);

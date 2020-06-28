@@ -41,17 +41,17 @@ public class ObTextTest {
                 "    in the raw string, use a different syntax, [[delim[ ]delim]] , that allows delimiters.\n" +
                 "here, the delimiter is '''different''', just to be different.]different]]\n");
         String o = ot.toString();
-        System.out.println(o);
-        System.out.println(ObText.deserializeFromString(o).toString());
+        TestConfiguration.println(o);
+        TestConfiguration.println(ObText.deserializeFromString(o).toString());
         iterate(ot);
     }
     public static void iterate(List<ObText.ObTextEntry> it)
     {
         for(ObText.ObTextEntry entry : it)
         {
-            System.out.print('"');
-            System.out.print(entry.primary);
-            System.out.println("\",");
+            TestConfiguration.print('"');
+            TestConfiguration.print(entry.primary);
+            TestConfiguration.println("\",");
             if(entry.hasAssociated())
                 iterate(entry.associated);
         }
@@ -96,8 +96,8 @@ public class ObTextTest {
                 "  [\"speed\" [\"speed\"]]]\n";
         ObText obText = new ObText(roles);
         ObText.ObTextEntry ent = obText.get(0);
-        System.out.println(ent.associated.get(6).primary);
-        System.out.println(StringKit.join(", ", ent.associated.get(6).shallowContents()));
+        TestConfiguration.println(ent.associated.get(6).primary);
+        TestConfiguration.println(StringKit.join(", ", ent.associated.get(6).shallowContents()));
     }
 
 }

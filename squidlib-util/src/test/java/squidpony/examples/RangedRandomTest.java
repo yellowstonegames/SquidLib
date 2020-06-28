@@ -63,6 +63,7 @@ public class RangedRandomTest {
     @Test
     public void testMult128()
     {
+        if(!TestConfiguration.PRINTING) return;
         r0.setState(-1L);
         System.out.println("Mult128");
         double total = 0, optimal = 0.0;
@@ -75,6 +76,7 @@ public class RangedRandomTest {
     @Test
     public void testMult128Signed()
     {
+        if(!TestConfiguration.PRINTING) return;
         r1.setState(-1L);
         System.out.println("Mult128Signed");
         double total = 0.0, optimal = 0.0;
@@ -87,6 +89,7 @@ public class RangedRandomTest {
     @Test
     public void testMult128RNG()
     {
+        if(!TestConfiguration.PRINTING) return;
         s0.setState(-1L);
         System.out.println("Mult128RNG");
         double total = 0.0, optimal = 0.0;
@@ -99,6 +102,7 @@ public class RangedRandomTest {
     @Test
     public void testBitmask()
     {
+        if(!TestConfiguration.PRINTING) return;
         r2.setState(-1L);
         System.out.println("Bitmask");
         double total = 0.0, optimal = 0.0;
@@ -141,6 +145,7 @@ public class RangedRandomTest {
     @Test
     public void testMultiplication()
     {
+        if(!TestConfiguration.PRINTING) return;
         for (long l = -0x10000000000L; l <= 0x10000000000L; l += 0x11111111L) {
             for (long r = -0x10000000000L; r <= 0x10000000000L; r += 0x11111111L) {
 //                if(multiplyHigh(l, r) != Math.multiplyHigh(l, r))
@@ -152,6 +157,7 @@ public class RangedRandomTest {
     @Test
     public void testMultiplicationJDK()
     {
+        if(!TestConfiguration.PRINTING) return;
 //        for (long l = -0x10000000000L; l <= 0x10000000000L; l += 0x11111111L) {
 //            for (long r = -0x10000000000L; r <= 0x10000000000L; r += 0x11111111L) {
 ////                if(multiplyHigh(l, r) != Math.multiplyHigh(l, r))

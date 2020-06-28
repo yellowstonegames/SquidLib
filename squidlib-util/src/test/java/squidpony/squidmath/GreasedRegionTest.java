@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import org.junit.Test;
 import squidpony.ArrayTools;
+import squidpony.examples.TestConfiguration;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DividedMazeGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static squidpony.examples.LanguageGenTest.PRINTING;
+import static squidpony.examples.TestConfiguration.PRINTING;
 
 
 /**
@@ -40,16 +41,16 @@ public class GreasedRegionTest {
         if(!PRINTING)
             return;
         if(data == null || data.length <= 0 || data[0] == null || data[0].length <= 0)
-            System.out.println("null");
+            TestConfiguration.println("null");
         else
         {
             int d = 0;
             for (int y = 0; y < data[0].length; y++) {
                 for (int x = 0; x < data.length; x++) {
                     d = data[x][y]& 255;
-                    System.out.print(letters[d]);
+                    TestConfiguration.print(letters[d]);
                 }
-                System.out.println();
+                TestConfiguration.println("");
             }
         }
     }
@@ -77,104 +78,104 @@ public class GreasedRegionTest {
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng)));
             int dcs = dataCross.copy().not().size() + dataCross.size() / 20;
-            System.out.println("\nSOBOL:");
+            TestConfiguration.println("\nSOBOL:");
             printRegion(gr = dataCross.copy().not().insertSeveral(dataCross.separatedPortion(0.05)));
-            System.out.println("expected size: " + (dcs) + ", actual size " + gr.size());
-            System.out.println("\nVDC_2:");
+            TestConfiguration.println("expected size: " + (dcs) + ", actual size " + gr.size());
+            TestConfiguration.println("\nVDC_2:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.quasiRandomSeparated(0.05)));
-            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
-            System.out.println("\nZ_CURVE:");
+            TestConfiguration.println("expected size: " + (dcs) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nZ_CURVE:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.separatedZCurve(0.05)));
-            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_MIXED:");
+            TestConfiguration.println("expected size: " + (dcs) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.mixedRandomSeparated(0.05)));
-            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
-            System.out.println("\nBLUE:");
+            TestConfiguration.println("expected size: " + (dcs) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nBLUE:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.separatedBlue(0.05)));
-            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
-            System.out.println();
+            TestConfiguration.println("expected size: " + (dcs) + ", actual size " + gr2.size());
+            TestConfiguration.println("");
             printRegion(dataDungeon);
-            System.out.println("\nWith fraction 0.05:");
-            System.out.println("\nSOBOL:");
+            TestConfiguration.println("\nWith fraction 0.05:");
+            TestConfiguration.println("\nSOBOL:");
             printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr.size());
-            System.out.println("\nVDC_2:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr.size());
+            TestConfiguration.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
-            System.out.println("\nZ_CURVE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_MIXED:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
-            System.out.println("\nBLUE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nBLUE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
 
-            System.out.println("\nWith fraction 0.15:");
-            System.out.println("\nSOBOL:");
+            TestConfiguration.println("\nWith fraction 0.15:");
+            TestConfiguration.println("\nSOBOL:");
             printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.15)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr.size());
-            System.out.println("\nVDC_2:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr.size());
+            TestConfiguration.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.15)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
-            System.out.println("\nZ_CURVE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.15)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_MIXED:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.15)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
-            System.out.println("\nBLUE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nBLUE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.15)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
 
-            System.out.println("\nWith fraction 0.25:");
-            System.out.println("\nSOBOL:");
+            TestConfiguration.println("\nWith fraction 0.25:");
+            TestConfiguration.println("\nSOBOL:");
             printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.25)));
-            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr.size());
-            System.out.println("\nVDC_2:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr.size());
+            TestConfiguration.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.25)));
-            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
-            System.out.println("\nZ_CURVE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.25)));
-            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_MIXED:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.25)));
-            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
-            System.out.println("\nBLUE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nBLUE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.25)));
-            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+            TestConfiguration.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
 
-            System.out.println("\nWith fraction 0.4:");
-            System.out.println("\nSOBOL:");
+            TestConfiguration.println("\nWith fraction 0.4:");
+            TestConfiguration.println("\nSOBOL:");
             printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.4)));
-            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr.size());
-            System.out.println("\nVDC_2:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr.size());
+            TestConfiguration.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.4)));
-            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
-            System.out.println("\nZ_CURVE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.4)));
-            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_MIXED:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nRANDOM_MIXED:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.4)));
-            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
-            System.out.println("\nBLUE:");
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+            TestConfiguration.println("\nBLUE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedBlue(0.4)));
-            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+            TestConfiguration.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
 
             gr = dataDungeon.copy();
-            System.out.println("\nrandomScatter with minimum distance 1:");
+            TestConfiguration.println("\nrandomScatter with minimum distance 1:");
             printRegion(gr.randomScatter(rng, 1));
-            System.out.println("\nrandomScatter with minimum distance 2:");
+            TestConfiguration.println("\nrandomScatter with minimum distance 2:");
             printRegion(gr.allOn().randomScatter(rng, 2));
-            System.out.println("\nrandomScatter with minimum distance 3:");
+            TestConfiguration.println("\nrandomScatter with minimum distance 3:");
             printRegion(gr.allOn().randomScatter(rng, 3));
             gr = dataDungeon.copy();
-            System.out.println("\nrandomScatter with minimum distance 1 and limit of 20:");
+            TestConfiguration.println("\nrandomScatter with minimum distance 1 and limit of 20:");
             printRegion(gr.randomScatter(rng, 1, 20));
-            System.out.println("\nrandomScatter with minimum distance 2 and limit of 20:");
+            TestConfiguration.println("\nrandomScatter with minimum distance 2 and limit of 20:");
             printRegion(gr.allOn().randomScatter(rng, 2, 20));
-            System.out.println("\nrandomScatter with minimum distance 3 and limit of 20:");
+            TestConfiguration.println("\nrandomScatter with minimum distance 3 and limit of 20:");
             printRegion(gr.allOn().randomScatter(rng, 3, 20));
         }
         GreasedRegion g = new GreasedRegion(box);
@@ -207,7 +208,7 @@ public class GreasedRegionTest {
 //        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
 
         DividedMazeGenerator mazeGen = new DividedMazeGenerator(120, 120);
-        System.out.println(gr2.refill(mazeGen.generate(), '.').toString());
+        TestConfiguration.println(gr2.refill(mazeGen.generate(), '.').toString());
     }
 
     public static int FOV_RANGE = 12;
@@ -216,18 +217,8 @@ public class GreasedRegionTest {
     public static void printRegion(GreasedRegion r) {
         if (PRINTING) {
             DungeonUtility.debugPrint(r.toChars());
-            System.out.println();
+            TestConfiguration.println("");
         }
-    }
-
-    public void printBits16(int n) {
-        for (int i = 0x8000; i > 0; i >>= 1)
-            System.out.print((n & i) > 0 ? 1 : 0);
-    }
-
-    public void printBits32(int n) {
-        for (int i = 1 << 31; i != 0; i >>>= 1)
-            System.out.print((n & i) != 0 ? 1 : 0);
     }
 
     public long arrayMemoryUsage(int length, long bytesPerItem)
@@ -333,10 +324,10 @@ public class GreasedRegionTest {
         GreasedRegion shrunk2 = new GreasedRegion(dataCross2).retract8way();
         printRegion(shrunk2);
         assertTrue(new GreasedRegion(shrunk2).or(surf2).equals(dataCross2));
-        System.out.println();
+        TestConfiguration.println("");
         GreasedRegion littleBox = new GreasedRegion(32, 32).insertRectangle(12, 12, 8, 8);
         printRegion(littleBox);
-        System.out.println();
+        TestConfiguration.println("");
         ArrayList<GreasedRegion> toLimit = littleBox.fringeSeriesToLimit8way();
         for(GreasedRegion gr : toLimit)
             printRegion(gr);
@@ -347,9 +338,9 @@ public class GreasedRegionTest {
         GreasedRegion wrecked = new GreasedRegion(dataCross);
         int[][] numbers = GreasedRegion.sum(new GreasedRegion(64, 64).not().retractSeries8way(30));
         print2D(numbers);
-        System.out.println();
+        TestConfiguration.println("");
         printRegion(wrecked);
-        System.out.println();
+        TestConfiguration.println("");
         print2D(wrecked.fit(numbers, 0));
     }
     @Test
@@ -391,44 +382,45 @@ public class GreasedRegionTest {
         RNG rng = new RNG(0x1337BEEFAAAAAAAAL);
         GreasedRegion current = new GreasedRegion(rng, 0.52, 64, 64);
         if (PRINTING)
-            System.out.println(current + "\n\n");
+            TestConfiguration.println(current + "\n\n");
         CellularAutomaton ca = new CellularAutomaton(current);
         if (PRINTING) {
-            System.out.println(ca.runBasicSmoothing());
-            System.out.println();
-            System.out.println(ca.runBasicSmoothing());
-            System.out.println();
-            System.out.println(ca.runBasicSmoothing());
-            System.out.println();
-            System.out.println(ca.runBasicSmoothing());
-            System.out.println();
-            System.out.println(ca.runBasicSmoothing());
-            System.out.println();
-            System.out.println(ca.runBasicSmoothing().removeEdges());
-            System.out.println();
+            TestConfiguration.println(ca.runBasicSmoothing());
+            TestConfiguration.println("");
+            TestConfiguration.println(ca.runBasicSmoothing());
+            TestConfiguration.println("");
+            TestConfiguration.println(ca.runBasicSmoothing());
+            TestConfiguration.println("");
+            TestConfiguration.println(ca.runBasicSmoothing());
+            TestConfiguration.println("");
+            TestConfiguration.println(ca.runBasicSmoothing());
+            TestConfiguration.println("");
+            TestConfiguration.println(ca.runBasicSmoothing().removeEdges());
+            TestConfiguration.println("");
         }
         if (PRINTING)
-            System.out.println(current.largestPart() + "\n");
+            TestConfiguration.println(current.largestPart() + "\n");
         current.remake(dataDungeon);
         if (PRINTING)
-            System.out.println(current + "\n\n");
+            TestConfiguration.println(current + "\n\n");
         ca.remake(current.copy());
         if (PRINTING) {
-            System.out.println(current.and(ca.runBasicSmoothing()));
-            System.out.println();
-            System.out.println(current.and(ca.runBasicSmoothing()));
-            System.out.println();
+            TestConfiguration.println(current.and(ca.runBasicSmoothing()));
+            TestConfiguration.println("");
+            TestConfiguration.println(current.and(ca.runBasicSmoothing()));
+            TestConfiguration.println("");
             ca.current.remake(current);
-            System.out.println(current.or(ca.runBasicSmoothing()).removeEdges());
-            System.out.println();
+            TestConfiguration.println(current.or(ca.runBasicSmoothing()).removeEdges());
+            TestConfiguration.println("");
         }
         if (PRINTING)
-            System.out.println(current.largestPart() + "\n");
+            TestConfiguration.println(current.largestPart() + "\n");
     }
     
     @Test
     public void testInteriorFill()
     {
+        if(!PRINTING) return;
         String[] map = new String[]{
                 "..............................................................................................",
                 "##############################################################################################",
@@ -486,7 +478,8 @@ public class GreasedRegionTest {
                 walls = floors.copy().not(), edit = walls.copy(); // includes all walls and doors
         edit.connect8way().removeEdges().andNot(walls);
         edit.flood(floors, floors.size());
-        DungeonUtility.debugPrint(doors.inverseMask(walls.inverseMask(edit.toChars('%', '.'), '#'), '+'));
+        if(PRINTING) 
+            DungeonUtility.debugPrint(doors.inverseMask(walls.inverseMask(edit.toChars('%', '.'), '#'), '+'));
     }
     @Test
     public void testCompression()
@@ -497,29 +490,29 @@ public class GreasedRegionTest {
         decompressed = GreasedRegion.decompress(compressed);
         assertEquals(dataDungeon, decompressed);
         String basicText = dataDungeon.serializeToString();
-        if(PRINTING) System.out.println(basicText.length() + " compresses down to " + compressed.length());
-//        System.out.println("\n\nORIGINAL\n\n");
-//        System.out.println(dataDungeon);
-//        System.out.println("\n\nDECOMPRESSED\n\n");
-//        System.out.println(decompressed);
-//        System.out.println("\n\nDIFF:\n\n");
-//        System.out.println(decompressed.xor(dataDungeon));
-//        System.out.println("giant stats: width=" + giantDataDungeon.width + ", height=" + giantDataDungeon.height
+        if(PRINTING) TestConfiguration.println(basicText.length() + " compresses down to " + compressed.length());
+//        TestConfiguration.println("\n\nORIGINAL\n\n");
+//        TestConfiguration.println(dataDungeon);
+//        TestConfiguration.println("\n\nDECOMPRESSED\n\n");
+//        TestConfiguration.println(decompressed);
+//        TestConfiguration.println("\n\nDIFF:\n\n");
+//        TestConfiguration.println(decompressed.xor(dataDungeon));
+//        TestConfiguration.println("giant stats: width=" + giantDataDungeon.width + ", height=" + giantDataDungeon.height
 //                + ", size=" + giantDataDungeon.size());
         compressed = giantDataDungeon.toCompressedString();
         decompressed = GreasedRegion.decompress(compressed);
-//        System.out.println("decom stats: width=" + decompressed.width + ", height=" + decompressed.height
+//        TestConfiguration.println("decom stats: width=" + decompressed.width + ", height=" + decompressed.height
 //                + ", size=" + decompressed.size());
-//        System.out.println(decompressed.copy().xor(giantDataDungeon).size());
+//        TestConfiguration.println(decompressed.copy().xor(giantDataDungeon).size());
         assertEquals(giantDataDungeon, decompressed);
         basicText = giantDataDungeon.serializeToString();
-        if(PRINTING) System.out.println(basicText.length() + " compresses down to " + compressed.length());
-//        System.out.println("\n\nORIGINAL\n\n");
-//        System.out.println(giantDataDungeon);
-//        System.out.println("\n\nDECOMPRESSED\n\n");
-//        System.out.println(decompressed);
-//        System.out.println("\n\nDIFF:\n\n");
-//        System.out.println(decompressed.xor(giantDataDungeon));
+        if(PRINTING) TestConfiguration.println(basicText.length() + " compresses down to " + compressed.length());
+//        TestConfiguration.println("\n\nORIGINAL\n\n");
+//        TestConfiguration.println(giantDataDungeon);
+//        TestConfiguration.println("\n\nDECOMPRESSED\n\n");
+//        TestConfiguration.println(decompressed);
+//        TestConfiguration.println("\n\nDIFF:\n\n");
+//        TestConfiguration.println(decompressed.xor(giantDataDungeon));
     }
     @Test
     public void testFlipRotate()
@@ -530,19 +523,19 @@ public class GreasedRegionTest {
         assertEquals(twice, work);
         printRegion(work);
         printRegion(once);
-        if(PRINTING) System.out.println();
+        if(PRINTING) TestConfiguration.println("");
         once = work.copy().flip(false, true);
         twice = once.copy().flip(false, true);
         assertEquals(twice, work);
         printRegion(work);
         printRegion(once);
-        if(PRINTING) System.out.println();
+        if(PRINTING) TestConfiguration.println("");
         once = work.copy().flip(true, true);
         twice = once.copy().flip(true, true);
         assertEquals(twice, work);
         printRegion(work);
         printRegion(once);
-        if(PRINTING) System.out.println();
+        if(PRINTING) TestConfiguration.println("");
         work = giantDataDungeon.copy();
         once = work.copy().flip(true, false);
         twice = once.copy().flip(true, false);
