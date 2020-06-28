@@ -1,5 +1,6 @@
 /**
- * Pre-constructed Tileset objects in different styles, that DungeonBoneGen consumes (not intended for external use).
+ * Internally used; see {@link squidpony.squidgrid.mapping.styled.TilesetType} members for the actual documentation.
+ * <br>
  * It is currently pretty much impossible to create tilesets beyond these, since these were ported from a public domain C
  * library that, unfortunately, does not document how its tilesets were created or how to make more.
  * <br>

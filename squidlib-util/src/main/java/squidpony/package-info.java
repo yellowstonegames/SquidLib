@@ -1,4 +1,4 @@
 /**
- * Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.
+ * Utilities that don't fit elsewhere in SquidLib; mostly text manipulation, compression, and helper code.
  */
 package squidpony;
