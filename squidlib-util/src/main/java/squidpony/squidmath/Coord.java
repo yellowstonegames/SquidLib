@@ -64,18 +64,25 @@ public class Coord implements Serializable {
     }
 
 	/**
-     * Gets the angle in degrees to go between two Coords; 0 is up.
+     * Gets the angle in degrees to go between two Coords.
+     * When only x is different and {@code to.x} is greater than {@code from.x}, this returns 0.
+     * When only y is different and {@code to.y} is greater than {@code from.y}, this returns 90.
+     * When only x is different and {@code to.x} is less than {@code from.x}, this returns 180.
+     * When only y is different and {@code to.y} is less than {@code from.y}, this returns 270.
+     * In cases between these, the angle is between those values; it cannot be 360 but it can be very close. This never
+     * returns a negative angle. Keep in mind, "up" depends on how your code orients the y-axis, and SquidLib generally
+     * defaults to positive y going toward the bottom of the screen, like how later lines in a paragraph are further
+     * down on the page.
+     * <br>
+     * As a compatibility note, before SquidLib 3.0.0 stable, this used an odd rotation of the normal degrees where 0
+     * degrees were used when {@code to.y} was greater than {@code from.y} and x was equal. Because that typically runs
+     * counter to expectations from actual math, the behavior was changed. 
 	 * @param from the starting Coord to measure from
 	 * @param to the ending Coord to measure to
 	 * @return The degree from {@code from} to {@code to}; 0 is up
 	 */
 	public static double degrees(final Coord from, final Coord to) {
-		final int x = to.x - from.x;
-		final int y = to.y - from.y;
-		double degree = Math.toDegrees(NumberTools.atan2(y, x));
-		degree += 450;// rotate to all positive and 0 is up
-		degree %= 360;// normalize
-		return degree;
+		return NumberTools.atan2_(to.y - from.y, to.x - from.x) * 360.0;
 	}
 
     /**
@@ -344,50 +351,17 @@ public class Coord implements Serializable {
 	}
 
 	/**
-	 * Precondition: {@code this} is {@link #isAdjacent(Coord) adjacent} to
-	 * {@code adjacent}.
-     *
-	 * @param adjacent
-	 *            A {@link Coord} that is {@link #isAdjacent(Coord) adjacent} to
-	 *            {@code this}.
-	 * @return The direction to go from {@code this} to {@code adjacent} i.e.
-	 *         the direction {@code d} such that {@code translate(this, d)}
-	 *         yields {@code adjacent}.
-	 * @throws IllegalStateException
-	 *             If {@code this} isn't adjacent to {@code adjacent}.
+     * Gets the {@link Direction} needed to get to {@code target} from this; typically this is more useful when target
+     * and this are adjacent (by {@link #isAdjacent(Coord)}) since that should make it possible to go to target.
+     * <br>
+     * Internally, this delegates to {@link Direction#toGoTo(Coord, Coord)}, and some code may prefer using the method
+     * in Direction instead of this one. Earlier versions of this code only worked for adjacent Coords, which seemed
+     * like an unnecessary limitation since Direction's version worked for any arguments.
+	 * @param target a non-null {@link Coord}
+	 * @return the direction to go from {@code this} to {@code target}
 	 */
-	/* different implementation than before, closer to isAdjacent() */
-	public Direction toGoTo(final Coord adjacent) {
-        switch (adjacent.x - x) {
-            case 0:
-                switch (adjacent.y - y)
-                {
-                    case -1: return Direction.UP;
-                    case 1: return Direction.DOWN;
-                    default:
-                        throw new IllegalStateException(this + " is not adjacent to " + adjacent);
-                }
-            case 1:
-                switch (adjacent.y - y)
-                {
-                    case -1: return Direction.UP_RIGHT;
-                    case 0: return Direction.RIGHT;
-                    case 1: return Direction.DOWN_RIGHT;
-                    default:
-                        throw new IllegalStateException(this + " is not adjacent to " + adjacent);
-                }
-            case -1:
-                switch (adjacent.y - y)
-                {
-                    case -1: return Direction.UP_LEFT;
-                    case 0: return Direction.LEFT;
-                    case 1: return Direction.DOWN_LEFT;
-                    default:
-                        throw new IllegalStateException(this + " is not adjacent to " + adjacent);
-                }
-            default:
-                throw new IllegalStateException(this + " is not adjacent to " + adjacent);
-        }
+	public Direction toGoTo(final Coord target) {
+	    return Direction.toGoTo(this, target);
 	}
 
     /**
