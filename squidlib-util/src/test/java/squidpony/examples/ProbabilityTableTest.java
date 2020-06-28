@@ -6,7 +6,7 @@ import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.ProbabilityTable;
 import squidpony.squidmath.WeightedTable;
 
-import static squidpony.examples.LanguageGenTest.PRINTING;
+import static squidpony.examples.TestConfiguration.PRINTING;
 
 /**
  * Created by Tommy Ettinger on 2/21/2017.

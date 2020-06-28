@@ -60,6 +60,7 @@ public class HashQualityTest {
     //where this restrict is used, it will use all bits of a hash
     public static final int restrict = -1;
     @Test
+    @Ignore
     public void testMost()
     {
         CrossHash.Mist storm = CrossHash.Mist.chi;
@@ -1115,6 +1116,7 @@ public class HashQualityTest {
      * TOTAL Obje collisions: 69577617 (78.9321717768093%), BEST 0, WORST 141151
      */
     @Test
+    @Ignore
     public void testCoord() {
         RNG prng = new RNG(new GoatRNG(123456789, 987654321));
         final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
@@ -1230,6 +1232,7 @@ public class HashQualityTest {
     }
     // This one takes a while to run; be advised.
     @Test
+    @Ignore
     public void testCoord3() {
         final int[] params = ArrayTools.range(8, 14);// new int[]{33, 65, 129, 257, 513};
 //        final int[] params = new int[]{64, 128, 256, 512};
@@ -1362,6 +1365,7 @@ public class HashQualityTest {
 
 
     @Test
+    @Ignore
     public void testLimited()
     {
         int restrict = 0xFFFF;
@@ -1474,6 +1478,7 @@ public class HashQualityTest {
     }
 
     @Test
+    @Ignore
     public void testInts()
     {
         int restrict = 0xFFFFF;
@@ -1575,6 +1580,7 @@ public class HashQualityTest {
      */
 
     @Test
+    @Ignore
     public void testMix() {
         final int[] params = new int[]{64, 128, 256, 512, 1024}, increases = {0,1,2};
         long baseTotal = 0, hacoTotal = 0, lantTotal = 0, xlxsTotal = 0, total = 0;

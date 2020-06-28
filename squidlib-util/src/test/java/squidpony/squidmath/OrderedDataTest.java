@@ -2,7 +2,7 @@ package squidpony.squidmath;
 
 import org.junit.Test;
 
-import static squidpony.examples.LanguageGenTest.PRINTING;
+import static squidpony.examples.TestConfiguration.PRINTING;
 
 /**
  * Created by Tommy Ettinger on 6/19/2017.

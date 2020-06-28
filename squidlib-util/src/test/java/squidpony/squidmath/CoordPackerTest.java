@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.squidai.AimLimit;
 import squidpony.squidai.Reach;
@@ -91,7 +92,8 @@ public class CoordPackerTest {
         assertEquals(posToHilbert(255, 255), coordToHilbert(Coord.get(255, 255)));
         assertEquals(Coord.get(255, 255), hilbertToCoord(coordToHilbert(Coord.get(255, 255))));
     }
-    //@Test
+    @Test
+    @Ignore
     public void testHilbertCurve3D() {
         for(int i : new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,31,32,33,63,64,255,256,4092,4093,4094,4095})
             System.out.println("index " + i + ", x:" + hilbert3X[i] +
@@ -111,7 +113,8 @@ public class CoordPackerTest {
             z0 = z1;
         }
     }
-    //@Test
+    @Test
+    @Ignore
     public void testMooreCurve3DOld() {
         for (int s = 0; s < 12; s++) {
 
@@ -123,7 +126,8 @@ public class CoordPackerTest {
             }
         }
     }
-    //@Test
+    @Test
+    @Ignore
     public void testMooreCurve() {
         for (int i = 0; i < 256; i++) {
             System.out.println("index " + i + "x:" + mooreX[i] + ", y:" + mooreY[i] +
