@@ -95,7 +95,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
         <dependency>
             <groupId>com.github.tommyettinger</groupId>
             <artifactId>simple-graphs</artifactId>
-            <version>60f4ebb605</version>
+            <version>b9d70bfbda</version>
         </dependency>
     </dependencies>
 
