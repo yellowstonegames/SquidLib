@@ -85,7 +85,7 @@
         <module>squidlib-util</module>
         <module>squidlib</module>
         <module>squidlib-extra</module>
-        <module>squidlib-performance</module>
+<!--        <module>squidlib-performance</module>-->
     </modules>
 <!--    <repositories>-->
 <!--        <repository>-->

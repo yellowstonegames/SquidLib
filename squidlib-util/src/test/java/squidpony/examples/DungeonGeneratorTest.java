@@ -84,6 +84,19 @@ import java.util.Arrays;
  */
 public class DungeonGeneratorTest {
     public static int width = 60, height = 30, depth = 16;
+    public static GreasedRegion expandIsolated(GreasedRegion gr)
+    {
+        int fst = gr.firstTight();
+        GreasedRegion remaining = new GreasedRegion(gr), filled = new GreasedRegion(gr);
+        while (fst >= 0) {
+            filled.empty().insert(fst).flood(remaining, 8);
+            if(filled.size() <= 10)
+                gr.or(filled.expand8way());
+            remaining.andNot(filled);
+            fst = remaining.firstTight();
+        }
+        return gr;
+    }
 
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
@@ -185,9 +198,34 @@ public class DungeonGeneratorTest {
 
             GreasedRegion walls = new GreasedRegion(map, '#');
             GreasedRegion temp = walls.copy();
-            walls.deteriorate(rng, 0.85);
-            walls.or(temp.refill(mazeGenerator.generate(), '#').deteriorate(rng, 0.85));
-            walls.andNot(walls.copy().neighborDownRight()).removeIsolated().not().removeEdges().intoChars(map, '.', '#');
+            //// generally try messing with the options here
+            //// deteriorate can take a double between 0.0 and 1.0; that parameter is how much of the "on" area to keep on
+            walls.deteriorate(rng, 0.6);
+            walls.and(temp.refill(mazeGenerator.generate(), '#').deteriorate(rng, 0.125));
+            walls.xor(temp.refill(mazeGenerator.generate(), '#'));
+            //// you can try adding extra xor lines like above and below; the number of xors matters a lot, not sure how...
+            //walls.xor(temp.refill(mazeGenerator.generate(), '#'));
+            //// expandIsolated is defined at the top of this file, it is used to open up closed "rooms"
+            expandIsolated(walls.andNot(
+                    //// sets the 4 edges of a copy of walls to on
+                    walls.copy().insertRectangle(0, 0, walls.width, 1).insertRectangle(0, 0, 1, walls.height)
+                            .insertRectangle(0, walls.height - 1, walls.width, 1).insertRectangle(walls.width - 1, 0, 1, walls.height)
+                    //// restricts the on cells to only contain all squares of 4 walls in a cluster
+                            .neighborDown().and(walls).neighborRight().and(walls).neighborDownRight().and(walls)
+                    //// expands the restricted area (which was one cell per square) to fit the whole square
+                            .insertTranslation(0, 1).insertTranslation(1, 0))
+                    //// that whole working copy gets subtracted from walls with andNot(), above
+                    
+                    //// removeIsolated finds any tiny on areas and removes them
+                    .removeIsolated()
+                    //// the not() here is key, it makes what were initially simple lines of on cells into walls, and
+                    //// takes the now many off cells and turns them into open floors 
+                    .not())
+                    //// this goes to removeIsolated(), above
+                    
+                    //// removeEdges bounds the map in off cells, intoChars makes it use '.' for on cells and '#' for off
+                    .removeEdges().intoChars(map, '.', '#');
+            //// hashesToLines does that magic.
             dungeonGenerator.setDungeon(DungeonUtility.hashesToLines(map));
             System.out.println(dungeonGenerator);
             System.out.println("Vertical walls  : " + temp.refill(dungeonGenerator.getDungeon(), '│').size());
@@ -197,7 +235,7 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
         }
         System.out.println("Less Opened Maze Generator");
-        for (int i = 2000; i < 2020; i++) {
+        for (int i = 1; i <= 20; i++) {
             rng.setState(i);
             map = mazeGenerator.generate();
 
