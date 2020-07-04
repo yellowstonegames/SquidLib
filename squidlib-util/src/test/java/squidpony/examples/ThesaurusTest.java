@@ -4,6 +4,7 @@ import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
 
+import java.util.Date;
 import java.util.TreeSet;
 
 /**
@@ -11,7 +12,7 @@ import java.util.TreeSet;
  */
 public class ThesaurusTest {
     public static void main(String[] args) {
-        Thesaurus thesaurus  = new Thesaurus("SQUID! LIB!");
+        Thesaurus thesaurus  = new Thesaurus(System.currentTimeMillis() >>> 25); // changes seed roughly once/9 hours
         TreeSet<String> synonyms = new TreeSet<>();
         int len = thesaurus.mappings.size();
         for (int i = 0; i < len; i++) {
@@ -46,13 +47,12 @@ public class ThesaurusTest {
 //        System.out.println(Thesaurus.ORK.process(oz));
 //        System.out.println();
         thesaurus.refresh(thesaurus.rng.nextLong());
-        thesaurus.defaultLanguage = FakeLanguageGen.mixAll(FakeLanguageGen.GREEK_ROMANIZED, 4, FakeLanguageGen.SIMPLISH, 2, FakeLanguageGen.MALAY, 1);
+        thesaurus.defaultLanguage = FakeLanguageGen.mixAll(FakeLanguageGen.randomLanguage(thesaurus.rng).removeAccents(), 1, FakeLanguageGen.SIMPLISH, 3, FakeLanguageGen.MALAY, 4);
         StringBuilder text = new StringBuilder("The elixir you desire is no simple matter to brew. " +
                 "I would require many ingredients, most rare or exotic, to even begin to craft this tonic. " +
                 "If you remain undaunted... I require ");
         for (int i = 0; i < 10; i++) {
             text.append("leaf`noun` of plant`term`, ");
-//            text.append(thesaurus.lookup("leaf`noun`")).append(" of ").append(thesaurus.makePlantName(lang)).append(", ");
         }
         text.append("and leaf`noun` of plant`term`. Bring me this before the winter equinox and you shall have your potion." +
                 "\n...Oh, and could you also pick me up a fruit`term`, maybe a fruit`term`, uh, a nut`term`, a nut`term`, " +
