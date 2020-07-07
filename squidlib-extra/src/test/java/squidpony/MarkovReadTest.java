@@ -26,7 +26,7 @@ public class MarkovReadTest extends ApplicationAdapter {
         long seed = 1234567890L;
         while (sb.length() < 10000)
             sb.append(mt.chain(++seed, 1000)).append(' ');
-        List<String> ls = StringKit.wrap(sb, 80);
+        List<String> ls = StringKit.wrap(StringKit.sentenceCase(sb), 80);
         for(String s : ls)
         {
             System.out.println(s);
