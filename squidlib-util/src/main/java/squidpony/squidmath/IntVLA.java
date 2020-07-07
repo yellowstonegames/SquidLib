@@ -137,8 +137,8 @@ public class IntVLA implements Serializable, Cloneable {
 
     /**
      * Adds value to the item in the IntVLA at index. Calling it "add" would overlap with the collection method.
-     * @param index
-     * @param value
+     * @param index the index of the item to add to
+     * @param value how much to add to the item at index (this may be negative, positive, or 0)
      */
     public void incr (int index, int value) {
         if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
@@ -430,7 +430,7 @@ public class IntVLA implements Serializable, Cloneable {
     /**
      * Hashes this IntVLA using {@link CrossHash.Water}, getting a 32-bit result. The same algorithm is used by
      * {@link #hash64()}, just with different constants and a different final step here.
-     * @returna 32-bit hash code
+     * @return a 32-bit hash code
      */
     @Override
     public int hashCode () {

@@ -91,10 +91,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     protected K[] key;
     /**
-     * The array of values.
-     */
-    //protected V[] value;
-    /**
      * The mask for wrapping a position counter.
      */
     protected int mask;

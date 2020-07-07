@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.ArrayTools;
@@ -55,6 +56,15 @@ public class HashQualityTest {
         System.arraycopy(data, start, used, 0, used.length);
         return used;
     }
+ 
+    @Test
+    public void testNextPowerOfTwo(){
+        for (int i = 0; i >= 0; i++) {
+            Assert.assertEquals(HashCommon.nextPowerOfTwo(i), 1 << -Integer.numberOfLeadingZeros(i - 1));
+//            Assert.assertEquals(HashCommon.nextPowerOfTwo(i), Math.max(1, Integer.highestOneBit(i - 1 << 1)));
+        }
+    }
+    
     //where this restrict is used, it will only use the bottom 16 bits and 8 alternating bits from the top of a hash
     //public static final int restrict = 0x5555FFFF;
     //where this restrict is used, it will use all bits of a hash
