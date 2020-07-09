@@ -86,7 +86,7 @@ public class AStarSearch implements Serializable {
      * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} and
      * {@link  squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])} methods from a 2D char array.
      * <br>
-     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
      * based on diagonal and cardinal pathing (8-way).
      *
      * @param map the search map, as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])}
@@ -109,7 +109,7 @@ public class AStarSearch implements Serializable {
      * considered an impassable wall. The {@link DungeonGenerator#getBareDungeon()} method is a common way to get a map
      * where only '#' is used to mean a wall.
      * <br>
-     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
      * based on diagonal and cardinal pathing (8-way).
      *
      * @param map a 2D char array where only {@code '#'} represents a wall, and anything else is equally passable
@@ -135,7 +135,7 @@ public class AStarSearch implements Serializable {
      * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} and
      * {@link  squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])} methods from a 2D char array.
      * <br>
-     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
      * based on diagonal and cardinal pathing (8-way).
      *
      * @param map the search map, as produced by {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][])}
@@ -159,7 +159,7 @@ public class AStarSearch implements Serializable {
      * considered an impassable wall. The {@link DungeonGenerator#getBareDungeon()} method is a common way to get a map
      * where only '#' is used to mean a wall.
      * <br>
-     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return result
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
      * based on diagonal and cardinal pathing (8-way).
      *
      * @param map a 2D char array where only {@code '#'} represents a wall, and anything else is equally passable
