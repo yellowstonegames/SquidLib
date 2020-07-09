@@ -26,6 +26,7 @@ package squidpony.squidai.astar.eg;
 import squidpony.annotation.Beta;
 import squidpony.squidai.astar.Heuristic;
 import squidpony.squidmath.BinaryHeap;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedSet;
 
 import java.util.*;
@@ -88,9 +89,9 @@ class AlgorithmImplementations<V> {
             if (v.prev != null) tree.addEdge(v.object, v.prev.object);
             if (v.i == maxDepth) continue;
             if (tree.size() == maxVertices) break;
-            int n = v.neighbors.size();
+            int n = v.outEdges.size();
             for (int i = 0; i < n; i++) {
-                Connection<V> e = v.neighbors.getAt(i);
+                Connection<V> e = v.outEdges.get(i);
                 Node<V> w = e.b;
                 w.resetAlgorithmAttribs(runID);
                 if (!w.visited) {
@@ -119,9 +120,9 @@ class AlgorithmImplementations<V> {
                 if (v.i == maxDepth) continue;
                 if (tree.size() == maxVertices) break;
                 v.visited = true;
-                int n = v.neighbors.size();
+                int n = v.outEdges.size();
                 for (int i = 0; i < n; i++) {
-                    Connection<V> e = v.neighbors.getAt(i);
+                    Connection<V> e = v.outEdges.get(i);
                     Node<V> w = e.b;
                     w.resetAlgorithmAttribs(runID);
                     w.i = v.i+1;
@@ -138,7 +139,7 @@ class AlgorithmImplementations<V> {
 
     double findMinimumDistance(Node<V> start, Node<V> target) {
         Node<V> end = aStarSearch(start, target, null);
-        if (end==null) return Float.POSITIVE_INFINITY;
+        if (end==null) return Float.MAX_VALUE;
         else return end.distance;
     }
 
@@ -191,9 +192,9 @@ class AlgorithmImplementations<V> {
             }
             if (!u.visited) {
                 u.visited = true;
-                int n = u.neighbors.size();
+                int n = u.outEdges.size();
                 for (int i = 0; i < n; i++) {
-                    Connection<V> e = u.neighbors.getAt(i);
+                    Connection<V> e = u.outEdges.get(i);
                     Node<V> v = e.b;
                     v.resetAlgorithmAttribs(runID);
                     if (!v.visited) {
@@ -249,8 +250,7 @@ class AlgorithmImplementations<V> {
         if (success) {
             for (int i = sortedVertices.size()-1; i >= 0; i--) {
                 V v = sortedVertices.get(i);
-                Node<V> value = graph.vertexMap.remove(v);
-                graph.vertexMap.put(v, value);
+                graph.vertexMap.getAndMoveToLast(v);
             }
         }
         return success;
@@ -265,9 +265,9 @@ class AlgorithmImplementations<V> {
             return false;
         }
         v.seen = true;
-        int n = v.neighbors.size();
+        int n = v.outEdges.size();
         for (int i = 0; i < n; i++) {
-            Connection<V> e = v.neighbors.getAt(i);
+            Connection<V> e = v.outEdges.get(i);
             boolean success = recursiveTopologicalSort(sortedVertices, e.b, set);
             if (!success) return false;
         }
@@ -285,14 +285,14 @@ class AlgorithmImplementations<V> {
     final Comparator<Connection<V>> weightComparator = new Comparator<Connection<V>>() {
         @Override
         public int compare(Connection<V> o1, Connection<V> o2) {
-            return Float.floatToIntBits(o1.weight - o2.weight);
+            return NumberTools.floatToIntBits(o1.weight - o2.weight);
         }
     };
 
     final Comparator<Connection<V>> reverseWeightComparator = new Comparator<Connection<V>>() {
         @Override
         public int compare(Connection<V> o1, Connection<V> o2) {
-            return Float.floatToIntBits(o2.weight - o1.weight);
+            return NumberTools.floatToIntBits(o2.weight - o1.weight);
         }
     };
     
@@ -384,9 +384,9 @@ class AlgorithmImplementations<V> {
     private boolean detectCycleDFS(Node<V> v, Node<V> parent, Set<Node<V>> recursiveStack) {
         v.visited = true;
         recursiveStack.add(v);
-        int n = v.neighbors.size();
+        int n = v.outEdges.size();
         for (int i = 0; i < n; i++) {
-            Connection<V> e = v.neighbors.getAt(i);
+            Connection<V> e = v.outEdges.get(i);
             Node<V> u = e.b;
             if (!graph.isDirected() && u.equals(parent)) continue;
             u.resetAlgorithmAttribs(runID);

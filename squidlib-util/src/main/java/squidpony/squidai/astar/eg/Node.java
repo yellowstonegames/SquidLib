@@ -25,9 +25,10 @@ package squidpony.squidai.astar.eg;
 
 import squidpony.annotation.Beta;
 import squidpony.squidmath.BinaryHeap;
-import squidpony.squidmath.OrderedMap;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 @Beta
 public class Node<V> extends BinaryHeap.Node {
@@ -40,7 +41,8 @@ public class Node<V> extends BinaryHeap.Node {
     final int idHash;
     final V object;
 
-    OrderedMap<Node<V>, Connection<V>> neighbors = new OrderedMap<>(8);
+    HashMap<Node<V>, Connection<V>> neighbors = new HashMap<>();
+    ArrayList<Connection<V>> outEdges = new ArrayList<>(); // List for fast iteration
 
     //================================================================================
     // Constructor
@@ -67,6 +69,7 @@ public class Node<V> extends BinaryHeap.Node {
             edge = graph.obtainEdge();
             edge.set(this, v, weight);
             neighbors.put(v, edge);
+            outEdges.add(edge);
             return edge;
         } else {
             edge.setWeight(weight);
@@ -74,11 +77,22 @@ public class Node<V> extends BinaryHeap.Node {
         return edge;
     }
     Connection<V> removeEdge(Node<V> v) {
-        return neighbors.remove(v); 
+        Connection<V> edge = neighbors.remove(v);
+        if (edge == null) return null;
+        // loop backwards to make Graph#removeNode faster
+        for (int j = outEdges.size()-1; j >= 0; j--) {
+            Connection<V> connection = outEdges.get(j);
+            if (connection.equals(edge)) {
+                outEdges.remove(j);
+                break;
+            }
+        }
+        return edge;
     }
 
     void disconnect() {
         neighbors.clear();
+        outEdges.clear();
     }
 
     //================================================================================
@@ -86,7 +100,7 @@ public class Node<V> extends BinaryHeap.Node {
     //================================================================================
 
     public Collection<Connection<V>> getConnections() {
-        return neighbors.values();
+        return outEdges;
     }
 
     public V getObject() {
@@ -108,7 +122,7 @@ public class Node<V> extends BinaryHeap.Node {
         if (runID == this.lastRunID) return false;
         visited = false;
         prev = null;
-        distance = Float.POSITIVE_INFINITY;
+        distance = Float.MAX_VALUE;
         estimate = 0;
         i = 0;
         seen = false;
