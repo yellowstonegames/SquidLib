@@ -88,9 +88,9 @@ class AlgorithmImplementations<V> {
             if (v.prev != null) tree.addEdge(v.object, v.prev.object);
             if (v.i == maxDepth) continue;
             if (tree.size() == maxVertices) break;
-            int n = v.outEdges.size();
+            int n = v.neighbors.size();
             for (int i = 0; i < n; i++) {
-                Connection<V> e = v.outEdges.get(i);
+                Connection<V> e = v.neighbors.getAt(i);
                 Node<V> w = e.b;
                 w.resetAlgorithmAttribs(runID);
                 if (!w.visited) {
@@ -119,9 +119,9 @@ class AlgorithmImplementations<V> {
                 if (v.i == maxDepth) continue;
                 if (tree.size() == maxVertices) break;
                 v.visited = true;
-                int n = v.outEdges.size();
+                int n = v.neighbors.size();
                 for (int i = 0; i < n; i++) {
-                    Connection<V> e = v.outEdges.get(i);
+                    Connection<V> e = v.neighbors.getAt(i);
                     Node<V> w = e.b;
                     w.resetAlgorithmAttribs(runID);
                     w.i = v.i+1;
@@ -191,9 +191,9 @@ class AlgorithmImplementations<V> {
             }
             if (!u.visited) {
                 u.visited = true;
-                int n = u.outEdges.size();
+                int n = u.neighbors.size();
                 for (int i = 0; i < n; i++) {
-                    Connection<V> e = u.outEdges.get(i);
+                    Connection<V> e = u.neighbors.getAt(i);
                     Node<V> v = e.b;
                     v.resetAlgorithmAttribs(runID);
                     if (!v.visited) {
@@ -265,9 +265,9 @@ class AlgorithmImplementations<V> {
             return false;
         }
         v.seen = true;
-        int n = v.outEdges.size();
+        int n = v.neighbors.size();
         for (int i = 0; i < n; i++) {
-            Connection<V> e = v.outEdges.get(i);
+            Connection<V> e = v.neighbors.getAt(i);
             boolean success = recursiveTopologicalSort(sortedVertices, e.b, set);
             if (!success) return false;
         }
@@ -384,9 +384,9 @@ class AlgorithmImplementations<V> {
     private boolean detectCycleDFS(Node<V> v, Node<V> parent, Set<Node<V>> recursiveStack) {
         v.visited = true;
         recursiveStack.add(v);
-        int n = v.outEdges.size();
+        int n = v.neighbors.size();
         for (int i = 0; i < n; i++) {
-            Connection<V> e = v.outEdges.get(i);
+            Connection<V> e = v.neighbors.getAt(i);
             Node<V> u = e.b;
             if (!graph.isDirected() && u.equals(parent)) continue;
             u.resetAlgorithmAttribs(runID);

@@ -27,7 +27,6 @@ import squidpony.annotation.Beta;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 @Beta
 public abstract class Graph<V> {
@@ -202,8 +201,8 @@ public abstract class Graph<V> {
     //--------------------
 
     void removeNode(Node<V> node) {
-        for (int i = node.outEdges.size()-1; i >= 0; i--) {
-            removeConnection(node.outEdges.get(i).b, node);
+        for (int i = node.neighbors.size()-1; i >= 0; i--) {
+            removeConnection(node.neighbors.getAt(i).b, node);
         }
         node.disconnect();
         vertexMap.remove(node.object);
@@ -276,10 +275,10 @@ public abstract class Graph<V> {
      * @param v the source vertex of all the edges
      * @return an unmodifiable collection of edges
      */
-    public List<? extends Edge<V>> getEdges(V v) {
+    public Collection<? extends Edge<V>> getEdges(V v) {
         Node<V> node = getNode(v);
         if (node==null) return null;
-        return Collections.unmodifiableList(node.outEdges);
+        return Collections.unmodifiableCollection(node.neighbors.values());
     }
 
     /**
