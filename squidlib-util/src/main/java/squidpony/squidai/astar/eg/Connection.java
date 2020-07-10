@@ -40,6 +40,20 @@ public class Connection<V> extends Edge<V> {
     //================================================================================
     // Constructor
     //================================================================================
+    
+    public Connection() {
+    }
+    
+    public Connection(Node<V> a, Node<V> b) {
+        this.a = a;
+        this.b = b;
+    }
+    
+    public Connection(Node<V> a, Node<V> b, float weight) {
+        this.a = a;
+        this.b = b;
+        this.weight = weight;
+    }
 
     @Override
     void set(Node<V> a, Node<V> b, float weight) {

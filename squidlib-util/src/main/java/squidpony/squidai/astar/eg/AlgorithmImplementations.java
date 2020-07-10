@@ -303,7 +303,7 @@ class AlgorithmImplementations<V> {
 
         Graph<V> spanningTree = graph.createNew();
 
-        spanningTree.addVertices(graph.getVertices());
+        spanningTree.addVertices(graph.vertexMap.keySet());
 
         List<Connection<V>> edgeList = new ArrayList<>(graph.edgeMap.values());
 
