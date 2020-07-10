@@ -6,36 +6,45 @@ import squidpony.squidmath.Coord;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
+ * A default-setting for a Graph where each passable cell has a cost to enter it from any passable neighbor.
+ * This should be compatible with the AStar cost maps produced by
+ * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)}.
+ * <br>
  * Created by Tommy Ettinger on 7/9/2020.
  */
-public class DefaultGraph extends UndirectedGraph<Coord> {
+public class CostlyGraph extends DirectedGraph<Coord> {
 
 	/**
-	 * The same as constructing a DefaultGraph with {@link #DefaultGraph(char[][], boolean)} and false for the last
+	 * The same as constructing a CostlyGraph with {@link #CostlyGraph(double[][], boolean)} and false for the last
 	 * parameter (this uses 4-way adjacency).
-	 * @param map a 2D char array where {@code '#'} represents an inaccessible area (such as a wall) and anything else is walkable
+	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
 	 */
-	public DefaultGraph(char[][] map) {
+	public CostlyGraph(double[][] map) {
 		this(map, false);
 	}
 
 	/**
-	 * Builds a DefaultGraph from a 2D char array that uses {@code '#'} to represent any kind of inaccessible cell, with
-	 * all other chars treated as walkable. If {@code eightWay} is true, this builds connections along diagonals as well
-	 * as along cardinals, but if {@code eightWay} is false, it only builds connections along cardinal directions.
-	 * @param map a 2D char array where {@code '#'} represents an inaccessible area (such as a wall) and anything else is walkable
+	 * Builds a DefaultGraph from a 2D double array that uses negative numbers to represent any kind of inaccessible
+	 * cell, with all other numbers treated as possible to enter for a cost equal to that double. If {@code eightWay} is
+	 * true, this builds connections along diagonals as well as along cardinals, but if {@code eightWay} is false, it
+	 * only builds connections along cardinal directions.
+	 * 
+	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
 	 * @param eightWay if true, this will build connections on diagonals as well as cardinal directions; if false, this will only use cardinal connections
 	 */
-	public DefaultGraph(char[][] map, boolean eightWay) {
+	public CostlyGraph(double[][] map, boolean eightWay) {
 		super();
 		final int width = map.length, height = map[0].length;
 		Coord.expandPoolTo(width, height);
 		ArrayList<Coord> vs = new ArrayList<>(width * height >>> 1);
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				if(map[x][y] != '#')
+				if(map[x][y] >= 0.0)
 				{
 					Coord pt = Coord.get(x, y);
 					vs.add(pt);
@@ -52,24 +61,35 @@ public class DefaultGraph extends UndirectedGraph<Coord> {
 			for (int j = 0; j < outer.length; j++) {
 				dir = outer[j];
 				off = center.translate(dir);
-				if(off.isWithin(width, height) && map[center.x + dir.deltaX][center.y + dir.deltaY] != '#')
-				{
-					if(!edgeExists(center, off))
-					{
-						addEdge(center, off);
-					}
+				if(off.isWithin(width, height) && map[center.x + dir.deltaX][center.y + dir.deltaY] >= 0.0)
+				{						
+					addEdge(off, center, (float)map[center.x][center.y]);
 				}
 			}
 		}
 	}
 
 	/**
-	 * Find a minimum weight spanning tree using Kruskal's algorithm.
-	 * @return a Graph object containing a minimum weight spanning tree (if this graph is connected -
-	 * in general a minimum weight spanning forest)
+	 * Sort the vertices of this graph in topological order. That is, for every edge from vertex u to vertex v, u comes
+	 * before v in the ordering. This is reflected in the iteration order of the collection returned by
+	 * {@link Graph#getVertices()}. Note that the graph cannot contain any cycles for a topological order to exist. If a
+	 * cycle exists, this method will do nothing.
+	 * @return true if the sort was successful, false if the graph contains a cycle
 	 */
-	public Graph<Coord> findMinimumWeightSpanningTree() {
-		return algorithms.findMinimumWeightSpanningTree();
+	public boolean topologicalSort() {
+		return algorithms.topologicalSort();
+	}
+
+	/**
+	 * Perform a topological sort on the graph, and puts the sorted vertices in the supplied list.
+	 * That is, for every edge from vertex u to vertex v, u will come before v in the supplied list.
+	 * Note that the graph cannot contain any cycles for a topological order to exist. If a cycle exists, the sorting
+	 * procedure will terminate and the supplied list will only contain the vertices up until the point of termination.
+	 * @param sortedVertices a List of V vertices that will be cleared and modified in-place
+	 * @return true if the sort was successful, false if the graph contains a cycle
+	 */
+	public boolean topologicalSort(List<Coord> sortedVertices) {
+		return algorithms.topologicalSort(sortedVertices);
 	}
 
 	/**
