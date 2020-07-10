@@ -65,7 +65,7 @@ public abstract class Graph<V> {
 
     protected abstract Connection<V> obtainEdge();
     abstract Graph<V> createNew();
-    public abstract Algorithms algorithms();
+    public abstract Algorithms<V> algorithms();
 
     //--------------------
     //  Public Methods
@@ -80,7 +80,7 @@ public abstract class Graph<V> {
     public boolean addVertex(V v) {
         Node<V> node = getNode(v);
         if (node!=null) return false;
-        node = new Node(v, this);
+        node = new Node<>(v, this);
         vertexMap.put(v, node);
         return true;
     }
@@ -254,9 +254,7 @@ public abstract class Graph<V> {
     public Edge<V> getEdge(V v, V w) {
         Node<V> a = getNode(v), b = getNode(w);
         if (a == null  || b == null) throw new IllegalArgumentException("At least one vertex is not in the graph");
-        Connection<V> edge = getEdge(a, b);
-        if (edge == null) return null;
-        return edge;
+        return getEdge(a, b);
     }
 
     /**
@@ -341,9 +339,7 @@ public abstract class Graph<V> {
     }
 
     Connection<V> getEdge(Node<V> a, Node<V> b) {
-        Connection<V> edge = a.getEdge(b);
-        if (edge == null) return null;
-        return edge;
+        return a.getEdge(b);
     }
 
 

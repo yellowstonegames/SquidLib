@@ -35,9 +35,10 @@ public class DirectedGraphAlgorithms<V> extends Algorithms<V> {
     }
 
     /**
-     * Sort the vertices of this graph in topological order. That is, for every edge from vertex u to vertex v, u comes before v in the ordering.
-     * This is reflected in the iteration order of the collection returned by {@link Graph#getVertices()}.
-     * Note that the graph cannot contain any cycles for a topological order to exist. If a cycle exists, this method will do nothing.
+     * Sort the vertices of this graph in topological order. That is, for every edge from vertex u to vertex v, u comes
+     * before v in the ordering. This is reflected in the iteration order of the collection returned by
+     * {@link Graph#getVertices()}. Note that the graph cannot contain any cycles for a topological order to exist. If a
+     * cycle exists, this method will do nothing.
      * @return true if the sort was successful, false if the graph contains a cycle
      */
     public boolean topologicalSort() {
@@ -47,8 +48,9 @@ public class DirectedGraphAlgorithms<V> extends Algorithms<V> {
     /**
      * Perform a topological sort on the graph, and puts the sorted vertices in the supplied list.
      * That is, for every edge from vertex u to vertex v, u will come before v in the supplied list.
-     * Note that the graph cannot contain any cycles for a topological order to exist. If a cycle exists, the sorting procedure will
-     * terminate and the supplied list will only contain the vertices up until the point of termination.
+     * Note that the graph cannot contain any cycles for a topological order to exist. If a cycle exists, the sorting
+     * procedure will terminate and the supplied list will only contain the vertices up until the point of termination.
+     * @param sortedVertices a List of V vertices that will be cleared and modified in-place
      * @return true if the sort was successful, false if the graph contains a cycle
      */
     public boolean topologicalSort(List<V> sortedVertices) {
