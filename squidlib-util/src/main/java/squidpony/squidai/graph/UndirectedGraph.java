@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
+package squidpony.squidai.graph;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -59,7 +59,7 @@ public class UndirectedGraph<V> extends Graph<V> implements Serializable {
 
     @Override
     protected Connection<V> obtainEdge() {
-        return new Connection.UndirectedConnection<>();
+        return new Connection.UndirectedConnection<V>();
     }
 
     @Override

@@ -21,13 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
+package squidpony.squidai.graph;
 
-import squidpony.annotation.Beta;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * Abstract superclass of actual Graph types, like {@link DirectedGraph} and {@link UndirectedGraph}.

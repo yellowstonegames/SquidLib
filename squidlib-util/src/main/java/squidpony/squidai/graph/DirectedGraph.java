@@ -21,14 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
-
-import squidpony.annotation.Beta;
+package squidpony.squidai.graph;
 
 import java.io.Serializable;
 import java.util.Collection;
-
-@Beta
+/**
+ * A kind of {@link Graph} where all connections between vertices are one-way (but a connection may exist that goes from
+ * A to B and another connection may go from B to A), and each connection can have a different cost.
+ * @see CostlyGraph The CostlyGraph class supports the common case where V is Coord and all costs are based on the cell being entered.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
 public class DirectedGraph<V> extends Graph<V> implements Serializable {
     private static final long serialVersionUID = 1L;
 
