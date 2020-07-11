@@ -21,28 +21,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
+package squidpony.squidai.graph;
+
+import java.io.Serializable;
 
 /**
- * Algorithms specific to undirected graphs, like {@link DefaultGraph}, as well as general {@link Algorithms}.
- * Currently, this only adds a {@link #findMinimumWeightSpanningTree()} method.
+ * Abstract superclass of any connection between nodes on a graph.
  * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
  * @author earlygrey
  */
-public class UndirectedGraphAlgorithms<V> extends Algorithms<V> {
+public abstract class Edge<V> implements Serializable {
+    public Edge(){}
 
-    UndirectedGraphAlgorithms(UndirectedGraph<V> graph) {
-        super(graph);
-    }
+    public abstract V getA();
+    public abstract V getB();
 
-    /**
-     * Find a minimum weight spanning tree using Kruskal's algorithm.
-     * @return a Graph object containing a minimum weight spanning tree (if this graph is connected -
-     * in general a minimum weight spanning forest)
-     */
-    public Graph<V> findMinimumWeightSpanningTree() {
-        return implementations.kruskalsMinimumWeightSpanningTree(true);
-    }
+    public abstract float getWeight();
+    public abstract void setWeight(float weight);
 
+    protected abstract Node<V> getInternalNodeA();
+    protected abstract Node<V> getInternalNodeB();
 
+    protected abstract void set(Node<V> a, Node<V> b, float weight);
 }

@@ -871,7 +871,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     // White Noise
 
     private int floatToIntMixed(final float f) {
-        final int i = Float.floatToIntBits(f);
+        final int i = NumberTools.floatToIntBits(f);
         return i ^ i >>> 16;
     }
 

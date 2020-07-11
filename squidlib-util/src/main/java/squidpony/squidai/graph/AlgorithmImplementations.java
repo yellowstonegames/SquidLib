@@ -21,9 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
+package squidpony.squidai.graph;
 
-import squidpony.annotation.Beta;
 import squidpony.squidai.astar.Heuristic;
 import squidpony.squidmath.BinaryHeap;
 import squidpony.squidmath.NumberTools;
@@ -36,7 +35,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-@Beta
 class AlgorithmImplementations<V> {
 
     //================================================================================
@@ -54,7 +52,7 @@ class AlgorithmImplementations<V> {
 
     AlgorithmImplementations(Graph<V> graph) {
         this.graph = graph;
-        heap = new BinaryHeap();
+        heap = new BinaryHeap<>();
         queue = new ArrayDeque<>();
     }
 

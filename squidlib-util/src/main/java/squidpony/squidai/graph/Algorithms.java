@@ -21,14 +21,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
+package squidpony.squidai.graph;
 
-import squidpony.annotation.Beta;
 import squidpony.squidai.astar.Heuristic;
 
 import java.util.ArrayList;
 
-@Beta
+/**
+ * Most of the algorithms that operate on a {@link Graph} are defined here, with some specific cases in subclasses.
+ * The most-frequently-used algorithm here is probably {@link #findShortestPath(Object, Object, ArrayList, Heuristic)},
+ * or some overload of it; this is a standard A-Star algorithm backed by a priority queue that is very fast. Somewhat
+ * surprisingly, it doesn't need indices like gdx-ai's IndexedAStarPathFinder needs, and this makes the code easier to
+ * use. There's a good amount of other useful algorithms here, like {@link #detectCycle()} and various non-A-Star search
+ * methods, like {@link #breadthFirstSearch(Object, int, int)} and {@link #depthFirstSearch(Object, int, int)}.
+ * <br>
+ * This class is not meant to be extended from outside of this package, so it uses a package-private implementation.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
 public class Algorithms<V> {
 
     final Graph<V> graph;
@@ -86,7 +96,7 @@ public class Algorithms<V> {
     }
 
     /**
-     * Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.
+     * Find the length of the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.
      * @param start the starting vertex
      * @param target the target vertex
      * @return the sum of the weights in a shortest path from the starting vertex to the target vertex

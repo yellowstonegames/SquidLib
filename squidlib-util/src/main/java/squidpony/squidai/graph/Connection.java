@@ -21,13 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
-
-import squidpony.annotation.Beta;
+package squidpony.squidai.graph;
 
 import java.io.Serializable;
 
-@Beta
+/**
+ * The most-commonly-used class that represents an edge between nodes on a Graph. Different kinds of graph will use
+ * different subclasses of this to represent their edges: {@link DirectedConnection} or {@link UndirectedConnection}.
+ * These subclasses don't add new functionality, but they compare differently during hashing and equality checks.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
 public class Connection<V> extends Edge<V> implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -115,6 +119,10 @@ public class Connection<V> extends Edge<V> implements Serializable {
     // Subclasses
     //================================================================================
 
+    /**
+     * A Connection that treats A-to-B as a different edge from B-to-A.
+     * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+     */
     public static class DirectedConnection<V> extends Connection<V> {
 
         @Override
@@ -137,7 +145,10 @@ public class Connection<V> extends Edge<V> implements Serializable {
         }
 
     }
-
+    /**
+     * A Connection that treats A-to-B and B-to-A as the same edge.
+     * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+     */
     public static class UndirectedConnection<V> extends Connection<V> {
 
         @Override

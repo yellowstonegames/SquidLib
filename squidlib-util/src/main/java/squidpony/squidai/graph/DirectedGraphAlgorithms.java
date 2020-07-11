@@ -21,13 +21,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package squidpony.squidai.astar.eg;
-
-import squidpony.annotation.Beta;
+package squidpony.squidai.graph;
 
 import java.util.ArrayList;
 
-@Beta
+/**
+ * Algorithms specific to directed graph, like {@link CostlyGraph}, as well as general {@link Algorithms}.
+ * Currently, this only adds a {@link #topologicalSort()} method and its overload.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
 public class DirectedGraphAlgorithms<V> extends Algorithms<V> {
 
     DirectedGraphAlgorithms(DirectedGraph<V> graph) {
