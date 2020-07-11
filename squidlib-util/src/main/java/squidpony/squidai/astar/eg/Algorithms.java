@@ -27,7 +27,6 @@ import squidpony.annotation.Beta;
 import squidpony.squidai.astar.Heuristic;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Beta
 public class Algorithms<V> {
@@ -50,7 +49,7 @@ public class Algorithms<V> {
      * @param target the target vertex
      * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
      */
-    public List<V> findShortestPath(V start, V target) {
+    public ArrayList<V> findShortestPath(V start, V target) {
         return findShortestPath(start, target, null);
     }
 
@@ -60,8 +59,8 @@ public class Algorithms<V> {
      * @param target the target vertex
      * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
      */
-    public List<V> findShortestPath(V start, V target, Heuristic<V> heuristic) {
-        List<V> list = new ArrayList<>();
+    public ArrayList<V> findShortestPath(V start, V target, Heuristic<V> heuristic) {
+        ArrayList<V> list = new ArrayList<>();
         findShortestPath(start, target, list, heuristic);
         return list;
     }
@@ -77,7 +76,7 @@ public class Algorithms<V> {
      * @param path the list of vertices to which the path vertices should be added
      * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
      */
-    public boolean findShortestPath(V start, V target, List<V> path, Heuristic<V> heuristic) {
+    public boolean findShortestPath(V start, V target, ArrayList<V> path, Heuristic<V> heuristic) {
         path.clear();
         Node<V> startNode = graph.getNode(start);
         Node<V> targetNode = graph.getNode(target);

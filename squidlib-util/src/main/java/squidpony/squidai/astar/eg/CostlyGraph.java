@@ -4,18 +4,19 @@ import squidpony.squidai.astar.Heuristic;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
- * A default-setting for a Graph where each passable cell has a cost to enter it from any passable neighbor.
- * This should be compatible with the AStar cost maps produced by
+ * A default setting for a DirectedGraph of Coord vertices where each passable cell has a cost to enter it from any
+ * passable neighbor. This should be compatible with the AStar cost maps produced by
  * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)}.
  * <br>
  * Created by Tommy Ettinger on 7/9/2020.
  */
-public class CostlyGraph extends DirectedGraph<Coord> {
+public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The same as constructing a CostlyGraph with {@link #CostlyGraph(double[][], boolean)} and false for the last
@@ -85,10 +86,10 @@ public class CostlyGraph extends DirectedGraph<Coord> {
 	 * That is, for every edge from vertex u to vertex v, u will come before v in the supplied list.
 	 * Note that the graph cannot contain any cycles for a topological order to exist. If a cycle exists, the sorting
 	 * procedure will terminate and the supplied list will only contain the vertices up until the point of termination.
-	 * @param sortedVertices a List of V vertices that will be cleared and modified in-place
+	 * @param sortedVertices an ArrayList of V vertices that will be cleared and modified in-place
 	 * @return true if the sort was successful, false if the graph contains a cycle
 	 */
-	public boolean topologicalSort(List<Coord> sortedVertices) {
+	public boolean topologicalSort(ArrayList<Coord> sortedVertices) {
 		return algorithms.topologicalSort(sortedVertices);
 	}
 
@@ -98,7 +99,7 @@ public class CostlyGraph extends DirectedGraph<Coord> {
 	 * @param target the target vertex
 	 * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
 	 */
-	public List<Coord> findShortestPath(Coord start, Coord target) {
+	public ArrayList<Coord> findShortestPath(Coord start, Coord target) {
 		return algorithms.findShortestPath(start, target);
 	}
 
@@ -106,10 +107,10 @@ public class CostlyGraph extends DirectedGraph<Coord> {
 	 * Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.
 	 * @param start the starting vertex
 	 * @param target the target vertex
-	 * @param heuristic typically predefined in {@link Heuristics}, this determines how the optimal path will be estimated
+	 * @param heuristic typically predefined in {@link Heuristic}, this determines how the optimal path will be estimated
 	 * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
 	 */
-	public List<Coord> findShortestPath(Coord start, Coord target, Heuristic<Coord> heuristic) {
+	public ArrayList<Coord> findShortestPath(Coord start, Coord target, Heuristic<Coord> heuristic) {
 		return algorithms.findShortestPath(start, target, heuristic);
 	}
 
@@ -118,10 +119,10 @@ public class CostlyGraph extends DirectedGraph<Coord> {
 	 * @param start the starting vertex
 	 * @param target the target vertex
 	 * @param path the list of vertices to which the path vertices should be added
-	 * @param heuristic typically predefined in {@link Heuristics}, this determines how the optimal path will be estimated
+	 * @param heuristic typically predefined in {@link Heuristic}, this determines how the optimal path will be estimated
 	 * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
 	 */
-	public boolean findShortestPath(Coord start, Coord target, List<Coord> path, Heuristic<Coord> heuristic) {
+	public boolean findShortestPath(Coord start, Coord target, ArrayList<Coord> path, Heuristic<Coord> heuristic) {
 		return algorithms.findShortestPath(start, target, path, heuristic);
 	}
 
