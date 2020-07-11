@@ -29,15 +29,19 @@ import squidpony.squidmath.OrderedMap;
 import java.util.*;
 import java.util.Map.Entry;
 
-@Beta
+/**
+ * Abstract superclass of actual Graph types, like {@link DirectedGraph} and {@link UndirectedGraph}.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
 public abstract class Graph<V> {
 
     //================================================================================
     // Members
     //================================================================================
     
-    final OrderedMap<V, Node<V>> vertexMap;
-    final OrderedMap<Connection<V>, Connection<V>> edgeMap;
+    protected final OrderedMap<V, Node<V>> vertexMap;
+    protected final OrderedMap<Connection<V>, Connection<V>> edgeMap;
     
     //================================================================================
     // Constructors
@@ -64,7 +68,7 @@ public abstract class Graph<V> {
     //--------------------
 
     protected abstract Connection<V> obtainEdge();
-    abstract Graph<V> createNew();
+    protected abstract Graph<V> createNew();
     public abstract Algorithms<V> algorithms();
 
     //--------------------
@@ -201,7 +205,7 @@ public abstract class Graph<V> {
     //  Internal Methods
     //--------------------
 
-    void removeNode(Node<V> node) {
+    protected void removeNode(Node<V> node) {
         for (int i = node.outEdges.size()-1; i >= 0; i--) {
             removeConnection(node.outEdges.get(i).b, node);
         }
@@ -209,19 +213,19 @@ public abstract class Graph<V> {
         vertexMap.remove(node.object);
     }
 
-    Connection<V> addConnection(Node<V> a, Node<V> b) {
+    protected Connection<V> addConnection(Node<V> a, Node<V> b) {
         Connection<V> e = a.addEdge(b, Connection.DEFAULT_WEIGHT);
         edgeMap.put(e, e);
         return e;
     }
 
-    Connection<V> addConnection(Node<V> a, Node<V> b, float weight) {
+    protected Connection<V> addConnection(Node<V> a, Node<V> b, float weight) {
         Connection<V> e = a.addEdge(b, weight);
         edgeMap.put(e, e);
         return e;
     }
 
-    boolean removeConnection(Node<V> a, Node<V> b) {
+    protected boolean removeConnection(Node<V> a, Node<V> b) {
         Connection<V> e = a.removeEdge(b);
         if (e == null) return false;
         edgeMap.remove(e);
@@ -326,19 +330,19 @@ public abstract class Graph<V> {
     //  Internal Getters
     //--------------------
 
-    Node<V> getNode(V v) {
+    protected Node<V> getNode(V v) {
         return vertexMap.get(v);
     }
 
-    Collection<Node<V>> getNodes() {
+    protected Collection<Node<V>> getNodes() {
         return vertexMap.values();
     }
 
-    boolean connectionExists(Node<V> u, Node<V> v) {
+    protected boolean connectionExists(Node<V> u, Node<V> v) {
         return u.getEdge(v) != null;
     }
 
-    Connection<V> getEdge(Node<V> a, Node<V> b) {
+    protected Connection<V> getEdge(Node<V> a, Node<V> b) {
         return a.getEdge(b);
     }
 

@@ -23,12 +23,18 @@ SOFTWARE.
  */
 package squidpony.squidai.astar.eg;
 
-import squidpony.annotation.Beta;
-
+import java.io.Serializable;
 import java.util.Collection;
 
-@Beta
-public class UndirectedGraph<V> extends Graph<V> {
+/**
+ * A kind of {@link Graph} where all connections between vertices are two-way and have equal cost for traveling A to B
+ * or B to A.
+ * @see DefaultGraph The DefaultGraph class supports the common case where V is Coord and all costs are 1.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
+public class UndirectedGraph<V> extends Graph<V> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     UndirectedGraphAlgorithms<V> algorithms;
 
@@ -57,7 +63,7 @@ public class UndirectedGraph<V> extends Graph<V> {
     }
 
     @Override
-    Connection<V> addConnection(Node<V> a, Node<V> b, float weight) {
+    protected Connection<V> addConnection(Node<V> a, Node<V> b, float weight) {
         Connection<V> e = a.addEdge(b, weight);
         edgeMap.put(e, e);
         b.addEdge(a, weight);
@@ -65,7 +71,7 @@ public class UndirectedGraph<V> extends Graph<V> {
     }
 
     @Override
-    boolean removeConnection(Node<V> a, Node<V> b) {
+    protected boolean removeConnection(Node<V> a, Node<V> b) {
         Connection<V> e = a.removeEdge(b);
         if (e == null) return false;
         b.removeEdge(a);
@@ -74,7 +80,7 @@ public class UndirectedGraph<V> extends Graph<V> {
     }
 
     @Override
-    Connection<V> getEdge(Node<V> a, Node<V> b) {
+    protected Connection<V> getEdge(Node<V> a, Node<V> b) {
         Connection<V> edge = a.getEdge(b);
         if (edge == null) return null;
         edge = edgeMap.get(edge);
@@ -92,7 +98,7 @@ public class UndirectedGraph<V> extends Graph<V> {
     }
 
     @Override
-    Graph<V> createNew() {
+    protected Graph<V> createNew() {
         return new UndirectedGraph<>();
     }
 

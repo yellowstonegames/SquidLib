@@ -23,32 +23,39 @@ SOFTWARE.
  */
 package squidpony.squidai.astar.eg;
 
-import squidpony.annotation.Beta;
 import squidpony.squidmath.BinaryHeap;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-@Beta
-public class Node<V> extends BinaryHeap.Node {
+/**
+ * An extended version of {@link squidpony.squidmath.BinaryHeap.Node} that also stores a reference to the parent Graph,
+ * a vertex object of type {@code V}, a Map of neighbor Nodes to the appropriate {@link Connection} per Node, an extra
+ * List of those same Connections for faster iteration, and a lot of internal data used by algorithms in this package.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
+public class Node<V> extends BinaryHeap.Node implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 
     //================================================================================
     // Graph structure related members
     //================================================================================
 
-    final Graph<V> graph;
-    final int idHash;
-    final V object;
-
-    HashMap<Node<V>, Connection<V>> neighbors = new HashMap<>();
-    ArrayList<Connection<V>> outEdges = new ArrayList<>(); // List for fast iteration
+    protected final Graph<V> graph;
+    protected final int idHash;
+    protected final V object;
+    protected HashMap<Node<V>, Connection<V>> neighbors = new HashMap<>();
+    protected ArrayList<Connection<V>> outEdges = new ArrayList<>(); // List for fast iteration
 
     //================================================================================
     // Constructor
     //================================================================================
 
-    Node(V v, Graph<V> graph) {
+    protected Node(V v, Graph<V> graph) {
         super(0.0);
         this.object = v;
         this.graph = graph;
@@ -59,11 +66,11 @@ public class Node<V> extends BinaryHeap.Node {
     // Internal methods
     //================================================================================
 
-    Connection<V> getEdge(Node<V> v) {
+    protected Connection<V> getEdge(Node<V> v) {
         return neighbors.get(v);
     }
 
-    Connection<V> addEdge(Node<V> v, float weight) {
+    protected Connection<V> addEdge(Node<V> v, float weight) {
         Connection<V> edge = neighbors.get(v);
         if (edge == null) {
             edge = graph.obtainEdge();
@@ -76,7 +83,7 @@ public class Node<V> extends BinaryHeap.Node {
         }
         return edge;
     }
-    Connection<V> removeEdge(Node<V> v) {
+    protected Connection<V> removeEdge(Node<V> v) {
         Connection<V> edge = neighbors.remove(v);
         if (edge == null) return null;
         // loop backwards to make Graph#removeNode faster
@@ -90,7 +97,7 @@ public class Node<V> extends BinaryHeap.Node {
         return edge;
     }
 
-    void disconnect() {
+    protected void disconnect() {
         neighbors.clear();
         outEdges.clear();
     }
@@ -111,14 +118,43 @@ public class Node<V> extends BinaryHeap.Node {
     // Algorithm fields and methods
     //================================================================================
 
-    //util fields for algorithms, don't store data in them
-    boolean visited, seen;
-    double distance;
-    double estimate;
-    Node<V> prev;
-    int i, lastRunID;
+    /**
+     * Internal; tracking bit for whether this Node has already been visited during the current algorithm.
+     */
+    protected boolean visited;
+    /**
+     * Internal; tracking bit for whether this Node has been checked during the current algorithm.
+     */
+    protected boolean seen;
+    /**
+     * Internal; confirmed distance so far to get to this Node from the start.
+     */
+    protected double distance;
+    /**
+     * Internal; estimated distance to get from this Node to the goal.
+     */
+    protected double estimate;
+    /**
+     * Internal; a reference to the previous Node in a BinaryHeap.
+     */
+    protected Node<V> prev;
+    /**
+     * Internal; a utility field used to store depth in some algorithms.
+     */
+    protected int i;
+    /**
+     * Internal; a utility field used to distinguish which algorithm last used this Node.
+     */
+    protected int lastRunID;
 
-    boolean resetAlgorithmAttribs(int runID) {
+    /**
+     * If {@code runID} is not equal to {@link #lastRunID}, this resets the internal fields {@link #visited},
+     * {@link #seen}, {@link #distance}, {@link #estimate}, {@link #prev}, and {@link #i}, then sets {@link #lastRunID}
+     * to {@code runID}.
+     * @param runID an int that identifies which run of an algorithm is currently active
+     * @return true if anything was reset, or false if {@code runID} is equal to {@link #lastRunID}
+     */
+    protected boolean resetAlgorithmAttributes(int runID) {
         if (runID == this.lastRunID) return false;
         visited = false;
         prev = null;

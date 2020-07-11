@@ -25,10 +25,12 @@ package squidpony.squidai.astar.eg;
 
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 @Beta
-public class DirectedGraph<V> extends Graph<V> {
+public class DirectedGraph<V> extends Graph<V> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     final DirectedGraphAlgorithms<V> algorithms;
 
@@ -57,7 +59,7 @@ public class DirectedGraph<V> extends Graph<V> {
     }
 
     @Override
-    Graph<V> createNew() {
+    protected Graph<V> createNew() {
         return new DirectedGraph<>();
     }
 

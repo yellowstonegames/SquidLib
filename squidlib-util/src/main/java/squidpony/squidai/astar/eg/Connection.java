@@ -25,17 +25,20 @@ package squidpony.squidai.astar.eg;
 
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
+
 @Beta
-public class Connection<V> extends Edge<V> {
+public class Connection<V> extends Edge<V> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     //================================================================================
     // Fields and constants
     //================================================================================
 
-    static final float DEFAULT_WEIGHT = 1;
+    protected static final float DEFAULT_WEIGHT = 1;
 
-    Node<V> a, b;
-    float weight = DEFAULT_WEIGHT;
+    protected Node<V> a, b;
+    protected float weight = DEFAULT_WEIGHT;
 
     //================================================================================
     // Constructor
@@ -56,7 +59,7 @@ public class Connection<V> extends Edge<V> {
     }
 
     @Override
-    void set(Node<V> a, Node<V> b, float weight) {
+    protected void set(Node<V> a, Node<V> b, float weight) {
         this.a = a;
         this.b = b;
         this.weight = weight;
@@ -67,12 +70,12 @@ public class Connection<V> extends Edge<V> {
     //================================================================================
 
     @Override
-    Node<V> getInternalNodeA() {
+    protected Node<V> getInternalNodeA() {
         return a;
     }
 
     @Override
-    Node<V> getInternalNodeB() {
+    protected Node<V> getInternalNodeB() {
         return b;
     }
 
@@ -112,7 +115,7 @@ public class Connection<V> extends Edge<V> {
     // Subclasses
     //================================================================================
 
-    static class DirectedConnection<V> extends Connection<V> {
+    public static class DirectedConnection<V> extends Connection<V> {
 
         @Override
         public boolean equals(Object o) {
@@ -135,7 +138,7 @@ public class Connection<V> extends Edge<V> {
 
     }
 
-    static class UndirectedConnection<V> extends Connection<V> {
+    public static class UndirectedConnection<V> extends Connection<V> {
 
         @Override
         public boolean equals(Object o) {

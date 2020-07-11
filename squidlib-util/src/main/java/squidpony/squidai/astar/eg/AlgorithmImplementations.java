@@ -29,7 +29,12 @@ import squidpony.squidmath.BinaryHeap;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 @Beta
 class AlgorithmImplementations<V> {
@@ -77,7 +82,7 @@ class AlgorithmImplementations<V> {
         if (maxDepth <= 0 ) return;
         init();
 
-        vertex.resetAlgorithmAttribs(runID);
+        vertex.resetAlgorithmAttributes(runID);
         vertex.visited = true;
         ArrayDeque<Node<V>> queue = this.queue;
         queue.clear();
@@ -93,7 +98,7 @@ class AlgorithmImplementations<V> {
             for (int i = 0; i < n; i++) {
                 Connection<V> e = v.outEdges.get(i);
                 Node<V> w = e.b;
-                w.resetAlgorithmAttribs(runID);
+                w.resetAlgorithmAttributes(runID);
                 if (!w.visited) {
                     w.visited = true;
                     w.i = v.i+1;
@@ -107,7 +112,7 @@ class AlgorithmImplementations<V> {
     void depthFirstSearch(Node<V> vertex, Graph<V> tree, int maxVertices, int maxDepth) {
         init();
 
-        vertex.resetAlgorithmAttribs(runID);
+        vertex.resetAlgorithmAttributes(runID);
         ArrayDeque<Node<V>> queue = this.queue;
         queue.clear();
         queue.addLast(vertex);
@@ -124,7 +129,7 @@ class AlgorithmImplementations<V> {
                 for (int i = 0; i < n; i++) {
                     Connection<V> e = v.outEdges.get(i);
                     Node<V> w = e.b;
-                    w.resetAlgorithmAttribs(runID);
+                    w.resetAlgorithmAttributes(runID);
                     w.i = v.i+1;
                     w.prev = v;
                     queue.addFirst(w);
@@ -143,23 +148,23 @@ class AlgorithmImplementations<V> {
         else return end.distance;
     }
 
-    List<V> findShortestPath(Node<V> start, Node<V> target) {
+    ArrayList<V> findShortestPath(Node<V> start, Node<V> target) {
         ArrayList<V> path = new ArrayList<>();
         findShortestPath(start, target, path);
         return path;
     }
 
-    boolean findShortestPath(Node<V> start, Node<V> target, List<V> path) {
+    boolean findShortestPath(Node<V> start, Node<V> target, ArrayList<V> path) {
         return findShortestPath(start, target, path, null);
     }
 
-    List<V> findShortestPath(Node<V> start, Node<V> target, Heuristic<V> heuristic) {
+    ArrayList<V> findShortestPath(Node<V> start, Node<V> target, Heuristic<V> heuristic) {
         ArrayList<V> path = new ArrayList<>();
         findShortestPath(start, target, path, heuristic);
         return path;
     }
 
-    boolean findShortestPath(Node<V> start, Node<V> target, List<V> path, Heuristic<V> heuristic) {
+    boolean findShortestPath(Node<V> start, Node<V> target, ArrayList<V> path, Heuristic<V> heuristic) {
         Node<V> end = aStarSearch(start, target, heuristic);
         if (end==null) {
             return false;
@@ -179,7 +184,7 @@ class AlgorithmImplementations<V> {
 
         boolean hasHeuristic = heuristic != null;
         
-        start.resetAlgorithmAttribs(runID);
+        start.resetAlgorithmAttributes(runID);
         start.distance = 0;
 
         heap.add(start);
@@ -196,7 +201,7 @@ class AlgorithmImplementations<V> {
                 for (int i = 0; i < n; i++) {
                     Connection<V> e = u.outEdges.get(i);
                     Node<V> v = e.b;
-                    v.resetAlgorithmAttribs(runID);
+                    v.resetAlgorithmAttributes(runID);
                     if (!v.visited) {
                         double newDistance = u.distance + e.weight;
                         if (newDistance < v.distance) {
@@ -224,13 +229,13 @@ class AlgorithmImplementations<V> {
     // Topological sorting
     //================================================================================
 
-    boolean topologicalSort(List<V> sortedVertices) {
+    boolean topologicalSort(ArrayList<V> sortedVertices) {
         sortedVertices.clear();
         init();
         OrderedSet<Node<V>> set = new OrderedSet<>(graph.vertexMap.values());
         boolean success = true;
         while (success && !set.isEmpty()) {
-            success = recursiveTopologicalSort(sortedVertices, set.iterator().next(), set);
+            success = recursiveTopologicalSort(sortedVertices, set.first(), set);
         }
         if (success) {
             Collections.reverse(sortedVertices);
@@ -240,24 +245,23 @@ class AlgorithmImplementations<V> {
     }
 
     boolean topologicalSort() {
-        List<V> sortedVertices = new ArrayList<>();
+        ArrayList<V> sortedVertices = new ArrayList<>();
         init();
         OrderedSet<Node<V>> set = new OrderedSet<>(graph.vertexMap.values());
         boolean success = true;
         while (success && !set.isEmpty()) {
-            success = recursiveTopologicalSort(sortedVertices, set.iterator().next(), set);
+            success = recursiveTopologicalSort(sortedVertices, set.first(), set);
         }
         if (success) {
             for (int i = sortedVertices.size()-1; i >= 0; i--) {
-                V v = sortedVertices.get(i);
-                graph.vertexMap.getAndMoveToLast(v);
+                graph.vertexMap.getAndMoveToLast(sortedVertices.get(i));
             }
         }
         return success;
     }
 
-    private boolean recursiveTopologicalSort(List<V> sortedVertices, Node<V> v, Set<Node<V>> set) {
-        v.resetAlgorithmAttribs(runID);
+    private boolean recursiveTopologicalSort(ArrayList<V> sortedVertices, Node<V> v, Set<Node<V>> set) {
+        v.resetAlgorithmAttributes(runID);
 
         if (v.visited) return true;
         if (v.seen) {
@@ -305,20 +309,22 @@ class AlgorithmImplementations<V> {
 
         spanningTree.addVertices(graph.vertexMap.keySet());
 
-        List<Connection<V>> edgeList = new ArrayList<>(graph.edgeMap.values());
+        ArrayList<Connection<V>> edgeList = new ArrayList<>(graph.edgeMap.values());
 
         Collections.sort(edgeList, minSpanningTree ? weightComparator : reverseWeightComparator);
 
-        int totalNodes = graph.size();
+        int maxNodes = graph.size() - 1;
+        final int totalEdges = edgeList.size();
         int edgeCount = 0;
 
-        for (Connection<V> edge : edgeList) {
+        for (int i = 0; i < totalEdges; i++) {
+            final Connection<V> edge = edgeList.get(i);
             if (doesEdgeCreateCycle(edge.a, edge.b)) {
                 continue;
             }
             spanningTree.addConnection(edge.a, edge.b, edge.weight);
             edgeCount++;
-            if (edgeCount == totalNodes - 1) {
+            if (edgeCount == maxNodes) {
                 break;
             }
         }
@@ -353,8 +359,8 @@ class AlgorithmImplementations<V> {
     }
 
     private boolean doesEdgeCreateCycle(Node<V> u, Node<V> v) {
-        if (u.resetAlgorithmAttribs(runID)) u.prev = u;
-        if (v.resetAlgorithmAttribs(runID)) v.prev = v;
+        if (u.resetAlgorithmAttributes(runID)) u.prev = u;
+        if (v.resetAlgorithmAttributes(runID)) v.prev = v;
         Node<V> rootU = pathCompressionFind(u);
         Node<V> rootV = pathCompressionFind(v);
         if (rootU.equals(rootV)) {
@@ -372,7 +378,7 @@ class AlgorithmImplementations<V> {
         if (graph.size() < 3 || graph.getEdgeCount() < 3) return false;
         init();
         for (Node<V> v : graph.getNodes()) {
-            v.resetAlgorithmAttribs(runID);
+            v.resetAlgorithmAttributes(runID);
             if (detectCycleDFS(v, null, new HashSet<Node<V>>())) {
                 init();
                 return true;
@@ -389,7 +395,7 @@ class AlgorithmImplementations<V> {
             Connection<V> e = v.outEdges.get(i);
             Node<V> u = e.b;
             if (!graph.isDirected() && u.equals(parent)) continue;
-            u.resetAlgorithmAttribs(runID);
+            u.resetAlgorithmAttributes(runID);
             if (recursiveStack.contains(u)) {
                 return true;
             }

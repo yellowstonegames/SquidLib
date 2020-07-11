@@ -4,14 +4,24 @@ import squidpony.squidai.astar.Heuristic;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
+ * A default setting for an {@link UndirectedGraph} of Coord vertices where all connections have cost 1. This should be
+ * initialized with a 2D (rectangular) char array using the map convention where {@code '#'} is a wall and anything else
+ * is passable.
+ * <br>
  * Created by Tommy Ettinger on 7/9/2020.
  */
-public class DefaultGraph extends UndirectedGraph<Coord> {
+public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable {
+	private static final long serialVersionUID = 1L;
 
+	/**
+	 * No-op no-arg constructor, present for {@link Serializable}.
+	 */
+	protected DefaultGraph() {
+	}
 	/**
 	 * The same as constructing a DefaultGraph with {@link #DefaultGraph(char[][], boolean)} and false for the last
 	 * parameter (this uses 4-way adjacency).
@@ -78,7 +88,7 @@ public class DefaultGraph extends UndirectedGraph<Coord> {
 	 * @param target the target vertex
 	 * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
 	 */
-	public List<Coord> findShortestPath(Coord start, Coord target) {
+	public ArrayList<Coord> findShortestPath(Coord start, Coord target) {
 		return algorithms.findShortestPath(start, target);
 	}
 
@@ -86,10 +96,10 @@ public class DefaultGraph extends UndirectedGraph<Coord> {
 	 * Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.
 	 * @param start the starting vertex
 	 * @param target the target vertex
-	 * @param heuristic typically predefined in {@link Heuristics}, this determines how the optimal path will be estimated
+	 * @param heuristic typically predefined in {@link Heuristic}, this determines how the optimal path will be estimated
 	 * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
 	 */
-	public List<Coord> findShortestPath(Coord start, Coord target, Heuristic<Coord> heuristic) {
+	public ArrayList<Coord> findShortestPath(Coord start, Coord target, Heuristic<Coord> heuristic) {
 		return algorithms.findShortestPath(start, target, heuristic);
 	}
 
@@ -98,10 +108,10 @@ public class DefaultGraph extends UndirectedGraph<Coord> {
 	 * @param start the starting vertex
 	 * @param target the target vertex
 	 * @param path the list of vertices to which the path vertices should be added
-	 * @param heuristic typically predefined in {@link Heuristics}, this determines how the optimal path will be estimated
+	 * @param heuristic typically predefined in {@link Heuristic}, this determines how the optimal path will be estimated
 	 * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
 	 */
-	public boolean findShortestPath(Coord start, Coord target, List<Coord> path, Heuristic<Coord> heuristic) {
+	public boolean findShortestPath(Coord start, Coord target, ArrayList<Coord> path, Heuristic<Coord> heuristic) {
 		return algorithms.findShortestPath(start, target, path, heuristic);
 	}
 

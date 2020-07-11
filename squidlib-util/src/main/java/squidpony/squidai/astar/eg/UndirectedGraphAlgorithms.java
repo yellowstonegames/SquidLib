@@ -23,9 +23,12 @@ SOFTWARE.
  */
 package squidpony.squidai.astar.eg;
 
-import squidpony.annotation.Beta;
-
-@Beta
+/**
+ * Algorithms specific to undirected graphs, like {@link DefaultGraph}, as well as general {@link Algorithms}.
+ * Currently, this only adds a {@link #findMinimumWeightSpanningTree()} method.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
 public class UndirectedGraphAlgorithms<V> extends Algorithms<V> {
 
     UndirectedGraphAlgorithms(UndirectedGraph<V> graph) {

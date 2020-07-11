@@ -25,10 +25,14 @@ package squidpony.squidai.astar.eg;
 
 import squidpony.annotation.Beta;
 
-@Beta
-public abstract class Edge<V> {
+import java.io.Serializable;
 
-
+/**
+ * Abstract superclass of any connection between nodes on a graph.
+ * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
+ * @author earlygrey
+ */
+public abstract class Edge<V> implements Serializable {
     public Edge(){}
 
     public abstract V getA();
@@ -37,8 +41,8 @@ public abstract class Edge<V> {
     public abstract float getWeight();
     public abstract void setWeight(float weight);
 
-    abstract Node<V> getInternalNodeA();
-    abstract Node<V> getInternalNodeB();
+    protected abstract Node<V> getInternalNodeA();
+    protected abstract Node<V> getInternalNodeB();
 
-    abstract void set(Node<V> a, Node<V> b, float weight);
+    protected abstract void set(Node<V> a, Node<V> b, float weight);
 }
