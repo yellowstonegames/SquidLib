@@ -102,7 +102,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
 
-        pm = new Pixmap[240];
+        pm = new Pixmap[360];
         for (int i = 0; i < pm.length; i++) {
             pm[i] = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGBA8888);
             pm[i].setBlending(Pixmap.Blending.None);
@@ -200,7 +200,7 @@ public class AnimatedWorldMapWriter extends ApplicationAdapter {
         batch.draw(pt, 0, 0, width, height);
         batch.end();
 
-        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 24);
+        writer.write(Gdx.files.local(path + name + ".gif"), new Array<Pixmap>(pm), 30);
 
         if(counter >= LIMIT)
                 Gdx.app.exit();
