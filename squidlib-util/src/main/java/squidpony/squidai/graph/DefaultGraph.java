@@ -16,15 +16,22 @@ import java.util.ArrayList;
  */
 public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public int width;
+	public int height;
 
 	/**
-	 * No-op no-arg constructor, present for {@link Serializable}.
+	 * No-op no-arg constructor, present for {@link Serializable}; if you use this you must call {@link #init(char[][])}
+	 * or {@link #init(char[][], boolean)} before using the DefaultGraph.
 	 */
-	protected DefaultGraph() {
+	public DefaultGraph() {
+		super();
+		width = 0;
+		height = 0;
 	}
 	/**
-	 * The same as constructing a DefaultGraph with {@link #DefaultGraph(char[][], boolean)} and false for the last
-	 * parameter (this uses 4-way adjacency).
+	 * Builds a DefaultGraph from a 2D char array that uses {@code '#'} to represent any kind of inaccessible cell, with
+	 * all other chars treated as walkable. This only builds connections along cardinal directions.
 	 * @param map a 2D char array where {@code '#'} represents an inaccessible area (such as a wall) and anything else is walkable
 	 */
 	public DefaultGraph(char[][] map) {
@@ -40,7 +47,29 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 	 */
 	public DefaultGraph(char[][] map, boolean eightWay) {
 		super();
-		final int width = map.length, height = map[0].length;
+		init(map, eightWay);
+	}
+
+	/**
+	 * Re-initializes a DefaultGraph from a 2D char array that uses {@code '#'} to represent any kind of inaccessible
+	 * cell, with all other chars treated as walkable. This only builds connections along cardinal directions.
+	 * @param map a 2D char array where {@code '#'} represents an inaccessible area (such as a wall) and anything else is walkable
+	 */
+	public void init(char[][] map) {
+		init(map, false);
+	}
+
+	/**
+	 * Re-initializes this DefaultGraph from a 2D char array that uses {@code '#'} to represent any kind of inaccessible
+	 * cell, with all other chars treated as walkable. If {@code eightWay} is true, this builds connections along
+	 * diagonals as well as along cardinals, but if {@code eightWay} is false, it only builds connections along cardinal
+	 * directions.
+	 * @param map a 2D char array where {@code '#'} represents an inaccessible area (such as a wall) and anything else is walkable
+	 * @param eightWay if true, this will build connections on diagonals as well as cardinal directions; if false, this will only use cardinal connections
+	 */
+	public void init(char[][] map, boolean eightWay) {
+		width = map.length;
+		height = map[0].length;
 		Coord.expandPoolTo(width, height);
 		ArrayList<Coord> vs = new ArrayList<>(width * height >>> 1);
 		for (int x = 0; x < width; x++) {
@@ -71,6 +100,7 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -184,4 +214,5 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 	public boolean detectCycle() {
 		return algorithms.detectCycle();
 	}
+	
 }

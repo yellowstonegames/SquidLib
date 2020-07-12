@@ -41,21 +41,21 @@ public class AStarSearch implements Serializable {
          * The distance it takes when only the four primary directions can be
          * moved in.
          */
-        MANHATTAN(DefaultGraph.MANHATTAN),
+        MANHATTAN(Heuristic.MANHATTAN),
         /**
          * The distance it takes when diagonal movement costs the same as
          * cardinal movement.
          */
-        CHEBYSHEV(DefaultGraph.CHEBYSHEV),
+        CHEBYSHEV(Heuristic.CHEBYSHEV),
         /**
          * The distance it takes as the crow flies.
          */
-        EUCLIDEAN(DefaultGraph.EUCLIDEAN),
+        EUCLIDEAN(Heuristic.EUCLIDEAN),
         /**
          * Full space search. Least efficient but guaranteed to return a path if
          * one exists. See also {@link squidpony.squidai.DijkstraMap}.
          */
-        DIJKSTRA(DefaultGraph.DIJKSTRA);
+        DIJKSTRA(Heuristic.DIJKSTRA);
         Heuristic<Coord> heuristic;
         SearchType(Heuristic<Coord> heuristic){
             this.heuristic = heuristic;
