@@ -26,7 +26,7 @@ package squidpony.squidai.graph;
 import java.util.ArrayList;
 
 /**
- * Algorithms specific to directed graph, like {@link CostlyGraph}, as well as general {@link Algorithms}.
+ * Algorithms specific to directed graphs, like {@link CostlyGraph}, as well as general {@link Algorithms}.
  * Currently, this only adds a {@link #topologicalSort()} method and its overload.
  * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
  * @author earlygrey
