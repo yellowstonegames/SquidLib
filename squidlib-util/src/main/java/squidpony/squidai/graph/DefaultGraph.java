@@ -72,6 +72,8 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 		height = map[0].length;
 		Coord.expandPoolTo(width, height);
 		ArrayList<Coord> vs = new ArrayList<>(width * height >>> 1);
+		vertexMap.clear();
+		edgeMap.clear();
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if(map[x][y] != '#')
