@@ -18,9 +18,24 @@ import java.util.Map;
 public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public int width;
+	public int height;
+
 	/**
-	 * The same as constructing a CostlyGraph with {@link #CostlyGraph(double[][], boolean)} and false for the last
-	 * parameter (this uses 4-way adjacency).
+	 * No-op no-arg constructor, present for {@link Serializable}; if you use this you must call
+	 * {@link #init(double[][])} or {@link #init(double[][], boolean)} before using the CostlyGraph.
+	 */
+	public CostlyGraph() {
+		super();
+		width = 0;
+		height = 0;
+	}
+
+	/**
+	 * Builds a DefaultGraph from a 2D double array that uses negative numbers to represent any kind of inaccessible
+	 * cell, with all other numbers treated as possible to enter for a cost equal to that double. This only builds
+	 * connections along cardinal directions.
+	 *
 	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
 	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
 	 */
@@ -40,9 +55,37 @@ public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 	 */
 	public CostlyGraph(double[][] map, boolean eightWay) {
 		super();
-		final int width = map.length, height = map[0].length;
+		init(map, eightWay);
+	}
+
+	/**
+	 * Re-initializes this DefaultGraph from a 2D double array that uses negative numbers to represent any kind of
+	 * inaccessible cell, with all other numbers treated as possible to enter for a cost equal to that double. This only
+	 * builds connections along cardinal directions.
+	 *
+	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
+	 */
+	public void init(double[][] map) {
+		init(map, false);
+	}
+	/**
+	 * Re-initializes this DefaultGraph from a 2D double array that uses negative numbers to represent any kind of
+	 * inaccessible cell, with all other numbers treated as possible to enter for a cost equal to that double. If
+	 * {@code eightWay} is true, this builds connections along diagonals as well as along cardinals, but if
+	 * {@code eightWay} is false, it only builds connections along cardinal directions.
+	 *
+	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
+	 * @param eightWay if true, this will build connections on diagonals as well as cardinal directions; if false, this will only use cardinal connections
+	 */
+	public void init(double[][] map, boolean eightWay) {
+		width = map.length;
+		height = map[0].length;
 		Coord.expandPoolTo(width, height);
 		ArrayList<Coord> vs = new ArrayList<>(width * height >>> 1);
+		vertexMap.clear();
+		edgeMap.clear();
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if(map[x][y] >= 0.0)
@@ -63,7 +106,7 @@ public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 				dir = outer[j];
 				off = center.translate(dir);
 				if(off.isWithin(width, height) && map[center.x + dir.deltaX][center.y + dir.deltaY] >= 0.0)
-				{						
+				{
 					addEdge(off, center, (float)map[center.x][center.y]);
 				}
 			}
