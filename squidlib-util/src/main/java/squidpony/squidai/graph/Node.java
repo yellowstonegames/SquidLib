@@ -23,19 +23,21 @@ SOFTWARE.
  */
 package squidpony.squidai.graph;
 
+import squidpony.squidmath.BinaryHeap;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * A mutual relative of {@link FibonacciHeap.Entry} that also stores a reference to the parent Graph,
+ * An extended version of {@link squidpony.squidmath.BinaryHeap.Node} that also stores a reference to the parent Graph,
  * a vertex object of type {@code V}, a Map of neighbor Nodes to the appropriate {@link Connection} per Node, an extra
  * List of those same Connections for faster iteration, and a lot of internal data used by algorithms in this package.
  * @param <V> the vertex type; often {@link squidpony.squidmath.Coord}
  * @author earlygrey
  */
-public class Node<V> implements Serializable {
+public class Node<V> extends BinaryHeap.Node implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
@@ -46,7 +48,6 @@ public class Node<V> implements Serializable {
     protected final Graph<V> graph;
     protected final int idHash;
     protected final V object;
-    protected FibonacciHeap.Entry<Node<V>> entry = null;
     protected HashMap<Node<V>, Connection<V>> neighbors = new HashMap<>();
     protected ArrayList<Connection<V>> outEdges = new ArrayList<>(); // List for fast iteration
 
@@ -55,6 +56,7 @@ public class Node<V> implements Serializable {
     //================================================================================
 
     protected Node(V v, Graph<V> graph) {
+        super(0.0);
         this.object = v;
         this.graph = graph;
         idHash = System.identityHashCode(this);
@@ -133,7 +135,7 @@ public class Node<V> implements Serializable {
      */
     protected double estimate;
     /**
-     * Internal; a reference to the previous Node in a heap.
+     * Internal; a reference to the previous Node in a BinaryHeap.
      */
     protected Node<V> prev;
     /**
