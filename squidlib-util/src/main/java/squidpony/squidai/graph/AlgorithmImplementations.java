@@ -24,7 +24,6 @@ SOFTWARE.
 package squidpony.squidai.graph;
 
 import squidpony.squidai.astar.Heuristic;
-import squidpony.squidmath.BinaryHeap;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedSet;
 
@@ -42,7 +41,7 @@ class AlgorithmImplementations<V> {
     //================================================================================
 
     private final Graph<V> graph;
-    private final BinaryHeap<Node<V>> heap;
+    private final FibonacciHeap<Node<V>> heap;
     private final ArrayDeque<Node<V>> queue;
     private int runID = 0;
 
@@ -52,7 +51,7 @@ class AlgorithmImplementations<V> {
 
     AlgorithmImplementations(Graph<V> graph) {
         this.graph = graph;
-        heap = new BinaryHeap<>();
+        heap = new FibonacciHeap<>();
         queue = new ArrayDeque<>();
     }
 
@@ -185,10 +184,10 @@ class AlgorithmImplementations<V> {
         start.resetAlgorithmAttributes(runID);
         start.distance = 0;
 
-        heap.add(start);
+        heap.enqueue(start, 0.0);
 
-        while(heap.size != 0) {
-            Node<V> u = heap.pop();
+        while(!heap.isEmpty()) {
+            Node<V> u = heap.dequeueMin().item;
             if (u == target) {
                 heap.clear();
                 return u;
@@ -209,10 +208,10 @@ class AlgorithmImplementations<V> {
                                 v.estimate = heuristic.estimate(v.object, target.object);
                             }
                             if (!v.seen) {
-                                heap.add(v, v.distance + v.estimate);
-                            } else {
-                                heap.setValue(v, v.distance + v.estimate);
+                                heap.enqueue(v, v.distance + v.estimate);
                             }
+                            if (v.entry == null) v.entry = heap.enqueue(v, v.distance + v.estimate);
+                            else heap.decreaseKey(v.entry, v.distance + v.estimate);
                             v.seen = true;
                         }
                     }
