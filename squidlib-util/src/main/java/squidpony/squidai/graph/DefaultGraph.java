@@ -237,7 +237,7 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 		Node<Coord> nc;
 		for (int i = 0; i < vs; i++) {
 			nc = vertexMap.getAt(i);
-			if(!nc.visited || nc.distance >= 9999.5)
+			if(!nc.seen || nc.distance >= 9999.5)
 				continue;
 			int d = (int) (nc.distance + 0.5), x = nc.object.x * 5, y = nc.object.y;
 			cs[y * w5 + x    ] = (d >= 1000) ? (char) ('0' + d / 1000) : ' ';
