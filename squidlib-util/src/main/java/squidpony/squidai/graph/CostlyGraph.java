@@ -2,16 +2,18 @@ package squidpony.squidai.graph;
 
 import squidpony.squidai.astar.Heuristic;
 import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
  * A default setting for a DirectedGraph of Coord vertices where each passable cell has a cost to enter it from any
  * passable neighbor. This should be compatible with the AStar cost maps produced by
- * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)}.
+ * {@link DungeonUtility#generateAStarCostMap(char[][], Map, double)}.
  * <br>
  * Created by Tommy Ettinger on 7/9/2020.
  */
@@ -36,7 +38,7 @@ public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 	 * cell, with all other numbers treated as possible to enter for a cost equal to that double. This only builds
 	 * connections along cardinal directions.
 	 *
-	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @see DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
 	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
 	 */
 	public CostlyGraph(double[][] map) {
@@ -49,7 +51,7 @@ public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 	 * true, this builds connections along diagonals as well as along cardinals, but if {@code eightWay} is false, it
 	 * only builds connections along cardinal directions.
 	 * 
-	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @see DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
 	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
 	 * @param eightWay if true, this will build connections on diagonals as well as cardinal directions; if false, this will only use cardinal connections
 	 */
@@ -59,11 +61,47 @@ public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 	}
 
 	/**
+	 * Builds a DefaultGraph from a 2D char array that treats {@code '#'}, {@code '+'}, and all box drawing characters
+	 * as impassable, but considers all other cells passable for a cost of 1.0. This only builds connections along
+	 * cardinal directions.
+	 * <br>
+	 * This simply delegates to {@link #init(double[][], boolean)} with the result of
+	 * {@link DungeonUtility#generateAStarCostMap(char[][])} for the 2D double array. You can get more control by
+	 * calling {@link DungeonUtility#generateAStarCostMap(char[][], Map, double)} and passing that to init() or a
+	 * constructor that takes a 2D double array.
+	 *
+	 * @param map a 2D char array where {@code '#'}, {@code '+'}, and all box drawing characters are considered impassable
+	 */
+	public CostlyGraph(char[][] map) {
+		super();
+		init(DungeonUtility.generateAStarCostMap(map), false);
+	}
+
+	/**
+	 * Builds a DefaultGraph from a 2D char array that treats {@code '#'}, {@code '+'}, and all box drawing characters
+	 * as impassable, but considers all other cells passable for a cost of 1.0. If {@code eightWay} is true, this builds
+	 * connections along diagonals as well as along cardinals, but if {@code eightWay} is false, it only builds
+	 * connections along cardinal directions.
+	 * <br>
+	 * This simply delegates to {@link #init(double[][], boolean)} with the result of
+	 * {@link DungeonUtility#generateAStarCostMap(char[][])} for the 2D double array. You can get more control by
+	 * calling {@link DungeonUtility#generateAStarCostMap(char[][], Map, double)} and passing that to init() or a
+	 * constructor that takes a 2D double array.
+	 *
+	 * @param map a 2D char array where {@code '#'}, {@code '+'}, and all box drawing characters are considered impassable
+	 * @param eightWay if true, this will build connections on diagonals as well as cardinal directions; if false, this will only use cardinal connections
+	 */
+	public CostlyGraph(char[][] map, boolean eightWay) {
+		super();
+		init(DungeonUtility.generateAStarCostMap(map), eightWay);
+	}
+
+	/**
 	 * Re-initializes this DefaultGraph from a 2D double array that uses negative numbers to represent any kind of
 	 * inaccessible cell, with all other numbers treated as possible to enter for a cost equal to that double. This only
 	 * builds connections along cardinal directions.
 	 *
-	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @see DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
 	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
 	 */
 	public void init(double[][] map) {
@@ -75,7 +113,7 @@ public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 	 * {@code eightWay} is true, this builds connections along diagonals as well as along cardinals, but if
 	 * {@code eightWay} is false, it only builds connections along cardinal directions.
 	 *
-	 * @see squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
+	 * @see DungeonUtility#generateAStarCostMap(char[][], Map, double) DungeonUtility has methods to generate this type of map
 	 * @param map a 2D double array where negative numbers are impassable and non-negative ones represent costs to enter
 	 * @param eightWay if true, this will build connections on diagonals as well as cardinal directions; if false, this will only use cardinal connections
 	 */
@@ -238,4 +276,34 @@ public class CostlyGraph extends DirectedGraph<Coord> implements Serializable {
 	public boolean detectCycle() {
 		return algorithms.detectCycle();
 	}
+
+	/**
+	 * Creates a 1D char array (which can be passed to {@link String#valueOf(char[])}) filled with a grid made of the
+	 * vertices in this Graph and their estimated costs, if this has done an estimate. Each estimate is rounded to the
+	 * nearest int and only printed if it is 4 digits or less; otherwise this puts '####' in the grid cell. This is a
+	 * building-block for toString() implementations that may have debugging uses as well.
+	 * @return a 1D char array containing newline-separated rows of space-separated grid cells that contain estimated costs or '####' for unexplored
+	 */
+	public char[] show() {
+		final int w5 = width * 5;
+		final char[] cs = new char[w5 * height];
+		Arrays.fill(cs,  '#');
+		for (int i = 4; i < cs.length; i += 5) {
+			cs[i] = (i + 1) % w5 == 0 ? '\n' : ' ';
+		}
+		final int vs = vertexMap.size();
+		Node<Coord> nc;
+		for (int i = 0; i < vs; i++) {
+			nc = vertexMap.getAt(i);
+			if(nc.distance + nc.estimate >= 9999.5)
+				continue;
+			int d = (int) (nc.distance + nc.estimate + 0.5), x = nc.object.x * 5, y = nc.object.y;
+			cs[y * w5 + x    ] = (d >= 1000) ? (char) ('0' + d / 1000) : ' ';
+			cs[y * w5 + x + 1] = (d >= 100)  ? (char) ('0' + d / 100 % 10) : ' ';
+			cs[y * w5 + x + 2] = (d >= 10)   ? (char) ('0' + d / 10 % 10) : ' ';
+			cs[y * w5 + x + 3] = (char) ('0' + d % 10);
+		}
+		return cs;
+	}
+
 }
