@@ -75,16 +75,14 @@ public class Algorithms<V> {
         return list;
     }
 
-    /*public boolean findShortestPath(V start, V target, List<V> path) {
-        return findShortestPath(start, target, path, null);
-    }*/
-
     /**
-     * Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.
+     * Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+     * heuristic, and implemented with a priority queue. Fills path with a list of vertices from start to target
+     * containing the ordered vertices of a shortest path, including both the start and target vertices.
      * @param start the starting vertex
      * @param target the target vertex
      * @param path the list of vertices to which the path vertices should be added
-     * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
+     * @return true if a path was found, or false if no path could be found
      */
     public boolean findShortestPath(V start, V target, ArrayList<V> path, Heuristic<V> heuristic) {
         path.clear();

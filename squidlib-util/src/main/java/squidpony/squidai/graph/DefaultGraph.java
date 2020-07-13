@@ -137,12 +137,13 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 	}
 
 	/**
-	 * Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.
+	 * Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+	 * heuristic, and implemented with a priority queue. Fills path with a list of vertices from start to target
+	 * containing the ordered vertices of a shortest path, including both the start and target vertices.
 	 * @param start the starting vertex
 	 * @param target the target vertex
 	 * @param path the list of vertices to which the path vertices should be added
-	 * @param heuristic typically predefined in {@link Heuristic}, this determines how the optimal path will be estimated
-	 * @return a list of vertices from start to target containing the ordered vertices of a shortest path, including both the start and target vertices
+	 * @return true if a path was found, or false if no path could be found
 	 */
 	public boolean findShortestPath(Coord start, Coord target, ArrayList<Coord> path, Heuristic<Coord> heuristic) {
 		return algorithms.findShortestPath(start, target, path, heuristic);
@@ -236,9 +237,9 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 		Node<Coord> nc;
 		for (int i = 0; i < vs; i++) {
 			nc = vertexMap.getAt(i);
-			if(nc.distance + nc.estimate >= 9999.5)
+			if(!nc.visited || nc.distance >= 9999.5)
 				continue;
-			int d = (int) (nc.distance + nc.estimate + 0.5), x = nc.object.x * 5, y = nc.object.y;
+			int d = (int) (nc.distance + 0.5), x = nc.object.x * 5, y = nc.object.y;
 			cs[y * w5 + x    ] = (d >= 1000) ? (char) ('0' + d / 1000) : ' ';
 			cs[y * w5 + x + 1] = (d >= 100)  ? (char) ('0' + d / 100 % 10) : ' ';
 			cs[y * w5 + x + 2] = (d >= 10)   ? (char) ('0' + d / 10 % 10) : ' ';
