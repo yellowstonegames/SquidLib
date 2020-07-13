@@ -375,12 +375,14 @@ class AlgorithmImplementations<V> {
     boolean containsCycle(Graph<V> graph) {
         if (graph.size() < 3 || graph.getEdgeCount() < 3) return false;
         init();
+        HashSet<Node<V>> set =  new HashSet<Node<V>>();
         for (Node<V> v : graph.getNodes()) {
             v.resetAlgorithmAttributes(runID);
-            if (detectCycleDFS(v, null, new HashSet<Node<V>>())) {
+            if (detectCycleDFS(v, null, set)) {
                 init();
                 return true;
             }
+            set.clear();
         }
         return false;
     }
@@ -404,49 +406,5 @@ class AlgorithmImplementations<V> {
         recursiveStack.remove(v);
         return false;
     }
-
-    /*void dfs(Node<V> vertex, List<V> vertices, float maxDistance, int maxDepth) {
-        vertices.clear();
-        clear();
-        dfsRecursive(vertex, vertices, maxDistance, maxDepth, 0);
-        clear();
-    }
-
-    private void dfsRecursive(Node<V> v, List<V> vertices, float maxDistance, int maxDepth, int depth) {
-        if (depth > maxDepth) return;
-        resetAttribs(v);
-        v.visited = true;
-        vertices.add(v.object);
-        for (Connection e : v.connections.values()) {
-            Node<V> w = e.b;
-            if (!w.visited) {
-                w.distance = v.distance + e.getWeight();
-                if (w.distance <= maxDistance) dfsRecursive(w, vertices, maxDistance, maxDepth, depth + 1);
-            }
-        }
-    }*/
-
-
-    /*List<List<V>> getComponents(Graph<V> graph) {
-        Set<Node<V>> nodeSet = new HashSet();
-        nodeSet.addAll(graph.getNodes());
-        List<List<Node<V>>> components = new ArrayList<>();
-        while(!nodeSet.isEmpty()) {
-            List<Node<V>> nodeList = findComponent(nodeSet.iterator().next());
-            components.add(nodeList);
-            nodeSet.removeAll(nodeList);
-        }
-        List<List<V>> objectComponents = new ArrayList<>(components.size());
-        for (List<Node<V>> component : components) {
-            List<V> objectNodes = new ArrayList<>();
-            for (Node<V> node : component) {
-                objectNodes.add(node.object);
-            }
-            objectComponents.add(objectNodes);
-        }
-        return objectComponents;
-    }*/
-
-
 }
 

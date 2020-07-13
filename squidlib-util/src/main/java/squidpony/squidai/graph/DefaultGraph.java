@@ -6,6 +6,7 @@ import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A default setting for an {@link UndirectedGraph} of Coord vertices where all connections have cost 1. This should be
@@ -216,5 +217,33 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 	public boolean detectCycle() {
 		return algorithms.detectCycle();
 	}
-	
+
+	/**
+	 * Creates a 1D char array (which can be passed to {@link String#valueOf(char[])}) filled with a grid made of the
+	 * vertices in this Graph and their estimated costs, if this has done an estimate. Each estimate is rounded to the
+	 * nearest int and only printed if it is 4 digits or less; otherwise this puts '####' in the grid cell. This is a
+	 * building-block for toString() implementations that may have debugging uses as well.
+	 * @return a 1D char array containing newline-separated rows of space-separated grid cells that contain estimated costs or '####' for unexplored
+	 */
+	public char[] show() {
+		final int w5 = width * 5;
+		final char[] cs = new char[w5 * height];
+		Arrays.fill(cs,  '#');
+		for (int i = 4; i < cs.length; i += 5) {
+			cs[i] = (i + 1) % w5 == 0 ? '\n' : ' ';
+		}
+		final int vs = vertexMap.size();
+		Node<Coord> nc;
+		for (int i = 0; i < vs; i++) {
+			nc = vertexMap.getAt(i);
+			if(nc.distance + nc.estimate >= 9999.5)
+				continue;
+			int d = (int) (nc.distance + nc.estimate + 0.5), x = nc.object.x * 5, y = nc.object.y;
+			cs[y * w5 + x    ] = (d >= 1000) ? (char) ('0' + d / 1000) : ' ';
+			cs[y * w5 + x + 1] = (d >= 100)  ? (char) ('0' + d / 100 % 10) : ' ';
+			cs[y * w5 + x + 2] = (d >= 10)   ? (char) ('0' + d / 10 % 10) : ' ';
+			cs[y * w5 + x + 3] = (char) ('0' + d % 10);
+		}
+		return cs;
+	}
 }
