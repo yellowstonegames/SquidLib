@@ -1,6 +1,5 @@
 package squidpony.examples;
 
-import squidpony.Maker;
 import squidpony.squidai.astar.DefaultGraph;
 import squidpony.squidai.astar.Heuristic;
 import squidpony.squidai.astar.Pathfinder;
@@ -13,7 +12,6 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.TangleRNG;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 /**

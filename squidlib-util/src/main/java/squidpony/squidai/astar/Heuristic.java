@@ -85,7 +85,7 @@ public interface Heuristic<V> {
 	Heuristic<Coord> DIJKSTRA = new Heuristic<Coord>() {
 		@Override
 		public double estimate(Coord node, Coord endNode) {
-			return 1.0;
+			return 0.0;
 		}
 	};
 	/**

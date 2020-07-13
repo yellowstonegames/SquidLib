@@ -1,37 +1,39 @@
 package squidpony.squidmath;
 
-import squidpony.squidai.astar.DefaultGraph;
 import squidpony.squidai.astar.Heuristic;
-import squidpony.squidai.astar.Pathfinder;
+import squidpony.squidai.graph.CostlyGraph;
 import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.DungeonUtility;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Performs A* search.
- *
+ * Performs A* search to find the shortest path between two Coord points.
+ * <br>
  * A* is a best-first search algorithm for pathfinding. It uses a heuristic
  * value to reduce the total search space. If the heuristic is too large then
  * the optimal path is not guaranteed to be returned.
  * <br>
- * This implementation is a thin wrapper around {@link Pathfinder} and the other code in the
- * {@code squidpony.squidai.astar} package; it replaces an older, much-less-efficient A* implementation with one based
- * on GDX-AI's IndexedAStarPathFinder class. The only major change in the API is that this version returns an ArrayList
+ * This implementation is a thin wrapper around {@link squidpony.squidai.graph.CostlyGraph} and the other code in the
+ * {@code squidpony.squidai.graph} package; it replaces an older, much-less-efficient A* implementation with one based
+ * on code from simple-graphs by earlygrey. The current version is quite fast, typically outpacing gdx-ai's more-complex
+ * IndexedAStarPathfinder by a high margin. The only major change in the API is that this version returns an ArrayList
  * of Coord instead of a Queue of Coord. Typical usage of this class involves either the simpler technique of only using
  * {@code '#'} for walls or obstructions and calling {@link #AStarSearch(char[][], SearchType)}, or the more complex
  * technique that allows variable costs for different types of terrain, using
  * {@link squidpony.squidgrid.mapping.DungeonUtility#generateAStarCostMap(char[][], Map, double)} to generate a cost
  * map; if you used the old AStarSearch, then be advised that the default cost is now 1.0 instead of 0.0.
- * @see squidpony.squidai.astar.Pathfinder the pathfinding class this is based on; Pathfinder can be used independently
+ * @see squidpony.squidai.graph.CostlyGraph the pathfinding class this is based on; CostlyGraph can be used independently
  * @see squidpony.squidai.DijkstraMap a sometimes-faster pathfinding algorithm that can pathfind to multiple goals
  * @see squidpony.squidai.CustomDijkstraMap an alternative to DijkstraMap; faster and supports complex adjacency rules
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - optimized code
+ * @author earlygrey - wrote and really optimized simple-graphs, which this uses heavily
  */
 public class AStarSearch implements Serializable {
-    private static final long serialVersionUID = 10L;
+    private static final long serialVersionUID = 11L;
     /**
      * The type of heuristic to use.
      */
@@ -66,8 +68,7 @@ public class AStarSearch implements Serializable {
     protected Coord start, target;
     protected SearchType type;
     
-    protected DefaultGraph graph;
-    protected Pathfinder<Coord> pathfinder;
+    protected CostlyGraph graph;
     protected ArrayList<Coord> path;
     
     
@@ -98,8 +99,7 @@ public class AStarSearch implements Serializable {
         width = map.length;
         height = width == 0 ? 0 : map[0].length;
         this.type = type == null ? SearchType.EUCLIDEAN : type;         
-        graph = new DefaultGraph(map, (this.type != SearchType.MANHATTAN));
-        pathfinder = new Pathfinder<>(graph, true);
+        graph = new CostlyGraph(map, (this.type != SearchType.MANHATTAN));
         path = new ArrayList<>(width + height);
     }
     /**
@@ -121,8 +121,7 @@ public class AStarSearch implements Serializable {
         width = map.length;
         height = width == 0 ? 0 : map[0].length;
         this.type = type == null ? SearchType.EUCLIDEAN : type;
-        graph = new DefaultGraph(map, (this.type != SearchType.MANHATTAN));
-        pathfinder = new Pathfinder<>(graph, true);
+        graph = new CostlyGraph(map, (this.type != SearchType.MANHATTAN));
         path = new ArrayList<>(width + height);
     }
 
@@ -148,16 +147,15 @@ public class AStarSearch implements Serializable {
         height = width == 0 ? 0 : map[0].length;
         this.type = type == null ? SearchType.EUCLIDEAN : type;
         graph.init(map, this.type != SearchType.MANHATTAN);
-        pathfinder = new Pathfinder<>(graph, true);
         return this;
     }
 
     /**
      * Resets this pathing object to use a different map and optionally a different SearchType.
      * <br>
-     * Values in the map are all considered equally passable unless the char is {@code '#'}, in which case it is
-     * considered an impassable wall. The {@link DungeonGenerator#getBareDungeon()} method is a common way to get a map
-     * where only '#' is used to mean a wall.
+     * Values in the map are all considered equally passable unless the char is {@code '#'}, {@code '+'}, or any box
+     * drawing character, in which case it is considered an impassable wall. {@link DungeonGenerator#getBareDungeon()}
+     * is a common way to get a map where only '#' is used to mean a wall.
      * <br>
      * If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
      * based on diagonal and cardinal pathing (8-way).
@@ -171,8 +169,7 @@ public class AStarSearch implements Serializable {
         width = map.length;
         height = width == 0 ? 0 : map[0].length;
         this.type = type == null ? SearchType.EUCLIDEAN : type;
-        graph.init(map, this.type != SearchType.MANHATTAN);
-        pathfinder = new Pathfinder<>(graph, true);
+        graph.init(DungeonUtility.generateAStarCostMap(map), this.type != SearchType.MANHATTAN);
         return this;
     }
 
@@ -201,7 +198,7 @@ public class AStarSearch implements Serializable {
         path.clear();
         this.start = start;
         this.target = target;
-        if(pathfinder.searchNodePath(start, target, type.heuristic, path)) 
+        if(graph.findShortestPath(start, target, path, type.heuristic)) 
             return path;
         else
             return null;
@@ -217,13 +214,12 @@ public class AStarSearch implements Serializable {
 
 	@Override
 	public String toString() {
-        int cellSize = (int)Math.log10(Math.round(pathfinder.metrics.maxCost)) + 2;
-        StringBuilder result = new StringBuilder((width * cellSize + 1) * height);
-        graph.show(result, pathfinder, pathfinder.metrics);
-        for (int i = 0; i + 1 < cellSize; i++) {
-            result.setCharAt((width * cellSize + 1) * start.y + cellSize * start.x + i, '@');
-            result.setCharAt((width * cellSize + 1) * target.y + cellSize * target.x + i, '!');
-        }
-        return result.toString();
+        final int w5 = width * 5;
+        final char[] cs = graph.show();
+        cs[start.y * w5 + start.x * 5] = cs[start.y * w5 + start.x * 5 + 1] =
+                cs[start.y * w5 + start.x * 5 + 2] = cs[start.y * w5 + start.x * 5 + 3] = '@';
+        cs[target.y * w5 + target.x * 5] = cs[target.y * w5 + target.x * 5 + 1] =
+                cs[target.y * w5 + target.x * 5 + 2] = cs[target.y * w5 + target.x * 5 + 3] = '!';
+        return String.valueOf(cs);
     }
 }
