@@ -11,7 +11,8 @@ import java.util.ArrayList;
  * unlike WobblyLine, this won't ever generate paths that cross themselves.
  * <br>
  * This uses a similar algorithm to {@link squidpony.squidgrid.mapping.GrowingTreeMazeGenerator} to generate a
- * fully-connected graph for a given rectangular area, then solves it with {@link squidpony.squidai.astar.Pathfinder}.
+ * fully-connected graph for a given rectangular area, then solves it with
+ * {@link DefaultGraph#findShortestPath(Coord, Coord, ArrayList, Heuristic)}.
  * <br>
  * Created by Tommy Ettinger on 6/26/2020.
  */
