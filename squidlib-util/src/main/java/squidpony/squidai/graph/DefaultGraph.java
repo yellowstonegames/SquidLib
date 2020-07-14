@@ -232,11 +232,11 @@ public class DefaultGraph extends UndirectedGraph<Coord> implements Serializable
 		for (int i = 4; i < cs.length; i += 5) {
 			cs[i] = (i + 1) % w5 == 0 ? '\n' : ' ';
 		}
-		final int vs = vertexMap.size();
+		final int vs = vertexMap.size(), rid = algorithms.lastRunID();
 		Node<Coord> nc;
 		for (int i = 0; i < vs; i++) {
 			nc = vertexMap.getAt(i);
-			if(!nc.seen || nc.distance >= 9999.5)
+			if(!nc.seen || nc.lastRunID != rid || nc.distance >= 9999.5)
 				continue;
 			int d = (int) (nc.distance + 0.5), x = nc.object.x * 5, y = nc.object.y;
 			cs[y * w5 + x    ] = (d >= 1000) ? (char) ('0' + d / 1000) : ' ';
