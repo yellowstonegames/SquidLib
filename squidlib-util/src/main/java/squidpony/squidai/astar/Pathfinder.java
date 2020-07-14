@@ -16,6 +16,7 @@
 
 package squidpony.squidai.astar;
 
+import squidpony.squidai.graph.Heuristic;
 import squidpony.squidmath.BinaryHeap;
 
 import java.util.Collections;

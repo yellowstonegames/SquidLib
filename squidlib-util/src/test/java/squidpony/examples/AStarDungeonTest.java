@@ -1,8 +1,5 @@
 package squidpony.examples;
 
-import squidpony.squidai.astar.DefaultGraph;
-import squidpony.squidai.astar.Heuristic;
-import squidpony.squidai.astar.Pathfinder;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.AStarSearch;
@@ -12,7 +9,6 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.TangleRNG;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Tommy Ettinger on 4/5/2015.

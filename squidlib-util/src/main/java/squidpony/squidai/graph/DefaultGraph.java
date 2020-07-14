@@ -1,6 +1,5 @@
 package squidpony.squidai.graph;
 
-import squidpony.squidai.astar.Heuristic;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 
