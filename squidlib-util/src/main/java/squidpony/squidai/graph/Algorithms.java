@@ -178,4 +178,17 @@ public class Algorithms<V> {
         return implementations.containsCycle(graph);
     }
 
+    //--------------------
+    //  Structures
+    //--------------------
+
+    /**
+     * Gets the identifier for the last run of an algorithm; this should mostly be usable internally, but may be useful
+     * when different runs have affected a graph and a {@link Node#lastRunID} may need to be checked against this.
+     * @return an identifier for which algorithm ran last, as a probably-unique int
+     */
+    public int lastRunID() {
+        return implementations.getRunID();
+    }
+
 }

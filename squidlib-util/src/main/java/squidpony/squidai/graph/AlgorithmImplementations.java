@@ -62,12 +62,10 @@ class AlgorithmImplementations<V> {
 
     private void init() {
         runID++;
-        final OrderedMap<V, Node<V>> vm = graph.vertexMap;
-        final int size = vm.size();
-        for (int i = 0; i < size; i++) {
-            vm.getAt(i).resetAlgorithmAttributes(runID);
-        }
+    }
 
+    int getRunID() {
+        return runID;
     }
 
     //================================================================================
@@ -188,7 +186,7 @@ class AlgorithmImplementations<V> {
 
         boolean hasHeuristic = heuristic != null;
         
-//        start.resetAlgorithmAttributes(runID);
+        start.resetAlgorithmAttributes(runID);
         start.distance = 0;
 
         heap.add(start);
@@ -205,7 +203,7 @@ class AlgorithmImplementations<V> {
                 for (int i = 0; i < n; i++) {
                     Connection<V> e = u.outEdges.get(i);
                     Node<V> v = e.b;
-//                    v.resetAlgorithmAttributes(runID);
+                    v.resetAlgorithmAttributes(runID);
                     if (!v.visited) {
                         double newDistance = u.distance + e.weight;
                         if (newDistance < v.distance) {
