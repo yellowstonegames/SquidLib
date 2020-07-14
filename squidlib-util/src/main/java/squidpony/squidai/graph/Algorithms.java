@@ -23,8 +23,6 @@ SOFTWARE.
  */
 package squidpony.squidai.graph;
 
-import squidpony.squidai.astar.Heuristic;
-
 import java.util.ArrayList;
 
 /**

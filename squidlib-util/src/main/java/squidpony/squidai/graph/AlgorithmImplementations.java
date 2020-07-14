@@ -23,7 +23,6 @@ SOFTWARE.
  */
 package squidpony.squidai.graph;
 
-import squidpony.squidai.astar.Heuristic;
 import squidpony.squidmath.BinaryHeap;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
@@ -63,6 +62,12 @@ class AlgorithmImplementations<V> {
 
     private void init() {
         runID++;
+        final OrderedMap<V, Node<V>> vm = graph.vertexMap;
+        final int size = vm.size();
+        for (int i = 0; i < size; i++) {
+            vm.getAt(i).resetAlgorithmAttributes(runID);
+        }
+
     }
 
     //================================================================================
@@ -182,11 +187,6 @@ class AlgorithmImplementations<V> {
         init();
 
         boolean hasHeuristic = heuristic != null;
-        final OrderedMap<V, Node<V>> vm = graph.vertexMap;
-        final int size = vm.size();
-        for (int i = 0; i < size; i++) {
-            vm.getAt(i).resetAlgorithmAttributes(runID);
-        }
         
 //        start.resetAlgorithmAttributes(runID);
         start.distance = 0;

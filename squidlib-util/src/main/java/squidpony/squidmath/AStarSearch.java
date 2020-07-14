@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import squidpony.squidai.astar.Heuristic;
+import squidpony.squidai.graph.Heuristic;
 import squidpony.squidai.graph.CostlyGraph;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;

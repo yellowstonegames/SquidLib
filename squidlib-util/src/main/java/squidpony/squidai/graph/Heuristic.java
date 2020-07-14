@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package squidpony.squidai.astar;
+package squidpony.squidai.graph;
 
 import squidpony.squidmath.Coord;
 
