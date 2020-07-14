@@ -387,12 +387,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextPowerOfTwo(int)">nextPowerOfTwo</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/HashCommon.html#line.150">nextPowerOfTwo</a></span>&#8203;(<span class="arguments">int&nbsp;x)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/HashCommon.html#line.152">nextPowerOfTwo</a></span>&#8203;(<span class="arguments">int&nbsp;x)</span></div>
 <div class="block">Return the least power of two greater than or equal to the specified value.
- <br>Note that this function will return 1 when the argument is 0.</div>
+ <br>
+ Note that this function will return 1 when the argument is 0.
+ <br>
+ This is a cleaned-up Java version of <a href="https://jameshfisher.com/2018/03/30/round-up-power-2/">this C code</a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - an integer smaller than or equal to 2<sup>30</sup>.</dd>
+<dd><code>x</code> - a non-negative int.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the least power of two greater than or equal to the specified value.</dd>
 </dl>
@@ -401,12 +404,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/ja
 <li class="blockList">
 <section class="detail">
 <h3><a id="nextPowerOfTwo(long)">nextPowerOfTwo</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/HashCommon.html#line.167">nextPowerOfTwo</a></span>&#8203;(<span class="arguments">long&nbsp;x)</span></div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">long</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/HashCommon.html#line.165">nextPowerOfTwo</a></span>&#8203;(<span class="arguments">long&nbsp;x)</span></div>
 <div class="block">Return the least power of two greater than or equal to the specified value.
- <br>Note that this function will return 1 when the argument is 0.</div>
+ <br>
+ Note that this function will return 1 when the argument is 0.
+ <br>
+ This is a cleaned-up Java version of <a href="https://jameshfisher.com/2018/03/30/round-up-power-2/">this C code</a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - a long smaller than or equal to 2<sup>62</sup>.</dd>
+<dd><code>x</code> - a non-negative long.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the least power of two greater than or equal to the specified value.</dd>
 </dl>

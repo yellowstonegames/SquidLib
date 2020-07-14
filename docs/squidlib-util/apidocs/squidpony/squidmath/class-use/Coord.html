@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony">squidpony</a></th>
 <td class="colLast">
-<div class="block">Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.</div>
+<div class="block">Utilities that don't fit elsewhere in SquidLib; mostly text manipulation, compression, and helper code.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -87,8 +87,10 @@ loadScripts(document, 'script');</script>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="#squidpony.squidai.astar">squidpony.squidai.astar</a></th>
-<td class="colLast">&nbsp;</td>
+<th class="colFirst" scope="row"><a href="#squidpony.squidai.graph">squidpony.squidai.graph</a></th>
+<td class="colLast">
+<div class="block">Graphs and graph algorithms used primarily (but not exclusively) for pathfinding.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></th>
@@ -99,7 +101,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.iterator">squidpony.squidgrid.iterator</a></th>
 <td class="colLast">
-<div class="block">Iterators that allow traversal of squidpony.squidmath.Coord points on a map's grid.</div>
+<div class="block">Iterators that allow traversal of <a href="../Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> points on a map's grid.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -110,12 +112,14 @@ loadScripts(document, 'script');</script>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.zone">squidpony.squidgrid.zone</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Ways to represent different types of areas in 2D space; not recommended, most new code uses <a href="../GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a>.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidmath">squidpony.squidmath</a></th>
 <td class="colLast">
-<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+<div class="block">A very broad package containing random number generators, geometry tools, data structures, and noise functions.</div>
 </td>
 </tr>
 </tbody>
@@ -2584,13 +2588,13 @@ char[][]&nbsp;map,
 </section>
 </li>
 <li class="blockList">
-<section class="detail"><a id="squidpony.squidai.astar">
+<section class="detail"><a id="squidpony.squidai.graph">
 <!--   -->
 </a>
-<h2>Uses of <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a> in <a href="../../squidai/astar/package-summary.html">squidpony.squidai.astar</a></h2>
+<h2>Uses of <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a> in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a></h2>
 <div class="useSummary">
 <table>
-<caption><span>Fields in <a href="../../squidai/astar/package-summary.html">squidpony.squidai.astar</a> with type parameters of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Fields in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a> with type parameters of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
 <thead>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -2600,58 +2604,50 @@ char[][]&nbsp;map,
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#allConnections">allConnections</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#CHEBYSHEV">CHEBYSHEV</a></span></code></th>
+<td class="colFirst"><code>static <a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Heuristic.</span><code><span class="memberNameLink"><a href="../../squidai/graph/Heuristic.html#CHEBYSHEV">CHEBYSHEV</a></span></code></th>
 <td class="colLast">
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing the same as
  orthogonal movement.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#DIJKSTRA">DIJKSTRA</a></span></code></th>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Heuristic.</span><code><span class="memberNameLink"><a href="../../squidai/graph/Heuristic.html#DIJKSTRA">DIJKSTRA</a></span></code></th>
 <td class="colLast">
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where the heuristic is not used, and all cells are
  considered equivalent regardless of actual distance.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#EUCLIDEAN">EUCLIDEAN</a></span></code></th>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Heuristic.</span><code><span class="memberNameLink"><a href="../../squidai/graph/Heuristic.html#EUCLIDEAN">EUCLIDEAN</a></span></code></th>
 <td class="colLast">
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where all movement is calculated "as-the-crow-flies," using
  the standard Pythagorean formula for distance as in the real world.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#HEURISTICS">HEURISTICS</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../squidai/astar/Heuristic.html" title="interface in squidpony.squidai.astar">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#MANHATTAN">MANHATTAN</a></span></code></th>
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Heuristic.</span><code><span class="memberNameLink"><a href="../../squidai/graph/Heuristic.html#HEURISTICS">HEURISTICS</a></span></code></th>
+<td class="colLast">
+<div class="block">An unmodifiable List of all the Heuristic implementations in this class.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Heuristic.</span><code><span class="memberNameLink"><a href="../../squidai/graph/Heuristic.html#MANHATTAN">MANHATTAN</a></span></code></th>
 <td class="colLast">
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where diagonal movement is estimated as costing twice as
  much as orthogonal movement.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../Arrangement.html" title="class in squidpony.squidmath">Arrangement</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#positions">positions</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 </tbody>
 </table>
 </div>
 <div class="useSummary">
 <table>
-<caption><span>Methods in <a href="../../squidai/astar/package-summary.html">squidpony.squidai.astar</a> that return types with arguments of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a> that return types with arguments of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
 <thead>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -2661,38 +2657,108 @@ char[][]&nbsp;map,
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#getConnections(squidpony.squidmath.Coord)">getConnections</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;fromNode)</code></th>
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#breadthFirstSearch(squidpony.squidmath.Coord)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
 <td class="colLast">
-<div class="block">Returns the connections outgoing from the given node.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="useSummary">
-<table>
-<caption><span>Methods in <a href="../../squidai/astar/package-summary.html">squidpony.squidai.astar</a> with parameters of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
-<thead>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../squidai/astar/Connection.html" title="interface in squidpony.squidai.astar">Connection</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#getConnections(squidpony.squidmath.Coord)">getConnections</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;fromNode)</code></th>
-<td class="colLast">
-<div class="block">Returns the connections outgoing from the given node.</div>
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#getIndex(squidpony.squidmath.Coord)">getIndex</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;node)</code></th>
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#breadthFirstSearch(squidpony.squidmath.Coord,int,int)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
 <td class="colLast">
-<div class="block">Returns the unique index of the given node.</div>
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#breadthFirstSearch(squidpony.squidmath.Coord)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
+<td class="colLast">
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#breadthFirstSearch(squidpony.squidmath.Coord,int,int)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
+<td class="colLast">
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#depthFirstSearch(squidpony.squidmath.Coord)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#depthFirstSearch(squidpony.squidmath.Coord,int,int)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#depthFirstSearch(squidpony.squidmath.Coord)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#depthFirstSearch(squidpony.squidmath.Coord,int,int)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findMinimumWeightSpanningTree()">findMinimumWeightSpanningTree</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Find a minimum weight spanning tree using Kruskal's algorithm.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
 </td>
 </tr>
 </tbody>
@@ -2700,7 +2766,7 @@ char[][]&nbsp;map,
 </div>
 <div class="useSummary">
 <table>
-<caption><span>Method parameters in <a href="../../squidai/astar/package-summary.html">squidpony.squidai.astar</a> with type arguments of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a> with parameters of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
 <thead>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -2710,14 +2776,222 @@ char[][]&nbsp;map,
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/astar/DefaultGraph.html#show(java.lang.StringBuilder,squidpony.squidai.astar.Pathfinder,squidpony.squidai.astar.Pathfinder.Metrics)">show</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang" class="externalLink">StringBuilder</a>&nbsp;sb,
-<a href="../../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;pathfinder,
-<a href="../../squidai/astar/Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a>&nbsp;metrics)</code></th>
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#breadthFirstSearch(squidpony.squidmath.Coord)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
 <td class="colLast">
-<div class="block">Given a StringBuilder to append to, a Pathfinder with Coord nodes that has run and at least attempted to find a
- path, and the <a href="../../squidai/astar/Pathfinder.html#metrics"><code>Pathfinder.metrics</code></a> that the Pathfinder must have been configured to record, this makes a
- textual representation of the explored nodes and appends it to the StringBuilder.</div>
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#breadthFirstSearch(squidpony.squidmath.Coord,int,int)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
+<td class="colLast">
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#breadthFirstSearch(squidpony.squidmath.Coord)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
+<td class="colLast">
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#breadthFirstSearch(squidpony.squidmath.Coord,int,int)">breadthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
+<td class="colLast">
+<div class="block">Perform a breadth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#depthFirstSearch(squidpony.squidmath.Coord)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#depthFirstSearch(squidpony.squidmath.Coord,int,int)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#depthFirstSearch(squidpony.squidmath.Coord)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#depthFirstSearch(squidpony.squidmath.Coord,int,int)">depthFirstSearch</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord,
+int&nbsp;maxVertices,
+int&nbsp;maxDepth)</code></th>
+<td class="colLast">
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findMinimumDistance(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findMinimumDistance</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findMinimumDistance(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findMinimumDistance</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="useSummary">
+<table>
+<caption><span>Method parameters in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a> with type arguments of type <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<thead>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;path,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">DefaultGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target,
+<a href="../../squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;heuristic)</code></th>
+<td class="colLast">
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">CostlyGraph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/CostlyGraph.html#topologicalSort(java.util.ArrayList)">topologicalSort</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;sortedVertices)</code></th>
+<td class="colLast">
+<div class="block">Perform a topological sort on the graph, and puts the sorted vertices in the supplied list.</div>
 </td>
 </tr>
 </tbody>
@@ -4912,13 +5186,13 @@ int&nbsp;height,
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../AStarSearch.html#path">path</a></span></code></th>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TwistedLine.</span><code><span class="memberNameLink"><a href="../TwistedLine.html#lastPath">lastPath</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../AStarSearch.html#pathfinder">pathfinder</a></span></code></th>
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../AStarSearch.html#path">path</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -5682,6 +5956,11 @@ int&nbsp;height)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TwistedLine.</span><code><span class="memberNameLink"><a href="../TwistedLine.html#getLastPath()">getLastPath</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">RNG.</span><code><span class="memberNameLink"><a href="../RNG.html#getRandomCellsIterable(int,int,int)">getRandomCellsIterable</a></span>&#8203;(int&nbsp;width,
 int&nbsp;height,
@@ -5690,12 +5969,12 @@ int&nbsp;size)</code></th>
 <div class="block">Use that to get random cells in a rectangular map.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#iterator()">iterator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../DDALine.html#line(int,int,int,int)">line</a></span>&#8203;(int&nbsp;startX,
 int&nbsp;startY,
@@ -5705,7 +5984,7 @@ int&nbsp;endY)</code></th>
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using the DDA algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../DDALine.html#line(int,int,int,int,int,int)">line</a></span>&#8203;(int&nbsp;startX,
 int&nbsp;startY,
@@ -5717,7 +5996,7 @@ int&nbsp;modifierY)</code></th>
 <div class="block">Not intended for external use; prefer the overloads without a modifier argument.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../DDALine.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
@@ -5725,7 +6004,7 @@ int&nbsp;modifierY)</code></th>
 <div class="block">Draws a line from start to end using the DDA algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../Elias.html#line(double,double,double,double)">line</a></span>&#8203;(double&nbsp;startx,
 double&nbsp;starty,
@@ -5735,7 +6014,7 @@ double&nbsp;endy)</code></th>
 <div class="block">Gets the line between the two points.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../Elias.html#line(double,double,double,double,double)">line</a></span>&#8203;(double&nbsp;startx,
 double&nbsp;starty,
@@ -5746,20 +6025,20 @@ double&nbsp;brightnessThreshold)</code></th>
 <div class="block">Gets the line between the two points.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../Elias.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Elias.</span><code><span class="memberNameLink"><a href="../Elias.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord,double)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
 double&nbsp;brightnessThreshold)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../OrthoLine.html#line(int,int,int,int)">line</a></span>&#8203;(int&nbsp;startX,
 int&nbsp;startY,
@@ -5769,7 +6048,7 @@ int&nbsp;endY)</code></th>
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using only N/S/E/W movement.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../OrthoLine.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
@@ -5777,7 +6056,21 @@ int&nbsp;endY)</code></th>
 <div class="block">Draws a line from start to end using only N/S/E/W movement.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TwistedLine.</span><code><span class="memberNameLink"><a href="../TwistedLine.html#line(int,int,int,int)">line</a></span>&#8203;(int&nbsp;startX,
+int&nbsp;startY,
+int&nbsp;endX,
+int&nbsp;endY)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TwistedLine.</span><code><span class="memberNameLink"><a href="../TwistedLine.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">WobblyLine.</span><code><span class="memberNameLink"><a href="../WobblyLine.html#line(int,int,int,int,int,int)">line</a></span>&#8203;(int&nbsp;startX,
 int&nbsp;startY,
@@ -5789,7 +6082,7 @@ int&nbsp;height)</code></th>
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using the Drunkard's Walk algorithm.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">WobblyLine.</span><code><span class="memberNameLink"><a href="../WobblyLine.html#line(int,int,int,int,int,int,double,squidpony.squidmath.IRNG)">line</a></span>&#8203;(int&nbsp;startX,
 int&nbsp;startY,
@@ -5803,7 +6096,7 @@ double&nbsp;weight,
 <div class="block">Draws a line from (startX, startY) to (endX, endY) using the Drunkard's Walk algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">WobblyLine.</span><code><span class="memberNameLink"><a href="../WobblyLine.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,int)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
@@ -5813,7 +6106,7 @@ int&nbsp;height)</code></th>
 <div class="block">Draws a line from start to end using the Drunkard's Walk algorithm.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../Bresenham.html#line2D(int,int,int,int)">line2D</a></span>&#8203;(int&nbsp;startx,
 int&nbsp;starty,
@@ -5823,7 +6116,7 @@ int&nbsp;endy)</code></th>
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../Bresenham.html#line2D(int,int,int,int,int)">line2D</a></span>&#8203;(int&nbsp;startx,
 int&nbsp;starty,
@@ -5835,7 +6128,7 @@ int&nbsp;maxLength)</code></th>
  the number of Coords returned reaches maxLength.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../Bresenham.html#line2D(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line2D</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;a,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;b)</code></th>
@@ -5843,7 +6136,7 @@ int&nbsp;maxLength)</code></th>
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../AStarSearch.html#path(int,int,int,int)">path</a></span>&#8203;(int&nbsp;startx,
 int&nbsp;starty,
@@ -5853,7 +6146,7 @@ int&nbsp;targety)</code></th>
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../AStarSearch.html#path(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">path</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
@@ -5861,7 +6154,7 @@ int&nbsp;targety)</code></th>
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../CoordPacker.html#randomPortion(short%5B%5D,int,squidpony.squidmath.IRNG)">randomPortion</a></span>&#8203;(short[]&nbsp;packed,
 int&nbsp;size,
@@ -5871,7 +6164,7 @@ int&nbsp;size,
  and returns a List of Coord with a count equal to size (or less if there aren't enough "on" cells).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleCircle(squidpony.squidmath.Coord,float,float,int,int)">sampleCircle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
 float&nbsp;radius,
@@ -5883,7 +6176,7 @@ int&nbsp;maxY)</code></th>
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleCircle(squidpony.squidmath.Coord,float,float,int,int,int,squidpony.squidmath.IRNG)">sampleCircle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
 float&nbsp;radius,
@@ -5897,7 +6190,7 @@ int&nbsp;pointsPerIteration,
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleMap(char%5B%5D%5B%5D,float,squidpony.squidmath.IRNG,java.lang.Character...)">sampleMap</a></span>&#8203;(char[][]&nbsp;map,
 float&nbsp;minimumDistance,
@@ -5905,7 +6198,7 @@ float&nbsp;minimumDistance,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>...&nbsp;blocking)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleMap(squidpony.squidmath.Coord,squidpony.squidmath.Coord,char%5B%5D%5B%5D,float,squidpony.squidmath.IRNG,java.lang.Character...)">sampleMap</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5915,7 +6208,7 @@ float&nbsp;minimumDistance,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>...&nbsp;blocking)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleRectangle(squidpony.squidmath.Coord,squidpony.squidmath.Coord,float,int,int)">sampleRectangle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5927,7 +6220,7 @@ int&nbsp;maxY)</code></th>
  maxPosition, but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleRectangle(squidpony.squidmath.Coord,squidpony.squidmath.Coord,float,int,int,int,squidpony.squidmath.IRNG)">sampleRectangle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -6033,7 +6326,7 @@ int&nbsp;height)</code></th>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../Coord.html#degrees(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">degrees</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;from,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;to)</code></th>
 <td class="colLast">
-<div class="block">Gets the angle in degrees to go between two Coords; 0 is up.</div>
+<div class="block">Gets the angle in degrees to go between two Coords.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -6153,6 +6446,12 @@ double&nbsp;brightnessThreshold)</code></th>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">TwistedLine.</span><code><span class="memberNameLink"><a href="../TwistedLine.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">WobblyLine.</span><code><span class="memberNameLink"><a href="../WobblyLine.html#line(squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,int)">line</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
@@ -6162,7 +6461,7 @@ int&nbsp;height)</code></th>
 <div class="block">Draws a line from start to end using the Drunkard's Walk algorithm.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">DDALine.</span><code><span class="memberNameLink"><a href="../DDALine.html#line_(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line_</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
@@ -6170,7 +6469,7 @@ int&nbsp;height)</code></th>
 <div class="block">Draws a line from start to end using the DDA algorithm.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../OrthoLine.html#line_(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line_</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code></th>
@@ -6178,7 +6477,7 @@ int&nbsp;height)</code></th>
 <div class="block">Draws a line from start to end using only N/S/E/W movement.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/Queue.html?is-external=true" title="class or interface in java.util" class="externalLink">Queue</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../Bresenham.html#line2D(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line2D</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;a,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;b)</code></th>
@@ -6186,7 +6485,7 @@ int&nbsp;height)</code></th>
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Bresenham.</span><code><span class="memberNameLink"><a href="../Bresenham.html#line2D_(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">line2D_</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;a,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;b)</code></th>
@@ -6194,7 +6493,7 @@ int&nbsp;height)</code></th>
 <div class="block">Generates a 2D Bresenham line between two points.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static char[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../OrthoLine.html#lineChars(squidpony.squidmath.Coord%5B%5D)">lineChars</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;line)</code></th>
 <td class="colLast">
@@ -6203,7 +6502,7 @@ int&nbsp;height)</code></th>
  given line.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../Coord.html#multiply(squidpony.squidmath.Coord)">multiply</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code></th>
 <td class="colLast">
@@ -6211,21 +6510,21 @@ int&nbsp;height)</code></th>
  "product."</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static short[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../CoordPacker.html#packOne(squidpony.squidmath.Coord)">packOne</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">Returns a new packed short[] containing the Coord point as "on", and all other cells "off".</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static short[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../CoordPacker.html#packSeveral(squidpony.squidmath.Coord...)">packSeveral</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code></th>
 <td class="colLast">
 <div class="block">Returns a new packed short[] containing the Coords in points as "on" cells, and all other cells "off"</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../AStarSearch.html#path(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">path</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
@@ -6233,7 +6532,7 @@ int&nbsp;height)</code></th>
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#randomUnblockedTile(squidpony.squidmath.Coord,squidpony.squidmath.Coord,char%5B%5D%5B%5D,squidpony.squidmath.IRNG,java.util.HashSet)">randomUnblockedTile</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -6244,23 +6543,23 @@ char[][]&nbsp;map,
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has any value not in blocking.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#remove(squidpony.squidmath.Coord)">remove</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#removeCircle(squidpony.squidmath.Coord,int)">removeCircle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
 int&nbsp;radius)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#removeSeveral(squidpony.squidmath.Coord...)">removeSeveral</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static short[]</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../CoordPacker.html#removeSeveralPacked(short%5B%5D,squidpony.squidmath.Coord...)">removeSeveralPacked</a></span>&#8203;(short[]&nbsp;original,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code></th>
@@ -6270,7 +6569,7 @@ int&nbsp;radius)</code></th>
  in points, and encodes "off" for cells that were "off" in original and are a cell points refers to.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleCircle(squidpony.squidmath.Coord,float,float,int,int)">sampleCircle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
 float&nbsp;radius,
@@ -6282,7 +6581,7 @@ int&nbsp;maxY)</code></th>
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleCircle(squidpony.squidmath.Coord,float,float,int,int,int,squidpony.squidmath.IRNG)">sampleCircle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
 float&nbsp;radius,
@@ -6296,7 +6595,7 @@ int&nbsp;pointsPerIteration,
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleMap(squidpony.squidmath.Coord,squidpony.squidmath.Coord,char%5B%5D%5B%5D,float,squidpony.squidmath.IRNG,java.lang.Character...)">sampleMap</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -6306,7 +6605,7 @@ float&nbsp;minimumDistance,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>...&nbsp;blocking)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleRectangle(squidpony.squidmath.Coord,squidpony.squidmath.Coord,float,int,int)">sampleRectangle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -6318,7 +6617,7 @@ int&nbsp;maxY)</code></th>
  maxPosition, but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../PoissonDisk.html#sampleRectangle(squidpony.squidmath.Coord,squidpony.squidmath.Coord,float,int,int,int,squidpony.squidmath.IRNG)">sampleRectangle</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -6332,7 +6631,7 @@ int&nbsp;pointsPerIteration,
  maxPosition, but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#set(boolean,squidpony.squidmath.Coord)">set</a></span>&#8203;(boolean&nbsp;value,
 <a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code></th>
@@ -6340,14 +6639,14 @@ int&nbsp;pointsPerIteration,
 <div class="block">Sets the cell at point to on if value is true or off if value is false.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Region.</span><code><span class="memberNameLink"><a href="../Region.html#setCoords(squidpony.squidmath.Coord...)">setCoords</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;coords)</code></th>
 <td class="colLast">
 <div class="block">Changes this Region to include the given Coords and disregard its previous contents.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../Coord.html#subtract(squidpony.squidmath.Coord)">subtract</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code></th>
 <td class="colLast">
@@ -6355,15 +6654,15 @@ int&nbsp;pointsPerIteration,
  "difference."</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../Coord.html#toGoTo(squidpony.squidmath.Coord)">toGoTo</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;adjacent)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../Coord.html#toGoTo(squidpony.squidmath.Coord)">toGoTo</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
 <td class="colLast">
-<div class="block">Precondition: <code>this</code> is <a href="../Coord.html#isAdjacent(squidpony.squidmath.Coord)"><code>adjacent</code></a> to
- <code>adjacent</code>.</div>
+<div class="block">Gets the <a href="../../squidgrid/Direction.html" title="enum in squidpony.squidgrid"><code>Direction</code></a> needed to get to <code>target</code> from this; typically this is more useful when target
+ and this are adjacent (by <a href="../Coord.html#isAdjacent(squidpony.squidmath.Coord)"><code>isAdjacent(Coord)</code></a>) since that should make it possible to go to target.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../GreasedRegion.html#translate(squidpony.squidmath.Coord)">translate</a></span>&#8203;(<a href="../Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code></th>
 <td class="colLast">

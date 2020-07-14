@@ -154,39 +154,30 @@
 <span class="sourceLineNo">142</span><a id="line.142"></a>
 <span class="sourceLineNo">143</span><a id="line.143">    /**</a>
 <span class="sourceLineNo">144</span><a id="line.144">     * Return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">145</span><a id="line.145">     * &lt;br&gt;Note that this function will return 1 when the argument is 0.</a>
-<span class="sourceLineNo">146</span><a id="line.146">     *</a>
-<span class="sourceLineNo">147</span><a id="line.147">     * @param x an integer smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt;.</a>
-<span class="sourceLineNo">148</span><a id="line.148">     * @return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">149</span><a id="line.149">     */</a>
-<span class="sourceLineNo">150</span><a id="line.150">    public static int nextPowerOfTwo(int x) {</a>
-<span class="sourceLineNo">151</span><a id="line.151">        if (x == 0) return 1;</a>
-<span class="sourceLineNo">152</span><a id="line.152">        x--;</a>
-<span class="sourceLineNo">153</span><a id="line.153">        x |= x &gt;&gt; 1;</a>
-<span class="sourceLineNo">154</span><a id="line.154">        x |= x &gt;&gt; 2;</a>
-<span class="sourceLineNo">155</span><a id="line.155">        x |= x &gt;&gt; 4;</a>
-<span class="sourceLineNo">156</span><a id="line.156">        x |= x &gt;&gt; 8;</a>
-<span class="sourceLineNo">157</span><a id="line.157">        return (x | x &gt;&gt; 16) + 1;</a>
-<span class="sourceLineNo">158</span><a id="line.158">    }</a>
-<span class="sourceLineNo">159</span><a id="line.159"></a>
-<span class="sourceLineNo">160</span><a id="line.160">    /**</a>
-<span class="sourceLineNo">161</span><a id="line.161">     * Return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">162</span><a id="line.162">     * &lt;br&gt;Note that this function will return 1 when the argument is 0.</a>
-<span class="sourceLineNo">163</span><a id="line.163">     *</a>
-<span class="sourceLineNo">164</span><a id="line.164">     * @param x a long smaller than or equal to 2&lt;sup&gt;62&lt;/sup&gt;.</a>
-<span class="sourceLineNo">165</span><a id="line.165">     * @return the least power of two greater than or equal to the specified value.</a>
-<span class="sourceLineNo">166</span><a id="line.166">     */</a>
-<span class="sourceLineNo">167</span><a id="line.167">    public static long nextPowerOfTwo(long x) {</a>
-<span class="sourceLineNo">168</span><a id="line.168">        if (x == 0) return 1;</a>
-<span class="sourceLineNo">169</span><a id="line.169">        x--;</a>
-<span class="sourceLineNo">170</span><a id="line.170">        x |= x &gt;&gt; 1;</a>
-<span class="sourceLineNo">171</span><a id="line.171">        x |= x &gt;&gt; 2;</a>
-<span class="sourceLineNo">172</span><a id="line.172">        x |= x &gt;&gt; 4;</a>
-<span class="sourceLineNo">173</span><a id="line.173">        x |= x &gt;&gt; 8;</a>
-<span class="sourceLineNo">174</span><a id="line.174">        x |= x &gt;&gt; 16;</a>
-<span class="sourceLineNo">175</span><a id="line.175">        return (x | x &gt;&gt; 32) + 1;</a>
-<span class="sourceLineNo">176</span><a id="line.176">    }</a>
-<span class="sourceLineNo">177</span><a id="line.177">}</a>
+<span class="sourceLineNo">145</span><a id="line.145">     * &lt;br&gt;</a>
+<span class="sourceLineNo">146</span><a id="line.146">     * Note that this function will return 1 when the argument is 0.</a>
+<span class="sourceLineNo">147</span><a id="line.147">     * &lt;br&gt;</a>
+<span class="sourceLineNo">148</span><a id="line.148">     * This is a cleaned-up Java version of &lt;a href="https://jameshfisher.com/2018/03/30/round-up-power-2/"&gt;this C code&lt;/a&gt;.</a>
+<span class="sourceLineNo">149</span><a id="line.149">     * @param x a non-negative int.</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * @return the least power of two greater than or equal to the specified value.</a>
+<span class="sourceLineNo">151</span><a id="line.151">     */</a>
+<span class="sourceLineNo">152</span><a id="line.152">    public static int nextPowerOfTwo(final int x) {</a>
+<span class="sourceLineNo">153</span><a id="line.153">        return 1 &lt;&lt; -Integer.numberOfLeadingZeros(x - 1);</a>
+<span class="sourceLineNo">154</span><a id="line.154">    }</a>
+<span class="sourceLineNo">155</span><a id="line.155"></a>
+<span class="sourceLineNo">156</span><a id="line.156">    /**</a>
+<span class="sourceLineNo">157</span><a id="line.157">     * Return the least power of two greater than or equal to the specified value.</a>
+<span class="sourceLineNo">158</span><a id="line.158">     * &lt;br&gt;</a>
+<span class="sourceLineNo">159</span><a id="line.159">     * Note that this function will return 1 when the argument is 0.</a>
+<span class="sourceLineNo">160</span><a id="line.160">     * &lt;br&gt;</a>
+<span class="sourceLineNo">161</span><a id="line.161">     * This is a cleaned-up Java version of &lt;a href="https://jameshfisher.com/2018/03/30/round-up-power-2/"&gt;this C code&lt;/a&gt;.</a>
+<span class="sourceLineNo">162</span><a id="line.162">     * @param x a non-negative long.</a>
+<span class="sourceLineNo">163</span><a id="line.163">     * @return the least power of two greater than or equal to the specified value.</a>
+<span class="sourceLineNo">164</span><a id="line.164">     */</a>
+<span class="sourceLineNo">165</span><a id="line.165">    public static long nextPowerOfTwo(final long x) {</a>
+<span class="sourceLineNo">166</span><a id="line.166">        return 1L &lt;&lt; -Long.numberOfLeadingZeros(x - 1);</a>
+<span class="sourceLineNo">167</span><a id="line.167">    }</a>
+<span class="sourceLineNo">168</span><a id="line.168">}</a>
 
 
 

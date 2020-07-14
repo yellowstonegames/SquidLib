@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony">squidpony</a></th>
 <td class="colLast">
-<div class="block">Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.</div>
+<div class="block">Utilities that don't fit elsewhere in SquidLib; mostly text manipulation, compression, and helper code.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -87,8 +87,10 @@ loadScripts(document, 'script');</script>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="#squidpony.squidai.astar">squidpony.squidai.astar</a></th>
-<td class="colLast">&nbsp;</td>
+<th class="colFirst" scope="row"><a href="#squidpony.squidai.graph">squidpony.squidai.graph</a></th>
+<td class="colLast">
+<div class="block">Graphs and graph algorithms used primarily (but not exclusively) for pathfinding.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></th>
@@ -99,7 +101,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.iterator">squidpony.squidgrid.iterator</a></th>
 <td class="colLast">
-<div class="block">Iterators that allow traversal of squidpony.squidmath.Coord points on a map's grid.</div>
+<div class="block">Iterators that allow traversal of <a href="Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> points on a map's grid.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -111,17 +113,19 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.mapping.styled">squidpony.squidgrid.mapping.styled</a></th>
 <td class="colLast">
-<div class="block">Support code for working with tiled dungeon generation; normally only TilesetType is used outside SquidLib.</div>
+<div class="block">Support code for working with tiled dungeon generation; normally only <a href="../squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled"><code>TilesetType</code></a> is used outside SquidLib.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.zone">squidpony.squidgrid.zone</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Ways to represent different types of areas in 2D space; not recommended, most new code uses <a href="GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a>.</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidmath">squidpony.squidmath</a></th>
 <td class="colLast">
-<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+<div class="block">A very broad package containing random number generators, geometry tools, data structures, and noise functions.</div>
 </td>
 </tr>
 </tbody>
@@ -371,12 +375,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li class="blockList">
-<section class="detail"><a id="squidpony.squidai.astar">
+<section class="detail"><a id="squidpony.squidai.graph">
 <!--   -->
 </a>
 <div class="useSummary">
 <table>
-<caption><span>Classes in <a href="package-summary.html">squidpony.squidmath</a> used by <a href="../squidai/astar/package-summary.html">squidpony.squidai.astar</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Classes in <a href="package-summary.html">squidpony.squidmath</a> used by <a href="../squidai/graph/package-summary.html">squidpony.squidai.graph</a></span><span class="tabEnd">&nbsp;</span></caption>
 <thead>
 <tr>
 <th class="colFirst" scope="col">Class</th>
@@ -385,21 +389,23 @@ loadScripts(document, 'script');</script>
 </thead>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="class-use/Arrangement.html#squidpony.squidai.astar">Arrangement</a></th>
+<th class="colFirst" scope="row"><a href="class-use/BinaryHeap.Node.html#squidpony.squidai.graph">BinaryHeap.Node</a></th>
 <td class="colLast">
-<div class="block">A bi-directional mapping of objects to positions in an ordering (which this generates), and vice versa.</div>
+<div class="block">A binary heap node.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colFirst" scope="row"><a href="class-use/BinaryHeap.html#squidpony.squidai.astar">BinaryHeap</a></th>
+<th class="colFirst" scope="row"><a href="class-use/Coord.html#squidpony.squidai.graph">Coord</a></th>
 <td class="colLast">
-<div class="block">A binary heap that stores nodes which each have a double value and are sorted either lowest first or highest first.</div>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="class-use/Coord.html#squidpony.squidai.astar">Coord</a></th>
+<th class="colFirst" scope="row"><a href="class-use/OrderedMap.html#squidpony.squidai.graph">OrderedMap</a></th>
 <td class="colLast">
-<div class="block">A 2D coordinate with (constant) x and y fields.</div>
+<div class="block">A generic insertion-ordered hash map with with a fast implementation, originally from fastutil as
+ Object2ObjectLinkedOpenHashMap but modified to support constant-time indexed access of keys, values, and entries,
+ reordering, and optional hash strategies for unusual keys, such as arrays or usually-dense numeric values.</div>
 </td>
 </tr>
 </tbody>
@@ -749,7 +755,7 @@ loadScripts(document, 'script');</script>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="class-use/AStarSearch.html#squidpony.squidmath">AStarSearch</a></th>
 <td class="colLast">
-<div class="block">Performs A* search.</div>
+<div class="block">Performs A* search to find the shortest path between two Coord points.</div>
 </td>
 </tr>
 <tr class="altColor">

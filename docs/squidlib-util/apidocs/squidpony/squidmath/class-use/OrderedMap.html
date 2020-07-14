@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony">squidpony</a></th>
 <td class="colLast">
-<div class="block">Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.</div>
+<div class="block">Utilities that don't fit elsewhere in SquidLib; mostly text manipulation, compression, and helper code.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -87,21 +87,27 @@ loadScripts(document, 'script');</script>
 </td>
 </tr>
 <tr class="altColor">
+<th class="colFirst" scope="row"><a href="#squidpony.squidai.graph">squidpony.squidai.graph</a></th>
+<td class="colLast">
+<div class="block">Graphs and graph algorithms used primarily (but not exclusively) for pathfinding.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></th>
 <td class="colLast">
 <div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></th>
 <td class="colLast">
 <div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidmath">squidpony.squidmath</a></th>
 <td class="colLast">
-<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+<div class="block">A very broad package containing random number generators, geometry tools, data structures, and noise functions.</div>
 </td>
 </tr>
 </tbody>
@@ -544,6 +550,37 @@ double&nbsp;cutoff)</code></th>
 <div class="block">Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
  representing which targets (by their location) are effected by choosing that Coord.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
+<li class="blockList">
+<section class="detail"><a id="squidpony.squidai.graph">
+<!--   -->
+</a>
+<h2>Uses of <a href="../OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a> in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a></h2>
+<div class="useSummary">
+<table>
+<caption><span>Fields in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a> declared as <a href="../OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></span><span class="tabEnd">&nbsp;</span></caption>
+<thead>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidai/graph/Connection.html" title="class in squidpony.squidai.graph">Connection</a>&lt;<a href="../../squidai/graph/Graph.html" title="type parameter in Graph">V</a>&gt;,&#8203;<a href="../../squidai/graph/Connection.html" title="class in squidpony.squidai.graph">Connection</a>&lt;<a href="../../squidai/graph/Graph.html" title="type parameter in Graph">V</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Graph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/Graph.html#edgeMap">edgeMap</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidai/graph/Graph.html" title="type parameter in Graph">V</a>,&#8203;<a href="../../squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a>&lt;<a href="../../squidai/graph/Graph.html" title="type parameter in Graph">V</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Graph.</span><code><span class="memberNameLink"><a href="../../squidai/graph/Graph.html#vertexMap">vertexMap</a></span></code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
 </table>

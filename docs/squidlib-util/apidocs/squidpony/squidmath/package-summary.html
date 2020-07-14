@@ -67,7 +67,7 @@ loadScripts(document, 'script');</script>
 <section class="packageDescription"><a id="package.description">
 <!--   -->
 </a>
-<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+<div class="block">A very broad package containing random number generators, geometry tools, data structures, and noise functions.</div>
 </section>
 <section class="summary">
 <ul class="blockList">
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></th>
 <td class="colLast">
-<div class="block">Performs A* search.</div>
+<div class="block">Performs A* search to find the shortest path between two Coord points.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1231,12 +1231,19 @@ loadScripts(document, 'script');</script>
 </td>
 </tr>
 <tr class="rowColor">
+<th class="colFirst" scope="row"><a href="TwistedLine.html" title="class in squidpony.squidmath">TwistedLine</a></th>
+<td class="colLast">
+<div class="block">Like <a href="WobblyLine.html" title="class in squidpony.squidmath"><code>WobblyLine</code></a>, this generates orthogonally-connected paths of <a href="Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> that meander through an area;
+ unlike WobblyLine, this won't ever generate paths that cross themselves.</div>
+</td>
+</tr>
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;K,&#8203;V&gt;</th>
 <td class="colLast">
 <div class="block">A generic unordered hash map; generally prefer <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/HashMap.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>HashMap</code></a> unless you need array keys.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;K&gt;</th>
 <td class="colLast">
 <div class="block">A generic unordered hash set with with a fast implementation, based on <a href="OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> in this library, which is
@@ -1244,37 +1251,37 @@ loadScripts(document, 'script');</script>
  potentially reduce the time cost of insertion and removal at the expense of increasing time cost for access by index.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></th>
 <td class="colLast">
 <div class="block">A low-quality continuous noise generator with strong grid artifacts, this is nonetheless useful as a building block.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></th>
 <td class="colLast">
 <div class="block">A quasi-random number generator that goes through one of many sub-random sequences found by J.G.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="Voronoi.html" title="class in squidpony.squidmath">Voronoi</a></th>
 <td class="colLast">
 <div class="block">A Java implementation of both a 2D Delaunay triangulation algorithm and a Voronoi polygon data structure.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="Voronoi.Edge.html" title="class in squidpony.squidmath">Voronoi.Edge</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="Voronoi.Polygon.html" title="class in squidpony.squidmath">Voronoi.Polygon</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="WeightedTable.html" title="class in squidpony.squidmath">WeightedTable</a></th>
 <td class="colLast">
 <div class="block">A different approach to the same task <a href="ProbabilityTable.html" title="class in squidpony.squidmath"><code>ProbabilityTable</code></a> solves, though this only looks up an appropriate index
@@ -1282,32 +1289,32 @@ loadScripts(document, 'script');</script>
  simplicity.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></th>
 <td class="colLast">
 <div class="block">A Noise class that's here for compatibility; it extends <a href="SeededNoise.html" title="class in squidpony.squidmath"><code>SeededNoise</code></a> and delegates to it for all methods
  except <a href="WhirlingNoise.html#noiseAlt(double,double)"><code>WhirlingNoise.noiseAlt(double, double)</code></a> and <a href="WhirlingNoise.html#noiseAlt(double,double,double)"><code>WhirlingNoise.noiseAlt(double, double, double)</code></a>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="WhiteNoise.html" title="class in squidpony.squidmath">WhiteNoise</a></th>
 <td class="colLast">
 <div class="block">Performance-oriented white noise generator for 1D, 2D, 3D, 4D, and 6D.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="WobblyLine.html" title="class in squidpony.squidmath">WobblyLine</a></th>
 <td class="colLast">
-<div class="block">A drunkard's-walk-like algorithm for line drawing "wobbly" paths.</div>
+<div class="block">A drunkard's-walk-like algorithm for line-drawing "wobbly" paths.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="XoRoRNG.html" title="class in squidpony.squidmath">XoRoRNG</a></th>
 <td class="colLast">
 <div class="block">A port of Blackman and Vigna's xoroshiro128+ generator; should be very fast and produce medium-quality output.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></th>
 <td class="colLast">
 <div class="block">A modification of Blackman and Vigna's xoshiro128 generator with a different "scrambler" than the default; this

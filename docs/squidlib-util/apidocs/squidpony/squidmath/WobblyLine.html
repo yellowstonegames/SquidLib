@@ -92,16 +92,22 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="description">
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.18">WobblyLine</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.24">WobblyLine</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">A drunkard's-walk-like algorithm for line drawing "wobbly" paths.
+<div class="block">A drunkard's-walk-like algorithm for line-drawing "wobbly" paths.
+ This produces lines as <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>ArrayList</code></a> of <a href="Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a>, where Coords that are adjacent in the ArrayList are
+ guaranteed to be orthogonally adjacent, but the path as a whole is not guaranteed to have all unique Coords (that is,
+ the line may cross over its previous path). If you don't want the line to cross itself, you can use
+ <a href="TwistedLine.html" title="class in squidpony.squidmath"><code>TwistedLine</code></a>, though the API is different.
+ <br>
  The line() methods here use an IRNG (and will make their own if they don't take one as a parameter) to make a choice
  between orthogonal directions to travel in. Because they can go around the target instead of straight to it, they
  also need a width and height for the map so they don't wander over the edge. You can also pass a weight to one of the
  line() methods, which affects how straight the wobbly path will be (1.0 being just about perfectly straight, 0.5
- being very chaotic, and less than 0.5 being almost unrecognizable as a path).
+ being very chaotic, and less than 0.5 being almost unrecognizable as a path). Lower weights make the case where the
+ path crosses itself more likely.
  <br>
- Based on Michael Patraw's C code, used for cave carving in his map generator. http://mpatraw.github.io/libdrunkard/
+ Based on Michael Patraw's C code, used for cave carving in his map generator. https://github.com/mpatraw/butterfly
  Created by Tommy Ettinger on 1/10/2016.</div>
 </section>
 <section class="summary">
@@ -185,7 +191,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="line(int,int,int,int,int,int)">line</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.33">line</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.39">line</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
 int&nbsp;startY,
 int&nbsp;endX,
 int&nbsp;endY,
@@ -211,7 +217,7 @@ int&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="line(int,int,int,int,int,int,double,squidpony.squidmath.IRNG)">line</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.49">line</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.55">line</a></span>&#8203;(<span class="arguments">int&nbsp;startX,
 int&nbsp;startY,
 int&nbsp;endX,
 int&nbsp;endY,
@@ -239,7 +245,7 @@ double&nbsp;weight,
 <li class="blockList">
 <section class="detail">
 <h3><a id="line(squidpony.squidmath.Coord,squidpony.squidmath.Coord,int,int)">line</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.160">line</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/WobblyLine.html#line.166">line</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
 int&nbsp;width,
 int&nbsp;height)</span></div>

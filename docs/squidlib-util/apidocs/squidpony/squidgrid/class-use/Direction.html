@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidgrid.iterator">squidpony.squidgrid.iterator</a></th>
 <td class="colLast">
-<div class="block">Iterators that allow traversal of squidpony.squidmath.Coord points on a map's grid.</div>
+<div class="block">Iterators that allow traversal of <a href="../../squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> points on a map's grid.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -95,7 +95,7 @@ loadScripts(document, 'script');</script>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidmath">squidpony.squidmath</a></th>
 <td class="colLast">
-<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+<div class="block">A very broad package containing random number generators, geometry tools, data structures, and noise functions.</div>
 </td>
 </tr>
 </tbody>
@@ -414,10 +414,10 @@ int&nbsp;height)</code></th>
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../squidmath/Coord.html#toGoTo(squidpony.squidmath.Coord)">toGoTo</a></span>&#8203;(<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;adjacent)</code></th>
+<th class="colSecond" scope="row"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../squidmath/Coord.html#toGoTo(squidpony.squidmath.Coord)">toGoTo</a></span>&#8203;(<a href="../../squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code></th>
 <td class="colLast">
-<div class="block">Precondition: <code>this</code> is <a href="../../squidmath/Coord.html#isAdjacent(squidpony.squidmath.Coord)"><code>adjacent</code></a> to
- <code>adjacent</code>.</div>
+<div class="block">Gets the <a href="../Direction.html" title="enum in squidpony.squidgrid"><code>Direction</code></a> needed to get to <code>target</code> from this; typically this is more useful when target
+ and this are adjacent (by <a href="../../squidmath/Coord.html#isAdjacent(squidpony.squidmath.Coord)"><code>Coord.isAdjacent(Coord)</code></a>) since that should make it possible to go to target.</div>
 </td>
 </tr>
 </tbody>

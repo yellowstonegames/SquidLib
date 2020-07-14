@@ -2,7 +2,7 @@ squidpony
 squidpony.annotation
 squidpony.panel
 squidpony.squidai
-squidpony.squidai.astar
+squidpony.squidai.graph
 squidpony.squidgrid
 squidpony.squidgrid.iterator
 squidpony.squidgrid.mapping

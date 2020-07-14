@@ -68,6 +68,10 @@ loadScripts(document, 'script');</script>
 </a>
 <h2 class="title">I</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#i">i</a></span> - Variable in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
+<dd>
+<div class="block">Internal; a utility field used to store depth in some algorithms.</div>
+</dd>
 <dt><a href="../squidpony/IColorCenter.html" title="interface in squidpony"><span class="typeNameLink">IColorCenter</span></a>&lt;<a href="../squidpony/IColorCenter.html" title="type parameter in IColorCenter">T</a>&gt; - Interface in <a href="../squidpony/package-summary.html">squidpony</a></dt>
 <dd>
 <div class="block">How to manage colors, making sure that a color is allocated at most once.</div>
@@ -162,6 +166,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Iterates through identity keys in insertion order.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#idHash">idHash</a></span> - Variable in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/IDistribution.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IDistribution</span></a> - Interface in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">A way to take an <a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a> and get one or more random numbers from it to produce a double in some statistical
@@ -331,13 +337,25 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Initializes this IsaacRNG; typically used from the constructor but can be called externally.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#init(char%5B%5D%5B%5D,boolean)">init(char[][], boolean)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#init(char%5B%5D%5B%5D)">init(char[][])</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
 <dd>
-<div class="block">Initializes or resets the nodes this knows about and their connections to their neighbors.</div>
+<div class="block">Re-initializes a DefaultGraph from a 2D char array that uses <code>'#'</code> to represent any kind of inaccessible
+ cell, with all other chars treated as walkable.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#init(double%5B%5D%5B%5D,boolean)">init(double[][], boolean)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#init(char%5B%5D%5B%5D,boolean)">init(char[][], boolean)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
 <dd>
-<div class="block">Initializes or resets the nodes this knows about and their connections to their neighbors.</div>
+<div class="block">Re-initializes this DefaultGraph from a 2D char array that uses <code>'#'</code> to represent any kind of inaccessible
+ cell, with all other chars treated as walkable.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#init(double%5B%5D%5B%5D)">init(double[][])</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Re-initializes this DefaultGraph from a 2D double array that uses negative numbers to represent any kind of
+ inaccessible cell, with all other numbers treated as possible to enter for a cost equal to that double.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#init(double%5B%5D%5B%5D,boolean)">init(double[][], boolean)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Re-initializes this DefaultGraph from a 2D double array that uses negative numbers to represent any kind of
+ inaccessible cell, with all other numbers treated as possible to enter for a cost equal to that double.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IsaacRNG.html#init(long)">init(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath">IsaacRNG</a></dt>
 <dd>
@@ -491,8 +509,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Initializes a substance array that can be given to other static methods.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#initSearch(N,N,squidpony.squidai.astar.Heuristic)">initSearch(N, N, Heuristic&lt;N&gt;)</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel(char%5B%5D%5B%5D,int,int)">inLevel(char[][], int, int)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#inLevel(char%5B%5D%5B%5D,squidpony.squidmath.Coord)">inLevel(char[][], Coord)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
@@ -1226,6 +1242,12 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Direction.html#isCardinal()">isCardinal()</a></span> - Method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Direction.html#isDiagonal()">isDiagonal()</a></span> - Method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#isDirected()">isDirected()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>
+<div class="block">Check if the graph is directed, that is whether the edges form an ordered pair or a set.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/UndirectedGraph.html#isDirected()">isDirected()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/UndirectedGraph.html" title="class in squidpony.squidai.graph">UndirectedGraph</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/IColoredString.Impl.html#isEmpty()">isEmpty()</a></span> - Method in class squidpony.panel.<a href="../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a></dt>
 <dd>&nbsp;</dd>

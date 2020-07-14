@@ -374,48 +374,30 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A FastNoise that has a higher frequency than that class defaults to, which is useful for maps here.</div>
 </dd>
-<dt><a href="../squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar"><span class="typeNameLink">DefaultConnection</span></a>&lt;<a href="../squidpony/squidai/astar/DefaultConnection.html" title="type parameter in DefaultConnection">N</a>&gt; - Class in <a href="../squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a></dt>
-<dd>
-<div class="block">A <code>DefaultConnection</code> is a <a href="../squidpony/squidai/astar/Connection.html" title="interface in squidpony.squidai.astar"><code>Connection</code></a> whose cost is 1.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultConnection.html#%3Cinit%3E(N,N)">DefaultConnection(N, N)</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Connection.html#DEFAULT_WEIGHT">DEFAULT_WEIGHT</a></span> - Static variable in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Connection.html" title="class in squidpony.squidai.graph">Connection</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/tileset/DefaultDungeon.html" title="class in squidpony.tileset"><span class="typeNameLink">DefaultDungeon</span></a> - Class in <a href="../squidpony/tileset/package-summary.html">squidpony.tileset</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/tileset/DefaultDungeon.html#%3Cinit%3E()">DefaultDungeon()</a></span> - Constructor for class squidpony.tileset.<a href="../squidpony/tileset/DefaultDungeon.html" title="class in squidpony.tileset">DefaultDungeon</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar"><span class="typeNameLink">DefaultGraph</span></a> - Class in <a href="../squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a></dt>
+<dt><a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph"><span class="typeNameLink">DefaultGraph</span></a> - Class in <a href="../squidpony/squidai/graph/package-summary.html">squidpony.squidai.graph</a></dt>
 <dd>
-<div class="block">A convenient implementation of <a href="../squidpony/squidai/astar/Graph.html" title="interface in squidpony.squidai.astar"><code>Graph</code></a> for <a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> nodes; this also allows constructing a Graph with a
- 2D char array like those produced all over SquidLib.</div>
+<div class="block">A default setting for an <a href="../squidpony/squidai/graph/UndirectedGraph.html" title="class in squidpony.squidai.graph"><code>UndirectedGraph</code></a> of Coord vertices where all connections have cost 1.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#%3Cinit%3E()">DefaultGraph()</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#%3Cinit%3E()">DefaultGraph()</a></span> - Constructor for class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
 <dd>
-<div class="block">Creates an empty DefaultGraph with capacity 16; you must call <a href="../squidpony/squidai/astar/DefaultGraph.html#init(char%5B%5D%5B%5D,boolean)"><code>DefaultGraph.init(char[][], boolean)</code></a> or
- otherwise manually initialize this DefaultGraph before using it.</div>
+<div class="block">No-op no-arg constructor, present for <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>Serializable</code></a>; if you use this you must call <a href="../squidpony/squidai/graph/DefaultGraph.html#init(char%5B%5D%5B%5D)"><code>DefaultGraph.init(char[][])</code></a>
+ or <a href="../squidpony/squidai/graph/DefaultGraph.html#init(char%5B%5D%5B%5D,boolean)"><code>DefaultGraph.init(char[][], boolean)</code></a> before using the DefaultGraph.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#%3Cinit%3E(char%5B%5D%5B%5D)">DefaultGraph(char[][])</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#%3Cinit%3E(char%5B%5D%5B%5D)">DefaultGraph(char[][])</a></span> - Constructor for class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
 <dd>
-<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="../squidpony/squidai/astar/DefaultGraph.html#init(char%5B%5D%5B%5D,boolean)"><code>DefaultGraph.init(char[][], boolean)</code></a>, with eightWay set
- to false (only orthogonal neighbors will be connected).</div>
+<div class="block">Builds a DefaultGraph from a 2D char array that uses <code>'#'</code> to represent any kind of inaccessible cell, with
+ all other chars treated as walkable.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#%3Cinit%3E(char%5B%5D%5B%5D,boolean)">DefaultGraph(char[][], boolean)</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#%3Cinit%3E(char%5B%5D%5B%5D,boolean)">DefaultGraph(char[][], boolean)</a></span> - Constructor for class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
 <dd>
-<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="../squidpony/squidai/astar/DefaultGraph.html#init(char%5B%5D%5B%5D,boolean)"><code>DefaultGraph.init(char[][], boolean)</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#%3Cinit%3E(double%5B%5D%5B%5D)">DefaultGraph(double[][])</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
-<dd>
-<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="../squidpony/squidai/astar/DefaultGraph.html#init(double%5B%5D%5B%5D,boolean)"><code>DefaultGraph.init(double[][], boolean)</code></a>, with eightWay set
- to false (only orthogonal neighbors will be connected).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#%3Cinit%3E(double%5B%5D%5B%5D,boolean)">DefaultGraph(double[][], boolean)</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
-<dd>
-<div class="block">Creates a DefaultGraph and immediately initializes it using <a href="../squidpony/squidai/astar/DefaultGraph.html#init(double%5B%5D%5B%5D,boolean)"><code>DefaultGraph.init(double[][], boolean)</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#%3Cinit%3E(int)">DefaultGraph(int)</a></span> - Constructor for class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
-<dd>
-<div class="block">Creates an empty DefaultGraph with the given minimum capacity; you must call <a href="../squidpony/squidai/astar/DefaultGraph.html#init(char%5B%5D%5B%5D,boolean)"><code>DefaultGraph.init(char[][], boolean)</code></a> or
- otherwise manually initialize this DefaultGraph before using it.</div>
+<div class="block">Builds a DefaultGraph from a 2D char array that uses <code>'#'</code> to represent any kind of inaccessible cell, with
+ all other chars treated as walkable.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.html#defaultHasher">defaultHasher</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.html" title="class in squidpony.squidmath">CrossHash</a></dt>
 <dd>&nbsp;</dd>
@@ -483,7 +465,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#degrees(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">degrees(Coord, Coord)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>
-<div class="block">Gets the angle in degrees to go between two Coords; 0 is up.</div>
+<div class="block">Gets the angle in degrees to go between two Coords.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/DelaunayTriangulator.html" title="class in squidpony.squidmath"><span class="typeNameLink">DelaunayTriangulator</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
@@ -539,6 +521,30 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#DEPTH">DEPTH</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#depthFirstSearch(squidpony.squidmath.Coord)">depthFirstSearch(Coord)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#depthFirstSearch(squidpony.squidmath.Coord)">depthFirstSearch(Coord)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#depthFirstSearch(squidpony.squidmath.Coord,int,int)">depthFirstSearch(Coord, int, int)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#depthFirstSearch(squidpony.squidmath.Coord,int,int)">depthFirstSearch(Coord, int, int)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Algorithms.html#depthFirstSearch(V)">depthFirstSearch(V)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph">Algorithms</a></dt>
+<dd>
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Algorithms.html#depthFirstSearch(V,int,int)">depthFirstSearch(V, int, int)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph">Algorithms</a></dt>
+<dd>
+<div class="block">Perform a depth first search starting from the specified vertex.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#depths">depths</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>
 <div class="block">Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.</div>
@@ -613,6 +619,18 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/DetailedMimic.html#%3Cinit%3E(squidpony.squidgrid.AestheticDifference,squidpony.squidmath.IRNG)">DetailedMimic(AestheticDifference, IRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid">DetailedMimic</a></dt>
 <dd>
 <div class="block">Constructor that uses the given RNG and the given AestheticDifference.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Algorithms.html#detectCycle()">detectCycle()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph">Algorithms</a></dt>
+<dd>
+<div class="block">Checks whether there are any cycles in the graph using depth first searches.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#detectCycle()">detectCycle()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Checks whether there are any cycles in the graph using depth first searches.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#detectCycle()">detectCycle()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Checks whether there are any cycles in the graph using depth first searches.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#deteriorate(squidpony.squidmath.RandomnessSource,double)">deteriorate(RandomnessSource, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
@@ -945,7 +963,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Full space search.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultGraph.html#DIJKSTRA">DIJKSTRA</a></span> - Static variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Heuristic.html#DIJKSTRA">DIJKSTRA</a></span> - Static variable in interface squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Heuristic.html" title="interface in squidpony.squidai.graph">Heuristic</a></dt>
 <dd>
 <div class="block">A predefined Heuristic for Coord nodes in a 2D plane where the heuristic is not used, and all cells are
  considered equivalent regardless of actual distance.</div>
@@ -1010,6 +1028,21 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PhantomNoise.html#dim">dim</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/PhantomNoise.html" title="class in squidpony.squidmath">PhantomNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Connection.DirectedConnection.html#%3Cinit%3E()">DirectedConnection()</a></span> - Constructor for class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Connection.DirectedConnection.html" title="class in squidpony.squidai.graph">Connection.DirectedConnection</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidai/graph/DirectedGraph.html" title="class in squidpony.squidai.graph"><span class="typeNameLink">DirectedGraph</span></a>&lt;<a href="../squidpony/squidai/graph/DirectedGraph.html" title="type parameter in DirectedGraph">V</a>&gt; - Class in <a href="../squidpony/squidai/graph/package-summary.html">squidpony.squidai.graph</a></dt>
+<dd>
+<div class="block">A kind of <a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph"><code>Graph</code></a> where all connections between vertices are one-way (but a connection may exist that goes from
+ A to B and another connection may go from B to A), and each connection can have a different cost.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DirectedGraph.html#%3Cinit%3E()">DirectedGraph()</a></span> - Constructor for class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DirectedGraph.html" title="class in squidpony.squidai.graph">DirectedGraph</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DirectedGraph.html#%3Cinit%3E(java.util.Collection)">DirectedGraph(Collection&lt;V&gt;)</a></span> - Constructor for class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DirectedGraph.html" title="class in squidpony.squidai.graph">DirectedGraph</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidai/graph/DirectedGraphAlgorithms.html" title="class in squidpony.squidai.graph"><span class="typeNameLink">DirectedGraphAlgorithms</span></a>&lt;<a href="../squidpony/squidai/graph/DirectedGraphAlgorithms.html" title="type parameter in DirectedGraphAlgorithms">V</a>&gt; - Class in <a href="../squidpony/squidai/graph/package-summary.html">squidpony.squidai.graph</a></dt>
+<dd>
+<div class="block">Algorithms specific to directed graphs, like <a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph"><code>CostlyGraph</code></a>, as well as general <a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph"><code>Algorithms</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/iterator/SquidIterators.Linear.html#direction">direction</a></span> - Variable in class squidpony.squidgrid.iterator.<a href="../squidpony/squidgrid/iterator/SquidIterators.Linear.html" title="class in squidpony.squidgrid.iterator">SquidIterators.Linear</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid"><span class="typeNameLink">Direction</span></a> - Enum in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
@@ -1024,6 +1057,8 @@ loadScripts(document, 'script');</script>
 <div class="block">The array of all possible directions this allows, regardless of cost.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Messaging.NounTrait.html#directText(java.lang.String)">directText(String)</a></span> - Method in enum squidpony.<a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#disconnect()">disconnect()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperse()">disperse()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
@@ -1057,6 +1092,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html#displacement">displacement</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#distance">distance</a></span> - Variable in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
+<dd>
+<div class="block">Internal; confirmed distance so far to get to this Node from the start.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#distance(double,double)">distance(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#distance(double,double)">distance(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>

@@ -75,9 +75,15 @@ loadScripts(document, 'script');</script>
 </thead>
 <tbody>
 <tr class="altColor">
+<th class="colFirst" scope="row"><a href="#squidpony.squidai.graph">squidpony.squidai.graph</a></th>
+<td class="colLast">
+<div class="block">Graphs and graph algorithms used primarily (but not exclusively) for pathfinding.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#squidpony.squidmath">squidpony.squidmath</a></th>
 <td class="colLast">
-<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+<div class="block">A very broad package containing random number generators, geometry tools, data structures, and noise functions.</div>
 </td>
 </tr>
 </tbody>
@@ -85,6 +91,36 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="classUses">
 <ul class="blockList">
+<li class="blockList">
+<section class="detail"><a id="squidpony.squidai.graph">
+<!--   -->
+</a>
+<h2>Uses of <a href="../BinaryHeap.Node.html" title="class in squidpony.squidmath">BinaryHeap.Node</a> in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a></h2>
+<div class="useSummary">
+<table>
+<caption><span>Subclasses of <a href="../BinaryHeap.Node.html" title="class in squidpony.squidmath">BinaryHeap.Node</a> in <a href="../../squidai/graph/package-summary.html">squidpony.squidai.graph</a></span><span class="tabEnd">&nbsp;</span></caption>
+<thead>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../../squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a>&lt;V&gt;</span></code></th>
+<td class="colLast">
+<div class="block">An extended version of <a href="../BinaryHeap.Node.html" title="class in squidpony.squidmath"><code>BinaryHeap.Node</code></a> that also stores a reference to the parent Graph,
+ a vertex object of type <code>V</code>, a Map of neighbor Nodes to the appropriate <a href="../../squidai/graph/Connection.html" title="class in squidpony.squidai.graph"><code>Connection</code></a> per Node, an extra
+ List of those same Connections for faster iteration, and a lot of internal data used by algorithms in this package.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</li>
 <li class="blockList">
 <section class="detail"><a id="squidpony.squidmath">
 <!--   -->

@@ -597,6 +597,26 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#findMinimumDistance(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findMinimumDistance(Coord, Coord)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#findMinimumDistance(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findMinimumDistance(Coord, Coord)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Algorithms.html#findMinimumDistance(V,V)">findMinimumDistance(V, V)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph">Algorithms</a></dt>
+<dd>
+<div class="block">Find the length of the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#findMinimumWeightSpanningTree()">findMinimumWeightSpanningTree()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Find a minimum weight spanning tree using Kruskal's algorithm.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/UndirectedGraphAlgorithms.html#findMinimumWeightSpanningTree()">findMinimumWeightSpanningTree()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/UndirectedGraphAlgorithms.html" title="class in squidpony.squidai.graph">UndirectedGraphAlgorithms</a></dt>
+<dd>
+<div class="block">Find a minimum weight spanning tree using Kruskal's algorithm.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findNearest(squidpony.squidmath.Coord,java.util.Collection)">findNearest(Coord, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.</div>
@@ -720,6 +740,45 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findShortcutPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord...)">findShortcutPath(Coord, Coord...)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">If you have a target or group of targets you want to pathfind to without scanning the full map, this can be good.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findShortestPath(Coord, Coord)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">findShortestPath(Coord, Coord)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath(Coord, Coord, ArrayList&lt;Coord&gt;, Heuristic&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath(Coord, Coord, ArrayList&lt;Coord&gt;, Heuristic&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath(Coord, Coord, Heuristic&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DefaultGraph.html#findShortestPath(squidpony.squidmath.Coord,squidpony.squidmath.Coord,squidpony.squidai.graph.Heuristic)">findShortestPath(Coord, Coord, Heuristic&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph">DefaultGraph</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Algorithms.html#findShortestPath(V,V)">findShortestPath(V, V)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph">Algorithms</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using Dijkstra's algorithm implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Algorithms.html#findShortestPath(V,V,java.util.ArrayList,squidpony.squidai.graph.Heuristic)">findShortestPath(V, V, ArrayList&lt;V&gt;, Heuristic&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph">Algorithms</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided
+ heuristic, and implemented with a priority queue.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Algorithms.html#findShortestPath(V,V,squidpony.squidai.graph.Heuristic)">findShortestPath(V, V, Heuristic&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Algorithms.html" title="class in squidpony.squidai.graph">Algorithms</a></dt>
+<dd>
+<div class="block">Find the shortest path between the start and target vertices, using the A* search algorithm with the provided heuristic, and implemented with a priority queue.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#findTechniquePath(int,squidpony.squidai.Technique,char%5B%5D%5B%5D,squidpony.squidgrid.LOS,java.util.Collection,java.util.Collection,squidpony.squidmath.Coord,java.util.Collection)">findTechniquePath(int, Technique, char[][], LOS, Collection&lt;Coord&gt;, Collection&lt;Coord&gt;, Coord, Collection&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
@@ -1271,10 +1330,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Takes a String produced by <a href="../squidpony/Mnemonic.html#toMnemonic(long)"><code>Mnemonic.toMnemonic(long)</code></a> or <a href="../squidpony/Mnemonic.html#toMnemonic(long,boolean)"><code>Mnemonic.toMnemonic(long, boolean)</code></a> and returns the long
  used to encode that gibberish String.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/CostlyConnection.html#fromNode">fromNode</a></span> - Variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/CostlyConnection.html" title="class in squidpony.squidai.astar">CostlyConnection</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultConnection.html#fromNode">fromNode</a></span> - Variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Mnemonic.html#fromWordMnemonic(java.lang.String)">fromWordMnemonic(String)</a></span> - Method in class squidpony.<a href="../squidpony/Mnemonic.html" title="class in squidpony">Mnemonic</a></dt>
 <dd>
 <div class="block">Takes a String phrase produced by <a href="../squidpony/Mnemonic.html#toWordMnemonic(int,boolean)"><code>Mnemonic.toWordMnemonic(int, boolean)</code></a> and returns the int used to encode that
