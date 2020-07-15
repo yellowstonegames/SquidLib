@@ -91,10 +91,10 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     private OrderedMap<Coord, String> cities;
     //private WorldMapGenerator.EllipticalMap world;
     //private final float[][][] cloudData = new float[128][128][128];
-    private long counter = 0;
+    private long counter;
     //private float nation = 0f;
-    private long ttg = 0; // time to generate
-    private float moveAmount = 0f;
+    private long ttg; // time to generate
+    private float moveAmount;
     private static float black = SColor.FLOAT_BLACK,
             white = SColor.FLOAT_WHITE;
     // Biome map colors

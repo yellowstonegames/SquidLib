@@ -28,7 +28,7 @@ public class ZOI implements Serializable {
     private DijkstraMap dijkstra;
     private Coord[][] influences;
     private short[][] packedGroups;
-    private boolean completed = false;
+    private boolean completed;
     private Radius radius;
     /**
      * Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where

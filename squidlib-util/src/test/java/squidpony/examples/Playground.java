@@ -83,7 +83,7 @@ public class Playground {
 
     public static float swayOld(float a) { a = Math.abs(Math.abs(a - 1f) % 2f - 1f); return a * a * a * (a * (a * 6f - 15f) + 10f); }
 
-    private int state = 0;
+    private int state;
     private int mul = 0xF7910000;
     private float nextFloat(final int salt)
     {

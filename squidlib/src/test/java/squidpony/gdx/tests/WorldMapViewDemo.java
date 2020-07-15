@@ -43,9 +43,9 @@ public class WorldMapViewDemo extends ApplicationAdapter {
     private WorldMapGenerator world, inner;
     private WorldMapView wmv;
     
-    private boolean spinning = false;
+    private boolean spinning;
 
-    private long ttg = 0; // time to generate
+    private long ttg; // time to generate
     
 //    public int noiseCalls = 0, pixels = 0;  // debug
     

@@ -239,8 +239,8 @@ public class Voronoi implements Serializable {
     private void legalizeEdge(Triangle triangle, CoordDouble ea, CoordDouble eb, CoordDouble newVertex) {
         Triangle neighborTriangle = triangleSoup.findNeighbor(triangle, ea, eb);
 
-        /**
-         * If the triangle has a neighbor, then legalize the edge
+        /*
+          If the triangle has a neighbor, then legalize the edge
          */
         if (neighborTriangle != null) {
             if (neighborTriangle.isPointInCircumcircle(newVertex)) {
@@ -498,12 +498,8 @@ public class Voronoi implements Serializable {
          *         triangle
          */
         public boolean hasVertex(CoordDouble vertex) {
-            if (a == vertex || b == vertex || c == vertex) {
-                return true;
-            }
-
-            return false;
-        }
+			return a == vertex || b == vertex || c == vertex;
+		}
 
         /**
          * Computes the closest point on the given edge to the specified point.

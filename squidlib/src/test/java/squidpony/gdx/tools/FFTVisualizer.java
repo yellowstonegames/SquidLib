@@ -28,15 +28,15 @@ public class FFTVisualizer extends ApplicationAdapter {
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 256);
 //    private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
     private IPointHash[] pointHashes = new IPointHash[] {iph, cube, rug, quilt};
-    private int hashIndex = 0;
+    private int hashIndex;
     private static final int MODE_LIMIT = 7;
     private int mode = 6;
-    private int dim = 0; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
+    private int dim; // this can be 0, 1, 2, or 3; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
     private float threshold = 0.5f;
-    private boolean inverse = false;
-    private boolean paused = false;
+    private boolean inverse;
+    private boolean paused;
     private ImmediateModeRenderer20 renderer;
     
 //    private static final int width = 400, height = 400;
@@ -47,7 +47,7 @@ public class FFTVisualizer extends ApplicationAdapter {
     private InputAdapter input;
     
     private Viewport view;
-    private long ctr = -128, startTime = 0L;
+    private long ctr = -128, startTime;
 
     public static float basicPrepare(float n)
     {

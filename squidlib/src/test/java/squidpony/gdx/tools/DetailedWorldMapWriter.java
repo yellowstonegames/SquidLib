@@ -59,12 +59,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     //private int[] workingHash = new int[256];
     private Pixmap pm;
     private Texture pt;
-    private int counter = 0;
+    private int counter;
     private static final int cellWidth = 1, cellHeight = 1;
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private long ttg = 0; // time to generate
+    private long ttg; // time to generate
     private WorldMapGenerator world;
     private WorldMapView wmv;
     private PixmapIO.PNG writer;

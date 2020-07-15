@@ -162,7 +162,7 @@ public abstract class StringConvert<T> {
     public static final CrossHash.IHasher spaceIgnoringHasher = new CrossHash.IHasher() {
         @Override
         public int hash(Object data) {
-            if (data == null || !(data instanceof StringConvert || data instanceof CharSequence))
+            if (!(data instanceof StringConvert || data instanceof CharSequence))
                 return 0;
             final CharSequence s;
             if(data instanceof StringConvert) s = ((StringConvert) data).getName();

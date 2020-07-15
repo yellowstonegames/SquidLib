@@ -293,7 +293,6 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 							return false;
 						if (!equals(oneb.getColor(), twob.getColor()))
 							return false;
-						continue;
 					} else
 						/* 'this' not terminated, but 'other' is. */
 						return false;
@@ -408,7 +407,6 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				if (nextl < len) {
 					/* Nothing to do */
 					l += flen;
-					continue;
 				} else if (nextl == len) {
 					/* Delete all next fragments */
 					while (it.hasNext()) {
@@ -417,7 +415,6 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					}
 					/* We'll exit the outer loop right away */
 				} else {
-					assert len < nextl;
 					/* Trim this fragment */
 					final IColoredString.Bucket<T> trimmed = next.setLength(len - l);
 					/* Replace this fragment */
@@ -627,15 +624,15 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				}
 				assert 0 <= localRest;
 				assert localRest <= totalRest;
-				String novel = "";
+				StringBuilder novel = new StringBuilder();
 				int eatenSpaces = 1;
 				for (int i = 0; i < blength; i++) {
 					final char c = bucket.charAt(i);
-					novel += c;
+					novel.append(c);
 					if (c == ' ' && (0 < localDiff || 0 < totalDiff || 0 < localRest || 0 < totalRest)) {
 						/* Can (and should) add an extra space */
 						for (int j = 0; j < nb && 0 < localDiff; j++) {
-							novel += " ";
+							novel.append(" ");
 							localDiff--;
 							totalDiff--;
 						}
@@ -643,21 +640,21 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 							if (eatenSpaces == localNbSpaces) {
 								/* I'm the last hope for this bucket */
 								for (int j = 0; j < localRest; j++) {
-									novel += " ";
+									novel.append(" ");
 									localRest--;
 									totalRest--;
 								}
 								if (bidx == lastHopeIndex) {
 									/* I'm the last hope globally */
 									while (0 < totalRest) {
-										novel += " ";
+										novel.append(" ");
 										totalRest--;
 									}
 								}
 							} else {
 								if (0 < localRest && 0 < totalRest) {
 									/* Not the last hope: take one only */
-									novel += " ";
+									novel.append(" ");
 									localRest--;
 									totalRest--;
 								}
@@ -670,7 +667,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				assert localRest == 0;
 				/* If I was the hope, I did my job */
 				assert bidx != lastHopeIndex || totalRest == 0;
-				result.append(novel, next.getColor());
+				result.append(novel.toString(), next.getColor());
 			}
 
 			while (it.hasNext())

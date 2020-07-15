@@ -167,7 +167,6 @@ public class SquidStorage extends JsonStorage {
      * @param <T> the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}
      * @return the retrieved value if successful, or null otherwise
      */
-    @SuppressWarnings("unchecked")
     public <T> T get(String outerName, String innerName, Class<T> type)
     {
         return super.get(outerName, innerName, type);

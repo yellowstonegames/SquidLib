@@ -35,10 +35,10 @@ public class DharmaRNG extends RNG implements Serializable{
     private double fairness = 0.54;
 
     /** Running total for what this has actually produced. */
-    private double produced = 0.0;
+    private double produced;
 
     /** Running total for what this would produce if it always produced a value equal to fairness. */
-    private double baseline = 0.0;
+    private double baseline;
 
 	private static final long serialVersionUID = -8919455766853811999L;
 
@@ -246,7 +246,7 @@ public class DharmaRNG extends RNG implements Serializable{
             return 0;
         if(bits > 32)
             bits = 32;
-        return (int)(nextDouble() * (1l << bits));
+        return (int)(nextDouble() * (1L << bits));
 
     }
 

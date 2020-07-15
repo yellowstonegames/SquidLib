@@ -69,7 +69,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private int cellularDistanceFunction = EUCLIDEAN;
     private int cellularReturnType = CELL_VALUE;
-    private FastNoise cellularNoiseLookup = null;
+    private FastNoise cellularNoiseLookup;
     private IPointHash pointHash = new IntPointHash();
 
     private float gradientPerturbAmp = 1f / 0.45f;

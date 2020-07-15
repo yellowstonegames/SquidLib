@@ -49,6 +49,7 @@ import squidpony.squidmath.IntIntOrderedMap;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -778,9 +779,7 @@ public class DataStructureBenchmark {
     public void insertStringLinkedHashSet(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashSet<String> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
-        for (int i = 0; i < state.SIZE; i++) {
-            lhs.add(state.words[i]);
-        }
+        lhs.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(lhs);
     }
 
@@ -788,9 +787,7 @@ public class DataStructureBenchmark {
     public void insertStringLinkedHashSet2(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashSet<String> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
-        for (int i = 0; i < state.SIZE; i++) {
-            lhs.add(state.words[i]);
-        }
+        lhs.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(lhs);
     }
 
@@ -798,9 +795,7 @@ public class DataStructureBenchmark {
     public void insertStringLinkedHashSet3(BenchmarkState state, Blackhole blackhole)
     {
         LinkedHashSet<String> lhs = new LinkedHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
-        for (int i = 0; i < state.SIZE; i++) {
-            lhs.add(state.words[i]);
-        }
+        lhs.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(lhs);
     }
 
@@ -895,27 +890,21 @@ public class DataStructureBenchmark {
     public void insertStringSquidDefaultOS(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
-        for (int i = 0; i < state.SIZE; i++) {
-            squidOS.add(state.words[i]);
-        }
+        squidOS.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(squidOS);
     }
     @Benchmark
     public void insertStringSquidDefaultOS2(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
-        for (int i = 0; i < state.SIZE; i++) {
-            squidOS.add(state.words[i]);
-        }
+        squidOS.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(squidOS);
     }
     @Benchmark
     public void insertStringSquidDefaultOS3(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
-        for (int i = 0; i < state.SIZE; i++) {
-            squidOS.add(state.words[i]);
-        }
+        squidOS.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(squidOS);
     }
 
@@ -953,27 +942,21 @@ public class DataStructureBenchmark {
     public void insertStringSquidMildOS(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, CrossHash.mildHasher);
-        for (int i = 0; i < state.SIZE; i++) {
-            squidOS.add(state.words[i]);
-        }
+        squidOS.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(squidOS);
     }
     @Benchmark
     public void insertStringSquidMildOS2(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, CrossHash.mildHasher);
-        for (int i = 0; i < state.SIZE; i++) {
-            squidOS.add(state.words[i]);
-        }
+        squidOS.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(squidOS);
     }
     @Benchmark
     public void insertStringSquidMildOS3(BenchmarkState state, Blackhole blackhole)
     {
         OrderedSet<String> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, CrossHash.mildHasher);
-        for (int i = 0; i < state.SIZE; i++) {
-            squidOS.add(state.words[i]);
-        }
+        squidOS.addAll(Arrays.asList(state.words).subList(0, state.SIZE));
         blackhole.consume(squidOS);
     }
 

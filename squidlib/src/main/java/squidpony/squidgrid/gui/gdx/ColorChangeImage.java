@@ -17,7 +17,7 @@ import java.util.List;
 public class ColorChangeImage extends Image {
 
     private List<Color> colors;
-    private float progress = 0f;
+    private float progress;
     private float loopTime = 2f;
 
     /**

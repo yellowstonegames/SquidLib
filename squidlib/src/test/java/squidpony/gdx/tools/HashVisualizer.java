@@ -68,7 +68,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 148;
-    private int hashMode = 0, rngMode = 0, noiseMode = 5, otherMode = 1;//142
+    private int hashMode, rngMode, noiseMode = 5, otherMode = 1;//142
 
     private FilterBatch batch;
     
@@ -256,7 +256,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int ctr = -256;
     private boolean keepGoing = true;
 
-    private double total = 0.0;
+    private double total;
     public static double toDouble(long n) {
         return NumberTools.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
         //return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;

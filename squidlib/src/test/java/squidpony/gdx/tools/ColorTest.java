@@ -113,8 +113,8 @@ public class ColorTest extends ApplicationAdapter {
     private TextCellFactory tcf;
     private SquidLayers display;
     private float[][] colors;
-    private int hh = 0;
-    private int vv = 0;
+    private int hh;
+    private int vv;
     private float luma = 0.5f;
     private Color tmp = new Color();
 

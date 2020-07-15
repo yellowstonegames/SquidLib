@@ -33,7 +33,7 @@ public class LargeDijkstraTest {
     }
     public static void main(String[] args) {
         for (Measurement m : Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
+            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffaL);
             RNG rng = new RNG(lrng);
             int size = 2;
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
@@ -77,7 +77,7 @@ public class LargeDijkstraTest {
             System.out.println(dg);
             //debugPrint(dijkstra);
 
-            lrng.setState(0x57a8deadbeef0ffal);
+            lrng.setState(0x57a8deadbeef0ffaL);
             rng = new RNG(lrng);
             dg = new DungeonGenerator(40,40,rng);
 
@@ -125,7 +125,7 @@ public class LargeDijkstraTest {
             //debugPrint(dijkstra);
             System.out.println();
 
-            lrng.setState(0x57a8deadbeef0ffal);
+            lrng.setState(0x57a8deadbeef0ffaL);
             rng = new RNG(lrng);
             dg = new DungeonGenerator(40, 40, rng);
 

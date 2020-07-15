@@ -2028,7 +2028,7 @@ public class Noise {
         return seamless2D(fill, seed, octaves, SeededNoise.instance);
     }
 
-    public static double total = 0.0;
+    public static double total;
     /**
      * Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
      * boundaries. This overload doesn't care what you use for x or y axes, it uses the exact size of fill fully.

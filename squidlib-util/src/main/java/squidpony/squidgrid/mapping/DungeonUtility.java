@@ -384,12 +384,11 @@ public class DungeonUtility {
         char[][] portion = new char[width - 2][height - 2];
         for (int i = 1; i < width - 1; i++) {
             for (int j = 1; j < height - 1; j++) {
-                switch (dungeon[i][j]) {
-                    case '\1':
-                        portion[i - 1][j - 1] = ' ';
-                        break;
-                    default: // ┼┌┘
-                        portion[i - 1][j - 1] = dungeon[i][j];
+                if (dungeon[i][j] == '\1') {
+                    portion[i - 1][j - 1] = ' ';
+                } else {
+                    // ┼┌┘
+                    portion[i - 1][j - 1] = dungeon[i][j];
                 }
             }
         }
@@ -1084,8 +1083,8 @@ public class DungeonUtility {
         int rs = height - rsum;
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
         for (int i = 0; i <= 7; i++) {
-            cs2 = cs2 * i / 7;
-            rs2 = rs2 * i / 7;
+            cs2 = 0;
+            rs2 = 0;
             columns[i] -= cs2;
             rows[i] -= rs2;
         }

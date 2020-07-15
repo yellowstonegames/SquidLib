@@ -8,8 +8,6 @@ import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.ArrayList;
-
 /**
  * A maze generator that can be configured using a {@link ChoosingMethod}, which can be customized for the app.
  * Based in part on code from <a href="http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm">Jamis Buck's blog</a>.

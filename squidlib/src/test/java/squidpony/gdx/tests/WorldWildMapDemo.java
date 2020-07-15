@@ -88,13 +88,13 @@ public class WorldWildMapDemo extends ApplicationAdapter {
     private OrderedMap<Character, FakeLanguageGen> atlas;
     private OrderedMap<Coord, String> cities;
     private WildMapView wildView;
-    private boolean zoomed = false;
+    private boolean zoomed;
     //private WorldMapGenerator.EllipticalMap world;
     //private final float[][][] cloudData = new float[128][128][128];
-    private long counter = 0;
+    private long counter;
     //private float nation = 0f;
-    private long ttg = 0; // time to generate
-    private float moveAmount = 0f;
+    private long ttg; // time to generate
+    private float moveAmount;
     
     private static final char[] BIOME_CHARS = new char[61];
     static {

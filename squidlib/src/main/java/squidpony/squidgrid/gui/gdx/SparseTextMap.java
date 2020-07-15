@@ -1,18 +1,18 @@
-/*******************************************************************************
- * Copyright 2011 See AUTHORS file.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+/******************************************************************************
+ Copyright 2011 See AUTHORS file.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 
 package squidpony.squidgrid.gui.gdx;
 
@@ -445,7 +445,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     /**
      * If and only if key is already present, this changes the float associated with it while leaving the char the same.
      * @param key the encoded key as produced by {@link #encodePosition(int, int)}
-     * @param floatValue
+     * @param floatValue the float value to set at the given encoded key
      */
     public void updateFloat(int key, float floatValue)
     {
@@ -462,7 +462,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             floatValueTable[loc] = floatValue;
         }
     }
-
+    /**
+     * If and only if key is already present, this changes the char associated with it while leaving the float the same.
+     * @param key the encoded key as produced by {@link #encodePosition(int, int)}
+     * @param charValue the char value to set at the given encoded key
+     */
     public void updateChar(int key, char charValue)
     {
         if (key == 0 && hasZeroValue) {
@@ -922,9 +926,6 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     }
 
     static private class MapIterator {
-        static final int INDEX_ILLEGAL = -2;
-        static final int INDEX_ZERO = -1;
-
         public boolean hasNext;
 
         final SparseTextMap map;
@@ -946,7 +947,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     }
 
     static public class Entries extends MapIterator implements Iterable<Entry>, Iterator<Entry> {
-        private Entry entry = new Entry();
+        private final Entry entry = new Entry();
 
         public Entries(SparseTextMap map) {
             super(map);

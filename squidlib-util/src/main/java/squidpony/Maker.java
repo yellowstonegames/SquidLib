@@ -232,7 +232,6 @@ public class Maker {
      * @param <V> the type of values in the returned OrderedMap; if not specified, will be inferred from v0
      * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it
      */
-    @SuppressWarnings("unchecked")
     public static <K, V> OrderedMap<K, V> makeOM(K k0, V v0, Object... rest)
     {
         return makeOM(0.625f, k0, v0, rest);
@@ -413,7 +412,6 @@ public class Maker {
      * @param <B> a type of keys in the returned K2; if not specified, will be inferred from b0
      * @return a freshly-made K2 with A and B keys, using a0, b0, and the contents of rest to fill it
      */
-    @SuppressWarnings("unchecked")
     public static <A, B> K2<A, B> makeK2(A a0, B b0, Object... rest)
     {
         return makeK2(0.625f, a0, b0, rest);

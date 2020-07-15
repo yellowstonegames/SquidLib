@@ -268,7 +268,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
     public static int determineBoundedShort(int state, final int bound)
     {
         state = ((state *= 0x62BD5) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5);
-        return (int) ((((((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5)) & 0xFFFF) * bound) >> 16);
+        return (((((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5)) & 0xFFFF) * bound) >> 16;
     }
     /**
      * Returns a random float that is deterministic based on an int state; if state is the same on two calls to this,

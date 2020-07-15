@@ -123,9 +123,9 @@ public class ProbabilityTable<T> implements Serializable {
             return this;
         int i = table.getInt(item);
         if (i < 0) {
-            weights.insert(table.size, Math.max(0, weight));
+            weights.insert(table.size, weight);
             table.add(item);
-            int w = Math.max(0, weight);
+            int w = weight;
             total += w;
             normalTotal += w;
         } else {
@@ -250,9 +250,9 @@ public class ProbabilityTable<T> implements Serializable {
     public ProbabilityTable<T> add(ProbabilityTable<T> table, int weight) {
         if(weight <= 0 || table == null || contentEquals(table) || table.total <= 0)
             return this;
-        weights.add(Math.max(0, weight));
+        weights.add(weight);
         extraTable.add(table);
-        total += Math.max(0, weight);
+        total += weight;
         return this;
     }
 

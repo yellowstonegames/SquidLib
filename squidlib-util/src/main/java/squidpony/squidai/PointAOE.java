@@ -3,7 +3,6 @@ package squidpony.squidai;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.Collection;
  */
 public class PointAOE implements AOE, Serializable {
     private static final long serialVersionUID = 2L;
-    private Coord center, origin = null;
+    private Coord center, origin;
     private int mapWidth, mapHeight;
     private Reach reach = new Reach(1, 1, Radius.SQUARE, AimLimit.FREE);
 

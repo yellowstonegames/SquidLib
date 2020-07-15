@@ -153,7 +153,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      * @param f        the load factor.
      */
 
-    @SuppressWarnings("unchecked")
     public IntIntOrderedMap(final int expected, final float f) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
@@ -440,7 +439,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
             fixOrder(pos, last);
         }
     }
-    @SuppressWarnings("unchecked")
     public int remove(final int k) {
         if (k == 0) {
             if (containsNullKey)
@@ -728,7 +726,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
             value[index] = v;
             return oldValue;
         }
-        @SuppressWarnings("unchecked")
         public boolean equals(final Object o) {
             if (!(o instanceof MapEntry))
                 return false;
@@ -1067,7 +1064,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
                 throw new NoSuchElementException();
             return new MapEntry(order.items[order.size-1]);
         }
-        @SuppressWarnings("unchecked")
         public boolean contains(final Object o) {
             if (!(o instanceof MapEntry))
                 return false;
@@ -1092,7 +1088,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
                     return value[pos] == v;
             }
         }
-        @SuppressWarnings("unchecked")
         public boolean remove(final Object o) {
             if (!(o instanceof MapEntry))
                 return false;
@@ -1417,7 +1412,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
             final Iterator<?> i = c.iterator();
             while (n-- != 0)
                 if (remove(i.next())) retVal = true;
-            return retVal;
+            return false;
         }
 
         public Object[] toArray() {
@@ -1438,7 +1433,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
             int n = c.size();
             while (n-- != 0)
                 if (add(i.next())) retVal = true;
-            return retVal;
+            return false;
         }
 
         @Override
@@ -1682,7 +1677,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      *            the new size
      */
 
-    @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
         final int[] key = this.key;
         final int[] value = this.value;
@@ -1770,7 +1764,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      *
      * @return a deep copy of this map.
      */
-    @SuppressWarnings("unchecked")
     @GwtIncompatible
     public IntIntOrderedMap clone() {
         IntIntOrderedMap c;
@@ -1946,7 +1939,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         }
     }
     @GwtIncompatible
-    @SuppressWarnings("unchecked")
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
@@ -2297,7 +2289,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      * @param rest an array or vararg of keys and values in pairs; should contain alternating only int elements
      * @return this, after adding all viable key-value pairs given
      */
-    @SuppressWarnings("unchecked")
     public IntIntOrderedMap putPairs(int k0, int v0, int... rest)
     {
         if(rest == null || rest.length == 0)
@@ -2325,7 +2316,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      * @param rest an array or vararg of keys and values in pairs; should contain only int elements
      * @return a freshly-made IntIntOrderedMap, using k0, v0, and the contents of rest to fill it
      */
-    @SuppressWarnings("unchecked")
     public static IntIntOrderedMap makeMap(int k0, int v0, int... rest)
     {
         if(rest == null || rest.length == 0)

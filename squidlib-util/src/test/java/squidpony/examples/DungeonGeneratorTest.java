@@ -1,8 +1,6 @@
 package squidpony.examples;
 
 import squidpony.ArrayTools;
-import squidpony.Maker;
-import squidpony.StringKit;
 import squidpony.squidai.WaypointPathfinder;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
@@ -14,7 +12,6 @@ import squidpony.squidmath.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Sample output: <pre>

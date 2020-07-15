@@ -32,15 +32,15 @@ public class MathVisualizer extends ApplicationAdapter {
     private double[] dAmounts = new double[512];
     private DiverRNG diver;
     private SilkRNG rng;
-    private boolean hasGauss = false;
-    private double followingGauss = 0.0;
+    private boolean hasGauss;
+    private double followingGauss;
     private RandomBias bias;
     private RandomXS128 xs128;
     private XSP xsp;
     private EditRNG edit;
     private TweakRNG tweak;
     private long seed = 1L;
-    private long startTime = 0L;
+    private long startTime;
     private double[] circleCoord = new double[2];
 
     private double twist(double input) {

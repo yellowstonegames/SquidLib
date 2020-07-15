@@ -197,7 +197,7 @@ public class DetailedMimicDungeonTest {
                     switch (iso[x][y])
                     {
                         case '.':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" />");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face").append(rng.nextInt(4)).append("_0.png\" />");
                             if(rng.nextInt(120) == 0) {
                                 sb.append("<img class=\"ppl\" src=\"dungeon/").append(rng.getRandomElement(people)).append("\" />");
                             }
@@ -205,10 +205,10 @@ public class DetailedMimicDungeonTest {
                             break;
                         case '"':
                         case ':':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette47_Grass_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette47_Grass_Huge_face").append(rng.nextInt(4)).append("_0.png\" /></div>\n");
                             break;
                         case '#':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Boulder_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Boulder_Huge_face").append(rng.nextInt(4)).append("_0.png\" /></div>\n");
                             break;
                         case '~':
                         case ',':
@@ -218,13 +218,13 @@ public class DetailedMimicDungeonTest {
                             if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) * 4);
                             if(water[x+1][y] > -1) water[x][y] = (water[x][y] & 13) | ((water[x+1][y] & 8) >> 2);
 
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette0_Water_Huge_face0_" + (Integer.toHexString(water[x][y])) + ".png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette0_Water_Huge_face0_").append(Integer.toHexString(water[x][y])).append(".png\" /></div>\n");
                             break;
                         case '│':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face").append(rng.nextInt(2) * 2).append("_0.png\" /></div>\n");
                             break;
                         case '─':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face").append(rng.nextInt(2) * 2 + 1).append("_0.png\" /></div>\n");
                             break;
 
                         case '┌':
@@ -254,14 +254,14 @@ public class DetailedMimicDungeonTest {
                             break;
 
                         case '┼':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Cross_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Cross_Huge_face").append(rng.nextInt(4)).append("_0.png\" /></div>\n");
                             break;
 
                         case '+':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face").append(rng.nextInt(2) * 2).append("_0.png\" /></div>\n");
                             break;
                         case '/':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face").append(rng.nextInt(2) * 2 + 1).append("_0.png\" /></div>\n");
                             break;
 
                         case ' ':

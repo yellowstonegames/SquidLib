@@ -53,11 +53,11 @@ public abstract class WorldMapGenerator implements Serializable {
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
-    protected double centerLongitude = 0.0;
+    protected double centerLongitude;
 
-    public int zoom = 0, startX = 0, startY = 0, usedWidth, usedHeight;
+    public int zoom, startX, startY, usedWidth, usedHeight;
     protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
-    protected int zoomStartX = 0, zoomStartY = 0;
+    protected int zoomStartX, zoomStartY;
 
     /**
      * A FastNoise that has a higher frequency than that class defaults to, which is useful for maps here. With the
@@ -927,8 +927,9 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     heatCodeData[x][y] = hc;
                     moistureCodeData[x][y] = mc;
+                    // 54 == 9 * 6, 9 is used for Ocean groups
                     biomeCodeData[x][y] = heightCode < 4 ? hc + 54 // 54 == 9 * 6, 9 is used for Ocean groups
-                            : isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+                            : isLake ? hc + 48 : heightCode == 4 ? hc + 36 : hc + mc * 6;
                 }
             }
         }
@@ -1189,8 +1190,9 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     heatCodeData[x][y] = hc;
                     moistureCodeData[x][y] = mc;
+                    // 54 == 9 * 6, 9 is used for Ocean groups
                     bc = heightCode < 4 ? hc + 54 // 54 == 9 * 6, 9 is used for Ocean groups
-                            : isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+                            : isLake ? hc + 48 : heightCode == 4 ? hc + 36 : hc + mc * 6;
 
                     if(heightCode < 4) {
                         mc = 9;
@@ -1226,12 +1228,9 @@ public abstract class WorldMapGenerator implements Serializable {
                     bc |= (hc + mc * 6) << 10;
                     if(heightCode < 4)
                         biomeCodeData[x][y] = bc | (int)((heightData[x][y] + 1.0) * 1000.0) << 20;
-                    else if (isRiver || isLake)
-                        biomeCodeData[x][y] = bc | (int)(moist * 358.4 + 665.0) << 20;
-                    else
-                        biomeCodeData[x][y] = bc | (int) ((heightCode == 4)
-                                ? (sandUpper - high) * 10240.0 // multiplier affected by changes to sandLower
-                                : NumberTools.sway((high + moist) * (4.1 + high - hot)) * 512 + 512) << 20;
+                    else biomeCodeData[x][y] = bc | (int) ((heightCode == 4)
+                            ? (sandUpper - high) * 10240.0 // multiplier affected by changes to sandLower
+                            : NumberTools.sway((high + moist) * (4.1 + high - hot)) * 512 + 512) << 20;
                 }
             }
         }

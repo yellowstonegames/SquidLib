@@ -610,7 +610,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             fixOrder(pos, last);
         }
     }
-    @SuppressWarnings("unchecked")
     protected Integer rem(final Object k) {
         if (k == null) {
             if (containsNullKey)
@@ -636,7 +635,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     {
         return rem(o);
     }
-    @SuppressWarnings("unchecked")
     public int removeInt(final Object k) {
         if (k == null) {
             if (containsNullKey)

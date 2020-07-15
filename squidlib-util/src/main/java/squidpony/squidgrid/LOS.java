@@ -78,8 +78,8 @@ public class LOS implements Serializable {
     private int type;
     private double[][] resistanceMap;
     private int startx, starty, targetx, targety;
-    private Elias elias = null;
-    private LOS los1 = null, los2 = null;
+    private Elias elias;
+    private LOS los1, los2;
     /**
      * Gets the radius strategy this uses.
      * @return the current Radius enum used to measure distance; starts at CIRCLE if not specified

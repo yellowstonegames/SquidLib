@@ -160,7 +160,7 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 5)
 public class NoiseBenchmark {
 
-    private short x = 0, y = 0, z = 0, w = 0, u = 0, v = 0;
+    private short x, y, z, w, u, v;
     private final float[] f = new float[1024];
     private final double[] d = new double[1024];
     private final FastNoise fast = new FastNoise(12345),

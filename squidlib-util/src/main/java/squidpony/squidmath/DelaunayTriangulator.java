@@ -541,12 +541,8 @@ public class DelaunayTriangulator implements Serializable {
          *         triangle
          */
         public boolean hasVertex(CoordDouble vertex) {
-            if (a == vertex || b == vertex || c == vertex) {
-                return true;
-            }
-
-            return false;
-        }
+			return a == vertex || b == vertex || c == vertex;
+		}
 
         /**
          * Computes the closest point on the given edge to the specified point.

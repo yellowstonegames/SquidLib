@@ -63,14 +63,14 @@ public class MultiSpill {
      * The amount of cells filled by this Spill, which may be less than the volume passed to start() if the boundaries
      * are reached on all sides and the Spill has no more room to fill.
      */
-    public int filled = 0;
+    public int filled;
     private ArrayList<OrderedSet<Coord>> fresh;
     /**
      * The IRNG used to decide how to randomly fill a space; can have its state set and read.
      */
     public IRNG rng;
 
-    private boolean initialized = false;
+    private boolean initialized;
     /**
      * Construct a Spill without a level to actually scan. If you use this constructor, you must call an
      * initialize() method before using this class.

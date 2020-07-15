@@ -4,7 +4,6 @@ import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
 
-import java.util.Date;
 import java.util.TreeSet;
 
 /**

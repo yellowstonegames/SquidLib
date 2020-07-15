@@ -237,7 +237,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public OrderedSet(final K[] a, final int offset,
                       final int length, final float f) {
-        this(length < 0 ? 0 : length, f);
+        this(Math.max(length, 0), f);
         if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
         if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
@@ -360,7 +360,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public OrderedSet(final K[] a, final int offset,
                       final int length, final float f, CrossHash.IHasher hasher) {
-        this(length < 0 ? 0 : length, f, hasher);
+        this(Math.max(length, 0), f, hasher);
         if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
         if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
@@ -607,7 +607,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     protected boolean rem(final Object k) {
         if (k == null)
             return containsNull && removeNullEntry();
@@ -975,8 +974,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             order.clear();
             return 0;
         }
-        int idx = order.removeValue(i);
-        return idx;
+        return order.removeValue(i);
     }
 
     /**
@@ -1491,7 +1489,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         return a;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         final int size = size();

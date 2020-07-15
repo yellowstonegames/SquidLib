@@ -110,7 +110,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
      * north-to-south ones; this number will be negative if filling two-cell wide positions but will be made positive
      * when needed.
      */
-    public int doorFX = 0;
+    public int doorFX;
     /**
      * The char to use for deep lake cells.
      */
@@ -123,21 +123,21 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
      * The approximate percentage of non-room, non-cave, non-edge-of-map wall cells to try to fill with lake. Corridors
      * that are covered by a lake will become bridges, the glyph ':'.
      */
-    public int lakeFX = 0;
+    public int lakeFX;
     /**
      * The approximate percentage of non-room, non-cave, non-edge-of-map wall cells to try to fill with maze. Corridors
      * that are covered by a maze will become part of its layout.
      */
-    public int mazeFX = 0;
+    public int mazeFX;
     public DungeonUtility utility;
     protected int height, width;
-    public Coord stairsUp = null, stairsDown = null;
+    public Coord stairsUp, stairsDown;
     public StatefulRNG rng;
     protected long rebuildSeed;
-    protected boolean seedFixed = false;
+    protected boolean seedFixed;
     protected int environmentType = 1;
 
-    protected char[][] dungeon = null;
+    protected char[][] dungeon;
     /**
      * Potentially important if you need to identify specific rooms, corridors, or cave areas in a map.
      */
@@ -294,15 +294,15 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
         switch (env)
         {
             case ROOM:
-                if(roomFX.containsKey(FillEffect.WATER)) roomFX.remove(FillEffect.WATER);
+                roomFX.remove(FillEffect.WATER);
                 roomFX.put(FillEffect.WATER, percentage);
                 break;
             case CORRIDOR:
-                if(corridorFX.containsKey(FillEffect.WATER)) corridorFX.remove(FillEffect.WATER);
+                corridorFX.remove(FillEffect.WATER);
                 corridorFX.put(FillEffect.WATER, percentage);
                 break;
             case CAVE:
-                if(caveFX.containsKey(FillEffect.WATER)) caveFX.remove(FillEffect.WATER);
+                caveFX.remove(FillEffect.WATER);
                 caveFX.put(FillEffect.WATER, percentage);
                 break;
             default:
@@ -341,28 +341,28 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
         if(percentage > 100) percentage = 100;
         switch (env) {
             case ROOM:
-                if (roomFX.containsKey(FillEffect.ISLANDS)) roomFX.remove(FillEffect.ISLANDS);
+                roomFX.remove(FillEffect.ISLANDS);
                 if(islandSpacing > 1)
                     roomFX.put(FillEffect.ISLANDS, percentage);
                 break;
             case CORRIDOR:
-                if (corridorFX.containsKey(FillEffect.ISLANDS)) corridorFX.remove(FillEffect.ISLANDS);
+                corridorFX.remove(FillEffect.ISLANDS);
                 if(islandSpacing > 1)
                     corridorFX.put(FillEffect.ISLANDS, percentage);
                 break;
             case CAVE:
-                if (caveFX.containsKey(FillEffect.ISLANDS)) caveFX.remove(FillEffect.ISLANDS);
+                caveFX.remove(FillEffect.ISLANDS);
                 if(islandSpacing > 1)
                     caveFX.put(FillEffect.ISLANDS, percentage);
                 break;
             default:
-                if (roomFX.containsKey(FillEffect.ISLANDS)) roomFX.remove(FillEffect.ISLANDS);
+                roomFX.remove(FillEffect.ISLANDS);
                 if(islandSpacing > 1)
                     roomFX.put(FillEffect.ISLANDS, percentage);
-                if (corridorFX.containsKey(FillEffect.ISLANDS)) corridorFX.remove(FillEffect.ISLANDS);
+                corridorFX.remove(FillEffect.ISLANDS);
                 if(islandSpacing > 1)
                     corridorFX.put(FillEffect.ISLANDS, percentage);
-                if (caveFX.containsKey(FillEffect.ISLANDS)) caveFX.remove(FillEffect.ISLANDS);
+                caveFX.remove(FillEffect.ISLANDS);
                 if(islandSpacing > 1)
                     caveFX.put(FillEffect.ISLANDS, percentage);
         }
@@ -389,15 +389,15 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
         switch (env)
         {
             case ROOM:
-                if(roomFX.containsKey(FillEffect.GRASS)) roomFX.remove(FillEffect.GRASS);
+                roomFX.remove(FillEffect.GRASS);
                 roomFX.put(FillEffect.GRASS, percentage);
                 break;
             case CORRIDOR:
-                if(corridorFX.containsKey(FillEffect.GRASS)) corridorFX.remove(FillEffect.GRASS);
+                corridorFX.remove(FillEffect.GRASS);
                 corridorFX.put(FillEffect.GRASS, percentage);
                 break;
             case CAVE:
-                if(caveFX.containsKey(FillEffect.GRASS)) caveFX.remove(FillEffect.GRASS);
+                caveFX.remove(FillEffect.GRASS);
                 caveFX.put(FillEffect.GRASS, percentage);
                 break;
             default:
@@ -430,15 +430,15 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
         switch (env)
         {
             case ROOM:
-                if(roomFX.containsKey(FillEffect.BOULDERS)) roomFX.remove(FillEffect.BOULDERS);
+                roomFX.remove(FillEffect.BOULDERS);
                 roomFX.put(FillEffect.BOULDERS, percentage);
                 break;
             case CORRIDOR:
-                if(corridorFX.containsKey(FillEffect.BOULDERS)) corridorFX.remove(FillEffect.BOULDERS);
+                corridorFX.remove(FillEffect.BOULDERS);
                 corridorFX.put(FillEffect.BOULDERS, percentage);
                 break;
             case CAVE:
-                if(caveFX.containsKey(FillEffect.BOULDERS)) caveFX.remove(FillEffect.BOULDERS);
+                caveFX.remove(FillEffect.BOULDERS);
                 caveFX.put(FillEffect.BOULDERS, percentage);
                 break;
             default:
@@ -545,15 +545,15 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
         switch (env)
         {
             case ROOM:
-                if(roomFX.containsKey(FillEffect.TRAPS)) roomFX.remove(FillEffect.TRAPS);
+                roomFX.remove(FillEffect.TRAPS);
                 roomFX.put(FillEffect.TRAPS, percentage);
                 break;
             case CORRIDOR:
-                if(corridorFX.containsKey(FillEffect.TRAPS)) corridorFX.remove(FillEffect.TRAPS);
+                corridorFX.remove(FillEffect.TRAPS);
                 corridorFX.put(FillEffect.TRAPS, percentage);
                 break;
             case CAVE:
-                if(caveFX.containsKey(FillEffect.TRAPS)) caveFX.remove(FillEffect.TRAPS);
+                caveFX.remove(FillEffect.TRAPS);
                 caveFX.put(FillEffect.TRAPS, percentage);
                 break;
             default:
@@ -1277,7 +1277,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
             for(int i = 0; i < total; i++)
             {
                 Coord entry = rng.getRandomElement(hazards);
-                if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '<')
+                if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '>')
                     continue;
                 map[entry.x][entry.y] = '^';
                 hazards.remove(entry);

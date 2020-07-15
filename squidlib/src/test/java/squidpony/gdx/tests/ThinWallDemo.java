@@ -115,7 +115,7 @@ public class ThinWallDemo extends ApplicationAdapter {
     private GreasedRegion floors;
     private CustomDijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
-    private int framesWithoutAnimation = 0;
+    private int framesWithoutAnimation;
     private IntVLA toCursor, awaitedMoves;
     private String lang;
     private TextCellFactory textFactory;

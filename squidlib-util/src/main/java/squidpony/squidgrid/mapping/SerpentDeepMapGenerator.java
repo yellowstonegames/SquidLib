@@ -91,8 +91,8 @@ public class SerpentDeepMapGenerator {
         int rs = height - rsum;
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
         for (int i = 0; i <= 7; i++) {
-            cs2= cs2 * i / 7;
-            rs2 = rs2 * i / 7;
+            cs2= 0;
+            rs2 = 0;
             columns[i] -= cs2;
             rows[i] -= rs2;
         }
@@ -114,7 +114,6 @@ public class SerpentDeepMapGenerator {
         int r = random.between(12, 33);
         m += r;
         for (int i = 0; i < 0x800 * numLayers; r = random.between(12, 33), i += r, m = (m + r) % (0x800 * numLayers)) {
-            tz = z;
             int tx = x, ty = y;
             do {
                 List<Coord> cl = new ArrayList<>(4);

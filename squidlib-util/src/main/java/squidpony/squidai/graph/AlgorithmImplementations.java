@@ -25,7 +25,6 @@ package squidpony.squidai.graph;
 
 import squidpony.squidmath.BinaryHeap;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
 import java.util.ArrayDeque;
@@ -44,7 +43,7 @@ class AlgorithmImplementations<V> {
     private final Graph<V> graph;
     private final BinaryHeap<Node<V>> heap;
     private final ArrayDeque<Node<V>> queue;
-    private int runID = 0;
+    private int runID;
 
     //================================================================================
     // Constructor
