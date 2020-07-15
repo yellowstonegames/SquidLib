@@ -803,7 +803,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
          * {@link ListIterator#next()} (or <code>null</code> if no
          * next entry exists).
          */
-        int next = -1;
+        int next;
         /**
          * The last entry that was returned (or -1 if we did not iterate or used
          * {@link Iterator#remove()}).
@@ -814,7 +814,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
          * Note that this value is not meaningful when this iterator has been
          * created using the nonempty constructor.
          */
-        int index = 0;
+        int index;
         private MapIterator() {
             next = size == 0 ? -1 : order.items[0];
             index = 0;
@@ -1727,7 +1727,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
      */
     public int hashCode() {
         int h = 0;
-        for (int j = realSize(), i = 0, t = 0; j-- != 0;) {
+        for (int j = realSize(), i = 0, t; j-- != 0;) {
             while (key[i] == 0)
                 i++;             
             t = HashCommon.mix(key[i]) ^ HashCommon.mix(

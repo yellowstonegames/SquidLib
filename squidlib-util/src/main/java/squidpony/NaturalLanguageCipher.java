@@ -752,8 +752,7 @@ se$->z
             {
                 mods |=VERBER;
                 end-=3;
-                endO-=3;
-            }
+			}
             else if(end >= 4 && endO >= 4 && (sc[end-2] == 'e' || sc[end-2] == 'o') && sc[end-1] == 'r')
             {
                 mods |= VERBER;

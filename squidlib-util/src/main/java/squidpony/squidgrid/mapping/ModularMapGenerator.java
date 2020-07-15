@@ -33,8 +33,8 @@ public class ModularMapGenerator implements IDungeonGenerator {
     public IStatefulRNG rng;
     protected long rebuildSeed;
 
-    protected char[][] map = null;
-    protected int[][] environment = null;
+    protected char[][] map;
+    protected int[][] environment;
     //public RegionMap<MapModule> layout, modules, inverseModules;
     public RegionMap<MapModule> layout;
     public OrderedMap<Integer, ArrayList<MapModule>> modules;

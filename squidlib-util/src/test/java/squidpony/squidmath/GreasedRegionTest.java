@@ -44,7 +44,7 @@ public class GreasedRegionTest {
             TestConfiguration.println("null");
         else
         {
-            int d = 0;
+            int d;
             for (int y = 0; y < data[0].length; y++) {
                 for (int x = 0; x < data.length; x++) {
                     d = data[x][y]& 255;

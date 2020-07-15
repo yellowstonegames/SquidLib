@@ -3422,7 +3422,6 @@ public class FakeLanguageGen implements Serializable {
                     case 2:
                         if (rng.nextDouble() < 0.65) {
                             c = t.charAt(1);
-                            num = 0;
                             switch (c) {
                                 case 'z':
                                     num = 1;
@@ -3520,7 +3519,7 @@ public class FakeLanguageGen implements Serializable {
         parts2.reorder(reordering);
         parts3.reorder(reordering);
         parts0.reorder(vOrd);
-        int n = 0;
+        int n;
 
         int mn = Math.min(rng.nextInt(3), rng.nextInt(3)), sz0, p0s;
 
@@ -4381,7 +4380,7 @@ public class FakeLanguageGen implements Serializable {
     protected String[] accentVowels(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
-        int idx = 0;
+        int idx;
         Matcher matcher;
         if (me.length > 0) {
             String[] tmp = new String[me.length];
@@ -4409,7 +4408,7 @@ public class FakeLanguageGen implements Serializable {
     protected String[] accentConsonants(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
-        int idx = 0;
+        int idx;
         Matcher matcher;
         if (me.length > 0) {
             String[] tmp = new String[me.length];
@@ -4453,7 +4452,7 @@ public class FakeLanguageGen implements Serializable {
 
     protected String[] accentBoth(IRNG rng, String[] me, double vowelInfluence, double consonantInfluence) {
         String[] ret = new String[1000];
-        int idx = 0;
+        int idx;
         Matcher matcher;
         if (me.length > 0) {
             String[] tmp = new String[me.length];

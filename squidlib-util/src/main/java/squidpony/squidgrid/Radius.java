@@ -137,7 +137,7 @@ public enum Radius {
     }
 
     public Coord onUnitShape(double distance, IRNG rng) {
-        int x = 0, y = 0;
+        int x, y;
         switch (this) {
             case SQUARE:
             case CUBE:
@@ -376,7 +376,7 @@ public enum Radius {
                 end = Coord.get(clamp( (int) Math.round(cosTheta * radiusLength) + center.x, 0, width)
                         , clamp( (int) Math.round(sinTheta * radiusLength) + center.y, 0, height));
                 if(!surpassEdges) {
-                    long edgeLength = 0;
+                    long edgeLength;
 //                    if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
                     if (end.x < 0)
                     {

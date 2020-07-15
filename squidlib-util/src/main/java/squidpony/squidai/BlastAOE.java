@@ -143,8 +143,6 @@ public class BlastAOE implements AOE, Serializable {
             }
         }
 
-        t = ts[0];
-
         Measurement dmm = Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = Measurement.EUCLIDEAN;
@@ -163,7 +161,7 @@ public class BlastAOE implements AOE, Serializable {
             }
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){
@@ -274,7 +272,7 @@ public class BlastAOE implements AOE, Serializable {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
@@ -287,8 +285,6 @@ public class BlastAOE implements AOE, Serializable {
             }
         }
 
-        t = pts[0];
-
         Measurement dmm = Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = Measurement.EUCLIDEAN;
@@ -300,7 +296,7 @@ public class BlastAOE implements AOE, Serializable {
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){
@@ -333,8 +329,6 @@ public class BlastAOE implements AOE, Serializable {
             }
         }
 
-        t = lts[0];
-
         for (int i = pts.length; i < totalTargets; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
@@ -342,7 +336,7 @@ public class BlastAOE implements AOE, Serializable {
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){

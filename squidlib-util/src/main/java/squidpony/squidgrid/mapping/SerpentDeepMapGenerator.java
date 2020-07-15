@@ -342,7 +342,7 @@ public class SerpentDeepMapGenerator {
         for (int i = 0; i < depth; i++) {
             ups.add(new OrderedSet<Coord>(40));
             downs.add(new OrderedSet<Coord>(40));
-            OrderedSet<Coord> above = null;
+            OrderedSet<Coord> above;
             if (i > 0) {
                 above = new OrderedSet<>(linksDown.get(i - 1));
                 if(above.size() == 0)

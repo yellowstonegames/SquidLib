@@ -45,7 +45,7 @@ public class SoundMap
      * The latest results of findAlerted(), with Coord keys representing the positions of creatures that were alerted
      * and Double values representing how loud the sound was when it reached them.
      */
-    public OrderedMap<Coord, Double> alerted = new OrderedMap<>();
+    public OrderedMap<Coord, Double> alerted;
     /**
      * Cells with no sound are always marked with 0.
      */

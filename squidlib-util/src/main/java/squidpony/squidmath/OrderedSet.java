@@ -1056,7 +1056,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          * {@link java.util.ListIterator#next()} (or <code>null</code> if no
          * next entry exists).
          */
-        int next = -1;
+        int next;
         /**
          * The last entry that was returned (or -1 if we did not iterate or used
          * {@link #remove()}).
@@ -1066,7 +1066,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          * The current index (in the sense of a {@link java.util.ListIterator}).
          * When -1, we do not know the current index.
          */
-        int index = -1;
+        int index;
 
         SetIterator() {
             next = size == 0 ? -1 : order.items[0];

@@ -1243,7 +1243,7 @@ public class CoordPacker {
             return unpacked;
         boolean on = false;
         int idx = 0;
-        short x =0, y = 0;
+        short x, y;
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
@@ -1284,7 +1284,7 @@ public class CoordPacker {
             return unpacked;
         boolean on = false;
         int idx = 0;
-        short x =0, y = 0;
+        short x, y;
         double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? MathExtras.remainder(angle, 360.0) : angle);
         double span2 = Math.toRadians(span) * 0.5;
 
@@ -1340,7 +1340,7 @@ public class CoordPacker {
                     "Too many levels to be packed by CoordPacker; should be less than 64 but was given " +
                             levels.length);
         double[][] unpacked = new double[width][height];
-        short x= 0, y = 0;
+        short x, y;
         for(int l = 0; l < packed.length; l++) {
             boolean on = false;
             int idx = 0;
@@ -1398,7 +1398,7 @@ public class CoordPacker {
         if(limit > levels.length)
             limit = levels.length;
         double[][] unpacked = new double[width][height];
-        short x= 0, y = 0;
+        short x, y;
         for(int l = packed.length - limit; l < packed.length; l++) {
             boolean on = false;
             int idx = 0;
@@ -1466,7 +1466,7 @@ public class CoordPacker {
         double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? MathExtras.remainder(angle, 360.0) : angle);
         double span2 = Math.toRadians(span);
         double[][] unpacked = new double[width][height];
-        short x= 0, y = 0;
+        short x, y;
         for(int l = packed.length - limit; l < packed.length; l++) {
             boolean on = false;
             int idx = 0;
@@ -1510,7 +1510,7 @@ public class CoordPacker {
                     "CoordPacker.unpackMultiByte() must be given a non-empty array");
         byte[][] unpacked = new byte[width][height];
         byte lPlus = 1;
-        short x=0, y=0;
+        short x, y;
         for(int l = 0; l < packed.length; l++, lPlus++) {
             boolean on = false;
             int idx = 0;
@@ -4960,7 +4960,7 @@ public class CoordPacker {
         for (int e = 0; e < many.length; e++) {
             boolean on = false;
             int idx = 0;
-            short x = 0, y = 0;
+            short x, y;
             for(int p = 0; p < many[e].length; p++, on = !on) {
                 if (on) {
                     for (int toSkip = idx + (many[e][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
