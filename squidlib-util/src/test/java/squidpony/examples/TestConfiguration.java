@@ -12,6 +12,9 @@ public class TestConfiguration {
         if(PRINTING) System.out.print(text);
     }
 
+    public static void println(){
+        if(PRINTING) System.out.println();
+    }
     public static void println(CharSequence text){
         if(PRINTING) System.out.println(text);
     }

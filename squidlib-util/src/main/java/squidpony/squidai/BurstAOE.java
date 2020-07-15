@@ -141,8 +141,6 @@ public class BurstAOE implements AOE, Serializable {
             }
         }
 
-        t = ts[0];
-
         Measurement dmm = Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = Measurement.EUCLIDEAN;
@@ -153,7 +151,7 @@ public class BurstAOE implements AOE, Serializable {
             t = ts[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0) {

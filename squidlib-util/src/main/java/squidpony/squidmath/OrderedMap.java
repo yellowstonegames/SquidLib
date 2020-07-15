@@ -1133,7 +1133,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
          * {@link java.util.ListIterator#next()} (or <code>null</code> if no
          * next entry exists).
          */
-        int next = -1;
+        int next;
         /**
          * The last entry that was returned (or -1 if we did not iterate or used
          * {@link java.util.Iterator#remove()}).
@@ -1144,7 +1144,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
          * Note that this value is not meaningful when this iterator has been
          * created using the nonempty constructor.
          */
-        int index = 0;
+        int index;
         private MapIterator() {
             next = size == 0 ? -1 : order.items[0];
             index = 0;

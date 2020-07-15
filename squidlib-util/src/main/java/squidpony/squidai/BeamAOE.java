@@ -335,7 +335,7 @@ public class BeamAOE implements AOE, Serializable {
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
         double[][] resMap = DungeonUtility.generateResistances(dungeon);
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
@@ -378,7 +378,7 @@ public class BeamAOE implements AOE, Serializable {
                 dt.partialScan(radius, null);
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
@@ -482,7 +482,7 @@ public class BeamAOE implements AOE, Serializable {
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
         double[][] resMap = DungeonUtility.generateResistances(dungeon);
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
@@ -504,9 +504,7 @@ public class BeamAOE implements AOE, Serializable {
                 }
             }
         }
-
-        t = rt.extend(origin, pts[0], length, false, dungeon.length, dungeon[0].length);
-
+        
         for (int i = 0; i < pts.length; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
@@ -524,7 +522,7 @@ public class BeamAOE implements AOE, Serializable {
                 dt.partialScan(radius, null);
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
@@ -559,9 +557,7 @@ public class BeamAOE implements AOE, Serializable {
             dm.resetMap();
             dm.clearGoals();
         }
-
-        t = rt.extend(origin, lts[0], length, false, dungeon.length, dungeon[0].length);
-
+        
         for (int i = pts.length; i < totalTargets; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
@@ -579,7 +575,7 @@ public class BeamAOE implements AOE, Serializable {
                 dt.partialScan(radius, null);
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){

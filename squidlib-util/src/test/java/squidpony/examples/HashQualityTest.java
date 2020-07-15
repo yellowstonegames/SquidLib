@@ -1596,7 +1596,7 @@ public class HashQualityTest {
         long baseTotal = 0, hacoTotal = 0, lantTotal = 0, xlxsTotal = 0, total = 0;
 //        long[] confTotals = new long[31];
         NLFSR gen = new NLFSR(1234567);
-        int mul = gen.nextInt() << 1 | 1;
+        int mul;
         for (int r = 1; r < 32; r++) {
 
             for (int m = 1; m < 0x1000; m++) {

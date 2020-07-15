@@ -350,7 +350,7 @@ public class ConeAOE implements AOE, Serializable {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
@@ -366,8 +366,6 @@ public class ConeAOE implements AOE, Serializable {
                 }
             }
         }
-
-        t = pts[0];
 
         Measurement dmm = Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
@@ -410,8 +408,6 @@ public class ConeAOE implements AOE, Serializable {
                 }
             }
         }
-
-        t = lts[0];
 
         for (int i = pts.length; i < totalTargets; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);

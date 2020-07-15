@@ -157,7 +157,7 @@ public class DetailedMimicDungeonTest {
                 water[i][j] = -1;
             }
         }
-        boolean even = true;
+        boolean even;
         StringBuilder sb = new StringBuilder(64000);
         String[] people = new String[]{
                 "palette0_Hero_Chain_Bow_Iso.gif",

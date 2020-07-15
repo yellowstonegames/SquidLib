@@ -203,7 +203,7 @@ public class CloudAOE implements AOE, Serializable {
 
             sp.start(t, volume, null);
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (sp.spillMap[x][y]){
@@ -318,7 +318,7 @@ public class CloudAOE implements AOE, Serializable {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
             Arrays.fill(dungeonPriorities[i], '#');
         }
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -346,7 +346,7 @@ public class CloudAOE implements AOE, Serializable {
 
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (sp.spillMap[x][y]){

@@ -83,7 +83,7 @@ public class ThinDungeonTest {
         serpent.putWalledBoxRoomCarvers(5);
         serpent.putWalledRoundRoomCarvers(3);
         serpent.putCaveCarvers(4);
-        char[][] map = serpent.generate();
+        char[][] map;
 
         char[][] sdungeon;
         int[][] env;

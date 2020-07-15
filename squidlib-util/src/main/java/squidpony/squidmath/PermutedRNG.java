@@ -225,7 +225,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
      * @param bytes a byte array that will have its contents overwritten with random bytes.
      */
     public void nextBytes( final byte[] bytes ) {
-        int i = bytes.length, n = 0;
+        int i = bytes.length, n;
         while( i != 0 ) {
             n = Math.min(i, 8 );
             for ( long bits = nextLong(); n-- != 0; bits >>>= 8 ) bytes[ --i ] = (byte)bits;

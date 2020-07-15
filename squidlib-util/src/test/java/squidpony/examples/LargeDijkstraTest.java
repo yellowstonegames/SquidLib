@@ -55,7 +55,7 @@ public class LargeDijkstraTest {
                     hl = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(dun));
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
-                    char t = (char) 33;
+                    char t;
                     if (x % 2 == 0 && gm[x / 2][y] < 200)
                         t = '.';// ("" + (gm[x / 2][y] % 10)).charAt(0);
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
@@ -102,7 +102,7 @@ public class LargeDijkstraTest {
             hl = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(dun));
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
-                    char t = (char) 33;
+                    char t;
                     if (x % 2 == 0 && gm[x / 2][y] < 200)
                         t = '.';// ("" + (gm[x / 2][y] % 10)).charAt(0);
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
@@ -160,7 +160,7 @@ public class LargeDijkstraTest {
             hl = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(dun));
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
-                    char t = (char) 33;
+                    char t;
                     if (x % 2 == 0 && ((x /2 == goal1.x && y == goal1.y) || (x /2 == goal2.x && y == goal2.y) ||
                             (x /2 == goal3.x && y == goal3.y) || (x /2 == goal4.x && y == goal4.y) ||
                             (x /2 == goal5.x && y == goal5.y)))

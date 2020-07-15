@@ -41,7 +41,7 @@ public class NoiseRangeTest {
                         y1 = y0 - j1 + G2,
                         x2 = x0 - 1 + 2 * G2,
                         y2 = y0 - 1 + 2 * G2;
-                double n = 0.0;
+                double n;
                 for (int gi0 = 0; gi0 < 256; gi0++) {
                     double t0 = threshold - x0 * x0 - y0 * y0;
                     if (t0 > 0) {
