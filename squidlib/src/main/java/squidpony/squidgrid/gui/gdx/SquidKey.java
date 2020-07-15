@@ -24,7 +24,7 @@ public class SquidKey implements InputProcessor {
     private InputProcessor processor;
     private final IntArray queue = new IntArray();
     private final IntArray processingQueue = new IntArray();
-    private boolean ignoreInput = false;
+    private boolean ignoreInput;
 
     /**
      * Constructs a SquidKey with no InputProcessor; for this to do anything, setProcessor() must be called.

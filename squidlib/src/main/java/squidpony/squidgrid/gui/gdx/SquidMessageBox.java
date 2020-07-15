@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class SquidMessageBox extends SparseLayers {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
-    protected int messageIndex = 0;
+    protected int messageIndex;
     /**
      * Creates a bare-bones panel with all default values for text rendering.
      *

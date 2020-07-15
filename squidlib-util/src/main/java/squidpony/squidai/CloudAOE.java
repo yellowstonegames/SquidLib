@@ -1,6 +1,5 @@
 package squidpony.squidai;
 
-import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
 import squidpony.squidmath.*;
@@ -9,8 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static squidpony.squidgrid.Measurement.*;
 
 /**
  * An AOE type that has a center and a volume, and will randomly expand in all directions until it reaches volume or
@@ -30,7 +27,7 @@ import static squidpony.squidgrid.Measurement.*;
 public class CloudAOE implements AOE, Serializable {
     private static final long serialVersionUID = 2L;
     private Spill spill;
-    private Coord center, origin = null;
+    private Coord center, origin;
     private int volume;
     private long seed;
     private boolean expanding;
@@ -113,17 +110,6 @@ public class CloudAOE implements AOE, Serializable {
 
     public void setRadiusType(Radius radiusType) {
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                break;
-            case CUBE:
-            case SQUARE:
-                break;
-            default:
-                break;
-        }
     }
 
     @Override

@@ -64,24 +64,24 @@ import squidpony.squidmath.StatefulRNG;
  * Created by Tommy Ettinger on 7/11/2015.
  */
 public class DefaultResources implements LifecycleListener {
-    private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
-            smooth1 = null, smooth2 = null, smoothSquare = null,
-            square1 = null, square2 = null,
-            unicode1 = null, unicode2 = null,
-            arial15 = null, tiny = null, lessTiny = null,
-            sevenTwelve = null, computerSaysNo = null;
+    private BitmapFont narrow1, narrow2, narrow3,
+            smooth1, smooth2, smoothSquare,
+            square1, square2,
+            unicode1, unicode2,
+            arial15, tiny, lessTiny,
+            sevenTwelve, computerSaysNo;
 
-    private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
-            distancePrint = null, distanceClean = null, distanceCode = null, distanceCodeJP = null,
-            distanceDejaVu = null, distanceOrbit = null, distanceHeavySquare = null,
-            distanceSlab = null, distanceSlabLight = null,
-            distanceLean = null, distanceLeanLight = null,
-            msdfSlab = null, msdfLean = null, msdfDejaVu = null,
-            msdfCurvySquare = null, msdfCarved = null, msdfRoboto = null,
-            msdfIcons = null;
-    private TextFamily familyLean = null, familySlab = null, familyGo = null,
-            familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
-    private TextureAtlas iconAtlas = null;
+    private TextCellFactory distanceNarrow, distanceSquare, typewriterDistanceNarrow,
+            distancePrint, distanceClean, distanceCode, distanceCodeJP,
+            distanceDejaVu, distanceOrbit, distanceHeavySquare,
+            distanceSlab, distanceSlabLight,
+            distanceLean, distanceLeanLight,
+            msdfSlab, msdfLean, msdfDejaVu,
+            msdfCurvySquare, msdfCarved, msdfRoboto,
+            msdfIcons;
+    private TextFamily familyLean, familySlab, familyGo,
+            familyLeanMSDF, familySlabMSDF, familyPrintMSDF;
+    private TextureAtlas iconAtlas;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
             unicodeName = "Mandrill-6x16.fnt", unicodeTexture = "Mandrill-6x16.png",
@@ -321,12 +321,12 @@ public class DefaultResources implements LifecycleListener {
             + "  gl_FragColor = vec4(v_color.rgb * nice, clamp(d * u_smoothing + (block + 1.0) * 0.5, 0.0, 1.0) * v_color.a);\n"
             + "}\n";
 
-    private SquidColorCenter scc = null;
-    private Texture tentacle = null;
-    private TextureRegion tentacleRegion = null;
+    private SquidColorCenter scc;
+    private Texture tentacle;
+    private TextureRegion tentacleRegion;
     private StatefulRNG guiRandom;
 
-    private static DefaultResources instance = null;
+    private static DefaultResources instance;
 
     static BitmapFont copyFont(BitmapFont font)
     {
@@ -1448,6 +1448,7 @@ public class DefaultResources implements LifecycleListener {
      * Not supported; use {@link #getCrispSlabFamily()} instead, using {@link GDXMarkup} to add italics with its
      * {@code [/]} tag.
      * @return always throws an UnsupportedOperationException
+     * @deprecated use {@link #getCrispSlabFamily()} instead
      */
     @Deprecated
     public static TextCellFactory getCrispSlabItalicFont()
@@ -1498,6 +1499,7 @@ public class DefaultResources implements LifecycleListener {
      * Not supported; use {@link #getCrispLeanFamily()} instead, using {@link GDXMarkup} to add italics with its
      * {@code [/]} tag.
      * @return always throws an UnsupportedOperationException
+     * @deprecated use {@link #getCrispLeanFamily()} instead
      */
     @Deprecated
     public static TextCellFactory getCrispLeanItalicFont()

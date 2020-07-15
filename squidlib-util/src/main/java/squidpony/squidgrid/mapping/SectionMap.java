@@ -82,7 +82,7 @@ public class SectionMap implements Serializable {
             return;
         }
         regions = new ArrayList<>(rf.rooms.size() + rf.caves.size() + rf.corridors.size());
-        names = new Arrangement<>(regions.size());
+        names = new Arrangement<>(0);
         connections = new ArrayList<>(regions.size());
         reinitialize(rf);
     }

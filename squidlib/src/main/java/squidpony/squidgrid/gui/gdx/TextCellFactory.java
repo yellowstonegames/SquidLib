@@ -57,26 +57,29 @@ public class TextCellFactory implements Disposable {
      * The commonly used symbols in roguelike games.
      */
     public static final String DEFAULT_FITTING =
-            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
-            LINE_FITTING = StringKit.BOX_DRAWING_SINGLE,
-            SQUID_FITTING = StringKit.PERMISSIBLE_CHARS;
+            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    /**
+     * All symbols that squidlib-util permits itself to generate; this is a shared subset across most of the larger
+     * fonts in {@link DefaultResources}.
+     */
+    public static final String SQUID_FITTING = StringKit.PERMISSIBLE_CHARS;
     /**
      * The {@link AssetManager} from where to load the font. Use it to share
      * loading of a font's file across multiple factories.
      */
     protected /* Nullable */AssetManager assetManager;
-    public BitmapFont bmpFont = null;
-    protected TextureRegion block = null;
-    protected TextureRegion dirMarker = null;
+    public BitmapFont bmpFont;
+    protected TextureRegion block;
+    protected TextureRegion dirMarker;
     protected String fitting = SQUID_FITTING;
     protected IColorCenter<Color> scc;
-    protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
+    protected int leftPadding, rightPadding, topPadding, bottomPadding;
     protected float width = 1, height = 1;
     public float actualCellWidth = 1, actualCellHeight = 1;
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
-    protected boolean initialized = false, initializedByFont = false, initializedBySize = false;
-    protected boolean distanceField = false;
-    protected boolean msdf = false;
+    protected boolean initialized, initializedByFont, initializedBySize;
+    protected boolean distanceField;
+    protected boolean msdf;
     /**
      * For distance field and MSDF fonts, this is the ShaderProgram that will produce the intended effect.
      * Usually should not be changed manually unless you know what you are doing.
@@ -712,7 +715,7 @@ public class TextCellFactory implements Disposable {
      * Returns whether this factory is currently set to do antialiasing on the
      * characters rendered, which is always true.
      *
-     * @return true if antialiasing is set
+     * @return true if antialiasing is set, so, always
      */
     public boolean antialias() {
         return true;
@@ -725,6 +728,7 @@ public class TextCellFactory implements Disposable {
      * @return this factory for method chaining
      * @deprecated AA is the wave of the future!
      */
+    @Deprecated
     public TextCellFactory antialias(boolean antialias) {
         return this;
     }

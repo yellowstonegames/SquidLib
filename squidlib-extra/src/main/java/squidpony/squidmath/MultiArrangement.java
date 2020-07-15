@@ -133,7 +133,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected CrossHash.IHasher hasher;
 
     /**
      * Creates a new MultiArrangement.
@@ -536,7 +536,6 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         }
     }
 
-    @SuppressWarnings("unchecked")
     protected int rem(final Object k) {
         if (k == null) {
             if (containsNullKey)
@@ -562,7 +561,6 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
     {
         return rem(o);
     }
-    @SuppressWarnings("unchecked")
     public int removeInt(final Object k) {
         if (k == null) {
             if (containsNullKey)
@@ -924,7 +922,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
          * Note that this value is not meaningful when this iterator has been
          * created using the nonempty constructor.
          */
-        int index = 0;
+        int index;
         private MapIterator() {
             next = first;
             index = 0;
@@ -1650,7 +1648,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         while (i < n) {
             if (first) first = false;
             else s.append(", ");
-            s.append(keyAt(i)).append(':').append(i);
+            s.append(keyAt(i)).append(':').append(i++);
         }
         s.append("}");
         return s.toString();

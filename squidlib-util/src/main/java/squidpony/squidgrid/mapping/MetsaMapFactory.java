@@ -55,7 +55,7 @@ public class MetsaMapFactory {
 
     private List<Coord> cities = new ArrayList<>();
     private StatefulRNG rng;
-    private double maxPeak = 0;
+    private double maxPeak;
     private double[][] map;
     public MetsaMapFactory()
     {

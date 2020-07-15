@@ -117,7 +117,7 @@ public class OldEverythingDemo extends ApplicationAdapter {
     private GreasedRegion floors, blockage, seen, currentlySeen;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage, messageStage;
-    private int framesWithoutAnimation = 0;
+    private int framesWithoutAnimation;
     private Coord cursor;
     private Coord playerPos;
     private List<Coord> toCursor;
@@ -125,7 +125,7 @@ public class OldEverythingDemo extends ApplicationAdapter {
     private String lang;
     private SquidColorCenter[] colorCenters;
     private int currentCenter;
-    private boolean changingColors = false;
+    private boolean changingColors;
     private TextCellFactory textFactory;
     public static final int INTERNAL_ZOOM = 1;
     private Viewport viewport, messageViewport;

@@ -20,9 +20,9 @@ public class Placement {
     public RoomFinder finder;
 
     private GreasedRegion allRooms, allCorridors, allCaves, allFloors, nonRoom;
-    private OrderedSet<OrderedSet<Coord>> alongStraightWalls = null,
-            corners = null, centers = null;
-    private OrderedSet<Coord> hidingPlaces = null;
+    private OrderedSet<OrderedSet<Coord>> alongStraightWalls,
+            corners, centers;
+    private OrderedSet<Coord> hidingPlaces;
     private Placement()
     {
 

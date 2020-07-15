@@ -50,7 +50,7 @@ public class OldBasicDemo extends ApplicationAdapter {
     private float secondsWithoutMoves;
     private String[] lang;
     private FakeLanguageGen.SentenceForm[] forms;
-    private int langIndex = 0;
+    private int langIndex;
     @Override
     public void create () {
         //These variables, corresponding to the screen's width and height in cells and a cell's width and height in

@@ -178,7 +178,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
      */
     abstract class Skeleton implements Zone {
 
-		private transient Coord center = null;
+		private transient Coord center;
 		protected transient int width = -2;
 		protected transient int height = -2;
 

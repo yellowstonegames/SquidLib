@@ -48,7 +48,7 @@ public class DistanceFieldTest extends ApplicationAdapter {
     private TextCellFactory factory;
     private SparseLayers display;
     private SparseLayers[] displays;
-    private int index = 0;
+    private int index;
     @Override
     public void create() {
         batch = new FilterBatch();

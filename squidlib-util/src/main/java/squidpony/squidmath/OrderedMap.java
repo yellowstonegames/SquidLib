@@ -140,7 +140,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     /**
      * Default return value.
      */
-    protected V defRetValue = null;
+    protected V defRetValue;
 
     /**
      * The initial default size of a hash table.
@@ -578,7 +578,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             fixOrder(pos, last);
         }
     }
-    @SuppressWarnings("unchecked")
     public V remove(final Object k) {
         if (k == null) {
             if (containsNullKey)
@@ -1679,7 +1678,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final Iterator<?> i = c.iterator();
             while (n-- != 0)
                 if (remove(i.next())) retVal = true;
-            return retVal;
+            return false;
         }
 
         public Object[] toArray() {
@@ -1700,7 +1699,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             int n = c.size();
             while (n-- != 0)
                 if (add(i.next())) retVal = true;
-            return retVal;
+            return false;
         }
 
         @Override

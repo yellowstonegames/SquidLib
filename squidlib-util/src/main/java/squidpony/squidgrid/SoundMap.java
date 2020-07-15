@@ -65,7 +65,7 @@ public class SoundMap
      */
     public IRNG rng;
 
-    private boolean initialized = false;
+    private boolean initialized;
     /**
      * Construct a SoundMap without a level to actually scan. If you use this constructor, you must call an
      * initialize() method before using this class.
@@ -293,8 +293,7 @@ public class SoundMap
     public void removeSound(int x, int y) {
         if(!initialized) return;
         Coord pt = Coord.get(x, y);
-        if(sounds.containsKey(pt))
-            sounds.remove(pt);
+		sounds.remove(pt);
     }
 
     /**
@@ -303,8 +302,7 @@ public class SoundMap
      */
     public void removeSound(Coord pt) {
         if(!initialized) return;
-        if(sounds.containsKey(pt))
-            sounds.remove(pt);
+		sounds.remove(pt);
     }
 
     /**

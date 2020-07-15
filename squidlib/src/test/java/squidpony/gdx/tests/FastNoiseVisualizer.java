@@ -25,11 +25,11 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
 
     private FastNoise noise = new FastNoise(1, 0.25f, FastNoise.CUBIC_FRACTAL, 1);
     private static final int MODE_LIMIT = 1;
-    private int mode = 0;
-    private int dim = 0; // this can be 0, 1, or 2; add 2 to get the actual dimensions
+    private int mode;
+    private int dim; // this can be 0, 1, or 2; add 2 to get the actual dimensions
     private int octaves = 3;
     private float freq = 0.125f;
-    private boolean inverse = false;
+    private boolean inverse;
     private ImmediateModeRenderer20 renderer;
     
     private int hashIndex = 4;

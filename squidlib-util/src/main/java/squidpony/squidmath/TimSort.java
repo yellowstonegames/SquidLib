@@ -87,7 +87,7 @@ public class TimSort<T> {
 	 * runBase[i] + runLen[i] == runBase[i + 1]
 	 * 
 	 * so we could cut the storage for this, but it's a minor amount, and keeping all the info explicit simplifies the code. */
-	private int stackSize = 0; // Number of pending runs on stack
+	private int stackSize; // Number of pending runs on stack
 	private final int[] runBase;
 	private final int[] runLen;
 
@@ -173,8 +173,8 @@ public class TimSort<T> {
 			return;
 		}
 
-		/** March over the array once, left to right, finding natural runs, extending short natural runs to minRun elements, and
-		 * merging runs to maintain stack invariant. */
+		/* March over the array once, left to right, finding natural runs, extending short natural runs to minRun elements, and
+		  merging runs to maintain stack invariant. */
 		TimSort<T> ts = new TimSort<>(a, order, c);
 		int minRun = minRunLength(nRemaining);
 		do {
@@ -183,7 +183,7 @@ public class TimSort<T> {
 
 			// If run is short, extend to min(minRun, nRemaining)
 			if (runLen < minRun) {
-				int force = nRemaining <= minRun ? nRemaining : minRun;
+				int force = Math.min(nRemaining, minRun);
 				binarySort(a, order, lo, lo + force, lo + runLen, c);
 				runLen = force;
 			}
@@ -652,7 +652,7 @@ public class TimSort<T> {
 			if (minGallop < 0) minGallop = 0;
 			minGallop += 2; // Penalize for leaving gallop mode
 		} // End of "outer" loop
-		this.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
+		this.minGallop = Math.max(minGallop, 1); // Write back to field
 
 		if (len1 == 1) {
 			if (DEBUG) assert len2 > 0;
@@ -759,7 +759,7 @@ public class TimSort<T> {
 			if (minGallop < 0) minGallop = 0;
 			minGallop += 2; // Penalize for leaving gallop mode
 		} // End of "outer" loop
-		this.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
+		this.minGallop = Math.max(minGallop, 1); // Write back to field
 
 		if (len2 == 1) {
 			if (DEBUG) assert len1 > 0;

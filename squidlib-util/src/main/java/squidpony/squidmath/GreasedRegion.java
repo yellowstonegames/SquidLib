@@ -7283,7 +7283,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public class GRIterator implements Iterator<Coord>
     {
-        public int index = 0;
+        public int index;
         private long t, w;
         public GRIterator()
         {

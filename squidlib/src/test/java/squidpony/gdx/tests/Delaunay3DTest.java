@@ -33,7 +33,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
     private float[] vertices;
     private float[] centroids;
     private int[] connections;
-    private int connector = 0;
+    private int connector;
     private long startTime;
 //    private Texture whiteSquare;
 

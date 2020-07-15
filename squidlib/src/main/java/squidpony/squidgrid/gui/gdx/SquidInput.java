@@ -67,7 +67,7 @@ public class SquidInput extends InputAdapter {
     }
 
     protected KeyHandler keyAction;
-    protected boolean numpadDirections = true, ignoreInput = false;
+    protected boolean numpadDirections = true, ignoreInput;
     protected SquidMouse mouse;
     protected final IntVLA queue = new IntVLA();
     protected long lastKeyTime = -1000000L;

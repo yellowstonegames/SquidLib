@@ -36,7 +36,7 @@ public class IconsTest extends ApplicationAdapter{
     FilterBatch batch;
     ArrayList<Color> colors;
     double[][] resMap;
-    long ctr = 0L, lastUpdate = 0L;
+    long ctr, lastUpdate;
     TextureAtlas atlas;
     OrderedMap<Coord, AnimatedEntity> things;
     Array<TextureAtlas.AtlasRegion> regions;

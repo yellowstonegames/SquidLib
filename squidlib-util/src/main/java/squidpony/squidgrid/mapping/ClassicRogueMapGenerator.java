@@ -9,6 +9,7 @@ import squidpony.squidmath.OrderedSet;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Creates a dungeon in the style of the original Rogue game. It will always
@@ -175,9 +176,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     private void connectRooms() {
         ArrayList<ClassicRogueRoom> unconnected = new ArrayList<>();
         for (int x = 0; x < horizontalRooms; x++) {
-            for (int y = 0; y < verticalRooms; y++) {
-                unconnected.add(rooms[x][y]);
-            }
+            unconnected.addAll(Arrays.asList(rooms[x]).subList(0, verticalRooms));
         }
         rng.shuffleInPlace(unconnected);
 

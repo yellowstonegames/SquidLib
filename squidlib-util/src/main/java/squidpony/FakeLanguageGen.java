@@ -40,13 +40,13 @@ public class FakeLanguageGen implements Serializable {
             vowelSplitters, closingSyllables;
     public final boolean clean;
     public final double[] syllableFrequencies;
-    protected double totalSyllableFrequency = 0.0;
+    protected double totalSyllableFrequency;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final GWTRNG srng = new GWTRNG();
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64, Hashers.caseInsensitiveStringHasher);
-    protected String summary = null;
+    protected String summary;
     protected String name = "Nameless Language";
     private static final transient StringBuilder sb = new StringBuilder(20);
     private static final transient StringBuilder ender = new StringBuilder(12);
@@ -2970,7 +2970,7 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen CHEROKEE_ROMANIZED = cherokee().register("Cherokee Romanized");
 
-    private static final FakeLanguageGen vietnamese() {
+    private static FakeLanguageGen vietnamese() {
         return new FakeLanguageGen(new String[]{
                 "a", "à", "á", "â", "ä", "ā", "ă",
                 "e", "è", "é", "ê", "ë", "ē", "ĕ",

@@ -345,8 +345,6 @@ public class ModularMapGenerator implements IDungeonGenerator {
                 if (mm2.topDoors.isEmpty()) {
                     if (!mm2.rightDoors.isEmpty())
                         mm2 = mm2.rotate(1);
-                    else if (!mm2.topDoors.isEmpty())
-                        mm2 = mm2.flip(false, true);
                     else if (!mm2.leftDoors.isEmpty())
                         mm2 = mm2.rotate(3);
                     else continue;

@@ -14,8 +14,8 @@ import java.util.Collection;
 public class AnimatedEntity {
     public Actor actor;
     public int gridX, gridY;
-    public boolean animating = false;
-    public boolean doubleWidth = false;
+    public boolean animating;
+    public boolean doubleWidth;
     public AnimatedEntity(Actor actor, int x, int y)
     {
         this.actor = actor;

@@ -83,17 +83,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     private Pixmap pm;
     private Texture pt;
-    private int counter = 0;
-    private float season = 0f;
+    private int counter;
+    private float season;
     private Color tempColor = Color.WHITE.cpy();
 
-    private boolean spinning = false;
+    private boolean spinning;
 
     private boolean seasons = true;
 
-    private boolean cloudy = false;
+    private boolean cloudy;
 //    private float nation = 0f;
-    private long ttg = 0; // time to generate
+    private long ttg; // time to generate
     private WorldMapGenerator.DetailedBiomeMapper dbm;
 //    private FantasyPoliticalMapper fpm;
 //    private char[][] political;
@@ -835,11 +835,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         batch.draw(pt, 0, 0, width >> 1, height >> 1);
         batch.end();
     }
-    private final float emphasize(final float a)
+    private float emphasize(final float a)
     {
         return a * a * (3f - 2f * a);
     }
-    private final float extreme(final float a)
+    private float extreme(final float a)
     {
         return a * a * a * (a * (a * 6f - 15f) + 10f);
     }

@@ -270,8 +270,7 @@ public class JsonConverter extends Json {
             }
 
             @Override
-            @SuppressWarnings("unchecked")
-            public OrderedMap read(Json json, JsonValue jsonData, Class type) {
+			public OrderedMap read(Json json, JsonValue jsonData, Class type) {
                 if(jsonData == null || jsonData.isNull()) return null;
                 float f = json.readValue("f", float.class, jsonData);
                 Object k = json.readValue("k", null, INVALID, jsonData);

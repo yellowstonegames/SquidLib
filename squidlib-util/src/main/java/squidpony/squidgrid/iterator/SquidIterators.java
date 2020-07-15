@@ -146,7 +146,7 @@ public class SquidIterators {
 
 		protected final int size;
 
-		protected boolean done = false;
+		protected boolean done;
 
 		/**
 		 * An iterator to iterate in the square of size {@code size} around
@@ -292,7 +292,7 @@ public class SquidIterators {
 		protected final int height;
 
 		/** The last cell returned */
-		protected Coord previous = null;
+		protected Coord previous;
 
 		public RectangleFromBottomLeftToTopRight(Coord start, int width, int height) {
 			this.xstart = start.x;

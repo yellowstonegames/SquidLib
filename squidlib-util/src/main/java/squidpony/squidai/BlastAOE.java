@@ -26,7 +26,7 @@ import java.util.Collection;
 public class BlastAOE implements AOE, Serializable {
     private static final long serialVersionUID = 2L;
     private FOV fov;
-    private Coord center, origin = null;
+    private Coord center, origin;
     private int radius;
     private double[][] map;
     private char[][] dungeon;

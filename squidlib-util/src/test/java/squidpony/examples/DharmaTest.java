@@ -10,7 +10,7 @@ public class DharmaTest {
     public static void main(String[] args) {
         for(int d = 1; d < 20; d++)
         {
-            long sum = 0l;
+            long sum = 0L;
             System.out.println("\nFairness: " + (d * 0.05));
             DharmaRNG sq = new DharmaRNG(new LightRNG(d * 0xbabe), d * 0.05);
             int result;

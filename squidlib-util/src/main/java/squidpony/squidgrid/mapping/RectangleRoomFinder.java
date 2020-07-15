@@ -30,7 +30,7 @@ public class RectangleRoomFinder {
 	public int minimumDiagonal = 3;
 
 	/** {@code true} to restrict {@code this} to find square rooms */
-	public boolean onlySquareRooms = false;
+	public boolean onlySquareRooms;
 
 	public RectangleRoomFinder(char[][] dungeon) {
 		this.dungeon = dungeon;
@@ -185,7 +185,6 @@ public class RectangleRoomFinder {
 		Coord current = first;
 
 		assert 0 <= steps;
-		assert way != null;
 
 		while (0 < steps) {
 			if (!isInDungeon(current) || !isFloor(dungeon[current.x][current.y])

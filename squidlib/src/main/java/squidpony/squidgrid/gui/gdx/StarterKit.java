@@ -101,15 +101,20 @@ public class StarterKit {
     /**
      * Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width
      * and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font. You can use
-     * any of the pre-constructed TextCellFactory objects in {@link DefaultResources}. such as
-     * {@link DefaultResources#getStretchableTypewriterFont()}, {@link DefaultResources#getStretchableDejaVuFont()},
-     * {@link DefaultResources#getStretchableSquareFont()}, or {@link DefaultResources#getStretchableCodeFont()}, as
+     * any of the pre-constructed TextCellFactory objects in {@link DefaultResources}, such as
+     * {@link DefaultResources#getCrispLeanFamily()}, {@link DefaultResources#getCrispDejaVuFont()},
+     * {@link DefaultResources#getCrispSlabFamily()}, or {@link DefaultResources#getStretchableTypewriterFont()}, as
      * long as you have the right assets available (their documentation says the exact files you need). While you can
      * construct your own TextCellFactory given a BitmapFont, that won't work well as a distance field font unless you
      * used some very unusual configuration making the font, so the font would only look good at one size or possibly a
      * multiple of that size. The defaults are recommended for now; a separate project is used to make the distance
-     * field monospace fonts (tommyettinger/Glamer on GitHub) and more can be made as needed from permissively-licensed
-     * fonts if a game has particular aesthetic requirements.
+     * field monospace fonts (<a href="https://github.com/tommyettinger/Glamer">tommyettinger/Glamer</a> on GitHub)
+     * That project also serves as storage for fonts that were made with Glamer, and appropriately-licensed fonts are
+     * added to the "premade" folder once they are converted.
+     * <br>
+     * If you don't know what font to pick, {@link DefaultResources#getCrispLeanFamily()} and
+     * {@link DefaultResources#getCrispSlabFamily()} have the same (very large) character coverage, and have bold and
+     * italic modes that can be accessed with {@link GDXMarkup} if you decide to use that later.
      * @param textFactory the TextCellFactory to use for the font
      * @param gridWidth the width of the display area in cells
      * @param gridHeight the height of the display area in cells
@@ -121,16 +126,23 @@ public class StarterKit {
     }
     /**
      * Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width
-     * and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font. You can use
-     * any of the pre-constructed TextCellFactory objects in {@link DefaultResources}. such as
-     * {@link DefaultResources#getCrispLeanFamily()}, {@link DefaultResources#getCrispDejaVuFont()},
-     * {@link DefaultResources#getCrispCurvySquareFont()}, or {@link DefaultResources#getCrispSlabFamily()} , as
-     * long as you have the right assets available (their documentation says the exact files you need). While you can
-     * construct your own TextCellFactory given a BitmapFont, that won't work well as a distance field font unless you
-     * used some very unusual configuration making the font, so the font would only look good at one size or possibly a
-     * multiple of that size. The defaults are recommended for now; a separate project is used to make the distance
-     * field monospace fonts (tommyettinger/Glamer on GitHub) and more can be made as needed from permissively-licensed
-     * fonts if a game has particular aesthetic requirements.
+     * and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font; this
+     * overload also allows specifying additional space in pixels to be added to the right or bottom sides of the area
+     * with the grid of chars. You can use any of the pre-constructed TextCellFactory objects in
+     * {@link DefaultResources}, such as {@link DefaultResources#getCrispLeanFamily()}
+     * {@link DefaultResources#getCrispDejaVuFont()}, {@link DefaultResources#getCrispSlabFamily()}, or
+     * {@link DefaultResources#getStretchableTypewriterFont()}, as long as you have the right assets available (their
+     * documentation says the exact files you need). While you can construct your own TextCellFactory given a
+     * BitmapFont, that won't work well as a distance field font unless you used some very unusual configuration making
+     * the font, so the font would only look good at one size or possibly a multiple of that size. The defaults are
+     * recommended for now; a separate project is used to make the distance field monospace fonts
+     * (<a href="https://github.com/tommyettinger/Glamer">tommyettinger/Glamer</a> on GitHub). That project also serves
+     * as storage for fonts that were made with Glamer, and appropriately-licensed fonts are added to the "premade"
+     * folder once they are converted.
+     * <br>
+     * If you don't know what font to pick, {@link DefaultResources#getCrispLeanFamily()} and
+     * {@link DefaultResources#getCrispSlabFamily()} have the same (very large) character coverage, and have bold and
+     * italic modes that can be accessed with {@link GDXMarkup} if you decide to use that later.
      * @param textFactory the TextCellFactory to use for the font
      * @param gridWidth the width of the display area in cells
      * @param gridHeight the height of the display area in cells

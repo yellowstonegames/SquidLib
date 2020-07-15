@@ -55,7 +55,7 @@ public class Reach implements Serializable  {
      */
     public Reach(int maxDistance) {
         minDistance = 0;
-        this.maxDistance = (maxDistance < 0) ? 0 : maxDistance;
+        this.maxDistance = Math.max(maxDistance, 0);
         limit = AimLimit.FREE;
         metric = Radius.SQUARE;
     }
@@ -69,8 +69,8 @@ public class Reach implements Serializable  {
      *                    minDistance if it is lower than the calculated minDistance
      */
     public Reach(int minDistance, int maxDistance) {
-        this.minDistance = (minDistance < 0) ? 0 : minDistance;
-        this.maxDistance = (this.minDistance  > maxDistance) ? this.minDistance : maxDistance;
+        this.minDistance = Math.max(minDistance, 0);
+        this.maxDistance = Math.max(this.minDistance, maxDistance);
         limit = AimLimit.FREE;
         metric = Radius.SQUARE;
     }
@@ -85,8 +85,8 @@ public class Reach implements Serializable  {
      * @param metric a Radius enum that determines how distance will be calculated
      */
     public Reach(int minDistance, int maxDistance, Radius metric) {
-        this.minDistance = (minDistance < 0) ? 0 : minDistance;
-        this.maxDistance = (this.minDistance  > maxDistance) ? this.minDistance : maxDistance;
+        this.minDistance = Math.max(minDistance, 0);
+        this.maxDistance = Math.max(this.minDistance, maxDistance);
         limit = AimLimit.FREE;
         this.metric = metric;
     }
@@ -103,8 +103,8 @@ public class Reach implements Serializable  {
      *              equal to AimLimit.FREE)
      */
     public Reach(int minDistance, int maxDistance, Radius metric, AimLimit limit) {
-        this.minDistance = (minDistance < 0) ? 0 : minDistance;
-        this.maxDistance = (this.minDistance  > maxDistance) ? this.minDistance : maxDistance;
+        this.minDistance = Math.max(minDistance, 0);
+        this.maxDistance = Math.max(this.minDistance, maxDistance);
         this.limit = limit;
         this.metric = metric;
     }

@@ -63,7 +63,7 @@ public enum Radius {
 
     private static final double PI2 = Math.PI * 2;
     public double radius(int startx, int starty, int startz, int endx, int endy, int endz) {
-        return radius((double) startx, (double) starty, (double) startz, (double) endx, (double) endy, (double) endz);
+        return radius(startx, starty, startz, endx, endy, (double) endz);
     }
 
     public double radius(double startx, double starty, double startz, double endx, double endy, double endz) {
@@ -98,13 +98,13 @@ public enum Radius {
     }
 
     public double radius(int startx, int starty, int endx, int endy) {
-        return radius((double) startx, (double) starty, (double) endx, (double) endy);
+        return radius(startx, starty, endx, (double) endy);
     }
     public double radius(Coord start, Coord end) {
-        return radius((double) start.x, (double) start.y, (double) end.x, (double) end.y);
+        return radius(start.x, start.y, end.x, (double) end.y);
     }
     public double radius(Coord end) {
-        return radius(0.0, 0.0, (double) end.x, (double) end.y);
+        return radius(0.0, 0.0, end.x, end.y);
     }
 
     public double radius(double startx, double starty, double endx, double endy) {
@@ -114,7 +114,7 @@ public enum Radius {
     }
 
     public double radius(int dx, int dy) {
-        return radius((double) dx, (double) dy);
+        return radius(dx, (double) dy);
     }
 
     public double radius(double dx, double dy) {
@@ -382,7 +382,7 @@ public enum Radius {
                     {
                         // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
                         // straight up or down, and then x cannot be < 0 or >= width.
-                        edgeLength = Math.round((0 - center.x) / cosTheta);
+                        edgeLength = Math.round((-center.x) / cosTheta);
                         end = end.setY(clamp((int) Math.round(sinTheta * edgeLength) + center.y, 0, height));
                     }
                     else if(end.x >= width)
@@ -397,7 +397,7 @@ public enum Radius {
                     {
                         // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
                         // straight left or right, and then y cannot be < 0 or >= height.
-                        edgeLength = Math.round((0 - center.y) / sinTheta);
+                        edgeLength = Math.round((-center.y) / sinTheta);
                         end = end.setX(clamp((int) Math.round(cosTheta * edgeLength) + center.x, 0, width));
                     }
                     else if(end.y >= height)

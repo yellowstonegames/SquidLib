@@ -63,8 +63,8 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      * The array of keys.
      */
     protected K[] key;
-    /**
-     * The array of values.
+    /*
+      The array of values.
      */
     //protected V[] value;
     /**
@@ -207,7 +207,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      */
     public UnorderedSet(final K[] a, final int offset,
                         final int length, final float f) {
-        this(length < 0 ? 0 : length, f);
+        this(Math.max(length, 0), f);
         if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
         if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
@@ -328,7 +328,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      */
     public UnorderedSet(final K[] a, final int offset,
                         final int length, final float f, CrossHash.IHasher hasher) {
-        this(length < 0 ? 0 : length, f, hasher);
+        this(Math.max(length, 0), f, hasher);
         if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
         if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
@@ -537,7 +537,6 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean remove(final Object k) {
         if (k == null)
@@ -756,7 +755,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
          *
          * @param pos a starting position.
          */
-        private final void shiftKeys( int pos ) {
+        private void shiftKeys(int pos ) {
             // Shift entries with the same hash.
             int last, slot;
             K current;
@@ -1010,7 +1009,6 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         return a;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         final int size = this.size;
