@@ -47,20 +47,7 @@ public class CloudAOE implements AOE, Serializable {
         this.volume = volume;
         expanding = false;
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement(); 
     }
 
     public CloudAOE(Coord center, int volume, Radius radiusType, int minRange, int maxRange)
@@ -74,20 +61,7 @@ public class CloudAOE implements AOE, Serializable {
         rt = radiusType;
         reach.minDistance = minRange;
         reach.maxDistance = maxRange;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement();
     }
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed)
     {
@@ -97,20 +71,7 @@ public class CloudAOE implements AOE, Serializable {
         this.volume = volume;
         expanding = false;
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement();
     }
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
     {
@@ -120,20 +81,7 @@ public class CloudAOE implements AOE, Serializable {
         this.volume = volume;
         expanding = false;
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement();
         reach.minDistance = minRange;
         reach.maxDistance = maxRange;
     }
@@ -216,8 +164,8 @@ public class CloudAOE implements AOE, Serializable {
             }
             return bestPoints;
         }
-        Coord[] ts = targets.toArray(new Coord[targets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] ts = targets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
@@ -244,14 +192,10 @@ public class CloudAOE implements AOE, Serializable {
             }
         }
 
-        Measurement dmm = Measurement.MANHATTAN;
-        if(spill.measurement == CHEBYSHEV) dmm = Measurement.CHEBYSHEV;
-        else if(spill.measurement == EUCLIDEAN) dmm = Measurement.EUCLIDEAN;
-
         double radius = Math.sqrt(volume) * 0.75;
 
         for (int i = 0; i < ts.length; ++i) {
-            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+            DijkstraMap dm = new DijkstraMap(dungeon, spill.measurement);
 
             t = ts[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -360,9 +304,9 @@ public class CloudAOE implements AOE, Serializable {
             }
             return bestPoints;
         }
-        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
-        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] pts = priorityTargets.toArray(new Coord[0]);
+        Coord[] lts = lesserTargets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
@@ -388,17 +332,11 @@ public class CloudAOE implements AOE, Serializable {
                 }
             }
         }
-
-        t = pts[0];
-
-        Measurement dmm = Measurement.MANHATTAN;
-        if(spill.measurement == CHEBYSHEV) dmm = Measurement.CHEBYSHEV;
-        else if(spill.measurement == EUCLIDEAN) dmm = Measurement.EUCLIDEAN;
-
+        
         double radius = Math.sqrt(volume) * 0.75;
 
         for (int i = 0; i < pts.length; ++i) {
-            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+            DijkstraMap dm = new DijkstraMap(dungeon, spill.measurement);
 
             t = pts[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -443,11 +381,9 @@ public class CloudAOE implements AOE, Serializable {
             dm.resetMap();
             dm.clearGoals();
         }
-
-        t = lts[0];
-
+        
         for (int i = pts.length; i < totalTargets; ++i) {
-            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+            DijkstraMap dm = new DijkstraMap(dungeon, spill.measurement);
 
             t = lts[i - pts.length];
             sp = new Spill(dungeon, spill.measurement);
@@ -456,7 +392,7 @@ public class CloudAOE implements AOE, Serializable {
             sp.start(t, volume, null);
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (sp.spillMap[x][y]){

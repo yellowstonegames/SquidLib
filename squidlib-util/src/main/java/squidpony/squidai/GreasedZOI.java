@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
@@ -40,13 +41,13 @@ public class GreasedZOI implements Serializable {
      * Call {@link #calculate()} when you want information out of this.
      * @param influences an outer array containing influencing groups, each an array containing Coords that influence
      * @param map a char[][] that is used as an area map; should be bounded
-     * @param measurement a Radius enum that corresponds to how distance should be measured
+     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured
      */
-    public GreasedZOI(Coord[][] influences, char[][] map, Radius measurement) {
+    public GreasedZOI(Coord[][] influences, char[][] map, Radius radiusStrategy) {
         this.influences = influences;
         groups = new GreasedRegion[influences.length];
-        radius = measurement;
-        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;
+        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());
     }
     /**
      * Constructs a Zone of Influence map. Takes an arrays of Coord influences, where each Coord is treated as both a
@@ -60,17 +61,17 @@ public class GreasedZOI implements Serializable {
      * Call {@link #calculate()} when you want information out of this.
      * @param influences an array containing Coords that each have their own independent influence
      * @param map a char[][] that is used as an area map; should be bounded
-     * @param measurement a Radius enum that corresponds to how distance should be measured
+     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured
      * @see squidpony.squidmath.PoissonDisk PoissonDisk provides a good way to generate evenly spaced Coords
      */
-    public GreasedZOI(Coord[] influences, char[][] map, Radius measurement) {
+    public GreasedZOI(Coord[] influences, char[][] map, Radius radiusStrategy) {
         this.influences = new Coord[influences.length][];
         for (int i = 0; i < influences.length; i++) {
             this.influences[i] = new Coord[] { influences[i] };
         }
         groups = new GreasedRegion[influences.length];
-        radius = measurement;
-        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;
+        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());
     }
     /**
      * Constructs a Zone of Influence map. Takes a Collection of Coord influences, where each Coord is treated as both a
@@ -85,17 +86,17 @@ public class GreasedZOI implements Serializable {
      * Call {@link #calculate()} when you want information out of this.
      * @param influences A Collection of Coord, such as a GreasedRegion, where each Coord has independent influence
      * @param map a char[][] that is used as an area map; should be bounded
-     * @param measurement a Radius enum that corresponds to how distance should be measured
+     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured
      */
-    public GreasedZOI(Collection<Coord> influences, char[][] map, Radius measurement) {
+    public GreasedZOI(Collection<Coord> influences, char[][] map, Radius radiusStrategy) {
         this.influences = new Coord[influences.size()][];
         int i = 0;
         for(Coord c : influences) {
             this.influences[i++] = new Coord[]{c};
         }
         groups = new GreasedRegion[this.influences.length];
-        radius = measurement;
-        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;
+        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());
     }
 
     /**

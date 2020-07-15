@@ -323,8 +323,8 @@ public class BeamAOE implements AOE, Serializable {
         if(totalTargets == 0)
             return bestPoints;
 
-        Coord[] ts = targets.toArray(new Coord[targets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] ts = targets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
@@ -467,9 +467,9 @@ public class BeamAOE implements AOE, Serializable {
         if(totalTargets == 0)
             return bestPoints;
 
-        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
-        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] pts = priorityTargets.toArray(new Coord[0]);
+        Coord[] lts = lesserTargets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;// = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
