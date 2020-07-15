@@ -29,10 +29,10 @@ public class WaypointPathfinder {
      * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if
      * the parameter is null.
      * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
-     * @param measurement a Radius that should correspond to how you want path distance calculated.
+     * @param radius a Radius that should correspond to how you want path distance calculated.
      * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      */
-    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng)
+    public WaypointPathfinder(char[][] map, Radius radius, IRNG rng)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
@@ -103,7 +103,7 @@ public class WaypointPathfinder {
             }
         }
         
-        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        dm = new DijkstraMap(map, radius.matchingMeasurement());
 
         for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())
         {
@@ -127,11 +127,11 @@ public class WaypointPathfinder {
      * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if
      * the parameter is null.
      * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
-     * @param measurement a Radius that should correspond to how you want path distance calculated.
+     * @param radius a Radius that should correspond to how you want path distance calculated.
      * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      * @param thickCorridors true if most chokepoints on the map are 2 cells wide instead of 1
      */
-    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, boolean thickCorridors)
+    public WaypointPathfinder(char[][] map, Radius radius, IRNG rng, boolean thickCorridors)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
@@ -215,7 +215,7 @@ public class WaypointPathfinder {
             }
         }
 
-        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        dm = new DijkstraMap(map, radius.matchingMeasurement());
 
         int e = 0;
         for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())
@@ -246,11 +246,11 @@ public class WaypointPathfinder {
      * <br>
      * Remember, a fraction value of 29 works well!
      * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
-     * @param measurement a Radius that should correspond to how you want path distance calculated.
+     * @param radius a Radius that should correspond to how you want path distance calculated.
      * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      * @param fraction the fractional denominator of passable cells to assign as waypoints; use 29 if you aren't sure
      */
-    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, int fraction)
+    public WaypointPathfinder(char[][] map, Radius radius, IRNG rng, int fraction)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
@@ -269,7 +269,7 @@ public class WaypointPathfinder {
             waypoints.put(apart[i], new OrderedMap<Coord, Edge>());
         }
 
-        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        dm = new DijkstraMap(map, radius.matchingMeasurement());
 
         int e = 0;
         for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())

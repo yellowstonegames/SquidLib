@@ -674,4 +674,27 @@ public enum Radius {
         }
         return expanded;
     }
+    /**
+     * Gets the appropriate {@link Measurement} to pass to a constructor if you already have a Radius.
+     * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
+     * 
+     * @see Measurement#matchingMeasurement(Radius) an equivalent method in Measurement
+     * @see Measurement#matchingRadius() a method to do the inverse of this and get a Radius from a Measurement
+     *
+     * @return a {@link Measurement} that matches this; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
+     */
+    public Measurement matchingMeasurement() {
+        switch (this)
+        {
+            case CUBE:
+            case SQUARE:
+                return Measurement.CHEBYSHEV;
+            case DIAMOND:
+            case OCTAHEDRON:
+                return Measurement.MANHATTAN;
+            default:
+                return Measurement.EUCLIDEAN;
+        }
+    }
+
 }

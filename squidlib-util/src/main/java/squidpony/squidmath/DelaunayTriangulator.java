@@ -58,7 +58,7 @@ public class DelaunayTriangulator implements Serializable {
      * @param points The point set to be triangulated
      */
     public DelaunayTriangulator(Collection<CoordDouble> points) {
-        this.points = points.toArray(new CoordDouble[points.size()]);
+        this.points = points.toArray(new CoordDouble[0]);
         this.triangleSoup = new ArrayList<>(points.size());
     }
     /**

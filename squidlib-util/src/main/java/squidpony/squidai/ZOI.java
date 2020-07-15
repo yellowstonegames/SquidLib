@@ -41,15 +41,15 @@ public class ZOI implements Serializable {
      * Call calculate() when you want information out of this.
      * @param influences an outer array containing influencing groups, each an array containing Coords that influence
      * @param map a char[][] that is used as a map; should be bounded
-     * @param measurement a Radius enum that corresponds to how distance should be measured
+     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured
      */
-    public ZOI(Coord[][] influences, char[][] map, Radius measurement) {
+    public ZOI(Coord[][] influences, char[][] map, Radius radiusStrategy) {
         CoordPacker.init();
         this.influences = influences;
         packedGroups = new short[influences.length][];
         this.map = map;
-        radius = measurement;
-        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;
+        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());
     }
     /**
      * Constructs a Zone of Influence map. Takes an arrays of Coord influences, where each Coord is treated as both a
@@ -63,10 +63,10 @@ public class ZOI implements Serializable {
      * Call calculate() when you want information out of this.
      * @param influences an array containing Coords that each have their own independent influence
      * @param map a char[][] that is used as a map; should be bounded
-     * @param measurement a Radius enum that corresponds to how distance should be measured
+     * @param radiusStrategy a Radius enum that corresponds to how distance should be measured
      * @see squidpony.squidmath.PoissonDisk for a good way to generate evenly spaced Coords that can be used here
      */
-    public ZOI(Coord[] influences, char[][] map, Radius measurement) {
+    public ZOI(Coord[] influences, char[][] map, Radius radiusStrategy) {
         CoordPacker.init();
         this.influences = new Coord[influences.length][];
         for (int i = 0; i < influences.length; i++) {
@@ -74,8 +74,8 @@ public class ZOI implements Serializable {
         }
         packedGroups = new short[influences.length][];
         this.map = map;
-        radius = measurement;
-        dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+        radius = radiusStrategy == null ? Radius.CIRCLE : radiusStrategy;
+        dijkstra = new DijkstraMap(map, radius.matchingMeasurement());
     }
 
     /**

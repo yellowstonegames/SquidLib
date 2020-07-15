@@ -465,11 +465,11 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.
+     * Gets the appropriate Measurement to pass to a constructor if you already have a Radius.
      * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
      *
      * @param radius the Radius to find the corresponding Measurement for
-     * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
+     * @return a Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
      */
     public static Measurement findMeasurement(Radius radius) {
         switch (radius)
@@ -486,7 +486,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
+     * Gets the appropriate Radius corresponding to a Measurement.
      * Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.
      * <br>
      * See also {@link Measurement#matchingRadius()} as a method on Measurement.
