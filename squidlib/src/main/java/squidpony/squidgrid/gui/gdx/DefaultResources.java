@@ -77,7 +77,7 @@ public class DefaultResources implements LifecycleListener {
             distanceSlab, distanceSlabLight,
             distanceLean, distanceLeanLight,
             msdfSlab, msdfLean, msdfDejaVu,
-            msdfCurvySquare, msdfCarved, msdfRoboto,
+            msdfCurvySquare, msdfCarved, msdfRoboto, msdfOctagonalSquare,
             msdfIcons;
     private TextFamily familyLean, familySlab, familyGo,
             familyLeanMSDF, familySlabMSDF, familyPrintMSDF;
@@ -136,8 +136,10 @@ public class DefaultResources implements LifecycleListener {
             crispCarvedTexture = "bloccus-msdf.png",
             crispCurvySquare = "square-msdf.fnt",
             crispCurvySquareTexture = "square-msdf.png", 
-        crispRobotoSans = "Roboto-Regular-msdf.fnt", 
-        crispRobotoSansTexture = "Roboto-Regular-msdf.png",
+            crispRobotoSans = "Roboto-Regular-msdf.fnt", 
+            crispRobotoSansTexture = "Roboto-Regular-msdf.png",
+            crispOctagonalSquare = "a-starry-msdf.fnt",
+            crispOctagonalSquareTexture = "a-starry-msdf.png",
             crispIcons = "awesome-solid-msdf.fnt",
             crispIconsTexture = "awesome-solid-msdf.png"
                     ;
@@ -936,6 +938,46 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.msdfCurvySquare != null)
             return instance.msdfCurvySquare.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a square font with 45-degree angled sections, based on the
+     * typeface used on the Atari ST console, that should scale cleanly to many sizes. Unlike
+     * {@link #getStretchableSquareFont()}, the font this uses was made to be square initially, and is not a
+     * distorted/stretched version of an existing font. This font only supports ASCII, but it supports all of it, unlike
+     * {@link #getCrispCurvySquareFont()}. Caches the result for later calls. The font is "a-starry", based on "Atari ST
+     * (low-res)" by Damien Guard; it is available under a CC-BY-SA-3.0 license, which requires attribution to Damien
+     * Guard (and technically Tommy Ettinger, because he made changes in a-starry) if you use it.
+     * <br>
+     * Note: Uses a smoothing multiplier of 3f, instead of the default 1.2f. 
+     * <br>
+     * <a href="https://i.imgur.com/nvHl64v.png">Preview at large size</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font a-starry.ttf
+     */
+    public static TextCellFactory getCrispOctagonalSquareFont()
+    {
+        initialize();
+        if(instance.msdfOctagonalSquare == null)
+        {
+            try {
+                instance.msdfOctagonalSquare = new TextCellFactory()
+                        .fontMultiDistanceField(crispOctagonalSquare, crispOctagonalSquareTexture).setSmoothingMultiplier(3f);
+            } catch (Exception e) {
+            }
+        }
+        if(instance.msdfOctagonalSquare != null)
+            return instance.msdfOctagonalSquare.copy();
         return null;
     }
 

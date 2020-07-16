@@ -28,7 +28,7 @@ public class TinyTest extends ApplicationAdapter {
     public void create() {
         batch = new FilterBatch();
         stage = new Stage(new StretchViewport(40 * 8,  25 * 8), batch);
-        font = DefaultResources.getStretchableHeavySquareFont().setSmoothingMultiplier(1.25f);
+        font = DefaultResources.getCrispOctagonalSquareFont();
         layers = new SparseLayers(40, 25, 8, 8, font);
 //        smb = new SquidMessageBox(40, 25, font);
         List<IColoredString<Color>> messages = new ArrayList<>(20);
