@@ -262,17 +262,68 @@ public class Thesaurus implements Serializable{
         {
             addCategory(kv.getKey(), kv.getValue());
         }
-        plantTermShuffler = new GapShuffler<>(plantTerms, rng, true);
-        fruitTermShuffler = new GapShuffler<>(fruitTerms, rng, true);
-        nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
-        flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
-        potionTermShuffler = new GapShuffler<>(potionTerms, rng, true);
-        mappings.put("plant`term`", plantTermShuffler);
-        mappings.put("fruit`term`", fruitTermShuffler);
-        mappings.put("nut`term`", nutTermShuffler);
-        mappings.put("flower`term`", flowerTermShuffler);
-        mappings.put("potion`term`", potionTermShuffler);
+        plantTermShuffler =  mappings.get("plant`term`");
+        fruitTermShuffler =  mappings.get("fruit`term`");
+        nutTermShuffler =    mappings.get("nut`term`");  
+        flowerTermShuffler = mappings.get("flower`term`");
+        potionTermShuffler = mappings.get("potion`term`");
         return this;
+    }
+
+    /**
+     * Given an archive String saved by {@link #archiveCategories()} (probably from another version of SquidLib), this
+     * makes the Thesaurus class act like it did in that archive, assuming the {@link #rng} is seeded the same. This
+     * modifies the {@link #categories}, {@link #adjective}, {@link #noun}, and {@link #nouns} static fields, so it can
+     * affect other Thesaurus objects produced later (it won't change previously-made ones, probably).
+     * @param archive an archived String of categories produced by {@link #archiveCategories()}
+     * @return this Thesaurus, but static state of the class will also be modified so this may affect other Thesaurus objects
+     */
+    public Thesaurus addArchivedCategories(String archive){
+        final OrderedMap<String, ArrayList<String>> cat = Converters.convertOrderedMap(
+                Converters.convertString,
+                Converters.convertArrayList(Converters.convertString)
+        ).restore(archive);
+        
+        categories.clear();
+        categories.putAll(cat);
+        
+        adjective.clear();
+        adjective.putAll(cat);
+        
+        noun.clear();
+        noun.putAll(cat);
+        
+        nouns.clear();
+        nouns.putAll(cat);
+        
+        Iterator<String> it = adjective.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`adj`"))
+                it.remove();
+        }
+        it = noun.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`noun`"))
+                it.remove();
+        }
+        it = nouns.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`nouns`"))
+                it.remove();
+        }
+
+        for(Map.Entry<String, ArrayList<String>> kv : categories.entrySet())
+        {
+            addCategory(kv.getKey(), kv.getValue());
+        }
+        plantTermShuffler =  mappings.get("plant`term`");
+        fruitTermShuffler =  mappings.get("fruit`term`");
+        nutTermShuffler =    mappings.get("nut`term`");
+        flowerTermShuffler = mappings.get("flower`term`");
+        potionTermShuffler = mappings.get("potion`term`");
+
+        return this;
+
     }
 
     /**
@@ -672,10 +723,6 @@ public class Thesaurus implements Serializable{
         {
             addKnownCategories();
         }
-        if(plantTermShuffler == null)
-        {
-            plantTermShuffler = new GapShuffler<>(plantTerms, rng, true);
-        }
         String working = process(plantTermShuffler.next());
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
@@ -702,10 +749,6 @@ public class Thesaurus implements Serializable{
         if(!this.mappings.containsKey("tree`noun`"))
         {
             addKnownCategories();
-        }
-        if(plantTermShuffler == null)
-        {
-            plantTermShuffler = new GapShuffler<>(plantTerms, rng, true);
         }
         String working = process(plantTermShuffler.next());
         int frustration = 0;
@@ -737,10 +780,6 @@ public class Thesaurus implements Serializable{
         {
             addKnownCategories();
         }
-        if(fruitTermShuffler == null)
-        {
-            fruitTermShuffler = new GapShuffler<>(fruitTerms, rng, true);
-        }
         String working = process(fruitTermShuffler.next());
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
@@ -767,10 +806,6 @@ public class Thesaurus implements Serializable{
         if(!this.mappings.containsKey("fruit`noun`"))
         {
             addKnownCategories();
-        }
-        if(fruitTermShuffler == null)
-        {
-            fruitTermShuffler = new GapShuffler<>(fruitTerms, rng, true);
         }
         String working = process(fruitTermShuffler.next());
         int frustration = 0;
@@ -802,10 +837,6 @@ public class Thesaurus implements Serializable{
         {
             addKnownCategories();
         }
-        if(nutTermShuffler == null)
-        {
-            nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
-        }
         String working = process(nutTermShuffler.next());
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
@@ -832,10 +863,6 @@ public class Thesaurus implements Serializable{
         if(!this.mappings.containsKey("nut`noun`"))
         {
             addKnownCategories();
-        }
-        if(nutTermShuffler == null)
-        {
-            nutTermShuffler = new GapShuffler<>(nutTerms, rng, true);
         }
         String working = process(nutTermShuffler.next());
         int frustration = 0;
@@ -867,10 +894,6 @@ public class Thesaurus implements Serializable{
         {
             addKnownCategories();
         }
-        if(flowerTermShuffler == null)
-        {
-            flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
-        }
         String working = process(flowerTermShuffler.next());
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
@@ -898,10 +921,6 @@ public class Thesaurus implements Serializable{
         {
             addKnownCategories();
         }
-        if(flowerTermShuffler == null)
-        {
-            flowerTermShuffler = new GapShuffler<>(flowerTerms, rng, true);
-        }
         String working = process(flowerTermShuffler.next());
         int frustration = 0;
         while (frustration++ < 8 && similarFinder.matches(working))
@@ -924,10 +943,6 @@ public class Thesaurus implements Serializable{
         if(!this.mappings.containsKey("liquid`noun`"))
         {
             addKnownCategories();
-        }
-        if(potionTermShuffler == null)
-        {
-            potionTermShuffler = new GapShuffler<>(potionTerms, rng, true);
         }
         String working = process(potionTermShuffler.next());
         int frustration = 0;
@@ -1061,12 +1076,12 @@ public class Thesaurus implements Serializable{
         return numberAdjective(rng.nextSignedInt(highest + 1 - lowest) + lowest);
     }
     
-    private static final String[] nationTerms = new String[]{
+    private static final ArrayList<String> nationTerms = Maker.makeList(
             "Union`adj` Union`noun` of @", "Union`adj` @ Union`noun`", "@ Union`noun`", "@ Union`noun`", "@-@ Union`noun`", "Union`adj` Union`noun` of @",
             "Union`adj` Duchy`nouns` of @",  "The @ Duchy`noun`", "The Fancy`adj` @ Duchy`noun`", "The Sole`adj` @ Empire`noun`",
-            "@ Empire`noun`", "@ Empire`noun`", "@ Empire`noun`", "@-@ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Holy`adj` @ Empire`noun`",};
+            "@ Empire`noun`", "@ Empire`noun`", "@ Empire`noun`", "@-@ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Holy`adj` @ Empire`noun`");
 
-    private static final String[] plantTerms = new String[]{
+    private static final ArrayList<String> plantTerms = Maker.makeList(
             "@'s color`adj`\tleaf`noun`",
             "@'s tree`noun`",
             "@'s color`adj` tree`noun`",
@@ -1098,17 +1113,17 @@ public class Thesaurus implements Serializable{
             "shape`adj`-leaf`noun` flower`noun`",
             "sensory`adj` flower`noun`-flower`noun`",
             "sensory`adj`-leaf`noun` flower`noun`",
-            "ground`noun`\tflower`noun`",
-    };
-    private static final String[] fruitTerms = new String[]{
+            "ground`noun`\tflower`noun`"
+    );
+    private static final ArrayList<String> fruitTerms = Maker.makeList(
             "fruit`noun` of @",
             "@'s fruit`noun`",
             "@'s flavor`adj` fruit`noun`",
             "@'s color`adj` fruit`noun`",
             "flavor`adj` fruit`noun`-fruit`noun`",
-            "color`adj` fruit`noun`-fruit`noun`",
-    };
-    private static final String[] nutTerms = new String[]{
+            "color`adj` fruit`noun`-fruit`noun`"
+    );
+    private static final ArrayList<String> nutTerms = Maker.makeList(
             "nut`noun` of @",
             "color`adj` nut`noun` of @",
             "@'s nut`noun`",
@@ -1116,9 +1131,9 @@ public class Thesaurus implements Serializable{
             "@'s color`adj` nut`noun`",
             "flavor`adj` nut`noun`",
             "color`adj` nut`noun`",
-            "sensory`adj` nut`noun`",
-    };
-    private static final String[] flowerTerms = new String[]{
+            "sensory`adj` nut`noun`"
+            );
+    private static final ArrayList<String> flowerTerms = Maker.makeList(
             "flower`noun` of @",
             "sensory`adj` flower`noun` of @",
             "color`adj` flower`noun` of @",
@@ -1131,16 +1146,15 @@ public class Thesaurus implements Serializable{
             "shape`adj`-leaf`noun` flower`noun`",
             "sensory`adj` flower`noun`-flower`noun`",
             "sensory`adj`-leaf`noun` flower`noun`",
-            "ground`noun`\tflower`noun`",
-
-    };
-    private static final String[] potionTerms = new String[]{
+            "ground`noun`\tflower`noun`"
+        );
+    private static final ArrayList<String> potionTerms = Maker.makeList(
             "a bottle`adj` bottle`noun` filled with a liquid`adj` color`adj` liquid`noun`",
             "a bottle`adj` bottle`noun` filled with a color`adj` liquid`noun`",
             "a calabash`adj` filled with a color`adj` liquid`noun`",
             "a bottle`adj` bottle`noun` half-filled with a liquid`adj` color`adj` liquid`noun`",
-            "a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`",
-    };
+            "a bottle`adj` bottle`noun` containing a few drops of a color`adj` liquid`noun`"
+        );
     public static final OrderedMap<String, ArrayList<String>> categories = makeOM(
             "calm`adj`",
             makeList("harmonious", "peaceful", "pleasant", "serene", "placid", "tranquil", "calm"),
@@ -1381,7 +1395,12 @@ public class Thesaurus implements Serializable{
             "power`noun`",
             makeList("power", "force", "potency", "strength", "authority", "dominance"),
             "power`adj`",
-            makeList("powerful", "forceful", "potent", "strong", "authoritative", "dominant")
+            makeList("powerful", "forceful", "potent", "strong", "authoritative", "dominant"),
+            "plant`term`",  plantTerms ,
+            "fruit`term`",  fruitTerms ,
+            "nut`term`",    nutTerms   ,
+            "flower`term`", flowerTerms,
+            "potion`term`", potionTerms
             );
     public static final OrderedMap<String, ArrayList<String>>
             adjective = new OrderedMap<>(categories),
@@ -1483,7 +1502,18 @@ public class Thesaurus implements Serializable{
             if(!it.next().contains("`nouns`"))
                 it.remove();
         }
+    }
 
-
+    /**
+     * Gets a stable (large) String that stores all categories this version of Thesaurus knows, as well as all of the
+     * words each category includes. This can be useful in conjunction with {@link #addArchivedCategories(String)} to
+     * load a set of categories stored from an earlier version of SquidLib.
+     * @return a category archive String that can be passed to {@link #addArchivedCategories(String)}
+     */
+    public static String archiveCategories(){
+        return Converters.convertOrderedMap(
+                        Converters.convertString,
+                        Converters.convertArrayList(Converters.convertString)
+                ).stringify(categories);
     }
 }
