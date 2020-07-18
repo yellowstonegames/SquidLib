@@ -56,7 +56,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
     private double expected = 0.5;
 
     // These are tied to expected, and must change when it does.
-    private double offset = 0.0;
+    private double offset;
     private double range = 1.0;
     /**
      * When positive, makes the generator more likely to generate values close to the average (bell curve).
@@ -64,7 +64,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
      * When negative, makes the generator swing more toward extremes rather than gravitate toward the average.
      * Values are typically between -100 and 100, but can go as low as -200 or as high as 200 (stopping there).
      */
-    private double centrality = 0.0;
+    private double centrality;
 
 
     // This lets us avoid a conversion to double every time we generate a number.

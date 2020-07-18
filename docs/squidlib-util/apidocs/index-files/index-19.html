@@ -998,6 +998,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Rehashes the map.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwistedLine.html#reinitialize()">reinitialize()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TwistedLine.html" title="class in squidpony.squidmath">TwistedLine</a></dt>
+<dd>
+<div class="block">Called automatically during construction, this sets up a random maze as a <a href="../squidpony/squidai/graph/DefaultGraph.html" title="class in squidpony.squidai.graph"><code>DefaultGraph</code></a> so a path can be
+ found.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/AStarSearch.html#reinitialize(char%5B%5D%5B%5D,squidpony.squidmath.AStarSearch.SearchType)">reinitialize(char[][], AStarSearch.SearchType)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></dt>
+<dd>
+<div class="block">Resets this pathing object to use a different map and optionally a different SearchType.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/AStarSearch.html#reinitialize(double%5B%5D%5B%5D,squidpony.squidmath.AStarSearch.SearchType)">reinitialize(double[][], AStarSearch.SearchType)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></dt>
+<dd>
+<div class="block">Resets this pathing object to use a different map and optionally a different SearchType.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#reinitialize(squidpony.squidgrid.mapping.RoomFinder)">reinitialize(RoomFinder)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
 <dd>
 <div class="block">If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a
@@ -1239,6 +1252,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Removes from this array all of elements contained in the specified array.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeAllEdges()">removeAllEdges()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>
+<div class="block">Removes all edges from the graph.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeAllVertices()">removeAllVertices()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>
+<div class="block">Removes all vertices and edges from the graph.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#removeAt(int)">removeAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
@@ -1284,11 +1305,23 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeCircle(squidpony.squidmath.Coord,int)">removeCircle(Coord, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeConnection(squidpony.squidai.graph.Node,squidpony.squidai.graph.Node)">removeConnection(Node&lt;V&gt;, Node&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/UndirectedGraph.html#removeConnection(squidpony.squidai.graph.Node,squidpony.squidai.graph.Node)">removeConnection(Node&lt;V&gt;, Node&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/UndirectedGraph.html" title="class in squidpony.squidai.graph">UndirectedGraph</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeCorners()">removeCorners()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Where a cell is "on" but forms a right-angle with exactly two orthogonally-adjacent "on" cells and exactly two
  orthogonally-adjacent "off" cells, this turns each of those cells "off." This won't affect east-west lines of
  flat "on" cells, nor north-south lines.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeEdge(squidpony.squidai.graph.Edge)">removeEdge(Edge&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#removeEdge(squidpony.squidai.graph.Node)">removeEdge(Node&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeEdge(V,V)">removeEdge(V, V)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>
+<div class="block">Removes the edge from v to w from the graph.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#removeEdges()">removeEdges()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
@@ -1366,6 +1399,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeNearby(squidpony.squidmath.OrderedSet,char%5B%5D%5B%5D)">removeNearby(OrderedSet&lt;Coord&gt;, char[][])</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeNode(squidpony.squidai.graph.Node)">removeNode(Node&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedMap.html#removeNullEntry()">removeNullEntry()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#removePacked(short%5B%5D,int,int)">removePacked(short[], int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
@@ -1439,6 +1474,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#removeValue(short)">removeValue(short)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeVertex(V)">removeVertex(V)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>
+<div class="block">Removes a vertex from the graph, and any adjacent edges.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Graph.html#removeVertices(java.util.Collection)">removeVertices(Collection&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Graph.html" title="class in squidpony.squidai.graph">Graph</a></dt>
+<dd>
+<div class="block">Removes all the vertices in the collection from the graph, and any adjacent edges.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#reorder(int...)">reorder(int...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the
@@ -1585,8 +1628,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Reinitializes this class' 1024 bits of state with the given seed, using a different strategy depending on the seed.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.Metrics.html#reset()">reset()</a></span> - Method in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.Metrics.html" title="class in squidpony.squidai.astar">Pathfinder.Metrics</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#reset()">reset()</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
 <dd>
 <div class="block">Resets this CustomDijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
@@ -1619,6 +1660,12 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutationGenerator.html#reset()">reset()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutationGenerator.html" title="class in squidpony.squidmath">PermutationGenerator</a></dt>
 <dd>
 <div class="block">Resets the generator state.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#resetAlgorithmAttributes(int)">resetAlgorithmAttributes(int)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
+<dd>
+<div class="block">If <code>runID</code> is not equal to <a href="../squidpony/squidai/graph/Node.html#lastRunID"><code>Node.lastRunID</code></a>, this resets the internal fields <a href="../squidpony/squidai/graph/Node.html#visited"><code>Node.visited</code></a>,
+ <a href="../squidpony/squidai/graph/Node.html#seen"><code>Node.seen</code></a>, <a href="../squidpony/squidai/graph/Node.html#distance"><code>Node.distance</code></a>, <a href="../squidpony/squidai/graph/Node.html#estimate"><code>Node.estimate</code></a>, <a href="../squidpony/squidai/graph/Node.html#prev"><code>Node.prev</code></a>, and <a href="../squidpony/squidai/graph/Node.html#i"><code>Node.i</code></a>, then sets <a href="../squidpony/squidai/graph/Node.html#lastRunID"><code>Node.lastRunID</code></a>
+ to <code>runID</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#resetAllVariants(double%5B%5D,int%5B%5D,double%5B%5D)">resetAllVariants(double[], int[], double[])</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>&nbsp;</dd>
@@ -2084,6 +2131,8 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ProbabilityTable.html#rng">rng</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RandomBias.html#rng">rng</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/RandomBias.html" title="class in squidpony.squidmath">RandomBias</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwistedLine.html#rng">rng</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/TwistedLine.html" title="class in squidpony.squidmath">TwistedLine</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#rng">rng</a></span> - Variable in class squidpony.<a href="../squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></dt>
 <dd>&nbsp;</dd>

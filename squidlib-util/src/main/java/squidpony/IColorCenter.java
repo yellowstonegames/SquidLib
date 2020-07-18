@@ -713,7 +713,7 @@ public interface IColorCenter<T> {
 
 		@Override
 		public ArrayList<T> gradient(T fromColor, T toColor, int steps) {
-			ArrayList<T> colors = new ArrayList<>((steps > 1) ? steps : 1);
+			ArrayList<T> colors = new ArrayList<>(Math.max(steps, 1));
 			colors.add(filter(fromColor));
 			if(steps < 2)
 				return colors;

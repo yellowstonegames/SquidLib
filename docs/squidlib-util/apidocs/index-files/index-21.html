@@ -519,8 +519,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#toGoTo(squidpony.squidmath.Coord)">toGoTo(Coord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>
-<div class="block">Precondition: <code>this</code> is <a href="../squidpony/squidmath/Coord.html#isAdjacent(squidpony.squidmath.Coord)"><code>adjacent</code></a> to
- <code>adjacent</code>.</div>
+<div class="block">Gets the <a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid"><code>Direction</code></a> needed to get to <code>target</code> from this; typically this is more useful when target
+ and this are adjacent (by <a href="../squidpony/squidmath/Coord.html#isAdjacent(squidpony.squidmath.Coord)"><code>Coord.isAdjacent(Coord)</code></a>) since that should make it possible to go to target.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Direction.html#toGoTo(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">toGoTo(Coord, Coord)</a></span> - Static method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
 <dd>&nbsp;</dd>
@@ -542,12 +542,24 @@ loadScripts(document, 'script');</script>
 <div class="block">Given any long, generates a slightly-more-memorable gibberish phrase that can be decoded back to the original
  long with <a href="../squidpony/Mnemonic.html#fromMnemonic(java.lang.String)"><code>Mnemonic.fromMnemonic(String)</code></a>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/CostlyConnection.html#toNode">toNode</a></span> - Variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/CostlyConnection.html" title="class in squidpony.squidai.astar">CostlyConnection</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/DefaultConnection.html#toNode">toNode</a></span> - Variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/DefaultConnection.html" title="class in squidpony.squidai.astar">DefaultConnection</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#topDoors">topDoors</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#topologicalSort()">topologicalSort()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Sort the vertices of this graph in topological order.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DirectedGraphAlgorithms.html#topologicalSort()">topologicalSort()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DirectedGraphAlgorithms.html" title="class in squidpony.squidai.graph">DirectedGraphAlgorithms</a></dt>
+<dd>
+<div class="block">Sort the vertices of this graph in topological order.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/CostlyGraph.html#topologicalSort(java.util.ArrayList)">topologicalSort(ArrayList&lt;Coord&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></dt>
+<dd>
+<div class="block">Perform a topological sort on the graph, and puts the sorted vertices in the supplied list.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/DirectedGraphAlgorithms.html#topologicalSort(java.util.ArrayList)">topologicalSort(ArrayList&lt;V&gt;)</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/DirectedGraphAlgorithms.html" title="class in squidpony.squidai.graph">DirectedGraphAlgorithms</a></dt>
+<dd>
+<div class="block">Perform a topological sort on the graph, and puts the sorted vertices in the supplied list.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/AbstractRNG.html#toSerializable()">toSerializable()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
 <dd>
 <div class="block">Gets a view of this IRNG in a way that implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink"><code>Serializable</code></a>, which may simply be this IRNG if it
@@ -611,6 +623,12 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/IColoredString.Bucket.html#toString()">toString()</a></span> - Method in class squidpony.panel.<a href="../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/IColoredString.Impl.html#toString()">toString()</a></span> - Method in class squidpony.panel.<a href="../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Connection.DirectedConnection.html#toString()">toString()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Connection.DirectedConnection.html" title="class in squidpony.squidai.graph">Connection.DirectedConnection</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Connection.UndirectedConnection.html#toString()">toString()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Connection.UndirectedConnection.html" title="class in squidpony.squidai.graph">Connection.UndirectedConnection</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#toString()">toString()</a></span> - Method in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#toString()">toString()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>
@@ -1077,6 +1095,17 @@ loadScripts(document, 'script');</script>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TweakRNG.html#%3Cinit%3E(long,long,long)">TweakRNG(long, long, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TweakRNG.html#%3Cinit%3E(long,long,long,long)">TweakRNG(long, long, long, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TweakRNG.html" title="class in squidpony.squidmath">TweakRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidmath/TwistedLine.html" title="class in squidpony.squidmath"><span class="typeNameLink">TwistedLine</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/WobblyLine.html" title="class in squidpony.squidmath"><code>WobblyLine</code></a>, this generates orthogonally-connected paths of <a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> that meander through an area;
+ unlike WobblyLine, this won't ever generate paths that cross themselves.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwistedLine.html#%3Cinit%3E()">TwistedLine()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwistedLine.html" title="class in squidpony.squidmath">TwistedLine</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwistedLine.html#%3Cinit%3E(int,int)">TwistedLine(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwistedLine.html" title="class in squidpony.squidmath">TwistedLine</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TwistedLine.html#%3Cinit%3E(int,int,squidpony.squidmath.IRNG)">TwistedLine(int, int, IRNG)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/TwistedLine.html" title="class in squidpony.squidmath">TwistedLine</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Adjacency.html#twoStepRule">twoStepRule</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid">Adjacency</a></dt>
 <dd>

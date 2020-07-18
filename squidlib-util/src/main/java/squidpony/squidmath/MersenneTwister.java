@@ -181,7 +181,7 @@ public class MersenneTwister implements Serializable, RandomnessSource {
             return;
         int i = 1;
         int j = 0;
-        int k = (NN > array.length ? NN : array.length);
+        int k = (Math.max(NN, array.length));
         for (; k != 0; k--) {
             mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >>> 62)) * 3935559000370003845L))
                     + array[j] + j;

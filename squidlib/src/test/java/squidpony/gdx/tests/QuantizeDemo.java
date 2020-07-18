@@ -401,11 +401,11 @@ public class QuantizeDemo extends ApplicationAdapter {
         Gdx.graphics.requestRendering();
     }
     
-    private final float emphasize(final float a)
+    private float emphasize(final float a)
     {
         return a * a * (3f - 2f * a);
     }
-    private final float extreme(final float a)
+    private float extreme(final float a)
     {
         return a * a * a * (a * (a * 6f - 15f) + 10f);
     }

@@ -281,18 +281,18 @@ public class LightingHandler implements Serializable {
                             if ((losResult[x][y - 1] > 0 && other[0][x][y - 1] > 0 && resistances[x][y - 1] < 1)
                                     || (x > 0 && losResult[x - 1][y - 1] > 0 && other[0][x - 1][y - 1] > 0 && resistances[x - 1][y - 1] < 1)
                                     || (x < width - 1 && losResult[x + 1][y - 1] > 0 && other[0][x + 1][y - 1] > 0 && resistances[x + 1][y - 1] < 1)) {
-                                o0 = (float) other[0][x][y];
+                                o0 = other[0][x][y];
                             }
                         }
                         if (y < height - 1) {
                             if ((losResult[x][y + 1] > 0 && other[0][x][y + 1] > 0 && resistances[x][y + 1] < 1)
                                     || (x > 0 && losResult[x - 1][y + 1] > 0 && other[0][x - 1][y + 1] > 0 && resistances[x - 1][y + 1] < 1)
                                     || (x < width - 1 && losResult[x + 1][y + 1] > 0 && other[0][x + 1][y + 1] > 0 && resistances[x + 1][y + 1] < 1)) {
-                                o0 = (float) other[0][x][y];
+                                o0 = other[0][x][y];
                             }
                         }
                         if (x > 0 && losResult[x - 1][y] > 0 && other[0][x - 1][y] > 0 && resistances[x - 1][y] < 1) {
-                            o0 = (float) other[0][x][y];
+                            o0 = other[0][x][y];
                         }
                         if (x < width - 1 && losResult[x + 1][y] > 0 && other[0][x + 1][y] > 0 && resistances[x + 1][y] < 1) {
                             o0 = other[0][x][y];

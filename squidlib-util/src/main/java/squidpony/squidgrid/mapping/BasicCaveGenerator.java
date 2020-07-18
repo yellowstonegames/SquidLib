@@ -60,9 +60,7 @@ public class BasicCaveGenerator implements IDungeonGenerator {
                 }
             }
             for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    dungeon[x][y] = working[x][y];
-                }
+				if (height >= 0) System.arraycopy(working[x], 0, dungeon[x], 0, height);
             }
         }
         return dungeon;

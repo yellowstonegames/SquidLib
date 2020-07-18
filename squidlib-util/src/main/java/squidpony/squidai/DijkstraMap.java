@@ -74,7 +74,7 @@ public class DijkstraMap implements Serializable {
      * to gradientMap during a scan. The values for walls are identical to the value used by gradientMap, that is, this
      * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .
      */
-    public double[][] costMap = null;
+    public double[][] costMap;
 
     public boolean standardCosts = true;
     /**
@@ -94,7 +94,7 @@ public class DijkstraMap implements Serializable {
 
     private HashSet<Coord> impassable2, friends, tempSet;
     
-    public boolean cutShort = false;
+    public boolean cutShort;
 
     /**
      * Goals are always marked with 0.
@@ -124,14 +124,14 @@ public class DijkstraMap implements Serializable {
      * {@link GWTRNG} if you may target web browsers with GWT, or a {@link RNG} or {@link StatefulRNG} otherwise.
      */
     public IRNG rng;
-    private int frustration = 0;
+    private int frustration;
     public Coord[][] targetMap;
 
     private Direction[] dirs = new Direction[9];
 
-    private boolean initialized = false;
+    private boolean initialized;
 
-    private int mappedCount = 0;
+    private int mappedCount;
 
     private int blockingRequirement = 2;
 
@@ -465,11 +465,11 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.
+     * Gets the appropriate Measurement to pass to a constructor if you already have a Radius.
      * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
      *
      * @param radius the Radius to find the corresponding Measurement for
-     * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
+     * @return a Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
      */
     public static Measurement findMeasurement(Radius radius) {
         switch (radius)
@@ -486,7 +486,7 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
+     * Gets the appropriate Radius corresponding to a Measurement.
      * Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.
      * <br>
      * See also {@link Measurement#matchingRadius()} as a method on Measurement.
@@ -2606,7 +2606,6 @@ public class DijkstraMap implements Serializable {
                 }
             }
 
-            if(length < 0) length = 0;
             if(scanLimit <= 0 || scanLimit < length)
                 cachedFleeMap = scan(impassable2);
             else
@@ -3147,7 +3146,6 @@ public class DijkstraMap implements Serializable {
             impassable2.addAll(onlyPassable);
         if (fearSources == null || fearSources.length < 1) {
             cutShort = true;
-            path.clear();
             return new ArrayList<>(path);
         }
         if (size == cachedSize && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable)
@@ -3414,7 +3412,7 @@ public class DijkstraMap implements Serializable {
      * @param blockingRequirement the desired level of blocking required to stop a diagonal move
      */
     public void setBlockingRequirement(int blockingRequirement) {
-        this.blockingRequirement = blockingRequirement > 2 ? 2 : blockingRequirement < 0 ? 0 : blockingRequirement;
+        this.blockingRequirement = blockingRequirement > 2 ? 2 : Math.max(blockingRequirement, 0);
     }
 
     private void appendDirToShuffle(IRNG rng) {

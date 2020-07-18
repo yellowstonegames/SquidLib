@@ -21,7 +21,7 @@ public class TextStorage {
     protected OrderedMap<String, String> contents;
     public final StringConvert<OrderedMap<String, String>> mapConverter;
     public boolean compress = true;
-    public long[] garbleKey = null;
+    public long[] garbleKey;
 
     /**
      * Please don't use this constructor if possible; it simply calls {@link #TextStorage(String)} with the constant
@@ -233,7 +233,6 @@ public class TextStorage {
      * @param <T> the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}
      * @return the retrieved value if successful, or null otherwise
      */
-    @SuppressWarnings("unchecked")
     public <T> T get(String outerName, String innerName, StringConvert<?> converter, Class<T> type)
     {
         OrderedMap<String, String> om;
@@ -273,7 +272,6 @@ public class TextStorage {
      * @param <T> the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}
      * @return the retrieved value if successful, or null otherwise
      */
-    @SuppressWarnings("unchecked")
     public <T> T get(String outerName, String innerName, CharSequence typeName, Class<T> type)
     {
         OrderedMap<String, String> om;

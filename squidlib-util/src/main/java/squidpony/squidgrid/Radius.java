@@ -63,7 +63,7 @@ public enum Radius {
 
     private static final double PI2 = Math.PI * 2;
     public double radius(int startx, int starty, int startz, int endx, int endy, int endz) {
-        return radius((double) startx, (double) starty, (double) startz, (double) endx, (double) endy, (double) endz);
+        return radius(startx, starty, startz, endx, endy, (double) endz);
     }
 
     public double radius(double startx, double starty, double startz, double endx, double endy, double endz) {
@@ -98,13 +98,13 @@ public enum Radius {
     }
 
     public double radius(int startx, int starty, int endx, int endy) {
-        return radius((double) startx, (double) starty, (double) endx, (double) endy);
+        return radius(startx, starty, endx, (double) endy);
     }
     public double radius(Coord start, Coord end) {
-        return radius((double) start.x, (double) start.y, (double) end.x, (double) end.y);
+        return radius(start.x, start.y, end.x, (double) end.y);
     }
     public double radius(Coord end) {
-        return radius(0.0, 0.0, (double) end.x, (double) end.y);
+        return radius(0.0, 0.0, end.x, end.y);
     }
 
     public double radius(double startx, double starty, double endx, double endy) {
@@ -114,7 +114,7 @@ public enum Radius {
     }
 
     public double radius(int dx, int dy) {
-        return radius((double) dx, (double) dy);
+        return radius(dx, (double) dy);
     }
 
     public double radius(double dx, double dy) {
@@ -137,7 +137,7 @@ public enum Radius {
     }
 
     public Coord onUnitShape(double distance, IRNG rng) {
-        int x = 0, y = 0;
+        int x, y;
         switch (this) {
             case SQUARE:
             case CUBE:
@@ -376,13 +376,13 @@ public enum Radius {
                 end = Coord.get(clamp( (int) Math.round(cosTheta * radiusLength) + center.x, 0, width)
                         , clamp( (int) Math.round(sinTheta * radiusLength) + center.y, 0, height));
                 if(!surpassEdges) {
-                    long edgeLength = 0;
+                    long edgeLength;
 //                    if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
                     if (end.x < 0)
                     {
                         // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
                         // straight up or down, and then x cannot be < 0 or >= width.
-                        edgeLength = Math.round((0 - center.x) / cosTheta);
+                        edgeLength = Math.round((-center.x) / cosTheta);
                         end = end.setY(clamp((int) Math.round(sinTheta * edgeLength) + center.y, 0, height));
                     }
                     else if(end.x >= width)
@@ -397,7 +397,7 @@ public enum Radius {
                     {
                         // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
                         // straight left or right, and then y cannot be < 0 or >= height.
-                        edgeLength = Math.round((0 - center.y) / sinTheta);
+                        edgeLength = Math.round((-center.y) / sinTheta);
                         end = end.setX(clamp((int) Math.round(cosTheta * edgeLength) + center.x, 0, width));
                     }
                     else if(end.y >= height)
@@ -674,4 +674,27 @@ public enum Radius {
         }
         return expanded;
     }
+    /**
+     * Gets the appropriate {@link Measurement} to pass to a constructor if you already have a Radius.
+     * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
+     * 
+     * @see Measurement#matchingMeasurement(Radius) an equivalent method in Measurement
+     * @see Measurement#matchingRadius() a method to do the inverse of this and get a Radius from a Measurement
+     *
+     * @return a {@link Measurement} that matches this; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
+     */
+    public Measurement matchingMeasurement() {
+        switch (this)
+        {
+            case CUBE:
+            case SQUARE:
+                return Measurement.CHEBYSHEV;
+            case DIAMOND:
+            case OCTAHEDRON:
+                return Measurement.MANHATTAN;
+            default:
+                return Measurement.EUCLIDEAN;
+        }
+    }
+
 }

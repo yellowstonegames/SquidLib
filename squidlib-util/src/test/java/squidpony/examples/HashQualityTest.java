@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.ArrayTools;
@@ -55,11 +56,21 @@ public class HashQualityTest {
         System.arraycopy(data, start, used, 0, used.length);
         return used;
     }
+ 
+    @Test
+    public void testNextPowerOfTwo(){
+        for (int i = 0; i >= 0; i++) {
+            Assert.assertEquals(HashCommon.nextPowerOfTwo(i), 1 << -Integer.numberOfLeadingZeros(i - 1));
+//            Assert.assertEquals(HashCommon.nextPowerOfTwo(i), Math.max(1, Integer.highestOneBit(i - 1 << 1)));
+        }
+    }
+    
     //where this restrict is used, it will only use the bottom 16 bits and 8 alternating bits from the top of a hash
     //public static final int restrict = 0x5555FFFF;
     //where this restrict is used, it will use all bits of a hash
     public static final int restrict = -1;
     @Test
+    @Ignore
     public void testMost()
     {
         CrossHash.Mist storm = CrossHash.Mist.chi;
@@ -1115,6 +1126,7 @@ public class HashQualityTest {
      * TOTAL Obje collisions: 69577617 (78.9321717768093%), BEST 0, WORST 141151
      */
     @Test
+    @Ignore
     public void testCoord() {
         RNG prng = new RNG(new GoatRNG(123456789, 987654321));
         final int[] params = new int[20];// ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
@@ -1230,6 +1242,7 @@ public class HashQualityTest {
     }
     // This one takes a while to run; be advised.
     @Test
+    @Ignore
     public void testCoord3() {
         final int[] params = ArrayTools.range(8, 14);// new int[]{33, 65, 129, 257, 513};
 //        final int[] params = new int[]{64, 128, 256, 512};
@@ -1362,6 +1375,7 @@ public class HashQualityTest {
 
 
     @Test
+    @Ignore
     public void testLimited()
     {
         int restrict = 0xFFFF;
@@ -1474,6 +1488,7 @@ public class HashQualityTest {
     }
 
     @Test
+    @Ignore
     public void testInts()
     {
         int restrict = 0xFFFFF;
@@ -1575,12 +1590,13 @@ public class HashQualityTest {
      */
 
     @Test
+    @Ignore
     public void testMix() {
         final int[] params = new int[]{64, 128, 256, 512, 1024}, increases = {0,1,2};
         long baseTotal = 0, hacoTotal = 0, lantTotal = 0, xlxsTotal = 0, total = 0;
 //        long[] confTotals = new long[31];
         NLFSR gen = new NLFSR(1234567);
-        int mul = gen.nextInt() << 1 | 1;
+        int mul;
         for (int r = 1; r < 32; r++) {
 
             for (int m = 1; m < 0x1000; m++) {

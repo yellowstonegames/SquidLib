@@ -31,7 +31,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
                 newkeys.add(c);
             }
         }
-        Coord[] keys = newkeys.toArray(new Coord[newkeys.size()]);
+        Coord[] keys = newkeys.toArray(new Coord[0]);
         for (int i = 0; i < keys.length; i++) {
             Coord c = keys[i];
             if (c.x * 1.0 / width + c.y * 1.0 / height <= 1.0) {

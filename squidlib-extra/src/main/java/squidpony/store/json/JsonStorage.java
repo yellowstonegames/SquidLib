@@ -19,7 +19,7 @@ public class JsonStorage {
     public final JsonConverter json;
     protected StringStringMap contents;
     public boolean compress = true;
-    public long[] garbleKey = null;
+    public long[] garbleKey;
 
     /**
      * Please don't use this constructor if possible; it simply calls {@link #JsonStorage(String)} with the constant
@@ -220,7 +220,6 @@ public class JsonStorage {
      * @param <T> the type of the value to retrieve; if type was {@code RNG.class}, this would be {@code RNG}
      * @return the retrieved value if successful, or null otherwise
      */
-    @SuppressWarnings("unchecked")
     public <T> T get(String outerName, String innerName, Class<T> type)
     {
         StringStringMap om;

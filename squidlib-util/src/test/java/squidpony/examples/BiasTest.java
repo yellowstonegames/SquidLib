@@ -17,19 +17,19 @@ public class BiasTest {
             rolls[bias.biasedInt(expected, 10)]++;
         }
         for (int o = 0; o < 10; o++) {
-            for (int i = (int) '0'; i <= (int) '9'; i++) {
+            for (int i = '0'; i <= (int) '9'; i++) {
                 System.out.print((char) i);
             }
-            for (int i = (int) '0'; i <= (int) '9'; i++) {
+            for (int i = '0'; i <= (int) '9'; i++) {
                 System.out.print(' ');
             }
         }
         System.out.println();
         for (int o = 0; o < 10; o++) {
-            for (int i = (int) '0'; i <= (int) '9'; i++) {
+            for (int i = '0'; i <= (int) '9'; i++) {
                 System.out.print(' ');
             }
-            for (int i = (int) '0'; i <= (int) '9'; i++) {
+            for (int i = '0'; i <= (int) '9'; i++) {
                 System.out.print((char) i);
             }
         }

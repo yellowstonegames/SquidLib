@@ -81,7 +81,7 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
     private BitmapFont font;
     private Pixmap pm;
     private Texture pt;
-    private long ttg = 0; // time to generate
+    private long ttg; // time to generate
     private WorldMapGenerator.DetailedBiomeMapper[][] dbm = new WorldMapGenerator.DetailedBiomeMapper[4][4];
     
     // Biome map colors

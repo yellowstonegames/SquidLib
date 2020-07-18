@@ -98,7 +98,7 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	 * @param text the text to append
 	 */
 	public void addColoredTextOnNewLine(String text, /* @Nullable */ T color) {
-		this.add(IColoredString.Impl.<T> create(text, color));
+		this.add(IColoredString.Impl.create(text, color));
 	}
 
 	/**

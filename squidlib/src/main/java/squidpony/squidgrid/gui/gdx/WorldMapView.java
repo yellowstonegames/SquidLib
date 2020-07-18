@@ -1,9 +1,9 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.DiverRNG;
-import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 
 /**
@@ -81,7 +81,7 @@ public class WorldMapView {
             Ocean                  = 13,
             Empty                  = 14;
 
-    public static float iceColor = SColor.ALICE_BLUE.toFloatBits();
+    public static float iceColor = SColor.floatGetI(240, 248, 255);
     public static float desertColor = SColor.floatGetI(248, 229, 180);
     public static float savannaColor = SColor.floatGetI(181, 200, 100);
     public static float tropicalRainforestColor = SColor.floatGetI(66, 123, 25);
@@ -93,7 +93,7 @@ public class WorldMapView {
     public static float woodlandColor = SColor.floatGetI(122, 170, 90);
     public static float rockyColor = SColor.floatGetI(171, 175, 145);
     public static float beachColor = SColor.floatGetI(255, 235, 180);
-    public static float emptyColor = SColor.DB_INK.toFloatBits();
+    public static float emptyColor = SColor.floatGetI(34, 32, 52);
 
     // water colors
     public static float deepColor =    SColor.floatGetI(0, 42, 88);
@@ -335,7 +335,7 @@ public class WorldMapView {
                     case 3:
                         colorMap[x][y] = SColor.lerpFloatColors(
                                 BIOME_COLOR_TABLE[56], BIOME_COLOR_TABLE[43],
-                                (MathExtras.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));
+                                (MathUtils.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)));
                         break;
                     default:
                         colorMap[x][y] = SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeMapper.extractPartB(bc)],

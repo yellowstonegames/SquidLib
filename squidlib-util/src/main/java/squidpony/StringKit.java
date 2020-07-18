@@ -1,6 +1,5 @@
 package squidpony;
 
-import regexodus.Category;
 import regexodus.Matcher;
 import regexodus.Pattern;
 import regexodus.Replacer;

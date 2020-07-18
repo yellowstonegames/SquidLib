@@ -40,9 +40,9 @@ public class WildMapDemo extends ApplicationAdapter {
 //    private WorldMapGenerator.MimicMap world;
     private WildMap.MixedWildMap wild;
     private WildMapView wmv;
-    private long counter = 0;
-    private long ttg = 0; // time to generate
-    private float moveAmount = 0f;
+    private long counter;
+    private long ttg; // time to generate
+    private float moveAmount;
     
     @Override
     public void create() {

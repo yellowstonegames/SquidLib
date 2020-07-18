@@ -36,7 +36,7 @@ public class ImageLayersTest extends ApplicationAdapter{
     private FilterBatch batch;
     ArrayList<Color> colors;
     double[][] resMap;
-    float ctr = 0;
+    float ctr;
     TextureAtlas atlas;
     OrderedMap<Coord, AnimatedEntity> things;
     Array<TextureAtlas.AtlasRegion> regions;
@@ -142,7 +142,7 @@ public class ImageLayersTest extends ApplicationAdapter{
         if(ctr > 0.05) {
             Coord pt;
             AnimatedEntity ent;
-            Integer uo;
+            int uo;
             for (int i = 0; i < things.size(); i++) {
                 ent = things.getAt(i);
                 if(ent == null || ent.actor == null)

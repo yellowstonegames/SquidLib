@@ -8,8 +8,6 @@ import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.ArrayList;
-
 /**
  * A maze generator that can be configured using a {@link ChoosingMethod}, which can be customized for the app.
  * Based in part on code from <a href="http://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm">Jamis Buck's blog</a>.
@@ -68,10 +66,8 @@ public class GrowingTreeMazeGenerator implements IDungeonGenerator {
         else 
             ArrayTools.fill(dungeon, '#');
         
-        int x = rng.between(1, width / 2);
-        int y = rng.between(1, height / 2);
-        x *= 2;
-        y *= 2;
+        int x = rng.nextInt(width - 1) | 1;
+        int y = rng.nextInt(height - 1) | 1;
 
         OrderedSet<Coord> deck = new OrderedSet<>();
         deck.add(Coord.get(x, y));

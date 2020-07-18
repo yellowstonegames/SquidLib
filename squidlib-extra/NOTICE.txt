@@ -34,16 +34,13 @@ probably from Google's GWT library or its documentation, but may also be from Gu
 
 The JRotation class (no longer in SquidLib) was based on code by Savvas Dalkitsis on stackoverflow.com.
 
-The RNG class is based on the Mersenne Twister implementation by Daniel Dyer as part of the Uncommons Maths library,
-which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura. Also from Uncommon Maths,
-the CombinationGenerator and PermutationGenerator classes; changes were made to PermutationGenerator based on techniques
-from user Joren on StackOverflow, http://stackoverflow.com/a/1506337 . The MersenneTwister class is no longer based on
-Uncommon Maths, instead using Nick Galbreath's implementation from https://github.com/javabeanz/javarng/blob/master/com/modp/random/MersenneTwister64.java .
-Certain methods in RNG and various RandomnessSource implementations are based on Daniel Lemire's integer-multiplication
-method for fast ranged random number reduction, as from https://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/ .
-
-The squidpony.squidgrid.mapping.styled package and the JSON resources are derived from Sean T. Barrett's Herringbone
-Wang Tiles library, part of the nothings set of libraries, which were released into the public domain.
+The many random number classes have several authors; notably, AbstractRNG is smelC's idea and largely his
+implementation. From Uncommon Maths, the CombinationGenerator and PermutationGenerator classes; changes were made to
+PermutationGenerator based on techniques from user Joren on StackOverflow, http://stackoverflow.com/a/1506337 . The
+MersenneTwister class is no longer based on Uncommon Maths, instead using Nick Galbreath's implementation from
+https://github.com/javabeanz/javarng/blob/master/com/modp/random/MersenneTwister64.java . Certain methods in RNG and
+various RandomnessSource implementations are based on Daniel Lemire's integer-multiplication method for fast ranged
+random number reduction, as from https://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/ .
 
 The LightRNG class is based on SplitMix64.c by Sebastiano Vigna, released into the public domain and made available on
 http://xorshift.di.unimi.it/ . It uses the SplitMix64 algorithm as published by Guy L. Steele Jr, Doug Lea, and
@@ -54,7 +51,7 @@ and made available on http://xorshift.di.unimi.it/
 LongPeriodRNG is based on xorshift1024*phi, XoRoRNG is based on xoroshiro128+ , and the other credit for these is the
 same as XorRNG. Starfish32RNG, Lathe32RNG, Oriole32RNG, and GWTRNG are based on modifications to xoroshiro64, the 32-bit
 version of the 64-bit xoroshiro128; they all use different scramblers from xoroshiro128+, but use the same fundamental
-structure for how they change their state.
+structure for how they change their state. XoshiroStarPhi32RNG is based on xoshiro128**, but uses a different scrambler.
 
 The PermutedRNG and PintRNG classes are based on the paper http://www.pcg-random.org/paper.html , describing PCG-Random
 and its methodology written by Melissa E. O'Neill.
@@ -77,9 +74,12 @@ Doty-Humphrey, from http://pracrand.sourceforge.net/ . PractRand has been an inv
 of home-made RNGs. The earlier TestU01 framework by Pierre L'Ecuyer has also been used,
 http://simul.iro.umontreal.ca/testu01/tu01.html , as has nda by Geronimo Jones, http://gjrand.sourceforge.net/ .
 
+The squidpony.squidgrid.mapping.styled package and the JSON resources are derived from Sean T. Barrett's Herringbone
+Wang Tiles library, part of the nothings set of libraries, which were released into the public domain.
+
 The NeuralParticle and WeightedLetterNamegen classes are based on work by Ebyan Alvarez-Buylla .
 
-ShortSet, ShortVLA, IntVLA, and SparseTextMap are based closely off primitive-backed collections from libGDX,
+BinaryHeap, ShortVLA, IntVLA, and SparseTextMap are based closely off primitive-backed collections from libGDX,
 Apache-licensed.
 
 IntDoubleOrderedMap, OrderedMap, and OrderedSet are based on similar code from Sebastiano Vigna's fastutil library,
@@ -142,10 +142,10 @@ Justin Kunimune's work on Map-Projections, https://github.com/jkunimune15/Map-Pr
 which is MIT licensed. Those in turn are derived from Waldo Tobler's work on the
 hyperelliptical map projection that bears his name.
 
-The squidpony.squidai.astar package is a close port of part of gdx-ai; only the indexed A*
-pathfinding has been brought over. gdx-ai is Apache licensed and available here
-https://github.com/libgdx/gdx-ai . The code here incorporates work from a pull request,
-https://github.com/libgdx/gdx-ai/pull/96 by JasonKDarby.
+The squidpony.squidai.graph package is almost entirely drawn from the MIT-licensed simple-graphs
+library by earlygrey, available at https://github.com/earlygrey/simple-graphs/tree/master . This
+library replaces the slightly older squidpony.squidai.astar package, since simple-graphs tends to
+be significantly faster, while also being simpler and more feature-packed.
 
 A substantial amount of work on SquidLib has been done by smelC, https://github.com/smelc ,
 especially in the areas of color handling, text layout, and shape analysis for dungeons.
@@ -193,6 +193,9 @@ Ettinger and released into the public domain, except:
     SourceCodePro-License.txt and SourceHanCodeJP-license.txt , respectively.
   * The font square by Wouter van Oortmerssen is licensed under a Creative Commons Attribution 3.0 Unported License,
     and it must be redistributed with square-License.txt .
+  * The fonts 7-12-serif, bloccus, ComputerSaysNo, and Monty are all originally authored by Christian Munk (Monty was
+    modified somewhat by Tommy Ettinger), and are licensed under a Creative Commons Attribution Share Alike license
+    ( http://creativecommons.org/licenses/by-sa/3.0/ ).
 
 libtcod 1.5.2 license text:
 Copyright (c) 2008,2009,2010,2012 Jice & Mingos

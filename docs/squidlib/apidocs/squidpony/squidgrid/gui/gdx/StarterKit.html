@@ -379,16 +379,17 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="batch">batch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FilterBatch.html" title="class in squidpony.squidgrid.gui.gdx">FilterBatch</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.61">batch</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FilterBatch.html" title="class in squidpony.squidgrid.gui.gdx">FilterBatch</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.62">batch</a></span></div>
 <div class="block">Used to draw lots of things, but mostly handled internally by the Stage.
  You may need to call <code>batch.begin()</code> and <code>batch.end()</code> in some cases where you want to
- render something that isn't a child of stage but is an Actor or similar render-able object.</div>
+ render something that isn't a child of stage but is an Actor or similar render-able object.
+ This can apply a filter from <a href="FloatFilters.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters</code></a> (or a custom <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilter</code></a>) to all drawn colors.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="viewport">viewport</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.utils.viewport.Viewport</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.67">viewport</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.utils.viewport.Viewport</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.68">viewport</a></span></div>
 <div class="block">An important part of how this will be displayed; the viewport defaults to a displayed width of
  <code>cellWidth * gridWidth</code> and a displayed height of <code>cellHeight * gridHeight</code>, after cellWidth
  and cellHeight were doubled by default, and will be stretched or shrunk to fit the actual screen size.</div>
@@ -397,7 +398,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="rng">rng</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GWTRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.85">rng</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/GWTRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">GWTRNG</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.86">rng</a></span></div>
 <div class="block">Almost all of SquidLib comes into contact with randomness at some point, so this is a good place to show one
  way of handling that randomness. GWTRNG acts as a normal implementation of <a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/IRNG.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink"><code>IRNG</code></a>,
  can be "seeded" at the start to set the initial state, like any other RNG, but it can also have the current state
@@ -427,7 +428,7 @@ int&nbsp;height)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,int,int,int)">StarterKit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.96">StarterKit</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.97">StarterKit</a></span>&#8203;(<span class="arguments">int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
 int&nbsp;cellHeight)</span></div>
@@ -446,7 +447,7 @@ int&nbsp;cellHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.TextCellFactory,int,int,int,int)">StarterKit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.118">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.119">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
 int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
@@ -475,7 +476,7 @@ int&nbsp;cellHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.TextCellFactory,int,int,int,int,int,int)">StarterKit</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.141">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.142">StarterKit</a></span>&#8203;(<span class="arguments"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
 int&nbsp;gridWidth,
 int&nbsp;gridHeight,
 int&nbsp;cellWidth,
@@ -518,7 +519,7 @@ int&nbsp;additionalHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw()">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.168">draw</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.169">draw</a></span>()</div>
 <div class="block">Not a complete drawing solution; so much of the logic related to drawing is specific to each game, like
  FOV being used to make certain things not render if they are out of sight, that this doesn't even try to
  guess at what a particular game needs for its rendering code. Any <a href="TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextCellFactory.Glyph</code></a> objects in
@@ -535,7 +536,7 @@ int&nbsp;additionalHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="resize(int,int)">resize</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.181">resize</a></span>&#8203;(<span class="arguments">int&nbsp;width,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.182">resize</a></span>&#8203;(<span class="arguments">int&nbsp;width,
 int&nbsp;height)</span></div>
 <div class="block">Not a complete resize method; this is meant to handle the resizing of this StarterKit only and should be
  called inside your main Game, ApplicationListener, etc. class' resize method.</div>

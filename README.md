@@ -177,7 +177,6 @@ Current Features:
       by doing one full scan and using `DijkstraMap.findPathPreScanned(Coord)` until the circumstances change; this approach
       is used in BasicDemo (in the examples of the display module) to handle the highlighted path from the player to the mouse cursor
   -   Several classes support multi-cell creatures, including DijkstraMap
-  -   DijkstraMap is currently recommended for pathfinding because it has been optimized more heavily than AStarSearch
   -   CustomDijkstraMap allows pathfinding on unusual map types, such as ones where you can rotate in your cell but it takes time, or where there are thin walls
     -   See ThinWallDemo and RotationDemo in the display module's tests folder for examples; this is an advanced feature, though
 

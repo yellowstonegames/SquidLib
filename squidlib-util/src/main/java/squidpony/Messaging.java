@@ -713,7 +713,7 @@ public class Messaging {
                 finisher = finish;
             } else if (len == 1) {
                 term = (terms[0] == null) ? "Nullberoth of the North" : terms[0];
-                trait = (trait == null) ? NounTrait.UNSPECIFIED_GENDER : firstTrait;
+                trait = NounTrait.UNSPECIFIED_GENDER;
                 finisher = finish;
             } else if (len == 2) {
                 term = terms[0] + " and " + terms[1];

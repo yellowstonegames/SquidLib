@@ -96,7 +96,7 @@ public class WaypointBenchmark {
                     continue;
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) way.rng).setState((x << 20) | (y << 14) | (x * y));
+                way.rng.setState((x << 20) | (y << 14) | (x * y));
                 r = utility.randomCell(floors);
                 way.getKnownPath(r, Coord.get(x, y));
                 scanned++;
@@ -123,7 +123,7 @@ public class WaypointBenchmark {
                     continue;
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) way.rng).setState((x << 20) | (y << 14) | (x * y));
+                way.rng.setState((x << 20) | (y << 14) | (x * y));
                 r = utility.randomCell(floors);
                 way.getKnownPath(r, Coord.get(x, y));
                 scanned++;
@@ -151,7 +151,7 @@ public class WaypointBenchmark {
                     continue;
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) way.rng).setState((x << 20) | (y << 14) | (x * y));
+                way.rng.setState((x << 20) | (y << 14) | (x * y));
                 r = utility.randomCell(floors);
                 way.getKnownPath(r, Coord.get(x, y));
                 scanned++;

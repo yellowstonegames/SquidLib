@@ -1,6 +1,9 @@
 package squidpony.squidmath;
 
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import squidpony.examples.TestConfiguration;
 
 import static squidpony.squidmath.Noise.fastFloor;
 import static squidpony.squidmath.SeededNoise.*;
@@ -10,11 +13,12 @@ import static squidpony.squidmath.SeededNoise.*;
  */
 public class NoiseRangeTest {
     @Test
-    public void testSeeded2D() {
+    @Ignore
+    public void testOldSeeded2D() {
         final double threshold = 0.75;
         double min0 = 0.0, max0 = 0.0, min1 = 0.0, max1 = 0.0, min2 = 0.0, max2 = 0.0;
-        for (double x = 0; x <= 16; x += 0x1p-6) {
-            for (double y = 0; y <= 16; y += 0x1p-6) {
+        for (double x = 0; x <= 16; x += 0x1.0001p-6) {
+            for (double y = 0; y <= 16; y += 0x1.0001p-6) {
                 final double s = (x + y) * F2;
                 final int i = fastFloor(x + s),
                         j = fastFloor(y + s);
@@ -37,7 +41,7 @@ public class NoiseRangeTest {
                         y1 = y0 - j1 + G2,
                         x2 = x0 - 1 + 2 * G2,
                         y2 = y0 - 1 + 2 * G2;
-                double n = 0.0;
+                double n;
                 for (int gi0 = 0; gi0 < 256; gi0++) {
                     double t0 = threshold - x0 * x0 - y0 * y0;
                     if (t0 > 0) {
@@ -72,8 +76,30 @@ public class NoiseRangeTest {
                 }
             }
         }
-        System.out.println("Min: " + (min0+min1+min2)*9.125);
-        System.out.println("Max: " + (max0+max1+max2)*9.125);
+        TestConfiguration.println("Min: " + (min0+min1+min2)*9.125);
+        TestConfiguration.println("Max: " + (max0+max1+max2)*9.125);
+    }
+
+    @Test
+    public void testSeeded2D() {
+        double min = 0.0, max = 0.0;
+        long seed = DiverRNG.randomize(System.nanoTime());
+        for (int i = 0; i < 10; i++) {
+            seed = DiverRNG.randomize(seed + System.nanoTime());
+            for (double x = 0; x <= 32; x += 0x1.0001p-6) {
+                for (double y = 0; y <= 32; y += 0x1.0001p-6) {
+                    double n = SeededNoise.noise(x * 123.4567, y * 123.4567, seed);
+                    min = Math.min(min, n);
+                    max = Math.max(max, n);
+                }
+            }
+        }
+//        System.out.println("Min: " + min);
+//        System.out.println("Max: " + max);
+        TestConfiguration.println("Min: " + min);
+        TestConfiguration.println("Max: " + max);
+        Assert.assertTrue("min is out of bounds", min >= -1.0 && min <= 1.0);
+        Assert.assertTrue("max is out of bounds", max >= -1.0 && max <= 1.0);
     }
 
 }

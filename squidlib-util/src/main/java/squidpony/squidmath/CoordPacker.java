@@ -202,7 +202,7 @@ public class CoordPacker {
             mooreDistances = new short[0x100], hilbert3X = new short[0x200], hilbert3Y = new short[0x200],
             hilbert3Z = new short[0x200], hilbert3Distances = new short[0x200],
             ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
-    private static boolean initialized = false;
+    private static boolean initialized;
     public static void init() {
         if(initialized) return;
         /*
@@ -1243,7 +1243,7 @@ public class CoordPacker {
             return unpacked;
         boolean on = false;
         int idx = 0;
-        short x =0, y = 0;
+        short x, y;
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
@@ -1284,7 +1284,7 @@ public class CoordPacker {
             return unpacked;
         boolean on = false;
         int idx = 0;
-        short x =0, y = 0;
+        short x, y;
         double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? MathExtras.remainder(angle, 360.0) : angle);
         double span2 = Math.toRadians(span) * 0.5;
 
@@ -1340,7 +1340,7 @@ public class CoordPacker {
                     "Too many levels to be packed by CoordPacker; should be less than 64 but was given " +
                             levels.length);
         double[][] unpacked = new double[width][height];
-        short x= 0, y = 0;
+        short x, y;
         for(int l = 0; l < packed.length; l++) {
             boolean on = false;
             int idx = 0;
@@ -1398,7 +1398,7 @@ public class CoordPacker {
         if(limit > levels.length)
             limit = levels.length;
         double[][] unpacked = new double[width][height];
-        short x= 0, y = 0;
+        short x, y;
         for(int l = packed.length - limit; l < packed.length; l++) {
             boolean on = false;
             int idx = 0;
@@ -1466,7 +1466,7 @@ public class CoordPacker {
         double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? MathExtras.remainder(angle, 360.0) : angle);
         double span2 = Math.toRadians(span);
         double[][] unpacked = new double[width][height];
-        short x= 0, y = 0;
+        short x, y;
         for(int l = packed.length - limit; l < packed.length; l++) {
             boolean on = false;
             int idx = 0;
@@ -1510,7 +1510,7 @@ public class CoordPacker {
                     "CoordPacker.unpackMultiByte() must be given a non-empty array");
         byte[][] unpacked = new byte[width][height];
         byte lPlus = 1;
-        short x=0, y=0;
+        short x, y;
         for(int l = 0; l < packed.length; l++, lPlus++) {
             boolean on = false;
             int idx = 0;
@@ -4132,18 +4132,10 @@ public class CoordPacker {
         boolean on = false, onLeft = false, onRight = false;
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
         while ((elemLeft < left.length && elemRight < right.length) && idx <= 0xffff) {
-            if (elemLeft >= left.length) {
-                totalLeft = 0x20000;
-                onLeft = false;
-            }
-            else if(totalLeft <= idx) {
+            if(totalLeft <= idx) {
                 totalLeft += left[elemLeft] & 0xffff;
             }
-            if(elemRight >= right.length) {
-                totalRight = 0x20000;
-                onRight = false;
-            }
-            else if(totalRight <= idx) {
+            if(totalRight <= idx) {
                 totalRight += right[elemRight] & 0xffff;
             }
             // 300, 5, 6, 8, 2, 4
@@ -4219,18 +4211,10 @@ public class CoordPacker {
         boolean onLeft = false, onRight = false;
         int idx = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
         while ((elemLeft < left.length && elemRight < right.length) && idx <= 0xffff) {
-            if (elemLeft >= left.length) {
-                totalLeft = 0x20000;
-                onLeft = false;
-            }
-            else if(totalLeft <= idx) {
+            if(totalLeft <= idx) {
                 totalLeft += left[elemLeft] & 0xffff;
             }
-            if(elemRight >= right.length) {
-                totalRight = 0x20000;
-                onRight = false;
-            }
-            else if(totalRight <= idx) {
+            if(totalRight <= idx) {
                 totalRight += right[elemRight] & 0xffff;
             }
             // 300, 5, 6, 8, 2, 4
@@ -4773,7 +4757,7 @@ public class CoordPacker {
         while (remaining.length > 1) {
             boolean on = false;
             int idx = 0;
-            for (int p = 0; p < remaining.length; p++, on = !on) {
+            for (int p = 0; p < remaining.length; p++, on = true) {
                 if (on) {
                     short[] area = flood(packed, packOne((short) idx), 512, false);
                     arrays.add(area);
@@ -4794,7 +4778,7 @@ public class CoordPacker {
         while (remaining.length > 1) {
             boolean on = false;
             int idx = 0;
-            for (int p = 0; p < remaining.length; p++, on = !on) {
+            for (int p = 0; p < remaining.length; p++, on = true) {
                 if (on) {
                     short[] area = flood(packed, packOne((short) idx), 512, false);
                     if(count(area) <= 4)
@@ -4960,7 +4944,7 @@ public class CoordPacker {
         for (int e = 0; e < many.length; e++) {
             boolean on = false;
             int idx = 0;
-            short x = 0, y = 0;
+            short x, y;
             for(int p = 0; p < many[e].length; p++, on = !on) {
                 if (on) {
                     for (int toSkip = idx + (many[e][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
@@ -5180,7 +5164,7 @@ public class CoordPacker {
         mcode = ( ( x >> 7 ) & 1 ) | ( ( ( y >> ( 7 ) ) & 1 ) << 1);
         hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
         remap ^= ( 0x82000028 >> ( hcode << 3 ) );
-        hilbert = ( ( hilbert << 2 ) + hcode );
+        hilbert = ( (0) + hcode );
 
         mcode = ( ( x >> 6 ) & 1 ) | ( ( ( y >> ( 6 ) ) & 1 ) << 1);
         hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
@@ -5446,7 +5430,7 @@ public class CoordPacker {
         mcode = ( ( x >> 7 ) & 1 ) | ( ( ( y >> ( 7 ) ) & 1 ) << 1);
         hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
         remap ^= ( 0x82000028 >> ( hcode << 3 ) );
-        hilbert = ( ( hilbert << 2 ) + hcode );
+        hilbert = ( (0) + hcode );
 
         mcode = ( ( x >> 6 ) & 1 ) | ( ( ( y >> ( 6 ) ) & 1 ) << 1);
         hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );

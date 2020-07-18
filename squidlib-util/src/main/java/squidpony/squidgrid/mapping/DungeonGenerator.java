@@ -85,12 +85,12 @@ public class DungeonGenerator implements IDungeonGenerator {
     protected DungeonBoneGen gen;
     public DungeonUtility utility;
     protected int height, width;
-    public Coord stairsUp = null, stairsDown = null;
+    public Coord stairsUp, stairsDown;
     public IStatefulRNG rng;
     protected long rebuildSeed;
-    protected boolean seedFixed = false;
+    protected boolean seedFixed;
 
-    protected char[][] dungeon = null;
+    protected char[][] dungeon;
 
     /**
      * Get the most recently generated char[][] dungeon out of this class. The
@@ -225,7 +225,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
+		fx.remove(FillEffect.WATER);
         fx.put(FillEffect.WATER, percentage);
         return this;
     }
@@ -244,9 +244,9 @@ public class DungeonGenerator implements IDungeonGenerator {
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
+        fx.remove(FillEffect.WATER);
         fx.put(FillEffect.WATER, percentage);
-        if(fx.containsKey(FillEffect.ISLANDS)) fx.remove(FillEffect.ISLANDS);
+        fx.remove(FillEffect.ISLANDS);
         if(islandSpacing > 1)
             fx.put(FillEffect.ISLANDS, islandSpacing);
         return this;
@@ -265,7 +265,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.GRASS)) fx.remove(FillEffect.GRASS);
+        fx.remove(FillEffect.GRASS);
         fx.put(FillEffect.GRASS, percentage);
         return this;
     }
@@ -279,7 +279,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.BOULDERS)) fx.remove(FillEffect.BOULDERS);
+        fx.remove(FillEffect.BOULDERS);
         fx.put(FillEffect.BOULDERS, percentage);
         return this;
     }
@@ -299,7 +299,7 @@ public class DungeonGenerator implements IDungeonGenerator {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
         if(doubleDoors) percentage *= -1;
-        if(fx.containsKey(FillEffect.DOORS)) fx.remove(FillEffect.DOORS);
+        fx.remove(FillEffect.DOORS);
         fx.put(FillEffect.DOORS, percentage);
         return this;
     }
@@ -316,7 +316,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.TRAPS)) fx.remove(FillEffect.TRAPS);
+        fx.remove(FillEffect.TRAPS);
         fx.put(FillEffect.TRAPS, percentage);
         return this;
     }
@@ -781,7 +781,7 @@ public class DungeonGenerator implements IDungeonGenerator {
             for(int i = 0; i < total; i++)
             {
                 Coord entry = rng.getRandomElement(hazards);
-                if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '<')
+                if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '>')
                     continue;
                 map[entry.x][entry.y] = '^';
                 hazards.remove(entry);

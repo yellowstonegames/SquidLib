@@ -1954,348 +1954,350 @@
 <span class="sourceLineNo">1942</span><a id="line.1942"></a>
 <span class="sourceLineNo">1943</span><a id="line.1943">    /**</a>
 <span class="sourceLineNo">1944</span><a id="line.1944">     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher</a>
-<span class="sourceLineNo">1945</span><a id="line.1945">     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</a>
-<span class="sourceLineNo">1946</span><a id="line.1946">     * @return the current smoothing multiplier as a float, which starts at 1f.</a>
-<span class="sourceLineNo">1947</span><a id="line.1947">     */</a>
-<span class="sourceLineNo">1948</span><a id="line.1948">    public float getSmoothingMultiplier() {</a>
-<span class="sourceLineNo">1949</span><a id="line.1949">        return smoothingMultiplier;</a>
-<span class="sourceLineNo">1950</span><a id="line.1950">    }</a>
-<span class="sourceLineNo">1951</span><a id="line.1951"></a>
-<span class="sourceLineNo">1952</span><a id="line.1952">    /**</a>
-<span class="sourceLineNo">1953</span><a id="line.1953">     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher</a>
-<span class="sourceLineNo">1954</span><a id="line.1954">     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</a>
-<span class="sourceLineNo">1955</span><a id="line.1955">     * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.</a>
-<span class="sourceLineNo">1956</span><a id="line.1956">     * @return this for chaining</a>
-<span class="sourceLineNo">1957</span><a id="line.1957">     */</a>
-<span class="sourceLineNo">1958</span><a id="line.1958">    public TextCellFactory setSmoothingMultiplier(float smoothingMultiplier) {</a>
-<span class="sourceLineNo">1959</span><a id="line.1959">        this.smoothingMultiplier = smoothingMultiplier;</a>
-<span class="sourceLineNo">1960</span><a id="line.1960">        return this;</a>
-<span class="sourceLineNo">1961</span><a id="line.1961">    }</a>
-<span class="sourceLineNo">1962</span><a id="line.1962"></a>
-<span class="sourceLineNo">1963</span><a id="line.1963">    /**</a>
-<span class="sourceLineNo">1964</span><a id="line.1964">     * If using a distance field font, you MUST call this at some point while the batch has begun, or use code that</a>
-<span class="sourceLineNo">1965</span><a id="line.1965">     * calls it for you (which is now much of SquidLib). A typical point to call it is in the</a>
-<span class="sourceLineNo">1966</span><a id="line.1966">     * "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call</a>
-<span class="sourceLineNo">1967</span><a id="line.1967">     * configureShader rarely, typically only a few times per frame if there are no images to render, and this means the</a>
-<span class="sourceLineNo">1968</span><a id="line.1968">     * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you</a>
-<span class="sourceLineNo">1969</span><a id="line.1969">     * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.</a>
-<span class="sourceLineNo">1970</span><a id="line.1970">     * &lt;br&gt;</a>
-<span class="sourceLineNo">1971</span><a id="line.1971">     * SquidLayers, SparseLayers, SubcellLayers, SquidPanel, TextPanel, and ImageSquidPanel already call</a>
-<span class="sourceLineNo">1972</span><a id="line.1972">     * this method in their draw overrides, so you don't need to call this manually if you use any of those. None of</a>
-<span class="sourceLineNo">1973</span><a id="line.1973">     * those classes change the shader after they set it for their uses, so you may need to set the shader on your Batch</a>
-<span class="sourceLineNo">1974</span><a id="line.1974">     * to null to revert to the default shader if you need to draw full-color art.</a>
-<span class="sourceLineNo">1975</span><a id="line.1975">     * &lt;br&gt;</a>
-<span class="sourceLineNo">1976</span><a id="line.1976">     * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.</a>
-<span class="sourceLineNo">1977</span><a id="line.1977">     *</a>
-<span class="sourceLineNo">1978</span><a id="line.1978">     * @param batch the Batch, such as a {@link FilterBatch}, to configure to render distance field fonts if necessary.</a>
-<span class="sourceLineNo">1979</span><a id="line.1979">     */</a>
-<span class="sourceLineNo">1980</span><a id="line.1980">    public void configureShader(Batch batch) {</a>
-<span class="sourceLineNo">1981</span><a id="line.1981">        if(initialized)</a>
-<span class="sourceLineNo">1982</span><a id="line.1982">        {</a>
-<span class="sourceLineNo">1983</span><a id="line.1983">            if(msdf)</a>
-<span class="sourceLineNo">1984</span><a id="line.1984">            {</a>
-<span class="sourceLineNo">1985</span><a id="line.1985">                if(!shader.equals(batch.getShader())) </a>
-<span class="sourceLineNo">1986</span><a id="line.1986">                    batch.setShader(shader);</a>
-<span class="sourceLineNo">1987</span><a id="line.1987">                shader.setUniformf("u_smoothing", 2.1198158f * smoothingMultiplier * bmpFont.getData().scaleX);</a>
-<span class="sourceLineNo">1988</span><a id="line.1988">            }</a>
-<span class="sourceLineNo">1989</span><a id="line.1989">            else if (distanceField) {</a>
-<span class="sourceLineNo">1990</span><a id="line.1990">                if(!shader.equals(batch.getShader()))</a>
-<span class="sourceLineNo">1991</span><a id="line.1991">                    batch.setShader(shader);</a>
-<span class="sourceLineNo">1992</span><a id="line.1992">                shader.setUniformf("u_smoothing", 0.35f / (1.9f * smoothingMultiplier * (bmpFont.getData().scaleX + bmpFont.getData().scaleY)));</a>
-<span class="sourceLineNo">1993</span><a id="line.1993">            }</a>
-<span class="sourceLineNo">1994</span><a id="line.1994">        }</a>
-<span class="sourceLineNo">1995</span><a id="line.1995">    }</a>
-<span class="sourceLineNo">1996</span><a id="line.1996">    /**</a>
-<span class="sourceLineNo">1997</span><a id="line.1997">     * Releases all resources of this object.</a>
-<span class="sourceLineNo">1998</span><a id="line.1998">     */</a>
-<span class="sourceLineNo">1999</span><a id="line.1999">    @Override</a>
-<span class="sourceLineNo">2000</span><a id="line.2000">    public void dispose() {</a>
-<span class="sourceLineNo">2001</span><a id="line.2001">        if(block != null) block.getTexture().dispose();</a>
-<span class="sourceLineNo">2002</span><a id="line.2002">        if(bmpFont != null) bmpFont.dispose();</a>
-<span class="sourceLineNo">2003</span><a id="line.2003">    }</a>
-<span class="sourceLineNo">2004</span><a id="line.2004"></a>
-<span class="sourceLineNo">2005</span><a id="line.2005">    /**</a>
-<span class="sourceLineNo">2006</span><a id="line.2006">     * Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.</a>
-<span class="sourceLineNo">2007</span><a id="line.2007">     * @return the descent of the BitmapFont this object uses</a>
-<span class="sourceLineNo">2008</span><a id="line.2008">     */</a>
-<span class="sourceLineNo">2009</span><a id="line.2009">    public float getDescent() {</a>
-<span class="sourceLineNo">2010</span><a id="line.2010">        return descent;</a>
-<span class="sourceLineNo">2011</span><a id="line.2011">    }</a>
-<span class="sourceLineNo">2012</span><a id="line.2012"></a>
-<span class="sourceLineNo">2013</span><a id="line.2013">    public char getDirectionGlyph() {</a>
-<span class="sourceLineNo">2014</span><a id="line.2014">        return directionGlyph;</a>
-<span class="sourceLineNo">2015</span><a id="line.2015">    }</a>
-<span class="sourceLineNo">2016</span><a id="line.2016"></a>
-<span class="sourceLineNo">2017</span><a id="line.2017">    public TextCellFactory setDirectionGlyph(char directionGlyph) {</a>
-<span class="sourceLineNo">2018</span><a id="line.2018">        this.directionGlyph = directionGlyph;</a>
-<span class="sourceLineNo">2019</span><a id="line.2019">        return this;</a>
-<span class="sourceLineNo">2020</span><a id="line.2020">    }</a>
-<span class="sourceLineNo">2021</span><a id="line.2021"></a>
-<span class="sourceLineNo">2022</span><a id="line.2022">    /**</a>
-<span class="sourceLineNo">2023</span><a id="line.2023">     * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested</a>
-<span class="sourceLineNo">2024</span><a id="line.2024">     * to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and</a>
-<span class="sourceLineNo">2025</span><a id="line.2025">     * related classes, so Strings longer than 1 char are effectively disregarded beyond the first char.</a>
-<span class="sourceLineNo">2026</span><a id="line.2026">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2027</span><a id="line.2027">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2028</span><a id="line.2028">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2029</span><a id="line.2029">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also</a>
-<span class="sourceLineNo">2030</span><a id="line.2030">     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2031</span><a id="line.2031">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2032</span><a id="line.2032">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2033</span><a id="line.2033">     * @param find the requested String that will be changed</a>
-<span class="sourceLineNo">2034</span><a id="line.2034">     * @param replace the replacement String that will be used in place of find</a>
-<span class="sourceLineNo">2035</span><a id="line.2035">     * @return this for chaining</a>
-<span class="sourceLineNo">2036</span><a id="line.2036">     */</a>
-<span class="sourceLineNo">2037</span><a id="line.2037">    public TextCellFactory addSwap(String find, String replace)</a>
-<span class="sourceLineNo">2038</span><a id="line.2038">    {</a>
-<span class="sourceLineNo">2039</span><a id="line.2039">        if(find == null || replace == null || find.isEmpty()  || replace.isEmpty() || find.charAt(0) == 0)</a>
-<span class="sourceLineNo">2040</span><a id="line.2040">            return this;</a>
-<span class="sourceLineNo">2041</span><a id="line.2041">        swap.put(find.charAt(0), replace.charAt(0));</a>
-<span class="sourceLineNo">2042</span><a id="line.2042">        return this;</a>
-<span class="sourceLineNo">2043</span><a id="line.2043">    }</a>
-<span class="sourceLineNo">2044</span><a id="line.2044"></a>
-<span class="sourceLineNo">2045</span><a id="line.2045">    /**</a>
-<span class="sourceLineNo">2046</span><a id="line.2046">     * Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is</a>
-<span class="sourceLineNo">2047</span><a id="line.2047">     * used instead.</a>
-<span class="sourceLineNo">2048</span><a id="line.2048">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2049</span><a id="line.2049">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2050</span><a id="line.2050">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2051</span><a id="line.2051">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
-<span class="sourceLineNo">2052</span><a id="line.2052">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2053</span><a id="line.2053">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2054</span><a id="line.2054">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2055</span><a id="line.2055">     * @param find the requested char that will be changed (converted to a length-1 String)</a>
-<span class="sourceLineNo">2056</span><a id="line.2056">     * @param replace the replacement char that will be used in place of find (converted to a length-1 String)</a>
-<span class="sourceLineNo">2057</span><a id="line.2057">     * @return this for chaining</a>
-<span class="sourceLineNo">2058</span><a id="line.2058">     */</a>
-<span class="sourceLineNo">2059</span><a id="line.2059">    public TextCellFactory addSwap(char find, char replace)</a>
-<span class="sourceLineNo">2060</span><a id="line.2060">    {</a>
-<span class="sourceLineNo">2061</span><a id="line.2061">        if(find == 0)</a>
-<span class="sourceLineNo">2062</span><a id="line.2062">            return this;</a>
-<span class="sourceLineNo">2063</span><a id="line.2063">        swap.put(find, replace);</a>
-<span class="sourceLineNo">2064</span><a id="line.2064">        return this;</a>
-<span class="sourceLineNo">2065</span><a id="line.2065">    }</a>
-<span class="sourceLineNo">2066</span><a id="line.2066"></a>
-<span class="sourceLineNo">2067</span><a id="line.2067">    /**</a>
-<span class="sourceLineNo">2068</span><a id="line.2068">     * Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text</a>
-<span class="sourceLineNo">2069</span><a id="line.2069">     * in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond</a>
-<span class="sourceLineNo">2070</span><a id="line.2070">     * the first char.</a>
-<span class="sourceLineNo">2071</span><a id="line.2071">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2072</span><a id="line.2072">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2073</span><a id="line.2073">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2074</span><a id="line.2074">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
-<span class="sourceLineNo">2075</span><a id="line.2075">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2076</span><a id="line.2076">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2077</span><a id="line.2077">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2078</span><a id="line.2078">     * @param find the String that would be changed in the replacement pair</a>
-<span class="sourceLineNo">2079</span><a id="line.2079">     * @return this for chaining</a>
-<span class="sourceLineNo">2080</span><a id="line.2080">     */</a>
-<span class="sourceLineNo">2081</span><a id="line.2081">    public TextCellFactory removeSwap(String find)</a>
-<span class="sourceLineNo">2082</span><a id="line.2082">    {</a>
-<span class="sourceLineNo">2083</span><a id="line.2083"></a>
-<span class="sourceLineNo">2084</span><a id="line.2084">        if(find != null &amp;&amp; !find.isEmpty() &amp;&amp; find.charAt(0) != 0)</a>
-<span class="sourceLineNo">2085</span><a id="line.2085">            swap.remove(find.charAt(0));</a>
-<span class="sourceLineNo">2086</span><a id="line.2086">        return this;</a>
-<span class="sourceLineNo">2087</span><a id="line.2087">    }</a>
-<span class="sourceLineNo">2088</span><a id="line.2088"></a>
-<span class="sourceLineNo">2089</span><a id="line.2089">    /**</a>
-<span class="sourceLineNo">2090</span><a id="line.2090">     * Removes the replacement pair, if present, that searches for the given key, find.</a>
-<span class="sourceLineNo">2091</span><a id="line.2091">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2092</span><a id="line.2092">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2093</span><a id="line.2093">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2094</span><a id="line.2094">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
-<span class="sourceLineNo">2095</span><a id="line.2095">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2096</span><a id="line.2096">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2097</span><a id="line.2097">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2098</span><a id="line.2098">     * @return this for chaining</a>
-<span class="sourceLineNo">2099</span><a id="line.2099">     */</a>
-<span class="sourceLineNo">2100</span><a id="line.2100">    public TextCellFactory removeSwap(char find)</a>
-<span class="sourceLineNo">2101</span><a id="line.2101">    {</a>
-<span class="sourceLineNo">2102</span><a id="line.2102">        swap.remove(find);</a>
-<span class="sourceLineNo">2103</span><a id="line.2103">        return this;</a>
-<span class="sourceLineNo">2104</span><a id="line.2104">    }</a>
-<span class="sourceLineNo">2105</span><a id="line.2105"></a>
-<span class="sourceLineNo">2106</span><a id="line.2106">    /**</a>
-<span class="sourceLineNo">2107</span><a id="line.2107">     * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their</a>
-<span class="sourceLineNo">2108</span><a id="line.2108">     * values in the {@link CharCharMap}. CharCharMap is a class from RegExodus (a dependency of squidlib-util that is</a>
-<span class="sourceLineNo">2109</span><a id="line.2109">     * used for text matching and Unicode support), which is used here to avoid making yet another primitive-backed</a>
-<span class="sourceLineNo">2110</span><a id="line.2110">     * collection class.</a>
-<span class="sourceLineNo">2111</span><a id="line.2111">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2112</span><a id="line.2112">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2113</span><a id="line.2113">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2114</span><a id="line.2114">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
-<span class="sourceLineNo">2115</span><a id="line.2115">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2116</span><a id="line.2116">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2117</span><a id="line.2117">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2118</span><a id="line.2118">     * @return the mapping of replacement pairs</a>
-<span class="sourceLineNo">2119</span><a id="line.2119">     */</a>
-<span class="sourceLineNo">2120</span><a id="line.2120">    public CharCharMap getAllSwaps() {</a>
-<span class="sourceLineNo">2121</span><a id="line.2121">        return swap;</a>
-<span class="sourceLineNo">2122</span><a id="line.2122">    }</a>
-<span class="sourceLineNo">2123</span><a id="line.2123"></a>
-<span class="sourceLineNo">2124</span><a id="line.2124">    /**</a>
-<span class="sourceLineNo">2125</span><a id="line.2125">     * Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.</a>
-<span class="sourceLineNo">2126</span><a id="line.2126">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2127</span><a id="line.2127">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2128</span><a id="line.2128">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2129</span><a id="line.2129">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
-<span class="sourceLineNo">2130</span><a id="line.2130">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2131</span><a id="line.2131">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2132</span><a id="line.2132">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2133</span><a id="line.2133">     * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values</a>
-<span class="sourceLineNo">2134</span><a id="line.2134">     * @return this for chaining</a>
-<span class="sourceLineNo">2135</span><a id="line.2135">     */</a>
-<span class="sourceLineNo">2136</span><a id="line.2136">    public TextCellFactory setAllSwaps(OrderedMap&lt;Character, Character&gt; swaps) {</a>
-<span class="sourceLineNo">2137</span><a id="line.2137">        swap.clear();</a>
-<span class="sourceLineNo">2138</span><a id="line.2138">        for (int i = 0; i &lt; swaps.size(); i++) {</a>
-<span class="sourceLineNo">2139</span><a id="line.2139">            if(!swaps.keyAt(i).equals('\0'))</a>
-<span class="sourceLineNo">2140</span><a id="line.2140">                swap.put(swaps.keyAt(i), swaps.getAt(i));</a>
-<span class="sourceLineNo">2141</span><a id="line.2141">        }</a>
-<span class="sourceLineNo">2142</span><a id="line.2142">        return this;</a>
-<span class="sourceLineNo">2143</span><a id="line.2143">    }</a>
-<span class="sourceLineNo">2144</span><a id="line.2144"></a>
-<span class="sourceLineNo">2145</span><a id="line.2145">    /**</a>
-<span class="sourceLineNo">2146</span><a id="line.2146">     * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the</a>
-<span class="sourceLineNo">2147</span><a id="line.2147">     * entries in a Map of Character keys to String values.</a>
-<span class="sourceLineNo">2148</span><a id="line.2148">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2149</span><a id="line.2149">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2150</span><a id="line.2150">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2151</span><a id="line.2151">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
-<span class="sourceLineNo">2152</span><a id="line.2152">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2153</span><a id="line.2153">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2154</span><a id="line.2154">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2155</span><a id="line.2155">     * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values</a>
-<span class="sourceLineNo">2156</span><a id="line.2156">     * @return this for chaining</a>
-<span class="sourceLineNo">2157</span><a id="line.2157">     */</a>
-<span class="sourceLineNo">2158</span><a id="line.2158">    public TextCellFactory addSwaps(OrderedMap&lt;Character, Character&gt; swaps) {</a>
-<span class="sourceLineNo">2159</span><a id="line.2159">        for (int i = 0; i &lt; swaps.size(); i++) {</a>
-<span class="sourceLineNo">2160</span><a id="line.2160">            if(!swaps.keyAt(i).equals('\0'))</a>
-<span class="sourceLineNo">2161</span><a id="line.2161">                swap.put(swaps.keyAt(i), swaps.getAt(i));</a>
-<span class="sourceLineNo">2162</span><a id="line.2162">        }</a>
-<span class="sourceLineNo">2163</span><a id="line.2163">        return this;</a>
-<span class="sourceLineNo">2164</span><a id="line.2164">    }</a>
-<span class="sourceLineNo">2165</span><a id="line.2165"></a>
-<span class="sourceLineNo">2166</span><a id="line.2166">    /**</a>
-<span class="sourceLineNo">2167</span><a id="line.2167">     * Clears all replacement pairs this has been told to swap.</a>
-<span class="sourceLineNo">2168</span><a id="line.2168">     * &lt;br&gt;</a>
-<span class="sourceLineNo">2169</span><a id="line.2169">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
-<span class="sourceLineNo">2170</span><a id="line.2170">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
-<span class="sourceLineNo">2171</span><a id="line.2171">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
-<span class="sourceLineNo">2172</span><a id="line.2172">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
-<span class="sourceLineNo">2173</span><a id="line.2173">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
-<span class="sourceLineNo">2174</span><a id="line.2174">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
-<span class="sourceLineNo">2175</span><a id="line.2175">     * @return this for chaining</a>
-<span class="sourceLineNo">2176</span><a id="line.2176">     */</a>
-<span class="sourceLineNo">2177</span><a id="line.2177">    public TextCellFactory clearSwaps()</a>
-<span class="sourceLineNo">2178</span><a id="line.2178">    {</a>
-<span class="sourceLineNo">2179</span><a id="line.2179">        swap.clear();</a>
-<span class="sourceLineNo">2180</span><a id="line.2180">        return this;</a>
-<span class="sourceLineNo">2181</span><a id="line.2181">    }</a>
-<span class="sourceLineNo">2182</span><a id="line.2182"></a>
-<span class="sourceLineNo">2183</span><a id="line.2183">    /**</a>
-<span class="sourceLineNo">2184</span><a id="line.2184">     * Not implemented in this class; in subclasses that do, this should change the currently-used font style, such as</a>
-<span class="sourceLineNo">2185</span><a id="line.2185">     * from regular to italic or bold. Calling this method on a TextCellFactory does nothing, but won't cause problems.</a>
-<span class="sourceLineNo">2186</span><a id="line.2186">     * @param style an int, typically a constant in a class that implements this, that determines what style to use.</a>
-<span class="sourceLineNo">2187</span><a id="line.2187">     */</a>
-<span class="sourceLineNo">2188</span><a id="line.2188">    public void setStyle(int style)</a>
-<span class="sourceLineNo">2189</span><a id="line.2189">    {</a>
-<span class="sourceLineNo">2190</span><a id="line.2190">    }</a>
-<span class="sourceLineNo">2191</span><a id="line.2191"></a>
-<span class="sourceLineNo">2192</span><a id="line.2192">    /**</a>
-<span class="sourceLineNo">2193</span><a id="line.2193">     * A kind of Actor for one char (with one color) that is innately drawn with a specific TextCellFactory, and will</a>
-<span class="sourceLineNo">2194</span><a id="line.2194">     * match the layout behavior of that TextCellFactory when it is used for other purposes. This is an inner class of</a>
-<span class="sourceLineNo">2195</span><a id="line.2195">     * TextCellFactory, and can't be constructed without a TextCellFactory being involved; usually you instantiate</a>
-<span class="sourceLineNo">2196</span><a id="line.2196">     * Glyphs with {@link #glyph(char, Color, float, float)} or an overload of that method on TextCellFactory.</a>
-<span class="sourceLineNo">2197</span><a id="line.2197">     */</a>
-<span class="sourceLineNo">2198</span><a id="line.2198">    public class Glyph extends Actor implements ICellVisible</a>
-<span class="sourceLineNo">2199</span><a id="line.2199">    {</a>
-<span class="sourceLineNo">2200</span><a id="line.2200">        /**</a>
-<span class="sourceLineNo">2201</span><a id="line.2201">         * The char that will be shown for this Glyph.</a>
-<span class="sourceLineNo">2202</span><a id="line.2202">         */</a>
-<span class="sourceLineNo">2203</span><a id="line.2203">        public char shown;</a>
-<span class="sourceLineNo">2204</span><a id="line.2204">        </a>
-<span class="sourceLineNo">2205</span><a id="line.2205">        @Override</a>
-<span class="sourceLineNo">2206</span><a id="line.2206">        public char getSymbol()</a>
-<span class="sourceLineNo">2207</span><a id="line.2207">        {</a>
-<span class="sourceLineNo">2208</span><a id="line.2208">            return shown;</a>
-<span class="sourceLineNo">2209</span><a id="line.2209">        }</a>
-<span class="sourceLineNo">2210</span><a id="line.2210"></a>
-<span class="sourceLineNo">2211</span><a id="line.2211">        /**</a>
-<span class="sourceLineNo">2212</span><a id="line.2212">         * Makes an orange '@' Glyph at 0,0 in world coordinates.</a>
-<span class="sourceLineNo">2213</span><a id="line.2213">         */</a>
-<span class="sourceLineNo">2214</span><a id="line.2214">        public Glyph() {</a>
-<span class="sourceLineNo">2215</span><a id="line.2215">            this('@', SColor.SAFETY_ORANGE, 0f, 0f);</a>
-<span class="sourceLineNo">2216</span><a id="line.2216">        }</a>
-<span class="sourceLineNo">2217</span><a id="line.2217"></a>
-<span class="sourceLineNo">2218</span><a id="line.2218">        /**</a>
-<span class="sourceLineNo">2219</span><a id="line.2219">         * Makes a Glyph of the given char in the given Color, at the specified world coordinates.</a>
-<span class="sourceLineNo">2220</span><a id="line.2220">         * @param shown the char to show</a>
-<span class="sourceLineNo">2221</span><a id="line.2221">         * @param color the Color to use; if null this will instead use {@link SColor#TRANSPARENT}</a>
-<span class="sourceLineNo">2222</span><a id="line.2222">         * @param x x position in world coordinates</a>
-<span class="sourceLineNo">2223</span><a id="line.2223">         * @param y y position in world coordinates</a>
-<span class="sourceLineNo">2224</span><a id="line.2224">         */</a>
-<span class="sourceLineNo">2225</span><a id="line.2225">        public Glyph(char shown, Color color, float x, float y)</a>
-<span class="sourceLineNo">2226</span><a id="line.2226">        {</a>
-<span class="sourceLineNo">2227</span><a id="line.2227">            super();</a>
-<span class="sourceLineNo">2228</span><a id="line.2228">            this.shown = shown;</a>
-<span class="sourceLineNo">2229</span><a id="line.2229">            super.getColor().set(color == null ? SColor.TRANSPARENT : color);</a>
-<span class="sourceLineNo">2230</span><a id="line.2230">            setPosition(x, y);</a>
-<span class="sourceLineNo">2231</span><a id="line.2231">        }</a>
-<span class="sourceLineNo">2232</span><a id="line.2232"></a>
-<span class="sourceLineNo">2233</span><a id="line.2233">        /**</a>
-<span class="sourceLineNo">2234</span><a id="line.2234">         * Makes a Glyph of the given char in the given packed float color, at the specified world coordinates.</a>
-<span class="sourceLineNo">2235</span><a id="line.2235">         * @param shown the char to show</a>
-<span class="sourceLineNo">2236</span><a id="line.2236">         * @param color the packed float color to use, as produced by {@link Color#toFloatBits()}</a>
-<span class="sourceLineNo">2237</span><a id="line.2237">         * @param x x position in world coordinates</a>
-<span class="sourceLineNo">2238</span><a id="line.2238">         * @param y y position in world coordinates</a>
-<span class="sourceLineNo">2239</span><a id="line.2239">         */</a>
-<span class="sourceLineNo">2240</span><a id="line.2240">        public Glyph(char shown, float color, float x, float y) {</a>
-<span class="sourceLineNo">2241</span><a id="line.2241">            super();</a>
-<span class="sourceLineNo">2242</span><a id="line.2242">            this.shown = shown;</a>
-<span class="sourceLineNo">2243</span><a id="line.2243">            Color.abgr8888ToColor(super.getColor(), color);</a>
-<span class="sourceLineNo">2244</span><a id="line.2244">            setPosition(x, y);</a>
-<span class="sourceLineNo">2245</span><a id="line.2245">        }</a>
-<span class="sourceLineNo">2246</span><a id="line.2246"></a>
-<span class="sourceLineNo">2247</span><a id="line.2247">        /**</a>
-<span class="sourceLineNo">2248</span><a id="line.2248">         * Gets the color of this Glyph as a packed float color; does not allocate any objects.</a>
-<span class="sourceLineNo">2249</span><a id="line.2249">         * @return the color of this Glyph as a packed float</a>
-<span class="sourceLineNo">2250</span><a id="line.2250">         */</a>
-<span class="sourceLineNo">2251</span><a id="line.2251">        @Override</a>
-<span class="sourceLineNo">2252</span><a id="line.2252">        public float getPackedColor() {</a>
-<span class="sourceLineNo">2253</span><a id="line.2253">            return getColor().toFloatBits();</a>
-<span class="sourceLineNo">2254</span><a id="line.2254">        }</a>
-<span class="sourceLineNo">2255</span><a id="line.2255"></a>
-<span class="sourceLineNo">2256</span><a id="line.2256">        /**</a>
-<span class="sourceLineNo">2257</span><a id="line.2257">         * Sets the color of this Glyph with the given packed float color; does not allocate any objects.</a>
-<span class="sourceLineNo">2258</span><a id="line.2258">         * @param color the color to set this Glyph to, as a packed float</a>
-<span class="sourceLineNo">2259</span><a id="line.2259">         */</a>
-<span class="sourceLineNo">2260</span><a id="line.2260">        public void setPackedColor(float color) {</a>
-<span class="sourceLineNo">2261</span><a id="line.2261">            Color.abgr8888ToColor(super.getColor(), color);</a>
-<span class="sourceLineNo">2262</span><a id="line.2262">        }</a>
-<span class="sourceLineNo">2263</span><a id="line.2263"></a>
-<span class="sourceLineNo">2264</span><a id="line.2264">        @Override</a>
-<span class="sourceLineNo">2265</span><a id="line.2265">        public String toString() {</a>
-<span class="sourceLineNo">2266</span><a id="line.2266">            return "Glyph{'" +</a>
-<span class="sourceLineNo">2267</span><a id="line.2267">                    + shown +</a>
-<span class="sourceLineNo">2268</span><a id="line.2268">                    "' with color " + getColor() +</a>
-<span class="sourceLineNo">2269</span><a id="line.2269">                    ", position (" + getX() +</a>
-<span class="sourceLineNo">2270</span><a id="line.2270">                    "," + getY() +</a>
-<span class="sourceLineNo">2271</span><a id="line.2271">                    ")}";</a>
-<span class="sourceLineNo">2272</span><a id="line.2272">        }</a>
-<span class="sourceLineNo">2273</span><a id="line.2273"></a>
-<span class="sourceLineNo">2274</span><a id="line.2274">        /**</a>
-<span class="sourceLineNo">2275</span><a id="line.2275">         * Draws the actor. The batch is configured to draw in the parent's coordinate system.</a>
-<span class="sourceLineNo">2276</span><a id="line.2276">         * {@link Batch#begin()} must have already been called on the batch before this method.</a>
-<span class="sourceLineNo">2277</span><a id="line.2277">         *</a>
-<span class="sourceLineNo">2278</span><a id="line.2278">         * @param batch the batch should be between begin() and end(), usually handled by Stage</a>
-<span class="sourceLineNo">2279</span><a id="line.2279">         * @param parentAlpha Multiplied with this Glyph's alpha, allowing a parent's alpha to affect all children.</a>
-<span class="sourceLineNo">2280</span><a id="line.2280">         */</a>
-<span class="sourceLineNo">2281</span><a id="line.2281">        @Override</a>
-<span class="sourceLineNo">2282</span><a id="line.2282">        public void draw(Batch batch, float parentAlpha) {</a>
-<span class="sourceLineNo">2283</span><a id="line.2283">            TextCellFactory.this.draw(batch, shown, SColor.multiplyAlpha(getColor(), parentAlpha), getX(), getY() + 1);</a>
-<span class="sourceLineNo">2284</span><a id="line.2284">        }</a>
-<span class="sourceLineNo">2285</span><a id="line.2285">    }</a>
-<span class="sourceLineNo">2286</span><a id="line.2286">}</a>
+<span class="sourceLineNo">1945</span><a id="line.1945">     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing. This starts</a>
+<span class="sourceLineNo">1946</span><a id="line.1946">     * at 1.2f, usually ({@link DefaultResources} notes when a different value is used).</a>
+<span class="sourceLineNo">1947</span><a id="line.1947">     * @return the current smoothing multiplier as a float, which starts at 1.2f for most fonts</a>
+<span class="sourceLineNo">1948</span><a id="line.1948">     */</a>
+<span class="sourceLineNo">1949</span><a id="line.1949">    public float getSmoothingMultiplier() {</a>
+<span class="sourceLineNo">1950</span><a id="line.1950">        return smoothingMultiplier;</a>
+<span class="sourceLineNo">1951</span><a id="line.1951">    }</a>
+<span class="sourceLineNo">1952</span><a id="line.1952"></a>
+<span class="sourceLineNo">1953</span><a id="line.1953">    /**</a>
+<span class="sourceLineNo">1954</span><a id="line.1954">     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher</a>
+<span class="sourceLineNo">1955</span><a id="line.1955">     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing. Before this</a>
+<span class="sourceLineNo">1956</span><a id="line.1956">     * is called, the smoothing multiplier is usually 1.2f; {@link DefaultResources} notes when other values are used.</a>
+<span class="sourceLineNo">1957</span><a id="line.1957">     * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.</a>
+<span class="sourceLineNo">1958</span><a id="line.1958">     * @return this for chaining</a>
+<span class="sourceLineNo">1959</span><a id="line.1959">     */</a>
+<span class="sourceLineNo">1960</span><a id="line.1960">    public TextCellFactory setSmoothingMultiplier(float smoothingMultiplier) {</a>
+<span class="sourceLineNo">1961</span><a id="line.1961">        this.smoothingMultiplier = smoothingMultiplier;</a>
+<span class="sourceLineNo">1962</span><a id="line.1962">        return this;</a>
+<span class="sourceLineNo">1963</span><a id="line.1963">    }</a>
+<span class="sourceLineNo">1964</span><a id="line.1964"></a>
+<span class="sourceLineNo">1965</span><a id="line.1965">    /**</a>
+<span class="sourceLineNo">1966</span><a id="line.1966">     * If using a distance field font, you MUST call this at some point while the batch has begun, or use code that</a>
+<span class="sourceLineNo">1967</span><a id="line.1967">     * calls it for you (which is now much of SquidLib). A typical point to call it is in the</a>
+<span class="sourceLineNo">1968</span><a id="line.1968">     * "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call</a>
+<span class="sourceLineNo">1969</span><a id="line.1969">     * configureShader rarely, typically only a few times per frame if there are no images to render, and this means the</a>
+<span class="sourceLineNo">1970</span><a id="line.1970">     * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you</a>
+<span class="sourceLineNo">1971</span><a id="line.1971">     * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.</a>
+<span class="sourceLineNo">1972</span><a id="line.1972">     * &lt;br&gt;</a>
+<span class="sourceLineNo">1973</span><a id="line.1973">     * SquidLayers, SparseLayers, SubcellLayers, SquidPanel, TextPanel, and ImageSquidPanel already call</a>
+<span class="sourceLineNo">1974</span><a id="line.1974">     * this method in their draw overrides, so you don't need to call this manually if you use any of those. None of</a>
+<span class="sourceLineNo">1975</span><a id="line.1975">     * those classes change the shader after they set it for their uses, so you may need to set the shader on your Batch</a>
+<span class="sourceLineNo">1976</span><a id="line.1976">     * to null to revert to the default shader if you need to draw full-color art.</a>
+<span class="sourceLineNo">1977</span><a id="line.1977">     * &lt;br&gt;</a>
+<span class="sourceLineNo">1978</span><a id="line.1978">     * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.</a>
+<span class="sourceLineNo">1979</span><a id="line.1979">     *</a>
+<span class="sourceLineNo">1980</span><a id="line.1980">     * @param batch the Batch, such as a {@link FilterBatch}, to configure to render distance field fonts if necessary.</a>
+<span class="sourceLineNo">1981</span><a id="line.1981">     */</a>
+<span class="sourceLineNo">1982</span><a id="line.1982">    public void configureShader(Batch batch) {</a>
+<span class="sourceLineNo">1983</span><a id="line.1983">        if(initialized)</a>
+<span class="sourceLineNo">1984</span><a id="line.1984">        {</a>
+<span class="sourceLineNo">1985</span><a id="line.1985">            if(msdf)</a>
+<span class="sourceLineNo">1986</span><a id="line.1986">            {</a>
+<span class="sourceLineNo">1987</span><a id="line.1987">                if(!shader.equals(batch.getShader())) </a>
+<span class="sourceLineNo">1988</span><a id="line.1988">                    batch.setShader(shader);</a>
+<span class="sourceLineNo">1989</span><a id="line.1989">                shader.setUniformf("u_smoothing", 2.1198158f * smoothingMultiplier * bmpFont.getData().scaleX);</a>
+<span class="sourceLineNo">1990</span><a id="line.1990">            }</a>
+<span class="sourceLineNo">1991</span><a id="line.1991">            else if (distanceField) {</a>
+<span class="sourceLineNo">1992</span><a id="line.1992">                if(!shader.equals(batch.getShader()))</a>
+<span class="sourceLineNo">1993</span><a id="line.1993">                    batch.setShader(shader);</a>
+<span class="sourceLineNo">1994</span><a id="line.1994">                shader.setUniformf("u_smoothing", 0.35f / (1.9f * smoothingMultiplier * (bmpFont.getData().scaleX + bmpFont.getData().scaleY)));</a>
+<span class="sourceLineNo">1995</span><a id="line.1995">            }</a>
+<span class="sourceLineNo">1996</span><a id="line.1996">        }</a>
+<span class="sourceLineNo">1997</span><a id="line.1997">    }</a>
+<span class="sourceLineNo">1998</span><a id="line.1998">    /**</a>
+<span class="sourceLineNo">1999</span><a id="line.1999">     * Releases all resources of this object.</a>
+<span class="sourceLineNo">2000</span><a id="line.2000">     */</a>
+<span class="sourceLineNo">2001</span><a id="line.2001">    @Override</a>
+<span class="sourceLineNo">2002</span><a id="line.2002">    public void dispose() {</a>
+<span class="sourceLineNo">2003</span><a id="line.2003">        if(block != null) block.getTexture().dispose();</a>
+<span class="sourceLineNo">2004</span><a id="line.2004">        if(bmpFont != null) bmpFont.dispose();</a>
+<span class="sourceLineNo">2005</span><a id="line.2005">    }</a>
+<span class="sourceLineNo">2006</span><a id="line.2006"></a>
+<span class="sourceLineNo">2007</span><a id="line.2007">    /**</a>
+<span class="sourceLineNo">2008</span><a id="line.2008">     * Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.</a>
+<span class="sourceLineNo">2009</span><a id="line.2009">     * @return the descent of the BitmapFont this object uses</a>
+<span class="sourceLineNo">2010</span><a id="line.2010">     */</a>
+<span class="sourceLineNo">2011</span><a id="line.2011">    public float getDescent() {</a>
+<span class="sourceLineNo">2012</span><a id="line.2012">        return descent;</a>
+<span class="sourceLineNo">2013</span><a id="line.2013">    }</a>
+<span class="sourceLineNo">2014</span><a id="line.2014"></a>
+<span class="sourceLineNo">2015</span><a id="line.2015">    public char getDirectionGlyph() {</a>
+<span class="sourceLineNo">2016</span><a id="line.2016">        return directionGlyph;</a>
+<span class="sourceLineNo">2017</span><a id="line.2017">    }</a>
+<span class="sourceLineNo">2018</span><a id="line.2018"></a>
+<span class="sourceLineNo">2019</span><a id="line.2019">    public TextCellFactory setDirectionGlyph(char directionGlyph) {</a>
+<span class="sourceLineNo">2020</span><a id="line.2020">        this.directionGlyph = directionGlyph;</a>
+<span class="sourceLineNo">2021</span><a id="line.2021">        return this;</a>
+<span class="sourceLineNo">2022</span><a id="line.2022">    }</a>
+<span class="sourceLineNo">2023</span><a id="line.2023"></a>
+<span class="sourceLineNo">2024</span><a id="line.2024">    /**</a>
+<span class="sourceLineNo">2025</span><a id="line.2025">     * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested</a>
+<span class="sourceLineNo">2026</span><a id="line.2026">     * to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and</a>
+<span class="sourceLineNo">2027</span><a id="line.2027">     * related classes, so Strings longer than 1 char are effectively disregarded beyond the first char.</a>
+<span class="sourceLineNo">2028</span><a id="line.2028">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2029</span><a id="line.2029">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2030</span><a id="line.2030">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2031</span><a id="line.2031">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also</a>
+<span class="sourceLineNo">2032</span><a id="line.2032">     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2033</span><a id="line.2033">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2034</span><a id="line.2034">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2035</span><a id="line.2035">     * @param find the requested String that will be changed</a>
+<span class="sourceLineNo">2036</span><a id="line.2036">     * @param replace the replacement String that will be used in place of find</a>
+<span class="sourceLineNo">2037</span><a id="line.2037">     * @return this for chaining</a>
+<span class="sourceLineNo">2038</span><a id="line.2038">     */</a>
+<span class="sourceLineNo">2039</span><a id="line.2039">    public TextCellFactory addSwap(String find, String replace)</a>
+<span class="sourceLineNo">2040</span><a id="line.2040">    {</a>
+<span class="sourceLineNo">2041</span><a id="line.2041">        if(find == null || replace == null || find.isEmpty()  || replace.isEmpty() || find.charAt(0) == 0)</a>
+<span class="sourceLineNo">2042</span><a id="line.2042">            return this;</a>
+<span class="sourceLineNo">2043</span><a id="line.2043">        swap.put(find.charAt(0), replace.charAt(0));</a>
+<span class="sourceLineNo">2044</span><a id="line.2044">        return this;</a>
+<span class="sourceLineNo">2045</span><a id="line.2045">    }</a>
+<span class="sourceLineNo">2046</span><a id="line.2046"></a>
+<span class="sourceLineNo">2047</span><a id="line.2047">    /**</a>
+<span class="sourceLineNo">2048</span><a id="line.2048">     * Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is</a>
+<span class="sourceLineNo">2049</span><a id="line.2049">     * used instead.</a>
+<span class="sourceLineNo">2050</span><a id="line.2050">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2051</span><a id="line.2051">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2052</span><a id="line.2052">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2053</span><a id="line.2053">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
+<span class="sourceLineNo">2054</span><a id="line.2054">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2055</span><a id="line.2055">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2056</span><a id="line.2056">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2057</span><a id="line.2057">     * @param find the requested char that will be changed (converted to a length-1 String)</a>
+<span class="sourceLineNo">2058</span><a id="line.2058">     * @param replace the replacement char that will be used in place of find (converted to a length-1 String)</a>
+<span class="sourceLineNo">2059</span><a id="line.2059">     * @return this for chaining</a>
+<span class="sourceLineNo">2060</span><a id="line.2060">     */</a>
+<span class="sourceLineNo">2061</span><a id="line.2061">    public TextCellFactory addSwap(char find, char replace)</a>
+<span class="sourceLineNo">2062</span><a id="line.2062">    {</a>
+<span class="sourceLineNo">2063</span><a id="line.2063">        if(find == 0)</a>
+<span class="sourceLineNo">2064</span><a id="line.2064">            return this;</a>
+<span class="sourceLineNo">2065</span><a id="line.2065">        swap.put(find, replace);</a>
+<span class="sourceLineNo">2066</span><a id="line.2066">        return this;</a>
+<span class="sourceLineNo">2067</span><a id="line.2067">    }</a>
+<span class="sourceLineNo">2068</span><a id="line.2068"></a>
+<span class="sourceLineNo">2069</span><a id="line.2069">    /**</a>
+<span class="sourceLineNo">2070</span><a id="line.2070">     * Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text</a>
+<span class="sourceLineNo">2071</span><a id="line.2071">     * in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond</a>
+<span class="sourceLineNo">2072</span><a id="line.2072">     * the first char.</a>
+<span class="sourceLineNo">2073</span><a id="line.2073">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2074</span><a id="line.2074">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2075</span><a id="line.2075">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2076</span><a id="line.2076">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
+<span class="sourceLineNo">2077</span><a id="line.2077">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2078</span><a id="line.2078">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2079</span><a id="line.2079">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2080</span><a id="line.2080">     * @param find the String that would be changed in the replacement pair</a>
+<span class="sourceLineNo">2081</span><a id="line.2081">     * @return this for chaining</a>
+<span class="sourceLineNo">2082</span><a id="line.2082">     */</a>
+<span class="sourceLineNo">2083</span><a id="line.2083">    public TextCellFactory removeSwap(String find)</a>
+<span class="sourceLineNo">2084</span><a id="line.2084">    {</a>
+<span class="sourceLineNo">2085</span><a id="line.2085"></a>
+<span class="sourceLineNo">2086</span><a id="line.2086">        if(find != null &amp;&amp; !find.isEmpty() &amp;&amp; find.charAt(0) != 0)</a>
+<span class="sourceLineNo">2087</span><a id="line.2087">            swap.remove(find.charAt(0));</a>
+<span class="sourceLineNo">2088</span><a id="line.2088">        return this;</a>
+<span class="sourceLineNo">2089</span><a id="line.2089">    }</a>
+<span class="sourceLineNo">2090</span><a id="line.2090"></a>
+<span class="sourceLineNo">2091</span><a id="line.2091">    /**</a>
+<span class="sourceLineNo">2092</span><a id="line.2092">     * Removes the replacement pair, if present, that searches for the given key, find.</a>
+<span class="sourceLineNo">2093</span><a id="line.2093">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2094</span><a id="line.2094">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2095</span><a id="line.2095">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2096</span><a id="line.2096">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
+<span class="sourceLineNo">2097</span><a id="line.2097">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2098</span><a id="line.2098">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2099</span><a id="line.2099">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2100</span><a id="line.2100">     * @return this for chaining</a>
+<span class="sourceLineNo">2101</span><a id="line.2101">     */</a>
+<span class="sourceLineNo">2102</span><a id="line.2102">    public TextCellFactory removeSwap(char find)</a>
+<span class="sourceLineNo">2103</span><a id="line.2103">    {</a>
+<span class="sourceLineNo">2104</span><a id="line.2104">        swap.remove(find);</a>
+<span class="sourceLineNo">2105</span><a id="line.2105">        return this;</a>
+<span class="sourceLineNo">2106</span><a id="line.2106">    }</a>
+<span class="sourceLineNo">2107</span><a id="line.2107"></a>
+<span class="sourceLineNo">2108</span><a id="line.2108">    /**</a>
+<span class="sourceLineNo">2109</span><a id="line.2109">     * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their</a>
+<span class="sourceLineNo">2110</span><a id="line.2110">     * values in the {@link CharCharMap}. CharCharMap is a class from RegExodus (a dependency of squidlib-util that is</a>
+<span class="sourceLineNo">2111</span><a id="line.2111">     * used for text matching and Unicode support), which is used here to avoid making yet another primitive-backed</a>
+<span class="sourceLineNo">2112</span><a id="line.2112">     * collection class.</a>
+<span class="sourceLineNo">2113</span><a id="line.2113">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2114</span><a id="line.2114">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2115</span><a id="line.2115">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2116</span><a id="line.2116">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
+<span class="sourceLineNo">2117</span><a id="line.2117">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2118</span><a id="line.2118">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2119</span><a id="line.2119">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2120</span><a id="line.2120">     * @return the mapping of replacement pairs</a>
+<span class="sourceLineNo">2121</span><a id="line.2121">     */</a>
+<span class="sourceLineNo">2122</span><a id="line.2122">    public CharCharMap getAllSwaps() {</a>
+<span class="sourceLineNo">2123</span><a id="line.2123">        return swap;</a>
+<span class="sourceLineNo">2124</span><a id="line.2124">    }</a>
+<span class="sourceLineNo">2125</span><a id="line.2125"></a>
+<span class="sourceLineNo">2126</span><a id="line.2126">    /**</a>
+<span class="sourceLineNo">2127</span><a id="line.2127">     * Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.</a>
+<span class="sourceLineNo">2128</span><a id="line.2128">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2129</span><a id="line.2129">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2130</span><a id="line.2130">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2131</span><a id="line.2131">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
+<span class="sourceLineNo">2132</span><a id="line.2132">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2133</span><a id="line.2133">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2134</span><a id="line.2134">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2135</span><a id="line.2135">     * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values</a>
+<span class="sourceLineNo">2136</span><a id="line.2136">     * @return this for chaining</a>
+<span class="sourceLineNo">2137</span><a id="line.2137">     */</a>
+<span class="sourceLineNo">2138</span><a id="line.2138">    public TextCellFactory setAllSwaps(OrderedMap&lt;Character, Character&gt; swaps) {</a>
+<span class="sourceLineNo">2139</span><a id="line.2139">        swap.clear();</a>
+<span class="sourceLineNo">2140</span><a id="line.2140">        for (int i = 0; i &lt; swaps.size(); i++) {</a>
+<span class="sourceLineNo">2141</span><a id="line.2141">            if(!swaps.keyAt(i).equals('\0'))</a>
+<span class="sourceLineNo">2142</span><a id="line.2142">                swap.put(swaps.keyAt(i), swaps.getAt(i));</a>
+<span class="sourceLineNo">2143</span><a id="line.2143">        }</a>
+<span class="sourceLineNo">2144</span><a id="line.2144">        return this;</a>
+<span class="sourceLineNo">2145</span><a id="line.2145">    }</a>
+<span class="sourceLineNo">2146</span><a id="line.2146"></a>
+<span class="sourceLineNo">2147</span><a id="line.2147">    /**</a>
+<span class="sourceLineNo">2148</span><a id="line.2148">     * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the</a>
+<span class="sourceLineNo">2149</span><a id="line.2149">     * entries in a Map of Character keys to String values.</a>
+<span class="sourceLineNo">2150</span><a id="line.2150">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2151</span><a id="line.2151">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2152</span><a id="line.2152">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2153</span><a id="line.2153">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
+<span class="sourceLineNo">2154</span><a id="line.2154">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2155</span><a id="line.2155">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2156</span><a id="line.2156">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2157</span><a id="line.2157">     * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values</a>
+<span class="sourceLineNo">2158</span><a id="line.2158">     * @return this for chaining</a>
+<span class="sourceLineNo">2159</span><a id="line.2159">     */</a>
+<span class="sourceLineNo">2160</span><a id="line.2160">    public TextCellFactory addSwaps(OrderedMap&lt;Character, Character&gt; swaps) {</a>
+<span class="sourceLineNo">2161</span><a id="line.2161">        for (int i = 0; i &lt; swaps.size(); i++) {</a>
+<span class="sourceLineNo">2162</span><a id="line.2162">            if(!swaps.keyAt(i).equals('\0'))</a>
+<span class="sourceLineNo">2163</span><a id="line.2163">                swap.put(swaps.keyAt(i), swaps.getAt(i));</a>
+<span class="sourceLineNo">2164</span><a id="line.2164">        }</a>
+<span class="sourceLineNo">2165</span><a id="line.2165">        return this;</a>
+<span class="sourceLineNo">2166</span><a id="line.2166">    }</a>
+<span class="sourceLineNo">2167</span><a id="line.2167"></a>
+<span class="sourceLineNo">2168</span><a id="line.2168">    /**</a>
+<span class="sourceLineNo">2169</span><a id="line.2169">     * Clears all replacement pairs this has been told to swap.</a>
+<span class="sourceLineNo">2170</span><a id="line.2170">     * &lt;br&gt;</a>
+<span class="sourceLineNo">2171</span><a id="line.2171">     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep</a>
+<span class="sourceLineNo">2172</span><a id="line.2172">     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something</a>
+<span class="sourceLineNo">2173</span><a id="line.2173">     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also</a>
+<span class="sourceLineNo">2174</span><a id="line.2174">     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn</a>
+<span class="sourceLineNo">2175</span><a id="line.2175">     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use</a>
+<span class="sourceLineNo">2176</span><a id="line.2176">     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.</a>
+<span class="sourceLineNo">2177</span><a id="line.2177">     * @return this for chaining</a>
+<span class="sourceLineNo">2178</span><a id="line.2178">     */</a>
+<span class="sourceLineNo">2179</span><a id="line.2179">    public TextCellFactory clearSwaps()</a>
+<span class="sourceLineNo">2180</span><a id="line.2180">    {</a>
+<span class="sourceLineNo">2181</span><a id="line.2181">        swap.clear();</a>
+<span class="sourceLineNo">2182</span><a id="line.2182">        return this;</a>
+<span class="sourceLineNo">2183</span><a id="line.2183">    }</a>
+<span class="sourceLineNo">2184</span><a id="line.2184"></a>
+<span class="sourceLineNo">2185</span><a id="line.2185">    /**</a>
+<span class="sourceLineNo">2186</span><a id="line.2186">     * Not implemented in this class; in subclasses that do, this should change the currently-used font style, such as</a>
+<span class="sourceLineNo">2187</span><a id="line.2187">     * from regular to italic or bold. Calling this method on a TextCellFactory does nothing, but won't cause problems.</a>
+<span class="sourceLineNo">2188</span><a id="line.2188">     * @param style an int, typically a constant in a class that implements this, that determines what style to use.</a>
+<span class="sourceLineNo">2189</span><a id="line.2189">     */</a>
+<span class="sourceLineNo">2190</span><a id="line.2190">    public void setStyle(int style)</a>
+<span class="sourceLineNo">2191</span><a id="line.2191">    {</a>
+<span class="sourceLineNo">2192</span><a id="line.2192">    }</a>
+<span class="sourceLineNo">2193</span><a id="line.2193"></a>
+<span class="sourceLineNo">2194</span><a id="line.2194">    /**</a>
+<span class="sourceLineNo">2195</span><a id="line.2195">     * A kind of Actor for one char (with one color) that is innately drawn with a specific TextCellFactory, and will</a>
+<span class="sourceLineNo">2196</span><a id="line.2196">     * match the layout behavior of that TextCellFactory when it is used for other purposes. This is an inner class of</a>
+<span class="sourceLineNo">2197</span><a id="line.2197">     * TextCellFactory, and can't be constructed without a TextCellFactory being involved; usually you instantiate</a>
+<span class="sourceLineNo">2198</span><a id="line.2198">     * Glyphs with {@link #glyph(char, Color, float, float)} or an overload of that method on TextCellFactory.</a>
+<span class="sourceLineNo">2199</span><a id="line.2199">     */</a>
+<span class="sourceLineNo">2200</span><a id="line.2200">    public class Glyph extends Actor implements ICellVisible</a>
+<span class="sourceLineNo">2201</span><a id="line.2201">    {</a>
+<span class="sourceLineNo">2202</span><a id="line.2202">        /**</a>
+<span class="sourceLineNo">2203</span><a id="line.2203">         * The char that will be shown for this Glyph.</a>
+<span class="sourceLineNo">2204</span><a id="line.2204">         */</a>
+<span class="sourceLineNo">2205</span><a id="line.2205">        public char shown;</a>
+<span class="sourceLineNo">2206</span><a id="line.2206">        </a>
+<span class="sourceLineNo">2207</span><a id="line.2207">        @Override</a>
+<span class="sourceLineNo">2208</span><a id="line.2208">        public char getSymbol()</a>
+<span class="sourceLineNo">2209</span><a id="line.2209">        {</a>
+<span class="sourceLineNo">2210</span><a id="line.2210">            return shown;</a>
+<span class="sourceLineNo">2211</span><a id="line.2211">        }</a>
+<span class="sourceLineNo">2212</span><a id="line.2212"></a>
+<span class="sourceLineNo">2213</span><a id="line.2213">        /**</a>
+<span class="sourceLineNo">2214</span><a id="line.2214">         * Makes an orange '@' Glyph at 0,0 in world coordinates.</a>
+<span class="sourceLineNo">2215</span><a id="line.2215">         */</a>
+<span class="sourceLineNo">2216</span><a id="line.2216">        public Glyph() {</a>
+<span class="sourceLineNo">2217</span><a id="line.2217">            this('@', SColor.SAFETY_ORANGE, 0f, 0f);</a>
+<span class="sourceLineNo">2218</span><a id="line.2218">        }</a>
+<span class="sourceLineNo">2219</span><a id="line.2219"></a>
+<span class="sourceLineNo">2220</span><a id="line.2220">        /**</a>
+<span class="sourceLineNo">2221</span><a id="line.2221">         * Makes a Glyph of the given char in the given Color, at the specified world coordinates.</a>
+<span class="sourceLineNo">2222</span><a id="line.2222">         * @param shown the char to show</a>
+<span class="sourceLineNo">2223</span><a id="line.2223">         * @param color the Color to use; if null this will instead use {@link SColor#TRANSPARENT}</a>
+<span class="sourceLineNo">2224</span><a id="line.2224">         * @param x x position in world coordinates</a>
+<span class="sourceLineNo">2225</span><a id="line.2225">         * @param y y position in world coordinates</a>
+<span class="sourceLineNo">2226</span><a id="line.2226">         */</a>
+<span class="sourceLineNo">2227</span><a id="line.2227">        public Glyph(char shown, Color color, float x, float y)</a>
+<span class="sourceLineNo">2228</span><a id="line.2228">        {</a>
+<span class="sourceLineNo">2229</span><a id="line.2229">            super();</a>
+<span class="sourceLineNo">2230</span><a id="line.2230">            this.shown = shown;</a>
+<span class="sourceLineNo">2231</span><a id="line.2231">            super.getColor().set(color == null ? SColor.TRANSPARENT : color);</a>
+<span class="sourceLineNo">2232</span><a id="line.2232">            setPosition(x, y);</a>
+<span class="sourceLineNo">2233</span><a id="line.2233">        }</a>
+<span class="sourceLineNo">2234</span><a id="line.2234"></a>
+<span class="sourceLineNo">2235</span><a id="line.2235">        /**</a>
+<span class="sourceLineNo">2236</span><a id="line.2236">         * Makes a Glyph of the given char in the given packed float color, at the specified world coordinates.</a>
+<span class="sourceLineNo">2237</span><a id="line.2237">         * @param shown the char to show</a>
+<span class="sourceLineNo">2238</span><a id="line.2238">         * @param color the packed float color to use, as produced by {@link Color#toFloatBits()}</a>
+<span class="sourceLineNo">2239</span><a id="line.2239">         * @param x x position in world coordinates</a>
+<span class="sourceLineNo">2240</span><a id="line.2240">         * @param y y position in world coordinates</a>
+<span class="sourceLineNo">2241</span><a id="line.2241">         */</a>
+<span class="sourceLineNo">2242</span><a id="line.2242">        public Glyph(char shown, float color, float x, float y) {</a>
+<span class="sourceLineNo">2243</span><a id="line.2243">            super();</a>
+<span class="sourceLineNo">2244</span><a id="line.2244">            this.shown = shown;</a>
+<span class="sourceLineNo">2245</span><a id="line.2245">            Color.abgr8888ToColor(super.getColor(), color);</a>
+<span class="sourceLineNo">2246</span><a id="line.2246">            setPosition(x, y);</a>
+<span class="sourceLineNo">2247</span><a id="line.2247">        }</a>
+<span class="sourceLineNo">2248</span><a id="line.2248"></a>
+<span class="sourceLineNo">2249</span><a id="line.2249">        /**</a>
+<span class="sourceLineNo">2250</span><a id="line.2250">         * Gets the color of this Glyph as a packed float color; does not allocate any objects.</a>
+<span class="sourceLineNo">2251</span><a id="line.2251">         * @return the color of this Glyph as a packed float</a>
+<span class="sourceLineNo">2252</span><a id="line.2252">         */</a>
+<span class="sourceLineNo">2253</span><a id="line.2253">        @Override</a>
+<span class="sourceLineNo">2254</span><a id="line.2254">        public float getPackedColor() {</a>
+<span class="sourceLineNo">2255</span><a id="line.2255">            return getColor().toFloatBits();</a>
+<span class="sourceLineNo">2256</span><a id="line.2256">        }</a>
+<span class="sourceLineNo">2257</span><a id="line.2257"></a>
+<span class="sourceLineNo">2258</span><a id="line.2258">        /**</a>
+<span class="sourceLineNo">2259</span><a id="line.2259">         * Sets the color of this Glyph with the given packed float color; does not allocate any objects.</a>
+<span class="sourceLineNo">2260</span><a id="line.2260">         * @param color the color to set this Glyph to, as a packed float</a>
+<span class="sourceLineNo">2261</span><a id="line.2261">         */</a>
+<span class="sourceLineNo">2262</span><a id="line.2262">        public void setPackedColor(float color) {</a>
+<span class="sourceLineNo">2263</span><a id="line.2263">            Color.abgr8888ToColor(super.getColor(), color);</a>
+<span class="sourceLineNo">2264</span><a id="line.2264">        }</a>
+<span class="sourceLineNo">2265</span><a id="line.2265"></a>
+<span class="sourceLineNo">2266</span><a id="line.2266">        @Override</a>
+<span class="sourceLineNo">2267</span><a id="line.2267">        public String toString() {</a>
+<span class="sourceLineNo">2268</span><a id="line.2268">            return "Glyph{'" +</a>
+<span class="sourceLineNo">2269</span><a id="line.2269">                    + shown +</a>
+<span class="sourceLineNo">2270</span><a id="line.2270">                    "' with color " + getColor() +</a>
+<span class="sourceLineNo">2271</span><a id="line.2271">                    ", position (" + getX() +</a>
+<span class="sourceLineNo">2272</span><a id="line.2272">                    "," + getY() +</a>
+<span class="sourceLineNo">2273</span><a id="line.2273">                    ")}";</a>
+<span class="sourceLineNo">2274</span><a id="line.2274">        }</a>
+<span class="sourceLineNo">2275</span><a id="line.2275"></a>
+<span class="sourceLineNo">2276</span><a id="line.2276">        /**</a>
+<span class="sourceLineNo">2277</span><a id="line.2277">         * Draws the actor. The batch is configured to draw in the parent's coordinate system.</a>
+<span class="sourceLineNo">2278</span><a id="line.2278">         * {@link Batch#begin()} must have already been called on the batch before this method.</a>
+<span class="sourceLineNo">2279</span><a id="line.2279">         *</a>
+<span class="sourceLineNo">2280</span><a id="line.2280">         * @param batch the batch should be between begin() and end(), usually handled by Stage</a>
+<span class="sourceLineNo">2281</span><a id="line.2281">         * @param parentAlpha Multiplied with this Glyph's alpha, allowing a parent's alpha to affect all children.</a>
+<span class="sourceLineNo">2282</span><a id="line.2282">         */</a>
+<span class="sourceLineNo">2283</span><a id="line.2283">        @Override</a>
+<span class="sourceLineNo">2284</span><a id="line.2284">        public void draw(Batch batch, float parentAlpha) {</a>
+<span class="sourceLineNo">2285</span><a id="line.2285">            TextCellFactory.this.draw(batch, shown, SColor.multiplyAlpha(getColor(), parentAlpha), getX(), getY() + 1);</a>
+<span class="sourceLineNo">2286</span><a id="line.2286">        }</a>
+<span class="sourceLineNo">2287</span><a id="line.2287">    }</a>
+<span class="sourceLineNo">2288</span><a id="line.2288">}</a>
 
 
 

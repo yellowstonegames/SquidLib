@@ -195,8 +195,8 @@ public class MimicWFC {
     }
     private boolean agrees(int[] p1, int[] p2, int dx, int dy)
     {
-        int xmin = dx < 0 ? 0 : dx, xmax = dx < 0 ? dx + order : order,
-                ymin = dy < 0 ? 0 : dy, ymax = dy < 0 ? dy + order : order;
+        int xmin = Math.max(dx, 0), xmax = dx < 0 ? dx + order : order,
+                ymin = Math.max(dy, 0), ymax = dy < 0 ? dy + order : order;
         for (int y = ymin; y < ymax; y++) {
             for (int x = xmin; x < xmax; x++) {
                 if (p1[x + order * y] != p2[x - dx + order * (y - dy)])

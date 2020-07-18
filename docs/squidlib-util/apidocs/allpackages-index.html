@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="squidpony/package-summary.html">squidpony</a></th>
 <td class="colLast">
-<div class="block">Utilities that don't fit elsewhere in SquidLib, like text manipulation, some interfaces, and compatibility code.</div>
+<div class="block">Utilities that don't fit elsewhere in SquidLib; mostly text manipulation, compression, and helper code.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -99,8 +99,10 @@ loadScripts(document, 'script');</script>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="squidpony/squidai/astar/package-summary.html">squidpony.squidai.astar</a></th>
-<td class="colLast">&nbsp;</td>
+<th class="colFirst" scope="row"><a href="squidpony/squidai/graph/package-summary.html">squidpony.squidai.graph</a></th>
+<td class="colLast">
+<div class="block">Graphs and graph algorithms used primarily (but not exclusively) for pathfinding.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></th>
@@ -111,7 +113,7 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="squidpony/squidgrid/iterator/package-summary.html">squidpony.squidgrid.iterator</a></th>
 <td class="colLast">
-<div class="block">Iterators that allow traversal of squidpony.squidmath.Coord points on a map's grid.</div>
+<div class="block">Iterators that allow traversal of <a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath"><code>Coord</code></a> points on a map's grid.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -123,23 +125,25 @@ loadScripts(document, 'script');</script>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="squidpony/squidgrid/mapping/styled/package-summary.html">squidpony.squidgrid.mapping.styled</a></th>
 <td class="colLast">
-<div class="block">Support code for working with tiled dungeon generation; normally only TilesetType is used outside SquidLib.</div>
+<div class="block">Support code for working with tiled dungeon generation; normally only <a href="squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled"><code>TilesetType</code></a> is used outside SquidLib.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Ways to represent different types of areas in 2D space; not recommended, most new code uses <a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a>.</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="squidpony/squidmath/package-summary.html">squidpony.squidmath</a></th>
 <td class="colLast">
-<div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
+<div class="block">A very broad package containing random number generators, geometry tools, data structures, and noise functions.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="squidpony/tileset/package-summary.html">squidpony.tileset</a></th>
 <td class="colLast">
-<div class="block">Pre-constructed Tileset objects in different styles, that DungeonBoneGen consumes (not intended for external use).</div>
+<div class="block">Internally used; see <a href="squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled"><code>TilesetType</code></a> members for the actual documentation.</div>
 </td>
 </tr>
 </tbody>

@@ -19,7 +19,7 @@
 <script type="text/javascript" src="../../script-dir/jquery-ui.js"></script>
 </head>
 <body class="class-declaration">
-<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+<script type="text/javascript">var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -96,26 +96,29 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.30">AStarSearch</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.35">AStarSearch</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a></pre>
-<div class="block">Performs A* search.
-
+<div class="block">Performs A* search to find the shortest path between two Coord points.
+ <br>
  A* is a best-first search algorithm for pathfinding. It uses a heuristic
  value to reduce the total search space. If the heuristic is too large then
  the optimal path is not guaranteed to be returned.
  <br>
- This implementation is a thin wrapper around <a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar"><code>Pathfinder</code></a> and the other code in the
- <code>squidpony.squidai.astar</code> package; it replaces an older, much-less-efficient A* implementation with one based
- on GDX-AI's IndexedAStarPathFinder class. The only major change in the API is that this version returns an ArrayList
- of Coord instead of a Queue of Coord. Typical usage of this class involves
- <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D,java.util.Map,double)"><code>DungeonUtility.generateAStarCostMap(char[][], Map, double)</code></a> to generate the cost
+ This implementation is a thin wrapper around <a href="../squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph"><code>CostlyGraph</code></a> and the other code in the
+ <code>squidpony.squidai.graph</code> package; it replaces an older, much-less-efficient A* implementation with one based
+ on code from simple-graphs by earlygrey. The current version is quite fast, typically outpacing gdx-ai's more-complex
+ IndexedAStarPathfinder by a high margin. The only major change in the API is that this version returns an ArrayList
+ of Coord instead of a Queue of Coord. Typical usage of this class involves either the simpler technique of only using
+ <code>'#'</code> for walls or obstructions and calling <a href="#%3Cinit%3E(char%5B%5D%5B%5D,squidpony.squidmath.AStarSearch.SearchType)"><code>AStarSearch(char[][], SearchType)</code></a>, or the more complex
+ technique that allows variable costs for different types of terrain, using
+ <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D,java.util.Map,double)"><code>DungeonUtility.generateAStarCostMap(char[][], Map, double)</code></a> to generate a cost
  map; if you used the old AStarSearch, then be advised that the default cost is now 1.0 instead of 0.0.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>Eben Howard - http://squidpony.com - howard@squidpony.com, Tommy Ettinger - optimized code</dd>
+<dd>Eben Howard - http://squidpony.com - howard@squidpony.com, Tommy Ettinger - optimized code, earlygrey - wrote and really optimized simple-graphs, which this uses heavily</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar"><code>the pathfinding class this is based on; Pathfinder can be used independently</code></a>, 
+<dd><a href="../squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph"><code>the pathfinding class this is based on; CostlyGraph can be used independently</code></a>, 
 <a href="../squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>a sometimes-faster pathfinding algorithm that can pathfind to multiple goals</code></a>, 
 <a href="../squidai/CustomDijkstraMap.html" title="class in squidpony.squidai"><code>an alternative to DijkstraMap; faster and supports complex adjacency rules</code></a>, 
 <a href="../../serialized-form.html#squidpony.squidmath.AStarSearch">Serialized Form</a></dd>
@@ -170,7 +173,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 </thead>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></code></td>
+<td class="colFirst"><code>protected <a href="../squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#graph">graph</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -185,26 +188,21 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pathfinder">pathfinder</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected <a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start">start</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#target">target</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#type">type</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#width">width</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -237,6 +235,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(char%5B%5D%5B%5D,squidpony.squidmath.AStarSearch.SearchType)">AStarSearch</a></span>&#8203;(char[][]&nbsp;map,
+<a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</code></th>
+<td class="colLast">
+<div class="block">Builds a pathing object to run searches on.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(double%5B%5D%5B%5D,squidpony.squidmath.AStarSearch.SearchType)">AStarSearch</a></span>&#8203;(double[][]&nbsp;map,
 <a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</code></th>
@@ -296,6 +302,22 @@ int&nbsp;targety)</code></th>
 </td>
 </tr>
 <tr class="altColor" id="i4">
+<td class="colFirst"><code><a href="AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reinitialize(char%5B%5D%5B%5D,squidpony.squidmath.AStarSearch.SearchType)">reinitialize</a></span>&#8203;(char[][]&nbsp;map,
+<a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</code></th>
+<td class="colLast">
+<div class="block">Resets this pathing object to use a different map and optionally a different SearchType.</div>
+</td>
+</tr>
+<tr class="rowColor" id="i5">
+<td class="colFirst"><code><a href="AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reinitialize(double%5B%5D%5B%5D,squidpony.squidmath.AStarSearch.SearchType)">reinitialize</a></span>&#8203;(double[][]&nbsp;map,
+<a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</code></th>
+<td class="colLast">
+<div class="block">Resets this pathing object to use a different map and optionally a different SearchType.</div>
+</td>
+</tr>
+<tr class="altColor" id="i6">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -325,49 +347,43 @@ int&nbsp;targety)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="width">width</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.62">width</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.67">width</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="height">height</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.62">height</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.67">height</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="start">start</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.63">start</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.68">start</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="target">target</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.63">target</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.68">target</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="type">type</a></h3>
-<div class="memberSignature"><span class="modifiers">protected final</span>&nbsp;<span class="returnType"><a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.64">type</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.69">type</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="graph">graph</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../squidai/astar/DefaultGraph.html" title="class in squidpony.squidai.astar">DefaultGraph</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.66">graph</a></span></div>
-</section>
-</li>
-<li class="blockList">
-<section class="detail">
-<h3><a id="pathfinder">pathfinder</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.67">pathfinder</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="../squidai/graph/CostlyGraph.html" title="class in squidpony.squidai.graph">CostlyGraph</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.71">graph</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="path">path</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.68">path</a></span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.72">path</a></span></div>
 </section>
 </li>
 </ul>
@@ -383,27 +399,47 @@ int&nbsp;targety)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">AStarSearch</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.71">AStarSearch</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.75">AStarSearch</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(double[][],squidpony.squidmath.AStarSearch.SearchType)">AStarSearch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.93">AStarSearch</a></span>&#8203;(<span class="arguments">double[][]&nbsp;map,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.96">AStarSearch</a></span>&#8203;(<span class="arguments">double[][]&nbsp;map,
 <a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</span></div>
 <div class="block">Builds a pathing object to run searches on.
-
- Values in the map are treated as positive values (and 0) being legal
- weights, with higher values being harder to pass through. Any negative
- value is treated as being an impassible space.
-
- If the type is Manhattan, only the cardinal directions will be used. All
- other search types will return results based on intercardinal and
- cardinal pathing.</div>
+ <br>
+ Values in the map are treated as positive values being legal weights, with higher values being harder to pass
+ through. Any negative value is treated as being an impassible space. A weight of 0 can be moved through at no
+ cost, but this should be used very carefully, if at all. Cost maps are commonly built using the
+ <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D,java.util.Map,double)"><code>DungeonUtility.generateAStarCostMap(char[][], Map, double)</code></a> and
+ <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D)"><code>DungeonUtility.generateAStarCostMap(char[][])</code></a> methods from a 2D char array.
+ <br>
+ If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
+ based on diagonal and cardinal pathing (8-way).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>map</code> - the search map. It is not modified by this class, hence you can
-            share this map among multiple instances.</dd>
+<dd><code>map</code> - the search map, as produced by <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D)"><code>DungeonUtility.generateAStarCostMap(char[][])</code></a></dd>
+<dd><code>type</code> - the manner of search</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="&lt;init&gt;(char[][],squidpony.squidmath.AStarSearch.SearchType)">AStarSearch</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.118">AStarSearch</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</span></div>
+<div class="block">Builds a pathing object to run searches on.
+ <br>
+ Values in the map are all considered equally passable unless the char is <code>'#'</code>, in which case it is
+ considered an impassable wall. The <a href="../squidgrid/mapping/DungeonGenerator.html#getBareDungeon()"><code>DungeonGenerator.getBareDungeon()</code></a> method is a common way to get a map
+ where only '#' is used to mean a wall.
+ <br>
+ If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
+ based on diagonal and cardinal pathing (8-way).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a 2D char array where only <code>'#'</code> represents a wall, and anything else is equally passable</dd>
 <dd><code>type</code> - the manner of search</dd>
 </dl>
 </section>
@@ -420,8 +456,50 @@ int&nbsp;targety)</code></th>
 <ul class="blockList">
 <li class="blockList">
 <section class="detail">
+<h3><a id="reinitialize(double[][],squidpony.squidmath.AStarSearch.SearchType)">reinitialize</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.143">reinitialize</a></span>&#8203;(<span class="arguments">double[][]&nbsp;map,
+<a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</span></div>
+<div class="block">Resets this pathing object to use a different map and optionally a different SearchType.
+ <br>
+ Values in the map are treated as positive values being legal weights, with higher values being harder to pass
+ through. Any negative value is treated as being an impassible space. A weight of 0 can be moved through at no
+ cost, but this should be used very carefully, if at all. Cost maps are commonly built using the
+ <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D,java.util.Map,double)"><code>DungeonUtility.generateAStarCostMap(char[][], Map, double)</code></a> and
+ <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D)"><code>DungeonUtility.generateAStarCostMap(char[][])</code></a> methods from a 2D char array.
+ <br>
+ If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
+ based on diagonal and cardinal pathing (8-way).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - the search map, as produced by <a href="../squidgrid/mapping/DungeonUtility.html#generateAStarCostMap(char%5B%5D%5B%5D)"><code>DungeonUtility.generateAStarCostMap(char[][])</code></a></dd>
+<dd><code>type</code> - the manner of search</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
+<h3><a id="reinitialize(char[][],squidpony.squidmath.AStarSearch.SearchType)">reinitialize</a></h3>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.166">reinitialize</a></span>&#8203;(<span class="arguments">char[][]&nbsp;map,
+<a href="AStarSearch.SearchType.html" title="enum in squidpony.squidmath">AStarSearch.SearchType</a>&nbsp;type)</span></div>
+<div class="block">Resets this pathing object to use a different map and optionally a different SearchType.
+ <br>
+ Values in the map are all considered equally passable unless the char is <code>'#'</code>, <code>'+'</code>, or any box
+ drawing character, in which case it is considered an impassable wall. <a href="../squidgrid/mapping/DungeonGenerator.html#getBareDungeon()"><code>DungeonGenerator.getBareDungeon()</code></a>
+ is a common way to get a map where only '#' is used to mean a wall.
+ <br>
+ If the type is Manhattan, only the cardinal directions will be used. All other search types will return a result
+ based on diagonal and cardinal pathing (8-way).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a 2D char array where only <code>'#'</code> represents a wall, and anything else is equally passable</dd>
+<dd><code>type</code> - the manner of search</dd>
+</dl>
+</section>
+</li>
+<li class="blockList">
+<section class="detail">
 <h3><a id="path(int,int,int,int)">path</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.114">path</a></span>&#8203;(<span class="arguments">int&nbsp;startx,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.186">path</a></span>&#8203;(<span class="arguments">int&nbsp;startx,
 int&nbsp;starty,
 int&nbsp;targetx,
 int&nbsp;targety)</span></div>
@@ -441,7 +519,7 @@ int&nbsp;targety)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="path(squidpony.squidmath.Coord,squidpony.squidmath.Coord)">path</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.125">path</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/ArrayList.html?is-external=true" title="class or interface in java.util" class="externalLink">ArrayList</a>&lt;<a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.197">path</a></span>&#8203;(<span class="arguments"><a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
 <a href="Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</span></div>
 <div class="block">Finds an A* path to the target from the start. If no path is possible,
  returns null.</div>
@@ -457,19 +535,19 @@ int&nbsp;targety)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getWidth()">getWidth</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.135">getWidth</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.207">getWidth</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getHeight()">getHeight</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.139">getHeight</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.211">getHeight</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="toString()">toString</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.143">toString</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></span>&nbsp;<span class="memberName"><a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.215">toString</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>

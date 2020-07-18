@@ -150,7 +150,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
     private FloatFilters.YCbCrFilter ycbcr;
     private FloatFilters.ColorizeFilter sepia;
     private FloatFilter[] filters;
-    private int filterChoice = 0;
+    private int filterChoice;
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -479,7 +479,6 @@ public class SparseLightingDemo extends ApplicationAdapter {
                         // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
                         // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
                         // moves, we only need to do a fraction of the work to find the best path with that info.
-                        toCursor.clear();
                         playerToCursor.findPathPreScanned(toCursor, cursor);
                         //findPathPreScanned includes the current cell (goal) by default, which is helpful when
                         // you're finding a path to a monster or loot, and want to bump into it, but here can be

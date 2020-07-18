@@ -221,8 +221,8 @@ public class SquidColorCenter implements IColorCenter<Color> {
     }
 
     /**
-     * @param ics
-     * @return {@code ics} filtered according to {@link #filter(Object)}. May be
+     * @param ics an IColoredString, often produced by {@link GDXMarkup#colorString(CharSequence)}.
+     * @return {@code ics} filtered according to {@link #filter(Color)}. May be
      * {@code ics} itself if unchanged.
      */
     @Override
@@ -741,7 +741,7 @@ public class SquidColorCenter implements IColorCenter<Color> {
      */
     public ArrayList<Color> gradient(Color fromColor, Color toColor, int steps, Interpolation interpolation)
     {
-        ArrayList<Color> colors = new ArrayList<>((steps > 1) ? steps : 1);
+        ArrayList<Color> colors = new ArrayList<>(Math.max(steps, 1));
         colors.add(filter(fromColor));
         if(steps < 2)
             return colors;
@@ -820,7 +820,7 @@ public class SquidColorCenter implements IColorCenter<Color> {
      */
     public ArrayList<Color> rainbow(float saturation, float value, float opacity, int steps)
     {
-        steps = (steps > 1) ? steps : 1;
+        steps = Math.max(steps, 1);
         ArrayList<Color> colors = new ArrayList<>(steps);
         for (float i = 0; i < 1f - 0.5f / steps; i+= 1.0f / steps) {
             colors.add(filter(getHSV(i, saturation, value, opacity)));
@@ -879,7 +879,7 @@ public class SquidColorCenter implements IColorCenter<Color> {
     public ArrayList<Color> zigzagGradient(Color fromColor, Color toColor, int steps)
     {
         CoordPacker.init();
-        ArrayList<Color> colors = new ArrayList<>((steps > 1) ? steps : 1);
+        ArrayList<Color> colors = new ArrayList<>(Math.max(steps, 1));
         colors.add(filter(fromColor));
         if(steps < 2)
             return colors;

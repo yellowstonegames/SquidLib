@@ -240,6 +240,8 @@ loadScripts(document, 'script');</script>
 <div class="block">The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to
  <a href="../squidpony/squidgrid/Adjacency.html#portal(int%5B%5D%5B%5D%5B%5D,int,int,boolean)"><code>Adjacency.portal(int[][][], int, int, boolean)</code></a> if you want to create portals between non-adjacent cells.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#neighbors">neighbors</a></span> - Variable in class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#neighborUp()">neighborUp()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards when this is called.</div>
@@ -1535,9 +1537,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Inanimate objects or beings without gender, as in "It is its own boss."</div>
 </dd>
+<dt><a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph"><span class="typeNameLink">Node</span></a>&lt;<a href="../squidpony/squidai/graph/Node.html" title="type parameter in Node">V</a>&gt; - Class in <a href="../squidpony/squidai/graph/package-summary.html">squidpony.squidai.graph</a></dt>
+<dd>
+<div class="block">An extended version of <a href="../squidpony/squidmath/BinaryHeap.Node.html" title="class in squidpony.squidmath"><code>BinaryHeap.Node</code></a> that also stores a reference to the parent Graph,
+ a vertex object of type <code>V</code>, a Map of neighbor Nodes to the appropriate <a href="../squidpony/squidai/graph/Connection.html" title="class in squidpony.squidai.graph"><code>Connection</code></a> per Node, an extra
+ List of those same Connections for faster iteration, and a lot of internal data used by algorithms in this package.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/BinaryHeap.Node.html#%3Cinit%3E(double)">Node(double)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/BinaryHeap.Node.html" title="class in squidpony.squidmath">BinaryHeap.Node</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidai/astar/Pathfinder.html#nodeRecords">nodeRecords</a></span> - Variable in class squidpony.squidai.astar.<a href="../squidpony/squidai/astar/Pathfinder.html" title="class in squidpony.squidai.astar">Pathfinder</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidai/graph/Node.html#%3Cinit%3E(V,squidpony.squidai.graph.Graph)">Node(V, Graph&lt;V&gt;)</a></span> - Constructor for class squidpony.squidai.graph.<a href="../squidpony/squidai/graph/Node.html" title="class in squidpony.squidai.graph">Node</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#noise">noise</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
 <dd>&nbsp;</dd>

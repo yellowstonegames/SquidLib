@@ -1,18 +1,18 @@
-/*******************************************************************************
- * Copyright 2011 See AUTHORS file.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+/******************************************************************************
+ Copyright 2011 See AUTHORS file.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 package squidpony.squidmath;
 
 import squidpony.StringKit;
@@ -137,8 +137,8 @@ public class IntVLA implements Serializable, Cloneable {
 
     /**
      * Adds value to the item in the IntVLA at index. Calling it "add" would overlap with the collection method.
-     * @param index
-     * @param value
+     * @param index the index of the item to add to
+     * @param value how much to add to the item at index (this may be negative, positive, or 0)
      */
     public void incr (int index, int value) {
         if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
@@ -414,8 +414,7 @@ public class IntVLA implements Serializable, Cloneable {
     }
 
     @GwtIncompatible
-    @SuppressWarnings("unchecked")
-    @Override
+	@Override
     public Object clone() {
         try {
             IntVLA nx = (IntVLA) super.clone();
@@ -430,7 +429,7 @@ public class IntVLA implements Serializable, Cloneable {
     /**
      * Hashes this IntVLA using {@link CrossHash.Water}, getting a 32-bit result. The same algorithm is used by
      * {@link #hash64()}, just with different constants and a different final step here.
-     * @returna 32-bit hash code
+     * @return a 32-bit hash code
      */
     @Override
     public int hashCode () {

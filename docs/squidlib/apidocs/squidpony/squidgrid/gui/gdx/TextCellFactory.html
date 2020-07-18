@@ -3039,21 +3039,23 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getSmoothingMultiplier()">getSmoothingMultiplier</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1948">getSmoothingMultiplier</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1949">getSmoothingMultiplier</a></span>()</div>
 <div class="block">If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
- numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</div>
+ numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing. This starts
+ at 1.2f, usually (<a href="DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx"><code>DefaultResources</code></a> notes when a different value is used).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current smoothing multiplier as a float, which starts at 1f.</dd>
+<dd>the current smoothing multiplier as a float, which starts at 1.2f for most fonts</dd>
 </dl>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setSmoothingMultiplier(float)">setSmoothingMultiplier</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1958">setSmoothingMultiplier</a></span>&#8203;(<span class="arguments">float&nbsp;smoothingMultiplier)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1960">setSmoothingMultiplier</a></span>&#8203;(<span class="arguments">float&nbsp;smoothingMultiplier)</span></div>
 <div class="block">If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
- numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</div>
+ numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing. Before this
+ is called, the smoothing multiplier is usually 1.2f; <a href="DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx"><code>DefaultResources</code></a> notes when other values are used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>smoothingMultiplier</code> - the new value for the smoothing multiplier as a float; should be fairly close to 1f.</dd>
@@ -3065,7 +3067,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="configureShader(com.badlogic.gdx.graphics.g2d.Batch)">configureShader</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1980">configureShader</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1982">configureShader</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</span></div>
 <div class="block">If using a distance field font, you MUST call this at some point while the batch has begun, or use code that
  calls it for you (which is now much of SquidLib). A typical point to call it is in the
  "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call
@@ -3088,7 +3090,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dispose()">dispose</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1999">dispose</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2001">dispose</a></span>()</div>
 <div class="block">Releases all resources of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -3099,7 +3101,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDescent()">getDescent</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2009">getDescent</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2011">getDescent</a></span>()</div>
 <div class="block">Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -3110,19 +3112,19 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getDirectionGlyph()">getDirectionGlyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2013">getDirectionGlyph</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">char</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2015">getDirectionGlyph</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setDirectionGlyph(char)">setDirectionGlyph</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2017">setDirectionGlyph</a></span>&#8203;(<span class="arguments">char&nbsp;directionGlyph)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2019">setDirectionGlyph</a></span>&#8203;(<span class="arguments">char&nbsp;directionGlyph)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addSwap(java.lang.String,java.lang.String)">addSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2037">addSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2039">addSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find,
 <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;replace)</span></div>
 <div class="block">Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested
  to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and
@@ -3146,7 +3148,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addSwap(char,char)">addSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2059">addSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2061">addSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find,
 char&nbsp;replace)</span></div>
 <div class="block">Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is
  used instead.
@@ -3169,7 +3171,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeSwap(java.lang.String)">removeSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2081">removeSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2083">removeSwap</a></span>&#8203;(<span class="arguments"><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;find)</span></div>
 <div class="block">Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text
  in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond
  the first char.
@@ -3191,7 +3193,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="removeSwap(char)">removeSwap</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2100">removeSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2102">removeSwap</a></span>&#8203;(<span class="arguments">char&nbsp;find)</span></div>
 <div class="block">Removes the replacement pair, if present, that searches for the given key, find.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3209,7 +3211,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getAllSwaps()">getAllSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">regexodus.ds.CharCharMap</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2120">getAllSwaps</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">regexodus.ds.CharCharMap</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2122">getAllSwaps</a></span>()</div>
 <div class="block">Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their
  values in the <code>CharCharMap</code>. CharCharMap is a class from RegExodus (a dependency of squidlib-util that is
  used for text matching and Unicode support), which is used here to avoid making yet another primitive-backed
@@ -3230,7 +3232,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setAllSwaps(squidpony.squidmath.OrderedMap)">setAllSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2136">setAllSwaps</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2138">setAllSwaps</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
 <div class="block">Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3250,7 +3252,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="addSwaps(squidpony.squidmath.OrderedMap)">addSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2158">addSwaps</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2160">addSwaps</a></span>&#8203;(<span class="arguments"><a href="https://squidpony.github.io/SquidLib/squidlib-util/apidocs/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath" class="externalLink">OrderedMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Character.html?is-external=true" title="class or interface in java.lang" class="externalLink">Character</a>&gt;&nbsp;swaps)</span></div>
 <div class="block">Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the
  entries in a Map of Character keys to String values.
  <br>
@@ -3271,7 +3273,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="clearSwaps()">clearSwaps</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2177">clearSwaps</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2179">clearSwaps</a></span>()</div>
 <div class="block">Clears all replacement pairs this has been told to swap.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3289,7 +3291,7 @@ char&nbsp;replace)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setStyle(int)">setStyle</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2188">setStyle</a></span>&#8203;(<span class="arguments">int&nbsp;style)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2190">setStyle</a></span>&#8203;(<span class="arguments">int&nbsp;style)</span></div>
 <div class="block">Not implemented in this class; in subclasses that do, this should change the currently-used font style, such as
  from regular to italic or bold. Calling this method on a TextCellFactory does nothing, but won't cause problems.</div>
 <dl>

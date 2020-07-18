@@ -51,37 +51,37 @@ public class FilterBatch implements Batch {
     private final Mesh mesh;
 
     final float[] vertices;
-    int idx = 0;
-    Texture lastTexture = null;
-    float invTexWidth = 0, invTexHeight = 0;
+    int idx;
+    Texture lastTexture;
+    float invTexWidth, invTexHeight;
 
-    boolean drawing = false;
+    boolean drawing;
 
     private final Matrix4 transformMatrix = new Matrix4();
     private final Matrix4 projectionMatrix = new Matrix4();
     private final Matrix4 combinedMatrix = new Matrix4();
 
-    private boolean blendingDisabled = false;
+    private boolean blendingDisabled;
     private int blendSrcFunc = GL20.GL_SRC_ALPHA;
     private int blendDstFunc = GL20.GL_ONE_MINUS_SRC_ALPHA;
     private int blendSrcFuncAlpha = GL20.GL_SRC_ALPHA;
     private int blendDstFuncAlpha = GL20.GL_ONE_MINUS_SRC_ALPHA;
 
     private final ShaderProgram shader;
-    private ShaderProgram customShader = null;
+    private ShaderProgram customShader;
     private boolean ownsShader;
 
     float color = Color.WHITE.toFloatBits();
     private final Color tempColor = new Color(1, 1, 1, 1);
 
     /** Number of render calls since the last {@link #begin()}. **/
-    public int renderCalls = 0;
+    public int renderCalls;
 
     /** Number of rendering calls, ever. Will not be reset unless set manually. **/
-    public int totalRenderCalls = 0;
+    public int totalRenderCalls;
 
     /** The maximum number of sprites rendered in one batch so far. **/
-    public int maxSpritesInBatch = 0;
+    public int maxSpritesInBatch;
 
     /** Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and no changes in the
      * color filter.

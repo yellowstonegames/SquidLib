@@ -19,7 +19,7 @@ import java.util.List;
 public class ColorChangeLabel extends Label {
 
     private List<Color> colors;
-    protected float progress = 0f;
+    protected float progress;
     protected float loopTime = 2f;
     protected ColorChangeLabel()
     {

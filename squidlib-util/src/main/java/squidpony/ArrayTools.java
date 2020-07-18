@@ -915,7 +915,7 @@ public class ArrayTools {
      * @return the inverse of ordering
      */
     public static int[] invertOrdering(int[] ordering) {
-        int ol = 0;
+        int ol;
         if (ordering == null || (ol = ordering.length) == 0) return ordering;
         int[] next = new int[ol];
         for (int i = 0; i < ol; i++) {
@@ -936,7 +936,7 @@ public class ArrayTools {
      * @return the inverse of ordering; will have the same value as dest
      */
     public static int[] invertOrdering(int[] ordering, int[] dest) {
-        int ol = 0;
+        int ol;
         if (ordering == null || dest == null || (ol = Math.min(ordering.length, dest.length)) == 0)
             return ordering;
         for (int i = 0; i < ol; i++) {

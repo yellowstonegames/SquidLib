@@ -80,108 +80,106 @@
 <span class="sourceLineNo">068</span><a id="line.68">        else </a>
 <span class="sourceLineNo">069</span><a id="line.69">            ArrayTools.fill(dungeon, '#');</a>
 <span class="sourceLineNo">070</span><a id="line.70">        </a>
-<span class="sourceLineNo">071</span><a id="line.71">        int x = rng.between(1, width / 2);</a>
-<span class="sourceLineNo">072</span><a id="line.72">        int y = rng.between(1, height / 2);</a>
-<span class="sourceLineNo">073</span><a id="line.73">        x *= 2;</a>
-<span class="sourceLineNo">074</span><a id="line.74">        y *= 2;</a>
-<span class="sourceLineNo">075</span><a id="line.75"></a>
-<span class="sourceLineNo">076</span><a id="line.76">        OrderedSet&lt;Coord&gt; deck = new OrderedSet&lt;&gt;();</a>
-<span class="sourceLineNo">077</span><a id="line.77">        deck.add(Coord.get(x, y));</a>
-<span class="sourceLineNo">078</span><a id="line.78"></a>
-<span class="sourceLineNo">079</span><a id="line.79">        Direction[] dirs = new Direction[4];</a>
-<span class="sourceLineNo">080</span><a id="line.80">        System.arraycopy(Direction.CARDINALS, 0, dirs, 0, 4);</a>
-<span class="sourceLineNo">081</span><a id="line.81">        OUTER:</a>
-<span class="sourceLineNo">082</span><a id="line.82">        while (!deck.isEmpty()) {</a>
-<span class="sourceLineNo">083</span><a id="line.83">            int i = choosing.chooseIndex(deck.size());</a>
-<span class="sourceLineNo">084</span><a id="line.84">            Coord p = deck.getAt(i);</a>
-<span class="sourceLineNo">085</span><a id="line.85">            rng.shuffleInPlace(dirs);</a>
-<span class="sourceLineNo">086</span><a id="line.86"></a>
-<span class="sourceLineNo">087</span><a id="line.87">            for (Direction dir : dirs) {</a>
-<span class="sourceLineNo">088</span><a id="line.88">                x = p.x + dir.deltaX * 2;</a>
-<span class="sourceLineNo">089</span><a id="line.89">                y = p.y + dir.deltaY * 2;</a>
-<span class="sourceLineNo">090</span><a id="line.90">                if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {</a>
-<span class="sourceLineNo">091</span><a id="line.91">                    if (dungeon[x][y] == '#' &amp;&amp; deck.add(Coord.get(x, y))) {</a>
-<span class="sourceLineNo">092</span><a id="line.92">                        dungeon[x][y] = '.';</a>
-<span class="sourceLineNo">093</span><a id="line.93">                        dungeon[p.x + dir.deltaX][p.y + dir.deltaY] = '.';</a>
-<span class="sourceLineNo">094</span><a id="line.94">                        continue OUTER;</a>
-<span class="sourceLineNo">095</span><a id="line.95">                    }</a>
-<span class="sourceLineNo">096</span><a id="line.96">                }</a>
-<span class="sourceLineNo">097</span><a id="line.97">            }</a>
-<span class="sourceLineNo">098</span><a id="line.98">            </a>
-<span class="sourceLineNo">099</span><a id="line.99">            deck.remove(p);</a>
-<span class="sourceLineNo">100</span><a id="line.100">        }</a>
-<span class="sourceLineNo">101</span><a id="line.101"></a>
-<span class="sourceLineNo">102</span><a id="line.102">        return dungeon;</a>
-<span class="sourceLineNo">103</span><a id="line.103">    }</a>
-<span class="sourceLineNo">104</span><a id="line.104"></a>
-<span class="sourceLineNo">105</span><a id="line.105">    /**</a>
-<span class="sourceLineNo">106</span><a id="line.106">     * A way to configure how {@link #generate(ChoosingMethod)} places paths through the maze. Most often, you'll want</a>
-<span class="sourceLineNo">107</span><a id="line.107">     * to at least start with {@link #newest}, since it generates the most maze-like dungeons, and try the other</a>
-<span class="sourceLineNo">108</span><a id="line.108">     * predefined ChoosingMethods eventually. You can use {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}</a>
-<span class="sourceLineNo">109</span><a id="line.109">     * to mix two ChoosingMethods, which can be a good way to add a little variety to a maze.</a>
-<span class="sourceLineNo">110</span><a id="line.110">     */</a>
-<span class="sourceLineNo">111</span><a id="line.111">    public interface ChoosingMethod {</a>
-<span class="sourceLineNo">112</span><a id="line.112"></a>
-<span class="sourceLineNo">113</span><a id="line.113">        /**</a>
-<span class="sourceLineNo">114</span><a id="line.114">         * Given the size to choose from, will return a single value smaller than the passed in value and greater than</a>
-<span class="sourceLineNo">115</span><a id="line.115">         * or equal to 0. The value chosen is dependent on the individual implementation.</a>
-<span class="sourceLineNo">116</span><a id="line.116">         *</a>
-<span class="sourceLineNo">117</span><a id="line.117">         * @param size the exclusive upper bound for results; always at least 1</a>
-<span class="sourceLineNo">118</span><a id="line.118">         * @return an int between 0 (inclusive) and {@code size} (exclusive)</a>
-<span class="sourceLineNo">119</span><a id="line.119">         */</a>
-<span class="sourceLineNo">120</span><a id="line.120">        int chooseIndex(int size);</a>
-<span class="sourceLineNo">121</span><a id="line.121">    }</a>
-<span class="sourceLineNo">122</span><a id="line.122"></a>
-<span class="sourceLineNo">123</span><a id="line.123">    /**</a>
-<span class="sourceLineNo">124</span><a id="line.124">     * Produces high-quality mazes that are very similar to those produced by a recursive back-tracking algorithm.</a>
-<span class="sourceLineNo">125</span><a id="line.125">     */</a>
-<span class="sourceLineNo">126</span><a id="line.126">    public final ChoosingMethod newest = new ChoosingMethod() {</a>
-<span class="sourceLineNo">127</span><a id="line.127">        @Override</a>
-<span class="sourceLineNo">128</span><a id="line.128">        public int chooseIndex(int size) {</a>
-<span class="sourceLineNo">129</span><a id="line.129">            return size - 1;</a>
-<span class="sourceLineNo">130</span><a id="line.130">        }</a>
-<span class="sourceLineNo">131</span><a id="line.131">    };</a>
-<span class="sourceLineNo">132</span><a id="line.132">    /**</a>
-<span class="sourceLineNo">133</span><a id="line.133">     * Produces mostly straight corridors that dead-end at the map's edge; probably only useful with {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}.</a>
-<span class="sourceLineNo">134</span><a id="line.134">     */</a>
-<span class="sourceLineNo">135</span><a id="line.135">    public final ChoosingMethod oldest = new ChoosingMethod() {</a>
-<span class="sourceLineNo">136</span><a id="line.136">        @Override</a>
-<span class="sourceLineNo">137</span><a id="line.137">        public int chooseIndex(int size) {</a>
-<span class="sourceLineNo">138</span><a id="line.138">            return 0;</a>
-<span class="sourceLineNo">139</span><a id="line.139">        }</a>
-<span class="sourceLineNo">140</span><a id="line.140">    };</a>
-<span class="sourceLineNo">141</span><a id="line.141">    /**</a>
-<span class="sourceLineNo">142</span><a id="line.142">     * Produces chaotic, jumbled spans of corridors that are similar to those produced by Prim's algorithm.</a>
-<span class="sourceLineNo">143</span><a id="line.143">     */</a>
-<span class="sourceLineNo">144</span><a id="line.144">    public final ChoosingMethod random = new ChoosingMethod() {</a>
-<span class="sourceLineNo">145</span><a id="line.145">        @Override</a>
-<span class="sourceLineNo">146</span><a id="line.146">        public int chooseIndex(int size) {</a>
-<span class="sourceLineNo">147</span><a id="line.147">            return rng.nextSignedInt(size);</a>
-<span class="sourceLineNo">148</span><a id="line.148">        }</a>
-<span class="sourceLineNo">149</span><a id="line.149">    };</a>
-<span class="sourceLineNo">150</span><a id="line.150"></a>
-<span class="sourceLineNo">151</span><a id="line.151">    /**</a>
-<span class="sourceLineNo">152</span><a id="line.152">     * Mixes two ChoosingMethod values, like {@link #newest} and {@link #random}, given a weight for each, and produces</a>
-<span class="sourceLineNo">153</span><a id="line.153">     * a new ChoosingMethod that randomly (respecting weight) picks one of those ChoosingMethods each time it is used.</a>
-<span class="sourceLineNo">154</span><a id="line.154">     * @param methodA the first ChoosingMethod to mix; must not be null</a>
-<span class="sourceLineNo">155</span><a id="line.155">     * @param chanceA the weight to favor choosing methodA</a>
-<span class="sourceLineNo">156</span><a id="line.156">     * @param methodB the second ChoosingMethod to mix; must not be null</a>
-<span class="sourceLineNo">157</span><a id="line.157">     * @param chanceB the weight to favor choosing methodB</a>
-<span class="sourceLineNo">158</span><a id="line.158">     * @return a ChoosingMethod that randomly picks between {@code methodA} and {@code methodB} each time it is used</a>
-<span class="sourceLineNo">159</span><a id="line.159">     */</a>
-<span class="sourceLineNo">160</span><a id="line.160">    public ChoosingMethod mix(final ChoosingMethod methodA, final double chanceA,</a>
-<span class="sourceLineNo">161</span><a id="line.161">                              final ChoosingMethod methodB, final double chanceB) {</a>
-<span class="sourceLineNo">162</span><a id="line.162">        final double a = Math.max(0.0, chanceA);</a>
-<span class="sourceLineNo">163</span><a id="line.163">        final double sum = a + Math.max(0.0, chanceB);</a>
-<span class="sourceLineNo">164</span><a id="line.164">        if(sum &lt;= 0.0) return random;</a>
-<span class="sourceLineNo">165</span><a id="line.165">        return new ChoosingMethod() {</a>
-<span class="sourceLineNo">166</span><a id="line.166">            @Override</a>
-<span class="sourceLineNo">167</span><a id="line.167">            public int chooseIndex(int size) {</a>
-<span class="sourceLineNo">168</span><a id="line.168">                return rng.nextDouble(sum) &lt; a ? methodA.chooseIndex(size) : methodB.chooseIndex(size);</a>
-<span class="sourceLineNo">169</span><a id="line.169">            }</a>
-<span class="sourceLineNo">170</span><a id="line.170">        };</a>
-<span class="sourceLineNo">171</span><a id="line.171">    }</a>
-<span class="sourceLineNo">172</span><a id="line.172">}</a>
+<span class="sourceLineNo">071</span><a id="line.71">        int x = rng.nextInt(width - 1) | 1;</a>
+<span class="sourceLineNo">072</span><a id="line.72">        int y = rng.nextInt(height - 1) | 1;</a>
+<span class="sourceLineNo">073</span><a id="line.73"></a>
+<span class="sourceLineNo">074</span><a id="line.74">        OrderedSet&lt;Coord&gt; deck = new OrderedSet&lt;&gt;();</a>
+<span class="sourceLineNo">075</span><a id="line.75">        deck.add(Coord.get(x, y));</a>
+<span class="sourceLineNo">076</span><a id="line.76"></a>
+<span class="sourceLineNo">077</span><a id="line.77">        Direction[] dirs = new Direction[4];</a>
+<span class="sourceLineNo">078</span><a id="line.78">        System.arraycopy(Direction.CARDINALS, 0, dirs, 0, 4);</a>
+<span class="sourceLineNo">079</span><a id="line.79">        OUTER:</a>
+<span class="sourceLineNo">080</span><a id="line.80">        while (!deck.isEmpty()) {</a>
+<span class="sourceLineNo">081</span><a id="line.81">            int i = choosing.chooseIndex(deck.size());</a>
+<span class="sourceLineNo">082</span><a id="line.82">            Coord p = deck.getAt(i);</a>
+<span class="sourceLineNo">083</span><a id="line.83">            rng.shuffleInPlace(dirs);</a>
+<span class="sourceLineNo">084</span><a id="line.84"></a>
+<span class="sourceLineNo">085</span><a id="line.85">            for (Direction dir : dirs) {</a>
+<span class="sourceLineNo">086</span><a id="line.86">                x = p.x + dir.deltaX * 2;</a>
+<span class="sourceLineNo">087</span><a id="line.87">                y = p.y + dir.deltaY * 2;</a>
+<span class="sourceLineNo">088</span><a id="line.88">                if (x &gt; 0 &amp;&amp; x &lt; width - 1 &amp;&amp; y &gt; 0 &amp;&amp; y &lt; height - 1) {</a>
+<span class="sourceLineNo">089</span><a id="line.89">                    if (dungeon[x][y] == '#' &amp;&amp; deck.add(Coord.get(x, y))) {</a>
+<span class="sourceLineNo">090</span><a id="line.90">                        dungeon[x][y] = '.';</a>
+<span class="sourceLineNo">091</span><a id="line.91">                        dungeon[p.x + dir.deltaX][p.y + dir.deltaY] = '.';</a>
+<span class="sourceLineNo">092</span><a id="line.92">                        continue OUTER;</a>
+<span class="sourceLineNo">093</span><a id="line.93">                    }</a>
+<span class="sourceLineNo">094</span><a id="line.94">                }</a>
+<span class="sourceLineNo">095</span><a id="line.95">            }</a>
+<span class="sourceLineNo">096</span><a id="line.96">            </a>
+<span class="sourceLineNo">097</span><a id="line.97">            deck.remove(p);</a>
+<span class="sourceLineNo">098</span><a id="line.98">        }</a>
+<span class="sourceLineNo">099</span><a id="line.99"></a>
+<span class="sourceLineNo">100</span><a id="line.100">        return dungeon;</a>
+<span class="sourceLineNo">101</span><a id="line.101">    }</a>
+<span class="sourceLineNo">102</span><a id="line.102"></a>
+<span class="sourceLineNo">103</span><a id="line.103">    /**</a>
+<span class="sourceLineNo">104</span><a id="line.104">     * A way to configure how {@link #generate(ChoosingMethod)} places paths through the maze. Most often, you'll want</a>
+<span class="sourceLineNo">105</span><a id="line.105">     * to at least start with {@link #newest}, since it generates the most maze-like dungeons, and try the other</a>
+<span class="sourceLineNo">106</span><a id="line.106">     * predefined ChoosingMethods eventually. You can use {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}</a>
+<span class="sourceLineNo">107</span><a id="line.107">     * to mix two ChoosingMethods, which can be a good way to add a little variety to a maze.</a>
+<span class="sourceLineNo">108</span><a id="line.108">     */</a>
+<span class="sourceLineNo">109</span><a id="line.109">    public interface ChoosingMethod {</a>
+<span class="sourceLineNo">110</span><a id="line.110"></a>
+<span class="sourceLineNo">111</span><a id="line.111">        /**</a>
+<span class="sourceLineNo">112</span><a id="line.112">         * Given the size to choose from, will return a single value smaller than the passed in value and greater than</a>
+<span class="sourceLineNo">113</span><a id="line.113">         * or equal to 0. The value chosen is dependent on the individual implementation.</a>
+<span class="sourceLineNo">114</span><a id="line.114">         *</a>
+<span class="sourceLineNo">115</span><a id="line.115">         * @param size the exclusive upper bound for results; always at least 1</a>
+<span class="sourceLineNo">116</span><a id="line.116">         * @return an int between 0 (inclusive) and {@code size} (exclusive)</a>
+<span class="sourceLineNo">117</span><a id="line.117">         */</a>
+<span class="sourceLineNo">118</span><a id="line.118">        int chooseIndex(int size);</a>
+<span class="sourceLineNo">119</span><a id="line.119">    }</a>
+<span class="sourceLineNo">120</span><a id="line.120"></a>
+<span class="sourceLineNo">121</span><a id="line.121">    /**</a>
+<span class="sourceLineNo">122</span><a id="line.122">     * Produces high-quality mazes that are very similar to those produced by a recursive back-tracking algorithm.</a>
+<span class="sourceLineNo">123</span><a id="line.123">     */</a>
+<span class="sourceLineNo">124</span><a id="line.124">    public final ChoosingMethod newest = new ChoosingMethod() {</a>
+<span class="sourceLineNo">125</span><a id="line.125">        @Override</a>
+<span class="sourceLineNo">126</span><a id="line.126">        public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">127</span><a id="line.127">            return size - 1;</a>
+<span class="sourceLineNo">128</span><a id="line.128">        }</a>
+<span class="sourceLineNo">129</span><a id="line.129">    };</a>
+<span class="sourceLineNo">130</span><a id="line.130">    /**</a>
+<span class="sourceLineNo">131</span><a id="line.131">     * Produces mostly straight corridors that dead-end at the map's edge; probably only useful with {@link #mix(ChoosingMethod, double, ChoosingMethod, double)}.</a>
+<span class="sourceLineNo">132</span><a id="line.132">     */</a>
+<span class="sourceLineNo">133</span><a id="line.133">    public final ChoosingMethod oldest = new ChoosingMethod() {</a>
+<span class="sourceLineNo">134</span><a id="line.134">        @Override</a>
+<span class="sourceLineNo">135</span><a id="line.135">        public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">136</span><a id="line.136">            return 0;</a>
+<span class="sourceLineNo">137</span><a id="line.137">        }</a>
+<span class="sourceLineNo">138</span><a id="line.138">    };</a>
+<span class="sourceLineNo">139</span><a id="line.139">    /**</a>
+<span class="sourceLineNo">140</span><a id="line.140">     * Produces chaotic, jumbled spans of corridors that are similar to those produced by Prim's algorithm.</a>
+<span class="sourceLineNo">141</span><a id="line.141">     */</a>
+<span class="sourceLineNo">142</span><a id="line.142">    public final ChoosingMethod random = new ChoosingMethod() {</a>
+<span class="sourceLineNo">143</span><a id="line.143">        @Override</a>
+<span class="sourceLineNo">144</span><a id="line.144">        public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">145</span><a id="line.145">            return rng.nextSignedInt(size);</a>
+<span class="sourceLineNo">146</span><a id="line.146">        }</a>
+<span class="sourceLineNo">147</span><a id="line.147">    };</a>
+<span class="sourceLineNo">148</span><a id="line.148"></a>
+<span class="sourceLineNo">149</span><a id="line.149">    /**</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * Mixes two ChoosingMethod values, like {@link #newest} and {@link #random}, given a weight for each, and produces</a>
+<span class="sourceLineNo">151</span><a id="line.151">     * a new ChoosingMethod that randomly (respecting weight) picks one of those ChoosingMethods each time it is used.</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @param methodA the first ChoosingMethod to mix; must not be null</a>
+<span class="sourceLineNo">153</span><a id="line.153">     * @param chanceA the weight to favor choosing methodA</a>
+<span class="sourceLineNo">154</span><a id="line.154">     * @param methodB the second ChoosingMethod to mix; must not be null</a>
+<span class="sourceLineNo">155</span><a id="line.155">     * @param chanceB the weight to favor choosing methodB</a>
+<span class="sourceLineNo">156</span><a id="line.156">     * @return a ChoosingMethod that randomly picks between {@code methodA} and {@code methodB} each time it is used</a>
+<span class="sourceLineNo">157</span><a id="line.157">     */</a>
+<span class="sourceLineNo">158</span><a id="line.158">    public ChoosingMethod mix(final ChoosingMethod methodA, final double chanceA,</a>
+<span class="sourceLineNo">159</span><a id="line.159">                              final ChoosingMethod methodB, final double chanceB) {</a>
+<span class="sourceLineNo">160</span><a id="line.160">        final double a = Math.max(0.0, chanceA);</a>
+<span class="sourceLineNo">161</span><a id="line.161">        final double sum = a + Math.max(0.0, chanceB);</a>
+<span class="sourceLineNo">162</span><a id="line.162">        if(sum &lt;= 0.0) return random;</a>
+<span class="sourceLineNo">163</span><a id="line.163">        return new ChoosingMethod() {</a>
+<span class="sourceLineNo">164</span><a id="line.164">            @Override</a>
+<span class="sourceLineNo">165</span><a id="line.165">            public int chooseIndex(int size) {</a>
+<span class="sourceLineNo">166</span><a id="line.166">                return rng.nextDouble(sum) &lt; a ? methodA.chooseIndex(size) : methodB.chooseIndex(size);</a>
+<span class="sourceLineNo">167</span><a id="line.167">            }</a>
+<span class="sourceLineNo">168</span><a id="line.168">        };</a>
+<span class="sourceLineNo">169</span><a id="line.169">    }</a>
+<span class="sourceLineNo">170</span><a id="line.170">}</a>
 
 
 

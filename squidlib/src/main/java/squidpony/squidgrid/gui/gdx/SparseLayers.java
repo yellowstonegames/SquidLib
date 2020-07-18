@@ -96,7 +96,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * reduce animationCount would never happen.
      * @deprecated Use {@link #hasActiveAnimations()} instead of adjusting this manually
      */
-    public int animationCount = 0;
+    public int animationCount;
     /**
      * A list of individually-movable Glyph objects. This field is public, and though it shouldn't be assigned null (you
      * don't really need to be told that), there may be cases where you may need manual control over what Glyph objects
@@ -724,7 +724,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * {@link Color#toFloatBits()} can be used to bypass the filtering if you want a color to be used exactly.
      * @param icc an IColorCenter that can cache and possibly filter {@link Color} objects
      */
-    private void setColorCenter(IColorCenter<Color> icc) {
+    protected void setColorCenter(IColorCenter<Color> icc) {
         scc = icc;
     }
 

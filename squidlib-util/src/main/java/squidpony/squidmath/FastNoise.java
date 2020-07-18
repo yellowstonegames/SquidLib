@@ -55,7 +55,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     public static final int CELL_VALUE = 0, NOISE_LOOKUP = 1, DISTANCE = 2, DISTANCE_2 = 3,
             DISTANCE_2_ADD = 4, DISTANCE_2_SUB = 5, DISTANCE_2_MUL = 6, DISTANCE_2_DIV = 7;
 
-    private int seed = 1337;
+    private int seed;
     private float frequency = 0.03125f;
     private int interpolation = HERMITE;
     private int noiseType = SIMPLEX_FRACTAL;
@@ -69,7 +69,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private int cellularDistanceFunction = EUCLIDEAN;
     private int cellularReturnType = CELL_VALUE;
-    private FastNoise cellularNoiseLookup = null;
+    private FastNoise cellularNoiseLookup;
     private IPointHash pointHash = new IntPointHash();
 
     private float gradientPerturbAmp = 1f / 0.45f;
@@ -871,7 +871,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     // White Noise
 
     private int floatToIntMixed(final float f) {
-        final int i = Float.floatToIntBits(f);
+        final int i = NumberTools.floatToIntBits(f);
         return i ^ i >>> 16;
     }
 

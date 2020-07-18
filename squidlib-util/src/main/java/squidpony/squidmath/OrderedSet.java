@@ -91,10 +91,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     protected K[] key;
     /**
-     * The array of values.
-     */
-    //protected V[] value;
-    /**
      * The mask for wrapping a position counter.
      */
     protected int mask;
@@ -241,7 +237,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public OrderedSet(final K[] a, final int offset,
                       final int length, final float f) {
-        this(length < 0 ? 0 : length, f);
+        this(Math.max(length, 0), f);
         if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
         if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
@@ -364,7 +360,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public OrderedSet(final K[] a, final int offset,
                       final int length, final float f, CrossHash.IHasher hasher) {
-        this(length < 0 ? 0 : length, f, hasher);
+        this(Math.max(length, 0), f, hasher);
         if (a == null) throw new NullPointerException("Array passed to OrderedSet constructor cannot be null");
         if (offset < 0) throw new ArrayIndexOutOfBoundsException("Offset (" + offset + ") is negative");
         if (length < 0) throw new IllegalArgumentException("Length (" + length + ") is negative");
@@ -611,7 +607,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     protected boolean rem(final Object k) {
         if (k == null)
             return containsNull && removeNullEntry();
@@ -979,8 +974,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             order.clear();
             return 0;
         }
-        int idx = order.removeValue(i);
-        return idx;
+        return order.removeValue(i);
     }
 
     /**
@@ -1060,7 +1054,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          * {@link java.util.ListIterator#next()} (or <code>null</code> if no
          * next entry exists).
          */
-        int next = -1;
+        int next;
         /**
          * The last entry that was returned (or -1 if we did not iterate or used
          * {@link #remove()}).
@@ -1070,7 +1064,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
          * The current index (in the sense of a {@link java.util.ListIterator}).
          * When -1, we do not know the current index.
          */
-        int index = -1;
+        int index;
 
         SetIterator() {
             next = size == 0 ? -1 : order.items[0];
@@ -1495,7 +1489,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         return a;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         final int size = size();

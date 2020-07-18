@@ -1,6 +1,5 @@
 package squidpony.squidai;
 
-import squidpony.squidgrid.Measurement;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
 import squidpony.squidmath.*;
@@ -9,8 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static squidpony.squidgrid.Measurement.*;
 
 /**
  * An AOE type that has a center and a volume, and will randomly expand in all directions until it reaches volume or
@@ -30,7 +27,7 @@ import static squidpony.squidgrid.Measurement.*;
 public class CloudAOE implements AOE, Serializable {
     private static final long serialVersionUID = 2L;
     private Spill spill;
-    private Coord center, origin = null;
+    private Coord center, origin;
     private int volume;
     private long seed;
     private boolean expanding;
@@ -47,20 +44,7 @@ public class CloudAOE implements AOE, Serializable {
         this.volume = volume;
         expanding = false;
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement(); 
     }
 
     public CloudAOE(Coord center, int volume, Radius radiusType, int minRange, int maxRange)
@@ -74,20 +58,7 @@ public class CloudAOE implements AOE, Serializable {
         rt = radiusType;
         reach.minDistance = minRange;
         reach.maxDistance = maxRange;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement();
     }
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed)
     {
@@ -97,20 +68,7 @@ public class CloudAOE implements AOE, Serializable {
         this.volume = volume;
         expanding = false;
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement();
     }
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
     {
@@ -120,20 +78,7 @@ public class CloudAOE implements AOE, Serializable {
         this.volume = volume;
         expanding = false;
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                spill.measurement = EUCLIDEAN;
-                break;
-            case CUBE:
-            case SQUARE:
-                spill.measurement = CHEBYSHEV;
-                break;
-            default:
-                spill.measurement = MANHATTAN;
-                break;
-        }
+        spill.measurement = rt.matchingMeasurement();
         reach.minDistance = minRange;
         reach.maxDistance = maxRange;
     }
@@ -165,17 +110,6 @@ public class CloudAOE implements AOE, Serializable {
 
     public void setRadiusType(Radius radiusType) {
         rt = radiusType;
-        switch (radiusType)
-        {
-            case SPHERE:
-            case CIRCLE:
-                break;
-            case CUBE:
-            case SQUARE:
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
@@ -216,8 +150,8 @@ public class CloudAOE implements AOE, Serializable {
             }
             return bestPoints;
         }
-        Coord[] ts = targets.toArray(new Coord[targets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] ts = targets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
@@ -244,14 +178,10 @@ public class CloudAOE implements AOE, Serializable {
             }
         }
 
-        Measurement dmm = Measurement.MANHATTAN;
-        if(spill.measurement == CHEBYSHEV) dmm = Measurement.CHEBYSHEV;
-        else if(spill.measurement == EUCLIDEAN) dmm = Measurement.EUCLIDEAN;
-
         double radius = Math.sqrt(volume) * 0.75;
 
         for (int i = 0; i < ts.length; ++i) {
-            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+            DijkstraMap dm = new DijkstraMap(dungeon, spill.measurement);
 
             t = ts[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -259,7 +189,7 @@ public class CloudAOE implements AOE, Serializable {
 
             sp.start(t, volume, null);
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (sp.spillMap[x][y]){
@@ -360,9 +290,9 @@ public class CloudAOE implements AOE, Serializable {
             }
             return bestPoints;
         }
-        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
-        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] pts = priorityTargets.toArray(new Coord[0]);
+        Coord[] lts = lesserTargets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
@@ -374,7 +304,7 @@ public class CloudAOE implements AOE, Serializable {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
             Arrays.fill(dungeonPriorities[i], '#');
         }
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -388,17 +318,11 @@ public class CloudAOE implements AOE, Serializable {
                 }
             }
         }
-
-        t = pts[0];
-
-        Measurement dmm = Measurement.MANHATTAN;
-        if(spill.measurement == CHEBYSHEV) dmm = Measurement.CHEBYSHEV;
-        else if(spill.measurement == EUCLIDEAN) dmm = Measurement.EUCLIDEAN;
-
+        
         double radius = Math.sqrt(volume) * 0.75;
 
         for (int i = 0; i < pts.length; ++i) {
-            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+            DijkstraMap dm = new DijkstraMap(dungeon, spill.measurement);
 
             t = pts[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -408,7 +332,7 @@ public class CloudAOE implements AOE, Serializable {
 
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (sp.spillMap[x][y]){
@@ -443,11 +367,9 @@ public class CloudAOE implements AOE, Serializable {
             dm.resetMap();
             dm.clearGoals();
         }
-
-        t = lts[0];
-
+        
         for (int i = pts.length; i < totalTargets; ++i) {
-            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+            DijkstraMap dm = new DijkstraMap(dungeon, spill.measurement);
 
             t = lts[i - pts.length];
             sp = new Spill(dungeon, spill.measurement);
@@ -456,7 +378,7 @@ public class CloudAOE implements AOE, Serializable {
             sp.start(t, volume, null);
 
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (sp.spillMap[x][y]){

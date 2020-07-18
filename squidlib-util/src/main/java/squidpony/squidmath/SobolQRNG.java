@@ -189,7 +189,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int cx = 0, cy = 0, c = 1 + Integer.numberOfTrailingZeros(count);
+        int cx, cy, c = 1 + Integer.numberOfTrailingZeros(count);
 
         if(dimension <= 0)
             return Coord.get(0, 0);

@@ -95,7 +95,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.badlogic.gdx.graphics.g2d.Batch</code>, <code>com.badlogic.gdx.utils.Disposable</code></dd>
 </dl>
 <hr>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.36">FilterBatch</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.46">FilterBatch</a>
 extends <a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <div class="block">A drop-in substitute for <code>SpriteBatch</code> that filters any colors used to tint text
@@ -108,9 +108,14 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
  may be slower if used for Tiled map renderers in libGDX or for <code>NinePatch</code>
  instances, which both need to reset a Color object frequently, but not much else in libGDX specifically needs the
  Color object <a href="#getColor()"><code>getColor()</code></a> returns, and many things do fine with <a href="#getPackedColor()"><code>getPackedColor()</code></a>, which is faster.
+ Note that for games that use 2D sprite graphics, there's very low overhead to 1.9.9's SpriteBatch, and it mostly has
+ issues with overdraw (which every glyph of text drawn over a background contributes towards).
  <br>
  Most FloatFilter varieties don't have much overhead, and I encourage you to try some to quickly produce graphical
- effects in a game. As an example, changing the warmth of a color (as well as its lightness) is relatively easy with a
+ effects in a game. As a simple example, <a href="FloatFilters.html#grayscaleFilter"><code>FloatFilters.grayscaleFilter</code></a> is a constant FloatFilter that makes
+ all colors, well, grayscale; you could apply it during things like flashback sequences or when the player is dazed.
+ <br>
+ As a more complex example, changing the warmth of a color (as well as its lightness) is relatively easy with a
  <a href="FloatFilters.YCwCmFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCwCmFilter</code></a> that adds to or subtracts from Cw (chromatic warmth) and may change Y (lightness).
  With that same filter, if the protagonist is partially blinded, you could set the multipliers for Cw and Cm
  (chromatic mildness; determines whether a color is closer to mild colors like green/yellow or bold colors like
@@ -577,27 +582,27 @@ float&nbsp;a)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="filter">filter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.39">filter</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.49">filter</a></span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="renderCalls">renderCalls</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.68">renderCalls</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.78">renderCalls</a></span></div>
 <div class="block">Number of render calls since the last <a href="#begin()"><code>begin()</code></a>.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="totalRenderCalls">totalRenderCalls</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.71">totalRenderCalls</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.81">totalRenderCalls</a></span></div>
 <div class="block">Number of rendering calls, ever. Will not be reset unless set manually.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="maxSpritesInBatch">maxSpritesInBatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.74">maxSpritesInBatch</a></span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.84">maxSpritesInBatch</a></span></div>
 <div class="block">The maximum number of sprites rendered in one batch so far.</div>
 </section>
 </li>
@@ -614,7 +619,7 @@ float&nbsp;a)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;()">FilterBatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.79">FilterBatch</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.89">FilterBatch</a></span>()</div>
 <div class="block">Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and no changes in the
  color filter.</div>
 <dl>
@@ -626,7 +631,7 @@ float&nbsp;a)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(squidpony.squidgrid.gui.gdx.FloatFilter)">FilterBatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.86">FilterBatch</a></span>&#8203;(<span class="arguments"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.96">FilterBatch</a></span>&#8203;(<span class="arguments"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</span></div>
 <div class="block">Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and the given
  color filter.</div>
 <dl>
@@ -638,7 +643,7 @@ float&nbsp;a)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int)">FilterBatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.92">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.102">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size)</span></div>
 <div class="block">Constructs a FilterBatch with one buffer, the default shader, and no changes in the color filter.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -649,7 +654,7 @@ float&nbsp;a)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,squidpony.squidgrid.gui.gdx.FloatFilter)">FilterBatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.99">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.109">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size,
 <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</span></div>
 <div class="block">Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and the given
  color filter.</div>
@@ -662,7 +667,7 @@ float&nbsp;a)</code></th>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,com.badlogic.gdx.graphics.glutils.ShaderProgram)">FilterBatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.111">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.121">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size,
 com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader)</span></div>
 <div class="block">Constructs a new FilterBatch. Sets the projection matrix to an orthographic projection with y-axis point upwards, x-axis
  point to the right and the origin being in the bottom left corner of the screen. The projection will be pixel perfect with
@@ -680,7 +685,7 @@ com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="&lt;init&gt;(int,com.badlogic.gdx.graphics.glutils.ShaderProgram,squidpony.squidgrid.gui.gdx.FloatFilter)">FilterBatch</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.123">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.133">FilterBatch</a></span>&#8203;(<span class="arguments">int&nbsp;size,
 com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader,
 <a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</span></div>
 <div class="block">Constructs a new FilterBatch. Sets the projection matrix to an orthographic projection with y-axis point upwards, x-axis
@@ -709,14 +714,14 @@ com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader,
 <li class="blockList">
 <section class="detail">
 <h3><a id="createDefaultShader()">createDefaultShader</a></h3>
-<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.glutils.ShaderProgram</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.160">createDefaultShader</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public static</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.glutils.ShaderProgram</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.170">createDefaultShader</a></span>()</div>
 <div class="block">Returns a new instance of the default shader used by FilterBatch for GL2 when no shader is specified.</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="begin()">begin</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.194">begin</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.204">begin</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>begin</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -726,7 +731,7 @@ com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader,
 <li class="blockList">
 <section class="detail">
 <h3><a id="end()">end</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.209">end</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.219">end</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>end</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -736,7 +741,7 @@ com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader,
 <li class="blockList">
 <section class="detail">
 <h3><a id="setColor(com.badlogic.gdx.graphics.Color)">setColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.226">setColor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;tint)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.236">setColor</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Color&nbsp;tint)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -746,7 +751,7 @@ com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader,
 <li class="blockList">
 <section class="detail">
 <h3><a id="setColor(float,float,float,float)">setColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.231">setColor</a></span>&#8203;(<span class="arguments">float&nbsp;r,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.241">setColor</a></span>&#8203;(<span class="arguments">float&nbsp;r,
 float&nbsp;g,
 float&nbsp;b,
 float&nbsp;a)</span></div>
@@ -759,13 +764,13 @@ float&nbsp;a)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setColor(float)">setColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.237">setColor</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.247">setColor</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setPackedColor(float)">setPackedColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.241">setPackedColor</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.251">setPackedColor</a></span>&#8203;(<span class="arguments">float&nbsp;color)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setPackedColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -775,7 +780,7 @@ float&nbsp;a)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getColor()">getColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.Color</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.246">getColor</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.Color</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.256">getColor</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -785,7 +790,7 @@ float&nbsp;a)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getPackedColor()">getPackedColor</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.257">getPackedColor</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">float</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.267">getPackedColor</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getPackedColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -795,7 +800,7 @@ float&nbsp;a)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Texture,float,float,float,float,float,float,float,float,float,int,int,int,int,boolean,boolean)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.262">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.272">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;originX,
@@ -820,7 +825,7 @@ boolean&nbsp;flipY)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Texture,float,float,float,float,int,int,int,int,boolean,boolean)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.393">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.403">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;width,
@@ -840,7 +845,7 @@ boolean&nbsp;flipY)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Texture,float,float,int,int,int,int)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.452">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.462">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
 float&nbsp;x,
 float&nbsp;y,
 int&nbsp;srcX,
@@ -856,7 +861,7 @@ int&nbsp;srcHeight)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Texture,float,float,float,float,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.498">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.508">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;width,
@@ -874,7 +879,7 @@ float&nbsp;v2)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Texture,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.540">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.550">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
 float&nbsp;x,
 float&nbsp;y)</span></div>
 <dl>
@@ -886,7 +891,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Texture,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.545">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.555">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;width,
@@ -900,7 +905,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.Texture,float[],int,int)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.591">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.601">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture,
 float[]&nbsp;spriteVertices,
 int&nbsp;offset,
 int&nbsp;count)</span></div>
@@ -913,7 +918,7 @@ int&nbsp;count)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.TextureRegion,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.621">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.631">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
 float&nbsp;x,
 float&nbsp;y)</span></div>
 <dl>
@@ -925,7 +930,7 @@ float&nbsp;y)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.626">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.636">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;width,
@@ -939,7 +944,7 @@ float&nbsp;height)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float,float,float,float,float,float,float)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.673">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.683">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;originX,
@@ -958,7 +963,7 @@ float&nbsp;rotation)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,float,float,float,float,float,float,float,boolean)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.793">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.803">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
 float&nbsp;x,
 float&nbsp;y,
 float&nbsp;originX,
@@ -978,7 +983,7 @@ boolean&nbsp;clockwise)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="draw(com.badlogic.gdx.graphics.g2d.TextureRegion,float,float,com.badlogic.gdx.math.Affine2)">draw</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.929">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.939">draw</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
 float&nbsp;width,
 float&nbsp;height,
 com.badlogic.gdx.math.Affine2&nbsp;transform)</span></div>
@@ -991,7 +996,7 @@ com.badlogic.gdx.math.Affine2&nbsp;transform)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="flush()">flush</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.985">flush</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.995">flush</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>flush</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1001,7 +1006,7 @@ com.badlogic.gdx.math.Affine2&nbsp;transform)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="disableBlending()">disableBlending</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1013">disableBlending</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1023">disableBlending</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>disableBlending</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1011,7 +1016,7 @@ com.badlogic.gdx.math.Affine2&nbsp;transform)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="enableBlending()">enableBlending</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1020">enableBlending</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1030">enableBlending</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>enableBlending</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1021,7 +1026,7 @@ com.badlogic.gdx.math.Affine2&nbsp;transform)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setBlendFunction(int,int)">setBlendFunction</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1027">setBlendFunction</a></span>&#8203;(<span class="arguments">int&nbsp;srcFunc,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1037">setBlendFunction</a></span>&#8203;(<span class="arguments">int&nbsp;srcFunc,
 int&nbsp;dstFunc)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1032,7 +1037,7 @@ int&nbsp;dstFunc)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setBlendFunctionSeparate(int,int,int,int)">setBlendFunctionSeparate</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1032">setBlendFunctionSeparate</a></span>&#8203;(<span class="arguments">int&nbsp;srcFuncColor,
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1042">setBlendFunctionSeparate</a></span>&#8203;(<span class="arguments">int&nbsp;srcFuncColor,
 int&nbsp;dstFuncColor,
 int&nbsp;srcFuncAlpha,
 int&nbsp;dstFuncAlpha)</span></div>
@@ -1045,7 +1050,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBlendSrcFunc()">getBlendSrcFunc</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1042">getBlendSrcFunc</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1052">getBlendSrcFunc</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendSrcFunc</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1055,7 +1060,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBlendDstFunc()">getBlendDstFunc</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1047">getBlendDstFunc</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1057">getBlendDstFunc</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendDstFunc</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1065,7 +1070,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBlendSrcFuncAlpha()">getBlendSrcFuncAlpha</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1052">getBlendSrcFuncAlpha</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1062">getBlendSrcFuncAlpha</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendSrcFuncAlpha</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1075,7 +1080,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getBlendDstFuncAlpha()">getBlendDstFuncAlpha</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1057">getBlendDstFuncAlpha</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">int</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1067">getBlendDstFuncAlpha</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendDstFuncAlpha</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1085,7 +1090,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="dispose()">dispose</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1062">dispose</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1072">dispose</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>dispose</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.utils.Disposable</code></dd>
@@ -1095,7 +1100,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getProjectionMatrix()">getProjectionMatrix</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.math.Matrix4</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1068">getProjectionMatrix</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.math.Matrix4</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1078">getProjectionMatrix</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getProjectionMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1105,7 +1110,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getTransformMatrix()">getTransformMatrix</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.math.Matrix4</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1073">getTransformMatrix</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.math.Matrix4</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1083">getTransformMatrix</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getTransformMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1115,7 +1120,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setProjectionMatrix(com.badlogic.gdx.math.Matrix4)">setProjectionMatrix</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1078">setProjectionMatrix</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.math.Matrix4&nbsp;projection)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1088">setProjectionMatrix</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.math.Matrix4&nbsp;projection)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setProjectionMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1125,7 +1130,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setTransformMatrix(com.badlogic.gdx.math.Matrix4)">setTransformMatrix</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1085">setTransformMatrix</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.math.Matrix4&nbsp;transform)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1095">setTransformMatrix</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.math.Matrix4&nbsp;transform)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setTransformMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1135,13 +1140,13 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="switchTexture(com.badlogic.gdx.graphics.Texture)">switchTexture</a></h3>
-<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1103">switchTexture</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture)</span></div>
+<div class="memberSignature"><span class="modifiers">protected</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1113">switchTexture</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.Texture&nbsp;texture)</span></div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setShader(com.badlogic.gdx.graphics.glutils.ShaderProgram)">setShader</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1110">setShader</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;shader)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1120">setShader</a></span>&#8203;(<span class="arguments">com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;shader)</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setShader</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1151,7 +1156,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getShader()">getShader</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.glutils.ShaderProgram</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1129">getShader</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">com.badlogic.gdx.graphics.glutils.ShaderProgram</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1139">getShader</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getShader</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1161,7 +1166,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="isBlendingEnabled()">isBlendingEnabled</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1137">isBlendingEnabled</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1147">isBlendingEnabled</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>isBlendingEnabled</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1171,7 +1176,7 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="isDrawing()">isDrawing</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1142">isDrawing</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">boolean</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1152">isDrawing</a></span>()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>isDrawing</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1181,13 +1186,13 @@ int&nbsp;dstFuncAlpha)</span></div>
 <li class="blockList">
 <section class="detail">
 <h3><a id="getFilter()">getFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1145">getFilter</a></span>()</div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1155">getFilter</a></span>()</div>
 </section>
 </li>
 <li class="blockList">
 <section class="detail">
 <h3><a id="setFilter(squidpony.squidgrid.gui.gdx.FloatFilter)">setFilter</a></h3>
-<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1149">setFilter</a></span>&#8203;(<span class="arguments"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</span></div>
+<div class="memberSignature"><span class="modifiers">public</span>&nbsp;<span class="returnType">void</span>&nbsp;<span class="memberName"><a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1159">setFilter</a></span>&#8203;(<span class="arguments"><a href="FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</span></div>
 </section>
 </li>
 </ul>

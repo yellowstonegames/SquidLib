@@ -37,11 +37,11 @@ import static com.badlogic.gdx.math.MathUtils.clamp;
 public class SquidPanel extends Group implements IPackedColorPanel {
 
     public float DEFAULT_ANIMATION_DURATION = 0.12F;
-    protected int animationCount = 0;
+    protected int animationCount;
     protected Color defaultForeground = Color.WHITE;
     protected IColorCenter<Color> scc;
     protected int cellWidth, cellHeight;
-    protected int gridWidth, gridHeight, gridOffsetX = 0, gridOffsetY = 0;
+    protected int gridWidth, gridHeight, gridOffsetX, gridOffsetY;
     /**
      * The 2D array of chars that this will render, using x,y indexing.
      * Full-block cells that are completely filled with their color will be the char at Unicode codepoint 0,
@@ -72,7 +72,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      * can be accomplished by using {@link #setTextSize(float, float)} to double the previously-given cell width
      * and height.
      */
-    public boolean onlyRenderEven = false;
+    public boolean onlyRenderEven;
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -2333,10 +2333,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     }
 
     protected float clampDuration(float duration) {
-    	if (duration < 0.02f)
-    		return 0.02f;
-    	else
-    		return duration;
+        return Math.max(duration, 0.02f);
     }
 
     /**

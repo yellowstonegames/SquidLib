@@ -1,4 +1,4 @@
-/**
+/*
  ------------------------------------------------------------------------------
  Rand.java: By Bob Jenkins.  My random number generator, ISAAC.
  rand.init() -- initialize

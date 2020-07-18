@@ -80,7 +80,6 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
      *               exactly the same length as elements, since GWT can create larger
      *               versions of an array on its own, but our code can't easily.
      */
-    @SuppressWarnings("unchecked")
     public PermutationGenerator(Collection<T> elements, T[] filler)
     {
         this(elements.toArray(filler));

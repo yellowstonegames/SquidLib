@@ -166,7 +166,7 @@ public final class PintRNG implements RandomnessSource, StatefulRandomness, Seri
      * @param bytes a byte array that will have its contents overwritten with random bytes.
      */
     public void nextBytes( final byte[] bytes ) {
-        int i = bytes.length, n = 0;
+        int i = bytes.length, n;
         while( i != 0 ) {
             n = Math.min( i, 4 );
             for ( int bits = nextInt(); n-- != 0; bits >>>= 8 ) bytes[ --i ] = (byte)bits;

@@ -4879,7 +4879,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if (basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0) {
             result = next;
         } else {
-            int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX, oX = basis.length, oY = basis[0].length, ao;
+            int tmp, xTotal = 0, yTotal, xTarget, yTarget, bestX, oX = basis.length, oY = basis[0].length, ao;
             long t;
             int[] xCounts = new int[width];
             for (int x = 0; x < width; x++) {
@@ -7283,7 +7283,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public class GRIterator implements Iterator<Coord>
     {
-        public int index = 0;
+        public int index;
         private long t, w;
         public GRIterator()
         {

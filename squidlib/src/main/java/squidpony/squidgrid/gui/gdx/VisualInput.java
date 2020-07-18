@@ -36,10 +36,10 @@ public class VisualInput extends SquidInput {
     protected SquidMouse mouseLeft, mouseRight;
     private int sectionWidth, sectionHeight;
     private float screenWidth = -1, screenHeight = -1;
-    protected boolean initialized = false;
+    protected boolean initialized;
     public Color color = Color.WHITE;
     protected CharArray clicks;
-    public boolean eightWay = true, forceButtons = false;
+    public boolean eightWay = true, forceButtons;
     public Stage stage;
     protected ShrinkPartViewport spv;
     private void ready(TextCellFactory font)
