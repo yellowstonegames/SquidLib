@@ -39,12 +39,12 @@ public class LightingTest extends ApplicationAdapter{
     private Stage stage;
     private FilterBatch batch;
     private ArrayList<Color> colors, mColors;
-    private int colorIndex = 0;
+    private int colorIndex;
     private Coord[] points;
     private int[] offsets;
     private AnimatedEntity[] markers;
     private double[][] resMap;
-    private float ctr = 0;
+    private float ctr;
     private LightingHandler lighting;
 //    private final double[][] tempLit = new double[gridWidth][gridHeight];
 //    private final float[][][] colorful = SColor.blankColoredLighting(gridWidth, gridHeight),

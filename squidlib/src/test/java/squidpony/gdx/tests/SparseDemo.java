@@ -509,7 +509,6 @@ public class SparseDemo extends ApplicationAdapter {
                         // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
                         // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
                         // moves, we only need to do a fraction of the work to find the best path with that info.
-                        toCursor.clear();
                         playerToCursor.findPathPreScanned(toCursor, cursor);
                         //findPathPreScanned includes the current cell (goal) by default, which is helpful when
                         // you're finding a path to a monster or loot, and want to bump into it, but here can be

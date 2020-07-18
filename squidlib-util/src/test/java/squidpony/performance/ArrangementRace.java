@@ -1,5 +1,6 @@
 package squidpony.performance;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.OrderedSet;
@@ -10,6 +11,7 @@ import squidpony.squidmath.OrderedSet;
  */
 public class ArrangementRace {
     @Test
+    @Ignore
     public void checkArrangement()
     {
         final int count = 1000;
@@ -37,6 +39,7 @@ public class ArrangementRace {
 
     }
     @Test
+    @Ignore
     public void checkSet()
     {
         final int count = 1000;

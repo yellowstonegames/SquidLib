@@ -20,7 +20,7 @@ public class CriticalRNG extends RNG {
     /**
      * Positive for higher results, negative for lower results; usually this is small, between -0.5f and 0.5f .
      */
-    public float luck = 0f;
+    public float luck;
 
     /**
      * Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded DiverRNG for its RandomnessSource.

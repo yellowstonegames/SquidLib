@@ -64,24 +64,24 @@ import squidpony.squidmath.StatefulRNG;
  * Created by Tommy Ettinger on 7/11/2015.
  */
 public class DefaultResources implements LifecycleListener {
-    private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
-            smooth1 = null, smooth2 = null, smoothSquare = null,
-            square1 = null, square2 = null,
-            unicode1 = null, unicode2 = null,
-            arial15 = null, tiny = null, lessTiny = null,
-            sevenTwelve = null, computerSaysNo = null;
+    private BitmapFont narrow1, narrow2, narrow3,
+            smooth1, smooth2, smoothSquare,
+            square1, square2,
+            unicode1, unicode2,
+            arial15, tiny, lessTiny,
+            sevenTwelve, computerSaysNo;
 
-    private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
-            distancePrint = null, distanceClean = null, distanceCode = null, distanceCodeJP = null,
-            distanceDejaVu = null, distanceOrbit = null, distanceHeavySquare = null,
-            distanceSlab = null, distanceSlabLight = null,
-            distanceLean = null, distanceLeanLight = null,
-            msdfSlab = null, msdfLean = null, msdfDejaVu = null,
-            msdfCurvySquare = null, msdfCarved = null, msdfRoboto = null,
-            msdfIcons = null;
-    private TextFamily familyLean = null, familySlab = null, familyGo = null,
-            familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
-    private TextureAtlas iconAtlas = null;
+    private TextCellFactory distanceNarrow, distanceSquare, typewriterDistanceNarrow,
+            distancePrint, distanceClean, distanceCode, distanceCodeJP,
+            distanceDejaVu, distanceOrbit, distanceHeavySquare,
+            distanceSlab, distanceSlabLight,
+            distanceLean, distanceLeanLight,
+            msdfSlab, msdfLean, msdfDejaVu,
+            msdfCurvySquare, msdfCarved, msdfRoboto, msdfOctagonalSquare,
+            msdfIcons;
+    private TextFamily familyLean, familySlab, familyGo,
+            familyLeanMSDF, familySlabMSDF, familyPrintMSDF;
+    private TextureAtlas iconAtlas;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
             unicodeName = "Mandrill-6x16.fnt", unicodeTexture = "Mandrill-6x16.png",
@@ -136,8 +136,10 @@ public class DefaultResources implements LifecycleListener {
             crispCarvedTexture = "bloccus-msdf.png",
             crispCurvySquare = "square-msdf.fnt",
             crispCurvySquareTexture = "square-msdf.png", 
-        crispRobotoSans = "Roboto-Regular-msdf.fnt", 
-        crispRobotoSansTexture = "Roboto-Regular-msdf.png",
+            crispRobotoSans = "Roboto-Regular-msdf.fnt", 
+            crispRobotoSansTexture = "Roboto-Regular-msdf.png",
+            crispOctagonalSquare = "a-starry-msdf.fnt",
+            crispOctagonalSquareTexture = "a-starry-msdf.png",
             crispIcons = "awesome-solid-msdf.fnt",
             crispIconsTexture = "awesome-solid-msdf.png"
                     ;
@@ -321,12 +323,12 @@ public class DefaultResources implements LifecycleListener {
             + "  gl_FragColor = vec4(v_color.rgb * nice, clamp(d * u_smoothing + (block + 1.0) * 0.5, 0.0, 1.0) * v_color.a);\n"
             + "}\n";
 
-    private SquidColorCenter scc = null;
-    private Texture tentacle = null;
-    private TextureRegion tentacleRegion = null;
+    private SquidColorCenter scc;
+    private Texture tentacle;
+    private TextureRegion tentacleRegion;
     private StatefulRNG guiRandom;
 
-    private static DefaultResources instance = null;
+    private static DefaultResources instance;
 
     static BitmapFont copyFont(BitmapFont font)
     {
@@ -939,6 +941,46 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
 
+    /**
+     * Returns a TextCellFactory already configured to use a square font with 45-degree angled sections, based on the
+     * typeface used on the Atari ST console, that should scale cleanly to many sizes. Unlike
+     * {@link #getStretchableSquareFont()}, the font this uses was made to be square initially, and is not a
+     * distorted/stretched version of an existing font. This font only supports ASCII, but it supports all of it, unlike
+     * {@link #getCrispCurvySquareFont()}. Caches the result for later calls. The font is "a-starry", based on "Atari ST
+     * (low-res)" by Damien Guard; it is available under a CC-BY-SA-3.0 license, which requires attribution to Damien
+     * Guard (and technically Tommy Ettinger, because he made changes in a-starry) if you use it.
+     * <br>
+     * Note: Uses a smoothing multiplier of 3f, instead of the default 1.2f. 
+     * <br>
+     * <a href="https://i.imgur.com/nvHl64v.png">Preview at large size</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/a-starry-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font a-starry.ttf
+     */
+    public static TextCellFactory getCrispOctagonalSquareFont()
+    {
+        initialize();
+        if(instance.msdfOctagonalSquare == null)
+        {
+            try {
+                instance.msdfOctagonalSquare = new TextCellFactory()
+                        .fontMultiDistanceField(crispOctagonalSquare, crispOctagonalSquareTexture).setSmoothingMultiplier(3f);
+            } catch (Exception e) {
+            }
+        }
+        if(instance.msdfOctagonalSquare != null)
+            return instance.msdfOctagonalSquare.copy();
+        return null;
+    }
+
 
     /**
      * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
@@ -1448,6 +1490,7 @@ public class DefaultResources implements LifecycleListener {
      * Not supported; use {@link #getCrispSlabFamily()} instead, using {@link GDXMarkup} to add italics with its
      * {@code [/]} tag.
      * @return always throws an UnsupportedOperationException
+     * @deprecated use {@link #getCrispSlabFamily()} instead
      */
     @Deprecated
     public static TextCellFactory getCrispSlabItalicFont()
@@ -1498,6 +1541,7 @@ public class DefaultResources implements LifecycleListener {
      * Not supported; use {@link #getCrispLeanFamily()} instead, using {@link GDXMarkup} to add italics with its
      * {@code [/]} tag.
      * @return always throws an UnsupportedOperationException
+     * @deprecated use {@link #getCrispLeanFamily()} instead
      */
     @Deprecated
     public static TextCellFactory getCrispLeanItalicFont()

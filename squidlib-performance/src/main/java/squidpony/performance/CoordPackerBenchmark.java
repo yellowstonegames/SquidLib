@@ -201,7 +201,7 @@ public class CoordPackerBenchmark {
         public Coord[][] unpacked;
         public GreasedRegion tmp;
         public char[][] map;
-        public int counter = 0;
+        public int counter;
         @Setup(Level.Trial)
         public void setup() {
             CoordPacker.init();

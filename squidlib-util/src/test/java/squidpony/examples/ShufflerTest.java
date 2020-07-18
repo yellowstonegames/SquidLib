@@ -7,7 +7,7 @@ import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
-import static squidpony.examples.LanguageGenTest.PRINTING;
+import static squidpony.examples.TestConfiguration.PRINTING;
 
 /**
  * Created by Tommy Ettinger on 5/21/2016.
@@ -81,6 +81,7 @@ public class ShufflerTest {
     @Test
     public void testLSSBounds()
     {
+        if(!TestConfiguration.PRINTING) return;
         for (int i = 3; i <= 80; i += 7) {
             LowStorageShuffler lss = new LowStorageShuffler(i, 31337);
             System.out.printf("Bound %02d: %d", i, lss.next());
@@ -93,6 +94,7 @@ public class ShufflerTest {
     @Test
     public void testLSSReseed()
     {
+        if(!TestConfiguration.PRINTING) return;
         LowStorageShuffler lss = new LowStorageShuffler(7, 0);
         for (int i = 0; i < 30; i++) {
             lss.restart(i);
@@ -106,6 +108,7 @@ public class ShufflerTest {
     @Test
     public void testLSSReverse()
     {
+        if(!TestConfiguration.PRINTING) return;
         LowStorageShuffler lss = new LowStorageShuffler(7, 0);
         for (int i = 0; i < 10; i++) {
             lss.restart(i);
@@ -125,6 +128,7 @@ public class ShufflerTest {
     @Test
     public void testSIS()
     {
+        if(!TestConfiguration.PRINTING) return;
         ShuffledIntSequence sis = new ShuffledIntSequence(10, 31337);
         for (int j = 0; j < 10; j++) {
             System.out.print(sis.next());

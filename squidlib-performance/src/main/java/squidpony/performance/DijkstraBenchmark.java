@@ -43,8 +43,6 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidai.astar.DefaultGraph;
-import squidpony.squidai.astar.Pathfinder;
 import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -151,6 +149,44 @@ import static squidpony.squidgrid.Measurement.CHEBYSHEV;
  * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3     53.976 ±    1.257  ms/op
  * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    3     37.959 ±    0.801  ms/op
  * </pre>
+ * <br> 
+ * And some tests back on Windows with the 64x64 map, testing simple-graphs by earlygrey...
+ * <pre>
+ * Benchmark                                   Mode  Cnt     Score     Error  Units
+ * DijkstraBenchmark.doPathAStarSearch         avgt    3   201.018 ±  98.294  ms/op <-- comparison point, best internal
+ * DijkstraBenchmark.doPathCustomDijkstra      avgt    3   550.774 ±  83.914  ms/op
+ * DijkstraBenchmark.doPathDijkstra            avgt    3   314.758 ±  39.804  ms/op
+ * DijkstraBenchmark.doPathGDXAStar            avgt    3   259.834 ±  31.066  ms/op
+ * DijkstraBenchmark.doPathIndexedAStar        avgt    3   218.580 ±  19.475  ms/op
+ * DijkstraBenchmark.doPathSimple              avgt    3   775.550 ± 129.804  ms/op <-- comparison point, external
+ * DijkstraBenchmark.doScanCustomDijkstra      avgt    3  1066.569 ± 268.600  ms/op
+ * DijkstraBenchmark.doScanDijkstra            avgt    3   560.739 ±   8.138  ms/op
+ * DijkstraBenchmark.doTinyPathAStarSearch     avgt    3     6.061 ±   0.193  ms/op
+ * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    3    25.803 ±   8.823  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstra        avgt    3    16.131 ±   2.245  ms/op
+ * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3     7.743 ±   0.471  ms/op
+ * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    3     5.389 ±   0.362  ms/op <-- comparison point, best internal
+ * DijkstraBenchmark.doTinyPathSimple          avgt    3    32.315 ±   0.503  ms/op <-- comparison point, external
+ * </pre>
+ * And the results I get using my fork of simple-graphs, with a few optimizations...
+ * <pre>
+ * Benchmark                                   Mode  Cnt     Score    Error  Units
+ * DijkstraBenchmark.doPathAStarSearch         avgt    5   228.174 ±  3.207  ms/op
+ * DijkstraBenchmark.doPathCustomDijkstra      avgt    5   542.062 ± 18.640  ms/op
+ * DijkstraBenchmark.doPathDijkstra            avgt    5   313.257 ±  3.390  ms/op
+ * DijkstraBenchmark.doPathGDXAStar            avgt    5   290.614 ±  4.313  ms/op
+ * DijkstraBenchmark.doPathIndexedAStar        avgt    5   222.829 ±  6.354  ms/op <-- comparison point, best internal
+ * DijkstraBenchmark.doPathSimple              avgt    5   393.835 ±  6.341  ms/op <-- comparison point, external
+ * DijkstraBenchmark.doScanCustomDijkstra      avgt    5  1101.455 ± 43.271  ms/op
+ * DijkstraBenchmark.doScanDijkstra            avgt    5   546.962 ±  5.344  ms/op
+ * DijkstraBenchmark.doTinyPathAStarSearch     avgt    5     5.863 ±  0.151  ms/op <-- comparison point, best internal
+ * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    5    24.927 ±  0.496  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstra        avgt    5    17.401 ±  1.018  ms/op
+ * DijkstraBenchmark.doTinyPathGDXAStar        avgt    5     7.770 ±  0.268  ms/op
+ * DijkstraBenchmark.doTinyPathIndexedAStar    avgt    5     6.051 ±  0.062  ms/op
+ * DijkstraBenchmark.doTinyPathSimple          avgt    5    17.383 ±  0.439  ms/op <-- comparison point, external
+ * </pre>
+ * There's still a ways to go, but simple-graphs is getting much faster.
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -176,12 +212,11 @@ public class DijkstraBenchmark {
         public CustomDijkstraMap customDijkstra;
         public StatefulRNG srng;
         public GridGraph gg;
-        public DefaultGraph dg;
         public IndexedAStarPathFinder<Coord> astar;
-        public Pathfinder<Coord> iasSquid;
         public AStarSearch as;
         public GraphPath<Coord> dgp;
         public ArrayList<Coord> path;
+
         @Setup(Level.Trial)
         public void setup() {
             Coord.expandPoolTo(DIMENSION, DIMENSION);
@@ -217,11 +252,8 @@ public class DijkstraBenchmark {
             gg = new GridGraph(floors, map);
             astar = new IndexedAStarPathFinder<>(gg, false);
             dgp = new DefaultGraphPath<>(DIMENSION << 2);
-            dg = new DefaultGraph(map, true);
-            iasSquid = new Pathfinder<>(dg, false);
-            path = new ArrayList<>(DIMENSION << 2);
+            path = new ArrayList<>(DIMENSION << 2); 
         }
-
     }
 
     @Benchmark
@@ -620,47 +652,7 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-
-    @Benchmark
-    public long doPathIndexedAStar(BenchmarkState state)
-    {
-        Coord r;
-        long scanned = 0;
-        for (int x = 1; x < state.DIMENSION - 1; x++) {
-            for (int y = 1; y < state.DIMENSION - 1; y++) {
-                if (state.map[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                state.srng.setState((x << 22) | (y << 16) | (x * y));
-                r = state.srng.getRandomElement(state.floorArray);
-                state.path.clear();
-                if(state.iasSquid.searchNodePath(r, Coord.get(x, y), DefaultGraph.CHEBYSHEV, state.path))
-                    scanned += state.path.size();
-            }
-        }
-        return scanned;
-    }
-
-    @Benchmark
-    public long doTinyPathIndexedAStar(BenchmarkState state)
-    {
-        Coord r;
-        long scanned = 0;
-        for (int x = 1; x < state.DIMENSION - 1; x++) {
-            for (int y = 1; y < state.DIMENSION - 1; y++) {
-                if (state.map[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                //state.srng.setState((x << 22) | (y << 16) | (x * y));
-                r = state.nearbyMap[x][y];
-                state.path.clear();
-                if(state.iasSquid.searchNodePath(r, Coord.get(x, y), DefaultGraph.CHEBYSHEV, state.path))
-                    scanned += state.path.size();
-            }
-        }
-        return scanned;
-    }
-
+    
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *

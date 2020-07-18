@@ -161,7 +161,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
      * @param f        the load factor.
      */
 
-    @SuppressWarnings("unchecked")
     public IntDoubleOrderedMap(final int expected, final float f) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
@@ -421,7 +420,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
             fixOrder(pos, last);
         }
     }
-    @SuppressWarnings("unchecked")
     public double remove(final int k) {
         if (k == 0) {
             if (containsNullKey)
@@ -709,7 +707,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
             value[index] = v;
             return oldValue;
         }
-        @SuppressWarnings("unchecked")
         public boolean equals(final Object o) {
             if (!(o instanceof MapEntry))
                 return false;
@@ -803,7 +800,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
          * {@link ListIterator#next()} (or <code>null</code> if no
          * next entry exists).
          */
-        int next = -1;
+        int next;
         /**
          * The last entry that was returned (or -1 if we did not iterate or used
          * {@link Iterator#remove()}).
@@ -814,7 +811,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
          * Note that this value is not meaningful when this iterator has been
          * created using the nonempty constructor.
          */
-        int index = 0;
+        int index;
         private MapIterator() {
             next = size == 0 ? -1 : order.items[0];
             index = 0;
@@ -1048,7 +1045,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
                 throw new NoSuchElementException();
             return new MapEntry(order.items[order.size-1]);
         }
-        @SuppressWarnings("unchecked")
         public boolean contains(final Object o) {
             if (!(o instanceof MapEntry))
                 return false;
@@ -1073,7 +1069,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
                     return value[pos] == v;
             }
         }
-        @SuppressWarnings("unchecked")
         public boolean remove(final Object o) {
             if (!(o instanceof MapEntry))
                 return false;
@@ -1398,7 +1393,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
             final Iterator<?> i = c.iterator();
             while (n-- != 0)
                 if (remove(i.next())) retVal = true;
-            return retVal;
+            return false;
         }
 
         public Object[] toArray() {
@@ -1419,7 +1414,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
             int n = c.size();
             while (n-- != 0)
                 if (add(i.next())) retVal = true;
-            return retVal;
+            return false;
         }
 
         @Override
@@ -1663,7 +1658,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
      *            the new size
      */
 
-    @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
         final int[] key = this.key;
         final double[] value = this.value;
@@ -1703,7 +1697,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
      *
      * @return a deep copy of this map.
      */
-    @SuppressWarnings("unchecked")
     @GwtIncompatible
     public IntDoubleOrderedMap clone() {
         IntDoubleOrderedMap c;
@@ -1727,7 +1720,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
      */
     public int hashCode() {
         int h = 0;
-        for (int j = realSize(), i = 0, t = 0; j-- != 0;) {
+        for (int j = realSize(), i = 0, t; j-- != 0;) {
             while (key[i] == 0)
                 i++;             
             t = HashCommon.mix(key[i]) ^ HashCommon.mix(
@@ -1880,7 +1873,6 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
         }
     }
     @GwtIncompatible
-    @SuppressWarnings("unchecked")
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();

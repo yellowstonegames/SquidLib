@@ -3,7 +3,6 @@ package squidpony.squidai;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.Collection;
  */
 public class PointAOE implements AOE, Serializable {
     private static final long serialVersionUID = 2L;
-    private Coord center, origin = null;
+    private Coord center, origin;
     private int mapWidth, mapHeight;
     private Reach reach = new Reach(1, 1, Radius.SQUARE, AimLimit.FREE);
 
@@ -75,7 +74,7 @@ public class PointAOE implements AOE, Serializable {
             return bestPoints;
 
 
-        double dist = 0.0;
+        double dist;
         for(Coord p : targets) {
             if (AreaUtils.verifyReach(reach, origin, p)) {
 
@@ -95,7 +94,6 @@ public class PointAOE implements AOE, Serializable {
     public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> priorityTargets, Collection<Coord> lesserTargets, Collection<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();
 
         int totalTargets = priorityTargets.size() + lesserTargets.size();
         OrderedMap<Coord, ArrayList<Coord>> bestPoints = new OrderedMap<>(totalTargets * 4);
@@ -103,7 +101,7 @@ public class PointAOE implements AOE, Serializable {
         if(totalTargets == 0)
             return bestPoints;
 
-        double dist = 0.0;
+        double dist;
 
         for(Coord p : priorityTargets) {
             if (AreaUtils.verifyReach(reach, origin, p)) {

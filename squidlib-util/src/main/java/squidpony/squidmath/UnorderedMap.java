@@ -111,7 +111,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
     /**
      * Default return value.
      */
-    protected V defRetValue = null;
+    protected V defRetValue;
 
     /**
      * The initial default size of a hash table.
@@ -486,7 +486,6 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
             value[last] = value[pos];
         }
     }
-    @SuppressWarnings("unchecked")
     public V remove(final Object k) {
         if (k == null) {
             if (containsNullKey)
@@ -742,7 +741,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
          *
          * @param pos a starting position.
          */
-        private final void shiftKeys(int pos) {
+        private void shiftKeys(int pos) {
             // Shift entries with the same hash.
             int last, slot;
             K curr;

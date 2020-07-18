@@ -40,13 +40,13 @@ public class FakeLanguageGen implements Serializable {
             vowelSplitters, closingSyllables;
     public final boolean clean;
     public final double[] syllableFrequencies;
-    protected double totalSyllableFrequency = 0.0;
+    protected double totalSyllableFrequency;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final GWTRNG srng = new GWTRNG();
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64, Hashers.caseInsensitiveStringHasher);
-    protected String summary = null;
+    protected String summary;
     protected String name = "Nameless Language";
     private static final transient StringBuilder sb = new StringBuilder(20);
     private static final transient StringBuilder ender = new StringBuilder(12);
@@ -2970,7 +2970,7 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen CHEROKEE_ROMANIZED = cherokee().register("Cherokee Romanized");
 
-    private static final FakeLanguageGen vietnamese() {
+    private static FakeLanguageGen vietnamese() {
         return new FakeLanguageGen(new String[]{
                 "a", "à", "á", "â", "ä", "ā", "ă",
                 "e", "è", "é", "ê", "ë", "ē", "ĕ",
@@ -3422,7 +3422,6 @@ public class FakeLanguageGen implements Serializable {
                     case 2:
                         if (rng.nextDouble() < 0.65) {
                             c = t.charAt(1);
-                            num = 0;
                             switch (c) {
                                 case 'z':
                                     num = 1;
@@ -3520,7 +3519,7 @@ public class FakeLanguageGen implements Serializable {
         parts2.reorder(reordering);
         parts3.reorder(reordering);
         parts0.reorder(vOrd);
-        int n = 0;
+        int n;
 
         int mn = Math.min(rng.nextInt(3), rng.nextInt(3)), sz0, p0s;
 
@@ -4381,7 +4380,7 @@ public class FakeLanguageGen implements Serializable {
     protected String[] accentVowels(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
-        int idx = 0;
+        int idx;
         Matcher matcher;
         if (me.length > 0) {
             String[] tmp = new String[me.length];
@@ -4409,7 +4408,7 @@ public class FakeLanguageGen implements Serializable {
     protected String[] accentConsonants(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
-        int idx = 0;
+        int idx;
         Matcher matcher;
         if (me.length > 0) {
             String[] tmp = new String[me.length];
@@ -4453,7 +4452,7 @@ public class FakeLanguageGen implements Serializable {
 
     protected String[] accentBoth(IRNG rng, String[] me, double vowelInfluence, double consonantInfluence) {
         String[] ret = new String[1000];
-        int idx = 0;
+        int idx;
         Matcher matcher;
         if (me.length > 0) {
             String[] tmp = new String[me.length];

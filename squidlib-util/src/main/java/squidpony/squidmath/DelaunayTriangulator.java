@@ -58,7 +58,7 @@ public class DelaunayTriangulator implements Serializable {
      * @param points The point set to be triangulated
      */
     public DelaunayTriangulator(Collection<CoordDouble> points) {
-        this.points = points.toArray(new CoordDouble[points.size()]);
+        this.points = points.toArray(new CoordDouble[0]);
         this.triangleSoup = new ArrayList<>(points.size());
     }
     /**
@@ -541,12 +541,8 @@ public class DelaunayTriangulator implements Serializable {
          *         triangle
          */
         public boolean hasVertex(CoordDouble vertex) {
-            if (a == vertex || b == vertex || c == vertex) {
-                return true;
-            }
-
-            return false;
-        }
+			return a == vertex || b == vertex || c == vertex;
+		}
 
         /**
          * Computes the closest point on the given edge to the specified point.

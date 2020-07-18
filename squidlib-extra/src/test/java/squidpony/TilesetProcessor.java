@@ -144,7 +144,7 @@ public class TilesetProcessor extends ApplicationAdapter {
      * @return a name suitable for a Java class
      */
     private static String fixFileName(String s) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         final int bound = s.length();
         boolean upperNext = false;
         for (int i = 0; i < bound; i++) {
@@ -152,11 +152,11 @@ public class TilesetProcessor extends ApplicationAdapter {
             if (c == '_')
                 upperNext = true;
             else {
-                result += (i == 0 || upperNext) ? Character.toUpperCase(c) : c;
+                result.append((i == 0 || upperNext) ? Character.toUpperCase(c) : c);
                 upperNext = false;
             }
         }
-        return result;
+        return result.toString();
     }
 
     private static StringBuilder appendln(StringBuilder buf, int indent, String s) {

@@ -22,7 +22,7 @@ public class Elias implements Serializable {
     private ArrayList<Coord> path;
     private double[][] lightMap;
     private int width, height;
-    private double threshold = 0.0;
+    private double threshold;
 
     public Elias() {
         path = new ArrayList<>();

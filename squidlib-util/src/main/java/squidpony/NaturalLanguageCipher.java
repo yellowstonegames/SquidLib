@@ -752,8 +752,7 @@ se$->z
             {
                 mods |=VERBER;
                 end-=3;
-                endO-=3;
-            }
+			}
             else if(end >= 4 && endO >= 4 && (sc[end-2] == 'e' || sc[end-2] == 'o') && sc[end-1] == 'r')
             {
                 mods |= VERBER;
@@ -857,7 +856,7 @@ se$->z
             dest.append(lookup(match.group(0)));
         }
     }
-    private class DecipherSubstition implements Substitution
+    private static class DecipherSubstition implements Substitution
     {
         private final Map<String, String> vocabulary;
         DecipherSubstition(final Map<String, String> vocabulary)
@@ -991,8 +990,7 @@ se$->z
 
     public void setCacheLevel(int cacheLevel) {
         if(cacheLevel >= 2) this.cacheLevel = 2;
-        else if(cacheLevel <= 0) this.cacheLevel = 0;
-        else this.cacheLevel = cacheLevel;
+        else this.cacheLevel = Math.max(cacheLevel, 0);
     }
 
     protected Matcher markupMatcher = Pattern.compile("\\[\\?\\](.*?)(?:\\[\\?\\]|$)").matcher();

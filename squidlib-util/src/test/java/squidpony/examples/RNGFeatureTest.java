@@ -7,7 +7,7 @@ import squidpony.StringKit;
 import squidpony.squidmath.*;
 
 import static org.junit.Assert.assertTrue;
-import static squidpony.examples.LanguageGenTest.PRINTING;
+import static squidpony.examples.TestConfiguration.PRINTING;
 
 /**
  * Created by Tommy Ettinger on 7/7/2017.

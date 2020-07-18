@@ -48,7 +48,7 @@ public class MetsaWorldMapDemo extends ApplicationAdapter {
     private Color[] polarcolors;
     private Color[] desertcolors;
     
-    private double highn = 0;
+    private double highn;
     private int[][] biomeMap;
     private double[][] map;
     private List<Coord> cities;

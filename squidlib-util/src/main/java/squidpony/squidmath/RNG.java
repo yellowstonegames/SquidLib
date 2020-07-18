@@ -111,7 +111,7 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
 public class RNG implements Serializable, IRNG {
 
 	protected RandomnessSource random;
-	protected Random ran = null;
+	protected Random ran;
 
     private static final long serialVersionUID = 2352426757973945105L;
 
@@ -1337,7 +1337,7 @@ public class RNG implements Serializable, IRNG {
                     /**
                      * The number of elements returned so far
                      */
-                    int returned = 0;
+                    int returned;
 
                     @Override
                     public boolean hasNext() {

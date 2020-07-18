@@ -142,36 +142,27 @@ public class HashCommon {
 
     /**
      * Return the least power of two greater than or equal to the specified value.
-     * <br>Note that this function will return 1 when the argument is 0.
-     *
-     * @param x an integer smaller than or equal to 2<sup>30</sup>.
+     * <br>
+     * Note that this function will return 1 when the argument is 0.
+     * <br>
+     * This is a cleaned-up Java version of <a href="https://jameshfisher.com/2018/03/30/round-up-power-2/">this C code</a>.
+     * @param x a non-negative int.
      * @return the least power of two greater than or equal to the specified value.
      */
-    public static int nextPowerOfTwo(int x) {
-        if (x == 0) return 1;
-        x--;
-        x |= x >> 1;
-        x |= x >> 2;
-        x |= x >> 4;
-        x |= x >> 8;
-        return (x | x >> 16) + 1;
+    public static int nextPowerOfTwo(final int x) {
+        return 1 << -Integer.numberOfLeadingZeros(x - 1);
     }
 
     /**
      * Return the least power of two greater than or equal to the specified value.
-     * <br>Note that this function will return 1 when the argument is 0.
-     *
-     * @param x a long smaller than or equal to 2<sup>62</sup>.
+     * <br>
+     * Note that this function will return 1 when the argument is 0.
+     * <br>
+     * This is a cleaned-up Java version of <a href="https://jameshfisher.com/2018/03/30/round-up-power-2/">this C code</a>.
+     * @param x a non-negative long.
      * @return the least power of two greater than or equal to the specified value.
      */
-    public static long nextPowerOfTwo(long x) {
-        if (x == 0) return 1;
-        x--;
-        x |= x >> 1;
-        x |= x >> 2;
-        x |= x >> 4;
-        x |= x >> 8;
-        x |= x >> 16;
-        return (x | x >> 32) + 1;
+    public static long nextPowerOfTwo(final long x) {
+        return 1L << -Long.numberOfLeadingZeros(x - 1);
     }
 }

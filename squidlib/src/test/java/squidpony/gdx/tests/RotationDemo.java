@@ -109,7 +109,7 @@ public class RotationDemo extends ApplicationAdapter {
     private OrderedMap<Integer, Creature> monsters;
     private CustomDijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
-    private int framesWithoutAnimation = 0;
+    private int framesWithoutAnimation;
     private IntVLA toCursor, awaitedMoves;
     private String lang;
     private TextCellFactory textFactory;

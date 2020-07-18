@@ -74,7 +74,7 @@ public class MarkovChar implements Serializable {
 //        working.add(new IntVLA(links));
 
         //matcher.setTarget(corpus);
-        int current = 0, pair = 0, pre = 0, post;
+        int current, pair = 0, pre = 0, post;
         for (int i = 0; i < clen; i++) {
             char c = corpus.charAt(i);
             if('\'' != c && !Category.L.contains(c))
@@ -208,13 +208,12 @@ public class MarkovChar implements Serializable {
      * @return a String generated from the analyzed corpus text's word placement, usually a small sentence
      */
     public String chain(long seed, int maxLength) {
-        int before = 0, pair = 0;
+        int before, pair = 0;
         boolean later;
         long state;
         StringBuilder sb = new StringBuilder(1000);
         int[] rf;
         while (sb.length() < maxLength) {
-            later = (pair != 0);
             rf = processed[pairs.get(pair)];
             // This is LightRNG's algorithm to generate a random long given sequential states
             state = ((state = ((state = ((seed += 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31);

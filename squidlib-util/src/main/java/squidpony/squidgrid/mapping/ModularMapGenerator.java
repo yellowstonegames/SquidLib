@@ -33,8 +33,8 @@ public class ModularMapGenerator implements IDungeonGenerator {
     public IStatefulRNG rng;
     protected long rebuildSeed;
 
-    protected char[][] map = null;
-    protected int[][] environment = null;
+    protected char[][] map;
+    protected int[][] environment;
     //public RegionMap<MapModule> layout, modules, inverseModules;
     public RegionMap<MapModule> layout;
     public OrderedMap<Integer, ArrayList<MapModule>> modules;
@@ -345,8 +345,6 @@ public class ModularMapGenerator implements IDungeonGenerator {
                 if (mm2.topDoors.isEmpty()) {
                     if (!mm2.rightDoors.isEmpty())
                         mm2 = mm2.rotate(1);
-                    else if (!mm2.topDoors.isEmpty())
-                        mm2 = mm2.flip(false, true);
                     else if (!mm2.leftDoors.isEmpty())
                         mm2 = mm2.rotate(3);
                     else continue;

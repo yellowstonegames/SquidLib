@@ -356,7 +356,7 @@ public class DungeonBoneGen {
 //        }
         if (ts.config.is_corner) {
             c_color = new int[ymax][xmax];
-            int i = 0, j = 0, ypos = -sidelen;
+            int i, j, ypos = -sidelen;
             int[] cc = ts.config.num_colors;
 
             for (j = 0; j < ymax; ++j) {
@@ -370,7 +370,7 @@ public class DungeonBoneGen {
             // to avoid really obvious repetition (which happens easily with extreme weights)
             for (j = 0; j < ymax - 3; ++j) {
                 for (i = 0; i < xmax - 3; ++i) {
-                    int p = (i - j + 1) & 3; // corner type
+                    int p; // corner type
 //                    if (i + 3 >= 1006) {
 //                        return null;
 //                    }

@@ -488,7 +488,6 @@ public class SquidLayers extends Group {
         SquidPanel p = backgroundPanel;
         switch (layer) {
             case 0:
-                break;
             case 1:
                 break;
             case 2:

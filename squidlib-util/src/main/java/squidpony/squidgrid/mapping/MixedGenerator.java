@@ -79,7 +79,7 @@ public class MixedGenerator implements IDungeonGenerator {
     protected float roomWidth, roomHeight;
     public IRNG rng;
     protected char[][] dungeon;
-    protected boolean generated = false;
+    protected boolean generated;
     protected int[][] environment;
     protected boolean[][] marked, walled, fixedRooms;
     protected IntVLA points;
@@ -804,7 +804,7 @@ public class MixedGenerator implements IDungeonGenerator {
                 wallOff(i, j);
             }
         }
-        return block;
+        return null;
     }
 
     /**
@@ -874,7 +874,7 @@ public class MixedGenerator implements IDungeonGenerator {
 
             }
         }
-        return block;
+        return null;
     }
 
     /**

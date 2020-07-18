@@ -1,6 +1,8 @@
 package squidpony.squidmath;
 
+import org.junit.Ignore;
 import org.junit.Test;
+import squidpony.examples.TestConfiguration;
 import squidpony.squidai.AimLimit;
 import squidpony.squidai.Reach;
 import squidpony.squidgrid.FOV;
@@ -43,14 +45,18 @@ public class CoordPackerTest {
 
     public void printBits16(int n) {
         for (int i = 0x8000; i > 0; i >>= 1)
-            System.out.print((n & i) > 0 ? 1 : 0);
+            TestConfiguration.print((n & i) > 0 ? 1 : 0);
     }
 
     public void printBits32(int n) {
         for (int i = 1 << 31; i != 0; i >>>= 1)
-            System.out.print((n & i) != 0 ? 1 : 0);
+            TestConfiguration.print((n & i) != 0 ? 1 : 0);
     }
-
+    public static void printPacked(short[] packed, int width, int height)
+    {
+        if(TestConfiguration.PRINTING)
+            CoordPacker.printPacked(packed, width, height);
+    }
     public long arrayMemoryUsage(int length, long bytesPerItem)
     {
         return (((bytesPerItem * length + 12 - 1) / 8) + 1) * 8L;
@@ -72,9 +78,9 @@ public class CoordPackerTest {
     public void testBraille()
     {
         String encoded = encodeBraille(dataCross2);
-        //System.out.println(encoded);
-        //System.out.println("short array length: " + dataCross2.length);
-        //System.out.println("encoded length: " + encoded.length());
+        //TestConfiguration.println(encoded);
+        //TestConfiguration.println("short array length: " + dataCross2.length);
+        //TestConfiguration.println("encoded length: " + encoded.length());
         short[] decoded = decodeBraille(encoded);
         assertArrayEquals(dataCross2, decoded);
 
@@ -91,10 +97,11 @@ public class CoordPackerTest {
         assertEquals(posToHilbert(255, 255), coordToHilbert(Coord.get(255, 255)));
         assertEquals(Coord.get(255, 255), hilbertToCoord(coordToHilbert(Coord.get(255, 255))));
     }
-    //@Test
+    @Test
+    @Ignore
     public void testHilbertCurve3D() {
         for(int i : new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,31,32,33,63,64,255,256,4092,4093,4094,4095})
-            System.out.println("index " + i + ", x:" + hilbert3X[i] +
+            TestConfiguration.println("index " + i + ", x:" + hilbert3X[i] +
                     ", y:" + hilbert3Y[i] +
                     ", z:" + hilbert3Z[i]);
     }
@@ -111,22 +118,24 @@ public class CoordPackerTest {
             z0 = z1;
         }
     }
-    //@Test
+    @Test
+    @Ignore
     public void testMooreCurve3DOld() {
         for (int s = 0; s < 12; s++) {
 
             for (int i0 : new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 31, 32, 33, 63, 64, 255, 256, 511, 512, 1023, 1024, 4092, 4093, 4094, 4095}) {
                 int i = i0 + s * 4096;
-                System.out.println("index " + i + ", sector " + (i >> 12) + ", x:" + getXMoore3D(i, 3) +
+                TestConfiguration.println("index " + i + ", sector " + (i >> 12) + ", x:" + getXMoore3D(i, 3) +
                         ", y:" + getYMoore3D(i, 3) +
                         ", z:" + getZMoore3D(i, 3));
             }
         }
     }
-    //@Test
+    @Test
+    @Ignore
     public void testMooreCurve() {
         for (int i = 0; i < 256; i++) {
-            System.out.println("index " + i + "x:" + mooreX[i] + ", y:" + mooreY[i] +
+            TestConfiguration.println("index " + i + "x:" + mooreX[i] + ", y:" + mooreY[i] +
             ", dist:" + mooreDistances[mooreX[i] + (mooreY[i] << 4)]);
         }
     }
@@ -172,21 +181,21 @@ public class CoordPackerTest {
         // =
         // 290, 15, 6, 8, 2, 4
         /*
-        System.out.println("Union: ");
+        TestConfiguration.println("Union: ");
         for (int i = 0; i < union.length; i++) {
-            System.out.print(union[i] + ", ");
+            TestConfiguration.print(union[i] + ", ");
         }
-        System.out.println();
+        TestConfiguration.println();
         */
         assertArrayEquals(new short[]{290, 15, 6, 8, 2, 4}, union);
 
         union = unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 10, 1});
         /*
-        System.out.println("Union: ");
+        TestConfiguration.println("Union: ");
         for (int i = 0; i < union.length; i++) {
-            System.out.print(union[i] + ", ");
+            TestConfiguration.print(union[i] + ", ");
         }
-        System.out.println();
+        TestConfiguration.println();
         */
         assertArrayEquals(new short[]{290, 15, 5, 9, 2, 4}, union);
 
@@ -196,21 +205,21 @@ public class CoordPackerTest {
         // =
         // 300, 2, 9, 1
         /*
-        System.out.println("Intersect: ");
+        TestConfiguration.println("Intersect: ");
         for (int i = 0; i < intersect.length; i++) {
-            System.out.print(intersect[i] + ", ");
+            TestConfiguration.print(intersect[i] + ", ");
         }
-        System.out.println();
+        TestConfiguration.println();
         */
         assertArrayEquals(new short[]{300, 2, 9, 1}, intersect);
 
         intersect = intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 11, 1});
         /*
-        System.out.println("Intersect: ");
+        TestConfiguration.println("Intersect: ");
         for (int i = 0; i < intersect.length; i++) {
-            System.out.print(intersect[i] + ", ");
+            TestConfiguration.print(intersect[i] + ", ");
         }
-        System.out.println();
+        TestConfiguration.println();
         */
         assertArrayEquals(new short[]{311, 1}, intersect);
 
@@ -257,13 +266,13 @@ public class CoordPackerTest {
                 Coord.get(26, 4));
         //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
-        flooded = spill(dataCross, packOne(27, 4), 30, srng);
+        //flooded = spill(dataCross, packOne(27, 4), 30, srng);
         //printPacked(flooded, 64, 64);
-        //System.out.println(count(flooded));
+        //TestConfiguration.println(count(flooded));
 /*
         flooded = spill(dataCross, packOne(27, 4), count(dataCross), srng);
         printPacked(flooded, 64, 64);
-        System.out.println(count(flooded));*/
+        TestConfiguration.println(count(flooded));*/
     }
     @Test
     public void testRetracting() {
@@ -329,13 +338,13 @@ public class CoordPackerTest {
     {
         Reach reach = new Reach(3, 8, Radius.DIAMOND);
         short[] groupReachable = reachable(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 22), reach);
-        //printPacked(groupReachable, 64, 64);
+        printPacked(groupReachable, 64, 64);
         reach = new Reach(3, 8, Radius.DIAMOND, AimLimit.ORTHOGONAL);
         groupReachable = reachable(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 22), reach);
-        //printPacked(groupReachable, 64, 64);
+        printPacked(groupReachable, 64, 64);
         reach = new Reach(3, 8, Radius.DIAMOND, AimLimit.EIGHT_WAY);
         groupReachable = reachable(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 22), reach);
-        //printPacked(groupReachable, 64, 64);
+        printPacked(groupReachable, 64, 64);
     }
     //@Test
     public void testFraction()
@@ -350,17 +359,17 @@ public class CoordPackerTest {
         short[] floors = pack(map, '.');
         Coord[] positions = fractionPacked(floors, 29);
         /*
-        System.out.println(positions.length);
-        System.out.println(count(floors));
-        System.out.println(positions.length * 1.0 / count(floors));
+        TestConfiguration.println(positions.length);
+        TestConfiguration.println(count(floors));
+        TestConfiguration.println(positions.length * 1.0 / count(floors));
         */
         printPacked(floors, 60, 60);
-        System.out.println();
+        TestConfiguration.println();
         for (int i = 0; i < positions.length; i++) {
             map[positions[i].x][positions[i].y] = '!';
         }
         dungeonGenerator.setDungeon(map);
-        System.out.println(dungeonGenerator);
+        TestConfiguration.println(dungeonGenerator);
 
 
     }
@@ -382,26 +391,26 @@ public class CoordPackerTest {
                 doors = intersectPacked(rooms, fringe(corridors, 1, 60, 60, false));
 
         printPacked(floors, 60, 60);
-        System.out.println();
+        TestConfiguration.println();
         printPacked(shrunk, 60, 60);
-        System.out.println();
+        TestConfiguration.println();
         printPacked(rooms, 60, 60);
-        System.out.println();
+        TestConfiguration.println();
         printPacked(corridors, 60, 60);
-        System.out.println();
+        TestConfiguration.println();
         printPacked(doors, 60, 60);
-        System.out.println();
+        TestConfiguration.println();
         ArrayList<short[]> separatedCorridors = split(corridors), separatedRooms = split(rooms);
         for (short[] sep : separatedRooms) {
             printPacked(sep, 60, 60);
-            System.out.println();
+            TestConfiguration.println();
         }
         /*
         for (short[] sep : separatedCorridors) {
             short[] someDoors = intersectPacked(rooms, fringe(sep, 1, 60, 60, false)),
                     connectedRooms = flood(rooms, someDoors, 512, false);
             printPacked(unionPacked(sep, connectedRooms), 60, 60);
-            System.out.println();
+            TestConfiguration.println();
         }
         */
 
@@ -442,19 +451,19 @@ public class CoordPackerTest {
         //assertEquals("Packed shorts", 18, packed.length);
         //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
         /*
-        System.out.println("Average Memory used by packed short[] (Appropriate):" +
+        TestConfiguration.println("Average Memory used by packed short[] (Appropriate):" +
                 ramPacked / 100.0 + " bytes");
-        System.out.println("Average Memory used by boolean[][] (Appropriate):" +
+        TestConfiguration.println("Average Memory used by boolean[][] (Appropriate):" +
                 ramBoolean / 100.0 + " bytes");
-        System.out.println("Average Memory used by original double[][] (Appropriate):" +
+        TestConfiguration.println("Average Memory used by original double[][] (Appropriate):" +
                 ramDouble / 100.0 + " bytes");
-        System.out.println("Average Compression, short[] vs. boolean[][] (Appropriate):" +
+        TestConfiguration.println("Average Compression, short[] vs. boolean[][] (Appropriate):" +
                 100.0 * ramPacked / ramBoolean + "%");
-        System.out.println("Average Compression, short[] vs. double[][] (Appropriate):" +
+        TestConfiguration.println("Average Compression, short[] vs. double[][] (Appropriate):" +
                 100.0 * ramPacked / ramDouble + "%");
-        System.out.println("FOV Map stored for every cell, booleans, 240x240: " +
+        TestConfiguration.println("FOV Map stored for every cell, booleans, 240x240: " +
                 arrayMemoryUsage2D(240, 240, arrayMemoryUsage2D(240, 240, 1)));
-        System.out.println("FOV Map stored for every cell, floats, 240x240: " +
+        TestConfiguration.println("FOV Map stored for every cell, floats, 240x240: " +
                 arrayMemoryUsage2D(240, 240, arrayMemoryUsage2D(240, 240, 4)));
                 */
     }
@@ -493,19 +502,19 @@ public class CoordPackerTest {
         //assertEquals("Packed shorts", 18, packed.length);
         //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
         /*
-        System.out.println("Average Memory used by packed short[] (Approaching Worst-Case):" +
+        TestConfiguration.println("Average Memory used by packed short[] (Approaching Worst-Case):" +
                 ramPacked / 100.0 + " bytes");
-        System.out.println("Average Memory used by boolean[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Average Memory used by boolean[][] (Approaching Worst-Case):" +
                 ramBoolean / 100.0 + " bytes");
-        System.out.println("Average Memory used by original double[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Average Memory used by original double[][] (Approaching Worst-Case):" +
                 ramDouble / 100.0 + " bytes");
-        System.out.println("Average Compression, short[] vs. boolean[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Average Compression, short[] vs. boolean[][] (Approaching Worst-Case):" +
                 100.0 * ramPacked / ramBoolean + "%");
-        System.out.println("Average Compression, short[] vs. double[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Average Compression, short[] vs. double[][] (Approaching Worst-Case):" +
                 100.0 * ramPacked / ramDouble + "%");
-        System.out.println("FOV Map stored for every cell, booleans, 30x70: " +
+        TestConfiguration.println("FOV Map stored for every cell, booleans, 30x70: " +
                 arrayMemoryUsage2D(30, 70, arrayMemoryUsage2D(30, 70, 1)));
-        System.out.println("FOV Map stored for every cell, floats, 30x70: " +
+        TestConfiguration.println("FOV Map stored for every cell, floats, 30x70: " +
                 arrayMemoryUsage2D(30, 70, arrayMemoryUsage2D(30, 70, 4)));
                 */
     }
@@ -525,7 +534,7 @@ public class CoordPackerTest {
 
         map[viewer.x][viewer.y] = '@';
         dungeonGenerator.setDungeon(map);
-        //System.out.println(dungeonGenerator.toString());
+        //TestConfiguration.println(dungeonGenerator.toString());
 
         double[][] resMap = DungeonUtility.generateResistances(map);
         double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
@@ -533,15 +542,15 @@ public class CoordPackerTest {
 
         assertEquals("Packed shorts", 28, packed.length);
         assertEquals("Unpacked doubles: ", 2100, seen.length * seen[0].length);
-        System.out.println("Memory used by packed short[] (Approaching Worst-Case):" +
+        TestConfiguration.println("Memory used by packed short[] (Approaching Worst-Case):" +
                 arrayMemoryUsage(packed.length, 2) + " bytes");
-        System.out.println("Memory used by boolean[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Memory used by boolean[][] (Approaching Worst-Case):" +
                 arrayMemoryUsage2D(30, 70, 1) + " bytes");
-        System.out.println("Memory used by original double[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Memory used by original double[][] (Approaching Worst-Case):" +
                 arrayMemoryUsage2D(30, 70, 8) + " bytes");
-        System.out.println("Compression, short[] vs. boolean[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Compression, short[] vs. boolean[][] (Approaching Worst-Case):" +
                 100.0 * arrayMemoryUsage(packed.length, 2) / arrayMemoryUsage2D(30, 70, 1) + "%");
-        System.out.println("Compression, short[] vs. double[][] (Approaching Worst-Case):" +
+        TestConfiguration.println("Compression, short[] vs. double[][] (Approaching Worst-Case):" +
                 100.0 * arrayMemoryUsage(packed.length, 2) / arrayMemoryUsage2D(30, 70, 8) + "%");
 
         boolean[][]unpacked = unpack(packed, seen.length, seen[0].length);
@@ -572,16 +581,16 @@ public class CoordPackerTest {
             Coord viewer;
             HashSet<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
             /*
-            System.out.println("Packing levels at range " + FOV_RANGE + ": ");
+            TestConfiguration.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {
-                System.out.print(d + "  ");
+                TestConfiguration.print(d + "  ");
             }
-            System.out.println();
-            System.out.println("Light levels at range " + FOV_RANGE + ": ");
+            TestConfiguration.println();
+            TestConfiguration.println("Light levels at range " + FOV_RANGE + ": ");
             for (Double d : lightLevels) {
-                System.out.print(d + "  ");
+                TestConfiguration.print(d + "  ");
             }
-            System.out.println();
+            TestConfiguration.println();
             */
             for (int t = 0; t < 100; t++) {
                 viewer = dungeonGenerator.utility.randomFloor(map);
@@ -611,12 +620,12 @@ public class CoordPackerTest {
                     for (int i = 0; i < seen.length; i++) {
                         /*
                         if(Math.abs(seen[i][j] - unpacked2[i][j]) >= 0.75 / FOV_RANGE) {
-                            System.out.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
-                            System.out.println(seen[i][j] - unpacked2[i][j]);
+                            TestConfiguration.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
+                            TestConfiguration.println(seen[i][j] - unpacked2[i][j]);
 
-                            System.out.println("Values present in seen at range " + FOV_RANGE + ": ");
+                            TestConfiguration.println("Values present in seen at range " + FOV_RANGE + ": ");
                             for (Double d : seenValues) {
-                                System.out.print(d + "  ");
+                                TestConfiguration.print(d + "  ");
                             }
                         }
                         */
@@ -628,30 +637,30 @@ public class CoordPackerTest {
                 ramFloat += arrayMemoryUsage2D(seen.length, seen[0].length, 4);
                 ramDouble += arrayMemoryUsage2D(seen.length, seen[0].length, 8);
             }
-            //System.out.println(dungeonGenerator.toString());
+            //TestConfiguration.println(dungeonGenerator.toString());
             /*
-            System.out.println("Appropriate Parameter packed values " + FOV_RANGE);
+            TestConfiguration.println("Appropriate Parameter packed values " + FOV_RANGE);
             for (int p = 0; p < packed.length; p++) {
                 if (packed[p].length == 0) continue;
-                System.out.print(packed[p][0]);
+                TestConfiguration.print(packed[p][0]);
                 for (int i = 1; i < packed[p].length; i++) {
-                    System.out.print(", " + (packed[p][i] & 0xffff));
+                    TestConfiguration.print(", " + (packed[p][i] & 0xffff));
                 }
-                System.out.println();
+                TestConfiguration.println();
             }*/
             //assertEquals("Packed shorts", 19, packed.length);
             //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
 
             /*
-            System.out.println("Memory used by multi-packed short[][] (Appropriate " + FOV_RANGE + "):" +
+            TestConfiguration.println("Memory used by multi-packed short[][] (Appropriate " + FOV_RANGE + "):" +
                     ramPacked / 100.0 + " bytes");
-            System.out.println("Memory used by double[][] (Appropriate " + FOV_RANGE + "):" +
+            TestConfiguration.println("Memory used by double[][] (Appropriate " + FOV_RANGE + "):" +
                     ramDouble / 100.0 + " bytes");
-            System.out.println("Memory used by float[][] (Appropriate " + FOV_RANGE + "):" +
+            TestConfiguration.println("Memory used by float[][] (Appropriate " + FOV_RANGE + "):" +
                     ramFloat / 100.0 + " bytes");
-            System.out.println("Compression vs. double[][] (Appropriate " + FOV_RANGE + "):" +
+            TestConfiguration.println("Compression vs. double[][] (Appropriate " + FOV_RANGE + "):" +
                     100.0 * ramPacked / ramDouble + "%");
-            System.out.println("Compression vs. float[][] (Appropriate " + FOV_RANGE + "):" +
+            TestConfiguration.println("Compression vs. float[][] (Appropriate " + FOV_RANGE + "):" +
                     100.0 * ramPacked / ramFloat + "%");
             */
         }
@@ -659,11 +668,11 @@ public class CoordPackerTest {
         byte[][] unpacked3 = unpackMultiByte(packed, seen.length, seen[0].length);
         for (int j = 0; j < seen[0].length; j++) {
             for (int i = 0; i < seen.length; i++) {
-                System.out.print(String.format("%x", unpacked3[i][j]));
+                TestConfiguration.print(String.format("%x", unpacked3[i][j]));
             }
-            System.out.println();
+            TestConfiguration.println();
         }
-        System.out.println();
+        TestConfiguration.println();
         */
 
 
@@ -671,16 +680,16 @@ public class CoordPackerTest {
         byte[][] unpacked3 = unpackMultiByte(packed, seen.length, seen[0].length);
         for (int j = 0; j < seen[0].length; j++) {
             for (int i = 0; i < seen.length; i++) {
-                System.out.print(unpacked3[i][j]);
+                TestConfiguration.print(unpacked3[i][j]);
             }
-            System.out.println();
+            TestConfiguration.println();
         }
-        System.out.println();
+        TestConfiguration.println();
         for (int j = 0; j < seen[0].length; j++) {
             for (int i = 0; i < seen.length; i++) {
-                System.out.print((int) (seen[i][j] * 8.05));
+                TestConfiguration.print((int) (seen[i][j] * 8.05));
             }
-            System.out.println();
+            TestConfiguration.println();
         }*/
     }
 
@@ -704,14 +713,14 @@ public class CoordPackerTest {
             Coord viewer;
             HashSet<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
             /*
-            System.out.println("Packing levels at range " + FOV_RANGE + ": ");
+            TestConfiguration.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {
-                System.out.print(d + "  ");
+                TestConfiguration.print(d + "  ");
             }
-            System.out.println();
-            System.out.println("Light levels at range " + FOV_RANGE + ": ");
+            TestConfiguration.println();
+            TestConfiguration.println("Light levels at range " + FOV_RANGE + ": ");
             for (Double d : lightLevels) {
-                System.out.print(d + "  ");
+                TestConfiguration.print(d + "  ");
             }
             */
             for (int t = 0; t < 100; t++) {
@@ -742,13 +751,13 @@ public class CoordPackerTest {
                         /*
                         if(Math.abs(seen[i][j] - unpacked2[i][j]) >= 0.75 / FOV_RANGE)
                         {
-                            System.out.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
-                            System.out.println(seen[i][j] - unpacked2[i][j]);
-                            System.out.println("Values present in seen at range " + FOV_RANGE + ": ");
+                            TestConfiguration.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
+                            TestConfiguration.println(seen[i][j] - unpacked2[i][j]);
+                            TestConfiguration.println("Values present in seen at range " + FOV_RANGE + ": ");
                             for (Double d : seenValues) {
-                                System.out.print(d + "  ");
+                                TestConfiguration.print(d + "  ");
                             }
-                            System.out.println();
+                            TestConfiguration.println();
                         }
                         */
                         assertTrue(Math.abs(seen[i][j] - unpacked2[i][j]) < 0.75 / FOV_RANGE);
@@ -758,29 +767,29 @@ public class CoordPackerTest {
                 ramFloat += arrayMemoryUsage2D(seen.length, seen[0].length, 4);
                 ramDouble += arrayMemoryUsage2D(seen.length, seen[0].length, 8);
             }
-            //System.out.println(dungeonGenerator.toString());
+            //TestConfiguration.println(dungeonGenerator.toString());
             /*
-            System.out.println("Appropriate Parameter packed values " + FOV_RANGE);
+            TestConfiguration.println("Appropriate Parameter packed values " + FOV_RANGE);
             for (int p = 0; p < packed.length; p++) {
                 if (packed[p].length == 0) continue;
-                System.out.print(packed[p][0]);
+                TestConfiguration.print(packed[p][0]);
                 for (int i = 1; i < packed[p].length; i++) {
-                    System.out.print(", " + (packed[p][i] & 0xffff));
+                    TestConfiguration.print(", " + (packed[p][i] & 0xffff));
                 }
-                System.out.println();
+                TestConfiguration.println();
             }*/
             //assertEquals("Packed shorts", 19, packed.length);
             //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
             /*
-            System.out.println("Memory used by multi-packed short[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+            TestConfiguration.println("Memory used by multi-packed short[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
                     ramPacked / 100.0 + " bytes");
-            System.out.println("Memory used by double[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+            TestConfiguration.println("Memory used by double[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
                     ramDouble / 100.0 + " bytes");
-            System.out.println("Memory used by float[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+            TestConfiguration.println("Memory used by float[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
                     ramFloat / 100.0 + " bytes");
-            System.out.println("Compression vs. double[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+            TestConfiguration.println("Compression vs. double[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
                     100.0 * ramPacked / ramDouble + "%");
-            System.out.println("Compression vs. float[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+            TestConfiguration.println("Compression vs. float[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
                     100.0 * ramPacked / ramFloat + "%");
             */
         }

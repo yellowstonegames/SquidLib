@@ -10,8 +10,9 @@ The software is provided "as is", without warranty of any kind, express or impli
 */
 package squidpony.squidgrid;
 
-import squidpony.ArrayTools;
 import squidpony.squidmath.*;
+
+import java.util.Arrays;
 
 /**
  * Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
@@ -315,7 +316,7 @@ public class DetailedMimic {
         }
 
         int[] origins = new int[OW * OH];
-        for (int i = 0; i < origins.length; i++) origins[i] = -1;
+        Arrays.fill(origins, -1);
 
         int[] shuffle = new int[OW * OH];
         for (int i = 0; i < shuffle.length; i++)

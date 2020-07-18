@@ -5,7 +5,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.StatefulRNG;
 
-import static squidpony.examples.LanguageGenTest.PRINTING;
+import static squidpony.examples.TestConfiguration.PRINTING;
 
 /**
  * Check for <a href="https://github.com/SquidPony/SquidLib/issues/202">SquidLib Issue 202</a>.

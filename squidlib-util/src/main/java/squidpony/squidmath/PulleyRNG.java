@@ -355,7 +355,7 @@ public final class PulleyRNG implements StatefulRandomness, SkippingRandomness, 
      * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
      */
     public static float determineFloat(long state) {
-        return ((state = ((state = (state ^ (state << 41 | state >>> 23) ^ (state << 17 | state >>> 47)) * 0x369DEA0F31A53F85L) ^ state >>> 37 ^ state >>> 25) * 0xDB4F0B9175AE2165L) >>> 40) * 0x1p-24f;
+        return (((state = (state ^ (state << 41 | state >>> 23) ^ (state << 17 | state >>> 47)) * 0x369DEA0F31A53F85L) ^ state >>> 37 ^ state >>> 25) * 0xDB4F0B9175AE2165L >>> 40) * 0x1p-24f;
     }
 
     /**

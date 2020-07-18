@@ -457,9 +457,7 @@ public class MimicFill {
         Pattern reflect() {
             boolean[][] next = new boolean[data.length][data.length];
             for (int x = 0; x < data.length; x++) {
-                for (int y = 0; y < data.length; y++) {
-                    next[data.length - 1 - x][y] = data[x][y];
-                }
+				System.arraycopy(data[x], 0, next[data.length - 1 - x], 0, data.length);
             }
             return new Pattern(next);
         }

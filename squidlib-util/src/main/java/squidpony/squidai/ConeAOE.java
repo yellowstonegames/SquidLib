@@ -216,12 +216,12 @@ public class ConeAOE implements AOE, Serializable {
         if(totalTargets == 0)
             return bestPoints;
 
-        Coord[] ts = targets.toArray(new Coord[targets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] ts = targets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
-        double tAngle; //, tStartAngle, tEndAngle;
+        double tAngle;
 
 
         char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length];
@@ -230,11 +230,8 @@ public class ConeAOE implements AOE, Serializable {
 
         for (int i = 0; i < exs.length; i++) {
             t = exs[i];
-//            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
-            tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
-//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
-//            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
+            tAngle = NumberTools.atan2Degrees360(t.y - origin.y, t.x - origin.x);
+            FOV.reuseRippleFOV(map, tmpfov, 2, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
@@ -243,17 +240,11 @@ public class ConeAOE implements AOE, Serializable {
             }
         }
         
-        Measurement dmm = Measurement.MANHATTAN;
-        if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
-        else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = Measurement.EUCLIDEAN;
-        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+        DijkstraMap dm = new DijkstraMap(dungeon, radiusType.matchingMeasurement());
         for (int i = 0; i < ts.length; ++i) {
             dm.initialize(dungeon);
             t = ts[i];
-//            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
-            tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
-//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
-//            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tAngle = NumberTools.atan2Degrees360(t.y - origin.y, t.x - origin.x);
 
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
@@ -344,9 +335,9 @@ public class ConeAOE implements AOE, Serializable {
         if(totalTargets == 0)
             return bestPoints;
 
-        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
-        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord[] pts = priorityTargets.toArray(new Coord[0]);
+        Coord[] lts = lesserTargets.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
         Coord t;
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
@@ -359,7 +350,7 @@ public class ConeAOE implements AOE, Serializable {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
@@ -375,8 +366,6 @@ public class ConeAOE implements AOE, Serializable {
                 }
             }
         }
-
-        t = pts[0];
 
         Measurement dmm = Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = Measurement.CHEBYSHEV;
@@ -419,8 +408,6 @@ public class ConeAOE implements AOE, Serializable {
                 }
             }
         }
-
-        t = lts[0];
 
         for (int i = pts.length; i < totalTargets; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);

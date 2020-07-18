@@ -32,7 +32,7 @@ public class ShapeTest extends ApplicationAdapter {
     private int[][] data;
     private float[][] colorChoices;
     private char[][] lines;
-    private long counter = 0L;
+    private long counter;
     private GapShuffler<Integer> shuffler;
     @Override
     public void create() {

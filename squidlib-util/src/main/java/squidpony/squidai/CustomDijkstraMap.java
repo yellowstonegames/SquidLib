@@ -55,7 +55,7 @@ public class CustomDijkstraMap implements Serializable {
      * always start with a reasonable default value for when the int key is not present. It's common to simply assign
      * a char like '#' or '.' to an element in costMap.
      */
-    public int[] costMap = null;
+    public int[] costMap;
 
     /**
      * The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to
@@ -100,13 +100,13 @@ public class CustomDijkstraMap implements Serializable {
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
     public IRNG rng;
-    private int frustration = 0;
+    private int frustration;
 
     private int[] reuse = new int[9];
 
-    private boolean initialized = false;
+    private boolean initialized;
 
-    private int mappedCount = 0;
+    private int mappedCount;
     private double[] heuristics;
 
     /**
@@ -2019,7 +2019,7 @@ public class CustomDijkstraMap implements Serializable {
 
 
     private double cachedLongerPaths = 1.2;
-    private long cachedImpassable = 0L, cachedFearSources = 0L;
+    private long cachedImpassable, cachedFearSources;
     private double[] cachedFleeMap;
     private int cachedSize = 1;
 

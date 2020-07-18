@@ -51,10 +51,10 @@ public class SquidAIDemo extends ApplicationAdapter {
     private Technique redCone, redCloud, blueBlast, blueBeam;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
-    private int framesWithoutAnimation = 0, moveLength = 5;
+    private int framesWithoutAnimation, moveLength = 5;
     private ArrayList<Coord> awaitedMoves;
-    private int redIdx = 0, blueIdx = 0;
-    private boolean blueTurn = false;
+    private int redIdx, blueIdx;
+    private boolean blueTurn;
 
     @Override
     public void create () {
@@ -348,8 +348,8 @@ public class SquidAIDemo extends ApplicationAdapter {
 
             for(Map.Entry<Coord, Double> power : effects.entrySet())
             {
-                Double strength = (idx % 2 == 0) ? rng.nextDouble() : power.getValue();
-                whichTint.a = strength.floatValue();
+                double strength = (idx % 2 == 0) ? rng.nextDouble() : power.getValue();
+                whichTint.a = (float) strength;
                 display.tint(power.getKey().x * 2    , power.getKey().y, whichTint, 0, display.getAnimationDuration());
                 display.tint(power.getKey().x * 2 + 1, power.getKey().y, whichTint, 0, display.getAnimationDuration());
                 AnimatedEntity tgt;

@@ -15,10 +15,9 @@ import java.util.List;
  */
 @Ignore
 public class LanguageGenTest {
-    public static boolean PRINTING = true;
     @Test
     public void testOutput() {
-        if(!PRINTING) return;
+        if(!TestConfiguration.PRINTING) return;
         StatefulRNG rng = new StatefulRNG(0xf00df00L);
 
         for (int langi = 0; langi < FakeLanguageGen.registered.length; langi++) {
@@ -121,7 +120,7 @@ public class LanguageGenTest {
     @Test
     public void testSentences()
     {
-        if(!PRINTING) return;
+        if(!TestConfiguration.PRINTING) return;
         StatefulRNG rng = new StatefulRNG(0xf00df00L);
         FakeLanguageGen flg;
         System.out.println("\n\nDEFAULT SENTENCES:\n\n");
@@ -244,7 +243,7 @@ public class LanguageGenTest {
     @Test
     public void testNaturalCipher()
     {
-        if(!PRINTING) return;
+        if(!TestConfiguration.PRINTING) return;
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
 
                 FakeLanguageGen.ENGLISH,
@@ -440,7 +439,7 @@ public class LanguageGenTest {
     @Test
     public void testNameGen()
     {
-        if(!PRINTING) return;
+        if(!TestConfiguration.PRINTING) return;
         StatefulRNG rng = new StatefulRNG(2252637788195L);
         ArrayList<String> men = new WeightedLetterNamegen(WeightedLetterNamegen.COMMON_USA_MALE_NAMES, 2, rng).generateList(50),
                 women = new WeightedLetterNamegen(WeightedLetterNamegen.COMMON_USA_FEMALE_NAMES, 2, rng).generateList(50),
@@ -452,7 +451,7 @@ public class LanguageGenTest {
     }
     @Test
     public void testMarkovText() {
-        if (!PRINTING) return;
+        if (!TestConfiguration.PRINTING) return;
         long seed = 10040L;
         String oz = "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a " +
                 "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the " +
@@ -487,7 +486,7 @@ public class LanguageGenTest {
     }
     @Test
     public void testMarkovObject() {
-        if (!PRINTING) return;
+        if (!TestConfiguration.PRINTING) return;
         long seed = 10040L;
         MarkovObject<String> markovObject = new MarkovObject<>();
         String[] ozzes = {"Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a " +
@@ -520,7 +519,7 @@ public class LanguageGenTest {
 
     @Test
     public void testMarkovChar() {
-        if (!PRINTING) return;
+        if (!TestConfiguration.PRINTING) return;
         long seed = 10040L;
         MarkovChar markovChar = new MarkovChar();
         String[] ozzes = {"Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a " +
@@ -573,6 +572,7 @@ public class LanguageGenTest {
     @Test
     public void testRandomLanguage()
     {
+        if(!TestConfiguration.PRINTING) return;
         FakeLanguageGen lang1 = FakeLanguageGen.randomLanguage(0xABCDEF1234567890L).mix(0.375, FakeLanguageGen.ELF, 0.25);
         FakeLanguageGen lang2 = FakeLanguageGen.randomLanguage(0xABCDEF1234567890L).mix(0.375, FakeLanguageGen.ELF, 0.25);
         System.out.println(lang1.equals(lang2));
