@@ -32,7 +32,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private boolean inverse = false;
     private ImmediateModeRenderer20 renderer;
     
-    private int hashIndex = 4;
+    private int hashIndex = 3;
     private PointHash ph = new PointHash();
     private HastyPointHash hph = new HastyPointHash();
     private IntPointHash iph = new IntPointHash();
@@ -40,7 +40,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private FlawedPointHash.QuiltHash quilt = new FlawedPointHash.QuiltHash(1, 16);
     private FlawedPointHash.CubeHash cube = new FlawedPointHash.CubeHash(1, 32);
     private FlawedPointHash.FNVHash fnv = new FlawedPointHash.FNVHash(1);
-    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, rug, quilt, cube};
+    private GoldPointHash gold = new GoldPointHash();
+    private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, gold, rug, quilt, cube};
 
     private static final int width = 128, height = 128;
 
@@ -62,7 +63,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     public void create() {
         renderer = new ImmediateModeRenderer20(width * height, false, true, 0);
         view = new ScreenViewport();
-        noise.setPointHash(quilt);
+        noise.setPointHash(pointHashes[hashIndex]);
         noise.setFractalType(FastNoise.RIDGED_MULTI);
         gif = new AnimatedGif();
         gif.palette = new PaletteReducer(new int[] {
