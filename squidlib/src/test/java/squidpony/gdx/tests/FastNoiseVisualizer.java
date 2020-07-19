@@ -43,7 +43,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
     private GoldPointHash gold = new GoldPointHash();
     private IPointHash[] pointHashes = new IPointHash[] {ph, hph, iph, gold, rug, quilt, cube};
 
-    private static final int width = 128, height = 128;
+    private static final int width = 512, height = 512;
 
     private InputAdapter input;
     
@@ -254,8 +254,8 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
         config.title = "SquidLib Test: Hash Visualization";
         config.width = width;
         config.height = height;
-        config.foregroundFPS = 20;
-        config.vSyncEnabled = true;
+        config.foregroundFPS = 0;
+        config.vSyncEnabled = false;
         config.resizable = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
