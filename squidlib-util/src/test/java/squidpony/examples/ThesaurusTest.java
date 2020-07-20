@@ -81,13 +81,15 @@ public class ThesaurusTest {
         for (int i = 0; i < 10; i++) {
             int a = GWTRNG.determineInt(i);
             for (int j = 0; j < m.length; j++) {
-                System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(i) + ": "+ m[j].toWordMnemonic(i, true));
+                String words = m[j].toWordMnemonic(i, true);
+                System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(i) + ": "+ words + ", decoding to " + StringKit.hex(m[j].fromWordMnemonic(words)));
             }
         }
         for (int i = 0; i < 10; i++) {
             int a = GWTRNG.determineInt(i);
             for (int j = 0; j < m.length; j++) {
-                System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(a) + ": "+ m[j].toWordMnemonic(a, true));
+                String words = m[j].toWordMnemonic(a, true);
+                System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(a) + ": "+ words + ", decoding to " + StringKit.hex(m[j].fromWordMnemonic(words)));
             }
         }
     }
