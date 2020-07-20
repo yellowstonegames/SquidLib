@@ -15,6 +15,8 @@
 // ============================================================================
 package squidpony.squidmath;
 
+import squidpony.annotation.GwtIncompatible;
+
 import java.math.BigInteger;
 
 /**
@@ -253,5 +255,38 @@ public final class MathExtras
             a = temp;
         }
         return a;
+    }
+
+    /**
+     * Given any odd int {@code a}, this finds another odd int {@code b} such that {@code a * b == 1}.
+     * <br>
+     * This is incompatible with GWT, but it should usually only find uses in exploratory code or in tests anyway...
+     * It is only incompatible because it tends to rely on multiplication overflow to work.
+     * @param a any odd int; note that even numbers do not have inverses modulo 2 to the 32
+     * @return the multiplicative inverse of {@code a} modulo 4294967296 (or, 2 to the 32)
+     */
+    @GwtIncompatible
+    public static int modularMultiplicativeInverse(int a)
+    {
+        int x = 2 ^ a * 3;     //  5 bits
+        x *= 2 - a * x;        // 10
+        x *= 2 - a * x;        // 20
+        x *= 2 - a * x;        // 40 -- 32 low bits
+        return x;
+    }
+
+    /**
+     * Given any odd long {@code a}, this finds another odd long {@code b} such that {@code a * b == 1L}.
+     * @param a any odd long; note that even numbers do not have inverses modulo 2 to the 64
+     * @return the multiplicative inverse of {@code a} modulo 18446744073709551616 (or, 2 to the 64)
+     */
+    public static long modularMultiplicativeInverse(long a)
+    {
+        long x = 2 ^ a * 3;    //  5 bits
+        x *= 2 - a * x;        // 10
+        x *= 2 - a * x;        // 20
+        x *= 2 - a * x;        // 40
+        x *= 2 - a * x;        // 80 -- 64 low bits
+        return x;
     }
 }
