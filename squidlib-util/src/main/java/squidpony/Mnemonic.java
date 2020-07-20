@@ -5,6 +5,9 @@ import squidpony.squidmath.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static squidpony.Thesaurus.adjective;
+import static squidpony.Thesaurus.noun;
+
 /**
  * A utility class to print (typically very large) numbers in a way that players can more-meaningfully tell them apart.
  * It isn't that great for this task currently, but it can bi-directionally turn {@code long} values like
@@ -40,14 +43,19 @@ public class Mnemonic {
             "yaiyauyeayeeyeiyeoyiayieyioyoayoeyoiyouyuayueyuiyuo" +
             "zaizauzvazlazwazyazeazeezeizeozvezlezwezyeziazieziozvizlizwizyizoazoezoizouzvozlozuozyozuazuezuizvuzluzwuzyu";
     public final Arrangement<String> items = new Arrangement<>(256, 0.5f, Hashers.caseInsensitiveStringHasher);
-    public final OrderedMap<String, ArrayList<String>> adjective = new OrderedMap<>(Thesaurus.adjective), 
-            noun = new OrderedMap<>(Thesaurus.noun);
-    public final Arrangement<String> allAdjectives = new Arrangement<>(155, 0.5f, Hashers.caseInsensitiveStringHasher),
-            allNouns = new Arrangement<>(327, 0.5f, Hashers.caseInsensitiveStringHasher);
+    public final Arrangement<String> allAdjectives, allNouns;
 
     /**
      * Default constructor for a Mnemonic generator; equivalent to {@code new Mnemonic(1L)}, and probably a good choice
      * unless you know you need different seeds.
+     * <br>
+     * This depends on the current (at the time this Mnemonic is constructed) contents of {@link Thesaurus#adjective}
+     * and {@link Thesaurus#noun}, which can be modified, and if these contents aren't identical for two different
+     * Mnemonic objects (possibly constructed at different times, using different SquidLib versions), the Mnemonics will
+     * have different encoded and decoded forms. You can either save the key set from {@link #allAdjectives} and
+     * {@link #allNouns} and pass them to {@link #Mnemonic(long, Collection, Collection)}, or save the Thesaurus state
+     * altogether using {@link Thesaurus#archiveCategories()}, loading it before constructing any Mnemonics with
+     * {@link Thesaurus#addArchivedCategories(String)}.
      */
     public Mnemonic()
     {
@@ -59,6 +67,14 @@ public class Mnemonic {
      * produced by {@link #toMnemonic(long)} and the words produced by {@link #toWordMnemonic(int, boolean)} if you give
      * the same numeric argument to differently-seeded Mnemonic generators. Unless you know you need this, you should
      * probably use {@link #Mnemonic()} to ensure that your text can be decoded.
+     * <br>
+     * This depends on the current (at the time this Mnemonic is constructed) contents of {@link Thesaurus#adjective}
+     * and {@link Thesaurus#noun}, which can be modified, and if these contents aren't identical for two different
+     * Mnemonic objects (possibly constructed at different times, using different SquidLib versions), the Mnemonics will
+     * have different encoded and decoded forms. You can either save the key set from {@link #allAdjectives} and
+     * {@link #allNouns} and pass them to {@link #Mnemonic(long, Collection, Collection)}, or save the Thesaurus state
+     * altogether using {@link Thesaurus#archiveCategories()}, loading it before constructing any Mnemonics with
+     * {@link Thesaurus#addArchivedCategories(String)}.
      * @param seed a long seed that will be used to randomize the syllables and words used.
      */
     public Mnemonic(long seed)
@@ -70,6 +86,8 @@ public class Mnemonic {
             o = order[i];
             items.add(baseTriplets.substring(o * 3, o * 3 + 3));
         }
+        allAdjectives = new Arrangement<>(adjective.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
+        allNouns = new Arrangement<>(noun.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
         for (int i = 0; i < adjective.size(); i++) {
             allAdjectives.putAll(adjective.getAt(i));
         }
@@ -104,6 +122,8 @@ public class Mnemonic {
             o = order[i];
             items.add(baseTriplets.substring(o * 3, o * 3 + 3));
         }
+        allAdjectives = new Arrangement<>(adjectives.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
+        allNouns = new Arrangement<>(nouns.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
         allAdjectives.putAll(adjectives);
         allAdjectives.shuffle(rng);
         allNouns.putAll(nouns);
@@ -135,6 +155,8 @@ public class Mnemonic {
             o = order[i];
             items.add(baseTriplets.substring(o * 3, o * 3 + 3));
         }
+        allAdjectives = new Arrangement<>(adjectives.length, 0.5f, Hashers.caseInsensitiveStringHasher);
+        allNouns = new Arrangement<>(nouns.length, 0.5f, Hashers.caseInsensitiveStringHasher);
         allAdjectives.putAll(adjectives);
         allAdjectives.shuffle(rng);
         allNouns.putAll(nouns);
