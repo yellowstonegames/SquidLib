@@ -1,8 +1,10 @@
 package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
+import squidpony.Mnemonic;
 import squidpony.StringKit;
 import squidpony.Thesaurus;
+import squidpony.squidmath.GWTRNG;
 
 import java.util.TreeSet;
 
@@ -73,13 +75,20 @@ public class ThesaurusTest {
         {
             System.out.println(s);
         }
-//        for (int i = 0; i < 10; i++) {
-//            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())    );
-//            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())    );
-//            System.out.println(FakeLanguageGen.removeAccents(thesaurus.makePlantName())    );
-//            System.out.println(thesaurus.makePlantName(FakeLanguageGen.JAPANESE_ROMANIZED));
-//            System.out.println(thesaurus.makePlantName(FakeLanguageGen.MALAY)             );
-//            System.out.println(thesaurus.makePlantName(FakeLanguageGen.SIMPLISH)          );
-//        }
+
+
+        Mnemonic[] m = {new Mnemonic(0), new Mnemonic(1), new Mnemonic(2), new Mnemonic(3)};
+        for (int i = 0; i < 10; i++) {
+            int a = GWTRNG.determineInt(i);
+            for (int j = 0; j < m.length; j++) {
+                System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(i) + ": "+ m[j].toWordMnemonic(i, true));
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            int a = GWTRNG.determineInt(i);
+            for (int j = 0; j < m.length; j++) {
+                System.out.println("Mnemonic(" + j + "), encoding " + StringKit.hex(a) + ": "+ m[j].toWordMnemonic(a, true));
+            }
+        }
     }
 }
