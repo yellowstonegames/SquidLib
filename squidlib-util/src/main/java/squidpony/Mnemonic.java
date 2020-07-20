@@ -5,8 +5,7 @@ import squidpony.squidmath.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static squidpony.Thesaurus.adjective;
-import static squidpony.Thesaurus.noun;
+import static squidpony.Thesaurus.*;
 
 /**
  * A utility class to print (typically very large) numbers in a way that players can more-meaningfully tell them apart.
@@ -89,11 +88,21 @@ public class Mnemonic {
         allAdjectives = new Arrangement<>(adjective.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
         allNouns = new Arrangement<>(noun.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
         for (int i = 0; i < adjective.size(); i++) {
-            allAdjectives.putAll(adjective.getAt(i));
+            ArrayList<String> words = adjective.getAt(i);
+            for (int j = 0; j < words.size(); j++) {
+                if(words.get(j).contains(" "))
+                    continue;
+                allAdjectives.add(words.get(j));
+            }
         }
         allAdjectives.shuffle(rng);
         for (int i = 0; i < noun.size(); i++) {
-            allNouns.putAll(noun.getAt(i));
+            ArrayList<String> words = noun.getAt(i);
+            for (int j = 0; j < words.size(); j++) {
+                if(words.get(j).contains(" "))
+                    continue;
+                allNouns.add(words.get(j));
+            }
         }
         allNouns.shuffle(rng);
     }
@@ -124,9 +133,11 @@ public class Mnemonic {
         }
         allAdjectives = new Arrangement<>(adjectives.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
         allNouns = new Arrangement<>(nouns.size(), 0.5f, Hashers.caseInsensitiveStringHasher);
-        allAdjectives.putAll(adjectives);
+        for(String word : adjectives)
+            if(!word.contains(" ")) allAdjectives.add(word);
         allAdjectives.shuffle(rng);
-        allNouns.putAll(nouns);
+        for(String word : nouns)
+            if(!word.contains(" ")) allNouns.add(word);
         allNouns.shuffle(rng);
     }
     /**
@@ -157,9 +168,11 @@ public class Mnemonic {
         }
         allAdjectives = new Arrangement<>(adjectives.length, 0.5f, Hashers.caseInsensitiveStringHasher);
         allNouns = new Arrangement<>(nouns.length, 0.5f, Hashers.caseInsensitiveStringHasher);
-        allAdjectives.putAll(adjectives);
+        for(String word : adjectives)
+            if(!word.contains(" ")) allAdjectives.add(word);
         allAdjectives.shuffle(rng);
-        allNouns.putAll(nouns);
+        for(String word : nouns)
+            if(!word.contains(" ")) allNouns.add(word);
         allNouns.shuffle(rng);
     }
 
@@ -242,6 +255,12 @@ public class Mnemonic {
     {
         final int adjectiveCount = allAdjectives.size(), nounCount = allNouns.size();
         StringBuilder sb = new StringBuilder(80);
+        //0x000D76CB inverted by 0x000FBEE3
+        //0x000D724B inverted by 0x000E4763
+        number = (number ^ 0x7F4A7C15) * 0x000FBEE3;
+        // http://marc-b-reynolds.github.io/math/2017/10/13/XorRotate.html
+        number = ((number << 5 | number >>> 27) ^ (number << 10 | number >>> 22) ^ (number << 26 | number >>> 6)) * 0x000D724B ^ 0x91E10DA5;
+        number ^= number >>> 15;
         boolean negative = (number < 0);
         if(negative) number = ~number;
         sb.append(allAdjectives.keyAt(number % adjectiveCount)).append(' ')
@@ -273,7 +292,11 @@ public class Mnemonic {
         else idx += 7;
         result += (factor *= nounCount) * allAdjectives.getInt(StringKit.safeSubstring(mnemonic, idx + 1, idx = mnemonic.indexOf(' ', idx + 1)));
         result += factor * adjectiveCount * allNouns.getInt(StringKit.safeSubstring(mnemonic, idx + 1, -1));
-        if(negative) return ~result;
-        else return result;
+        if(negative) result = ~result;
+        result ^= result >>> 15 ^ result >>> 30;
+        result = (result ^ 0x91E10DA5) * 0x000E4763;
+        result ^= (result << 16 | result >>> 16) ^ (result << 27 ^ result >>> 5);
+        result = result * 0x000D76CB ^ 0x7F4A7C15;
+        return result;
     }
 }
